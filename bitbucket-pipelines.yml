@@ -1,0 +1,15 @@
+# This is a sample build configuration for PHP.
+# Check our guides at https://confluence.atlassian.com/x/e8YWN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: leonidasfsilva/debian
+
+pipelines:
+  branches:
+    producao:
+      - step:
+          script:
+            - ssh -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $BIT_USER_SSH@mxcode.net "cd /home4/mxcodene/public_html/contex/ && git --work-tree=/home4/mxcodene/public_html/contex/ remote update && git --work-tree=/home4/mxcodene/public_html/contex/ reset --hard origin/producao"
+
+
