@@ -5,7 +5,7 @@
 <body class="focused-form" style="background-color: #37474f">
 
 <div class="container" id="login-form">
-    <a href="<?php echo base_url() ?>" class="login-logo"><img id="logo" src="<?php echo base_url() ?>assets/img/logo_contex.png"></a>
+    <a href="<?php echo base_url() ?>" class="login-logo"><img id="logo" src="<?php echo base_url() ?>assets/img/contex_brand.png"></a>
     <div class="row">
         <div class="col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
             <div class="panel panel-default">
