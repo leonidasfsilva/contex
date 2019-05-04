@@ -242,7 +242,7 @@
                 <span class="icon-bg">
                     <i class="fa fa-fw fa-bell"></i>
                 </span>
-                <span class="badge badge-info">5</span>
+<!--                <span class="badge badge-info">5</span>-->
             </a>
             <div class="dropdown-menu dropdown-alternate notifications arrow">
                 <div class="dd-header">
