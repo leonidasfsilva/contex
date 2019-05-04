@@ -340,7 +340,7 @@ $periodo = $this->input->get('periodo');
 
                         <div id="divRecebimento" class="hidden">
                             <div class="form-group col-lg-4">
-                                <label for="recebimento" class="font-weight-bold">Data de Lançamento</label>
+                                <label for="recebimento" class="font-weight-bold">Data de Pagamento</label>
                                 <input class="form-control datepicker" id="recebimento" type="text" name="recebimento"/>
                             </div>
                             <div class="form-group col-lg-4">

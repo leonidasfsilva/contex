@@ -737,7 +737,7 @@ body.swal2-no-backdrop .swal2-shown.swal2-bottom-end, body.swal2-no-backdrop .sw
 .swal2-container {
   display: flex;
   position: fixed;
-  z-index: 1060;
+  z-index: 1600;
   top: 0;
   right: 0;
   bottom: 0;
