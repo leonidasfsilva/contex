@@ -9,8 +9,10 @@
     <meta name="apple-touch-fullscreen" content="yes">
     <meta name="description" content="Contex Sistema de Gestão">
     <meta name="author" content="Leônidas Ferreira">
+    <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/logo_contex.png" type="image/x-icon" />
 
-<!--    CSS CORE-->
+
+    <!--    CSS CORE-->
 <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,400italic,600,700' rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700' rel='stylesheet' type='text/css'>
 <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet">
