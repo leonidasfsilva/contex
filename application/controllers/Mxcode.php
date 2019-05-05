@@ -1,4 +1,4 @@
-<?php if (! defined('BASEPATH')) {
+<?php if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -11,7 +11,7 @@ class Mxcode extends CI_Controller
      * email: silva018-mg@yahoo.com.br
      *
      */
-    
+
     public function __construct()
     {
         parent::__construct();
@@ -34,7 +34,7 @@ class Mxcode extends CI_Controller
         $this->data['menuPainel'] = 'Index';
         $this->data['view'] = 'mapos/painel';
         $this->load->view('tema/topo', $this->data);
-      
+
     }
 
     public function minhaConta()
@@ -56,18 +56,27 @@ class Mxcode extends CI_Controller
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
             redirect('mxcode/login');
         }
-
         $oldSenha = $this->input->post('oldSenha');
         $senha = $this->input->post('novaSenha');
-        $result = $this->mapos_model->alterarSenha($senha, $oldSenha, $this->session->userdata('id'));
-        if ($result) {
-            $this->session->set_flashdata('success', 'Senha Alterada com sucesso!');
-            redirect(base_url() . 'index.php/mapos/minhaConta');
+
+        $usuario = $this->mapos_model->getUsuario($this->session->userdata('id'));
+
+
+        if (password_verify($oldSenha, $usuario->senha)) {
+            $result = $this->mapos_model->alterarSenha($usuario->idUsuarios, $senha);
+            if ($result == true) {
+                $this->session->set_flashdata('sucesso', 'Senha alterada com sucesso!');
+                redirect(base_url() . 'mxcode/minhaConta');
+            } else {
+                $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar alterar a senha!');
+                redirect(base_url() . 'mxcode/minhaConta');
+            }
         } else {
-            $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar a senha!');
-            redirect(base_url() . 'index.php/mapos/minhaConta');
-            
+            $this->session->set_flashdata('erro', 'Senha atual incorreta!');
+            redirect(base_url() . 'mxcode/minhaConta');
+
         }
+
     }
 
     public function pesquisar()
@@ -75,7 +84,7 @@ class Mxcode extends CI_Controller
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
             redirect('mxcode/login');
         }
-        
+
         $termo = $this->input->get('termo');
 
         $data['results'] = $this->mapos_model->pesquisar($termo);
@@ -85,14 +94,14 @@ class Mxcode extends CI_Controller
         $this->data['clientes'] = $data['results']['clientes'];
         $this->data['view'] = 'mapos/pesquisa';
         $this->load->view('tema/topo', $this->data);
-      
+
     }
 
     public function login()
     {
-        
+
         $this->load->view('mapos/login');
-        
+
     }
 
     public function sair()
@@ -103,12 +112,12 @@ class Mxcode extends CI_Controller
 
     public function verificarLogin()
     {
-        
-        header('Access-Control-Allow-Origin: '.base_url());
+
+        header('Access-Control-Allow-Origin: ' . base_url());
         header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
         header('Access-Control-Max-Age: 1000');
         header('Access-Control-Allow-Headers: Content-Type');
-        
+
         $this->load->library('form_validation');
         $this->form_validation->set_rules('email', 'E-mail', 'valid_email|required|trim');
         $this->form_validation->set_rules('senha', 'Senha', 'required|trim');
@@ -126,7 +135,7 @@ class Mxcode extends CI_Controller
 
             if ($user) {
                 if (password_verify($password, $user->senha)) {
-                    $session_data = array('nome' => $user->nome, 'email' => $user->email, 'id' => $user->idUsuarios,'permissao' => $user->permissoes_id , 'logado' => true);
+                    $session_data = array('nome' => $user->nome, 'email' => $user->email, 'id' => $user->idUsuarios, 'permissao' => $user->permissoes_id, 'logado' => true);
                     $this->session->set_userdata($session_data);
                     redirect('mxcode/');
                 } else {
@@ -155,18 +164,18 @@ class Mxcode extends CI_Controller
 
         $this->load->dbutil();
         $prefs = array(
-                'format' => 'zip',
-                'foreign_key_checks' => false,
-                'filename' => 'backup'.date('d-m-Y').'.sql',
-              );
+            'format' => 'zip',
+            'foreign_key_checks' => false,
+            'filename' => 'backup' . date('d-m-Y') . '.sql',
+        );
 
         $backup = $this->dbutil->backup($prefs);
 
         $this->load->helper('file');
-        write_file(base_url().'backup/backup.zip', $backup);
+        write_file(base_url() . 'backup/backup.zip', $backup);
 
         $this->load->helper('download');
-        force_download('backup'.date('d-m-Y H:m:s').'.zip', $backup);
+        force_download('backup' . date('d-m-Y H:m:s') . '.zip', $backup);
     }
 
     public function emitente()
@@ -209,11 +218,11 @@ class Mxcode extends CI_Controller
         }
 
         $this->upload_config = array(
-            'upload_path'   => $image_upload_folder,
+            'upload_path' => $image_upload_folder,
             'allowed_types' => 'png|jpg|jpeg|bmp',
-            'max_size'      => 2048,
-            'remove_space'  => true,
-            'encrypt_name'  => true,
+            'max_size' => 2048,
+            'remove_space' => true,
+            'encrypt_name' => true,
         );
 
         $this->upload->initialize($this->upload_config);
@@ -254,10 +263,10 @@ class Mxcode extends CI_Controller
         $this->form_validation->set_rules('email', 'E-mail', 'required|trim');
 
         if ($this->form_validation->run() == false) {
-            
+
             $this->session->set_flashdata('error', 'Campos obrigatórios não foram preenchidos.');
-            redirect(base_url().'index.php/mxcode/emitente');
-            
+            redirect(base_url() . 'index.php/mxcode/emitente');
+
         } else {
 
             $nome = $this->input->post('nome');
@@ -271,19 +280,19 @@ class Mxcode extends CI_Controller
             $telefone = $this->input->post('telefone');
             $email = $this->input->post('email');
             $image = $this->do_upload();
-            $logo = base_url().'assets/uploads/'.$image;
+            $logo = base_url() . 'assets/uploads/' . $image;
 
 
             $retorno = $this->mapos_model->addEmitente($nome, $cnpj, $ie, $logradouro, $numero, $bairro, $cidade, $uf, $telefone, $email, $logo);
             if ($retorno) {
 
                 $this->session->set_flashdata('success', 'As informações foram inseridas com sucesso.');
-                redirect(base_url().'index.php/mxcode/emitente');
+                redirect(base_url() . 'index.php/mxcode/emitente');
             } else {
                 $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar inserir as informações.');
-                redirect(base_url().'index.php/mxcode/emitente');
+                redirect(base_url() . 'index.php/mxcode/emitente');
             }
-            
+
         }
     }
 
@@ -312,13 +321,11 @@ class Mxcode extends CI_Controller
         $this->form_validation->set_rules('email', 'E-mail', 'required|trim');
 
 
-        
-
         if ($this->form_validation->run() == false) {
-            
+
             $this->session->set_flashdata('error', 'Campos obrigatórios não foram preenchidos.');
-            redirect(base_url().'index.php/mxcode/emitente');
-            
+            redirect(base_url() . 'index.php/mxcode/emitente');
+
         } else {
 
             $nome = $this->input->post('nome');
@@ -338,18 +345,18 @@ class Mxcode extends CI_Controller
             if ($retorno) {
 
                 $this->session->set_flashdata('success', 'As informações foram alteradas com sucesso.');
-                redirect(base_url().'index.php/mxcode/emitente');
+                redirect(base_url() . 'index.php/mxcode/emitente');
             } else {
                 $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar as informações.');
-                redirect(base_url().'index.php/mxcode/emitente');
+                redirect(base_url() . 'index.php/mxcode/emitente');
             }
-            
+
         }
     }
 
     public function editarLogo()
     {
-        
+
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
             redirect('mxcode/login');
         }
@@ -362,22 +369,22 @@ class Mxcode extends CI_Controller
         $id = $this->input->post('id');
         if ($id == null || !is_numeric($id)) {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar a logomarca.');
-            redirect(base_url().'index.php/mxcode/emitente');
+            redirect(base_url() . 'index.php/mxcode/emitente');
         }
         $this->load->helper('file');
-        delete_files(FCPATH .'assets/uploads/');
+        delete_files(FCPATH . 'assets/uploads/');
 
         $image = $this->do_upload();
-        $logo = base_url().'assets/uploads/'.$image;
+        $logo = base_url() . 'assets/uploads/' . $image;
 
         $retorno = $this->mapos_model->editLogo($id, $logo);
         if ($retorno) {
 
             $this->session->set_flashdata('success', 'As informações foram alteradas com sucesso.');
-            redirect(base_url().'index.php/mxcode/emitente');
+            redirect(base_url() . 'index.php/mxcode/emitente');
         } else {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar as informações.');
-            redirect(base_url().'index.php/mxcode/emitente');
+            redirect(base_url() . 'index.php/mxcode/emitente');
         }
 
     }

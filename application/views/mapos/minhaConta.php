@@ -70,7 +70,7 @@
                 </h2>
             </div>
             <div class="panel-body">
-                <form id="formSenha" action="<?php echo base_url(); ?>index.php/mapos/alterarSenha" method="post">
+                <form id="formSenha" action="<?php echo base_url(); ?>mxcode/alterarSenha" method="post">
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricao">Senha Atual *</label>
@@ -90,7 +90,11 @@
                         </div>
                     </div>
                     <div class="panel-footer">
-                        <button class="btn btn-primary"><i class="fa fa-refresh fa-fw"></i> Alterar Senha</button>
+                        <div class="row">
+                            <div class="col-md-6 pull-right">
+                                <button class="btn btn-primary btn-sm btn-block"><i class="fa fa-refresh fa-fw"></i> Alterar Senha</button>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
