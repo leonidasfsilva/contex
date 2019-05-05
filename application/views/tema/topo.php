@@ -417,7 +417,7 @@
                             <a href="<?php echo site_url(); ?>/mapos/minhaConta">
                                 <div class="tabular-row">
                                     <div class="tabular-cell welcome-avatar">
-                                        <img src="<?php echo base_url(); ?>assets/demo/avatar/avatar_02.png" class="avatar">
+                                        <img src="<?php echo base_url(); ?>assets/img/logo_contex.png" class="avatar">
                                     </div>
                                     <div class="tabular-cell welcome-options">
                                         <span class="welcome-text">Bem-vindo,</span>
