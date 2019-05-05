@@ -414,14 +414,14 @@
                 <div class="sidebar">
                     <div class="widget stay-on-collapse" id="widget-welcomebox">
                         <div class="widget-body welcome-box tabular">
-                            <a href="<?php echo site_url(); ?>/mapos/minhaConta">
+                            <a href="<?php echo site_url(); ?>mxcode/minhaConta">
                                 <div class="tabular-row">
                                     <div class="tabular-cell welcome-avatar">
                                         <img src="<?php echo base_url(); ?>assets/img/logo_contex.png" class="avatar">
                                     </div>
                                     <div class="tabular-cell welcome-options">
                                         <span class="welcome-text">Bem-vindo,</span>
-                                        <a href="#" class="name"><?= $this->session->userdata('nome') ?></a>
+                                        <a href="<?php echo site_url(); ?>mxcode/minhaConta" class="name"><?= $this->session->userdata('nome') ?></a>
                                     </div>
                                 </div>
                             </a>

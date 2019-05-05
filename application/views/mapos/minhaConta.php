@@ -1,6 +1,3 @@
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css"/>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
-
 <style type="text/css">
 
     label.error {
@@ -26,67 +23,81 @@
 
 </style>
 
-<div class="span6" style="margin-left: 0">
-    <div class="widget-box">
-        <div class="widget-title">
-                <span class="icon">
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-profile">
+            <div class="panel-heading">
+                <h2 style="font-size: 12pt">
                     <i class="fa fa-user-circle fa-lg fa-fw"></i>
-		</span>
-            <h5>Minha Conta</h5>
-        </div>
-        <div class="widget-content">
-            <div class="row-fluid">
-                <div class="span12" style="min-height: 260px">
-                    <ul class="site-stats">
-                        <li class="bg_ls span12" style="text-align: left; margin-left: 0"><strong>Nome: <?php echo $usuario->nome ?></strong></li>
-                        <li class="bg_lb span12" style="text-align: left; margin-left: 0"><strong>Telefone: <?php echo $usuario->telefone ?></strong></li>
-                        <li class="bg_lg span12" style="text-align: left; margin-left: 0"><strong>Email: <?php echo $usuario->email ?></strong></li>
-                        <li class="bg_lo span12" style="text-align: left; margin-left: 0"><strong>Nível: <?php echo $usuario->permissao; ?></strong></li>
+                    Minha Conta
+                </h2>
+            </div>
+            <div class="panel-body">
+                <div class="user-card">
+                    <div class="avatar">
+                        <img src="<?php echo base_url(); ?>assets/img/logo_contex.png" class="img-responsive img-circle">
+                    </div>
+                    <div class="contact-name"><?php echo $usuario->nome ?></div>
+                    <div class="contact-status"><?php echo $usuario->permissao; ?></div>
+                    <ul class="details">
+                        <li><a href="javascript:"><?php echo $usuario->email ?></a></li>
+                        <li><?php echo $usuario->telefone ?></li>
+                        <li>
+                            <?php echo $usuario->bairro ?>,
+                            <?php echo $usuario->cidade ?>/<?php echo $usuario->estado ?>
+                        </li>
                     </ul>
+                    <hr class="">
+                    <div class="text-center">
+                        <a href="javascript:" class="btn btn-social btn-facebook"><i class="fa fa-facebook"></i></a>
+                        <a href="javascript:" class="btn btn-social btn-twitter"><i class="fa fa-twitter"></i></a>
+                        <a href="javascript:" class="btn btn-social btn-github"><i class="fa fa-github"></i></a>
+                        <a href="javascript:" class="btn btn-social btn-flickr"><i class="fa fa-flickr"></i></a>
+                        <a href="javascript:" class="btn btn-social btn-instagram"><i class="fa fa-instagram"></i></a>
+                    </div>
+                    <hr class="">
                 </div>
-
             </div>
         </div>
     </div>
-</div>
-
-<div class="span6">
-    <div class="widget-box">
-        <div class="widget-title">
-                <span class="icon">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 style="font-size: 12pt">
                     <i class="fa fa-lock fa-lg fa-fw"></i>
-		</span>
-            <h5>Alterar Minha Senha</h5>
-        </div>
-        <div class="widget-content">
-            <div class="row-fluid">
-                <div class="span12" style=" min-height: 260px">
-                    <form id="formSenha" action="<?php echo base_url(); ?>index.php/mapos/alterarSenha" method="post">
-
-                        <div class="span12" style="margin-left: 0">
-                            <label for="">Senha Atual</label>
-                            <input type="password" id="oldSenha" name="oldSenha" class="span12"/>
+                    Alterar Senha
+                </h2>
+            </div>
+            <div class="panel-body">
+                <form id="formSenha" action="<?php echo base_url(); ?>index.php/mapos/alterarSenha" method="post">
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label class="font-weight-bold" for="descricao">Senha Atual *</label>
+                            <input class="form-control" type="password" id="oldSenha" name="oldSenha"/>
                         </div>
-                        <div class="span12" style="margin-left: 0">
-                            <label for="">Nova Senha</label>
-                            <input type="password" id="novaSenha" name="novaSenha" class="span12"/>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label class="font-weight-bold" for="descricao">Nova Senha *</label>
+                            <input class="form-control" type="password" id="novaSenha" name="novaSenha"/>
                         </div>
-                        <div class="span12" style="margin-left: 0">
-                            <label for="">Confirmar Senha</label>
-                            <input type="password" name="confirmarSenha" class="span12"/>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label class="font-weight-bold" for="descricao">Confirme Nova Senha *</label>
+                            <input class="form-control" type="password" name="confirmarSenha"/>
                         </div>
-                        <div class="span12" style="margin-left: 0; text-align: center">
-                            <button class="btn btn-primary"><i class="fa fa-refresh fa-fw"></i> Alterar Senha</button>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                    <div class="panel-footer">
+                        <button class="btn btn-primary"><i class="fa fa-refresh fa-fw"></i> Alterar Senha</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
 
-
-<script src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
 
