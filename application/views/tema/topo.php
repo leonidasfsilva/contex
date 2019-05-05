@@ -388,9 +388,9 @@
             <a href="#" class="dropdown-toggle " data-toggle='dropdown' data-placement="bottom" title="<?= $this->session->userdata('nome') ?>">
                 <span class="icon-bg"><i class="fa fa-fw fa-user-circle"></i></span></a>
             <ul class="dropdown-menu userinfo arrow">
-                <li><a href="javscript:" id="btn_teste"><span class="pull-left">Perfil</span> <span class="badge badge-info">80%</span></a></li>
+                <li><a href="javascript:" id="btn_teste"><span class="pull-left">Perfil</span> <span class="badge badge-info">80%</span></a></li>
                 <li><a href="<?php echo site_url(); ?>mxcode/minhaConta"><span class="pull-left">Minha Conta</span> <i class="pull-right fa fa-user-circle fa-lg"></i></a></li>
-                <li><a href="#"><span class="pull-left">Configurações</span> <i class="pull-right fa fa-cog fa-lg"></i></a></li>
+                <li><a href="javascript:"><span class="pull-left">Configurações</span> <i class="pull-right fa fa-cog fa-lg"></i></a></li>
                 <!--                <li class="divider"></li>-->
                 <!--                <li><a href="#"><span class="pull-left">Earnings</span> <i class="pull-right fa fa-line-chart"></i></a></li>-->
                 <!--                <li><a href="#"><span class="pull-left">Statement</span> <i class="pull-right fa fa-list-alt"></i></a></li>-->
