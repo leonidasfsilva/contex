@@ -124,9 +124,11 @@ $periodo = $this->input->get('periodo');
 
                     if ($r->baixado == 0) {
                         $status = 'Pendente';
+                        $label_status = 'danger';
 
                     } else {
-                        $status = 'efetivado';
+                        $status = 'Efetivado';
+                        $label_status = 'success';
 
                     };
 
@@ -143,7 +145,7 @@ $periodo = $this->input->get('periodo');
                     echo '<td>' . $vencimento . '</td>';
 //                    echo '<td><span class="badge badge-' . $label . '">' . ucfirst($r->tipo) . '</span></td>';
                     echo '<td>' . strtoupper($r->descricao) . '</td>';
-                    echo '<td>' . strtoupper($status) . '</td>';
+                    echo '<td><span class="label label-' . $label_status . '">' . strtoupper($status) . '</span></td>';
                     echo '<td style=" color: ' . $color . '"> ' . number_format($r->valor, 2, ',', '.') . '</td>';
 
                     if ($r->valor < 0) {
