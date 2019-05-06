@@ -194,15 +194,22 @@ $periodo = $this->input->get('periodo');
             </tr>
             </thead>
             <tr>
-                <td colspan="2" style="text-align: left; color: green">(+) SALDO PROVISÓRIO EM CONTA</td>
-                <td colspan="1" style="text-align: right; color: green">
-                    <?php echo number_format($entradas->total, 2, ',', '.') ?></td>
+                <td colspan="2" style="text-align: left;">(+) SALDO PROVISÓRIO EM CONTA</td>
+                <td colspan="1" style="text-align: right;">
+                    <?php echo number_format($total_entradas->total, 2, ',', '.') ?></td>
             </tr>
-            <?php if ($saidas->total > 0) { ?>
+            <?php if ($saidas_pendentes->total) { ?>
                 <tr>
-                    <td colspan="2" style="text-align: left; color: red">(-) SALDO DE LANÇAMENTOS A CONFIRMAR</td>
+                    <td colspan="2" style="text-align: left; color: red">(-) SALDO DE SAÍDAS A CONFIRMAR</td>
                     <td colspan="1" style="text-align: right; color: red">
-                        <?php echo number_format($saidas->total, 2, ',', '.') ?></td>
+                        <?php echo number_format($saidas_pendentes->total, 2, ',', '.') ?></td>
+                </tr>
+            <?php } ?>
+            <?php if ($entradas_pendentes->total) { ?>
+                <tr>
+                    <td colspan="2" style="text-align: left; color: green">(+) SALDO DE ENTRADAS A CONFIRMAR</td>
+                    <td colspan="1" style="text-align: right; color: green">
+                        <?php echo number_format($entradas_pendentes->total, 2, ',', '.') ?></td>
                 </tr>
             <?php } ?>
             <tr>
@@ -337,7 +344,7 @@ $periodo = $this->input->get('periodo');
                             <div class="checkbox icheck">
                                 <input type="checkbox" class="form-control" id="recebido" name="recebido" value="1">
                             </div>
-                            <label for="recebido" class="font-weight-bold">Recebido?</label>
+                            <label for="recebido" class="font-weight-bold">Pago?</label>
                         </div>
 
                         <div id="divRecebimento" class="hidden">

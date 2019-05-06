@@ -313,8 +313,9 @@ class Lancamentos extends CI_Controller
 
         $this->pagination->initialize($config);
 
-        $this->data['entradas'] = $this->financeiro_model->getTotalEntradas($this->id_usuario);
-        $this->data['saidas'] = $this->financeiro_model->getTotalSaidas($this->id_usuario);
+        $this->data['total_entradas'] = $this->financeiro_model->getTotalEntradas($this->id_usuario);
+        $this->data['saidas_pendentes'] = $this->financeiro_model->getSaidasPendentes($this->id_usuario);
+        $this->data['entradas_pendentes'] = $this->financeiro_model->getEntradasPendentes($this->id_usuario);
         $this->data['total'] = $this->financeiro_model->getTotal($this->id_usuario);
         $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
         $this->data['results'] = $this->financeiro_model->get(

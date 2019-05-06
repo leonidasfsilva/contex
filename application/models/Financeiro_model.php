@@ -108,12 +108,23 @@ class Financeiro_model extends CI_Model
 
     }
 
-    function getTotalSaidas($id_usuario)
+    function getSaidasPendentes($id_usuario)
     {
         $this->db
             ->select('SUM(valor) AS total')
             ->from('lancamentos')
-            ->where('status = 1 AND baixado = 0 AND id_usuario = ' . $id_usuario);
+            ->where('status = 1 AND tipo = 2 AND baixado = 0 AND id_usuario = ' . $id_usuario);
+
+        return $this->db->get()->row();
+
+    }
+
+    function getEntradasPendentes($id_usuario)
+    {
+        $this->db
+            ->select('SUM(valor) AS total')
+            ->from('lancamentos')
+            ->where('status = 1 AND tipo = 1 AND baixado = 0 AND id_usuario = ' . $id_usuario);
 
         return $this->db->get()->row();
 

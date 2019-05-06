@@ -114,13 +114,13 @@ $periodo = $this->input->get('periodo');
                         $status = 'Pendente';
                         $color = 'red';
                         $label = 'danger';
-                        $icon = 'square-o';
+                        $icon = 'fa fa-check-square-o';
 
                     } else {
                         $status = 'Pago';
                         $color = 'green';
                         $label = 'success';
-                        $icon = 'check-square';
+                        $icon = 'fa fa-check-square';
 
                     };
                     $disabled = '';
@@ -151,7 +151,7 @@ $periodo = $this->input->get('periodo');
                     echo '<td>';
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
                         echo '<button ' . $disabled . ' href="#modalPagar" style="margin-right: 1%"  class="btn btn-success btn-sm pagar" data-toggle="modal" title="Pagar" id_pendencia="' . $r->id_pendencia . '">
-                                <i class="fa fa-' . $icon . ' fa-lg fa-fw"></i></button>';
+                                <i class="' . $icon . ' fa-lg fa-fw"></i></button>';
 
                         echo '<button ' . $disabled . ' href="#modalEditar" style="margin-right: 1%" class="btn btn-primary btn-sm editar" data-toggle="modal" title="Editar" id_pendencia="' .
                             $r->id_pendencia . '" descricao="' . $r->descricao . '" valor="' . $valor . '" data_pendencia="' . date('d/m/Y', strtotime($r->data_pendencia)) .
