@@ -87,43 +87,7 @@ class Pendencia_model extends CI_Model
         return $this->db->count_all_results();
     }
 
-    function getTotalCreditoQuitadas($id_usuario, $id_cliente = null)
-    {
-        if (!$id_cliente == null) {
-            $this->db
-                ->select('SUM(valor) AS total')
-                ->from('pendencias')
-                ->where('status = 1 AND tipo = 1 AND quitado = 1 AND id_usuario  = ' . $id_usuario . ' AND id_cliente = ' . $id_cliente);
-        } else {
-            $this->db
-                ->select('SUM(valor) AS total')
-                ->from('pendencias')
-                ->where('status = 1 AND tipo = 1 AND quitado = 1 AND id_usuario  = ' . $id_usuario);
-        }
-
-        return $this->db->get()->row();
-
-    }
-
-    function getTotalDebitoQuitadas($id_usuario, $id_cliente = null)
-    {
-        if (!$id_cliente == null) {
-            $this->db
-                ->select('SUM(valor) AS total')
-                ->from('pendencias')
-                ->where('status = 1 AND tipo = 2 AND quitado = 1 AND id_usuario  = ' . $id_usuario . ' AND id_cliente = ' . $id_cliente);
-        } else {
-            $this->db
-                ->select('SUM(valor) AS total')
-                ->from('pendencias')
-                ->where('status = 1 AND tipo = 2 AND quitado = 1 AND id_usuario  = ' . $id_usuario);
-        }
-
-        return $this->db->get()->row();
-
-    }
-
-    function getTotalPendenciasCredito($id_usuario, $id_cliente = null, $where = null)
+    function getPendenciasParcialCredito($id_usuario, $id_cliente = null, $where = null)
     {
         if ($where == null) {
             if (!$id_cliente == null) {
@@ -156,7 +120,7 @@ class Pendencia_model extends CI_Model
 
     }
 
-    function getTotalPendenciasDebito($id_usuario, $id_cliente = null, $where = null)
+    function getPendenciasParcialDebito($id_usuario, $id_cliente = null, $where = null)
     {
         if ($where == null) {
             if (!$id_cliente == null) {
@@ -189,23 +153,24 @@ class Pendencia_model extends CI_Model
 
     }
 
-    function getTotalPendencias($id_usuario, $id_cliente = null)
+    function getPendenciasTotalCredito($id_usuario)
     {
-        if (!$id_cliente == null) {
-            $this->db
-                ->select('SUM(valor) AS total')
-                ->from('pendencias')
-                ->where('status = 1 AND quitado = 0 AND id_usuario = ' . $id_usuario . ' AND id_cliente = ' . $id_cliente);
+        $this->db
+            ->select('SUM(valor) AS total')
+            ->from('pendencias')
+            ->where('status = 1 AND tipo = 1 AND quitado = 0 AND id_usuario  = ' . $id_usuario);
 
-        } else {
-            $this->db
-                ->select('SUM(valor) AS total')
-                ->from('pendencias')
-                ->where('status = 1 AND quitado = 0 AND id_usuario = ' . $id_usuario);
-
-        }
         return $this->db->get()->row();
+    }
 
+    function getPendenciasTotalDebito($id_usuario)
+    {
+        $this->db
+            ->select('SUM(valor) AS total')
+            ->from('pendencias')
+            ->where('status = 1 AND tipo = 2 AND quitado = 0 AND id_usuario  = ' . $id_usuario);
+
+        return $this->db->get()->row();
     }
 
     function getTotal($id_usuario)

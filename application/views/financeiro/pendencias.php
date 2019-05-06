@@ -59,12 +59,12 @@ $periodo = $this->input->get('periodo');
             </tr>
             </thead>
             <tr>
-                <td colspan="2" style="text-align: left; color: green">(+) SALDO DE PENDÊNCIAS DE CRÉDITO</td>
+                <td colspan="2" style="text-align: left; color: green">(+) SALDO PARCIAL DE PENDÊNCIAS CRÉDITO</td>
                 <td colspan="1" style="text-align: right; color: green">
                     <?php echo number_format($pendencias_credito->total, 2, ',', '.') ?></td>
             </tr>
             <tr>
-                <td colspan="2" style="text-align: left; color: red">(-) SALDO DE PENDÊNCIAS DE DÉBITO</td>
+                <td colspan="2" style="text-align: left; color: red">(-) SALDO PARCIAL DE PENDÊNCIAS DÉBITO</td>
                 <td colspan="1" style="text-align: right; color: red">
                     <?php echo number_format($pendencias_debito->total, 2, ',', '.') ?></td>
             </tr>
@@ -200,6 +200,35 @@ $periodo = $this->input->get('periodo');
     </div>
     <?php echo $this->pagination->create_links();
 } ?>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2>
+            Posição Consolidada
+        </h2>
+    </div>
+    <div class="panel-body panel-no-padding">
+        <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
+            <thead>
+            <tr role="row">
+                <th colspan="2" style="text-align: left !important;">Descrição</th>
+                <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
+            </tr>
+            </thead>
+            <tr>
+                <td colspan="2" style="text-align: left; color: green">(+) SALDO TOTAL DE PENDÊNCIAS CRÉDITO</td>
+                <td colspan="1" style="text-align: right; color: green">
+                    <?php echo number_format($total_credito->total, 2, ',', '.') ?></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: left; color: red">(-) SALDO TOTAL DE PENDÊNCIAS DÉBITO</td>
+                <td colspan="1" style="text-align: right; color: red">
+                    <?php echo number_format($total_debito->total, 2, ',', '.') ?></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
 
 <!-- Modal FILTRAR -->
 <div class="modal fade" id="modalFiltrar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

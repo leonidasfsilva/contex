@@ -144,9 +144,10 @@ class Pendencias extends CI_Controller
         $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
         $this->data['selected'] = $cliente;
 
-        $this->data['pendencias_credito'] = $this->pendencia_model->getTotalPendenciasCredito($this->id_usuario, $cliente, $where);
-        $this->data['pendencias_debito'] = $this->pendencia_model->getTotalPendenciasDebito($this->id_usuario, $cliente, $where);
-        $this->data['pendencias'] = $this->pendencia_model->getTotalPendencias($this->id_usuario, $cliente);
+        $this->data['pendencias_credito'] = $this->pendencia_model->getPendenciasParcialCredito($this->id_usuario, $cliente, $where);
+        $this->data['pendencias_debito'] = $this->pendencia_model->getPendenciasParcialDebito($this->id_usuario, $cliente, $where);
+        $this->data['total_credito'] = $this->pendencia_model->getPendenciasTotalCredito($this->id_usuario);
+        $this->data['total_debito'] = $this->pendencia_model->getPendenciasTotalDebito($this->id_usuario);
 //        $this->data['total'] = $this->pendencia_model->getTotal($this->id_usuario);
 
 
