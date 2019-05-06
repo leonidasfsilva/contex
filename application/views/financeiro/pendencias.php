@@ -103,10 +103,10 @@ $periodo = $this->input->get('periodo');
                     $data_pendencia = date(('d/m'), strtotime($r->data_pendencia));
 
                     if ($r->tipo == 1) {
-                        $tipo = 'Crédito';
+                        $tipo = 'Credito';
                         $colorTipo = 'primary';
                     } else {
-                        $tipo = 'Débito';
+                        $tipo = 'Debito';
                         $colorTipo = 'warning';
                     }
 
@@ -319,8 +319,8 @@ $periodo = $this->input->get('periodo');
                             <label for="tipo" class="font-weight-bold" title="CRÉDITO: entrada nos lançamentos / DÉBITO: saída nos lançamentos">Tipo de Pendência *<i class="fa fa-info-circle fa-fw"></i></label>
                             <select class="form-control" name="tipo" id="tipo">
                                 <option value="">-- Selecione --</option>
-                                <option value="1">CRÉDITO</option>
-                                <option value="2">DÉBITO</option>
+                                <option value="1">CREDITO</option>
+                                <option value="2">DEBITO</option>
                             </select>
                         </div>
                     </div>
@@ -380,8 +380,8 @@ $periodo = $this->input->get('periodo');
                             <label for="tipoEditar" class="font-weight-bold" title="CRÉDITO: entrada nos lançamentos / DÉBITO: saída nos lançamentos">Tipo de Pendência *<i class="fa fa-info-circle fa-fw"></i></label>
                             <select class="form-control" name="tipo" id="tipoEditar">
                                 <option value="">-- Selecione --</option>
-                                <option value="1">CRÉDITO</option>
-                                <option value="2">DÉBITO</option>
+                                <option value="1">CREDITO</option>
+                                <option value="2">DEBITO</option>
                             </select>
                         </div>
                     </div>
