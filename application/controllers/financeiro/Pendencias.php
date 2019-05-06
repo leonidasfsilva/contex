@@ -138,13 +138,14 @@ class Pendencias extends CI_Controller
 
         $this->pagination->initialize($config);
 
-        $this->data['results'] = $this->pendencia_model->get('pendencias', 'id_pendencia, descricao, valor, data_pendencia, data_registro, quitado, id_cliente', $where, $this->id_usuario, $config['per_page'], $this->input->get('per_page'));
+        $this->data['results'] = $this->pendencia_model->get('pendencias', '*', $where, $this->id_usuario, $config['per_page'], $this->input->get('per_page'));
 
-        $this->data['devedores'] = $this->pendencia_model->getDevedores($this->id_usuario);
+        $this->data['clientes'] = $this->pendencia_model->getClientes($this->id_usuario);
         $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
         $this->data['selected'] = $cliente;
 
-        $this->data['quitadas'] = $this->pendencia_model->getTotalQuitadas($this->id_usuario, $cliente);
+        $this->data['pendencias_credito'] = $this->pendencia_model->getTotalPendenciasCredito($this->id_usuario, $cliente, $where);
+        $this->data['pendencias_debito'] = $this->pendencia_model->getTotalPendenciasDebito($this->id_usuario, $cliente, $where);
         $this->data['pendencias'] = $this->pendencia_model->getTotalPendencias($this->id_usuario, $cliente);
 //        $this->data['total'] = $this->pendencia_model->getTotal($this->id_usuario);
 
@@ -164,6 +165,7 @@ class Pendencias extends CI_Controller
         $urlAtual = $this->input->post('urlAtual');
 
         $valor = $this->input->post('valor');
+        $tipo = $this->input->post('tipo');
         $data_pendencia = $this->input->post('data_pendencia');
 
         if (!validate_money($valor)) {
@@ -183,10 +185,15 @@ class Pendencias extends CI_Controller
             $data_pendencia = date('Y/m/d');
         }
 
+        if($tipo == 2) {
+            $valor = '-' . $valor;
+        }
+
         $data = array(
             'id_usuario' => $this->id_usuario,
             'id_cliente' => $this->input->post('id_cliente'),
             'descricao' => padronizarString($this->input->post('descricao')),
+            'tipo' => $tipo,
             'valor' => $valor,
             'data_pendencia' => $data_pendencia,
         );
@@ -213,6 +220,7 @@ class Pendencias extends CI_Controller
             $urlAtual = $this->input->post('urlAtual');
 
             $valor = $this->input->post('valor');
+            $tipo = $this->input->post('tipo');
             $data_pendencia = $this->input->post('data_pendencia');
 
             if (!validate_money($valor)) {
@@ -226,9 +234,14 @@ class Pendencias extends CI_Controller
                 $data_pendencia = date('Y-m-d');
             }
 
+            if($tipo == 2) {
+                $valor = '-' . $valor;
+            }
+
             $data = array(
                 'id_cliente' => $this->input->post('id_cliente'),
                 'descricao' => padronizarString($this->input->post('descricao')),
+                'tipo' => $tipo,
                 'valor' => $valor,
                 'data_pendencia' => $data_pendencia,
             );
@@ -322,7 +335,7 @@ class Pendencias extends CI_Controller
                 'data_pagamento' => $pendencia->data_pagamento,
                 'cliente_fornecedor' => $cliente->nomeCliente,
                 'forma_pgto' => $_REQUEST['forma_pagamento'],
-                'tipo' => 1,
+                'tipo' => $pendencia->tipo,
                 'baixado' => 1,
             );
 

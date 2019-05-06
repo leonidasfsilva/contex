@@ -56,7 +56,6 @@
                         <a href="javascript:" class="btn btn-social btn-flickr"><i class="fa fa-flickr"></i></a>
                         <a href="javascript:" class="btn btn-social btn-instagram"><i class="fa fa-instagram"></i></a>
                     </div>
-                    <hr class="">
                 </div>
             </div>
         </div>
@@ -92,7 +91,7 @@
                     <div class="panel-footer">
                         <div class="row">
                             <div class="col-md-6 pull-right">
-                                <button class="btn btn-primary btn-sm btn-block"><i class="fa fa-refresh fa-fw"></i> Alterar Senha</button>
+                                <button class="btn btn-primary btn-block"><i class="fa fa-refresh fa-fw"></i> Alterar Senha</button>
                             </div>
                         </div>
                     </div>

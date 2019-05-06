@@ -87,19 +87,103 @@ class Pendencia_model extends CI_Model
         return $this->db->count_all_results();
     }
 
-    function getTotalQuitadas($id_usuario, $id_cliente = null)
+    function getTotalCreditoQuitadas($id_usuario, $id_cliente = null)
     {
         if (!$id_cliente == null) {
             $this->db
                 ->select('SUM(valor) AS total')
                 ->from('pendencias')
-                ->where('status = 1 AND quitado = 1 AND id_usuario  = ' . $id_usuario . ' AND id_cliente = ' . $id_cliente);
+                ->where('status = 1 AND tipo = 1 AND quitado = 1 AND id_usuario  = ' . $id_usuario . ' AND id_cliente = ' . $id_cliente);
         } else {
             $this->db
                 ->select('SUM(valor) AS total')
                 ->from('pendencias')
-                ->where('status = 1 AND quitado = 1 AND id_usuario  = ' . $id_usuario);
+                ->where('status = 1 AND tipo = 1 AND quitado = 1 AND id_usuario  = ' . $id_usuario);
         }
+
+        return $this->db->get()->row();
+
+    }
+
+    function getTotalDebitoQuitadas($id_usuario, $id_cliente = null)
+    {
+        if (!$id_cliente == null) {
+            $this->db
+                ->select('SUM(valor) AS total')
+                ->from('pendencias')
+                ->where('status = 1 AND tipo = 2 AND quitado = 1 AND id_usuario  = ' . $id_usuario . ' AND id_cliente = ' . $id_cliente);
+        } else {
+            $this->db
+                ->select('SUM(valor) AS total')
+                ->from('pendencias')
+                ->where('status = 1 AND tipo = 2 AND quitado = 1 AND id_usuario  = ' . $id_usuario);
+        }
+
+        return $this->db->get()->row();
+
+    }
+
+    function getTotalPendenciasCredito($id_usuario, $id_cliente = null, $where = null)
+    {
+        if ($where == null) {
+            if (!$id_cliente == null) {
+                $this->db
+                    ->select('SUM(valor) AS total')
+                    ->from('pendencias')
+                    ->where('status = 1 AND tipo = 1 AND quitado = 0 AND id_usuario  = ' . $id_usuario . ' AND id_cliente = ' . $id_cliente);
+            } else {
+                $this->db
+                    ->select('SUM(valor) AS total')
+                    ->from('pendencias')
+                    ->where('status = 1 AND tipo = 1 AND quitado = 0 AND id_usuario  = ' . $id_usuario);
+            }
+
+        } else {
+            if (!$id_cliente == null) {
+                $this->db
+                    ->select('SUM(valor) AS total')
+                    ->from('pendencias')
+                    ->where($where . ' AND status = 1 AND tipo = 1 AND quitado = 0 AND id_usuario  = ' . $id_usuario . ' AND id_cliente = ' . $id_cliente);
+            } else {
+                $this->db
+                    ->select('SUM(valor) AS total')
+                    ->from('pendencias')
+                    ->where($where . ' AND status = 1 AND tipo = 1 AND quitado = 0 AND id_usuario  = ' . $id_usuario);
+            }
+        }
+
+        return $this->db->get()->row();
+
+    }
+
+    function getTotalPendenciasDebito($id_usuario, $id_cliente = null, $where = null)
+    {
+        if ($where == null) {
+            if (!$id_cliente == null) {
+                $this->db
+                    ->select('SUM(valor) AS total')
+                    ->from('pendencias')
+                    ->where('status = 1 AND tipo = 2 AND quitado = 0 AND id_usuario  = ' . $id_usuario . ' AND id_cliente = ' . $id_cliente);
+            } else {
+                $this->db
+                    ->select('SUM(valor) AS total')
+                    ->from('pendencias')
+                    ->where('status = 1 AND tipo = 2 AND quitado = 0 AND id_usuario  = ' . $id_usuario);
+            }
+        } else {
+            if (!$id_cliente == null) {
+                $this->db
+                    ->select('SUM(valor) AS total')
+                    ->from('pendencias')
+                    ->where($where . ' AND status = 1 AND tipo = 2 AND quitado = 0 AND id_usuario  = ' . $id_usuario . ' AND id_cliente = ' . $id_cliente);
+            } else {
+                $this->db
+                    ->select('SUM(valor) AS total')
+                    ->from('pendencias')
+                    ->where($where . ' AND status = 1 AND tipo = 2 AND quitado = 0 AND id_usuario  = ' . $id_usuario);
+            }
+        }
+
 
         return $this->db->get()->row();
 
@@ -134,7 +218,7 @@ class Pendencia_model extends CI_Model
 
     }
 
-    function getDevedores($id_usuario)
+    function getClientes($id_usuario)
     {
         $one = false;
         $this->db->where('status = 1 AND id_usuario = ' . $id_usuario);
