@@ -201,43 +201,6 @@ $periodo = $this->input->get('periodo');
     <?php echo $this->pagination->create_links();
 } ?>
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h2>
-            Posição Consolidada
-        </h2>
-    </div>
-    <div class="panel-body panel-no-padding">
-        <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
-            <thead>
-            <tr role="row">
-                <th colspan="2" style="text-align: left !important;">Descrição</th>
-                <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
-            </tr>
-            </thead>
-            <tr>
-                <td colspan="2" style="text-align: left; color: green">(+) SALDO PROVISÓRIO EM CONTA</td>
-                <td colspan="1" style="text-align: right; color: green">
-                    <?php echo number_format($entradas->total, 2, ',', '.') ?></td>
-            </tr>
-            <?php if ($saidas->total > 0) { ?>
-                <tr>
-                    <td colspan="2" style="text-align: left; color: red">(-) SALDO DE LANÇAMENTOS A CONFIRMAR</td>
-                    <td colspan="1" style="text-align: right; color: red">
-                        <?php echo number_format($saidas->total, 2, ',', '.') ?></td>
-                </tr>
-            <?php } ?>
-            <tr>
-                <td colspan="2" style="text-align: left; font-weight: bold">(=) SALDO DISPONÍVEL EM CONTA</td>
-                <td colspan="1" style="text-align: right; font-weight: bold">
-                    <strong><?php echo number_format($total->total, 2, ',', '.') ?></strong>
-                </td>
-            </tr>
-        </table>
-    </div>
-</div>
-
-
 <!-- Modal FILTRAR -->
 <div class="modal fade" id="modalFiltrar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
