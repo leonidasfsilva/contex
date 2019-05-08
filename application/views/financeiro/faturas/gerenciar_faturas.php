@@ -127,20 +127,20 @@ $periodo = $this->input->get('periodo');
                         $status = 'FECHADA';
                         $label = 'inverse';
                         $disabled = 'disabled';
-                        $iconFechar = 'lock';
+                        $iconFechar = 'fa fa-lock';
 
                     } else if ($r->fatura_aberta == 2) {
                         $status = '';
                         $label = '';
                         $disabledPagar = 'disabled';
                         $disabled = 'disabled';
-                        $iconFechar = 'unlock-alt';
+                        $iconFechar = 'fa fa-unlock-alt';
 
                     } else {
                         $status = 'ABERTA';
                         $label = 'default';
                         $disabledPagar = 'disabled';
-                        $iconFechar = 'unlock-alt';
+                        $iconFechar = 'fa fa-unlock-alt';
 
                     }
 
@@ -148,20 +148,20 @@ $periodo = $this->input->get('periodo');
                         $pagamento = 'PENDENTE';
                         $labelPgto = 'danger';
                         $color = 'red';
-                        $iconPagar = 'square-o';
+                        $iconPagar = 'fa fa-check-square-o';
 
                     } else if ($r->fatura_paga == 1) {
                         $pagamento = 'PAGA';
                         $labelPgto = 'success';
                         $color = 'green';
-                        $iconPagar = 'check-square';
+                        $iconPagar = 'fa fa-check-square';
                         $disabledPagar = 'disabled';
 
                     } else {
                         $pagamento = '';
                         $labelPgto = '';
                         $color = 'red';
-                        $iconPagar = 'square-o';
+                        $iconPagar = 'fa fa-check-square-o';
                     }
 
                     $valor_total = $this->fatura_model->getValorTotalFatura($r->id_fatura)->valor_total;
@@ -177,10 +177,10 @@ $periodo = $this->input->get('periodo');
                     echo '<td>';
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eFaturas')) {
                         echo '<button ' . $disabledPagar . ' href="#modalPagar" style="margin-right: 1%"  class="btn btn-success btn-sm pagar" data-toggle="modal" title="Pagar Fatura" id_fatura="' . $r->id_fatura . '">
-                                <i class="fa fa-' . $iconPagar . ' fa-lg fa-fw"></i></button>';
+                                <i class="' . $iconPagar . ' fa-lg fa-fw"></i></button>';
 
                         echo '<button ' . $disabled . ' href="#modalFechar" style="margin-right: 1%"  class="btn btn-inverse btn-sm fechar" data-toggle="modal" title="Fechar Fatura" id_fatura="' . $r->id_fatura . '">
-                                <i class="fa fa-' . $iconFechar . ' fa-lg fa-fw"></i></button>';
+                                <i class="' . $iconFechar . ' fa-lg fa-fw"></i></button>';
 
                         echo '<a href="' . base_url() . 'financeiro/faturas/detalhes/' . $r->id_fatura . '" type="button" id="btn_detalhes" style="margin-right: 1%" class="btn btn-primary btn-sm detalhes" title="Detalhes da Fatura" id_fatura="' . $r->id_fatura . '">
                                 <i class="fa fa-search-plus fa-lg fa-fw"></i></a>';
