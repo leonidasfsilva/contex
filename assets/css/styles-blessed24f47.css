@@ -7094,7 +7094,7 @@ body {
     table-layout: fixed;
     overflow: auto;
     height: 100%;
-    position: absolute;
+    position: fixed;
 }
 #layout-static {
     display: table-row;
