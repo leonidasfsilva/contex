@@ -57,4 +57,27 @@
 <script src="<?php echo base_url(); ?>assets/plugins/pnotify/iife/PNotifyReference.js"></script>
 <script src="<?php echo base_url(); ?>assets/plugins/pnotify/iife/PNotifyStyleMaterial.js"></script>
 
+
+<script>
+    window.onload = function () {
+        document.body.className = "page-loading";
+    };
+
+    $(document).ready(function () {
+        $({property: 0}).animate({property: 105}, {
+            duration: 2100,
+            step: function () {
+                var _percent = Math.round(this.property);
+                $('#progress').css('width', _percent + "%");
+                if (_percent == 105) {
+                    $("#progress").addClass("done");
+                }
+            },
+            complete: function () {
+                $('body').removeClass('page-loading');
+            }
+        });
+    });
+</script>
+
 </head>

@@ -242,7 +242,7 @@
                 <span class="icon-bg">
                     <i class="fa fa-fw fa-bell"></i>
                 </span>
-<!--                <span class="badge badge-info">5</span>-->
+                <!--                <span class="badge badge-info">5</span>-->
             </a>
             <div class="dropdown-menu dropdown-alternate notifications arrow">
                 <div class="dd-header">
@@ -596,7 +596,7 @@
                     </ol>
 
                     <!--                CONTEUDO-->
-                    <div class="container-fluid">
+                    <div class="container-fluid conteudo-principal">
                         <?php if ($this->session->flashdata('error') != null) { ?>
                             <div class="alert alert-danger">
                                 <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -614,8 +614,10 @@
                         <?php if (isset($view)) {
                             echo $this->load->view($view, null, true);
                         } ?>
+                        <!--CONTEUDO PRINCIPAL-->
+
                     </div>
-                    <!--                CONTEUDO PRINCIPAL-->
+                    <!--                CONTEUDO-->
                 </div>
                 <!--                FOOTER-->
                 <footer role="contentinfo">
@@ -629,86 +631,6 @@
                     </div>
                 </footer>
                 <!--                FOOTER-->
-
-            </div>
-        </div>
-    </div>
-
-
-    <div class="infobar-wrapper scroll-pane">
-        <div class="infobar scroll-content">
-
-            <div id="widgetarea">
-
-                <div class="widget" id="widget-sparkline">
-                    <div class="widget-heading">
-                        <a href="javascript:;" data-toggle="collapse" data-target="#sparklinestats"><h4>Sparkline Stats</h4></a>
-                    </div>
-                    <div id="sparklinestats" class="collapse in">
-                        <div class="widget-body">
-                            <ul class="sparklinestats">
-                                <li>
-                                    <div class="title">Earnings</div>
-                                    <div class="stats">$22,500</div>
-                                    <div class="sparkline" id="infobar-earningsstats" style="100%"></div>
-                                </li>
-                                <li>
-                                    <div class="title">Orders</div>
-                                    <div class="stats">4,750</div>
-                                    <div class="sparkline" id="infobar-orderstats" style="100%"></div>
-                                </li>
-                            </ul>
-                            <a href="#" class="more">More Sparklines</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="widget">
-                    <div class="widget-heading">
-                        <a href="javascript:;" data-toggle="collapse" data-target="#widget-milestones"><h4>Milestones</h4></a>
-                    </div>
-                    <div id="widget-milestones" class="collapse in">
-                        <div class="widget-body">
-                            <div class="contextual-progress">
-                                <div class="clearfix">
-                                    <div class="progress-title">UI Design</div>
-                                    <div class="progress-percentage">12/16</div>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar progress-bar-lime" style="width: 75%"></div>
-                                </div>
-                            </div>
-                            <div class="contextual-progress">
-                                <div class="clearfix">
-                                    <div class="progress-title">UX Design</div>
-                                    <div class="progress-percentage">8/24</div>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar progress-bar-orange" style="width: 33.3%"></div>
-                                </div>
-                            </div>
-                            <div class="contextual-progress">
-                                <div class="clearfix">
-                                    <div class="progress-title">Frontend Development</div>
-                                    <div class="progress-percentage">8/40</div>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar progress-bar-purple" style="width: 20%"></div>
-                                </div>
-                            </div>
-                            <div class="contextual-progress m0">
-                                <div class="clearfix">
-                                    <div class="progress-title">Backend Development</div>
-                                    <div class="progress-percentage">24/48</div>
-                                </div>
-                                <div class="progress">
-                                    <div class="progress-bar progress-bar-danger" style="width: 50%"></div>
-                                </div>
-                            </div>
-                            <a href="#" class="more">See All</a>
-                        </div>
-                    </div>
-                </div>
 
             </div>
         </div>
