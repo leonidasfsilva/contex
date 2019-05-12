@@ -55,14 +55,14 @@
 
         .page-loading::before {
             content: " ";
-            display: block;
-            position: fixed;
+            display: flex;
+            position: absolute;
             z-index: 10;
             height: 10px;
             width: 100%;
             padding-top: 50px;
             left: 0;
-            background-color: #b91f1f;
+            background-color: #00b2ff;
             animation: page-load ease-out 2s;
             box-shadow: 0 2px 2px rgba(0, 0, 0, .2);
         }

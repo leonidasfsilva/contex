@@ -60,7 +60,8 @@
 
 <script>
     window.onload = function () {
-        document.body.className = "page-loading";
+        var wrapper = document.body;
+            wrapper.className += " page-loading";
     };
 
     $(document).ready(function () {

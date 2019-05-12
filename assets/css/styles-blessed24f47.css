@@ -7094,7 +7094,7 @@ body {
     table-layout: fixed;
     overflow: auto;
     height: 100%;
-    position: relative;
+    position: fixed;
 }
 #layout-static {
     display: table-row;
@@ -7135,6 +7135,16 @@ footer ul {
     .page-content {
         padding: 0;
     }
+
+    #wrapper {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+        overflow: auto;
+        height: 100%;
+        position: relative;
+    }
+
 }
 .fixed-content,
 .horizontal-nav #wrapper {
