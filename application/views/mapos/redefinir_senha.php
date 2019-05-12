@@ -24,7 +24,7 @@
 
 
 <div class="container" id="login-form">
-    <a href="<?php echo base_url() ?>" class="login-logo"><img src="<?php echo base_url() ?>assets/img/contex_brand.png"></a>
+    <a href="<?php echo base_url() ?>" class="login-logo"><img src="<?php echo base_url() ?>assets/img/contex_brand.png" class="avatar"></a>
     <div class="row">
         <div class="col-md-4 col-md-offset-4">
             <?php echo validation_errors(); ?>
