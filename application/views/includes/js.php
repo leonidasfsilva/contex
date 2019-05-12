@@ -59,26 +59,208 @@
 
 
 <script>
-    window.onload = function () {
-        var wrapper = document.body;
-            wrapper.className += " page-loading";
-    };
+    console.log('<?=($this->uri->segment(2))?>');
+    const url = '<?=($this->uri->segment(2))?>';
+     if(url != 'login') {
+         window.onload = function () {
+             var wrapper = document.body;
+             wrapper.className += " page-loading";
+         };
+     }
+
 
     $(document).ready(function () {
-        $({property: 0}).animate({property: 105}, {
-            duration: 2100,
-            step: function () {
-                var _percent = Math.round(this.property);
-                $('#progress').css('width', _percent + "%");
-                if (_percent == 105) {
-                    $("#progress").addClass("done");
-                }
-            },
-            complete: function () {
-                $('body').removeClass('page-loading');
+        setTimeout(function () {
+            $('body').removeClass('page-loading');
+
+        }, 2100);
+
+    });
+
+    $('#btn_teste').click(function () {
+        Swal({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            position: 'top',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                )
             }
         });
     });
+
+    $('.datepicker').datepicker({
+        language: 'pt-BR',
+        autoclose: true,
+        format: 'dd/mm/yyyy',
+        todayHighlight: true,
+        todayBtn: true
+    });
+
+    $('.tooltips').tooltip();
+
+    $('.poupanca').click(function () {
+        Swal.fire({
+            position: 'top',
+            type: 'info',
+            // timer: 5000,
+            title: 'Em breve',
+            html: 'O módulo de Poupança encontra-se em desenvolvimento.',
+            showConfirmButton: false,
+            showCancelButton: true,
+            showCloseButton: true,
+            reverseButtons: true,
+            confirmButtonText: '<i class="fa fa-refresh fa-fw"></i> Tentar de novo ',
+            cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
+        }).then((result) => {
+            if (result.value) {
+                recuperar_senha();
+            } else {
+
+            }
+        });
+
+        // PNotify.info({
+        //     title: 'Em breve',
+        //     text: 'O módulo de Poupança encontra-se em desenvolvimento.',
+        //     styling: 'bootstrap3',
+        //     icon: 'fa fa-warning fa-lg fa-fw',
+        //     delay: 5000,
+        //     addClass: 'pnotify-shadow',
+        //     hide: true,
+        //     stack: {
+        //         'dir1': 'down',
+        //         'firstpos1': 25
+        //     },
+        //     modules: {
+        //         Animate: {
+        //             animate: true,
+        //             inClass: 'slideInDown',
+        //             outClass: 'slideOutUp'
+        //         },
+        //         Buttons: {
+        //             sticker: false,
+        //             closerHover: false,
+        //         },
+        //         Mobile: {
+        //             styling: true
+        //         }
+        //     }
+        // });
+    });
+
+    $(document).ready(function () {
+        <?php if ($this->session->flashdata('erro') != null) { ?>
+        Swal.fire({
+            position: 'top',
+            type: 'error',
+            timer: 3000,
+            title: 'Erro!',
+            html: '<?= $this->session->flashdata('erro') ?>',
+            showConfirmButton: false,
+            showCancelButton: false,
+            showCloseButton: true,
+            reverseButtons: true,
+            confirmButtonText: '<i class="fa fa-refresh fa-fw"></i> Tentar de novo ',
+            cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
+        }).then((result) => {
+            if (result.value) {
+                recuperar_senha();
+            } else {
+
+            }
+        });
+
+        //PNotify.error({
+        //    title: 'Erro!',
+        //    text: '<?//= $this->session->flashdata('erro') ?>//',
+        //    styling: 'bootstrap3',
+        //    icon: 'fa fa-times-circle fa-lg fa-fw',
+        //    delay: 3000,
+        //    addClass: 'pnotify-center',
+        //    hide: true,
+        //    stack: {
+        //        'dir1': 'down',
+        //        'firstpos1': 25
+        //    },
+        //    modules: {
+        //        Animate: {
+        //            animate: true,
+        //            inClass: 'slideInDown',
+        //            outClass: 'slideOutUp'
+        //        },
+        //        Buttons: {
+        //            sticker: false,
+        //            closerHover: false,
+        //        },
+        //        Mobile: {
+        //            styling: true
+        //        }
+        //    }
+        //});
+        <?php } ?>
+
+        <?php if ($this->session->flashdata('sucesso') != null) { ?>
+        Swal.fire({
+            position: 'top',
+            type: 'success',
+            title: 'Feito!',
+            timer: 3000,
+            html: '<?= $this->session->flashdata('sucesso') ?>',
+            showConfirmButton: false,
+            showCancelButton: false,
+            showCloseButton: true,
+            confirmButtonText: '<i class="fa fa-check fa-fw"></i> OK ',
+            cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
+            reverseButtons: true,
+        }).then((result) => {
+            if (result.value) {
+
+            } else {
+
+            }
+        });
+
+        //PNotify.success({
+        //    title: 'Feito!',
+        //    text: '<?//= $this->session->flashdata('sucesso') ?>//',
+        //    styling: 'bootstrap3',
+        //    icon: 'fa fa-check-circle fa-lg fa-fw',
+        //    delay: 3000,
+        //    addClass: 'pnotify-center',
+        //    hide: true,
+        //    stack: {
+        //        'dir1': 'down',
+        //        'firstpos1': 25
+        //    },
+        //    modules: {
+        //        Animate: {
+        //            animate: true,
+        //            inClass: 'slideInDown',
+        //            outClass: 'slideOutUp'
+        //        },
+        //        Buttons: {
+        //            sticker: false,
+        //            closerHover: false,
+        //        },
+        //        Mobile: {
+        //            styling: true
+        //        }
+        //    }
+        //});
+        <?php } ?>
+    });
+
 </script>
+
 
 </head>

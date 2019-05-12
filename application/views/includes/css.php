@@ -56,13 +56,13 @@
         .page-loading::before {
             content: " ";
             display: flex;
-            position: absolute;
-            z-index: 10;
-            height: 10px;
+            position: fixed;
+            z-index: 1009;
+            height: 2px;
             width: 100%;
-            padding-top: 50px;
+            margin-top: 48px;
             left: 0;
-            background-color: #00b2ff;
+            background-color: #00ff00;
             animation: page-load ease-out 2s;
             box-shadow: 0 2px 2px rgba(0, 0, 0, .2);
         }
