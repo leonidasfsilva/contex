@@ -59,20 +59,22 @@
 
 
 <script>
-    console.log('<?=($this->uri->segment(2))?>');
-    const url = '<?=($this->uri->segment(2))?>';
-     if(url != 'login') {
-         window.onload = function () {
-             var wrapper = document.body;
-             wrapper.className += " page-loading";
-         };
-     }
+    <?php
+    $url = $this->uri->segment(2);
+    $segments = explode("/", $url);
+    $bloqueados = array('login', 'redefinirsenha');
 
+    if (!in_array($bloqueados, $segments)) { ?>
+    window.onload = function () {
+        var wrapper = document.body;
+        wrapper.className += " page-loading";
+    };
+    <?php
+    } ?>
 
     $(document).ready(function () {
         setTimeout(function () {
             $('body').removeClass('page-loading');
-
         }, 2100);
 
     });

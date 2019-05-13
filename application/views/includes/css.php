@@ -62,7 +62,7 @@
             width: 100%;
             margin-top: 48px;
             left: 0;
-            background-color: #00ff00;
+            background-color: #dd0006;
             animation: page-load ease-out 2s;
             box-shadow: 0 2px 2px rgba(0, 0, 0, .2);
         }
