@@ -62,9 +62,12 @@
     <?php
     $url = current_url();
     $segments = explode("/", $url);
-    $bloqueados = array('login', 'redefinirsenha');
+    $bloqueados = array(
+        'login',
+        'redefinirsenha',
+    );
 
-    if (!in_array($bloqueados, $segments)) { ?>
+    if(!count(array_intersect($segments, $bloqueados)) > 0){ ?>
     window.onload = function () {
         var wrapper = document.body;
         wrapper.className += " page-loading";

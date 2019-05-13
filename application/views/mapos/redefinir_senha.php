@@ -1,30 +1,14 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="utf-8">
-    <title>MX CODE - Sistemas Web</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-touch-fullscreen" content="yes">
-    <meta name="description" content="MX Code Sistema de Gestão">
-    <meta name="author" content="Leônidas Ferreira">
+<?php $this->load->view('includes/css'); ?>
 
-
-    <?php $this->load->view('includes/css'); ?>
-
-    <?php $this->load->view('includes/js'); ?>
-
-
-    <!-- The following CSS are included as plugins and can be removed if unused-->
-
-</head>
+<?php $this->load->view('includes/js'); ?>
 
 <body class="focused-form" style="background-color: #37474f">
 
 
 <div class="container" id="login-form">
-    <a href="<?php echo base_url() ?>" class="login-logo"><img id="logo" src="<?php echo base_url() ?>assets/img/contex_brand.png"></a>
+    <a href="javascript:" class="login-logo">
+        <img alt="Contex - Sistema de Gestão" id="logo" src="<?php echo base_url() ?>assets/img/contex_brand.png">
+    </a>
     <div class="row">
         <div class="col-md-4 col-md-offset-4">
             <?php echo validation_errors(); ?>

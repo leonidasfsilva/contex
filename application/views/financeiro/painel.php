@@ -1,6 +1,11 @@
 <!--Action boxes-->
 <div class="panel panel-default">
-    <div class="panel-heading"><h2>Painel Financeiro</h2></div>
+    <div class="panel-heading">
+        <h2>
+            <i class="fa fa-dollar fa-lg fa-fw"></i>
+            Painel Financeiro
+        </h2>
+    </div>
     <div class="panel-body">
         <div class="row">
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) : ?>
