@@ -60,11 +60,11 @@
 
 <script>
     <?php
-    $url = $this->uri->segment(2);
+    $url = base_url(uri_string());
     $segments = explode("/", $url);
     $bloqueados = array('login', 'redefinirsenha');
 
-    if (!in_array($bloqueados, $segments)) { ?>
+    if (in_array($bloqueados, $segments)) { ?>
     window.onload = function () {
         var wrapper = document.body;
         wrapper.className += " page-loading";
