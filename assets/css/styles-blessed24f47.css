@@ -7347,27 +7347,30 @@ body.layout-boxed .infobar-wrapper {
     margin-top: -24px;
 }
 .navbar-brand {
-    /*font: 0/0 a !important;*/
-    /*color: transparent !important;*/
+    font: 0/0 a !important;
+    color: transparent !important;
     text-shadow: none !important;
     background-color: transparent !important;
-    /*border: 0 !important;*/
-    /*background: url("") no-repeat top left;*/
-    height: 40px;
-    width: 205px ;
-    padding: 15px 0 0 15px !important;
+    border: 0 !important;
+    background: url("../img/contex_brand.png") no-repeat top left;
+    background-size: 100px;
+    /*background-position-x: 10px;*/
+    background-position-y: 8px;
+    height: 48px;
+    width: 200px;
+    padding: 16px !important;
 }
 #topnav.navbar-default .navbar-brand {
-    /*background: url("../img/logo.png") no-repeat -40px bottom;*/
+    /*background: url("../img/contex_brand.png") no-repeat -10px bottom;*/
 }
 #topnav .navbar-brand {
-    /*background: url("../img/logo.png") no-repeat -40px top;*/
+    /*background: url("../img/contex_brand.png") no-repeat -100px top;*/
 }
 body.topnav-collapsed #topnav.navbar-default .navbar-brand {
-    /*background: url("../img/logo.png") no-repeat -40px bottom;*/
+    /*background: url("../img/contex_brand.png") no-repeat -10px bottom;*/
 }
 body.topnav-collapsed #topnav .navbar-brand {
-    /*background: url("../img/logo.png") no-repeat -40px top;*/
+    /*background: url("../img/contex_brand.png") no-repeat -10px top;*/
 }
 @media print {
     .static-sidebar-wrapper,
