@@ -69,20 +69,14 @@
 
     if(!count(array_intersect($segments, $bloqueados)) > 0){ ?>
     window.onload = function () {
+        var wrapper = document.body;
+        wrapper.className += " page-loading";
         setTimeout(function () {
-            var wrapper = document.body;
-            wrapper.className += " page-loading";
-        }, 500);
+            wrapper.classList.remove('page-loading');
+        },2000);
     };
     <?php
     } ?>
-
-    $(document).ready(function () {
-        setTimeout(function () {
-            $('body').removeClass('page-loading');
-        }, 2600);
-
-    });
 
     $('#btn_teste').click(function () {
         Swal({
