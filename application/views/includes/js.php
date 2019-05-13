@@ -69,8 +69,10 @@
 
     if(!count(array_intersect($segments, $bloqueados)) > 0){ ?>
     window.onload = function () {
-        var wrapper = document.body;
-        wrapper.className += " page-loading";
+        setTimeout(function () {
+            var wrapper = document.body;
+            wrapper.className += " page-loading";
+        }, 500);
     };
     <?php
     } ?>
@@ -78,7 +80,7 @@
     $(document).ready(function () {
         setTimeout(function () {
             $('body').removeClass('page-loading');
-        }, 2100);
+        }, 2600);
 
     });
 
