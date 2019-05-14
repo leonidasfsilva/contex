@@ -67,99 +67,100 @@
         'redefinirsenha',
     );
 
-    if(!count(array_intersect($segments, $bloqueados)) > 0){ ?>
+    if (!count(array_intersect($segments, $bloqueados)) > 0) { ?>
     window.onload = function () {
         var wrapper = document.body;
         wrapper.className += " page-loading";
         setTimeout(function () {
             wrapper.classList.remove('page-loading');
-        },2000);
+        }, 2000);
     };
     <?php
     } ?>
 
-    $('#btn_teste').click(function () {
-        Swal({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            type: 'warning',
-            position: 'top',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.value) {
-                Swal.fire(
-                    'Deleted!',
-                    'Your file has been deleted.',
-                    'success'
-                )
-            }
-        });
-    });
-
-    $('.datepicker').datepicker({
-        language: 'pt-BR',
-        autoclose: true,
-        format: 'dd/mm/yyyy',
-        todayHighlight: true,
-        todayBtn: true
-    });
-
-    $('.tooltips').tooltip();
-
-    $('.poupanca').click(function () {
-        Swal.fire({
-            position: 'top',
-            type: 'info',
-            // timer: 5000,
-            title: 'Em breve',
-            html: 'O módulo de Poupança encontra-se em desenvolvimento.',
-            showConfirmButton: false,
-            showCancelButton: true,
-            showCloseButton: true,
-            reverseButtons: true,
-            confirmButtonText: '<i class="fa fa-refresh fa-fw"></i> Tentar de novo ',
-            cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
-        }).then((result) => {
-            if (result.value) {
-                recuperar_senha();
-            } else {
-
-            }
-        });
-
-        // PNotify.info({
-        //     title: 'Em breve',
-        //     text: 'O módulo de Poupança encontra-se em desenvolvimento.',
-        //     styling: 'bootstrap3',
-        //     icon: 'fa fa-warning fa-lg fa-fw',
-        //     delay: 5000,
-        //     addClass: 'pnotify-shadow',
-        //     hide: true,
-        //     stack: {
-        //         'dir1': 'down',
-        //         'firstpos1': 25
-        //     },
-        //     modules: {
-        //         Animate: {
-        //             animate: true,
-        //             inClass: 'slideInDown',
-        //             outClass: 'slideOutUp'
-        //         },
-        //         Buttons: {
-        //             sticker: false,
-        //             closerHover: false,
-        //         },
-        //         Mobile: {
-        //             styling: true
-        //         }
-        //     }
-        // });
-    });
-
     $(document).ready(function () {
+
+        $('#btn_teste').click(function () {
+            Swal({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                type: 'warning',
+                position: 'top',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.value) {
+                    Swal.fire(
+                        'Deleted!',
+                        'Your file has been deleted.',
+                        'success'
+                    )
+                }
+            });
+        });
+
+        $('.datepicker').datepicker({
+            language: 'pt-BR',
+            autoclose: true,
+            format: 'dd/mm/yyyy',
+            todayHighlight: true,
+            todayBtn: true
+        });
+
+        $('.tooltips').tooltip();
+
+        $('.poupanca').click(function () {
+            Swal.fire({
+                position: 'top',
+                type: 'info',
+                // timer: 5000,
+                title: 'Em breve',
+                html: 'O módulo de Poupança encontra-se em desenvolvimento.',
+                showConfirmButton: false,
+                showCancelButton: false,
+                showCloseButton: true,
+                reverseButtons: true,
+                confirmButtonText: '<i class="fa fa-refresh fa-fw"></i> Tentar de novo ',
+                cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
+            }).then((result) => {
+                if (result.value) {
+                    recuperar_senha();
+                } else {
+
+                }
+            });
+
+            // PNotify.info({
+            //     title: 'Em breve',
+            //     text: 'O módulo de Poupança encontra-se em desenvolvimento.',
+            //     styling: 'bootstrap3',
+            //     icon: 'fa fa-warning fa-lg fa-fw',
+            //     delay: 5000,
+            //     addClass: 'pnotify-shadow',
+            //     hide: true,
+            //     stack: {
+            //         'dir1': 'down',
+            //         'firstpos1': 25
+            //     },
+            //     modules: {
+            //         Animate: {
+            //             animate: true,
+            //             inClass: 'slideInDown',
+            //             outClass: 'slideOutUp'
+            //         },
+            //         Buttons: {
+            //             sticker: false,
+            //             closerHover: false,
+            //         },
+            //         Mobile: {
+            //             styling: true
+            //         }
+            //     }
+            // });
+        });
+
         <?php if ($this->session->flashdata('erro') != null) { ?>
         Swal.fire({
             position: 'top',

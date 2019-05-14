@@ -42,7 +42,7 @@ class Vendas_model extends CI_Model
         $this->db->select('vendas.*, clientes.*, lancamentos.data_lancamento, usuarios.telefone, usuarios.email,usuarios.nome');
         $this->db->from('vendas');
         $this->db->join('clientes', 'clientes.idClientes = vendas.clientes_id');
-        $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id');
+        $this->db->join('usuarios', 'usuarios.id_usuarios = vendas.usuarios_id');
         $this->db->join('lancamentos', 'vendas.idVendas = lancamentos.vendas_id', 'LEFT');
         $this->db->where('vendas.idVendas', $id);
         $this->db->limit(1);
@@ -142,7 +142,7 @@ class Vendas_model extends CI_Model
         $query = $this->db->get('usuarios');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = array('label'=>$row['nome'].' | Telefone: '.$row['telefone'],'id'=>$row['idUsuarios']);
+                $row_set[] = array('label'=>$row['nome'].' | Telefone: '.$row['telefone'],'id'=>$row['id_usuarios']);
             }
             echo json_encode($row_set);
         }

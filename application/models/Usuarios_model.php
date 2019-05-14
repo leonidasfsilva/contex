@@ -38,7 +38,7 @@ class Usuarios_model extends CI_Model
 
     function getById($id)
     {
-        $this->db->where('idUsuarios', $id);
+        $this->db->where('id_usuarios', $id);
         $this->db->limit(1);
         return $this->db->get('usuarios')->row();
     }

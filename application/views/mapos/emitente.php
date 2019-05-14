@@ -21,7 +21,7 @@
     </div>
 
     <div id="modalCadastrar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <form action="<?php echo base_url(); ?>index.php/mapos/cadastrarEmitente" id="formCadastrar" enctype="multipart/form-data" method="post"
+        <form action="<?php echo base_url(); ?>index.php/mxcode/cadastrarEmitente" id="formCadastrar" enctype="multipart/form-data" method="post"
               class="form-horizontal">
             <div class="modal-header bg_primary">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -120,9 +120,9 @@
                     <table class="table table-bordered">
                         <tbody>
                         <tr>
-                            <td style="width: 25%"><img src=" <?php echo $dados[0]->url_logo; ?> "></td>
+                            <td style="width: 25%"><img style="width: 200px" src=" <?php echo base_url() . $dados[0]->url_logo; ?> "></td>
                             <td><span style="font-size: 20px; "> <?php echo $dados[0]->nome; ?> </span> </br>
-                                <span><?php echo $dados[0]->cnpj; ?> </br> <?php echo $dados[0]->rua . ', nº:' . $dados[0]->numero . ', ' . $dados[0]->bairro . ' - ' . $dados[0]->cidade . ' - ' . $dados[0]->uf; ?> </span> </br>
+                                <span><?php echo $dados[0]->cnpj; ?> </br> <?php echo $dados[0]->rua . ', ' . $dados[0]->numero . ', ' . $dados[0]->bairro . ' - ' . $dados[0]->cidade . ' / ' . $dados[0]->uf; ?> </span> </br>
                                 <span> E-mail: <?php echo $dados[0]->email . ' - Fone: ' . $dados[0]->telefone; ?></span></td>
                         </tr>
                         </tbody>
@@ -137,7 +137,7 @@
     </div>
 
     <div id="modalAlterar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <form action="<?php echo base_url(); ?>index.php/mapos/editarEmitente" id="formAlterar" enctype="multipart/form-data" method="post"
+        <form action="<?php echo base_url(); ?>index.php/mxcode/editarEmitente" id="formAlterar" enctype="multipart/form-data" method="post"
               class="form-horizontal">
             <div class="modal-header bg_primary">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -216,33 +216,39 @@
         </form>
     </div>
 
-    <div id="modalLogo" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <form action="<?php echo base_url(); ?>index.php/mapos/editarLogo" id="formLogo" enctype="multipart/form-data" method="post"
-              class="form-horizontal">
-            <div class="modal-header bg_inverse">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="">MapOS - Alterar Logotipo</h3>
-            </div>
-            <div class="modal-body">
-                <div class="span12 alert alert-info">Selecione uma nova imagem da logotipo. Tamanho indicado (130 X 130).</div>
-                <div class="control-group">
-                    <label for="logo" class="control-label"><span class="required">Logotipo*</span></label>
-                    <div class="controls">
-                        <input type="file" name="userfile" value=""/>
-                        <input id="nome" type="hidden" name="id" value="<?php echo $dados[0]->id; ?>"/>
-                    </div>
+    <!-- Modal UPLOAD LOGO-->
+    <div class="modal fade" id="modalLogo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-inverse">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title text-white">Alterar logotipo</h4>
                 </div>
+                <form action="<?php echo base_url(); ?>mxcode/editarLogo" id="formLogo" enctype="multipart/form-data" method="post">
+                    <div class="modal-body">
+                        <p>Selecione uma nova imagem da logotipo.</p>
+                        <input id="nome" type="hidden" name="id" value="<?php echo $dados[0]->id; ?>"/>
+                        <input id="url" type="hidden" name="urlAtual" value=""/>
+                        <div class="row">
+                            <div class="form-group col-lg-6">
+                                <label class="font-weight-bold" for="data_pagamento">Logotipo *</label>
+                                <input type="file" class="btn btn-inverse" name="userfile" value=""/>
+                            </div>
+                        </div>
 
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                            <i class="fa fa-times fa-fw"></i> Cancelar
+                        </button>
+                        <button class="btn btn-inverse btn-sm" id="btnFechar">
+                            <i class="fa fa-check fa-fw"></i> Confirmar
+                        </button>
+                    </div>
+                </form>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir"><i class="fa fa-times fa-fw"></i>
-                    Cancelar
-                </button>
-                <button class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Alterar</button>
-            </div>
-        </form>
+        </div>
     </div>
-
 
 <?php } ?>
 

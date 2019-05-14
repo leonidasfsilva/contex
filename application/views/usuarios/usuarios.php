@@ -54,13 +54,13 @@ if (!$results) { ?>
                 <?php foreach ($results as $r) {
 
                     echo '<tr>';
-                    echo '<td>' . $r->idUsuarios . '</td>';
+                    echo '<td>' . $r->id_usuarios . '</td>';
                     echo '<td>' . $r->nome . '</td>';
                     echo '<td>' . $r->cpf . '</td>';
                     echo '<td>' . $r->telefone . '</td>';
                     echo '<td>' . $r->permissao . '</td>';
                     echo '<td>
-                      <a href="' . base_url() . 'index.php/usuarios/editar/' . $r->idUsuarios . '" class="btn btn-info btn-sm tip-top" title="Editar Usuário"><i class="fa fa-edit fa-fw"></i></a>
+                      <a href="' . base_url() . 'index.php/usuarios/editar/' . $r->id_usuarios . '" class="btn btn-info btn-sm tip-top" title="Editar Usuário"><i class="fa fa-edit fa-fw"></i></a>
                   </td>';
                     echo '</tr>';
                 } ?>

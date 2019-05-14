@@ -417,7 +417,7 @@
                             <a href="<?php echo site_url(); ?>mxcode/minhaConta">
                                 <div class="tabular-row">
                                     <div class="tabular-cell welcome-avatar">
-                                        <img src="<?php echo base_url(); ?>assets/img/avatars/avatar1.png" class="avatar">
+                                        <img src="<?php echo base_url(); ?>assets/img/avatars/padrao.png" class="avatar">
                                     </div>
                                     <div class="tabular-cell welcome-options">
                                         <span class="welcome-text">Bem-vindo,</span>
@@ -546,13 +546,13 @@
                                                 <li><a href="<?php echo base_url() ?>usuarios">Usuários</a></li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) { ?>
-                                                <li><a href="<?php echo base_url() ?>mapos/emitente">Emitente</a></li>
+                                                <li><a href="<?php echo base_url() ?>mxcode/emitente">Emitente</a></li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) { ?>
                                                 <li><a href="<?php echo base_url() ?>permissoes">Permissões</a></li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cBackup')) { ?>
-                                                <li><a href="<?php echo base_url() ?>mapos/backup">Backup</a></li>
+                                                <li><a href="<?php echo base_url() ?>mxcode/backup">Backup</a></li>
                                             <?php } ?>
                                         </ul>
                                     </li>

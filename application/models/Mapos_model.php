@@ -37,14 +37,14 @@ class Mapos_model extends CI_Model
         $this->db->from('usuarios');
         $this->db->select('usuarios.*, permissoes.nome as permissao');
         $this->db->join('permissoes', 'permissoes.idPermissao = usuarios.permissoes_id', 'left');
-        $this->db->where('idUsuarios', $id);
+        $this->db->where('id_usuarios', $id);
         $this->db->limit(1);
         return $this->db->get()->row();
     }
 
     public function getUsuario($id)
     {
-        $this->db->where('idUsuarios', $id);
+        $this->db->where('id_usuarios', $id);
         $this->db->limit(1);
         $usuario = $this->db->get('usuarios')->row();
 
@@ -54,7 +54,7 @@ class Mapos_model extends CI_Model
     public function alterarSenha($id, $newSenha)
     {
         $this->db->set('senha', password_hash($newSenha, PASSWORD_DEFAULT));
-        $this->db->where('idUsuarios', $id);
+        $this->db->where('id_usuarios', $id);
         return $this->db->update('usuarios');
 
     }

@@ -67,4 +67,25 @@
             box-shadow: 0 2px 2px rgba(0, 0, 0, .2);
         }
 
+        label.error {
+            color: #b94a48;
+        }
+
+        input.error {
+            border-color: #b94a48;
+        }
+
+        input.valid {
+            border-color: #5bb75b;
+        }
+
+        .table-bordeless td, .table-bordeless th {
+            border: none;
+        }
+
+        table {
+            font-family: Arial;
+            font-size: 11px;
+        }
+
     </style>

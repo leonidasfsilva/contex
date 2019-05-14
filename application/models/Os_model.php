@@ -58,7 +58,7 @@ class Os_model extends CI_Model
         $this->db->select($fields . ',clientes.nomeCliente, usuarios.nome');
         $this->db->from($table);
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
-        $this->db->join('usuarios', 'usuarios.idUsuarios = os.usuarios_id', 'left');
+        $this->db->join('usuarios', 'usuarios.id_usuarios = os.usuarios_id', 'left');
 
         // condicionais da pesquisa
 
@@ -99,7 +99,7 @@ class Os_model extends CI_Model
         $this->db->select('os.*, clientes.*, usuarios.telefone, usuarios.email,usuarios.nome');
         $this->db->from('os');
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
-        $this->db->join('usuarios', 'usuarios.idUsuarios = os.usuarios_id');
+        $this->db->join('usuarios', 'usuarios.id_usuarios = os.usuarios_id');
         $this->db->where('os.idOs', $id);
         $this->db->limit(1);
         return $this->db->get()->row();
@@ -223,7 +223,7 @@ class Os_model extends CI_Model
         $query = $this->db->get('usuarios');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = array('label' => $row['nome'] . ' | Telefone: ' . $row['telefone'], 'id' => $row['idUsuarios']);
+                $row_set[] = array('label' => $row['nome'] . ' | Telefone: ' . $row['telefone'], 'id' => $row['id_usuarios']);
             }
             echo json_encode($row_set);
         }

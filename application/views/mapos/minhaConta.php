@@ -1,29 +1,3 @@
-<style type="text/css">
-
-    label.error {
-        color: #b94a48;
-    }
-
-    input.error {
-        border-color: #b94a48;
-    }
-
-    input.valid {
-        border-color: #5bb75b;
-    }
-
-    .table-bordeless td, .table-bordeless th {
-        border: none;
-    }
-
-    table {
-        font-family: Arial;
-        font-size: 11px;
-    }
-
-</style>
-
-
 <div class="row">
     <div class="col-md-6">
         <div class="panel panel-profile">
@@ -32,11 +6,17 @@
                     <i class="fa fa-user-circle fa-lg fa-fw"></i>
                     Minha Conta
                 </h2>
+                <div class="panel-ctrls">
+                    <button href="#modalFiltrar" class="btn btn-default btn-sm" id="editar_perfil" data-toggle="modal" title="Editar perfil de usuário">
+                        <i class="fa fa-user-circle fa-fw"></i>
+                        Editar Perfil
+                    </button>
+                </div>
             </div>
             <div class="panel-body">
                 <div class="user-card">
                     <div class="avatar">
-                        <img src="<?php echo base_url(); ?>assets/img/avatars/avatar1.png" class="img-responsive img-circle">
+                        <img src="<?php echo base_url(); ?>assets/img/avatars/padrao.png" class="img-responsive img-circle">
                     </div>
                     <div class="contact-name"><?php echo $usuario->nome ?></div>
                     <div class="contact-status"><?php echo $usuario->permissao; ?></div>
@@ -45,7 +25,7 @@
                         <li><?php echo $usuario->telefone ?></li>
                         <li>
                             <?php echo $usuario->bairro ?>,
-                            <?php echo $usuario->cidade ?>/<?php echo $usuario->estado ?>
+                            <?php echo $usuario->cidade . '/' . $usuario->uf ?>
                         </li>
                     </ul>
                     <hr class="">

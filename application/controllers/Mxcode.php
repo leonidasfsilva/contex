@@ -5,17 +5,12 @@
 class Mxcode extends CI_Controller
 {
 
-
-    /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     *
-     */
-
     public function __construct()
     {
         parent::__construct();
         $this->load->model('mapos_model', '', true);
+        $this->load->helper('file');
+        $this->load->library('upload');
         $this->load->helper(array('codegen_helper'));
         $this->id_usuario = $this->session->userdata('id');
 
@@ -48,7 +43,6 @@ class Mxcode extends CI_Controller
         $this->data['minhaConta'] = 'Conta';
         $this->load->view('tema/topo', $this->data);
 
-
     }
 
     public function alterarSenha()
@@ -63,7 +57,7 @@ class Mxcode extends CI_Controller
 
 
         if (password_verify($oldSenha, $usuario->senha)) {
-            $result = $this->mapos_model->alterarSenha($usuario->idUsuarios, $senha);
+            $result = $this->mapos_model->alterarSenha($usuario->id_usuarios, $senha);
             if ($result == true) {
                 $this->session->set_flashdata('sucesso', 'Senha alterada com sucesso!');
                 redirect(base_url() . 'mxcode/minhaConta');
@@ -135,7 +129,7 @@ class Mxcode extends CI_Controller
 
             if ($user) {
                 if (password_verify($password, $user->senha)) {
-                    $session_data = array('nome' => $user->nome, 'email' => $user->email, 'id' => $user->idUsuarios, 'permissao' => $user->permissoes_id, 'logado' => true);
+                    $session_data = array('nome' => $user->nome, 'email' => $user->email, 'id' => $user->id_usuarios, 'permissao' => $user->permissoes_id, 'logado' => true);
                     $this->session->set_userdata($session_data);
                     redirect('mxcode/');
                 } else {
@@ -209,23 +203,21 @@ class Mxcode extends CI_Controller
             redirect(base_url());
         }
 
-        $this->load->library('upload');
-
         $image_upload_folder = FCPATH . 'assets/uploads';
 
         if (!file_exists($image_upload_folder)) {
             mkdir($image_upload_folder, DIR_WRITE_MODE, true);
         }
 
-        $this->upload_config = array(
+        $upload_config = array(
             'upload_path' => $image_upload_folder,
-            'allowed_types' => 'png|jpg|jpeg|bmp',
+            'allowed_types' => 'png|jpg|jpeg|bmp|gif',
             'max_size' => 2048,
             'remove_space' => true,
             'encrypt_name' => true,
         );
 
-        $this->upload->initialize($this->upload_config);
+        $this->upload->initialize($upload_config);
 
         if (!$this->upload->do_upload()) {
             $upload_error = $this->upload->display_errors();
@@ -369,22 +361,53 @@ class Mxcode extends CI_Controller
         $id = $this->input->post('id');
         if ($id == null || !is_numeric($id)) {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar a logomarca.');
-            redirect(base_url() . 'index.php/mxcode/emitente');
+            redirect(base_url() . 'mxcode/emitente');
         }
-        $this->load->helper('file');
         delete_files(FCPATH . 'assets/uploads/');
 
-        $image = $this->do_upload();
-        $logo = base_url() . 'assets/uploads/' . $image;
+        $image = $this->do_upload($_FILES['userfile']);
+        $logo = 'assets/uploads/' . $image;
 
         $retorno = $this->mapos_model->editLogo($id, $logo);
         if ($retorno) {
-
             $this->session->set_flashdata('success', 'As informações foram alteradas com sucesso.');
             redirect(base_url() . 'index.php/mxcode/emitente');
         } else {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar as informações.');
+            redirect(base_url() . 'mxcode/emitente');
+        }
+
+    }
+
+    public function editarFotoUsuario()
+    {
+
+        if ((!session_id()) || (!$this->session->userdata('logado'))) {
+            redirect('mxcode/login');
+        }
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
+            redirect(base_url());
+        }
+
+        $id = $this->input->post('id');
+        if ($id == null || !is_numeric($id)) {
+            $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar a logomarca.');
+            redirect(base_url() . 'mxcode/emitente');
+        }
+        delete_files(FCPATH . 'assets/uploads/');
+
+        $image = $this->do_upload($_FILES['userfile']);
+        $logo = 'assets/uploads/' . $image;
+
+        $retorno = $this->mapos_model->editLogo($id, $logo);
+        if ($retorno) {
+            $this->session->set_flashdata('success', 'As informações foram alteradas com sucesso.');
             redirect(base_url() . 'index.php/mxcode/emitente');
+        } else {
+            $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar as informações.');
+            redirect(base_url() . 'mxcode/emitente');
         }
 
     }

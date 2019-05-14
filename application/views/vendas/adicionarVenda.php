@@ -53,7 +53,7 @@
                                         <div class="span5">
                                             <label for="tecnico">Vendedor<span class="required"> *</span></label>
                                             <input id="tecnico" class="span12" type="text" name="tecnico" value="<?php echo $usuario->nome ?>" readonly/>
-                                            <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?php echo $usuario->idUsuarios ?>"/>
+                                            <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?php echo $usuario->id_usuarios ?>"/>
                                         </div>
                                     </div>
                                     <div class="span12" style="padding: 1%; margin-left: 0">

@@ -65,7 +65,7 @@ class Redefinirsenha extends CI_Controller
                     $data = array(
                         'token' => $token,
                         'email' => $result->email,
-                        'id_usuario' => $result->idUsuarios
+                        'id_usuario' => $result->id_usuarios
                     );
 
                     $this->redefinicao_model->gravaToken($data);

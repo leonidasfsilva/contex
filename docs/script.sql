@@ -128,7 +128,7 @@ ENGINE = InnoDB;
 -- Table `usuarios`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `usuarios` (
-  `idUsuarios` INT(11) NOT NULL AUTO_INCREMENT,
+  `id_usuarios` INT(11) NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(80) NOT NULL,
   `rg` VARCHAR(20) NULL DEFAULT NULL,
   `cpf` VARCHAR(20) NOT NULL,
@@ -144,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `situacao` TINYINT(1) NOT NULL,
   `dataCadastro` DATE NOT NULL,
   `permissoes_id` INT NOT NULL,
-  PRIMARY KEY (`idUsuarios`),
+  PRIMARY KEY (`id_usuarios`),
   INDEX `fk_usuarios_permissoes1_idx` (`permissoes_id` ASC),
   CONSTRAINT `fk_usuarios_permissoes1`
     FOREIGN KEY (`permissoes_id`)
@@ -190,7 +190,7 @@ CREATE TABLE IF NOT EXISTS `os` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_os_usuarios1`
     FOREIGN KEY (`usuarios_id`)
-    REFERENCES `usuarios` (`idUsuarios`)
+    REFERENCES `usuarios` (`id_usuarios`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -303,7 +303,7 @@ CREATE TABLE IF NOT EXISTS `vendas` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_vendas_usuarios1`
     FOREIGN KEY (`usuarios_id`)
-    REFERENCES `usuarios` (`idUsuarios`)
+    REFERENCES `usuarios` (`id_usuarios`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_vendas_lancamentos1`
@@ -486,7 +486,7 @@ INSERT INTO `permissoes` (`idPermissao`, `nome`, `permissoes`, `situacao`, `data
 (1, 'Administrador', 'a:38:{s:8:"aCliente";s:1:"1";s:8:"eCliente";s:1:"1";s:8:"dCliente";s:1:"1";s:8:"vCliente";s:1:"1";s:8:"aProduto";s:1:"1";s:8:"eProduto";s:1:"1";s:8:"dProduto";s:1:"1";s:8:"vProduto";s:1:"1";s:8:"aServico";s:1:"1";s:8:"eServico";s:1:"1";s:8:"dServico";s:1:"1";s:8:"vServico";s:1:"1";s:3:"aOs";s:1:"1";s:3:"eOs";s:1:"1";s:3:"dOs";s:1:"1";s:3:"vOs";s:1:"1";s:6:"aVenda";s:1:"1";s:6:"eVenda";s:1:"1";s:6:"dVenda";s:1:"1";s:6:"vVenda";s:1:"1";s:8:"aArquivo";s:1:"1";s:8:"eArquivo";s:1:"1";s:8:"dArquivo";s:1:"1";s:8:"vArquivo";s:1:"1";s:11:"aLancamento";s:1:"1";s:11:"eLancamento";s:1:"1";s:11:"dLancamento";s:1:"1";s:11:"vLancamento";s:1:"1";s:8:"cUsuario";s:1:"1";s:9:"cEmitente";s:1:"1";s:10:"cPermissao";s:1:"1";s:7:"cBackup";s:1:"1";s:8:"rCliente";s:1:"1";s:8:"rProduto";s:1:"1";s:8:"rServico";s:1:"1";s:3:"rOs";s:1:"1";s:6:"rVenda";s:1:"1";s:11:"rFinanceiro";s:1:"1";}', 1, '2014-09-03');
 
 
-INSERT INTO `usuarios` (`idUsuarios`, `nome`, `rg`, `cpf`, `rua`, `numero`, `bairro`, `cidade`, `estado`, `email`, `senha`, `telefone`, `celular`, `situacao`, `dataCadastro`, `permissoes_id`) VALUES
+INSERT INTO `usuarios` (`id_usuarios`, `nome`, `rg`, `cpf`, `rua`, `numero`, `bairro`, `cidade`, `estado`, `email`, `senha`, `telefone`, `celular`, `situacao`, `dataCadastro`, `permissoes_id`) VALUES
 (1, 'admin', 'MG-25.502.560', '600.021.520-87', 'Rua Acima', '12', 'Alvorada', 'Teste', 'MG', 'admin@admin.com', '94556715d7862d57e603e5e7389e0174227388d94090370517e3cfe5b1cccfbf3647bacd8dfc6190492c42d19e76df96308236c87c83ff78c37c01678d675e4fZE8TIK5YP2vt2j7+3ta7mfbOgY8wdMfs/vPCG5YBWh4=', '0000-0000', '', 1, '2013-11-22', 1);
 
 

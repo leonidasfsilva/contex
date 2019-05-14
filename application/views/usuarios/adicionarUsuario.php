@@ -34,7 +34,7 @@
                     </div>
 
                     <div class="control-group">
-                        <label for="rua" class="control-label">Rua<span class="required">*</span></label>
+                        <label for="rua" class="control-label">Logradouro<span class="required">*</span></label>
                         <div class="controls">
                             <input id="rua" type="text" name="rua" value="<?php echo set_value('rua'); ?>"  />
                         </div>
@@ -62,7 +62,7 @@
                     </div>
 
                     <div class="control-group">
-                        <label for="estado" class="control-label">Estado<span class="required">*</span></label>
+                        <label for="estado" class="control-label">UF<span class="required">*</span></label>
                         <div class="controls">
                             <input id="estado" type="text" name="estado" value="<?php echo set_value('estado'); ?>"  />
                         </div>

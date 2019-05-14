@@ -403,11 +403,11 @@ class Mine extends CI_Controller
                 $this->db->limit(1);
                 $usuario = $this->db->get('usuarios')->row();
 
-                if ($usuario->idUsuarios == null) {
+                if ($usuario->id_usuarios == null) {
                     $this->session->set_flashdata('error', 'Ocorreu um erro ao cadastrar a ordem de serviço, por favor contate o administrador do sistema.');
                     redirect('mine/os');
                 } else {
-                    $id = $usuario->idUsuarios;
+                    $id = $usuario->id_usuarios;
                 }
             } else {
                 $id = $usuario->usuarios_id;

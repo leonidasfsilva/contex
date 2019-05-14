@@ -217,7 +217,7 @@ class Relatorios_model extends CI_Model
         $this->db->select('vendas.*,clientes.nomeCliente, usuarios.nome');
         $this->db->from('vendas');
         $this->db->join('clientes', 'clientes.idClientes = vendas.clientes_id');
-        $this->db->join('usuarios', 'usuarios.idUsuarios = vendas.usuarios_id');
+        $this->db->join('usuarios', 'usuarios.id_usuarios = vendas.usuarios_id');
         return $this->db->get()->result();
     }
 
@@ -237,7 +237,7 @@ class Relatorios_model extends CI_Model
             $whereResponsavel = "AND usuarios_id = " . $this->db->escape($responsavel);
         }
 
-        $query = "SELECT vendas.*,clientes.nomeCliente,usuarios.nome FROM vendas LEFT JOIN clientes ON vendas.clientes_id = clientes.idClientes LEFT JOIN usuarios ON vendas.usuarios_id = usuarios.idUsuarios WHERE idVendas != 0 $whereData $whereCliente $whereResponsavel";
+        $query = "SELECT vendas.*,clientes.nomeCliente,usuarios.nome FROM vendas LEFT JOIN clientes ON vendas.clientes_id = clientes.idClientes LEFT JOIN usuarios ON vendas.usuarios_id = usuarios.id_usuarios WHERE idVendas != 0 $whereData $whereCliente $whereResponsavel";
         return $this->db->query($query)->result();
     }
 }
