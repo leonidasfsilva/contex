@@ -36,7 +36,7 @@
             <div class="panel-body">
                 <div class="user-card">
                     <div class="avatar">
-                        <img src="<?php echo base_url(); ?>assets/img/logo_contex.png" class="img-responsive img-circle">
+                        <img src="<?php echo base_url(); ?>assets/img/avatars/avatar1.png" class="img-responsive img-circle">
                     </div>
                     <div class="contact-name"><?php echo $usuario->nome ?></div>
                     <div class="contact-status"><?php echo $usuario->permissao; ?></div>
