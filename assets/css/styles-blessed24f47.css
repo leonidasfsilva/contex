@@ -3020,7 +3020,7 @@ fieldset[disabled] .btn.btn-social.btn-windows-alt.active {
     color: #5b5b5b;
 }
 .panel .alert {
-    /*margin-bottom: 24px;*/
+    margin-bottom: 24px;
 }
 .alert-dismissable .close {
     right: 0;
