@@ -124,14 +124,19 @@ class Mxcode extends CI_Controller
         } else {
             $email = $this->input->post('email');
             $password = $this->input->post('senha');
-            $this->load->model('Mapos_model');
-            $user = $this->Mapos_model->check_credentials($email);
+            $usuario = $this->mapos_model->check_credentials($email);
 
-            if ($user) {
-                if (password_verify($password, $user->senha)) {
-                    $session_data = array('nome' => $user->nome, 'email' => $user->email, 'id' => $user->id_usuarios, 'permissao' => $user->permissoes_id, 'logado' => true);
+            if ($usuario) {
+                if (password_verify($password, $usuario->senha)) {
+                    $session_data = array(
+                        'nome' => $usuario->nome,
+                        'email' => $usuario->email,
+                        'id' => $usuario->id_usuarios,
+                        'permissao' => $usuario->permissoes_id,
+                        'logado' => true
+                    );
                     $this->session->set_userdata($session_data);
-                    redirect('mxcode/');
+                    redirect('/');
                 } else {
                     $this->session->set_flashdata('erro', 'Dados de acesso inválidos, por favor tente novamente.');
                     redirect('mxcode/login');
@@ -188,10 +193,9 @@ class Mxcode extends CI_Controller
         $data['dados'] = $this->mapos_model->getEmitente($this->id_usuario);
         $data['view'] = 'mapos/emitente';
         $this->load->view('tema/topo', $data);
-        $this->load->view('tema/rodape');
     }
 
-    function do_upload()
+    public function cadastrarEmitente()
     {
 
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
@@ -203,7 +207,87 @@ class Mxcode extends CI_Controller
             redirect(base_url());
         }
 
-        $image_upload_folder = FCPATH . 'assets/uploads';
+        $data = array(
+            'emitente' => padronizarString($this->input->post('emitente')),
+            'cnpj' => $this->input->post('cnpj'),
+            'ie' => $this->input->post('ie'),
+            's_n' => $this->input->post('s_n'),
+            'logradouro' => padronizarString($this->input->post('logradouro')),
+            'numero' => $this->input->post('numero'),
+            'bairro' => padronizarString($this->input->post('bairro')),
+            'cidade' => padronizarString($this->input->post('cidade')),
+            'uf' => padronizarString($this->input->post('uf')),
+            'cep' => $this->input->post('cep'),
+            'telefone' => $this->input->post('telefone'),
+            'email' => $this->input->post('email'),
+            'id_usuario' => $this->id_usuario,
+        );
+
+        $retorno = $this->mapos_model->add('emitente', $data);
+        if ($retorno == true) {
+            $this->session->set_flashdata('sucesso', 'Informações cadastradas com sucesso!');
+            redirect(base_url() . 'mxcode/emitente');
+        } else {
+            $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar cadastrar as informações.');
+            redirect(base_url() . 'mxcode/emitente');
+        }
+
+
+    }
+
+    public function editarEmitente()
+    {
+
+        if ((!session_id()) || (!$this->session->userdata('logado'))) {
+            redirect('mxcode/login');
+        }
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
+            redirect(base_url());
+        }
+
+
+        $data = array(
+            'emitente' => padronizarString($this->input->post('emitente')),
+            'cnpj' => $this->input->post('cnpj'),
+            'ie' => $this->input->post('ie'),
+            's_n' => $this->input->post('s_n'),
+            'logradouro' => padronizarString($this->input->post('logradouro')),
+            'numero' => $this->input->post('numero'),
+            'bairro' => padronizarString($this->input->post('bairro')),
+            'cidade' => padronizarString($this->input->post('cidade')),
+            'uf' => padronizarString($this->input->post('uf')),
+            'cep' => $this->input->post('cep'),
+            'telefone' => $this->input->post('telefone'),
+            'email' => $this->input->post('email'),
+        );
+
+        $retorno = $this->mapos_model->edit('emitente', $data, 'id_emitente', $this->input->post('id_emitente'));
+        if ($retorno == true) {
+            $this->session->set_flashdata('sucesso', 'Informações alteradas com sucesso.');
+            redirect(base_url() . 'mxcode/emitente');
+        } else {
+            $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar alterar as informações.');
+            redirect(base_url() . 'mxcode/emitente');
+        }
+
+
+    }
+
+    function do_upload($file, $url = null, $dir)
+    {
+
+        if ((!session_id()) || (!$this->session->userdata('logado'))) {
+            redirect('mxcode/login');
+        }
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
+            redirect(base_url());
+        }
+
+        $image_upload_folder = $dir;
 
         if (!file_exists($image_upload_folder)) {
             mkdir($image_upload_folder, DIR_WRITE_MODE, true);
@@ -219,131 +303,19 @@ class Mxcode extends CI_Controller
 
         $this->upload->initialize($upload_config);
 
+        $url != null ?: $url = base_url();
+
         if (!$this->upload->do_upload()) {
             $upload_error = $this->upload->display_errors();
-            print_r($upload_error);
+            $this->session->set_flashdata('error', $upload_error);
+            redirect($url);
+//            print_r($upload_error);
             exit();
         } else {
             $file_info = array($this->upload->data());
             return $file_info[0]['file_name'];
         }
 
-    }
-
-    public function cadastrarEmitente()
-    {
-
-        if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mxcode/login');
-        }
-
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
-            redirect(base_url());
-        }
-
-        $this->load->library('form_validation');
-        $this->form_validation->set_rules('nome', 'Razão Social', 'required|trim');
-        $this->form_validation->set_rules('cnpj', 'CNPJ', 'required|trim');
-        $this->form_validation->set_rules('ie', 'IE', 'required|trim');
-        $this->form_validation->set_rules('logradouro', 'Logradouro', 'required|trim');
-        $this->form_validation->set_rules('numero', 'Número', 'required|trim');
-        $this->form_validation->set_rules('bairro', 'Bairro', 'required|trim');
-        $this->form_validation->set_rules('cidade', 'Cidade', 'required|trim');
-        $this->form_validation->set_rules('uf', 'UF', 'required|trim');
-        $this->form_validation->set_rules('telefone', 'Telefone', 'required|trim');
-        $this->form_validation->set_rules('email', 'E-mail', 'required|trim');
-
-        if ($this->form_validation->run() == false) {
-
-            $this->session->set_flashdata('error', 'Campos obrigatórios não foram preenchidos.');
-            redirect(base_url() . 'index.php/mxcode/emitente');
-
-        } else {
-
-            $nome = $this->input->post('nome');
-            $cnpj = $this->input->post('cnpj');
-            $ie = $this->input->post('ie');
-            $logradouro = $this->input->post('logradouro');
-            $numero = $this->input->post('numero');
-            $bairro = $this->input->post('bairro');
-            $cidade = $this->input->post('cidade');
-            $uf = $this->input->post('uf');
-            $telefone = $this->input->post('telefone');
-            $email = $this->input->post('email');
-            $image = $this->do_upload();
-            $logo = base_url() . 'assets/uploads/' . $image;
-
-
-            $retorno = $this->mapos_model->addEmitente($nome, $cnpj, $ie, $logradouro, $numero, $bairro, $cidade, $uf, $telefone, $email, $logo);
-            if ($retorno) {
-
-                $this->session->set_flashdata('success', 'As informações foram inseridas com sucesso.');
-                redirect(base_url() . 'index.php/mxcode/emitente');
-            } else {
-                $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar inserir as informações.');
-                redirect(base_url() . 'index.php/mxcode/emitente');
-            }
-
-        }
-    }
-
-    public function editarEmitente()
-    {
-
-        if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mxcode/login');
-        }
-
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
-            redirect(base_url());
-        }
-
-        $this->load->library('form_validation');
-        $this->form_validation->set_rules('nome', 'Razão Social', 'required|trim');
-        $this->form_validation->set_rules('cnpj', 'CNPJ', 'required|trim');
-        $this->form_validation->set_rules('ie', 'IE', 'required|trim');
-        $this->form_validation->set_rules('logradouro', 'Logradouro', 'required|trim');
-        $this->form_validation->set_rules('numero', 'Número', 'required|trim');
-        $this->form_validation->set_rules('bairro', 'Bairro', 'required|trim');
-        $this->form_validation->set_rules('cidade', 'Cidade', 'required|trim');
-        $this->form_validation->set_rules('uf', 'UF', 'required|trim');
-        $this->form_validation->set_rules('telefone', 'Telefone', 'required|trim');
-        $this->form_validation->set_rules('email', 'E-mail', 'required|trim');
-
-
-        if ($this->form_validation->run() == false) {
-
-            $this->session->set_flashdata('error', 'Campos obrigatórios não foram preenchidos.');
-            redirect(base_url() . 'index.php/mxcode/emitente');
-
-        } else {
-
-            $nome = $this->input->post('nome');
-            $cnpj = $this->input->post('cnpj');
-            $ie = $this->input->post('ie');
-            $logradouro = $this->input->post('logradouro');
-            $numero = $this->input->post('numero');
-            $bairro = $this->input->post('bairro');
-            $cidade = $this->input->post('cidade');
-            $uf = $this->input->post('uf');
-            $telefone = $this->input->post('telefone');
-            $email = $this->input->post('email');
-            $id = $this->input->post('id');
-
-
-            $retorno = $this->mapos_model->editEmitente($id, $nome, $cnpj, $ie, $logradouro, $numero, $bairro, $cidade, $uf, $telefone, $email);
-            if ($retorno) {
-
-                $this->session->set_flashdata('success', 'As informações foram alteradas com sucesso.');
-                redirect(base_url() . 'index.php/mxcode/emitente');
-            } else {
-                $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar as informações.');
-                redirect(base_url() . 'index.php/mxcode/emitente');
-            }
-
-        }
     }
 
     public function editarLogo()
@@ -358,22 +330,57 @@ class Mxcode extends CI_Controller
             redirect(base_url());
         }
 
-        $id = $this->input->post('id');
+        $id = $this->input->post('id_emitente');
         if ($id == null || !is_numeric($id)) {
-            $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar a logomarca.');
+            $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar alterar a logomarca.');
             redirect(base_url() . 'mxcode/emitente');
         }
-        delete_files(FCPATH . 'assets/uploads/');
 
-        $image = $this->do_upload($_FILES['userfile']);
-        $logo = 'assets/uploads/' . $image;
+        $logo_atual = $this->mapos_model->getLogoEmitente($this->id_usuario);
+        unlink('assets/uploads/logomarcas/' . $logo_atual->logomarca);
+        $dir = 'assets/uploads/logomarcas';
+        $image = $this->do_upload($_FILES['userfile'], base_url() . 'mxcode/emitente', $dir);
+        $logo = $image;
 
         $retorno = $this->mapos_model->editLogo($id, $logo);
         if ($retorno) {
-            $this->session->set_flashdata('success', 'As informações foram alteradas com sucesso.');
-            redirect(base_url() . 'index.php/mxcode/emitente');
+            $this->session->set_flashdata('sucesso', 'Logomarca alterada com sucesso!');
+            redirect(base_url() . 'mxcode/emitente');
         } else {
-            $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar as informações.');
+            $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar alterar a logomarca.');
+            redirect(base_url() . 'mxcode/emitente');
+        }
+
+    }
+
+    public function excluirLogo()
+    {
+
+        if ((!session_id()) || (!$this->session->userdata('logado'))) {
+            redirect('mxcode/login');
+        }
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
+            redirect(base_url());
+        }
+
+        $id = $this->input->post('id_emitente');
+        if ($id == null || !is_numeric($id)) {
+            $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar excluir a logomarca.');
+            redirect(base_url() . 'mxcode/emitente');
+        }
+
+        $logo_atual = $this->mapos_model->getLogoEmitente($this->id_usuario);
+        unlink('assets/uploads/logomarcas/' . $logo_atual->logomarca);
+        $nova_logo = null;
+        $retorno = $this->mapos_model->editLogo($id, $nova_logo);
+
+        if ($retorno) {
+            $this->session->set_flashdata('sucesso', 'Logomarca excluída com sucesso!');
+            redirect(base_url() . 'mxcode/emitente');
+        } else {
+            $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar excluir a logomarca.');
             redirect(base_url() . 'mxcode/emitente');
         }
 
@@ -404,7 +411,7 @@ class Mxcode extends CI_Controller
         $retorno = $this->mapos_model->editLogo($id, $logo);
         if ($retorno) {
             $this->session->set_flashdata('success', 'As informações foram alteradas com sucesso.');
-            redirect(base_url() . 'index.php/mxcode/emitente');
+            redirect(base_url() . 'mxcode/emitente');
         } else {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar as informações.');
             redirect(base_url() . 'mxcode/emitente');

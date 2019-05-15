@@ -166,7 +166,7 @@ class Usuarios extends CI_Controller
                     'senha' => $senha,
                     'telefone' => $this->input->post('telefone'),
                     'celular' => $this->input->post('celular'),
-                    'situacao' => $this->input->post('situacao'),
+                    'status' => $this->input->post('situacao'),
                     'permissoes_id' => $this->input->post('permissoes_id')
                 );
             } else {
@@ -183,7 +183,7 @@ class Usuarios extends CI_Controller
                     'email' => $this->input->post('email'),
                     'telefone' => $this->input->post('telefone'),
                     'celular' => $this->input->post('celular'),
-                    'situacao' => $this->input->post('situacao'),
+                    'status' => $this->input->post('situacao'),
                     'permissoes_id' => $this->input->post('permissoes_id')
                 );
 

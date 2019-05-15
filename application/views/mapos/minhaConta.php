@@ -48,7 +48,7 @@
                     Alterar Senha
                 </h2>
             </div>
-            <div class="panel-body">
+            <div class="panel-body ">
                 <form id="formSenha" action="<?php echo base_url(); ?>mxcode/alterarSenha" method="post">
                     <div class="row">
                         <div class="form-group col-lg-12">

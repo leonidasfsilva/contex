@@ -106,11 +106,6 @@ class Fatura_model extends CI_Model
             return true;
         }
 
-//        if ($this->db->affected_rows() > 0) {
-//            return 1;
-//        }
-
-//        return 0;
     }
 
     function delete($table, $data, $fieldID, $ID)

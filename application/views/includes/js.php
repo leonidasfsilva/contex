@@ -80,25 +80,91 @@
 
     $(document).ready(function () {
 
-        $('#btn_teste').click(function () {
-            Swal({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                type: 'warning',
-                position: 'top',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.value) {
-                    Swal.fire(
-                        'Deleted!',
-                        'Your file has been deleted.',
-                        'success'
-                    )
+        function limpa_formulário_cep() {
+            // Limpa valores do formulário de cep.
+            $("#logradouro").val("");
+            $("#bairro").val("");
+            $("#cidade").val("");
+            $("#uf").val("");
+            $("#ibge").val("");
+        }
+
+        //Quando o campo cep perde o foco.
+        $("#cep").blur(function() {
+
+            //Nova variável "cep" somente com dígitos.
+            var cep = $(this).val().replace(/\D/g, '');
+
+            //Verifica se campo cep possui valor informado.
+            if (cep != "") {
+
+                //Expressão regular para validar o CEP.
+                var validacep = /^[0-9]{8}$/;
+
+                //Valida o formato do CEP.
+                if(validacep.test(cep)) {
+
+                    //Preenche os campos com "..." enquanto consulta webservice.
+                    $("#logradouro").val("aguarde...");
+                    $("#bairro").val("aguarde...");
+                    $("#cidade").val("aguarde...");
+                    $("#uf").val("aguarde...");
+                    $("#ibge").val("aguarde...");
+
+                    //Consulta o webservice viacep.com.br/
+                    $.getJSON("https://viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
+
+                        if (!("erro" in dados)) {
+                            //Atualiza os campos com os valores da consulta.
+                            $("#logradouro").val(dados.logradouro);
+                            $("#bairro").val(dados.bairro);
+                            $("#cidade").val(dados.localidade);
+                            $("#uf").val(dados.uf);
+                            $("#ibge").val(dados.ibge);
+                        } //end if.
+                        else {
+                            //CEP pesquisado não foi encontrado.
+                            limpa_formulário_cep();
+                            // alert("CEP não encontrado.");
+                            Swal.fire({
+                                position: 'top',
+                                type: 'error',
+                                timer: 3000,
+                                title: 'Erro!',
+                                html: 'CEP não encontrado!',
+                                showConfirmButton: false,
+                                showCancelButton: false,
+                                showCloseButton: true,
+                                reverseButtons: true,
+                                confirmButtonText: '<i class="fa fa-refresh fa-fw"></i> Tentar de novo ',
+                                cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
+                            })
+                        }
+                    });
+                } //end if.
+                else {
+                    //cep é inválido.
+                    limpa_formulário_cep();
+                    // alert("Formato de CEP inválido.");
+                    Swal.fire({
+                        position: 'top',
+                        type: 'error',
+                        timer: 3000,
+                        title: 'Erro!',
+                        html: 'Formato de CEP inválido!',
+                        showConfirmButton: false,
+                        showCancelButton: false,
+                        showCloseButton: true,
+                        reverseButtons: true,
+                        confirmButtonText: '<i class="fa fa-refresh fa-fw"></i> Tentar de novo ',
+                        cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
+                    })
                 }
-            });
+            } //end if.
+            else {
+                //cep sem valor, limpa formulário.
+                limpa_formulário_cep();
+            }
         });
 
         $('.datepicker').datepicker({

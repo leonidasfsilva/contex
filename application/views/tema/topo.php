@@ -536,7 +536,10 @@
                                     </li>
                                 <?php } ?>
 
-                                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario') || $this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente') || $this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao') || $this->permission->checkPermission($this->session->userdata('permissao'), 'cBackup')) { ?>
+                                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario') ||
+                                    $this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente') ||
+                                    $this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao') ||
+                                    $this->permission->checkPermission($this->session->userdata('permissao'), 'cBackup')) { ?>
                                     <li class="<?= (isset($menuConfiguracoes)) ? 'active' : ''; ?>">
                                         <a href="javascript:;"><i class="fa fa-cogs fa-fw"></i>
                                             <span>Config. do Sistema</span>

@@ -2981,7 +2981,7 @@ fieldset[disabled] .btn.btn-social.btn-windows-alt.active {
     border-width: 1px;
     border-style: solid;
     /*padding: 24px;*/
-    margin-bottom: 24px;
+    /*margin-bottom: 24px;*/
 }
 .alert > h1,
 .alert > h2,
@@ -3020,7 +3020,7 @@ fieldset[disabled] .btn.btn-social.btn-windows-alt.active {
     color: #5b5b5b;
 }
 .panel .alert {
-    margin-bottom: 24px;
+    /*margin-bottom: 24px;*/
 }
 .alert-dismissable .close {
     right: 0;

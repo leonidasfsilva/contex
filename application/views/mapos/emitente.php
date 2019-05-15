@@ -1,248 +1,285 @@
 <?php if (!isset($dados) || $dados == null) { ?>
-    <div class="row-fluid" style="margin-top:0">
-        <div class="span12">
-            <div class="widget-box">
-                <div class="widget-title">
-                <span class="icon">
-                    <i class="fa fa-id-card-o fa-lg fa-fw"></i>
-                </span>
-                    <h5>Dados do Emitente</h5>
-                </div>
-                <div class="widget-content ">
-                    <div class="alert alert-danger">Nenhum dado foi cadastrado até o momento. Essas informações
-                        estarão disponíveis na tela de impressão de OS.
-                    </div>
-                    <a href="#modalCadastrar" data-toggle="modal" role="button" class="btn btn-primary btn-sm">
-                        <i class="fa fa-id-card-o fa-fw"></i> Cadastrar Dados</a>
-                </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 style="font-size: 12pt">
+                <i class="fa fa-id-card-o fa-lg fa-fw"></i>
+                Dados do Emitente
+            </h2>
+            <div class="panel-ctrls">
+                <!--                <button href="#modalFiltrar" class="btn btn-default btn-sm" id="editar_perfil" data-toggle="modal" title="Editar perfil de usuário">-->
+                <!--                    <i class="fa fa-user-circle fa-fw"></i>-->
+                <!--                    Editar Perfil-->
+                <!--                </button>-->
             </div>
+        </div>
+        <div class="panel-body">
+            <div class="alert alert-danger">
+                <i class="fa fa-exclamation-circle fa-lg fa-fw"></i>
+                Nenhuma informação referente ao emitente foi cadastrada até o momento.
+            </div>
+            <div class="panel-footer">
+                <a href="#modalCadastrar" data-toggle="modal" role="button" class="btn btn-primary pull-right">
+                    <i class="fa fa-plus fa-fw"></i> Cadastrar Dados
+                </a>
 
+            </div>
         </div>
     </div>
 
-    <div id="modalCadastrar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <form action="<?php echo base_url(); ?>index.php/mxcode/cadastrarEmitente" id="formCadastrar" enctype="multipart/form-data" method="post"
-              class="form-horizontal">
-            <div class="modal-header bg_primary">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">CADASTRAR DADOS DO EMITENTE</h3>
+    <!-- Modal CADASTRAR DADOS EMITENTE -->
+    <div class="modal fade" id="modalCadastrar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title text-white ">Cadastrar dados do emitente</h4>
+                </div>
+                <form id="formCadastrar" action="<?php echo base_url() ?>mxcode/cadastrarEmitente" method="post" autocomplete="off">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <label class="font-weight-bold" for="emitente">Razão Social *</label>
+                                <input id="emitente" class="form-control" type="text" name="emitente" value=""/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-5">
+                                <label for="cnpj" class="font-weight-bold">CNPJ *</label>
+                                <input class="form-control" type="text" id="cnpj" name="cnpj" value=""/>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="ie" class="font-weight-bold">IE </label>
+                                <input type="text" class="form-control" id="ie" name="ie" value=""/>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="cep" class="font-weight-bold">CEP *</label>
+                                <input type="text" class="form-control" id="cep" name="cep" value=""/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-8">
+                                <label for="logradouro" class="font-weight-bold">Logradouro *</label>
+                                <input type="text" class="form-control" id="logradouro" name="logradouro" value=""/>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="numero" class="font-weight-bold">Nº</label>
+                                <input type="text" class="form-control" id="numero" name="numero" value=""/>
+                            </div>
+                            <div class="form-group col-md-2 mt30">
+                                <div class="checkbox icheck">
+                                    <input type="checkbox" class="form-control" id="s_n" name="s_n" value="1">
+                                </div>
+                                <label for="s_n" class="font-weight-bold">S/N</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-5">
+                                <label for="bairro" class="font-weight-bold">Bairro *</label>
+                                <input type="text" class="form-control" id="bairro" name="bairro" value=""/>
+                            </div>
+                            <div class="form-group col-md-5">
+                                <label for="cidade" class="font-weight-bold">Cidade *</label>
+                                <input type="text" class="form-control" id="cidade" name="cidade" value=""/>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="uf" class="font-weight-bold">UF *</label>
+                                <input type="text" class="form-control" id="uf" name="uf" value=""/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="email" class="font-weight-bold">Email *</label>
+                                <input type="text" class="form-control" id="email" name="email" value=""/>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="telefone" class="font-weight-bold">Telefone *</label>
+                                <input type="text" class="form-control" id="telefone" name="telefone" value=""/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <label class="font-weight-bold" for="emitente">Logomarca </label>
+                                <input id="userfile" class="form-control" type="file" name="userfile" value=""/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="btnCancelLancamento" class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                            <i class="fa fa-times fa-fw"></i> Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
+                    </div>
+                </form>
             </div>
-            <div class="modal-body">
-                <div class="control-group">
-                    <label for="nome" class="control-label">Razão Social<span class="required">*</span></label>
-                    <div class="controls">
-                        <input id="nome" type="text" name="nome" value=""/>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="cnpj" class="control-label"><span class="required">CNPJ*</span></label>
-                    <div class="controls">
-                        <input class="" type="text" name="cnpj" value=""/>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="descricao" class="control-label"><span class="required">IE*</span></label>
-                    <div class="controls">
-                        <input type="text" name="ie" value=""/>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="descricao" class="control-label"><span class="required">Logradouro*</span></label>
-                    <div class="controls">
-                        <input type="text" name="logradouro" value=""/>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="descricao" class="control-label"><span class="required">Número*</span></label>
-                    <div class="controls">
-                        <input type="text" name="numero" value=""/>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="descricao" class="control-label"><span class="required">Bairro*</span></label>
-                    <div class="controls">
-                        <input type="text" name="bairro" value=""/>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="descricao" class="control-label"><span class="required">Cidade*</span></label>
-                    <div class="controls">
-                        <input type="text" name="cidade" value=""/>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="descricao" class="control-label"><span class="required">UF*</span></label>
-                    <div class="controls">
-                        <input type="text" name="uf" value=""/>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="descricao" class="control-label"><span class="required">Telefone*</span></label>
-                    <div class="controls">
-                        <input type="text" name="telefone" value=""/>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="descricao" class="control-label"><span class="required">E-mail*</span></label>
-                    <div class="controls">
-                        <input type="text" name="email" value=""/>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="logo" class="control-label"><span class="required">Logotipo*</span></label>
-                    <div class="controls">
-                        <input type="file" name="userfile" value=""/>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir">
-                    <i class="fa fa-times fa-fw"></i>Cancelar
-                </button>
-                <button class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Cadastrar</button>
-            </div>
-        </form>
+        </div>
     </div>
 
 <?php } else { ?>
 
-    <div class="row-fluid" style="margin-top:0">
-        <div class="span12">
-            <div class="widget-box">
-                <div class="widget-title">
-                <span class="icon">
-                    <i class="fa fa-id-card-o fa-lg fa-fw"></i>
-                </span>
-                    <h5>Dados do Emitente</h5>
-                </div>
-                <div class="widget-content ">
-                    <div class="alert alert-info">Os dados abaixo serão utilizados no cabeçalho das telas de impressão.</div>
-                    <table class="table table-bordered">
-                        <tbody>
-                        <tr>
-                            <td style="width: 25%"><img style="width: 200px" src=" <?php echo base_url() . $dados[0]->url_logo; ?> "></td>
-                            <td><span style="font-size: 20px; "> <?php echo $dados[0]->nome; ?> </span> </br>
-                                <span><?php echo $dados[0]->cnpj; ?> </br> <?php echo $dados[0]->rua . ', ' . $dados[0]->numero . ', ' . $dados[0]->bairro . ' - ' . $dados[0]->cidade . ' / ' . $dados[0]->uf; ?> </span> </br>
-                                <span> E-mail: <?php echo $dados[0]->email . ' - Fone: ' . $dados[0]->telefone; ?></span></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <a href="#modalAlterar" data-toggle="modal" role="button" class="btn btn-primary btn-sm"><i class="fa fa-edit fa-fw"></i> Alterar
-                        Dados</a>
-                    <a href="#modalLogo" data-toggle="modal" role="button" class="btn btn-inverse btn-sm"><i class="fa fa-picture-o fa-fw"></i>
-                        Alterar Logo</a>
-                </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 style="font-size: 12pt">
+                <i class="fa fa-id-card-o fa-lg fa-fw"></i>
+                Dados do Emitente
+            </h2>
+            <div class="panel-ctrls">
+                <a href="#modalAlterar" data-toggle="modal" class="btn btn-primary btn-sm">
+                    <i class="fa fa-edit fa-fw"></i> Alterar Dados
+                </a>
+                <a href="#modalLogo" data-toggle="modal" class="btn btn-primary btn-sm">
+                    <i class="fa fa-picture-o fa-fw"></i> Alterar Logo
+                </a>
+            </div>
+        </div>
+        <div class="panel-body">
+            <table class="table table-bordered">
+                <tbody>
+                <tr>
+                    <td style="width: 25%; padding: 15px">
+                        <?php if ($dados->logomarca) { ?>
+                            <img style="width: 200px" src="<?php echo base_url() .'assets/uploads/logomarcas/'. $dados->logomarca; ?> ">
+                        <?php } else { ?>
+                            <p class="alert alert-inverse">
+                                Nenhuma logomarca cadastrada
+                            </p>
+                        <?php } ?>
+                    </td>
+                    <td>
+                        <span style="font-size: 18px; "><?php echo $dados->emitente; ?></span>
+                        <br>
+                        <span>CNPJ: <?php echo $dados->cnpj; ?></span>
+                        <br>
+                        <span><?php echo $dados->logradouro . ', ' . $dados->numero . ', ' . $dados->bairro . ' - ' . $dados->cidade . ' / ' . $dados->uf; ?> </span>
+                        <br>
+                        <span> Email: <?php echo $dados->email . ' - Fone: ' . $dados->telefone; ?></span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="panel-footer">
+                <p class="alert alert-info">
+                    <i class="fa fa-exclamation-circle fa-lg fa-fw"></i>
+                    Os dados acima serão utilizados no cabeçalho das telas de impressão.
+                </p>
             </div>
         </div>
     </div>
 
-    <div id="modalAlterar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <form action="<?php echo base_url(); ?>index.php/mxcode/editarEmitente" id="formAlterar" enctype="multipart/form-data" method="post"
-              class="form-horizontal">
-            <div class="modal-header bg_primary">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="">EDITAR DADOS DO EMITENTE</h3>
+    <!-- Modal ALTERAR DADOS EMITENTE -->
+    <div class="modal fade" id="modalAlterar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title text-white ">Editar dados do emitente</h4>
+                </div>
+                <form id="formAlterar" action="<?php echo base_url() ?>mxcode/editarEmitente" method="post" autocomplete="off">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <label class="font-weight-bold" for="emitente">Razão Social *</label>
+                                <input id="emitente" class="form-control" type="text" name="emitente" value="<?php echo $dados->emitente; ?>"/>
+                                <input id="id_emitente" type="hidden" name="id_emitente" value="<?php echo $dados->id_emitente; ?>"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-5">
+                                <label for="cnpj" class="font-weight-bold">CNPJ *</label>
+                                <input class="form-control" type="text" id="cnpj" name="cnpj" value="<?php echo $dados->cnpj; ?>"/>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="ie" class="font-weight-bold">IE </label>
+                                <input type="text" class="form-control" id="ie" name="ie" value="<?php echo $dados->ie; ?>"/>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="cep" class="font-weight-bold">CEP *</label>
+                                <input type="text" class="form-control" id="cep" name="cep" value="<?php echo $dados->cep; ?>"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-8">
+                                <label for="logradouro" class="font-weight-bold">Logradouro *</label>
+                                <input type="text" class="form-control" id="logradouro" name="logradouro" value="<?php echo $dados->logradouro; ?>"/>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="numero" class="font-weight-bold">Nº</label>
+                                <input type="text" class="form-control" id="numero" name="numero" value="<?php echo $dados->numero; ?>"/>
+                            </div>
+                            <div class="form-group col-md-2 mt30">
+                                <div class="checkbox icheck">
+                                    <input type="checkbox" class="form-control" id="s_n" name="s_n" value="1" <?= $dados->s_n == 1 ? 'checked' : '' ?>>
+                                </div>
+                                <label for="s_n" class="font-weight-bold">S/N</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-5">
+                                <label for="bairro" class="font-weight-bold">Bairro *</label>
+                                <input type="text" class="form-control" id="bairro" name="bairro" value="<?php echo $dados->bairro; ?>"/>
+                            </div>
+                            <div class="form-group col-md-5">
+                                <label for="cidade" class="font-weight-bold">Cidade *</label>
+                                <input type="text" class="form-control" id="cidade" name="cidade" value="<?php echo $dados->cidade; ?>"/>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="uf" class="font-weight-bold">UF *</label>
+                                <input type="text" class="form-control" id="uf" name="uf" value="<?php echo $dados->uf; ?>"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="email" class="font-weight-bold">Email *</label>
+                                <input type="text" class="form-control" id="email" name="email" value="<?php echo $dados->email; ?>"/>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="telefone" class="font-weight-bold">Telefone *</label>
+                                <input type="text" class="form-control" id="telefone" name="telefone" value="<?php echo $dados->telefone; ?>"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="btnCancelLancamento" class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                            <i class="fa fa-times fa-fw"></i> Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
+                    </div>
+                </form>
             </div>
-            <div class="modal-body">
-                <div class="control-group">
-                    <label for="nome" class="control-label">Razão Social<span class="required">*</span></label>
-                    <div class="controls">
-                        <input id="nome" type="text" name="nome" value="<?php echo $dados[0]->nome; ?>"/>
-                        <input id="nome" type="hidden" name="id" value="<?php echo $dados[0]->id; ?>"/>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="cnpj" class="control-label"><span class="required">CNPJ*</span></label>
-                    <div class="controls">
-                        <input class="" type="text" name="cnpj" value="<?php echo $dados[0]->cnpj; ?>"/>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="descricao" class="control-label"><span class="required">IE*</span></label>
-                    <div class="controls">
-                        <input type="text" name="ie" value="<?php echo $dados[0]->ie; ?>"/>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="descricao" class="control-label"><span class="required">Logradouro*</span></label>
-                    <div class="controls">
-                        <input type="text" name="logradouro" value="<?php echo $dados[0]->rua; ?>"/>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="descricao" class="control-label"><span class="required">Número*</span></label>
-                    <div class="controls">
-                        <input type="text" name="numero" value="<?php echo $dados[0]->numero; ?>"/>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="descricao" class="control-label"><span class="required">Bairro*</span></label>
-                    <div class="controls">
-                        <input type="text" name="bairro" value="<?php echo $dados[0]->bairro; ?>"/>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="descricao" class="control-label"><span class="required">Cidade*</span></label>
-                    <div class="controls">
-                        <input type="text" name="cidade" value="<?php echo $dados[0]->cidade; ?>"/>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="descricao" class="control-label"><span class="required">UF*</span></label>
-                    <div class="controls">
-                        <input type="text" name="uf" value="<?php echo $dados[0]->uf; ?>"/>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="descricao" class="control-label"><span class="required">Telefone*</span></label>
-                    <div class="controls">
-                        <input type="text" name="telefone" value="<?php echo $dados[0]->telefone; ?>"/>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="descricao" class="control-label"><span class="required">E-mail*</span></label>
-                    <div class="controls">
-                        <input type="text" name="email" value="<?php echo $dados[0]->email; ?>"/>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir">
-                    <i class="fa fa-times fa-fw"></i>
-                    Cancelar
-                </button>
-                <button class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Alterar</button>
-            </div>
-        </form>
+        </div>
     </div>
 
-    <!-- Modal UPLOAD LOGO-->
+    <!-- Modal ALTERAR LOGO-->
     <div class="modal fade" id="modalLogo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header bg-inverse">
+                <div class="modal-header bg-primary">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title text-white">Alterar logotipo</h4>
+                    <h4 class="modal-title text-white">Alterar logomarca</h4>
                 </div>
                 <form action="<?php echo base_url(); ?>mxcode/editarLogo" id="formLogo" enctype="multipart/form-data" method="post">
                     <div class="modal-body">
-                        <p>Selecione uma nova imagem da logotipo.</p>
-                        <input id="nome" type="hidden" name="id" value="<?php echo $dados[0]->id; ?>"/>
+                        <p>Selecione uma imagem para a logomarca.</p>
+                        <input id="id_emitente" type="hidden" name="id_emitente" value="<?php echo $dados->id_emitente; ?>"/>
                         <input id="url" type="hidden" name="urlAtual" value=""/>
                         <div class="row">
-                            <div class="form-group col-lg-6">
-                                <label class="font-weight-bold" for="data_pagamento">Logotipo *</label>
-                                <input type="file" class="btn btn-inverse" name="userfile" value=""/>
+                            <div class="form-group col-lg-7">
+                                <label class="font-weight-bold control-label" for="data_pagamento"><span>Logotipo *</span></label>
+                                <input type="file" class="btn btn-default form-control" name="userfile" value=""/>
                             </div>
                         </div>
-
+                        <span class="badge badge-info">Tamanho máximo permitido para upload: 2 MB</span>
                     </div>
                     <div class="modal-footer">
+                        <?php if ($dados->logomarca) { ?>
+                        <a href="#modalExcluirLogo" data-toggle="modal" class="btn btn-danger btn-sm pull-left">
+                            <i class="fa fa-trash-o fa-fw"></i> Excluir Logo
+                        </a>
+                        <?php } ?>
                         <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                             <i class="fa fa-times fa-fw"></i> Cancelar
                         </button>
-                        <button class="btn btn-inverse btn-sm" id="btnFechar">
-                            <i class="fa fa-check fa-fw"></i> Confirmar
+                        <button class="btn btn-primary btn-sm">
+                            <i class="fa fa-check fa-fw"></i> Salvar
                         </button>
                     </div>
                 </form>
@@ -250,13 +287,61 @@
         </div>
     </div>
 
+    <!-- Modal EXCLUIR LOGO-->
+    <div class="modal fade" id="modalExcluirLogo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title text-white">Excluir logomarca</h4>
+                </div>
+                <form action="<?php echo base_url(); ?>mxcode/excluirLogo" id="formLogo" enctype="multipart/form-data" method="post">
+                    <div class="modal-body">
+                        <p>Deseja realmente excluir a logomarca cadastrada?</p>
+                        <input id="id_emitente" type="hidden" name="id_emitente" value="<?php echo $dados->id_emitente; ?>"/>
+                        <input id="url" type="hidden" name="urlAtual" value=""/>
+                        <p class="alert alert-danger">
+                            <i class="fa fa-exclamation-circle fa-lg fa-fw"></i>
+                            ATENÇÃO: esta ação não poderá ser desfeita!
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                            <i class="fa fa-times fa-fw"></i> Cancelar
+                        </button>
+                        <button class="btn btn-danger btn-sm">
+                            <i class="fa fa-check fa-fw"></i> Excluir
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 <?php } ?>
 
-
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery.validate.js"></script>
 <script type="text/javascript">
 
     $(document).ready(function () {
+
+        $('#s_n').on('ifChanged', function (event) {
+            const checked = event.target.checked;
+            if (checked == true) {
+                $('#numero').attr('disabled', true);
+                $('#numero').val('');
+            } else {
+                $('#numero').removeAttr('disabled');
+            }
+        });
+
+        var s_n = $('#s_n').iCheck('update')[0].checked;
+        $.each($(s_n), function (key, value) {
+            if (s_n == true) {
+                $('#numero').attr('disabled', true);
+                $('#numero').val('');
+            } else {
+                $('#numero').removeAttr('disabled');
+            }
+        });
 
         $("#formLogo").validate({
             rules: {
@@ -266,68 +351,68 @@
                 userfile: {required: 'Arquivo não informado'}
             },
 
-            errorClass: "help-inline",
-            errorElement: "span",
+            errorClass: "help-block",
+            errorElement: "p",
             highlight: function (element, errorClass, validClass) {
-                $(element).parents('.control-group').addClass('error');
-                $(element).parents('.control-group').removeClass('success');
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
             },
             unhighlight: function (element, errorClass, validClass) {
-                $(element).parents('.control-group').removeClass('error');
-                $(element).parents('.control-group').addClass('success');
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
             }
         });
-
 
         $("#formCadastrar").validate({
             rules: {
-                userfile: {required: true},
-                nome: {required: true},
+                emitente: {required: true},
                 cnpj: {required: true},
-                ie: {required: true},
+                cep: {required: true},
+                ie: {required: false},
                 logradouro: {required: true},
-                numero: {required: true},
+                numero: {required: false},
                 bairro: {required: true},
                 cidade: {required: true},
                 uf: {required: true},
                 telefone: {required: true},
-                email: {required: true}
+                email: {required: true},
+                userfile: {required: false},
             },
             messages: {
-                userfile: {required: 'Campo Requerido.'},
-                nome: {required: 'Campo Requerido.'},
-                cnpj: {required: 'Campo Requerido.'},
-                ie: {required: 'Campo Requerido.'},
-                logradouro: {required: 'Campo Requerido.'},
-                numero: {required: 'Campo Requerido.'},
-                bairro: {required: 'Campo Requerido.'},
-                cidade: {required: 'Campo Requerido.'},
-                uf: {required: 'Campo Requerido.'},
-                telefone: {required: 'Campo Requerido.'},
-                email: {required: 'Campo Requerido.'}
+                emitente: {required: 'Informe a razão social'},
+                cnpj: {required: 'Informe o CNPJ'},
+                cep: {required: 'Informe o CEP'},
+                ie: {required: 'Informe a I.E.'},
+                logradouro: {required: 'Informe o logradouro'},
+                numero: {required: 'Nao obrigatorio'},
+                bairro: {required: 'Informe o bairro'},
+                cidade: {required: 'Informe a cidade'},
+                uf: {required: 'Informe a UF'},
+                telefone: {required: 'Informe o telefone'},
+                email: {required: 'Informe o email'},
+                userfile: {required: 'Selecione a logomarca'},
             },
 
-            errorClass: "help-inline",
-            errorElement: "span",
+            errorClass: "help-block",
+            errorElement: "p",
             highlight: function (element, errorClass, validClass) {
-                $(element).parents('.control-group').addClass('error');
-                $(element).parents('.control-group').removeClass('success');
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
             },
             unhighlight: function (element, errorClass, validClass) {
-                $(element).parents('.control-group').removeClass('error');
-                $(element).parents('.control-group').addClass('success');
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
             }
         });
 
-
         $("#formAlterar").validate({
             rules: {
-                userfile: {required: true},
-                nome: {required: true},
+                emitente: {required: true},
                 cnpj: {required: true},
-                ie: {required: true},
+                cep: {required: true},
+                ie: {required: false},
                 logradouro: {required: true},
-                numero: {required: true},
+                numero: {required: false},
                 bairro: {required: true},
                 cidade: {required: true},
                 uf: {required: true},
@@ -335,28 +420,28 @@
                 email: {required: true}
             },
             messages: {
-                userfile: {required: 'Campo Requerido.'},
-                nome: {required: 'Campo Requerido.'},
-                cnpj: {required: 'Campo Requerido.'},
-                ie: {required: 'Campo Requerido.'},
-                logradouro: {required: 'Campo Requerido.'},
-                numero: {required: 'Campo Requerido.'},
-                bairro: {required: 'Campo Requerido.'},
-                cidade: {required: 'Campo Requerido.'},
-                uf: {required: 'Campo Requerido.'},
-                telefone: {required: 'Campo Requerido.'},
-                email: {required: 'Campo Requerido.'}
+                emitente: {required: 'Informe a razão social'},
+                cnpj: {required: 'Informe o CNPJ'},
+                cep: {required: 'Informe o CEP'},
+                ie: {required: 'Informe a I.E.'},
+                logradouro: {required: 'Informe o logradouro'},
+                numero: {required: 'Nao obrigatorio'},
+                bairro: {required: 'Informe o bairro'},
+                cidade: {required: 'Informe a cidade'},
+                uf: {required: 'Informe a UF'},
+                telefone: {required: 'Informe o telefone'},
+                email: {required: 'Informe o email'}
             },
 
-            errorClass: "help-inline",
-            errorElement: "span",
+            errorClass: "help-block",
+            errorElement: "p",
             highlight: function (element, errorClass, validClass) {
-                $(element).parents('.control-group').addClass('error');
-                $(element).parents('.control-group').removeClass('success');
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
             },
             unhighlight: function (element, errorClass, validClass) {
-                $(element).parents('.control-group').removeClass('error');
-                $(element).parents('.control-group').addClass('success');
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
             }
         });
 

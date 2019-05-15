@@ -102,7 +102,7 @@
                         <label class="control-label">Situação*</label>
                         <div class="controls">
                             <select name="situacao" id="situacao">
-                                <?php if ($result->situacao == 1) {
+                                <?php if ($result->status == 1) {
                                     $ativo = 'selected';
                                     $inativo = '';
 

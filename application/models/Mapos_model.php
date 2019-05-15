@@ -3,12 +3,6 @@
 class Mapos_model extends CI_Model
 {
 
-    /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     *
-     */
-
     function __construct()
     {
         parent::__construct();
@@ -160,49 +154,24 @@ class Mapos_model extends CI_Model
 
     public function getEmitente($id_usuario)
     {
-        $this->db->where('id_usuario', $id_usuario);
-        return $this->db->get('emitente')->result();
+        $this->db->where('id_usuario = ' . $id_usuario . ' AND status = ' . 1);
+        $this->db->limit(1);
+        return $this->db->get('emitente')->row();
     }
 
-    public function addEmitente($nome, $cnpj, $ie, $logradouro, $numero, $bairro, $cidade, $uf, $telefone, $email, $logo)
+    public function getLogoEmitente($id_usuario)
     {
-
-        $this->db->set('nome', $nome);
-        $this->db->set('cnpj', $cnpj);
-        $this->db->set('ie', $ie);
-        $this->db->set('rua', $logradouro);
-        $this->db->set('numero', $numero);
-        $this->db->set('bairro', $bairro);
-        $this->db->set('cidade', $cidade);
-        $this->db->set('uf', $uf);
-        $this->db->set('telefone', $telefone);
-        $this->db->set('email', $email);
-        $this->db->set('url_logo', $logo);
-        return $this->db->insert('emitente');
-    }
-
-    public function editEmitente($id, $nome, $cnpj, $ie, $logradouro, $numero, $bairro, $cidade, $uf, $telefone, $email)
-    {
-
-        $this->db->set('nome', $nome);
-        $this->db->set('cnpj', $cnpj);
-        $this->db->set('ie', $ie);
-        $this->db->set('rua', $logradouro);
-        $this->db->set('numero', $numero);
-        $this->db->set('bairro', $bairro);
-        $this->db->set('cidade', $cidade);
-        $this->db->set('uf', $uf);
-        $this->db->set('telefone', $telefone);
-        $this->db->set('email', $email);
-        $this->db->where('id', $id);
-        return $this->db->update('emitente');
+        $this->db->select('logomarca');
+        $this->db->from('emitente');
+        $this->db->where('id_usuario = ' . $id_usuario . ' AND status = ' . 1);
+        $this->db->limit(1);
+        return $this->db->get()->row();
     }
 
     public function editLogo($id, $logo)
     {
-
-        $this->db->set('url_logo', $logo);
-        $this->db->where('id', $id);
+        $this->db->set('logomarca', $logo);
+        $this->db->where('id_emitente', $id);
         return $this->db->update('emitente');
 
     }
@@ -210,7 +179,7 @@ class Mapos_model extends CI_Model
     public function check_credentials($email)
     {
         $this->db->where('email', $email);
-        $this->db->where('situacao', 1);
+        $this->db->where('status', 1);
         $this->db->limit(1);
         return $this->db->get('usuarios')->row();
     }

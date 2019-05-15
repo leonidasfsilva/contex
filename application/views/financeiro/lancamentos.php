@@ -563,7 +563,6 @@ $periodo = $this->input->get('periodo');
         });
 
         var recebido = $('#recebido').iCheck('update')[0].checked;
-
         $.each($(recebido), function (key, value) {
             if (recebido == true) {
                 $('#divRecebimento').removeClass('hidden');

@@ -10,7 +10,7 @@ function print_array($a)
     echo '<pre>';
     print_r($a);
     echo '</pre>';
-    exit;
+//    exit;
 }
 function print_var($a)
 {
