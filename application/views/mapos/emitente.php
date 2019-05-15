@@ -34,7 +34,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                     <h4 class="modal-title text-white ">Cadastrar dados do emitente</h4>
                 </div>
-                <form id="formCadastrar" action="<?php echo base_url() ?>mxcode/cadastrarEmitente" method="post" autocomplete="off">
+                <form id="formCadastrar" action="<?php echo base_url() ?>mxcode/cadastrarEmitente" method="post" enctype="multipart/form-data" autocomplete="off">
                     <div class="modal-body">
                         <div class="row">
                             <div class="form-group col-md-12">

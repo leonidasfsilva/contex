@@ -207,7 +207,15 @@ class Mxcode extends CI_Controller
             redirect(base_url());
         }
 
+        if($_FILES['userfile']) {
+            $dir = 'assets/uploads/logomarcas';
+            $image = $this->do_upload($_FILES['userfile'], base_url() . 'mxcode/emitente', $dir);
+        } else {
+            $image = null;
+        }
+
         $data = array(
+            'logomarca' => $image,
             'emitente' => padronizarString($this->input->post('emitente')),
             'cnpj' => $this->input->post('cnpj'),
             'ie' => $this->input->post('ie'),
@@ -337,7 +345,10 @@ class Mxcode extends CI_Controller
         }
 
         $logo_atual = $this->mapos_model->getLogoEmitente($this->id_usuario);
-        unlink('assets/uploads/logomarcas/' . $logo_atual->logomarca);
+
+        if($logo_atual) {
+            unlink('assets/uploads/logomarcas/' . $logo_atual->logomarca);
+        }
         $dir = 'assets/uploads/logomarcas';
         $image = $this->do_upload($_FILES['userfile'], base_url() . 'mxcode/emitente', $dir);
         $logo = $image;
@@ -372,7 +383,10 @@ class Mxcode extends CI_Controller
         }
 
         $logo_atual = $this->mapos_model->getLogoEmitente($this->id_usuario);
-        unlink('assets/uploads/logomarcas/' . $logo_atual->logomarca);
+
+        if($logo_atual) {
+            unlink('assets/uploads/logomarcas/' . $logo_atual->logomarca);
+        }
         $nova_logo = null;
         $retorno = $this->mapos_model->editLogo($id, $nova_logo);
 

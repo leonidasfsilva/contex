@@ -86,7 +86,7 @@ class Usuarios extends CI_Controller
                 'nome' => set_value('nome'),
                 'rg' => set_value('rg'),
                 'cpf' => set_value('cpf'),
-                'rua' => set_value('rua'),
+                'logradouro' => set_value('rua'),
                 'numero' => set_value('numero'),
                 'bairro' => set_value('bairro'),
                 'cidade' => set_value('cidade'),
@@ -95,7 +95,7 @@ class Usuarios extends CI_Controller
                 'senha' => password_hash($this->input->post('senha'), PASSWORD_DEFAULT),
                 'telefone' => set_value('telefone'),
                 'celular' => set_value('celular'),
-                'situacao' => set_value('situacao'),
+                'status' => set_value('situacao'),
                 'permissoes_id' => $this->input->post('permissoes_id'),
             );
 
