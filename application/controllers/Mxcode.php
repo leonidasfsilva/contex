@@ -346,7 +346,7 @@ class Mxcode extends CI_Controller
 
         $logo_atual = $this->mapos_model->getLogoEmitente($this->id_usuario);
 
-        if($logo_atual) {
+        if($logo_atual->logomarca) {
             unlink('assets/uploads/logomarcas/' . $logo_atual->logomarca);
         }
         $dir = 'assets/uploads/logomarcas';
@@ -383,7 +383,6 @@ class Mxcode extends CI_Controller
         }
 
         $logo_atual = $this->mapos_model->getLogoEmitente($this->id_usuario);
-
         if($logo_atual) {
             unlink('assets/uploads/logomarcas/' . $logo_atual->logomarca);
         }
