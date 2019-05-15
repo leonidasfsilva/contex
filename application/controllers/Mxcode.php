@@ -207,7 +207,7 @@ class Mxcode extends CI_Controller
             redirect(base_url());
         }
 
-        if($_FILES['userfile']) {
+        if($_FILES['userfile']['size'] > 0) {
             $dir = 'assets/uploads/logomarcas';
             $image = $this->do_upload($_FILES['userfile'], base_url() . 'mxcode/emitente', $dir);
         } else {
