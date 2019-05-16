@@ -22,6 +22,7 @@ class Relatorios extends CI_Controller
         $this->load->model('Relatorios_model', '', true);
         $this->load->model('Usuarios_model', '', true);
         $this->load->model('Mapos_model', '', true);
+        $this->load->helper('mpdf');
 
         $this->data['menuRelatorios'] = 'Relatórios';
 
@@ -252,7 +253,6 @@ class Relatorios extends CI_Controller
         pdf_create($html, 'relatorio_os' . date('d/m/y'), true, true);
     }
 
-
     public function financeiro()
     {
 
@@ -265,7 +265,6 @@ class Relatorios extends CI_Controller
         $this->load->view('tema/topo', $this->data);
     
     }
-
 
     public function financeiroRapid()
     {
@@ -289,14 +288,16 @@ class Relatorios extends CI_Controller
             redirect(base_url());
         }
 
+
         $dataInicial = $this->input->get('dataInicial');
         $dataFinal = $this->input->get('dataFinal');
         $tipo = $this->input->get('tipo');
         $situacao = $this->input->get('situacao');
 
         $data['lancamentos'] = $this->Relatorios_model->financeiroCustom($dataInicial, $dataFinal, $tipo, $situacao);
-        $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirFinanceiro', $data, true);
+//        print_array($data['lancamentos']);
+//        exit;
         pdf_create($html, 'relatorio_financeiro' . date('d/m/y'), true);
     }
 

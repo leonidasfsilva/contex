@@ -1,6 +1,7 @@
 <?php $this->load->view('includes/css'); ?>
-
+<?php $this->load->view('includes/custom_css'); ?>
 <?php $this->load->view('includes/js'); ?>
+<?php $this->load->view('includes/custom_js'); ?>
 
 <body class="infobar-offcanvas">
 

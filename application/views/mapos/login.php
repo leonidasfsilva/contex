@@ -253,7 +253,7 @@
                                 Swal.fire({
                                     position: 'top',
                                     type: 'success',
-                                    title: 'Link enviado!',
+                                    title: 'Email enviado!',
                                     showConfirmButton: true,
                                     showCancelButton: false,
                                     showCloseButton: true,

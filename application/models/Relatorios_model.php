@@ -195,11 +195,11 @@ class Relatorios_model extends CI_Model
             $dataFinal = date("Y-m-t");
         }
 
-        if ($tipo == 'receita') {
-            $whereTipo = "AND tipo = 'receita'";
+        if ($tipo == '1') {
+            $whereTipo = "AND tipo = '1'";
         }
-        if ($tipo == 'despesa') {
-            $whereTipo = "AND tipo = 'despesa'";
+        if ($tipo == '2') {
+            $whereTipo = "AND tipo = '2'";
         }
         if ($situacao == 'pendente') {
             $whereSituacao = "AND baixado = 0";
@@ -208,7 +208,7 @@ class Relatorios_model extends CI_Model
             $whereSituacao = "AND baixado = 1";
         }
 
-        $query = "SELECT * FROM lancamentos WHERE data_vencimento BETWEEN ? and ? $whereTipo $whereSituacao";
+        $query = "SELECT * FROM lancamentos WHERE data_lancamento BETWEEN ? and ? $whereTipo $whereSituacao";
         return $this->db->query($query, array($dataInicial, $dataFinal))->result();
     }
 

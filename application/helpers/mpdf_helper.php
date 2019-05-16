@@ -16,6 +16,7 @@ function pdf_create($html, $filename, $stream = true, $landscape = false)
     }
 
     $mpdf->WriteHTML($html);
+    ob_clean();  // eh  aqui que a mágica acontece!  :)
 
     if ($stream) {
         $mpdf->Output($filename . '.pdf', 'I');
