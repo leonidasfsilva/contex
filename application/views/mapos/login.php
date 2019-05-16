@@ -179,32 +179,18 @@
 
     $('#registro').click(function () {
 
-        PNotify.info({
+        Swal.fire({
+            position: 'top',
+            type: 'info',
+            // timer: 5000,
             title: 'Indisponível',
-            text: 'Lamentamos o inconveniente, mas o registro de usuários está temporariamente indisponível.',
-            styling: 'bootstrap3',
-            icon: 'fa fa-times-circle fa-lg fa-fw',
-            delay: 5000,
-            addClass: 'pnotify-center',
-            hide: true,
-            stack: {
-                'dir1': 'down',
-                'firstpos1': 25,
-            },
-            modules: {
-                Animate: {
-                    animate: true,
-                    inClass: 'slideInDown',
-                    outClass: 'slideOutUp'
-                },
-                Buttons: {
-                    sticker: false,
-                    closerHover: false,
-                },
-                Mobile: {
-                    styling: true
-                }
-            }
+            html: 'O registro de usuários encontra-se indisponível no momento. Contate o administrador do sistema para obter uma conta.',
+            showConfirmButton: false,
+            showCancelButton: false,
+            showCloseButton: true,
+            reverseButtons: true,
+            confirmButtonText: '<i class="fa fa-refresh fa-fw"></i> Tentar de novo ',
+            cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
         });
     });
 
