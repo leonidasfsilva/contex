@@ -3,7 +3,7 @@
 <?php $this->load->view('includes/js'); ?>
 <?php $this->load->view('includes/custom_js'); ?>
 
-<body class="infobar-offcanvas">
+<body class="infobar-offcanvas" id="body">
 
 <!--    MENU SUSPENSO-->
 <div id="headerbar">
@@ -81,14 +81,14 @@
 <header id="topnav" class="navbar navbar-midnightblue navbar-fixed-top clearfix" role="banner">
 
 	<span id="trigger-sidebar" class="toolbar-trigger toolbar-icon-bg">
-		<a data-placement="bottom" title="Exibir/Ocultar Menu">
-            <span class="icon-bg">
-                <i class="fa fa-fw fa-bars"></i>
+		<a data-placement="bottom" title="Exibir/Ocultar Menu" id="menu-switcher">
+            <span class="icon-bg menu-toggle">
+                <i id="menu-toggle-icon" class="fa fa-fw"></i>
             </span>
         </a>
 	</span>
 
-    <a class="navbar-brand" href="<?php echo base_url(); ?>">CONTEX</a>
+    <a class="navbar-brand" href="javascript:">CONTEX</a>
 
     <!--    MENU DIREITO-->
     <!--    <span id="trigger-infobar" class="toolbar-trigger toolbar-icon-bg">-->
@@ -194,7 +194,7 @@
         <li class="dropdown toolbar-icon-bg">
             <a href="#" id="navbar-links-toggle" data-toggle="collapse" data-target="header>.navbar-collapse" data-placement="bottom" title="Exibir Menu Superior">
 				<span class="icon-bg">
-					<i class="fa fa-fw fa-ellipsis-h"></i>
+					<i class="fa fa-fw fa-chevron-down"></i>
 				</span>
             </a>
         </li>

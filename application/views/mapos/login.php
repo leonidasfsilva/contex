@@ -19,7 +19,6 @@
 
 
     <script src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.min.js"></script>                            <!-- Load jQuery -->
-
     <script src="<?php echo base_url(); ?>assets/js/agile-custom.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/agile-waves.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/agile-style.switcher.js"></script>
@@ -30,16 +29,24 @@
         display: none;
         width: 100%;
         height: 100%;
-        top: 0px;
+        top: 0;
         left: 0;
-        position: absolute;
+        position: static;
         z-index: 1;
-        background: #eee;
+        background: #EEEEEE;
     }
+
     .preloader-login .cssload-speeding-wheel {
         position: absolute;
         top: calc(50% - 4%);
         left: calc(50% - 4%);
+    }
+    @media screen and (min-width: 1024px) {
+        .box-login {
+            position: relative;
+            right: 0px;
+            padding-top: calc(50%);
+            height: 100%;
     }
 </style>
 <body class="focused-form" style="background-color: #37474f">
@@ -49,51 +56,53 @@
 </div>
 <section id="wrapper" class="login-register">
     <div class="login-box login-sidebar">
-        <div class="preloader-login">
-            <div class="cssload-speeding-wheel"></div>
-        </div>
-        <div class="white-box">
-            <div class="text-center m-t-10">
+        <div class="white-box box-login">
+            <div class="text-center">
                 <img class="contex-logo" src="<?php echo base_url() ?>assets/img/contex_logo.png" alt="Home"/>
                 <br/>
                 <img class="contex-words" src="<?php echo base_url() ?>assets/img/contex_words.png" alt="Home"/>
             </div>
             <form class="form-horizontal floating-labels" id="formLogin" method="post" action="<?php echo base_url() ?>mxcode/verificarLogin">
-                <div class="form-group m-t-40 p-t-40 p-b-20">
-                    <input type="text" class="form-control" id="email" name="email" required/>
-                    <span class="highlight"></span> <span class="bar"></span>
-                    <label for="email">E-mail</label>
+                <div class="preloader-login">
+                    <div class="cssload-speeding-wheel"></div>
                 </div>
-                <div class="form-group">
-                    <input class="form-control" type="password" id="senha" name="senha" required/>
-                    <span class="highlight"></span> <span class="bar"></span>
-                    <label for="email">Senha</label>
-                </div>
-                <div class="form-group">
-                    <div class="checkbox checkbox-info pull-left p-t-0">
-                        <input id="checkbox-signup" type="checkbox">
-                        <label for="checkbox-signup">Manter conectado </label>
+                <div class="before-loading">
+                    <div class="form-group m-t-40 p-t-40 p-b-20">
+                        <input type="text" class="form-control" id="email" name="email" required/>
+                        <span class="highlight"></span> <span class="bar"></span>
+                        <label for="email">E-mail</label>
                     </div>
-                    <a href="javascript:" onclick="recuperar_senha()" class="text-primary pull-right">Esqueceu sua senha?</a>
-                </div>
-                <div class="form-group text-center m-t-20">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <button class="btn btn-login btn-block waves-effect waves-light" type="submit">Acessar <i class="fa fa-sign-in fa-fw"></i></button>
+                    <div class="form-group">
+                        <input class="form-control" type="password" id="senha" name="senha" required/>
+                        <span class="highlight"></span> <span class="bar"></span>
+                        <label for="email">Senha</label>
+                    </div>
+                    <div class="form-group">
+<!--                        <div class="checkbox checkbox-info pull-left p-t-0">-->
+<!--                            <input id="checkbox-signup" type="checkbox">-->
+<!--                            <label for="checkbox-signup">Manter conectado </label>-->
+<!--                        </div>-->
+                        <a href="javascript:" onclick="recuperar_senha()" class="text-primary pull-right">Esqueceu sua senha?</a>
+                    </div>
+                    <div class="form-group text-center m-t-20">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <button class="btn btn-login btn-block waves-effect waves-light" type="submit">Acessar <i class="fa fa-sign-in fa-fw"></i></button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!--                <div class="row">-->
-                <!--                    <div class="col-xs-12 col-sm-12 col-md-12 m-t-10 text-center">-->
-                <!--                        <div class="social">-->
-                <!--                            <a href="javascript:" class="btn btn-facebook" data-toggle="tooltip" title="Login com sua conta do Facebook"> <i aria-hidden="true" class="fa fa-facebook"></i> </a>-->
-                <!--                            <a href="javascript:" class="btn btn-googleplus" data-toggle="tooltip" title="Login com sua conta do Google"> <i aria-hidden="true" class="fa fa-google"></i> </a>-->
-                <!--                        </div>-->
-                <!--                    </div>-->
-                <!--                </div>-->
-                <div class="form-group m-b-0">
-                    <div class="col-sm-12 text-center">
-                        <p>Não tem uma conta? <a href="javascript:" id="registro" class="text-primary"><b>Registre-se</b></a>.</p>
+                    <!--                <div class="row">-->
+                    <!--                    <div class="col-xs-12 col-sm-12 col-md-12 m-t-10 text-center">-->
+                    <!--                        <div class="social">-->
+                    <!--                            <a href="javascript:" class="btn btn-facebook" data-toggle="tooltip" title="Login com sua conta do Facebook"> <i aria-hidden="true" class="fa fa-facebook"></i> </a>-->
+                    <!--                            <a href="javascript:" class="btn btn-googleplus" data-toggle="tooltip" title="Login com sua conta do Google"> <i aria-hidden="true" class="fa fa-google"></i> </a>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                </div>-->
+                    <div class="form-group m-b-0">
+                        <div class="col-sm-12 text-center">
+                            <p>Não tem uma conta? <a href="javascript:" id="registro" class="text-primary"><b>Registre-se</b></a>.</p>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -223,6 +232,7 @@
         $(".progress-bar").animate({
             width: "100%"
         }, 1000);
+        $(".before-loading").fadeOut();
         $(".preloader-login").fadeIn();
         event.preventDefault();
 

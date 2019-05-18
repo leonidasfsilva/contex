@@ -42,6 +42,7 @@
         font-family: Arial;
         font-size: 11px;
     }
+
     .preloader {
         width: 100%;
         height: 100%;
@@ -51,9 +52,29 @@
         z-index: 1;
         background: #eee;
     }
+
     .preloader .cssload-speeding-wheel {
         position: absolute;
         top: calc(50% - 3.5px);
         left: calc(50% - 3.5px);
     }
+
+    /*@media screen and (max-width: 768px) {*/
+    /*    #menu-toggle-icon {*/
+    /*        display: none;*/
+    /*    }*/
+    /*    .menu-toggle:before {*/
+    /*        font-family: FontAwesome;*/
+    /*        content: "\f142";*/
+    /*    }*/
+    /*}*/
+    /*body.infobar-offcanvas.sidebar-collapsed .menu-toggle:before {*/
+    /*    font-family: FontAwesome;*/
+    /*    content: "\f0c9";*/
+
+    /*}*/
+    /*body.infobar-offcanvas .menu-toggle:before {*/
+    /*    font-family: FontAwesome;*/
+    /*    content: "\f00d";*/
+    /*}*/
 </style>

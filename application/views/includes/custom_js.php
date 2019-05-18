@@ -24,6 +24,24 @@
 
     $(document).ready(function () {
 
+        $('#body').each(function () {
+            if ($(this).hasClass('sidebar-collapsed')) {
+                // SIDEBAR OCULTO
+                $('#menu-toggle-icon').addClass('fa-ellipsis-v')
+            } else {
+                // SIDEBAR EXPOSTO
+                $('#menu-toggle-icon').addClass('fa-chevron-left')
+            }
+        });
+
+        $('#menu-switcher').click(function () {
+            if ($('#body').hasClass('sidebar-collapsed')) {
+                $('#menu-toggle-icon').toggleClass('fa-chevron-left fa-ellipsis-v')
+            } else {
+                $('#menu-toggle-icon').toggleClass('fa-chevron-left fa-ellipsis-v')
+            }
+        });
+
         function limpa_formulário_cep() {
             // Limpa valores do formulário de cep.
             $("#logradouro").val("");
@@ -34,7 +52,7 @@
         }
 
         //Quando o campo cep perde o foco.
-        $("#cep").blur(function() {
+        $("#cep").blur(function () {
 
             //Nova variável "cep" somente com dígitos.
             var cep = $(this).val().replace(/\D/g, '');
@@ -46,7 +64,7 @@
                 var validacep = /^[0-9]{8}$/;
 
                 //Valida o formato do CEP.
-                if(validacep.test(cep)) {
+                if (validacep.test(cep)) {
 
                     //Preenche os campos com "..." enquanto consulta webservice.
                     $("#logradouro").val("aguarde...");
@@ -56,7 +74,7 @@
                     $("#ibge").val("aguarde...");
 
                     //Consulta o webservice viacep.com.br/
-                    $.getJSON("https://viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
+                    $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
 
                         if (!("erro" in dados)) {
                             //Atualiza os campos com os valores da consulta.
@@ -141,34 +159,6 @@
 
                 }
             });
-
-            // PNotify.info({
-            //     title: 'Em breve',
-            //     text: 'O módulo de Poupança encontra-se em desenvolvimento.',
-            //     styling: 'bootstrap3',
-            //     icon: 'fa fa-warning fa-lg fa-fw',
-            //     delay: 5000,
-            //     addClass: 'pnotify-shadow',
-            //     hide: true,
-            //     stack: {
-            //         'dir1': 'down',
-            //         'firstpos1': 25
-            //     },
-            //     modules: {
-            //         Animate: {
-            //             animate: true,
-            //             inClass: 'slideInDown',
-            //             outClass: 'slideOutUp'
-            //         },
-            //         Buttons: {
-            //             sticker: false,
-            //             closerHover: false,
-            //         },
-            //         Mobile: {
-            //             styling: true
-            //         }
-            //     }
-            // });
         });
 
         <?php if ($this->session->flashdata('erro') != null) { ?>
@@ -191,34 +181,6 @@
 
             }
         });
-
-        //PNotify.error({
-        //    title: 'Erro!',
-        //    text: '<?//= $this->session->flashdata('erro') ?>//',
-        //    styling: 'bootstrap3',
-        //    icon: 'fa fa-times-circle fa-lg fa-fw',
-        //    delay: 3000,
-        //    addClass: 'pnotify-center',
-        //    hide: true,
-        //    stack: {
-        //        'dir1': 'down',
-        //        'firstpos1': 25
-        //    },
-        //    modules: {
-        //        Animate: {
-        //            animate: true,
-        //            inClass: 'slideInDown',
-        //            outClass: 'slideOutUp'
-        //        },
-        //        Buttons: {
-        //            sticker: false,
-        //            closerHover: false,
-        //        },
-        //        Mobile: {
-        //            styling: true
-        //        }
-        //    }
-        //});
         <?php } ?>
 
         <?php if ($this->session->flashdata('sucesso') != null) { ?>
@@ -241,34 +203,6 @@
 
             }
         });
-
-        //PNotify.success({
-        //    title: 'Feito!',
-        //    text: '<?//= $this->session->flashdata('sucesso') ?>//',
-        //    styling: 'bootstrap3',
-        //    icon: 'fa fa-check-circle fa-lg fa-fw',
-        //    delay: 3000,
-        //    addClass: 'pnotify-center',
-        //    hide: true,
-        //    stack: {
-        //        'dir1': 'down',
-        //        'firstpos1': 25
-        //    },
-        //    modules: {
-        //        Animate: {
-        //            animate: true,
-        //            inClass: 'slideInDown',
-        //            outClass: 'slideOutUp'
-        //        },
-        //        Buttons: {
-        //            sticker: false,
-        //            closerHover: false,
-        //        },
-        //        Mobile: {
-        //            styling: true
-        //        }
-        //    }
-        //});
         <?php } ?>
     });
 </script>

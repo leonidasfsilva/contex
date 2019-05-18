@@ -17,15 +17,16 @@
 .preloader {
   width: 100%;
   height: 100%;
-  top: 0px;
-  position: fixed;
-  z-index: 99999;
-  background: #fff;
+  top: 0;
+  left: 0;
+  position: absolute;
+  z-index: 1;
+  background: #EEEEEE;
 }
 .preloader .cssload-speeding-wheel {
   position: absolute;
-  top: calc(50% - 3.5px);
-  left: calc(50% - 3.5px);
+  top: calc(50% - 4%);
+  left: calc(50% - 4%);
 }
 /* This is for popins font for firefox */
 @font-face {

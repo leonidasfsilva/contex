@@ -7354,7 +7354,7 @@ body.layout-boxed .infobar-wrapper {
     border: 0 !important;
     background: url("../img/contex_brand.png") no-repeat top left;
     background-size: 100px;
-    /*background-position-x: 10px;*/
+    background-position-x: 20px;
     background-position-y: 8px;
     height: 48px;
     width: 200px;
@@ -7383,7 +7383,7 @@ body.topnav-collapsed #topnav .navbar-brand {
     }
 }
 body.topnav-collapsed header.navbar .navbar-brand {
-    width: 100px;
+    width: 150px;
 }
 body.topnav-collapsed header.navbar .navbar-collapse {
     width: auto;
