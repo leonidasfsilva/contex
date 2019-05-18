@@ -42,4 +42,18 @@
         font-family: Arial;
         font-size: 11px;
     }
+    .preloader {
+        width: 100%;
+        height: 100%;
+        top: 0px;
+        left: 0;
+        position: absolute;
+        z-index: 1;
+        background: #eee;
+    }
+    .preloader .cssload-speeding-wheel {
+        position: absolute;
+        top: calc(50% - 3.5px);
+        left: calc(50% - 3.5px);
+    }
 </style>

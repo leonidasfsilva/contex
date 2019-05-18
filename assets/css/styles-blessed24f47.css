@@ -7572,6 +7572,13 @@ body.error .error-wrapper h1 {
     font-size: 96px;
     margin-bottom: 0;
 }
+/*Login sidebar*/
+.login-sidebar {
+    position: absolute;
+    right: 0px;
+    margin-top: 0px;
+    height: 100%;
+}
 .focused-form .login-logo {
     text-align: center;
     display: block;

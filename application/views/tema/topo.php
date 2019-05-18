@@ -601,6 +601,9 @@
 
                     <!--                CONTEUDO-->
                     <div class="container-fluid conteudo-principal">
+                        <div class="preloader">
+                            <div class="cssload-speeding-wheel"></div>
+                        </div>
                         <?php if ($this->session->flashdata('error') != null) { ?>
                             <div class="alert alert-danger">
                                 <button type="button" class="close" data-dismiss="alert">&times;</button>

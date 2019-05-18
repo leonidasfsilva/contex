@@ -1,4 +1,8 @@
 <script>
+    $(function () {
+        $(".preloader").fadeOut()
+    });
+
     <?php
     $url = current_url();
     $segments = explode("/", $url);
@@ -9,11 +13,11 @@
 
     if (!count(array_intersect($segments, $bloqueados)) > 0) { ?>
     window.onload = function () {
-        var wrapper = document.body;
-        wrapper.className += " page-loading";
-        setTimeout(function () {
-            wrapper.classList.remove('page-loading');
-        }, 2000);
+        // var wrapper = document.body;
+        // wrapper.className += " page-loading";
+        // setTimeout(function () {
+        //     wrapper.classList.remove('page-loading');
+        // }, 2000);
     };
     <?php
     } ?>
