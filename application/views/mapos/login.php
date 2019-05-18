@@ -38,8 +38,8 @@
     }
     .preloader-login .cssload-speeding-wheel {
         position: absolute;
-        top: calc(50% - 3.5px);
-        left: calc(50% - 3.5px);
+        top: calc(50% - 4%);
+        left: calc(50% - 4%);
     }
 </style>
 <body class="focused-form" style="background-color: #37474f">
@@ -53,7 +53,7 @@
             <div class="cssload-speeding-wheel"></div>
         </div>
         <div class="white-box">
-            <div class="text-center m-t-40 p-b-40">
+            <div class="text-center m-t-10">
                 <img class="contex-logo" src="<?php echo base_url() ?>assets/img/contex_logo.png" alt="Home"/>
                 <br/>
                 <img class="contex-words" src="<?php echo base_url() ?>assets/img/contex_words.png" alt="Home"/>
