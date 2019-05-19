@@ -63,7 +63,7 @@
                 <br/>
                 <img class="contex-words" src="<?php echo base_url() ?>assets/img/contex_words.png" alt="Home"/>
             </div>
-            <form class="form-horizontal floating-labels" id="formLogin" method="post" action="<?= site_url('redefinirsenha/alterarsenha') ?>">
+            <form class="form-horizontal floating-labels" id="formLogin" method="post" action="<?= site_url('redefinirsenha/alterarsenha') ?>" autocomplete="off">
                 <div class="preloader-login">
                     <div class="cssload-speeding-wheel"></div>
                 </div>
