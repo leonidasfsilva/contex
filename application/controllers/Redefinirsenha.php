@@ -134,7 +134,7 @@ class Redefinirsenha extends CI_Controller
                 <br />
                 Não é necessário responder este e-mail, mensagem automática.';
 
-//                    mail($emailremetente, $assunto_resposta, $msg_resposta, $headers_);
+                    mail($emailremetente, $assunto_resposta, $msg_resposta, $headers_);
 
                     //por hora, para efeito de teste, estou retornando o token para o aJax
                     echo json_encode($ajax, JSON_PRETTY_PRINT);
