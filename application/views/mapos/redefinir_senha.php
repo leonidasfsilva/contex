@@ -84,7 +84,7 @@
                         <span class="highlight"></span> <span class="bar"></span>
                         <label for="repitasenha">Confirme nova senha</label>
                     </div>
-                    <div class="form-group text-center m-t-40">
+                    <div class="form-group text-center m-t-40 p-t-20">
                         <div class="row">
                             <div class="col-xs-6">
                                 <button id="cancelToken" class="btn btn-default btn-block waves-effect waves-light" type="button"><i class="fa fa-times fa-fw"></i> Cancelar</button>
