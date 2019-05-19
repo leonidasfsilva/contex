@@ -40,7 +40,7 @@ $periodo = $this->input->get('periodo');
     ?>
 <?php } ?>
 
-    <div class="panel panel-default">
+    <div class="panel panel-midnightblue">
         <div class="panel-heading">
             <h2 style="font-size: 12pt">
                 <i class="fa fa-credit-card fa-lg fa-fw"></i>
@@ -89,7 +89,7 @@ $periodo = $this->input->get('periodo');
     </div>
 <?php if ($results) { ?>
 
-    <div class="panel panel-default">
+    <div class="panel panel-midnightblue">
         <div class="panel-heading">
             <h2>
                 Registro de Faturas
@@ -197,7 +197,7 @@ $periodo = $this->input->get('periodo');
     </div>
 
 <?php } else { ?>
-    <div class="panel panel-default">
+    <div class="panel panel-midnightblue">
         <div class="panel-heading">
             <h2>
                 Registro de Faturas

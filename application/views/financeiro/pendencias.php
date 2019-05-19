@@ -23,7 +23,7 @@ $periodo = $this->input->get('periodo');
 
 </style>
 
-<div class="panel panel-default">
+<div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h2 style="font-size: 12pt">
             <i class="fa fa-thumb-tack fa-lg fa-fw"></i>
@@ -74,7 +74,7 @@ $periodo = $this->input->get('periodo');
 </div>
 
 <?php if ($results) { ?>
-    <div class="panel panel-default">
+    <div class="panel panel-midnightblue">
         <div class="panel-heading">
             <h2>
                 Registro de Pendências
@@ -172,7 +172,7 @@ $periodo = $this->input->get('periodo');
     </div>
 
 <?php } else { ?>
-    <div class="panel panel-default">
+    <div class="panel panel-midnightblue">
         <div class="panel-heading">
             <h2>
                 Registro de Pendências
@@ -201,7 +201,7 @@ $periodo = $this->input->get('periodo');
     <?php echo $this->pagination->create_links();
 } ?>
 
-<div class="panel panel-default">
+<div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h2>
             Posição Consolidada

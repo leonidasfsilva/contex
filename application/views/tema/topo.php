@@ -96,11 +96,11 @@
     <!--	</span>-->
     <!--    MENU DIREITO-->
 
-    <!--    MEGAMENU-->
     <div class="yamm navbar-left navbar-collapse collapse in">
         <ul class="nav navbar-nav">
+            <!--    MEGAMENU-->
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Megamenu<span class="caret"></span></a>
+<!--                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Megamenu<span class="caret"></span></a>-->
                 <ul class="dropdown-menu" style="width: 900px;">
                     <li>
                         <div class="yamm-content container-sm-height">
@@ -173,8 +173,11 @@
                     </li>
                 </ul>
             </li>
+            <!--    MEGAMENU-->
+
+            <!--    DROPDOWN-->
             <li class="dropdown" id="widget-classicmenu">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<span class="caret"></span></a>
+<!--                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<span class="caret"></span></a>-->
                 <ul class="dropdown-menu" role="menu">
                     <li><a href="#">Action</a></li>
                     <li><a href="#">Another action</a></li>
@@ -185,18 +188,18 @@
                     <li><a href="#">One more separated link</a></li>
                 </ul>
             </li>
+            <!--    DROPDOWN-->
         </ul>
     </div>
-    <!--    MEGAMENU-->
 
     <!--    TOP NAVBAR-->
     <ul class="nav navbar-nav toolbar pull-right">
         <li class="dropdown toolbar-icon-bg">
-            <a href="#" id="navbar-links-toggle" data-toggle="collapse" data-target="header>.navbar-collapse" data-placement="bottom" title="Exibir Menu Superior">
-				<span class="icon-bg">
-					<i class="fa fa-fw fa-chevron-down"></i>
-				</span>
-            </a>
+<!--            <a href="#" id="navbar-links-toggle" data-toggle="collapse" data-target="header>.navbar-collapse" data-placement="bottom" title="Exibir Menu Superior">-->
+<!--				<span class="icon-bg">-->
+<!--					<i class="fa fa-fw fa-chevron-down"></i>-->
+<!--				</span>-->
+<!--            </a>-->
         </li>
 
         <!--        BUSCA-->
@@ -239,20 +242,19 @@
 
         <!--        NOTIFICAÇOES-->
         <li class="dropdown toolbar-icon-bg">
-            <a href="#" class="hasnotifications dropdown-toggle " data-toggle="dropdown" data-placement="bottom" title="Notificações">
+            <a href="#" class="hasnotifications dropdown-toggle" data-toggle="dropdown" data-placement="bottom" title="Notificações">
                 <span class="icon-bg">
                     <i class="fa fa-fw fa-bell"></i>
                 </span>
                 <!--                <span class="badge badge-info">5</span>-->
             </a>
-            <div class="dropdown-menu dropdown-alternate notifications arrow">
+            <div class="dropdown-menu dropdown-alternate messages arrow">
                 <div class="dd-header">
                     <span>Notifications</span>
                     <span><a href="#">Settings</a></span>
                 </div>
                 <div class="scrollthis scroll-pane">
                     <ul class="scroll-content">
-
                         <li class="">
                             <a href="#" class="notification-info">
                                 <div class="notification-icon"><i class="fa fa-user fa-fw"></i></div>

@@ -46,7 +46,7 @@
     .preloader {
         width: 100%;
         height: 100%;
-        top: 0px;
+        top: 0;
         left: 0;
         position: absolute;
         z-index: 1;
@@ -55,8 +55,8 @@
 
     .preloader .cssload-speeding-wheel {
         position: absolute;
-        top: calc(50% - 3.5px);
-        left: calc(50% - 3.5px);
+        top: calc(25% - 3%);
+        left: calc(50% - 3%);
     }
 
     /*@media screen and (max-width: 768px) {*/

@@ -69,11 +69,7 @@
                         </div>
                     </div>
                     <div class="panel-footer">
-                        <div class="row">
-                            <div class="col-md-6 pull-right">
-                                <button class="btn btn-primary btn-block"><i class="fa fa-refresh fa-fw"></i> Alterar Senha</button>
-                            </div>
-                        </div>
+                        <button class="btn btn-primary btn-sm pull-right"><i class="fa fa-refresh fa-fw"></i> Alterar Senha</button>
                     </div>
                 </form>
             </div>

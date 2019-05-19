@@ -35,6 +35,7 @@
 <script src="<?php echo base_url(); ?>assets/demo/demo-switcher.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/jquery.validate.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/jquery.mask.js"></script>
 <script src="<?php echo base_url(); ?>assets/plugins/fullcalendar/fullcalendar.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/plugins/wijets/wijets.js"></script>
 <!--    <script src="--><?php //echo base_url(); ?><!--assets/plugins/form-daterangepicker/moment.min.js"></script>                -->

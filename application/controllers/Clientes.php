@@ -18,6 +18,7 @@ class Clientes extends CI_Controller
         $this->load->helper(array('codegen_helper'));
         $this->load->model('clientes_model', '', true);
         $this->data['menuClientes'] = 'clientes';
+        $this->id_usuario = $this->session->userdata('id');
     }
 
     function index()
@@ -37,7 +38,7 @@ class Clientes extends CI_Controller
         $id_usuario = $this->session->userdata('id');
 
 
-        $config['base_url'] = base_url() . 'index.php/clientes/gerenciar/';
+        $config['base_url'] = base_url() . 'clientes/gerenciar/';
         $config['total_rows'] = $this->clientes_model->count('clientes');
         $config['per_page'] = 10;
         $config['next_link'] = 'Próxima';
@@ -61,7 +62,7 @@ class Clientes extends CI_Controller
 
         $this->pagination->initialize($config);
 
-        $this->data['results'] = $this->clientes_model->get('clientes', 'idClientes,nomeCliente,documento,telefone,celular,email,rua,numero,bairro,cidade,estado,cep', '', $id_usuario, $config['per_page'], $this->uri->segment(3));
+        $this->data['results'] = $this->clientes_model->get('clientes', '*', '', $id_usuario, $config['per_page'], $this->uri->segment(3));
 
         $this->data['view'] = 'clientes/clientes';
         $this->load->view('tema/topo', $this->data);
@@ -79,109 +80,104 @@ class Clientes extends CI_Controller
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
 
-        $nome = padronizarString($this->input->post('nomeCliente'));
+        if($this->input->post('nome')){
+            $nome = padronizarString($this->input->post('nome'));
 
-        if ($this->form_validation->run('clientes') == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
-        } else {
             $data = array(
-                'nomeCliente' => $nome,
-                'documento' => set_value('documento'),
-                'telefone' => set_value('telefone'),
-                'celular' => $this->input->post('celular'),
-                'email' => set_value('email'),
-                'rua' => set_value('rua'),
-                'numero' => set_value('numero'),
-                'bairro' => set_value('bairro'),
-                'cidade' => set_value('cidade'),
-                'estado' => set_value('estado'),
-                'cep' => set_value('cep'),
-                'dataCadastro' => date('Y-m-d'),
-                'id_usuario' => $id_usuario
+                'nome' => $nome,
+                'cpf' => $this->input->post('cpf'),
+                'telefone' => $this->input->post('telefone'),
+                'email' => $this->input->post('email'),
+                'logradouro' => $this->input->post('logradouro'),
+                'numero' => $this->input->post('numero'),
+                'bairro' => $this->input->post('bairro'),
+                'cidade' => $this->input->post('cidade'),
+                'uf' => $this->input->post('uf'),
+                'cep' => $this->input->post('cep'),
+                'id_usuario' => $id_usuario,
             );
 
             if ($this->clientes_model->add('clientes', $data) == true) {
-                $this->session->set_flashdata('success', 'Cliente adicionado com sucesso!');
-                redirect(base_url() . 'index.php/clientes/adicionar/');
+                $this->session->set_flashdata('sucesso', 'Cliente adicionado com sucesso!');
+                redirect(base_url() . 'clientes/');
             } else {
-                $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
+                $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar adicionar cliente');
+                redirect(base_url() . 'clientes/');
             }
         }
+
         $this->data['view'] = 'clientes/adicionarCliente';
         $this->load->view('tema/topo', $this->data);
 
     }
 
-    function editar()
+    function editar($id)
     {
-
-        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
-            $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
-            redirect('Mxcode');
-        }
-
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para editar clientes.');
             redirect(base_url());
         }
 
-        $this->load->library('form_validation');
-        $this->data['custom_error'] = '';
+        $verificacao = $this->clientes_model->verificaClienteUsuario($id, $this->id_usuario);
 
-        $nome = padronizarString($this->input->post('nomeCliente'));
+        if($verificacao == 0) {
+            $this->session->set_flashdata('erro', 'Cliente não encontrado para este usuário');
+            redirect(base_url() . 'clientes/');
+        }
 
-        if ($this->form_validation->run('clientes') == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
-        } else {
+        $nome = padronizarString($this->input->post('nome'));
+        if($this->input->post('nome')){
             $data = array(
-                'nomeCliente' => $nome,
-                'documento' => $this->input->post('documento'),
+                'nome' => $nome,
+                'cpf' => $this->input->post('cpf'),
                 'telefone' => $this->input->post('telefone'),
-                'celular' => $this->input->post('celular'),
                 'email' => $this->input->post('email'),
-                'rua' => $this->input->post('rua'),
+                'logradouro' => $this->input->post('logradouro'),
                 'numero' => $this->input->post('numero'),
                 'bairro' => $this->input->post('bairro'),
                 'cidade' => $this->input->post('cidade'),
-                'estado' => $this->input->post('estado'),
+                'uf' => $this->input->post('uf'),
                 'cep' => $this->input->post('cep')
             );
 
-            if ($this->clientes_model->edit('clientes', $data, 'idClientes', $this->input->post('idClientes')) == true) {
-                $this->session->set_flashdata('success', 'Cliente editado com sucesso!');
-                redirect(base_url() . 'index.php/clientes/editar/' . $this->input->post('idClientes'));
+            if ($this->clientes_model->edit('clientes', $data, 'id_clientes', $this->input->post('id_clientes')) == true) {
+                $this->session->set_flashdata('sucesso', 'Cliente editado com sucesso!');
+                redirect(base_url() . 'clientes/editar/' . $this->input->post('id_clientes'));
             } else {
-                $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro</p></div>';
+                $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar editar dados do cliente');
+                redirect(base_url() . 'clientes/');
             }
+
         }
 
-
-        $this->data['result'] = $this->clientes_model->getById($this->uri->segment(3));
+        $this->data['result'] = $this->clientes_model->getById($id);
         $this->data['view'] = 'clientes/editarCliente';
         $this->load->view('tema/topo', $this->data);
 
     }
 
-    public function visualizar()
+    public function visualizar($id)
     {
-
-        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
-            $this->session->set_flashdata('error', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
-            redirect('Mxcode');
-        }
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar clientes.');
             redirect(base_url());
         }
 
+        $verificacao = $this->clientes_model->verificaClienteUsuario($id, $this->id_usuario);
+
+        if($verificacao == 0) {
+            $this->session->set_flashdata('erro', 'Cliente não encontrado para este usuário');
+            redirect(base_url() . 'clientes/');
+        }
+
         $this->data['custom_error'] = '';
-        $this->data['result'] = $this->clientes_model->getById($this->uri->segment(3));
-        $this->data['results'] = $this->clientes_model->getOsByCliente($this->uri->segment(3));
+        $this->data['result'] = $this->clientes_model->getById($id);
+        $this->data['os'] = $this->clientes_model->getOsByCliente($id);
+        $this->data['pendencias'] = $this->clientes_model->getPendenciasByCliente($id);
         $this->data['view'] = 'clientes/visualizar';
         $this->load->view('tema/topo', $this->data);
-
 
     }
 
@@ -198,12 +194,12 @@ class Clientes extends CI_Controller
             'status' => 0
         );
 
-        $id = $this->input->post('id');
-        if ($id == null) {
-
-            $this->session->set_flashdata('error', 'Erro ao tentar excluir cliente.');
-            redirect(base_url() . 'index.php/clientes/gerenciar/');
+        if (!$this->input->post('id')) {
+            $this->session->set_flashdata('erro', 'Método não permitido');
+            redirect(base_url() . 'clientes/gerenciar/');
         }
+        $id = $this->input->post('id');
+
 
 //        // excluindo OSs vinculadas ao cliente
 //        $this->db->where('clientes_id', $id);
@@ -244,9 +240,14 @@ class Clientes extends CI_Controller
 //        $this->db->where('clientes_id', $id);
 //        $this->db->delete('lancamentos');
 
-        $this->clientes_model->delete('clientes', $data, 'idClientes', $id);
+        if($this->clientes_model->delete('clientes', $data, 'id_clientes', $id) == true){
+            $this->session->set_flashdata('sucesso', 'Cliente excluído com sucesso!');
+            redirect(base_url() . 'clientes/gerenciar/');
 
-        $this->session->set_flashdata('success', 'Cliente excluido com sucesso!');
-        redirect(base_url() . 'index.php/clientes/gerenciar/');
+        } else{
+            $this->session->set_flashdata('erro', 'Erro ao tentar excluir cliente.');
+            redirect(base_url() . 'clientes/gerenciar/');
+        }
+
     }
 }

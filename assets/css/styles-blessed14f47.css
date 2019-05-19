@@ -4662,7 +4662,7 @@ ul.mailbox-msg-list li a.mailbox-msg-list-item div .msg {
   text-decoration: none;
 }
 .accordion-group .accordion-item .accordion-title.collapsed h2:after {
-  content: "\f104";
+  content: "\f105";
   opacity: 0.5;
   filter: alpha(opacity=50);
 }

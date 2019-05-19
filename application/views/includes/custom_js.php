@@ -1,7 +1,7 @@
 <script>
-    $(function () {
-        $(".preloader").fadeOut()
-    });
+    setTimeout(function () {
+        $(".preloader").fadeOut();
+    },500);
 
     <?php
     $url = current_url();

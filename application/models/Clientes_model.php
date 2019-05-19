@@ -1,4 +1,5 @@
 <?php
+
 class Clientes_model extends CI_Model
 {
 
@@ -7,49 +8,49 @@ class Clientes_model extends CI_Model
      * email: silva018-mg@yahoo.com.br
      *
      */
-    
+
     function __construct()
     {
         parent::__construct();
     }
 
-    
+
     function get($table, $fields, $where = '', $id_usuario, $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
-        
+
         $this->db->select($fields);
         $this->db->from($table);
-        $this->db->order_by('idClientes', 'asc');
+        $this->db->order_by('id_clientes', 'asc');
         $this->db->limit($perpage, $start);
         if ($where) {
-            $this->db->where($where . ' AND status = 1 AND id_usuario = '.$id_usuario);
+            $this->db->where($where . ' AND status = 1 AND id_usuario = ' . $id_usuario);
         } else {
-            $this->db->where('status = 1 AND id_usuario = '.$id_usuario);
+            $this->db->where('status = 1 AND id_usuario = ' . $id_usuario);
         }
-        
+
         $query = $this->db->get();
-        
-        $result =  !$one  ? $query->result() : $query->row();
+
+        $result = !$one ? $query->result() : $query->row();
         return $result;
     }
 
     function getById($id)
     {
-        $this->db->where('idClientes', $id);
+        $this->db->where('id_clientes', $id);
         $this->db->limit(1);
         return $this->db->get('clientes')->row();
     }
-    
+
     function add($table, $data)
     {
         $this->db->insert($table, $data);
         if ($this->db->affected_rows() == '1') {
             return true;
         }
-        
+
         return false;
     }
-    
+
     function edit($table, $data, $fieldID, $ID)
     {
         $this->db->where($fieldID, $ID);
@@ -58,10 +59,10 @@ class Clientes_model extends CI_Model
         if ($this->db->affected_rows() >= 0) {
             return true;
         }
-        
+
         return false;
     }
-    
+
     function delete($table, $data, $fieldID, $ID)
     {
         $this->db->where($fieldID, $ID);
@@ -69,7 +70,7 @@ class Clientes_model extends CI_Model
         if ($this->db->affected_rows() == '1') {
             return true;
         }
-        
+
         return false;
     }
 
@@ -77,12 +78,26 @@ class Clientes_model extends CI_Model
     {
         return $this->db->count_all($table);
     }
-    
+
     public function getOsByCliente($id)
     {
         $this->db->where('clientes_id', $id);
         $this->db->order_by('idOs', 'desc');
         $this->db->limit(10);
         return $this->db->get('os')->result();
+    }
+
+    public function getPendenciasByCliente($id)
+    {
+        $this->db->where('id_cliente', $id);
+        $this->db->order_by('data_pendencia', 'desc');
+        $this->db->limit(10);
+        return $this->db->get('pendencias')->result();
+    }
+
+    public function verificaClienteUsuario($id, $id_usuario)
+    {
+        $this->db->where('id_clientes = ' . $id . ' AND id_usuario = ' . $id_usuario);
+        return $this->db->get('clientes')->num_rows();
     }
 }

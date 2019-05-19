@@ -23,7 +23,7 @@ $periodo = $this->input->get('periodo');
 
 </style>
 
-<div class="panel panel-default">
+<div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h2 style="font-size: 12pt">
             <i class="fa fa-line-chart fa-lg fa-fw"></i>
@@ -71,7 +71,7 @@ $periodo = $this->input->get('periodo');
 </div>
 
 <?php if (!$results) { ?>
-    <div class="panel panel-default">
+    <div class="panel panel-midnightblue">
         <div class="panel-heading">
             <h2>
                 Extrato de Lançamentos
@@ -97,7 +97,7 @@ $periodo = $this->input->get('periodo');
         </div>
     </div>
 <?php } else { ?>
-    <div class="panel panel-default">
+    <div class="panel panel-midnightblue">
         <div class="panel-heading">
             <h2>
                 Extrato de Lançamentos
@@ -179,7 +179,7 @@ $periodo = $this->input->get('periodo');
     <?php
 } ?>
 
-<div class="panel panel-default">
+<div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h2>
             Posição Consolidada
