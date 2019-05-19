@@ -67,6 +67,10 @@
                     <div class="cssload-speeding-wheel"></div>
                 </div>
                 <div class="before-loading">
+                    <div class="form-group">
+                        <h4 class="font-bold">Olá, Usuario de teste!</h4>
+                        <p class="font-bold">Cadastre uma nova senha para sua conta:</p>
+                    </div>
                     <div class="form-group m-t-40 p-t-40 p-b-20">
                         <input type="text" class="form-control" id="email" name="email" required/>
                         <span class="highlight"></span> <span class="bar"></span>
