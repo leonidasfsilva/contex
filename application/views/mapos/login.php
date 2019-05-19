@@ -58,7 +58,7 @@
 </div>
 <section id="wrapper" class="login-register">
     <div class="login-box login-sidebar">
-        <div class="text-center m-t-20">
+        <div class="text-center m-t-40">
             <img class="contex-logo" src="<?php echo base_url() ?>assets/img/contex_logo.png" alt="Home"/>
             <br/>
             <img class="contex-words" src="<?php echo base_url() ?>assets/img/contex_words.png" alt="Home"/>
