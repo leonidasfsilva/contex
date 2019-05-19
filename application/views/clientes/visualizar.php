@@ -12,7 +12,7 @@
                     <ul class="dropdown-menu"></ul>
                 </li>
                 <li class="active"><a href="#tab-11-1" data-toggle="tab">Dados do Cliente</a></li>
-                <li><a href="#tab-11-2" data-toggle="tab">Ordens de Serviço</a></li>
+<!--                <li><a href="#tab-11-2" data-toggle="tab">Ordens de Serviço</a></li>-->
                 <li><a href="#tab-11-3" data-toggle="tab">Pendências</a></li>
             </ul>
         </h2>
