@@ -76,7 +76,7 @@ class Redefinirsenha extends CI_Controller
                     //aqui entra o MAIL() para enviar o link de recuperação com o token gerado para o usuário
 
 
-                    $link = site_url('redefinirsenha/verificacao?token=' . $token . '&id=' . $last_id);
+                    $link = base_url('redefinirsenha/verificacao?token=' . $token . '&id=' . $last_id);
                     $date = date("d/m/Y h:i");
                     $ip = getenv("REMOTE_ADDR");
                     $navegador = $_SERVER['HTTP_USER_AGENT'];
