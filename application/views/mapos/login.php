@@ -78,10 +78,6 @@
                         <label for="email">Senha</label>
                     </div>
                     <div class="form-group">
-<!--                        <div class="checkbox checkbox-info pull-left p-t-0">-->
-<!--                            <input id="checkbox-signup" type="checkbox">-->
-<!--                            <label for="checkbox-signup">Manter conectado </label>-->
-<!--                        </div>-->
                         <a href="javascript:" onclick="recuperar_senha()" class="text-primary pull-right">Esqueceu sua senha?</a>
                     </div>
                     <div class="form-group text-center m-t-20">
