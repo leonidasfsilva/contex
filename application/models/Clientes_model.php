@@ -97,7 +97,7 @@ class Clientes_model extends CI_Model
 
     public function verificaClienteUsuario($id, $id_usuario)
     {
-        $this->db->where('id_clientes = ' . $id . ' AND id_usuario = ' . $id_usuario);
+        $this->db->where('id_clientes = ' . $id . ' AND id_usuario = ' . $id_usuario.' AND status = 1');
         return $this->db->get('clientes')->num_rows();
     }
 }
