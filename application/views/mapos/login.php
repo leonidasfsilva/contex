@@ -57,7 +57,7 @@
 <section id="wrapper" class="login-register">
     <div class="login-box login-sidebar">
         <div class="white-box box-login">
-            <div class="text-center">
+            <div class="text-center p-b-40">
                 <img class="contex-logo" src="<?php echo base_url() ?>assets/img/contex_logo.png" alt="Home"/>
                 <br/>
                 <img class="contex-words" src="<?php echo base_url() ?>assets/img/contex_words.png" alt="Home"/>
@@ -67,6 +67,9 @@
                     <div class="cssload-speeding-wheel"></div>
                 </div>
                 <div class="before-loading">
+                    <div class="form-group">
+                        <p class="font-bold">Efetue seu login</p>
+                    </div>
                     <div class="form-group m-t-40 p-t-40 p-b-20">
                         <input type="text" class="form-control" id="email" name="email" required/>
                         <span class="highlight"></span> <span class="bar"></span>
