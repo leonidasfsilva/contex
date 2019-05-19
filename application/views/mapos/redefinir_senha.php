@@ -22,6 +22,7 @@
     <script src="<?php echo base_url(); ?>assets/js/agile-custom.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/agile-waves.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/agile-style.switcher.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/bootstrap3.3.7.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.js"></script>
 </head>
 <style>
@@ -38,7 +39,7 @@
 
     .preloader-login .cssload-speeding-wheel {
         position: absolute;
-        top: calc(50% - 4%);
+        top: calc(30%);
         left: calc(50% - 4%);
     }
 
@@ -46,9 +47,10 @@
         .box-login {
             position: relative;
             right: 0px;
-            padding-top: calc(50%);
+            padding-top: calc(30%);
             height: 100%;
         }
+    }
 </style>
 <body class="focused-form" style="background-color: #37474f">
 
@@ -57,22 +59,25 @@
 </div>
 <section id="wrapper" class="login-register">
     <div class="login-box login-sidebar">
+        <div class="text-center m-t-20">
+            <img class="contex-logo" src="<?php echo base_url() ?>assets/img/contex_logo.png" alt="Home"/>
+            <br/>
+            <img class="contex-words" src="<?php echo base_url() ?>assets/img/contex_words.png" alt="Home"/>
+        </div>
         <div class="white-box box-login">
-            <div class="text-center p-b-40">
-                <img class="contex-logo" src="<?php echo base_url() ?>assets/img/contex_logo.png" alt="Home"/>
-                <br/>
-                <img class="contex-words" src="<?php echo base_url() ?>assets/img/contex_words.png" alt="Home"/>
-            </div>
             <form class="form-horizontal floating-labels" id="formLogin" method="post" action="<?= site_url('redefinirsenha/alterarsenha') ?>" autocomplete="off">
                 <div class="preloader-login">
                     <div class="cssload-speeding-wheel"></div>
                 </div>
                 <div class="before-loading">
-                    <div class="form-group">
+                    <div class="form-group p-b-0 m-t-0">
                         <h4 class="font-bold">Olá, <?= $nome ?>!</h4>
                         <p class="font-bold">Cadastre uma nova senha para sua conta:</p>
                     </div>
-                    <div class="form-group m-t-40 p-t-40 p-b-20">
+                    <div class="form-group p-b-0 m-t-0">
+                        <?php echo validation_errors(); ?>
+                    </div>
+                    <div class="form-group ">
                         <input type="hidden" id="token" name="token" value="<?= $token ?>"/>
                         <input type="hidden" id="id" name="id" value="<?= $id ?>"/>
                         <input type="password" class="form-control" id="novasenha" name="novasenha" required/>
@@ -102,7 +107,7 @@
 
 <div id="form_notice" class="hidden">
     <form id="form_invalidar_token" method="post" action="<?= site_url('redefinirsenha/invalidatoken') ?>">
-        <input type="hidden" id="id" name="id" value="<?= $id ?>"/>
+        <input type="hidden" id="id_token" name="id" value="<?= $id ?>"/>
     </form>
 </div>
 <!-- End loading site level scripts -->
@@ -131,6 +136,51 @@
         var form = $('#form_invalidar_token');
         form.submit();
     });
+
+    <?php if ($this->session->flashdata('erro') != null) { ?>
+    Swal.fire({
+        position: 'top',
+        type: 'error',
+        // timer: 5000,
+        title: 'Erro!',
+        html: '<?= $this->session->flashdata('erro') ?>',
+        showConfirmButton: false,
+        showCancelButton: true,
+        showCloseButton: true,
+        reverseButtons: true,
+        confirmButtonText: '<i class="fa fa-refresh fa-fw"></i> Tentar de novo ',
+        cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
+    }).then((result) => {
+        if (result.value) {
+            recuperar_senha();
+        } else {
+
+        }
+    });
+    <?php } ?>
+
+    <?php if ($this->session->flashdata('sucesso') != null) { ?>
+    Swal.fire({
+        position: 'top',
+        type: 'success',
+        title: 'Feito!',
+        // timer: 5000,
+        html: '<?= $this->session->flashdata('sucesso') ?>',
+        showConfirmButton: true,
+        showCancelButton: false,
+        showCloseButton: true,
+        confirmButtonText: '<i class="fa fa-check fa-fw"></i> OK ',
+        cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
+        reverseButtons: true,
+    }).then((result) => {
+        if (result.value) {
+
+        } else {
+
+        }
+    });
+    <?php } ?>
+
 </script>
 
 </body>

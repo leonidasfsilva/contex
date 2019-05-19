@@ -38,15 +38,17 @@
 
     .preloader-login .cssload-speeding-wheel {
         position: absolute;
-        top: calc(50% - 4%);
+        top: calc(30%);
         left: calc(50% - 4%);
     }
+
     @media screen and (min-width: 1024px) {
         .box-login {
             position: relative;
             right: 0px;
-            padding-top: calc(50%);
+            padding-top: calc(30%);
             height: 100%;
+        }
     }
 </style>
 <body class="focused-form" style="background-color: #37474f">
@@ -56,12 +58,12 @@
 </div>
 <section id="wrapper" class="login-register">
     <div class="login-box login-sidebar">
+        <div class="text-center m-t-20">
+            <img class="contex-logo" src="<?php echo base_url() ?>assets/img/contex_logo.png" alt="Home"/>
+            <br/>
+            <img class="contex-words" src="<?php echo base_url() ?>assets/img/contex_words.png" alt="Home"/>
+        </div>
         <div class="white-box box-login">
-            <div class="text-center p-b-40">
-                <img class="contex-logo" src="<?php echo base_url() ?>assets/img/contex_logo.png" alt="Home"/>
-                <br/>
-                <img class="contex-words" src="<?php echo base_url() ?>assets/img/contex_words.png" alt="Home"/>
-            </div>
             <form class="form-horizontal floating-labels" id="formLogin" method="post" action="<?php echo base_url() ?>mxcode/verificarLogin">
                 <div class="preloader-login">
                     <div class="cssload-speeding-wheel"></div>
