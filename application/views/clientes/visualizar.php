@@ -12,7 +12,7 @@
                     <ul class="dropdown-menu"></ul>
                 </li>
                 <li class="active"><a href="#tab-11-1" data-toggle="tab">Dados do Cliente</a></li>
-<!--                <li><a href="#tab-11-2" data-toggle="tab">Ordens de Serviço</a></li>-->
+                <!--                <li><a href="#tab-11-2" data-toggle="tab">Ordens de Serviço</a></li>-->
                 <li><a href="#tab-11-3" data-toggle="tab">Pendências</a></li>
             </ul>
         </h2>
@@ -238,56 +238,84 @@
                             <table class="table table-striped">
                                 <thead>
                                 <tr class="bg-inverse">
-                                    <th>#</th>
-                                    <th>Data Pendência</th>
-                                    <th>Data Pagamento</th>
-                                    <th>Tipo</th>
-                                    <th>Descrição</th>
-                                    <th>Valor</th>
-                                    <th style="width: 100px">Ações</th>
+                                    <th colspan="2" style="text-align: left !important;">Descrição</th>
+                                    <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                <?php
-                                foreach ($pendencias as $r) {
-                                    $dataInicial = date(('d/m/Y'), strtotime($r->data_pendencia));
-                                    if ($r->data_pagamento != null) {
-                                        $dataFinal = date(('d/m/Y'), strtotime($r->data_pagamento));
-                                    } else {
-                                        $dataFinal = null;
-                                    }
-                                    if ($r->tipo == 1) {
-                                        $tipo = 'Credito';
-                                        $colorTipo = 'primary';
-                                    } else {
-                                        $tipo = 'Debito';
-                                        $colorTipo = 'warning';
-                                    }
-
-                                    echo '<tr>';
-                                    echo '<td>' . $r->id_pendencia . '</td>';
-                                    echo '<td>' . $dataInicial . '</td>';
-                                    echo '<td>' . $dataFinal . '</td>';
-                                    echo '<td><span class="label label-' . $colorTipo . '">' . strtoupper($tipo) . '</span></td>';
-                                    echo '<td>' . $r->descricao . '</td>';
-                                    echo '<td>' . number_format($r->valor, 2, ',', '.') . '</td>';
-
-                                    echo '<td>';
-                                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-                                        echo '<a href="' . base_url() . 'os/visualizar/' . $r->id_pendencia . '" style="margin-right: 1%" class="btn btn-info btn-sm tip-top" title="Ver mais detalhes"><i class="fa fa-search-plus fa-fw"></i></a>';
-                                    }
-                                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-                                        echo '<a href="' . base_url() . 'os/editar/' . $r->id_pendencia . '" class="btn btn-primary btn-sm tip-top" title="Editar OS"><i class="fa fa-edit fa-fw"></i></a>';
-                                    }
-
-                                    echo '</td>';
-                                    echo '</tr>';
-                                } ?>
                                 <tr>
-
+                                    <td colspan="2" style="text-align: left; color: green">(+) SALDO TOTAL DE PENDÊNCIAS CRÉDITO</td>
+                                    <td colspan="1" style="text-align: right; color: green">
+                                        <?php echo number_format($total_credito->total, 2, ',', '.') ?></td>
                                 </tr>
-                                </tbody>
+                                <tr>
+                                    <td colspan="2" style="text-align: left; color: red">(-) SALDO TOTAL DE PENDÊNCIAS DÉBITO</td>
+                                    <td colspan="1" style="text-align: right; color: red">
+                                        <?php echo number_format($total_debito->total, 2, ',', '.') ?></td>
+                                </tr>
                             </table>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-midnightblue">
+                        <div class="panel-heading"></div>
+                        <div class="panel-body panel-no-padding">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr class="bg-inverse">
+                                        <th>#</th>
+                                        <th>Data Pendência</th>
+                                        <th>Descrição</th>
+                                        <th>Tipo</th>
+                                        <th>Status</th>
+                                        <th>Data Pagamento</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php
+                                    foreach ($pendencias as $r) {
+                                        $dataInicial = date(('d/m/Y'), strtotime($r->data_pendencia));
+                                        if ($r->data_pagamento != null) {
+                                            $dataFinal = date(('d/m/Y'), strtotime($r->data_pagamento));
+                                        } else {
+                                            $dataFinal = null;
+                                        }
+                                        if ($r->tipo == 1) {
+                                            $tipo = 'Credito';
+                                            $colorTipo = 'primary';
+                                        } else {
+                                            $tipo = 'Debito';
+                                            $colorTipo = 'warning';
+                                        }
+                                        if ($r->quitado == 0) {
+                                            $status = 'Pendente';
+                                            $color = 'red';
+                                            $label = 'danger';
+                                            $icon = 'fa fa-check-square-o';
+                                        } else {
+                                            $status = 'Pago';
+                                            $color = 'green';
+                                            $label = 'success';
+                                            $icon = 'fa fa-check-square';
+                                        }
+
+                                        echo '<tr>';
+                                        echo '<td>' . $r->id_pendencia . '</td>';
+                                        echo '<td>' . $dataInicial . '</td>';
+                                        echo '<td>' . $r->descricao . '</td>';
+                                        echo '<td><span class="label label-' . $colorTipo . '">' . strtoupper($tipo) . '</span></td>';
+                                        echo '<td><span class="label label-' . $label . '">' . strtoupper($status) . '</span></td>';
+                                        echo '<td>' . $dataFinal . '</td>';
+                                        echo '<td>' . number_format($r->valor, 2, ',', '.') . '</td>';
+                                        echo '</tr>';
+                                    } ?>
+                                    <tr>
+
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 <?php } ?>

@@ -3,12 +3,6 @@
 class Clientes_model extends CI_Model
 {
 
-    /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     *
-     */
-
     function __construct()
     {
         parent::__construct();
@@ -90,8 +84,9 @@ class Clientes_model extends CI_Model
     public function getPendenciasByCliente($id)
     {
         $this->db->where('id_cliente', $id);
-        $this->db->order_by('data_pendencia', 'desc');
-        $this->db->limit(10);
+        $this->db->where('status', 1);
+        $this->db->order_by('data_pendencia', 'asc');
+        $this->db->order_by('id_pendencia', 'asc');
         return $this->db->get('pendencias')->result();
     }
 

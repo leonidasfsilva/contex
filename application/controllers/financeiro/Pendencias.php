@@ -46,14 +46,14 @@ class Pendencias extends CI_Controller
         } else {
 
             // busca lançamentos do dia
-            if ($periodo == null || $periodo == '7dias') {
+            if ($periodo == '7dias') {
                 $semana = $this->getLastSevenDays();
 
                 $where = 'data_pendencia BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
 
-            } // fim lançamentos dia
-
-            else {
+            } else if ($periodo == null) {
+                $limit = 5;
+            } else {
 
                 // busca lançamentos da semana
                 if ($periodo == '5dias') {
@@ -138,7 +138,15 @@ class Pendencias extends CI_Controller
 
         $this->pagination->initialize($config);
 
-        $this->data['results'] = $this->pendencia_model->get('pendencias', '*', $where, $this->id_usuario, $config['per_page'], $this->input->get('per_page'));
+        $this->data['results'] = $this->pendencia_model->get(
+            'pendencias',
+            '*',
+            $where,
+            $this->id_usuario,
+            $limit,
+            $config['total_rows'],
+            $config['per_page'],
+            $this->input->get('per_page'));
 
         $this->data['clientes'] = $this->pendencia_model->getClientes($this->id_usuario);
         $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
