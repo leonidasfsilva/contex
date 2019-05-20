@@ -17,6 +17,7 @@ class Clientes extends CI_Controller
         }
         $this->load->helper(array('codegen_helper'));
         $this->load->model('clientes_model', '', true);
+        $this->load->model('pendencia_model', '', true);
         $this->data['menuClientes'] = 'clientes';
         $this->id_usuario = $this->session->userdata('id');
     }
@@ -175,6 +176,8 @@ class Clientes extends CI_Controller
         $this->data['custom_error'] = '';
         $this->data['result'] = $this->clientes_model->getById($id);
         $this->data['os'] = $this->clientes_model->getOsByCliente($id);
+        $this->data['total_credito'] = $this->pendencia_model->getPendenciasTotalCredito($this->id_usuario);
+        $this->data['total_debito'] = $this->pendencia_model->getPendenciasTotalDebito($this->id_usuario);
         $this->data['pendencias'] = $this->clientes_model->getPendenciasByCliente($id);
         $this->data['view'] = 'clientes/visualizar';
         $this->load->view('tema/topo', $this->data);

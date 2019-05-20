@@ -134,8 +134,8 @@ $periodo = $this->input->get('periodo');
 //                    echo '<td><span class="badge badge-' . $label . '">' . ucfirst($r->tipo) . '</span></td>';
                     echo '<td>' . strtoupper($r->descricao) . '</td>';
                     foreach ($clientes as $d) {
-                        if ($r->id_cliente == $d->idClientes) {
-                            echo '<td>' . strtoupper($d->nomeCliente) . '</td>';
+                        if ($r->id_cliente == $d->id_clientes) {
+                            echo '<td>' . strtoupper($d->nome) . '</td>';
                         }
                     }
                     echo '<td><span class="label label-' . $colorTipo . '">' . strtoupper($tipo) . '</span></td>';
@@ -285,9 +285,9 @@ $periodo = $this->input->get('periodo');
                                 <option value="">Todos</option>
                                 <?php if ($clientes) {
                                     foreach ($clientes as $d) { ?>
-                                        <option value="<?= $d->idClientes ?>" <?php if ($selected == $d->idClientes) {
+                                        <option value="<?= $d->id_clientes ?>" <?php if ($selected == $d->id_clientes) {
                                             echo 'selected';
-                                        } ?>><?= $d->nomeCliente ?></option>
+                                        } ?>><?= $d->nome ?></option>
                                     <?php }
                                 } ?>
                             </select>

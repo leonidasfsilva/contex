@@ -288,7 +288,7 @@ class Lancamentos extends CI_Controller
 
         $this->load->library('pagination');
 
-        $config['base_url'] = site_url() . '/financeiro/lancamentos/?periodo=' . $periodo . '&situacao=' . $situacao;
+        $config['base_url'] = site_url() . 'financeiro/lancamentos/?periodo=' . $periodo . '&situacao=' . $situacao;
         $config['total_rows'] = $this->financeiro_model->count('lancamentos', 'status = 1 AND id_usuario = ' . $this->id_usuario);
         $config['per_page'] = 100;
         $config['page_query_string'] = true;

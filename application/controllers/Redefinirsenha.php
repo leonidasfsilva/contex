@@ -22,19 +22,13 @@ class Redefinirsenha extends CI_Controller
 
     }
 
-    public function index()
+    public function index($data = null)
     {
-        if ((!session_id()) || (!$this->session->userdata('logado'))) {
+        if (($data == null) || ($this->session->userdata('logado'))) {
             redirect('mxcode/login');
         }
-
-        $this->data['ordens'] = $this->mapos_model->getOsAbertas();
-        $this->data['produtos'] = $this->mapos_model->getProdutosMinimo();
-        $this->data['os'] = $this->mapos_model->getOsEstatisticas();
-        $this->data['estatisticas_financeiro'] = $this->mapos_model->getEstatisticasFinanceiro();
-        $this->data['menuPainel'] = 'Index';
-        $this->data['view'] = 'mapos/painel';
-        $this->load->view('tema/topo', $this->data);
+//        redirect('redefinirsenha/');
+        $this->load->view('mapos/redefinir_senha', $data);
 
     }
 
@@ -82,7 +76,7 @@ class Redefinirsenha extends CI_Controller
                     //aqui entra o MAIL() para enviar o link de recuperação com o token gerado para o usuário
 
 
-                    $link = site_url('redefinirsenha/verificacao?token=' . $token . '&id=' . $last_id);
+                    $link = base_url('redefinirsenha/verificacao?token=' . $token . '&id=' . $last_id);
                     $date = date("d/m/Y h:i");
                     $ip = getenv("REMOTE_ADDR");
                     $navegador = $_SERVER['HTTP_USER_AGENT'];
@@ -184,7 +178,7 @@ class Redefinirsenha extends CI_Controller
                         $result = $query->row();
 
                         //tempo de validade do link (em minutos)
-                        $validade = 20;
+                        $validade = 30;
 
                         if (isset($result->validade) && $result->validade < $validade) {
 
@@ -197,7 +191,7 @@ class Redefinirsenha extends CI_Controller
                                 'token' => $tokenReal,
                             );
 
-                            $this->load->view('mapos/redefinir_senha', $data);
+                            $this->index($data);
 
                         } else {
                             $this->redefinicao_model->invalidaToken($id);
@@ -251,20 +245,22 @@ class Redefinirsenha extends CI_Controller
                     $result = $query->row();
 
                     //tempo de validade do link (em minutos)
-                    $validade = 20;
+                    $validade = 30;
 
                     if (isset($result->validade) && $result->validade < $validade) {
                         $this->form_validation->set_error_delimiters('<div class="alert alert-danger alert-dismissible small font-weight-bold" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> ', '</div>');
                         $this->form_validation->set_rules('novasenha', '"Nova senha"', 'required|min_length[6]');
-                        $this->form_validation->set_rules('repitasenha', '"Confirme nova senha"', 'required|min_length[6]');
+//                        $this->form_validation->set_rules('repitasenha', '"Confirme nova senha"', 'required|min_length[6]');
 
                         $query = $this->redefinicao_model->getDadosUsuarioById($resultToken->id_usuario);
                         $result = $query->row();
 
                         if ($this->form_validation->run() == FALSE) {
                             $data = array(
+                                'id' => $id,
                                 'nome' => $result->nome,
+                                'token' => $token,
                             );
                             $this->load->view('mapos/redefinir_senha', $data);
 
