@@ -329,7 +329,7 @@ $periodo = $this->input->get('periodo');
                                 <option value="">-- Selecione --</option>
                                 <?php if ($clientes) {
                                     foreach ($clientes as $d) { ?>
-                                        <option value="<?= $d->idClientes ?>"><?= $d->nomeCliente ?></option>
+                                        <option value="<?= $d->id_clientes ?>"><?= $d->nome ?></option>
                                     <?php }
                                 } ?>
                             </select>
@@ -390,7 +390,7 @@ $periodo = $this->input->get('periodo');
                                 <option value="">-- Selecione --</option>
                                 <?php if ($clientes) {
                                     foreach ($clientes as $d) { ?>
-                                        <option value="<?= $d->idClientes ?>"><?= $d->nomeCliente ?></option>
+                                        <option value="<?= $d->id_clientes ?>"><?= $d->nome ?></option>
                                     <?php }
                                 } ?>
                             </select>

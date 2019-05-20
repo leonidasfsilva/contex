@@ -1,21 +1,20 @@
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
-        <div class="panel-ctrls">
-            <a href="<?php echo base_url() ?>clientes" class="btn btn-default btn-sm "><i class="fa fa-arrow-left fa-fw"></i> Voltar</a>
-            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
-                echo '<a title="Editar detalhes do cliente" class="btn btn-primary btn-sm " href="' . base_url() . 'clientes/editar/' . $result->id_clientes . '"><i class="fa fa-edit fa-fw"></i> Editar</a>';
-            } ?>
-        </div>
         <h2>
             <ul class="nav nav-tabs">
                 <li class="dropdown pull-right tabdrop hide"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-angle-down"></i> </a>
                     <ul class="dropdown-menu"></ul>
                 </li>
                 <li class="active"><a href="#tab-11-1" data-toggle="tab">Dados do Cliente</a></li>
-                <!--                <li><a href="#tab-11-2" data-toggle="tab">Ordens de Serviço</a></li>-->
                 <li><a href="#tab-11-3" data-toggle="tab">Pendências</a></li>
             </ul>
         </h2>
+        <div class="panel-ctrls">
+            <a href="<?php echo base_url() ?>clientes" class="btn btn-default btn-sm "><i class="fa fa-arrow-left fa-fw"></i> Voltar</a>
+            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
+                echo '<a title="Editar detalhes do cliente" class="btn btn-primary btn-sm " href="' . base_url() . 'clientes/editar/' . $result->id_clientes . '"><i class="fa fa-edit fa-fw"></i> Editar</a>';
+            } ?>
+        </div>
     </div>
     <div class="panel-body">
         <div class="tab-content">
@@ -130,79 +129,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <!--            TAB OS DO CLIENTE-->
-            <div class="tab-pane" id="tab-11-2">
-                <?php if (!$os) { ?>
-                    <div class="panel panel-midnightblue">
-                        <div class="panel-heading"></div>
-                        <div class="panel-body panel-no-padding">
-                            <table class="table table-striped">
-                                <thead>
-                                <tr class="bg-inverse">
-                                    <th>#</th>
-                                    <th>Data Inicial</th>
-                                    <th>Data Final</th>
-                                    <th>Descrição</th>
-                                    <th>Defeito</th>
-                                    <th style="width: 100px">Ações</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-
-                                <tr>
-                                    <td colspan="6">Nenhuma OS encontrada para este cliente</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                <?php } else { ?>
-                    <div class="panel panel-midnightblue">
-                        <div class="panel-heading"></div>
-                        <div class="panel-body panel-no-padding">
-                            <table class="table table-striped">
-                                <thead>
-                                <tr class="bg-inverse">
-                                    <th>#</th>
-                                    <th>Data Inicial</th>
-                                    <th>Data Final</th>
-                                    <th>Descrição</th>
-                                    <th>Defeito</th>
-                                    <th style="width: 100px">Ações</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <?php
-                                foreach ($os as $r) {
-                                    $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
-                                    $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
-                                    echo '<tr>';
-                                    echo '<td>' . $r->idOs . '</td>';
-                                    echo '<td>' . $dataInicial . '</td>';
-                                    echo '<td>' . $dataFinal . '</td>';
-                                    echo '<td>' . $r->descricaoProduto . '</td>';
-                                    echo '<td>' . $r->defeito . '</td>';
-
-                                    echo '<td>';
-                                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-                                        echo '<a href="' . base_url() . 'os/visualizar/' . $r->idOs . '" style="margin-right: 1%" class="btn btn-info btn-sm tip-top" title="Ver mais detalhes"><i class="fa fa-search-plus fa-fw"></i></a>';
-                                    }
-                                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-                                        echo '<a href="' . base_url() . 'os/editar/' . $r->idOs . '" class="btn btn-primary btn-sm tip-top" title="Editar OS"><i class="fa fa-edit fa-fw"></i></a>';
-                                    }
-
-                                    echo '</td>';
-                                    echo '</tr>';
-                                } ?>
-                                <tr>
-
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                <?php } ?>
             </div>
             <!--            TAB PENDENCIAS DO CLIENTE-->
             <div class="tab-pane" id="tab-11-3">
