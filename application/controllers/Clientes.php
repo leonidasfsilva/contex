@@ -176,8 +176,8 @@ class Clientes extends CI_Controller
         $this->data['custom_error'] = '';
         $this->data['result'] = $this->clientes_model->getById($id);
         $this->data['os'] = $this->clientes_model->getOsByCliente($id);
-        $this->data['total_credito'] = $this->pendencia_model->getPendenciasTotalCredito($this->id_usuario);
-        $this->data['total_debito'] = $this->pendencia_model->getPendenciasTotalDebito($this->id_usuario);
+        $this->data['total_credito'] = $this->clientes_model->getPendenciasCreditoCliente($this->id_usuario, $id);
+        $this->data['total_debito'] = $this->clientes_model->getPendenciasDebitoCliente($this->id_usuario, $id);
         $this->data['pendencias'] = $this->clientes_model->getPendenciasByCliente($id);
         $this->data['view'] = 'clientes/visualizar';
         $this->load->view('tema/topo', $this->data);
