@@ -633,14 +633,13 @@
                     <div class="clearfix">
                         <ul class="list-unstyled list-inline pull-left pl-sm">
                             <a href="https://mxcode.net" target="_blank">
-                                <li><h6 style="margin: 0;">CONTEX - Sistema de Gestão <?php echo date('Y'); ?> &copy; MX Code Sistemas - Leônidas Ferreira</h6></li>
+                                <li><h6 style="margin: 0;">CONTEX - Sistema de Gestão &copy; <?php echo date('Y'); ?> MX Code Sistemas - Leônidas Ferreira</h6></li>
                             </a>
                         </ul>
                         <button class="pull-right btn btn-link btn-xs hidden-print" id="back-to-top"><i class="fa fa-arrow-up"></i></button>
                     </div>
                 </footer>
                 <!--                FOOTER-->
-
             </div>
         </div>
     </div>

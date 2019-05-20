@@ -83,7 +83,7 @@
                         <label for="email">Senha</label>
                     </div>
                     <div class="form-group">
-                        <a href="javascript:" onclick="recuperar_senha()" class="text-primary pull-right">Esqueceu sua senha?</a>
+                        <a href="javascript:" onclick="recuperar_senha()" class="text-primary pull-right">Esqueci minha senha</a>
                     </div>
                     <div class="form-group text-center m-t-20">
                         <div class="row">

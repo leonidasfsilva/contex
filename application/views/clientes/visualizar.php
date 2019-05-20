@@ -2,9 +2,6 @@
     <div class="panel-heading">
         <h2>
             <ul class="nav nav-tabs">
-                <li class="dropdown pull-right tabdrop hide"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-angle-down"></i> </a>
-                    <ul class="dropdown-menu"></ul>
-                </li>
                 <li class="active"><a href="#tab-11-1" data-toggle="tab">Dados do Cliente</a></li>
                 <li><a href="#tab-11-3" data-toggle="tab">Pendências</a></li>
             </ul>
@@ -156,7 +153,6 @@
                             </table>
                         </div>
                     </div>
-
                 <?php } else { ?>
                     <div class="panel panel-midnightblue">
                         <div class="panel-heading"></div>
