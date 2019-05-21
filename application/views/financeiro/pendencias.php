@@ -449,24 +449,6 @@ $periodo = $this->input->get('periodo');
     </div>
 </div>
 
-<div id="-modalExcluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true">
-    <div class="modal-header bg_danger">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">CONFIRMAR EXCLUSÃO</h3>
-    </div>
-    <div class="modal-body">
-        <span style="font-size: 11pt">Deseja realmente excluir esta pendência?</span>
-        <input name="id" id="idExcluir" type="hidden" value=""/>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir"><i
-                    class="fa fa-times fa-fw"></i> Cancelar
-        </button>
-        <button class="btn btn-danger btn-sm" id="btnExcluir"><i class="fa fa-check fa-fw"></i> Excluir</button>
-    </div>
-</div>
-
 <!-- Modal PAGAR-->
 <div class="modal fade" id="modalPagar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">

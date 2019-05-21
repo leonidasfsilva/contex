@@ -164,7 +164,7 @@
                                 </div>
                                 <div class="col-sm-3 col-sm-height yamm-col">
                                     <h3 class="yamm-category">Rem</h3>
-                                    <img src="assets/demo/stockphoto/communication_12_carousel.jpg" class="mb20 img-responsive" style="width: 100%;">
+                                    <img src="#" class="mb20 img-responsive" style="width: 100%;">
                                     <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. totam rem aperiam eaque ipsa quae ab illo
                                         inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
                                 </div>
@@ -320,7 +320,7 @@
                     <ul class="scroll-content">
                         <li class="">
                             <a href="#">
-                                <img class="msg-avatar" src="assets/demo/avatar/avatar_09.png" alt="avatar"/>
+                                <img class="msg-avatar" src="<?php echo base_url() ?>assets/demo/avatar/avatar_09.png" alt="avatar"/>
                                 <div class="msg-content">
                                     <span class="name">Steven Shipe</span>
                                     <span class="msg">Nonummy nibh epismod lorem ipsum</span>
@@ -330,7 +330,7 @@
                         </li>
                         <li>
                             <a href="#">
-                                <img class="msg-avatar" src="assets/demo/avatar/avatar_01.png" alt="avatar"/>
+                                <img class="msg-avatar" src="<?php echo base_url() ?>assets/demo/avatar/avatar_01.png" alt="avatar"/>
                                 <div class="msg-content">
                                     <span class="name">Roxann Hollingworth <i class="fa fa-paperclip attachment"></i></span>
                                     <span class="msg">Lorem ipsum dolor sit amet consectetur adipisicing elit</span>
@@ -340,7 +340,7 @@
                         </li>
                         <li>
                             <a href="#">
-                                <img class="msg-avatar" src="assets/demo/avatar/avatar_05.png" alt="avatar"/>
+                                <img class="msg-avatar" src="<?php echo base_url() ?>assets/demo/avatar/avatar_05.png" alt="avatar"/>
                                 <div class="msg-content">
                                     <span class="name">Diamond Harlands</span>
                                     <span class="msg">:)</span>
@@ -350,7 +350,7 @@
                         </li>
                         <li>
                             <a href="#">
-                                <img class="msg-avatar" src="assets/demo/avatar/avatar_02.png" alt="avatar"/>
+                                <img class="msg-avatar" src="<?php echo base_url() ?>assets/demo/avatar/avatar_02.png" alt="avatar"/>
                                 <div class="msg-content">
                                     <span class="name">Michael Serio <i class="fa fa-paperclip attachment"></i></span>
                                     <span class="msg">Sed distinctio dolores fuga molestiae modi?</span>
@@ -360,7 +360,7 @@
                         </li>
                         <li>
                             <a href="#">
-                                <img class="msg-avatar" src="assets/demo/avatar/avatar_03.png" alt="avatar"/>
+                                <img class="msg-avatar" src="<?php echo base_url() ?>assets/demo/avatar/avatar_03.png" alt="avatar"/>
                                 <div class="msg-content">
                                     <span class="name">Matt Jones</span>
                                     <span class="msg">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et mole</span>
@@ -370,7 +370,7 @@
                         </li>
                         <li>
                             <a href="#">
-                                <img class="msg-avatar" src="assets/demo/avatar/avatar_07.png" alt="avatar"/>
+                                <img class="msg-avatar" src="<?php echo base_url() ?>assets/demo/avatar/avatar_07.png" alt="avatar"/>
                                 <div class="msg-content">
                                     <span class="name">John Doe</span>
                                     <span class="msg">Neque porro quisquam est qui dolorem</span>
