@@ -65,7 +65,7 @@ $periodo = $this->input->get('periodo');
     ?>
 <?php } ?>
 
-<div class="panel panel-default">
+<div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h2 style="font-size: 12pt">
             <i class="fa fa-credit-card fa-lg fa-fw"></i>
@@ -113,7 +113,7 @@ $periodo = $this->input->get('periodo');
 </div>
 
 <?php if (!$results) { ?>
-    <div class="panel panel-default">
+    <div class="panel panel-midnightblue">
         <div class="panel-heading">
             <h2>
                 Lançamentos da Fatura
@@ -139,7 +139,7 @@ $periodo = $this->input->get('periodo');
         </div>
     </div>
 <?php } else { ?>
-    <div class="panel panel-default">
+    <div class="panel panel-midnightblue">
         <div class="panel-heading">
             <h2>
                 Lançamentos da Fatura
@@ -156,12 +156,12 @@ $periodo = $this->input->get('periodo');
                     </button>
                 </span>
                 <button class="btn btn-default btn-sm habilita_desabilita_soma" id="exibir_soma" title="Habilitar soma de lançamentos individuais">
-                    <i class="fa fa-toggle-off fa-fw"></i>
-                    Soma Desabilitada
+                    <i class="fa fa-toggle-on fa-fw"></i>
+                    Habilitar Soma
                 </button>
                 <button class="btn btn-default btn-sm habilita_desabilita_soma hidden" id="esconder_soma" title="Desabilitar soma de lançamentos individuais">
-                    <i class="fa fa-toggle-on fa-fw"></i>
-                    Soma Habilitada
+                    <i class="fa fa-toggle-off fa-fw"></i>
+                    Desabilitar Soma
                 </button>
             </div>
         </div>
@@ -257,7 +257,7 @@ $periodo = $this->input->get('periodo');
     </div>
     <?php echo $this->pagination->create_links();
 } ?>
-<div class="panel panel-default">
+<div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h2>
             Resumo da Fatura
