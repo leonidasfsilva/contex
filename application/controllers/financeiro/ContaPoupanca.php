@@ -347,12 +347,11 @@ class ContaPoupanca extends CI_Controller
             $vencimento = date('Y-m-d');
         }
 
-        $valor = $this->input->post('valor');
+        if (!validate_money($this->input->post('valor'))) {
+            $valor = str_replace(array('.', ','), array('', '.'), $this->input->post('valor'));
+        }
         $valor_corrente = '-' . $valor;
 
-        if (!validate_money($valor)) {
-            $valor = str_replace(array('.', ','), array('', '.'), $valor);
-        }
 
         if ($this->input->post('descricao')) {
             $descricao = padronizarString($this->input->post('descricao'));
@@ -411,12 +410,11 @@ class ContaPoupanca extends CI_Controller
             $vencimento = date('Y-m-d');
         }
 
-        $valor = $this->input->post('valor');
+        if (!validate_money($this->input->post('valor'))) {
+            $valor = str_replace(array('.', ','), array('', '.'), $this->input->post('valor'));
+        }
         $valor_poupanca = '-' . $valor;
 
-        if (!validate_money($valor)) {
-            $valor = str_replace(array('.', ','), array('', '.'), $valor);
-        }
 
         if ($this->input->post('descricao')) {
             $descricao = padronizarString($this->input->post('descricao'));
