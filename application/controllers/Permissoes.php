@@ -3,18 +3,11 @@
 class Permissoes extends CI_Controller
 {
 
-
-    /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     *
-     */
-
     function __construct()
     {
         parent::__construct();
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
+            redirect('mxcode/login');
         }
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {

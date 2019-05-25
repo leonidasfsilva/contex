@@ -2,7 +2,7 @@
     exit('No direct script access allowed');
 }
 
-class Lancamentos extends CI_Controller
+class ContaCorrente extends CI_Controller
 {
 
     public function __construct()
@@ -17,8 +17,6 @@ class Lancamentos extends CI_Controller
         $this->load->model('fatura_model', '', true);
         $this->load->model('clientes_model', '', true);
         $this->data['menuFinanceiro'] = 'Lancamentos';
-        $this->load->helper(array('codegen_helper'));
-        $this->id_usuario = $this->session->userdata('id');
         $this->global_url = site_url() . 'financeiro/lancamentos/';
 
     }
@@ -289,7 +287,7 @@ class Lancamentos extends CI_Controller
         $this->load->library('pagination');
 
         $config['base_url'] = site_url() . 'financeiro/lancamentos/?periodo=' . $periodo . '&situacao=' . $situacao;
-        $config['total_rows'] = $this->financeiro_model->count('lancamentos', 'status = 1 AND id_usuario = ' . $this->id_usuario);
+        $config['total_rows'] = $this->financeiro_model->count('lancamentos', 'status = 1 AND id_usuario = ' . id_usuario());
         $config['per_page'] = 100;
         $config['page_query_string'] = true;
         $config['next_link'] = 'Próxima';
@@ -313,16 +311,16 @@ class Lancamentos extends CI_Controller
 
         $this->pagination->initialize($config);
 
-        $this->data['total_entradas'] = $this->financeiro_model->getTotalEntradas($this->id_usuario);
-        $this->data['saidas_pendentes'] = $this->financeiro_model->getSaidasPendentes($this->id_usuario);
-        $this->data['entradas_pendentes'] = $this->financeiro_model->getEntradasPendentes($this->id_usuario);
-        $this->data['total'] = $this->financeiro_model->getTotal($this->id_usuario);
+        $this->data['total_entradas'] = $this->financeiro_model->getTotalEntradas(id_usuario());
+        $this->data['saidas_pendentes'] = $this->financeiro_model->getSaidasPendentes(id_usuario());
+        $this->data['entradas_pendentes'] = $this->financeiro_model->getEntradasPendentes(id_usuario());
+        $this->data['total'] = $this->financeiro_model->getTotal(id_usuario());
         $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
         $this->data['results'] = $this->financeiro_model->get(
             'lancamentos',
             'idLancamentos,descricao,valor,data_lancamento,data_pagamento,baixado,cliente_fornecedor,tipo,forma_pgto',
             $where,
-            $this->id_usuario,
+            id_usuario(),
             $limit,
             $config['total_rows'],
             $config['per_page'],
@@ -366,7 +364,7 @@ class Lancamentos extends CI_Controller
         $data = array(
             'descricao' => padronizarString($this->input->post('descricao')),
             'valor' => $valor,
-            'id_usuario' => $this->id_usuario,
+            'id_usuario' => id_usuario(),
             'data_lancamento' => $vencimento,
             'data_pagamento' => $recebimento != null ? $recebimento : $vencimento,
             'baixado' => $this->input->post('recebido') ?: 0,
@@ -422,7 +420,7 @@ class Lancamentos extends CI_Controller
         $data = array(
             'descricao' => padronizarString($this->input->post('descricao')),
             'valor' => $valor,
-            'id_usuario' => $this->id_usuario,
+            'id_usuario' => id_usuario(),
             'data_lancamento' => $vencimento,
             'data_pagamento' => $pagamento != null ? $pagamento : $vencimento,
             'baixado' => $this->input->post('pago') ?: 0,

@@ -5,23 +5,22 @@ $periodo = $this->input->get('periodo');
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h2 style="font-size: 12pt">
-            <i class="fa fa-line-chart fa-lg fa-fw"></i>
-            Conta Corrente
+            <i class="fas fa-piggy-bank fa-lg fa-fw"></i>
+            Conta Poupança
         </h2>
         <div class="panel-ctrls">
             <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar lançamentos">
                 <i class="fa fa-filter fa-fw"></i>
                 Filtrar
             </button>
-            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
-                <a href="#modalReceita" id="entrada" data-toggle="modal" role="button" class="btn btn-success btn-sm tip-bottom"
-                   title="Registrar nova entrada">
+            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aPoupanca')) { ?>
+                <a href="#modalAplicacao" id="entrada" data-toggle="modal" role="button" class="btn btn-success btn-sm tip-bottom" title="Registrar nova aplicação">
                     <i class="fa fa-plus-square fa-fw"></i>
-                    Nova Entrada
+                    Aplicar
                 </a>
-                <a href="#modalDespesa" id="saida" data-toggle="modal" role="button" class="btn btn-danger btn-sm tip-bottom" title="Registrar nova saída">
+                <a href="#modalResgate" id="saida" data-toggle="modal" role="button" class="btn btn-danger btn-sm tip-bottom" title="Registrar novo resgate">
                     <i class="fa fa-minus-square fa-fw"></i>
-                    Nova Saída
+                    Resgatar
                 </a>
             <?php } ?>
         </div>
@@ -88,7 +87,6 @@ $periodo = $this->input->get('periodo');
                 <tr role="row">
                     <th>Data</th>
                     <th>Descrição</th>
-                    <th>Status</th>
                     <th>Valor (R$)</th>
                     <th style="width: 100px">Ações</th>
                 </tr>
@@ -124,7 +122,6 @@ $periodo = $this->input->get('periodo');
                     echo '<td>' . $vencimento . '</td>';
 //                    echo '<td><span class="badge badge-' . $label . '">' . ucfirst($r->tipo) . '</span></td>';
                     echo '<td>' . strtoupper($r->descricao) . '</td>';
-                    echo '<td><span class="label label-' . $label_status . '">' . strtoupper($status) . '</span></td>';
                     echo '<td style=" color: ' . $color . '"> ' . number_format($r->valor, 2, ',', '.') . '</td>';
 
                     if ($r->valor < 0) {
@@ -136,7 +133,7 @@ $periodo = $this->input->get('periodo');
                     echo '<td>';
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
                         echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Detalhes" idLancamento="' .
-                            $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $valor . '" vencimento="' .
+                            $r->id_lancamentos . '" descricao="' . $r->descricao . '" valor="' . $valor . '" vencimento="' .
                             date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
                             $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '">
                                 <i class="fa fa-search-plus fa-lg fa-fw"></i></a>';
@@ -173,7 +170,7 @@ $periodo = $this->input->get('periodo');
             </tr>
             </thead>
             <tr>
-                <td colspan="2" style="text-align: left;">(+) SALDO PROVISÓRIO EM CONTA</td>
+                <td colspan="2" style="text-align: left;">(+) SALDO PARCIAL EM CONTA</td>
                 <td colspan="1" style="text-align: right;">
                     <?php echo number_format($total_entradas->total, 2, ',', '.') ?></td>
             </tr>
@@ -192,7 +189,7 @@ $periodo = $this->input->get('periodo');
                 </tr>
             <?php } ?>
             <tr>
-                <td colspan="2" style="text-align: left; font-weight: bold">(=) SALDO DISPONÍVEL EM CONTA</td>
+                <td colspan="2" style="text-align: left; font-weight: bold">(=) SALDO LÍQUIDO DISPONÍVEL EM CONTA</td>
                 <td colspan="1" style="text-align: right; font-weight: bold">
                     <strong><?php echo number_format($total->total, 2, ',', '.') ?></strong>
                 </td>
@@ -285,27 +282,21 @@ $periodo = $this->input->get('periodo');
     </div>
 </div>
 
-<!-- Modal NOVA ENTRADA -->
-<div class="modal fade" id="modalReceita" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!-- Modal NOVA APLICACAO -->
+<div class="modal fade" id="modalAplicacao" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-success">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white ">Registrar nova entrada</h4>
+                <h4 class="modal-title text-white ">Registrar nova aplicação</h4>
             </div>
-            <form id="formReceita" action="<?php echo base_url() ?>financeiro/contaCorrente/receita" method="post" autocomplete="off">
+            <form id="formAplicacao" action="<?php echo base_url() ?>financeiro/contaPoupanca/aplicacao" method="post" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
-                            <label class="font-weight-bold" for="descricao">Descrição *</label>
+                            <label class="font-weight-bold" for="descricao">Descrição</label>
                             <input class="form-control" id="descricao" type="text" name="descricao"/>
                             <input id="urlEntrada" type="hidden" name="urlAtual" value=""/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label class="font-weight-bold" for="descricao">Fornecedor</label>
-                            <input class="form-control" id="fornecedor" type="text" name="fornecedor"/>
                         </div>
                     </div>
                     <div class="row">
@@ -314,34 +305,27 @@ $periodo = $this->input->get('periodo');
                             <input class="form-control money" id="valor" type="text" name="valor"/>
                         </div>
                         <div class="form-group col-lg-6">
-                            <label for="vencimento" class="font-weight-bold">Data de Lançamento</label>
+                            <label for="vencimento" class="font-weight-bold">Data de Aplicação</label>
                             <input class="form-control datepicker" id="vencimento" type="text" name="vencimento"/>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-lg-4">
+                        <div class="form-group col-lg-6">
                             <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control" id="recebido" name="recebido" value="1">
+                                <input type="checkbox" class="form-control" id="debito_conta_aplicacao" name="debito_conta" value="1">
                             </div>
-                            <label for="recebido" class="font-weight-bold">Pago?</label>
+                            <label for="debito_conta_aplicacao" class="font-weight-bold">Debitar em Conta Corrente?</label>
                         </div>
-
-                        <div id="divRecebimento" class="hidden">
-                            <div class="form-group col-lg-4">
-                                <label for="recebimento" class="font-weight-bold">Data de Pagamento</label>
-                                <input class="form-control datepicker" id="recebimento" type="text" name="recebimento"/>
-                            </div>
-                            <div class="form-group col-lg-4">
-                                <label for="formaPgto" class="font-weight-bold">Forma Pagamento *</label>
-                                <select name="formaPgto" id="formaPgto" class="form-control">
-                                    <option value="">-- Selecione --</option>
-                                    <?php if ($formasPagamento) {
-                                        foreach ($formasPagamento as $f) { ?>
-                                            <option value="<?= $f->id_forma ?>"><?= $f->nome ?></option>
-                                        <?php }
-                                    } ?>
-                                </select>
-                            </div>
+                        <div class="form-group col-lg-6">
+                            <label for="formaPgto" class="font-weight-bold">Forma Aplicação *</label>
+                            <select name="formaPgto" id="formaPgto" class="form-control">
+                                <option value="">-- Selecione --</option>
+                                <?php if ($formasPagamento) {
+                                    foreach ($formasPagamento as $f) { ?>
+                                        <option value="<?= $f->id_forma ?>"><?= $f->nome ?></option>
+                                    <?php }
+                                } ?>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -356,27 +340,21 @@ $periodo = $this->input->get('periodo');
     </div>
 </div>
 
-<!-- Modal NOVA SAIDA -->
-<div class="modal fade" id="modalDespesa" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!-- Modal NOVO RESGATE -->
+<div class="modal fade" id="modalResgate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-danger">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white ">Registrar nova saída</h4>
+                <h4 class="modal-title text-white ">Registrar novo resgate</h4>
             </div>
-            <form id="formDespesa" action="<?php echo base_url() ?>financeiro/contaCorrente/despesa" method="post" autocomplete="off">
+            <form id="formResgate" action="<?php echo base_url() ?>financeiro/contaPoupanca/resgate" method="post" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
-                            <label class="font-weight-bold" for="descricao">Descrição *</label>
+                            <label class="font-weight-bold" for="descricao">Descrição</label>
                             <input class="form-control" id="descricao" type="text" name="descricao"/>
                             <input id="urlSaida" type="hidden" name="urlAtual" value=""/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label class="font-weight-bold" for="descricao">Fornecedor</label>
-                            <input class="form-control" id="fornecedor" type="text" name="fornecedor"/>
                         </div>
                     </div>
                     <div class="row">
@@ -385,33 +363,27 @@ $periodo = $this->input->get('periodo');
                             <input class="form-control money" id="valor" type="text" name="valor"/>
                         </div>
                         <div class="form-group col-lg-6">
-                            <label for="vencimento" class="font-weight-bold">Data de Lançamento</label>
+                            <label for="vencimento" class="font-weight-bold">Data de Aplicação</label>
                             <input class="form-control datepicker" id="vencimento" type="text" name="vencimento"/>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-lg-4">
+                        <div class="form-group col-lg-6">
                             <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control" id="pago" name="pago" value="1">
+                                <input type="checkbox" class="form-control" id="debito_conta_resgate" name="debito_conta" value="1">
                             </div>
-                            <label for="pago" class="font-weight-bold">Pago?</label>
+                            <label for="debito_conta_resgate" class="font-weight-bold">Creditar em Conta Corrente?</label>
                         </div>
-                        <div id="divRecebimento" class="hidden">
-                            <div class="form-group col-lg-4">
-                                <label for="pagamento" class="font-weight-bold">Data de Pagamento</label>
-                                <input class="form-control datepicker" id="pagamento" type="text" name="pagamento"/>
-                            </div>
-                            <div class="form-group col-lg-4">
-                                <label for="formaPgto" class="font-weight-bold">Forma Pagamento *</label>
-                                <select name="formaPgto" id="formaPgto" class="form-control">
-                                    <option value="">-- Selecione --</option>
-                                    <?php if ($formasPagamento) {
-                                        foreach ($formasPagamento as $f) { ?>
-                                            <option value="<?= $f->id_forma ?>"><?= $f->nome ?></option>
-                                        <?php }
-                                    } ?>
-                                </select>
-                            </div>
+                        <div class="form-group col-lg-6">
+                            <label for="formaPgto" class="font-weight-bold">Forma Resgate *</label>
+                            <select name="formaPgto" id="formaPgto" class="form-control">
+                                <option value="">-- Selecione --</option>
+                                <?php if ($formasPagamento) {
+                                    foreach ($formasPagamento as $f) { ?>
+                                        <option value="<?= $f->id_forma ?>"><?= $f->nome ?></option>
+                                    <?php }
+                                } ?>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -434,62 +406,44 @@ $periodo = $this->input->get('periodo');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Detalhes do lançamento</h4>
             </div>
-            <form id="formEditar" action="<?php echo base_url() ?>financeiro/contaCorrente/editar" method="post">
+            <form id="formEditar" action="<?php echo base_url() ?>financeiro/contaPoupanca/editar" method="post">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
-                            <label class="font-weight-bold" for="descricaoEditar">Descrição *</label>
+                            <label class="font-weight-bold" for="descricaoEditar">Descrição</label>
                             <input class="form-control" id="descricaoEditar" type="text" name="descricao"/>
                             <input id="urlAtualEditar" type="hidden" name="urlAtual" value=""/>
                             <input type="hidden" id="idEditar" name="id" value=""/>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label class="font-weight-bold" for="descricao">Fornecedor</label>
-                            <input class="form-control" id="fornecedorEditar" type="text" name="fornecedor"/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-4">
+                        <div class="form-group col-lg-6">
                             <label for="valorEditar" class="font-weight-bold">Valor *</label>
                             <input class="form-control money" id="valorEditar" type="text" name="valor"/>
                         </div>
-                        <div class="form-group col-lg-4">
+                        <div class="form-group col-lg-6">
                             <label for="vencimentoEditar" class="font-weight-bold">Data de Lançamento</label>
                             <input class="form-control datepicker" id="vencimentoEditar" type="text" name="vencimento"/>
                         </div>
-                        <div class="form-group col-lg-4">
-                            <label for="tipoEditar" class="font-weight-bold">Tipo</label>
-                            <select class="form-control" name="tipo" id="tipoEditar">
-                                <option value="1">ENTRADA</option>
-                                <option value="2">SAÍDA</option>
-                            </select>
-                        </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-lg-4">
-                            <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control" id="pagoEditar" name="pago" value="1">
-                            </div>
-                            <label for="pagoEditar" class="font-weight-bold">Pago?</label>
+                        <div class="form-group col-lg-6">
+                            <label for="tipoEditar" class="font-weight-bold">Tipo</label>
+                            <select class="form-control" name="tipo" id="tipoEditar">
+                                <option value="1">APLICAÇÃO</option>
+                                <option value="2">RESGATE</option>
+                            </select>
                         </div>
-                        <div id="divPagamentoEditar" class="hidden">
-                            <div class="form-group col-lg-4">
-                                <label for="pagamentoEditar" class="font-weight-bold">Data Pagamento</label>
-                                <input class="form-control datepicker" id="pagamentoEditar" type="text" name="pagamento"/>
-                            </div>
-                            <div class="form-group col-lg-4">
-                                <label for="formaPgtoEditar" class="font-weight-bold">Forma Pagamento *</label>
-                                <select name="formaPgto" id="formaPgtoEditar" class="form-control">
-                                    <option value="">-- Selecione --</option>
-                                    <?php if ($formasPagamento) {
-                                        foreach ($formasPagamento as $f) { ?>
-                                            <option value="<?= $f->id_forma ?>"><?= $f->nome ?></option>
-                                        <?php }
-                                    } ?>
-                                </select>
-                            </div>
+                        <div class="form-group col-lg-6">
+                            <label for="formaPgto" class="font-weight-bold">Forma Transação *</label>
+                            <select name="formaPgto" id="formaPgtoEditar" class="form-control">
+                                <option value="">-- Selecione --</option>
+                                <?php if ($formasPagamento) {
+                                    foreach ($formasPagamento as $f) { ?>
+                                        <option value="<?= $f->id_forma ?>"><?= $f->nome ?></option>
+                                    <?php }
+                                } ?>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -512,7 +466,7 @@ $periodo = $this->input->get('periodo');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Excluir lançamento</h4>
             </div>
-            <form id="formExcluir" action="<?php echo base_url(); ?>financeiro/contaCorrente/excluir" method="post">
+            <form id="formExcluir" action="<?php echo base_url(); ?>financeiro/contaPoupanca/excluir" method="post">
                 <div class="modal-body">
                     <p>Deseja realmente excluir este lançamento?</p>
                     <input id="idExcluir" type="hidden" name="id" value=""/>
@@ -537,36 +491,13 @@ $periodo = $this->input->get('periodo');
 
         $(".money").maskMoney();
 
-        $('#modalReceita, #modalDespesa').on('hidden.bs.modal', function () {
-            $('#formReceita, #formDespesa').trigger("reset");
+        $('#modalAplicacao, #modalResgate').on('hidden.bs.modal', function () {
+            $('#formAplicacao, #formResgate').trigger("reset");
         });
 
-        var recebido = $('#recebido').iCheck('update')[0].checked;
-        $.each($(recebido), function (key, value) {
-            if (recebido == true) {
-                $('#divRecebimento').removeClass('hidden');
-            } else {
-                $('#divRecebimento').addClass('hidden');
-            }
-        });
-
-        $('#pago, #recebido, #pagoEditar').on('ifChanged', function (event) {
-            mudaICheck(event);
-        });
-
-        function mudaICheck(event) {
-            const checked = event.target.checked;
-            if (checked == true) {
-                $('#divRecebimento, #divPagamentoEditar, #divPagamento').removeClass('hidden');
-            } else {
-                $('#divRecebimento, #divPagamentoEditar, #divPagamento').addClass('hidden');
-            }
-        }
-
-
-        $("#formReceita").validate({
+        $("#formAplicacao").validate({
             rules: {
-                descricao: {required: true},
+                descricao: {required: false},
                 cliente: {required: false},
                 valor: {required: true},
                 vencimento: {required: false},
@@ -578,13 +509,13 @@ $periodo = $this->input->get('periodo');
                 cliente: {required: 'Campo obrigatório'},
                 valor: {required: 'Informe o valor'},
                 vencimento: {required: 'Campo obrigatório'},
-                formaPgto: {required: 'Selecione a forma de pagamento'}
+                formaPgto: {required: 'Selecione a forma de aplicação'}
             }
         });
 
-        $("#formDespesa").validate({
+        $("#formResgate").validate({
             rules: {
-                descricao: {required: true},
+                descricao: {required: false},
                 cliente: {required: false},
                 valor: {required: true},
                 vencimento: {required: false},
@@ -596,13 +527,13 @@ $periodo = $this->input->get('periodo');
                 cliente: {required: 'Campo obrigatório'},
                 valor: {required: 'Informe o valor'},
                 vencimento: {required: 'Campo obrigatório'},
-                formaPgto: {required: 'Selecione a forma de pagamento'}
+                formaPgto: {required: 'Selecione a forma de resgate'}
             }
         });
 
         $("#formEditar").validate({
             rules: {
-                descricao: {required: true},
+                descricao: {required: false},
                 cliente: {required: false},
                 valor: {required: true},
                 vencimento: {required: false},
@@ -614,7 +545,7 @@ $periodo = $this->input->get('periodo');
                 cliente: {required: 'Campo obrigatório'},
                 valor: {required: 'Campo obrigatório'},
                 vencimento: {required: 'Campo obrigatório'},
-                formaPgto: {required: 'Selecione a forma de pagamento'}
+                formaPgto: {required: 'Selecione a forma de transação'}
             }
         });
 
@@ -645,10 +576,8 @@ $periodo = $this->input->get('periodo');
             var baixado = $(this).attr('baixado');
             if (baixado == 1) {
                 $("#pagoEditar").iCheck('check');
-                $("#divPagamentoEditar").removeClass('hidden');
             } else {
                 $("#pagoEditar").iCheck('uncheck');
-                $("#divPagamentoEditar").addClass('hidden');
             }
 
         });

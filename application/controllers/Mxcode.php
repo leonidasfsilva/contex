@@ -11,8 +11,6 @@ class Mxcode extends CI_Controller
         $this->load->model('mxcode_model', '', true);
         $this->load->helper('file');
         $this->load->library('upload');
-        $this->id_usuario = $this->session->userdata('id');
-
     }
 
     public function index()
@@ -99,7 +97,7 @@ class Mxcode extends CI_Controller
 
     public function sair()
     {
-        gravaLog($this->id_usuario, 'Logoff no sistema', getenv("REMOTE_ADDR"));
+        gravaLog(id_usuario(), 'Logoff no sistema', getenv("REMOTE_ADDR"));
         $this->session->sess_destroy();
         redirect('mxcode/login');
     }
@@ -191,7 +189,7 @@ class Mxcode extends CI_Controller
         }
 
         $data['menuConfiguracoes'] = 'Configuracoes';
-        $data['dados'] = $this->mxcode_model->getEmitente($this->id_usuario);
+        $data['dados'] = $this->mxcode_model->getEmitente(id_usuario());
         $data['view'] = 'mxcode/emitente';
         $this->load->view('tema/topo', $data);
     }
@@ -229,7 +227,7 @@ class Mxcode extends CI_Controller
             'cep' => $this->input->post('cep'),
             'telefone' => $this->input->post('telefone'),
             'email' => $this->input->post('email'),
-            'id_usuario' => $this->id_usuario,
+            'id_usuario' => id_usuario(),
         );
 
         $retorno = $this->mxcode_model->add('emitente', $data);
@@ -345,7 +343,7 @@ class Mxcode extends CI_Controller
             redirect(base_url() . 'mxcode/emitente');
         }
 
-        $logo_atual = $this->mxcode_model->getLogoEmitente($this->id_usuario);
+        $logo_atual = $this->mxcode_model->getLogoEmitente(id_usuario());
 
         if($logo_atual->logomarca) {
             unlink('assets/uploads/logomarcas/' . $logo_atual->logomarca);
@@ -383,7 +381,7 @@ class Mxcode extends CI_Controller
             redirect(base_url() . 'mxcode/emitente');
         }
 
-        $logo_atual = $this->mxcode_model->getLogoEmitente($this->id_usuario);
+        $logo_atual = $this->mxcode_model->getLogoEmitente(id_usuario());
         if($logo_atual) {
             unlink('assets/uploads/logomarcas/' . $logo_atual->logomarca);
         }

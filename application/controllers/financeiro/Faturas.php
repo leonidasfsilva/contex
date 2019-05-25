@@ -16,9 +16,6 @@ class Faturas extends CI_Controller
         $this->load->model('fatura_model', '', true);
         $this->load->model('clientes_model', '', true);
         $this->data['menuFinanceiro'] = 'Lancamentos';
-        $this->load->helper(array('codegen_helper'));
-        $this->id_usuario = $this->session->userdata('id');
-
     }
 
     public function index()
@@ -40,7 +37,7 @@ class Faturas extends CI_Controller
         $this->load->library('pagination');
 
         $config['base_url'] = site_url() . '/faturas/?periodo=' . $periodo;
-        $config['total_rows'] = $this->fatura_model->count('faturas', 'status = 1 AND id_usuario = ' . $this->id_usuario);
+        $config['total_rows'] = $this->fatura_model->count('faturas', 'status = 1 AND id_usuario = ' . id_usuario());
         $config['per_page'] = 100;
         $config['page_query_string'] = true;
         $config['next_link'] = 'Próxima';
@@ -77,8 +74,8 @@ class Faturas extends CI_Controller
         );
 
         $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
-        $this->data['faturaAberta'] = $this->fatura_model->getFaturaAbertaUsuario($this->id_usuario);
-        $this->data['results'] = $this->fatura_model->get('faturas', '*', $where, $this->id_usuario, $config['per_page'], $this->input->get('per_page'));
+        $this->data['faturaAberta'] = $this->fatura_model->getFaturaAbertaUsuario(id_usuario());
+        $this->data['results'] = $this->fatura_model->get('faturas', '*', $where, id_usuario(), $config['per_page'], $this->input->get('per_page'));
 
         $this->data['view'] = 'financeiro/faturas/gerenciar_faturas';
         $this->load->view('tema/topo', $this->data);
@@ -110,7 +107,7 @@ class Faturas extends CI_Controller
         $this->load->library('pagination');
 
         $config['base_url'] = site_url() . 'financeiro/faturas/';
-        $config['total_rows'] = $this->fatura_model->count('faturas', 'status = 1 AND id_usuario = ' . $this->id_usuario);
+        $config['total_rows'] = $this->fatura_model->count('faturas', 'status = 1 AND id_usuario = ' . id_usuario());
         $config['per_page'] = 100;
         $config['page_query_string'] = true;
         $config['next_link'] = 'Próxima';
@@ -155,7 +152,7 @@ class Faturas extends CI_Controller
 
         if ($faturaExistente != 0) {
 
-            $faturaUsuario = $this->fatura_model->getFaturaUsuario($id_fatura, $this->id_usuario);
+            $faturaUsuario = $this->fatura_model->getFaturaUsuario($id_fatura, id_usuario());
 
             if ($faturaUsuario > 0) {
 
@@ -222,17 +219,17 @@ class Faturas extends CI_Controller
             $valor = str_replace(array('.', ','), array('', '.'), $valor);
         }
 
-        $faturaEmAberto = $this->fatura_model->getFaturaAberta($this->id_usuario);
+        $faturaEmAberto = $this->fatura_model->getFaturaAberta(id_usuario());
 
         if ($faturaEmAberto != 0) {
-            $ultimaFaturaAberta = $this->fatura_model->getUltimaFaturaAberta($this->id_usuario);
+            $ultimaFaturaAberta = $this->fatura_model->getUltimaFaturaAberta(id_usuario());
             $mes = $ultimaFaturaAberta->mes_referencia;
             $ano = $ultimaFaturaAberta->ano_referencia;
 
             //ARRAY LANCAMENTOS_FATURAS
             $data = array(
                 'id_fatura' => $ultimaFaturaAberta->id_fatura,
-                'id_usuario' => $this->id_usuario,
+                'id_usuario' => id_usuario(),
                 'descricao' => padronizarString($this->input->post('descricao')),
                 'valor_total' => $valor,
                 'total_parcelas' => $qnt_parcelas,
@@ -250,11 +247,11 @@ class Faturas extends CI_Controller
                     for ($x = 1; $x <= $qnt_parcelas; $x++) {
 
                         //CONSULTA SE EXISTE FATURA REFERENTE AO MES DE LANÇAMENTO DA PARCELA
-                        $faturaReferencia = $this->fatura_model->getFaturaReferencia($this->id_usuario, $mes, $ano);
+                        $faturaReferencia = $this->fatura_model->getFaturaReferencia(id_usuario(), $mes, $ano);
 
                         //CASO NÃO EXISTA, O SISTEMA CRIA A FATURA REFERENTE AO MES DE LANÇAMENTO DA PARCELA
                         if ($faturaReferencia->num_rows() == 0) {
-                            $ultimaFatura = $this->fatura_model->getUltimaFatura($this->id_usuario);
+                            $ultimaFatura = $this->fatura_model->getUltimaFatura(id_usuario());
 
                             $vencimento = $ultimaFatura->vencimento;
                             $vencimento = explode('-', $vencimento);
@@ -270,7 +267,7 @@ class Faturas extends CI_Controller
 
                             //ARRAY ABRIR NOVA FATURA
                             $data = array(
-                                'id_usuario' => $this->id_usuario,
+                                'id_usuario' => id_usuario(),
                                 'mes_referencia' => $mes,
                                 'ano_referencia' => $ano,
                                 'vencimento' => $vencimentoFormatado,
@@ -283,7 +280,7 @@ class Faturas extends CI_Controller
                             }
                         }
 
-                        $faturaReferencia = $this->fatura_model->getFaturaReferencia($this->id_usuario, $mes, $ano);
+                        $faturaReferencia = $this->fatura_model->getFaturaReferencia(id_usuario(), $mes, $ano);
 
                         //ARRAY LANCAMENTOS_FATURA_ASSOC
                         $data1 = array(
@@ -383,17 +380,17 @@ class Faturas extends CI_Controller
             $valor = str_replace(array('.', ','), array('', '.'), $valor);
         }
 
-        $faturaEmAberto = $this->fatura_model->getFaturaAberta($this->id_usuario);
+        $faturaEmAberto = $this->fatura_model->getFaturaAberta(id_usuario());
 
         if ($faturaEmAberto != 0) {
-            $ultimaFaturaAberta = $this->fatura_model->getUltimaFaturaAberta($this->id_usuario);
+            $ultimaFaturaAberta = $this->fatura_model->getUltimaFaturaAberta(id_usuario());
             $mes = $ultimaFaturaAberta->mes_referencia;
             $ano = $ultimaFaturaAberta->ano_referencia;
 
             //ARRAY LANCAMENTOS_FATURAS
             $data = array(
                 'id_fatura' => $ultimaFaturaAberta->id_fatura,
-                'id_usuario' => $this->id_usuario,
+                'id_usuario' => id_usuario(),
                 'descricao' => padronizarString($this->input->post('descricao')),
                 'valor_total' => $valor,
                 'total_parcelas' => $qnt_parcelas,
@@ -412,10 +409,10 @@ class Faturas extends CI_Controller
                     for ($x = 1; $x <= $qnt_parcelas; $x++) {
 
                         //CONSULTA SE EXISTE FATURA REFERENTE AO MES DE LANÇAMENTO DA PARCELA
-                        $faturaReferencia = $this->fatura_model->getFaturaReferencia($this->id_usuario, $mes, $ano);
+                        $faturaReferencia = $this->fatura_model->getFaturaReferencia(id_usuario(), $mes, $ano);
 
                         if ($faturaReferencia->num_rows() == 0) {
-                            $ultimaFatura = $this->fatura_model->getUltimaFatura($this->id_usuario);
+                            $ultimaFatura = $this->fatura_model->getUltimaFatura(id_usuario());
 
                             $vencimento = $ultimaFatura->vencimento;
                             $vencimento = explode('-', $vencimento);
@@ -423,7 +420,7 @@ class Faturas extends CI_Controller
 
                             //ARRAY ABRIR NOVA FATURA
                             $data = array(
-                                'id_usuario' => $this->id_usuario,
+                                'id_usuario' => id_usuario(),
                                 'mes_referencia' => $mes,
                                 'ano_referencia' => $ano,
                                 'vencimento' => $vencimento,
@@ -438,7 +435,7 @@ class Faturas extends CI_Controller
                             }
                         }
 
-                        $faturaReferencia = $this->fatura_model->getFaturaReferencia($this->id_usuario, $mes, $ano);
+                        $faturaReferencia = $this->fatura_model->getFaturaReferencia(id_usuario(), $mes, $ano);
 
                         //ARRAY LANCAMENTOS_FATURA_ASSOC
                         $data1 = array(
@@ -559,7 +556,7 @@ class Faturas extends CI_Controller
         }
 
         $data = array(
-            'id_usuario' => $this->id_usuario,
+            'id_usuario' => id_usuario(),
             'mes_referencia' => $mes,
             'ano_referencia' => $ano,
             'vencimento' => $vencimentoFormatado,
@@ -583,9 +580,9 @@ class Faturas extends CI_Controller
 
         $urlAtual = $this->input->post('urlAtual');
 
-        $ultimaFaturaAberta = $this->fatura_model->getUltimaFaturaAberta($this->id_usuario)->id_fatura;
-        $mes = $this->fatura_model->getUltimaFaturaAberta($this->id_usuario)->mes_referencia;
-        $ano = $this->fatura_model->getUltimaFaturaAberta($this->id_usuario)->ano_referencia;
+        $ultimaFaturaAberta = $this->fatura_model->getUltimaFaturaAberta(id_usuario())->id_fatura;
+        $mes = $this->fatura_model->getUltimaFaturaAberta(id_usuario())->mes_referencia;
+        $ano = $this->fatura_model->getUltimaFaturaAberta(id_usuario())->ano_referencia;
 
         $mes++;
         if ($mes == 13) {
@@ -593,7 +590,7 @@ class Faturas extends CI_Controller
             $ano++;
         }
 
-        $faturaReferencia = $this->fatura_model->getFaturaReferencia($this->id_usuario, $mes, $ano);
+        $faturaReferencia = $this->fatura_model->getFaturaReferencia(id_usuario(), $mes, $ano);
 
         $data1 = array(
             'fatura_aberta' => 1,
@@ -682,21 +679,6 @@ class Faturas extends CI_Controller
             redirect($urlAtual);
         }
     }
-
-
-    //MODULO DE TESTES
-    public function getTeste($id = null)
-    {
-
-        $pendencia = $this->pendencia_model->getById($id);
-        $cliente = $this->clientes_model->getById($pendencia->id_cliente);
-
-        print_array($pendencia);
-        print_array($cliente);
-        echo 'TESTE OK!';
-
-    }
-
 
     //MODULO DE RETORNO DE FILTROS POR PERIODO
     protected function getThisYear()

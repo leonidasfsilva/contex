@@ -14,7 +14,7 @@ class Servicos extends CI_Controller
     {
         parent::__construct();
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
+            redirect('mxcode/login');
         }
 
         $this->load->helper(array('form', 'codegen_helper'));

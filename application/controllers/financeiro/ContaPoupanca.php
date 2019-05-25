@@ -2,7 +2,7 @@
     exit('No direct script access allowed');
 }
 
-class Poupanca extends CI_Controller
+class ContaPoupanca extends CI_Controller
 {
 
     public function __construct()
@@ -13,14 +13,12 @@ class Poupanca extends CI_Controller
         }
 
         $this->load->model('poupanca_model', '', true);
-        $this->load->model('Poupanca_model', '', true);
+        $this->load->model('financeiro_model', '', true);
         $this->load->model('pendencia_model', '', true);
         $this->load->model('fatura_model', '', true);
         $this->load->model('clientes_model', '', true);
         $this->data['menuFinanceiro'] = 'Poupanca';
-        $this->load->helper(array('codegen_helper'));
-        $this->id_usuario = $this->session->userdata('id');
-        $this->global_url = site_url() . 'financeiro/poupanca/';
+        $this->global_url = site_url() . 'financeiro/contaPoupanca/';
 
     }
 
@@ -58,8 +56,7 @@ class Poupanca extends CI_Controller
                     }
                 }
             }
-        }
-        else {
+        } else {
 
             // busca lançamentos do dia
             if ($periodo == '7dias') {
@@ -290,7 +287,7 @@ class Poupanca extends CI_Controller
         $this->load->library('pagination');
 
         $config['base_url'] = site_url() . 'financeiro/poupanca/?periodo=' . $periodo . '&situacao=' . $situacao;
-        $config['total_rows'] = $this->poupanca_model->count('poupanca', 'status = 1 AND id_usuario = ' . $this->id_usuario);
+        $config['total_rows'] = $this->poupanca_model->count('poupanca', 'status = 1 AND id_usuario = ' . id_usuario());
         $config['per_page'] = 100;
         $config['page_query_string'] = true;
         $config['next_link'] = 'Próxima';
@@ -314,16 +311,16 @@ class Poupanca extends CI_Controller
 
         $this->pagination->initialize($config);
 
-        $this->data['total_entradas'] = $this->poupanca_model->getTotalEntradas($this->id_usuario);
-        $this->data['saidas_pendentes'] = $this->poupanca_model->getSaidasPendentes($this->id_usuario);
-        $this->data['entradas_pendentes'] = $this->poupanca_model->getEntradasPendentes($this->id_usuario);
-        $this->data['total'] = $this->poupanca_model->getTotal($this->id_usuario);
+        $this->data['total_entradas'] = $this->poupanca_model->getTotalEntradas(id_usuario());
+        $this->data['saidas_pendentes'] = $this->poupanca_model->getSaidasPendentes(id_usuario());
+        $this->data['entradas_pendentes'] = $this->poupanca_model->getEntradasPendentes(id_usuario());
+        $this->data['total'] = $this->poupanca_model->getTotal(id_usuario());
         $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
         $this->data['results'] = $this->poupanca_model->get(
             'poupanca',
             '*',
             $where,
-            $this->id_usuario,
+            id_usuario(),
             $limit,
             $config['total_rows'],
             $config['per_page'],
@@ -334,17 +331,14 @@ class Poupanca extends CI_Controller
 
     }
 
-    function receita()
+    function aplicacao()
     {
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aPoupanca')) {
             $this->session->set_flashdata('erro', 'Você não tem permissão para adicionar lançamentos.');
             redirect(base_url());
         }
         $urlAtual = $this->input->post('urlAtual');
-
         $vencimento = $this->input->post('vencimento');
-        $recebimento = $this->input->post('recebimento');
 
         if ($vencimento != null) {
             $vencimento = explode('/', $vencimento);
@@ -353,53 +347,62 @@ class Poupanca extends CI_Controller
             $vencimento = date('Y-m-d');
         }
 
-        if ($recebimento != null) {
-            $recebimento = explode('/', $recebimento);
-            $recebimento = $recebimento[2] . '-' . $recebimento[1] . '-' . $recebimento[0];
-        }
-
         $valor = $this->input->post('valor');
+        $valor_corrente = '-' . $valor;
 
         if (!validate_money($valor)) {
             $valor = str_replace(array('.', ','), array('', '.'), $valor);
         }
 
+        if ($this->input->post('descricao')) {
+            $descricao = padronizarString($this->input->post('descricao'));
+        } else {
+            $descricao = 'APLICACAO EM CONTA POUPANCA';
+        }
+
         $data = array(
-            'descricao' => padronizarString($this->input->post('descricao')),
+            'descricao' => $descricao,
             'valor' => $valor,
-            'id_usuario' => $this->id_usuario,
+            'id_usuario' => id_usuario(),
             'data_lancamento' => $vencimento,
-            'data_pagamento' => $recebimento != null ? $recebimento : $vencimento,
-            'baixado' => $this->input->post('recebido') ?: 0,
-            'cliente_fornecedor' => padronizarString($this->input->post('fornecedor')),
             'forma_pgto' => ($this->input->post('formaPgto')),
             'tipo' => 1
         );
 
         if ($this->poupanca_model->add('poupanca', $data) == true) {
-            $this->session->set_flashdata('sucesso', 'Entrada registrada com sucesso!');
+            if ($this->input->post('debito_conta')) {
+                $data2 = array(
+                    'descricao' => $descricao,
+                    'valor' => $valor_corrente,
+                    'id_usuario' => id_usuario(),
+                    'data_lancamento' => $vencimento,
+                    'data_pagamento' => $vencimento,
+                    'baixado' => 1,
+                    'forma_pgto' => ($this->input->post('formaPgto')),
+                    'tipo' => 2
+                );
+                $this->financeiro_model->add('lancamentos', $data2);
+            }
+            $this->session->set_flashdata('sucesso', 'Aplicação registrada com sucesso!');
             redirect($urlAtual);
         } else {
-            $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar registrar entrada.');
+            $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar registrar aplicação.');
             redirect($urlAtual);
         }
 
-        $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar registrar entrada.');
+        $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar registrar aplicação.');
         redirect($urlAtual);
 
     }
 
-    function despesa()
+    function resgate()
     {
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aPoupanca')) {
             $this->session->set_flashdata('erro', 'Você não tem permissão para adicionar lançamentos.');
             redirect(base_url());
         }
         $urlAtual = $this->input->post('urlAtual');
-
         $vencimento = $this->input->post('vencimento');
-        $pagamento = $this->input->post('pagamento');
 
         if ($vencimento != null) {
             $vencimento = explode('/', $vencimento);
@@ -408,39 +411,51 @@ class Poupanca extends CI_Controller
             $vencimento = date('Y-m-d');
         }
 
-        if ($pagamento != null) {
-            $pagamento = explode('/', $pagamento);
-            $pagamento = $pagamento[2] . '-' . $pagamento[1] . '-' . $pagamento[0];
-        }
-
         $valor = $this->input->post('valor');
-        $valor = '-' . $valor;
+        $valor_poupanca = '-' . $valor;
 
         if (!validate_money($valor)) {
             $valor = str_replace(array('.', ','), array('', '.'), $valor);
         }
 
+        if ($this->input->post('descricao')) {
+            $descricao = padronizarString($this->input->post('descricao'));
+        } else {
+            $descricao = 'RESGATE DE CONTA POUPANCA';
+        }
+
         $data = array(
-            'descricao' => padronizarString($this->input->post('descricao')),
-            'valor' => $valor,
-            'id_usuario' => $this->id_usuario,
+            'descricao' => $descricao,
+            'valor' => $valor_poupanca,
+            'id_usuario' => id_usuario(),
             'data_lancamento' => $vencimento,
-            'data_pagamento' => $pagamento != null ? $pagamento : $vencimento,
-            'baixado' => $this->input->post('pago') ?: 0,
-            'cliente_fornecedor' => padronizarString($this->input->post('fornecedor')),
             'forma_pgto' => ($this->input->post('formaPgto')),
             'tipo' => 2
         );
 
         if ($this->financeiro_model->add('Poupanca', $data) == true) {
-            $this->session->set_flashdata('sucesso', 'Saída registrada com sucesso!');
+            if ($this->input->post('debito_conta')) {
+                $data2 = array(
+                    'descricao' => $descricao,
+                    'valor' => $valor,
+                    'id_usuario' => id_usuario(),
+                    'data_lancamento' => $vencimento,
+                    'data_pagamento' => $vencimento,
+                    'baixado' => 1,
+                    'forma_pgto' => ($this->input->post('formaPgto')),
+                    'tipo' => 1
+                );
+                $this->financeiro_model->add('lancamentos', $data2);
+            }
+
+            $this->session->set_flashdata('sucesso', 'Resgate registrado com sucesso!');
             redirect($urlAtual);
         } else {
-            $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar registrar saída.');
+            $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar registrar resgate.');
             redirect($urlAtual);
         }
 
-        $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar registrar saída.');
+        $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar registrar resgate.');
         redirect($urlAtual);
 
 
@@ -448,8 +463,6 @@ class Poupanca extends CI_Controller
 
     public function editar()
     {
-//        print_array($_REQUEST);
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'ePoupanca')) {
             $this->session->set_flashdata('erro', 'Você não tem permissão para editar lançamentos.');
             redirect(base_url());
@@ -459,7 +472,6 @@ class Poupanca extends CI_Controller
 
             $urlAtual = $this->input->post('urlAtual');
             $vencimento = $this->input->post('vencimento');
-            $pagamento = $this->input->post('pagamento');
 
             if ($vencimento != null) {
                 $vencimento = explode('/', $vencimento);
@@ -468,32 +480,35 @@ class Poupanca extends CI_Controller
                 $vencimento = date('Y-m-d');
             }
 
-            if ($pagamento != null) {
-                $pagamento = explode('/', $pagamento);
-                $pagamento = $pagamento[2] . '-' . $pagamento[1] . '-' . $pagamento[0];
-            }
-
             $tipo = ($this->input->post('tipo'));
             $valor = $this->input->post('valor');
 
             if ($tipo == 2) {
+                if ($this->input->post('descricao')) {
+                    $descricao = padronizarString($this->input->post('descricao'));
+                } else {
+                    $descricao = 'RESGATE DE CONTA POUPANCA';
+                }
                 $valor = '-' . $valor;
+            } elseif ($tipo == 1) {
+                if ($this->input->post('descricao')) {
+                    $descricao = padronizarString($this->input->post('descricao'));
+                } else {
+                    $descricao = 'APLICAÇÃO EM CONTA POUPANCA';
+                }
             }
 
             $valor = str_replace(array('.', ','), array('', '.'), $valor);
 
             $data = array(
-                'descricao' => padronizarString($this->input->post('descricao')),
+                'descricao' => $descricao,
                 'valor' => $valor,
                 'data_lancamento' => $vencimento,
-                'data_pagamento' => $pagamento != null ? $pagamento : $vencimento,
-                'baixado' => $this->input->post('pago') ?: 0,
-                'cliente_fornecedor' => padronizarString($this->input->post('fornecedor')),
                 'forma_pgto' => ($this->input->post('formaPgto')),
                 'tipo' => $tipo
             );
 
-            if ($this->financeiro_model->edit('Poupanca', $data, 'idLancamentos', $this->input->post('id')) == true) {
+            if ($this->poupanca_model->edit('poupanca', $data, 'id_lancamentos', $this->input->post('id')) == true) {
                 $this->session->set_flashdata('sucesso', 'Lançamento editado com sucesso!');
                 redirect($urlAtual);
             } else {

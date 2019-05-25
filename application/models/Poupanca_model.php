@@ -94,7 +94,7 @@ class Poupanca_model extends CI_Model
     {
         $this->db
             ->select('SUM(valor) AS total')
-            ->from('lancamentos')
+            ->from('poupanca')
             ->where('status = 1 AND id_usuario = ' . $id_usuario);
 
         return $this->db->get()->row();
@@ -105,8 +105,8 @@ class Poupanca_model extends CI_Model
     {
         $this->db
             ->select('SUM(valor) AS total')
-            ->from('lancamentos')
-            ->where('status = 1 AND tipo = 2 AND baixado = 0 AND id_usuario = ' . $id_usuario);
+            ->from('poupanca')
+            ->where('status = 1 AND tipo = 2 AND id_usuario = ' . $id_usuario);
 
         return $this->db->get()->row();
 
@@ -116,8 +116,8 @@ class Poupanca_model extends CI_Model
     {
         $this->db
             ->select('SUM(valor) AS total')
-            ->from('lancamentos')
-            ->where('status = 1 AND tipo = 1 AND baixado = 0 AND id_usuario = ' . $id_usuario);
+            ->from('poupanca')
+            ->where('status = 1 AND tipo = 1 AND id_usuario = ' . $id_usuario);
 
         return $this->db->get()->row();
 
@@ -127,8 +127,8 @@ class Poupanca_model extends CI_Model
     {
         $this->db
             ->select('SUM(valor) AS total')
-            ->from('lancamentos')
-            ->where(' baixado = 1 AND status = 1 AND id_usuario = ' . $id_usuario);
+            ->from('poupanca')
+            ->where(' status = 1 AND id_usuario = ' . $id_usuario);
 
         return $this->db->get()->row();
 

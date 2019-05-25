@@ -173,7 +173,7 @@
     
     <!--Footer-part-->
     <div class="row-fluid">
-      <div id="footer" class="span12"> <?= date('Y') ?> &copy; MapOS</div>
+      <div id="footer" class="span12"> <?= date('Y') ?> &copy; CONTEX</div>
     </div>
 
     <!-- javascript

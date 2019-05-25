@@ -5,7 +5,6 @@
 class Redefinirsenha extends CI_Controller
 {
 
-
     /**
      * author: Leônidas Ferreira
      * email: leonidas.f.silva@hotmail.com
@@ -16,10 +15,7 @@ class Redefinirsenha extends CI_Controller
     {
         parent::__construct();
         $this->load->model('redefinicao_model', '', true);
-        $this->load->helper(array('codegen_helper'));
         $this->load->library('form_validation');
-        $this->id_usuario = $this->session->userdata('id');
-
     }
 
     public function index($data = null)

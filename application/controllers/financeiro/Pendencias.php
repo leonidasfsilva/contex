@@ -17,8 +17,6 @@ class Pendencias extends CI_Controller
         $this->load->model('fatura_model', '', true);
         $this->load->model('clientes_model', '', true);
         $this->data['menuFinanceiro'] = 'Lancamentos';
-        $this->load->helper(array('codegen_helper'));
-        $this->id_usuario = $this->session->userdata('id');
         $this->global_url = site_url() . '/financeiro/pendencias/';
 
     }
@@ -106,7 +104,7 @@ class Pendencias extends CI_Controller
         $this->load->library('pagination');
 
         $config['base_url'] = site_url() . '/financeiro/pendencias/?periodo=' . $periodo;
-        $config['total_rows'] = $this->pendencia_model->count('pendencias', 'status = 1 AND id_usuario = ' . $this->id_usuario);
+        $config['total_rows'] = $this->pendencia_model->count('pendencias', 'status = 1 AND id_usuario = ' . id_usuario());
         $config['per_page'] = 100;
         $config['page_query_string'] = true;
         $config['next_link'] = 'Próxima';
@@ -142,21 +140,21 @@ class Pendencias extends CI_Controller
             'pendencias',
             '*',
             $where,
-            $this->id_usuario,
+            id_usuario(),
             $limit,
             $config['total_rows'],
             $config['per_page'],
             $this->input->get('per_page'));
 
-        $this->data['clientes'] = $this->pendencia_model->getClientes($this->id_usuario);
+        $this->data['clientes'] = $this->pendencia_model->getClientes(id_usuario());
         $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
         $this->data['selected'] = $cliente;
 
-        $this->data['pendencias_credito'] = $this->pendencia_model->getPendenciasParcialCredito($this->id_usuario, $cliente, $where);
-        $this->data['pendencias_debito'] = $this->pendencia_model->getPendenciasParcialDebito($this->id_usuario, $cliente, $where);
-        $this->data['total_credito'] = $this->pendencia_model->getPendenciasTotalCredito($this->id_usuario);
-        $this->data['total_debito'] = $this->pendencia_model->getPendenciasTotalDebito($this->id_usuario);
-//        $this->data['total'] = $this->pendencia_model->getTotal($this->id_usuario);
+        $this->data['pendencias_credito'] = $this->pendencia_model->getPendenciasParcialCredito(id_usuario(), $cliente, $where);
+        $this->data['pendencias_debito'] = $this->pendencia_model->getPendenciasParcialDebito(id_usuario(), $cliente, $where);
+        $this->data['total_credito'] = $this->pendencia_model->getPendenciasTotalCredito(id_usuario());
+        $this->data['total_debito'] = $this->pendencia_model->getPendenciasTotalDebito(id_usuario());
+//        $this->data['total'] = $this->pendencia_model->getTotal(id_usuario());
 
 
         $this->data['view'] = 'financeiro/pendencias';
@@ -199,7 +197,7 @@ class Pendencias extends CI_Controller
         }
 
         $data = array(
-            'id_usuario' => $this->id_usuario,
+            'id_usuario' => id_usuario(),
             'id_cliente' => $this->input->post('id_cliente'),
             'descricao' => padronizarString($this->input->post('descricao')),
             'tipo' => $tipo,

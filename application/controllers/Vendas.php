@@ -2,20 +2,12 @@
 
 class Vendas extends CI_Controller
 {
-    
-
-    /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     *
-     */
-    
     function __construct()
     {
         parent::__construct();
         
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
+            redirect('mxcode/login');
         }
         
         $this->load->helper(array('form','codegen_helper'));
@@ -23,7 +15,6 @@ class Vendas extends CI_Controller
         $this->load->model('usuarios_model', '', true);
         $this->load->model('Poupanca_model', '', true);
         $this->data['menuVendas'] = 'Vendas';
-        $this->id_usuario = $this->session->userdata('id');
     }
     
     function index()
@@ -103,7 +94,7 @@ class Vendas extends CI_Controller
 
             $data = array(
                 'dataVenda' => $dataVenda,
-                'id_usuario' => $this->id_usuario,
+                'id_usuario' => id_usuario(),
                 'clientes_id' => $this->input->post('clientes_id'),
                 'usuarios_id' => $this->input->post('usuarios_id'),
                 'faturado' => 0
@@ -119,7 +110,7 @@ class Vendas extends CI_Controller
             }
         }
 
-        $this->data['usuario'] = $this->usuarios_model->getById($this->id_usuario);
+        $this->data['usuario'] = $this->usuarios_model->getById(id_usuario());
         $this->data['view'] = 'vendas/adicionarVenda';
         $this->load->view('tema/topo', $this->data);
     }
@@ -266,7 +257,7 @@ class Vendas extends CI_Controller
 
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
-            $this->vendas_model->autoCompleteCliente($q, $this->id_usuario);
+            $this->vendas_model->autoCompleteCliente($q, id_usuario());
         }
 
     }
@@ -382,7 +373,7 @@ class Vendas extends CI_Controller
             }
 
             $data = array(
-                'id_usuario' => $this->id_usuario,
+                'id_usuario' => id_usuario(),
                 'vendas_id' => $venda_id,
                 'descricao' => padronizarString(set_value('descricao')),
                 'valor' => $this->input->post('valor'),

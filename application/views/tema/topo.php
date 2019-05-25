@@ -496,16 +496,16 @@
                                         </a>
                                         <ul class="acc-menu sub-menu">
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
-                                                <li><a href="<?php echo base_url() ?>financeiro/lancamentos">Lançamentos</a></li>
+                                                <li><a href="<?php echo base_url() ?>financeiro/contaCorrente">Conta Corrente</a></li>
+                                            <?php } ?>
+                                            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPoupanca')) { ?>
+                                                <li><a href="<?php echo base_url() ?>financeiro/contaPoupanca">Conta Poupança</a></li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) { ?>
                                                 <li><a href="<?php echo base_url() ?>financeiro/faturas">Faturas</a></li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPendencias')) { ?>
                                                 <li><a href="<?php echo base_url() ?>financeiro/pendencias">Pendências</a></li>
-                                            <?php } ?>
-                                            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPoupanca')) { ?>
-                                                <li><a href="<?php echo base_url() ?>financeiro/poupanca">Poupança</a></li>
                                             <?php } ?>
                                         </ul>
                                     </li>
