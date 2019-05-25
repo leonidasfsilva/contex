@@ -2,7 +2,7 @@
     exit('No direct script access allowed');
 }
 
-class Financeiro_model extends CI_Model
+class Poupanca_model extends CI_Model
 {
     function __construct()
     {
@@ -27,7 +27,7 @@ class Financeiro_model extends CI_Model
 
         if ($limit) {
             if ($rows > $limit) {
-                $this->db->order_by('idLancamentos', 'asc');
+                $this->db->order_by('id_lancamentos', 'asc');
                 $this->db->limit($limit, ($rows - $limit));
             }
         }

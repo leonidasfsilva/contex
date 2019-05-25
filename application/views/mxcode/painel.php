@@ -8,12 +8,26 @@
     </div>
     <div class="panel-body">
         <div class="row">
+            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) : ?>
+                <div class="col-md-6">
+                    <a href="<?= base_url() ?>financeiro" class="shortcut-tile tile-green">
+                        <div class="tile-body">
+                            <div class="pull-left"><i class="fa fa-dollar fa-fw"></i></div>
+<!--                            <div class="pull-right"><span class="badge">16</span></div>-->
+                        </div>
+                        <div class="tile-footer">
+                            Financeiro
+                        </div>
+                    </a>
+                </div>
+            <?php endif ?>
+
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')): ?>
-                <div class="col-md-2">
+                <div class="col-md-6">
                     <a href="<?= base_url() ?>clientes" class="shortcut-tile tile-primary">
                         <div class="tile-body">
                             <div class="pull-left"><i class="fa fa-group fa-fw"></i></div>
-                            <div class="pull-right"><span class="badge">2</span></div>
+<!--                            <div class="pull-right"><span class="badge">2</span></div>-->
                         </div>
                         <div class="tile-footer">
                             Clientes
@@ -23,11 +37,11 @@
             <?php endif ?>
 
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')): ?>
-                <div class="col-md-2">
+                <div class="col-md-6">
                     <a href="<?= base_url() ?>produtos" class="shortcut-tile tile-indigo">
                         <div class="tile-body">
                             <div class="pull-left"><i class="fa fa-barcode fa-fw"></i></div>
-                            <div class="pull-right"><span class="badge">5</span></div>
+<!--                            <div class="pull-right"><span class="badge">5</span></div>-->
                         </div>
                         <div class="tile-footer">
                             Produtos
@@ -37,11 +51,10 @@
             <?php endif ?>
 
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vServico')) : ?>
-                <div class="col-md-2">
+                <div class="col-md-6">
                     <a href="<?= base_url() ?>servicos" class="shortcut-tile tile-orange">
                         <div class="tile-body">
                             <div class="pull-left"><i class="fa fa-wrench fa-fw"></i></div>
-
                         </div>
                         <div class="tile-footer">
                             Serviços
@@ -51,11 +64,11 @@
             <?php endif ?>
 
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
-                <div class="col-md-2">
+                <div class="col-md-6">
                     <a href="<?= base_url() ?>os" class="shortcut-tile tile-danger">
                         <div class="tile-body">
                             <div class="pull-left"><i class="fa fa-tags fa-fw"></i></div>
-                            <div class="pull-right"><span class="badge">3</span></div>
+<!--                            <div class="pull-right"><span class="badge">3</span></div>-->
                         </div>
                         <div class="tile-footer">
                             OS
@@ -65,11 +78,11 @@
             <?php endif ?>
 
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) : ?>
-                <div class="col-md-2">
+                <div class="col-md-6">
                     <a href="<?= base_url() ?>vendas" class="shortcut-tile tile-magenta">
                         <div class="tile-body">
                             <div class="pull-left"><i class="fa fa-shopping-cart fa-fw"></i></div>
-                            <div class="pull-right"><span class="badge">10</span></div>
+<!--                            <div class="pull-right"><span class="badge">10</span></div>-->
                         </div>
                         <div class="tile-footer">
                             Vendas
@@ -78,19 +91,6 @@
                 </div>
             <?php endif ?>
 
-            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) : ?>
-                <div class="col-md-2">
-                    <a href="<?= base_url() ?>financeiro" class="shortcut-tile tile-green">
-                        <div class="tile-body">
-                            <div class="pull-left"><i class="fa fa-dollar fa-fw"></i></div>
-                            <div class="pull-right"><span class="badge">16</span></div>
-                        </div>
-                        <div class="tile-footer">
-                            Financeiro
-                        </div>
-                    </a>
-                </div>
-            <?php endif ?>
         </div>
     </div>
 </div>

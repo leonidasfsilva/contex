@@ -246,7 +246,7 @@ class Mine extends CI_Controller
 
         $data['menuOs'] = 'os';
         $this->data['custom_error'] = '';
-        $this->load->model('mapos_model');
+        $this->load->model('Mxcode_model');
         $this->load->model('os_model');
         $data['result'] = $this->os_model->getById($this->uri->segment(3));
         $data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
@@ -272,7 +272,7 @@ class Mine extends CI_Controller
 
         $data['menuOs'] = 'os';
         $this->data['custom_error'] = '';
-        $this->load->model('mapos_model');
+        $this->load->model('Mxcode_model');
         $this->load->model('os_model');
         $data['result'] = $this->os_model->getById($this->uri->segment(3));
         $data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
@@ -297,7 +297,7 @@ class Mine extends CI_Controller
 
         $data['menuVendas'] = 'vendas';
         $data['custom_error'] = '';
-        $this->load->model('mapos_model');
+        $this->load->model('Mxcode_model');
         $this->load->model('vendas_model');
         $data['result'] = $this->vendas_model->getById($this->uri->segment(3));
         $data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
@@ -322,7 +322,7 @@ class Mine extends CI_Controller
 
         $data['menuVendas'] = 'vendas';
         $data['custom_error'] = '';
-        $this->load->model('mapos_model');
+        $this->load->model('Mxcode_model');
         $this->load->model('vendas_model');
         $data['result'] = $this->vendas_model->getById($this->uri->segment(3));
         $data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
@@ -355,7 +355,7 @@ class Mine extends CI_Controller
 
             $data['menuOs'] = 'os';
             $this->data['custom_error'] = '';
-            $this->load->model('mapos_model');
+            $this->load->model('Mxcode_model');
             $this->load->model('os_model');
             $data['result'] = $this->os_model->getById($id);
             if ($data['result'] == null) {
@@ -443,7 +443,7 @@ class Mine extends CI_Controller
     {
         if (is_numeric($id) && $id != null) {
 
-            $this->load->model('mapos_model');
+            $this->load->model('Mxcode_model');
             $this->load->model('os_model');
 
             $this->data['result'] = $this->os_model->getById($id);

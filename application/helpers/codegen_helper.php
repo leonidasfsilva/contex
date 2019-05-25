@@ -17,7 +17,6 @@ function print_var($a)
     echo '<pre>';
     var_dump($a);
     echo '</pre>';
-
 }
 
 
@@ -52,4 +51,17 @@ function padronizarString($str) {
     $str = preg_replace('/[^a-z0-9\/\-_ ]/i', '', $str);
 //    $str = preg_replace('/_+/', '_', $str); // ideia do Bacco :)
     return strtoupper($str);
+}
+
+function gravaLog($id_usuario, $acao, $ip) {
+    $CI = get_instance();
+    $CI->load->model('mxcode_model');
+    $data = array(
+        'id_usuario' => $id_usuario,
+        'acao' => $acao,
+        'ip' => $ip,
+    );
+
+    $CI->mxcode_model->gravaLog($data);
+
 }

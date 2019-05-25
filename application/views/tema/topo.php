@@ -100,7 +100,7 @@
         <ul class="nav navbar-nav">
             <!--    MEGAMENU-->
             <li class="dropdown">
-<!--                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Megamenu<span class="caret"></span></a>-->
+                <!--                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Megamenu<span class="caret"></span></a>-->
                 <ul class="dropdown-menu" style="width: 900px;">
                     <li>
                         <div class="yamm-content container-sm-height">
@@ -177,7 +177,7 @@
 
             <!--    DROPDOWN-->
             <li class="dropdown" id="widget-classicmenu">
-<!--                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<span class="caret"></span></a>-->
+                <!--                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<span class="caret"></span></a>-->
                 <ul class="dropdown-menu" role="menu">
                     <li><a href="#">Action</a></li>
                     <li><a href="#">Another action</a></li>
@@ -195,11 +195,11 @@
     <!--    TOP NAVBAR-->
     <ul class="nav navbar-nav toolbar pull-right">
         <li class="dropdown toolbar-icon-bg">
-<!--            <a href="#" id="navbar-links-toggle" data-toggle="collapse" data-target="header>.navbar-collapse" data-placement="bottom" title="Exibir Menu Superior">-->
-<!--				<span class="icon-bg">-->
-<!--					<i class="fa fa-fw fa-chevron-down"></i>-->
-<!--				</span>-->
-<!--            </a>-->
+            <!--            <a href="#" id="navbar-links-toggle" data-toggle="collapse" data-target="header>.navbar-collapse" data-placement="bottom" title="Exibir Menu Superior">-->
+            <!--				<span class="icon-bg">-->
+            <!--					<i class="fa fa-fw fa-chevron-down"></i>-->
+            <!--				</span>-->
+            <!--            </a>-->
         </li>
 
         <!--        BUSCA-->
@@ -494,18 +494,18 @@
                                         <a href="javascript:;"><i class="fa fa-dollar fa-fw"></i>
                                             <span>Financeiro</span>
                                         </a>
-                                        <ul class="acc-menu">
+                                        <ul class="acc-menu sub-menu">
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
-                                                <li><a href="<?php echo base_url() ?>financeiro/lancamentos">Lançamentos</a></li>
+                                                <li><a href="<?php echo base_url() ?>financeiro/lancamentos"><i class="fa fa-line-chart fa-fw"></i> Lançamentos</a></li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) { ?>
-                                                <li><a href="<?php echo base_url() ?>financeiro/faturas">Faturas</a></li>
+                                                <li><a href="<?php echo base_url() ?>financeiro/faturas"><i class="fa fa-credit-card fa-fw"></i> Faturas</a></li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPendencias')) { ?>
-                                                <li><a href="<?php echo base_url() ?>financeiro/pendencias">Pendências</a></li>
+                                                <li><a href="<?php echo base_url() ?>financeiro/pendencias"><i class="fa fa-thumb-tack fa-fw"></i>Pendências</a></li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPoupanca')) { ?>
-                                                <li><a href="javascript:" class="poupanca">Poupança</a></li>
+                                                <li><a href="<?php echo base_url() ?>financeiro/poupanca"><i class="fas fa-piggy-bank"></i> Poupança</a></li>
                                             <?php } ?>
                                         </ul>
                                     </li>
@@ -579,25 +579,38 @@
                     <!--                    BREADCRUMB-->
                     <ol class="breadcrumb">
                         <li class="">
-                            <a href="<?= base_url() ?>">
+                            <a href="<?= base_url() ?>" title="Painel Inicial">
                                 Painel Inicial
                             </a>
                         </li>
-                        <?php if ($this->uri->segment(1) != null) { ?>
+                        <?php if ($this->uri->segment(1)) { ?>
                             <li class="active">
-                                <a href="<?= base_url() . '' . $this->uri->segment(1) ?>" class="tip-bottom"
+                                <a href="<?= base_url() . '' . $this->uri->segment(1) ?>"
                                    title="<?php echo ucfirst($this->uri->segment(1)); ?>">
                                     <?= ucfirst($this->uri->segment(1)); ?>
                                 </a>
                             </li>
-                            <li>
-                                <?php if ($this->uri->segment(2) != null) { ?>
-                                    <a href="<?php echo base_url() . '' . $this->uri->segment(1) . '/' . $this->uri->segment(2) . '/' . $this->uri->segment(3) ?>"
-                                       class="current tip-bottom" title="<?php echo ucfirst($this->uri->segment(2)); ?>">
+                            <?php if ($this->uri->segment(2)) { ?>
+                                <li>
+                                    <a href="<?php echo base_url() . '' . $this->uri->segment(1) . '/' . $this->uri->segment(2) ?>"
+                                       title="<?php echo ucfirst($this->uri->segment(2)); ?>">
                                         <?php echo ucfirst($this->uri->segment(2)); ?>
                                     </a>
-                                <?php } ?>
-                            </li>
+                                </li>
+                            <?php } ?>
+                            <?php if ($this->uri->segment(3)) { ?>
+                                <li>
+                                    <a href="<?php echo base_url() . '' . $this->uri->segment(1) . '/' . $this->uri->segment(2) . '/' . $this->uri->segment(3) ?>"
+                                       title="<?php echo ucfirst($this->uri->segment(3)); ?>">
+                                        <?php echo ucfirst($this->uri->segment(3)); ?>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <?php if ($this->uri->segment(4)) { ?>
+                                <li>
+                                    ...
+                                </li>
+                            <?php } ?>
                         <?php } ?>
                     </ol>
 

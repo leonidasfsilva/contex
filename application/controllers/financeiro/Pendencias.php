@@ -12,11 +12,11 @@ class Pendencias extends CI_Controller
             redirect('mxcode/login');
         }
 
-        $this->load->model('financeiro_model', '', true);
+        $this->load->model('Poupanca_model', '', true);
         $this->load->model('pendencia_model', '', true);
         $this->load->model('fatura_model', '', true);
         $this->load->model('clientes_model', '', true);
-        $this->data['menuFinanceiro'] = 'Lancamentos';
+        $this->data['menuFinanceiro'] = 'Poupanca';
         $this->load->helper(array('codegen_helper'));
         $this->id_usuario = $this->session->userdata('id');
         $this->global_url = site_url() . '/financeiro/pendencias/';
@@ -348,7 +348,7 @@ class Pendencias extends CI_Controller
                 'baixado' => 1,
             );
 
-            if ($this->financeiro_model->add('lancamentos', $consulta) == true) {
+            if ($this->financeiro_model->add('Poupanca', $consulta) == true) {
                 $this->session->set_flashdata('sucesso', 'Pendência paga com sucesso!');
                 redirect($urlAtual);
             } else {

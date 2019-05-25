@@ -12,11 +12,11 @@ class Index extends CI_Controller
             redirect('mxcode/login');
         }
 
-        $this->load->model('financeiro_model', '', true);
+        $this->load->model('Poupanca_model', '', true);
         $this->load->model('pendencia_model', '', true);
         $this->load->model('fatura_model', '', true);
         $this->load->model('clientes_model', '', true);
-        $this->data['menuFinanceiro'] = 'Lancamentos';
+        $this->data['menuFinanceiro'] = 'Poupanca';
         $this->load->helper(array('codegen_helper'));
         $this->id_usuario = $this->session->userdata('id');
 
