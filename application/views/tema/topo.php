@@ -491,21 +491,21 @@
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
                                     <li class="<?= (isset($menuFinanceiro)) ? 'active' : ''; ?>">
-                                        <a href="javascript:;"><i class="fa fa-dollar fa-fw"></i>
+                                        <a href="javascript:"><i class="fa fa-dollar fa-fw"></i>
                                             <span>Financeiro</span>
                                         </a>
                                         <ul class="acc-menu sub-menu">
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
-                                                <li><a href="<?php echo base_url() ?>financeiro/lancamentos"><i class="fa fa-line-chart fa-fw"></i> Lançamentos</a></li>
+                                                <li><a href="<?php echo base_url() ?>financeiro/lancamentos">Lançamentos</a></li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) { ?>
-                                                <li><a href="<?php echo base_url() ?>financeiro/faturas"><i class="fa fa-credit-card fa-fw"></i> Faturas</a></li>
+                                                <li><a href="<?php echo base_url() ?>financeiro/faturas">Faturas</a></li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPendencias')) { ?>
-                                                <li><a href="<?php echo base_url() ?>financeiro/pendencias"><i class="fa fa-thumb-tack fa-fw"></i>Pendências</a></li>
+                                                <li><a href="<?php echo base_url() ?>financeiro/pendencias">Pendências</a></li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPoupanca')) { ?>
-                                                <li><a href="<?php echo base_url() ?>financeiro/poupanca"><i class="fas fa-piggy-bank"></i> Poupança</a></li>
+                                                <li><a href="<?php echo base_url() ?>financeiro/poupanca">Poupança</a></li>
                                             <?php } ?>
                                         </ul>
                                     </li>
@@ -513,7 +513,7 @@
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rCliente') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rProduto') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rServico') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rOs') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rVenda')) { ?>
                                     <li class="<?= (isset($menuRelatorios)) ? 'active' : ''; ?>">
-                                        <a href="javascript:;"><i class="fa fa-list-alt fa-fw"></i>
+                                        <a href="javascript:"><i class="fa fa-list-alt fa-fw"></i>
                                             <span>Relatórios</span>
                                         </a>
                                         <ul class="acc-menu">
@@ -544,7 +544,7 @@
                                     $this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao') ||
                                     $this->permission->checkPermission($this->session->userdata('permissao'), 'cBackup')) { ?>
                                     <li class="<?= (isset($menuConfiguracoes)) ? 'active' : ''; ?>">
-                                        <a href="javascript:;"><i class="fa fa-cogs fa-fw"></i>
+                                        <a href="javascript:"><i class="fa fa-cogs fa-fw"></i>
                                             <span>Config. do Sistema</span>
                                         </a>
                                         <ul class="acc-menu">
