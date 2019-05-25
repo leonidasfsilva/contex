@@ -431,7 +431,7 @@ class ContaPoupanca extends CI_Controller
             'tipo' => 2
         );
 
-        if ($this->financeiro_model->add('Poupanca', $data) == true) {
+        if ($this->financeiro_model->add('poupanca', $data) == true) {
             if ($this->input->post('debito_conta')) {
                 $data2 = array(
                     'descricao' => $descricao,
