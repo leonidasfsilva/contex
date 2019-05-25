@@ -547,7 +547,7 @@ class ContaPoupanca extends CI_Controller
                 'status' => 0
             );
 
-            if ($this->financeiro_model->delete('Poupanca', $data, 'idLancamentos', $id) == true) {
+            if ($this->financeiro_model->delete('poupanca', $data, 'id_lancamentos', $id) == true) {
                 $this->session->set_flashdata('sucesso', 'Lançamento excluído com sucesso!');
                 redirect($urlAtual);
 

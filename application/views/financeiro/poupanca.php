@@ -139,7 +139,7 @@ $periodo = $this->input->get('periodo');
                                 <i class="fa fa-search-plus fa-lg fa-fw"></i></a>';
                     }
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
-                        echo '<a href="#modalExcluir" data-toggle="modal" idLancamento="' . $r->idLancamentos . '" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>';
+                        echo '<a href="#modalExcluir" data-toggle="modal" idLancamento="' . $r->id_lancamentos . '" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>';
                     }
 
                     echo '</td>';
