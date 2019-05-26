@@ -94,7 +94,7 @@ class Redefinirsenha extends CI_Controller
   border-radius: 10px;
 }
 td {
-  padding: 20px 20px 20px 20px;
+  padding: 0px 20px 20px 20px;
   text-align: left;    
 }
 </style>
@@ -105,24 +105,24 @@ td {
 		<tr>
           <td valign="top" width="100%">
             <table id="inner_table" align="center" cellpadding="0" cellspacing="0" border="0" align="center">
-              <tr >
-                <td colspan="2" style="border-bottom: 4px solid #0098da;">
+              <tr>
+                <td colspan="2" style="border-bottom: 4px solid #0098da; padding: 20px 20px 20px 20px;">
                   <img src="https://mxcode.net/contex/assets/img/contex_brand.png" alt="CONTEX - Sistema de Gestão" style="width:120px;">
                 </td>
               </tr>
               <tr>
-                <td>
-                  <p style="font-size: 16pt">Olá, ' . $nomeremetente . '!</p>
+                <td style="padding-top: 20px">
+                  <span style="font-size: 16pt;">Olá, ' . $nomeremetente . '!</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <p>Recebemos um pedido para alteração de sua senha de cadastro em nosso sistema.</p>
+                  <span>Recebemos um pedido para alteração de sua senha de cadastro em nosso sistema.</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <p>Origem da solicitação:
+                  <span>Origem da solicitação:
                     <br />
                     IP: ' . $ip . '
                     <br />
@@ -131,11 +131,11 @@ td {
                     Data e hora: ' . $date . '
                     <br />
                     <br />
-                    Caso você tenha solicitado a troca de sua senha, clique no botão abaixo:</p>
+                    Caso você tenha solicitado a troca de sua senha, clique no botão abaixo:</span>
                 </td>
               </tr>
               <tr>
-                <td style="border-radius: 3px; padding: 10px 20px 0px; text-align: left">
+                <td style="border-radius: 3px; padding: 20px 20px 40px 20px; text-align: left">
                   <a href="' . $link . '" target="_blank" style="padding: 10px 30px; background-color:#0098da; border: 1px solid #0098da;border-radius: 3px;font-family: Helvetica, Arial, sans-serif;font-size: 14px; color: #ffffff;text-decoration: none;font-weight:bold;display: inline-block;">
                     REDEFINIR SENHA         
                   </a>
@@ -158,7 +158,7 @@ td {
                 </td>
               </tr>
               <tr>
-                <td style="border-top: 2px dotted #0098da;">
+                <td style="border-top: 2px dotted #0098da; padding-top: 20px">
                   <p style="font-size:10pt; color: gray">Não é necessário responder este e-mail, mensagem automática.<p>
 
                 </td>
