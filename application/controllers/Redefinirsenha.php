@@ -144,7 +144,7 @@ class Redefinirsenha extends CI_Controller
                     <td>
                         <p>Por questões de segurança, este link só estará válido por alguns minutos, caso seu link tenha expirado, faça uma nova solicitação clicando no botão <strong>Esqueci minha senha</strong> na página inicial do sistema.</p>
                         <p>Caso não tenha solicitado a troca de sua senha, por favor, desconsidere e exclua este email, nenhuma outra ação é necessária. Não se preocupe, sua conta está segura.</p>
-                        <p>Caso necessite de suporte específico, contate-nos em <a href="mailto:suporte@mxcode.net?Subject=Solicitação de suporte" target="_top"><strong>suporte@mxcode.net</strong></a>
+                        <p>Caso necessite de suporte para o sistema Contex, contate-nos em <a href="mailto:suporte@mxcode.net?Subject=Solicitação de suporte" target="_top"><strong>suporte@mxcode.net</strong></a>
                     </td>
                   </tr>
                   <tr>
