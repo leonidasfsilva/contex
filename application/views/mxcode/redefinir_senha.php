@@ -120,17 +120,23 @@
 
     $('#formLogin').validate({
         rules: {
-            novaSenha: {required: true},
+            novaSenha: {
+                required: true,
+                minlength: 6,
+            },
             confirmarSenha: {
                 required: "#novaSenha",
                 equalTo: "#novaSenha"
             },
         },
         messages: {
-            novaSenha: {required: 'Digite sua nova senha'},
+            novaSenha: {
+                required: 'Digite sua nova senha',
+                minlength: 'A nova senha deve conter no mínimo 6 caracteres',
+            },
             confirmarSenha: {
                 required: 'Repita sua nova senha',
-                equalTo: 'As senhas não correspondem'
+                equalTo: 'As senhas não correspondem',
             }
         },
 
