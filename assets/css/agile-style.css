@@ -15105,13 +15105,13 @@ table.dataTable.order-column.stripe tbody tr.even > .sorting_1 {
   /*font-size: 14px;*/
 }
 .has-error .form-control {
-  border-bottom: 1px solid #cbb2ae;
+  border-bottom: 1px solid rgba(255, 84, 89, 0.73);
 }
 .has-warning .form-control {
   border-bottom: 1px solid #cbc3ae;
 }
 .has-success .form-control {
-  border-bottom: 1px solid #becfa6;
+  border-bottom: 1px solid #52d556;
 }
 .floating-labels .form-control:focus {
   outline: none;
@@ -15194,11 +15194,11 @@ table.dataTable.order-column.stripe tbody tr.even > .sorting_1 {
 }
 .has-success .form-control:focus ~ label,
 .has-success .form-control:valid ~ label {
-  color: #becfa6;
+  color: #4caf50;
 }
 .has-error .form-control:focus ~ label,
 .has-error .form-control:valid ~ label {
-  color: #cbb2ae;
+  color: #ff4f54;
 }
 .has-feedback label ~ .t-0 {
   top: 0;

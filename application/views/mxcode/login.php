@@ -72,7 +72,7 @@
                     <div class="form-group">
                         <p class="font-bold">Efetue seu login</p>
                     </div>
-                    <div class="form-group m-t-40 p-t-40 p-b-20">
+                    <div class="form-group m-t-0 p-t-0  p-b-20">
                         <input type="text" class="form-control" id="email" name="email" required/>
                         <span class="highlight"></span> <span class="bar"></span>
                         <label for="email">E-mail</label>

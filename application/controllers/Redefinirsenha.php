@@ -24,7 +24,7 @@ class Redefinirsenha extends CI_Controller
             redirect('mxcode/login');
         }
 //        redirect('redefinirsenha/');
-        $this->load->view('mapos/redefinir_senha', $data);
+        $this->load->view('mxcode/redefinir_senha', $data);
 
     }
 
@@ -226,8 +226,8 @@ class Redefinirsenha extends CI_Controller
         } else {
             $id = (int)$this->input->post('id');
             $token = $this->input->post('token');
-            $novasenha = $this->input->post('novasenha');
-            $repitasenha = $this->input->post('repitasenha');
+            $novasenha = $this->input->post('novaSenha');
+            $repitasenha = $this->input->post('confirmarSenha');
 
             if (($token != null) && ($id != null)) {
 
@@ -244,52 +244,38 @@ class Redefinirsenha extends CI_Controller
                     $validade = 30;
 
                     if (isset($result->validade) && $result->validade < $validade) {
-                        $this->form_validation->set_error_delimiters('<div class="alert alert-danger alert-dismissible small font-weight-bold" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> ', '</div>');
-                        $this->form_validation->set_rules('novasenha', '"Nova senha"', 'required|min_length[6]');
-//                        $this->form_validation->set_rules('repitasenha', '"Confirme nova senha"', 'required|min_length[6]');
 
                         $query = $this->redefinicao_model->getDadosUsuarioById($resultToken->id_usuario);
                         $result = $query->row();
 
-                        if ($this->form_validation->run() == FALSE) {
+                        if (($novasenha != null) && ($repitasenha != null) && ($novasenha == $repitasenha)) {
                             $data = array(
+                                'senha' => password_hash($repitasenha, PASSWORD_DEFAULT)
+                            );
+
+                            $this->redefinicao_model->atualizaAdmin($resultToken->id_usuario, $data);
+                            $this->redefinicao_model->invalidaToken($id);
+                            $this->session->set_flashdata('sucesso', 'Senha alterada com sucesso!');
+                            redirect('mxcode/login');
+
+                        } elseif (($novasenha != null) && ($repitasenha != null) && ($novasenha != $repitasenha)) {
+                            $data3 = array(
                                 'id' => $id,
                                 'nome' => $result->nome,
                                 'token' => $token,
+                                'senhaAlterada' => false
                             );
-                            $this->load->view('mapos/redefinir_senha', $data);
+                            $this->session->set_flashdata('erro', 'As senhas não correspondem.');
+                            $this->load->view('mxcode/redefinir_senha', $data3);
 
                         } else {
+                            $this->session->set_flashdata(
+                                'erro',
+                                'Link de redefinição de senha expirado. Solicite um novo link clicando no botão <a href="javascript:" onclick="recuperar_senha()">Esqueci minha senha</a>.');
+                            redirect('mxcode/login');
 
-                            if (($novasenha != null) && ($repitasenha != null) && ($novasenha == $repitasenha)) {
-                                $data = array(
-                                    'senha' => password_hash($repitasenha, PASSWORD_DEFAULT)
-                                );
-
-                                $this->redefinicao_model->atualizaAdmin($resultToken->id_usuario, $data);
-                                $this->redefinicao_model->invalidaToken($id);
-                                $this->session->set_flashdata('sucesso', 'Senha alterada com sucesso!');
-                                redirect('mxcode/login');
-
-                            } elseif (($novasenha != null) && ($repitasenha != null) && ($novasenha != $repitasenha)) {
-                                $data3 = array(
-                                    'id' => $id,
-                                    'nome' => $result->nome,
-                                    'token' => $token,
-                                    'senhaAlterada' => false
-                                );
-                                $this->session->set_flashdata('erro', 'As senhas não correspondem.');
-                                $this->load->view('mapos/redefinir_senha', $data3);
-
-                            } else {
-                                $this->session->set_flashdata(
-                                    'erro',
-                                    'Link de redefinição de senha expirado. Solicite um novo link clicando no botão <a href="javascript:" onclick="recuperar_senha()">Esqueci minha senha</a>.');
-                                redirect('mxcode/login');
-
-                            }
                         }
+
                     } else {
                         $this->session->set_flashdata(
                             'erro',

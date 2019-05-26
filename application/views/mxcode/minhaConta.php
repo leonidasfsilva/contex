@@ -98,15 +98,16 @@
                 }
             },
 
-            // errorClass: "help-inline",
-            // errorElement: "span",
-            // highlight: function (element, errorClass, validClass) {
-            //     $(element).parents('.control-group').addClass('error');
-            // },
-            // unhighlight: function (element, errorClass, validClass) {
-            //     $(element).parents('.control-group').removeClass('error');
-            //     $(element).parents('.control-group').addClass('success');
-            // }
+            errorClass: "help-block",
+            errorElement: "p",
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
+            }
         });
     });
 </script>

@@ -19,11 +19,14 @@
 
 
     <script src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.min.js"></script>                            <!-- Load jQuery -->
+    <script src="<?php echo base_url(); ?>assets/js/jqueryui-1.9.2.min.js"></script>                            <!-- Load jQueryUI -->
+    <script src="<?php echo base_url(); ?>assets/js/bootstrap3.3.7.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/agile-custom.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/agile-waves.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/agile-style.switcher.js"></script>
-    <script src="<?php echo base_url(); ?>assets/js/bootstrap3.3.7.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/jquery.validate.js"></script>
+
 </head>
 <style>
     .preloader-login {
@@ -80,12 +83,12 @@
                     <div class="form-group ">
                         <input type="hidden" id="token" name="token" value="<?= $token ?>"/>
                         <input type="hidden" id="id" name="id" value="<?= $id ?>"/>
-                        <input type="password" class="form-control" id="novasenha" name="novasenha" required/>
+                        <input type="password" class="form-control" id="novaSenha" name="novaSenha" required/>
                         <span class="highlight"></span> <span class="bar"></span>
                         <label for="novasenha">Nova senha</label>
                     </div>
                     <div class="form-group">
-                        <input class="form-control" type="password" id="repitasenha" name="repitasenha" required/>
+                        <input class="form-control" type="password" id="confirmarSenha" name="confirmarSenha" required/>
                         <span class="highlight"></span> <span class="bar"></span>
                         <label for="repitasenha">Confirme nova senha</label>
                     </div>
@@ -115,21 +118,52 @@
 
 <script type="text/javascript">
 
+    $('#formLogin').validate({
+        rules: {
+            novaSenha: {required: true},
+            confirmarSenha: {
+                required: "#novaSenha",
+                equalTo: "#novaSenha"
+            },
+        },
+        messages: {
+            novaSenha: {required: 'Digite sua nova senha'},
+            confirmarSenha: {
+                required: 'Repita sua nova senha',
+                equalTo: 'As senhas não correspondem'
+            }
+        },
+
+        errorClass: "help-block",
+        errorElement: "p",
+        highlight: function (element, errorClass, validClass) {
+            $(element).parents('.form-group').addClass('has-error');
+            $(element).parents('.form-group').removeClass('has-success');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).parents('.form-group').removeClass('has-error');
+            $(element).parents('.form-group').addClass('has-success');
+        }
+    });
+
     $('#formLogin').submit(function (event) {
         var form = this;
+        event.preventDefault();
         $('#btn-acessar').addClass('disabled');
         $('#btn-acessar').html('Acessando... <i class="fa fa-spinner fa-pulse fa-fw"></i>');
         $('#progress-acessar').removeClass('hidden');
         $(".progress-bar").animate({
             width: "100%"
         }, 1000);
-        $(".before-loading").fadeOut();
-        $(".preloader-login").fadeIn();
-        event.preventDefault();
+        if($(form).valid()) {
+            $(".before-loading").fadeOut();
+            $(".preloader-login").fadeIn();
 
-        setTimeout(function () {
-            form.submit();
-        }, 1000);
+            setTimeout(function () {
+                form.submit();
+            }, 1000);
+
+        }
     });
 
     $('#cancelToken').click(function () {
