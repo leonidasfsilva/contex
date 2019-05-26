@@ -162,7 +162,6 @@
             setTimeout(function () {
                 form.submit();
             }, 1000);
-
         }
     });
 

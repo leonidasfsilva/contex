@@ -19,10 +19,13 @@
 
 
     <script src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.min.js"></script>                            <!-- Load jQuery -->
+    <script src="<?php echo base_url(); ?>assets/js/jqueryui-1.9.2.min.js"></script>                            <!-- Load jQueryUI -->
+    <script src="<?php echo base_url(); ?>assets/js/bootstrap3.3.7.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/agile-custom.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/agile-waves.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/agile-style.switcher.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/jquery.validate.js"></script>
 </head>
 <style>
     .preloader-login {
@@ -111,101 +114,6 @@
     </div>
 </section>
 
-
-<!--<div class="container" id="login-form">-->
-<!--    <a href="--><?php //echo base_url() ?><!--" class="login-logo"><img id="logo" src="--><?php //echo base_url() ?><!--assets/img/contex_brand.png"></a>-->
-<!--    <div class="row">-->
-<!--        <div class="col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">-->
-<!--            <div class="panel panel-default">-->
-<!--                <div class="panel-heading"><h2>Efetue seu login</h2></div>-->
-<!--                <div class="panel-body">-->
-<!--                    <form class="form-horizontal" id="formLogin" method="post" action="--><?php //echo base_url() ?><!--mxcode/verificarLogin">-->
-<!--                        <div class="form-group">-->
-<!--                            <div class="col-xs-12">-->
-<!--                                <div class="input-group">-->
-<!--									<span class="input-group-addon">-->
-<!--										<i class="fa fa-user fa-fw"></i>-->
-<!--									</span>-->
-<!--                                    <input type="email" class="form-control" placeholder="E-mail" name="email" required/>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!---->
-<!--                        <div class="form-group">-->
-<!--                            <div class="col-lg-12">-->
-<!--                                <div class="input-group">-->
-<!--									<span class="input-group-addon">-->
-<!--										<i class="fa fa-lock fa-fw"></i>-->
-<!--									</span>-->
-<!--                                    <input type="password" class="form-control" placeholder="Senha" name="senha" id="senha" required/>-->
-<!--                                    <span id="eye_span" class="input-group-addon" style="cursor: pointer" title="Pré-visualizar senha">-->
-<!--                                        <i style="cursor:pointer;" id="eye" class="fa fa-eye-slash fa-fw"></i>-->
-<!--                                    </span>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!---->
-<!--                        <div class="form-group">-->
-<!--                            <div class="col-xs-12">-->
-<!--                                <a href="javascript:" onclick="recuperar_senha()" id="reset-password" class="pull-left">Esqueci minha senha</a>-->
-<!--                                <div class="checkbox-inline icheck pull-right pt0">-->
-<!--                                    <label for="">-->
-<!--                                        <input type="checkbox">Manter conectado</input>-->
-<!--                                    </label>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="panel-footer">-->
-<!--                            <div class="clearfix">-->
-<!--                                <div class="row">-->
-<!--                                    <div class="col-xs-6">-->
-<!--                                        <a href="#" id="registro" class="btn btn-default btn-block">Registrar-se <i class="fa fa-user-plus fa-fw"></i></a>-->
-<!--                                    </div>-->
-<!--                                    <div class="col-xs-6">-->
-<!--                                        <button id="btn-acessar" class="btn btn-success btn-block">Acessar <i class="fa fa-sign-in fa-fw"></i></button>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </form>-->
-<!---->
-<!--                </div>-->
-<!--            </div>-->
-<!---->
-<!--            <div id="progress-acessar" class="progress progress-lg progress-striped active hidden">-->
-<!--                <div class="progress-bar progress-bar-primary" role="progressbar" style="width: 0%">-->
-<!--                    <span class="sr-only">45% Complete</span>-->
-<!--                </div>-->
-<!--            </div>-->
-<!---->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<!--<div id="form_notice" class="hidden">-->
-<!--    <form id="form_recuperar_senha" method="post" autocomplete="on">-->
-<!--        <div>-->
-<!--            <h4>Esqueceu sua senha?</h4>-->
-<!--            <p>Informe seu e-mail de cadastro e lhe enviaremos instruções para alterar sua senha:</p>-->
-<!--        </div>-->
-<!--        <div class="form-group">-->
-<!--            <div class="input-group"><span class="input-group-addon"> <i class="fa fa-user fa-fw"></i> </span>-->
-<!--                <input type="email" class="form-control" placeholder="E-mail" name="email_usuario" id="email_usuario" required>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="mt-3 ">-->
-<!--            <div class="row">-->
-<!--                <div class="col-lg-6">-->
-<!--                    <button class="btn btn-default btn-block" type="button" id="cancel"><i class="fa fa-times fa-fw"></i> Cancelar</button>-->
-<!--                </div>-->
-<!--                <div class="col-lg-6">-->
-<!--                    <button class="btn btn-primary btn-block" type="submit" id="submit_form"><i class="fa fa-send fa-fw"></i> Enviar</button>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </form>-->
-<!--</div>-->
-
-
 <script type="text/javascript">
 
     $('#eye_span').click(function (e) {
@@ -225,21 +133,46 @@
 
     });
 
+    $('#formLogin').validate({
+        rules: {
+            email: {required: true},
+            senha: {required: true},
+        },
+        messages: {
+            email: {required: 'Digite seu email'},
+            senha: {required: 'Digite sua senha'},
+        },
+
+        errorClass: "help-block",
+        errorElement: "p",
+        highlight: function (element, errorClass, validClass) {
+            $(element).parents('.form-group').addClass('has-error');
+            $(element).parents('.form-group').removeClass('has-success');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).parents('.form-group').removeClass('has-error');
+            $(element).parents('.form-group').addClass('has-success');
+        }
+    });
+
+
     $('#formLogin').submit(function (event) {
         var form = this;
+        event.preventDefault();
         $('#btn-acessar').addClass('disabled');
         $('#btn-acessar').html('Acessando... <i class="fa fa-spinner fa-pulse fa-fw"></i>');
         $('#progress-acessar').removeClass('hidden');
         $(".progress-bar").animate({
             width: "100%"
         }, 1000);
-        $(".before-loading").fadeOut();
-        $(".preloader-login").fadeIn();
-        event.preventDefault();
+        if($(form).valid()) {
+            $(".before-loading").fadeOut();
+            $(".preloader-login").fadeIn();
 
-        setTimeout(function () {
-            form.submit();
-        }, 1000);
+            setTimeout(function () {
+                form.submit();
+            }, 1000);
+        }
     });
 
     <?php if ($this->session->flashdata('erro') != null) { ?>
@@ -287,7 +220,6 @@
     <?php } ?>
 
     $('#registro').click(function () {
-
         Swal.fire({
             position: 'top',
             type: 'info',
