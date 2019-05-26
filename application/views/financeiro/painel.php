@@ -13,7 +13,7 @@
                     <a href="<?= base_url() ?>financeiro/contaCorrente" class="shortcut-tile tile-blue">
                         <div class="tile-body">
                             <div class="pull-left"><i class="fa fa-line-chart fa-fw"></i></div>
-                            <div class="pull-right"><span class="badge">2</span></div>
+<!--                            <div class="pull-right"><span class="badge">2</span></div>-->
                         </div>
                         <div class="tile-footer">
                             Conta Corrente
@@ -26,7 +26,7 @@
                     <a href="<?= base_url() ?>financeiro/contaPoupanca" class="shortcut-tile tile-green">
                         <div class="tile-body">
                             <div class="pull-left"><i class="fas fa-piggy-bank fa-fw"></i></div>
-                            <div class="pull-right"><span class="badge">3</span></div>
+<!--                            <div class="pull-right"><span class="badge">3</span></div>-->
                         </div>
                         <div class="tile-footer">
                             Conta Poupança
@@ -39,7 +39,7 @@
                     <a href="<?= base_url() ?>financeiro/faturas" class="shortcut-tile tile-midnightblue">
                         <div class="tile-body">
                             <div class="pull-left"><i class="fa fa-credit-card fa-fw"></i></div>
-                            <div class="pull-right"><span class="badge">5</span></div>
+<!--                            <div class="pull-right"><span class="badge">5</span></div>-->
                         </div>
                         <div class="tile-footer">
                             Faturas
