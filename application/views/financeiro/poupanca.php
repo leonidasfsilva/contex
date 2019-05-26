@@ -174,20 +174,6 @@ $periodo = $this->input->get('periodo');
                 <td colspan="1" style="text-align: right;">
                     <?php echo number_format($total_entradas->total, 2, ',', '.') ?></td>
             </tr>
-            <?php if ($saidas_pendentes->total) { ?>
-                <tr>
-                    <td colspan="2" style="text-align: left; color: red">(-) SALDO DE SAÍDAS A CONFIRMAR</td>
-                    <td colspan="1" style="text-align: right; color: red">
-                        <?php echo number_format($saidas_pendentes->total, 2, ',', '.') ?></td>
-                </tr>
-            <?php } ?>
-            <?php if ($entradas_pendentes->total) { ?>
-                <tr>
-                    <td colspan="2" style="text-align: left; color: green">(+) SALDO DE ENTRADAS A CONFIRMAR</td>
-                    <td colspan="1" style="text-align: right; color: green">
-                        <?php echo number_format($entradas_pendentes->total, 2, ',', '.') ?></td>
-                </tr>
-            <?php } ?>
             <tr>
                 <td colspan="2" style="text-align: left; font-weight: bold">(=) SALDO LÍQUIDO DISPONÍVEL EM CONTA</td>
                 <td colspan="1" style="text-align: right; font-weight: bold">
