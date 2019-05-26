@@ -94,79 +94,80 @@ class Redefinirsenha extends CI_Controller
   border-radius: 10px;
 }
 td {
-  padding: 10px 20px 0px 20px;
+  padding: 20px 20px 20px 20px;
   text-align: left;    
 }
 </style>
 </head>
 <body>
-    <table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="white">
-	    <tbody>
-		    <tr>
-			    <td valign="top" width="100%">
-                <table id="inner_table" style="width: 90%" align="center" cellpadding="0" cellspacing="0" border="0" align="center">
-                    <tr >
-                    <td colspan="2" style="border-bottom: 4px solid #0098da;">
-                        <img src="https://mxcode.net/contex/assets/img/contex_brand.png" alt="CONTEX - Sistema de Gestão" style="width:120px; padding: 20px 0 20px 0">
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                    <p style="font-size: 16pt">Olá, ' . $nomeremetente . '!</p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                        <p>Recebemos um pedido para alteração de sua senha de cadastro em nosso sistema.</p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                        <p>Origem da solicitação:
-                                <br />
-                                IP: ' . $ip . '
-                                <br />
-                                Navegador: ' . $navegador . '
-                                <br />
-                                Data e hora: ' . $date . '
-                                <br />
-                                <br />
-                                Caso você tenha solicitado a troca de sua senha, clique no botão abaixo:</p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="border-radius: 3px; padding: 10px 20px 0px; text-align: left">
-                      <a href="' . $link . '" target="_blank" style="padding: 10px 30px; background-color:#0098da; border: 1px solid #0098da;border-radius: 3px;font-family: Helvetica, Arial, sans-serif;font-size: 14px; color: #ffffff;text-decoration: none;font-weight:bold;display: inline-block;">
-                                                            REDEFINIR SENHA         
-                      </a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                        <p>Por questões de segurança, este link só estará válido por alguns minutos, caso seu link tenha expirado, faça uma nova solicitação clicando no botão <strong>Esqueci minha senha</strong> na página inicial do sistema.</p>
-                        <p>Caso não tenha solicitado a troca de sua senha, por favor, desconsidere e exclua este email, nenhuma outra ação é necessária. Não se preocupe, sua conta está segura.</p>
-                        <p>Caso necessite de suporte específico, contate-nos em <a href="mailto:suporte@mxcode.net?Subject=Solicitação de suporte" target="_top"><strong>suporte@mxcode.net</strong></a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                        <span>Atenciosamente,</span>
-                        <br>
-                        <span style="font-size: 14pt"><strong>Equipe MX Code Sistemas</strong></span>
-                        <br>
-                        <a href="https://mxcode.net/contex" target="_blank"><p><strong>https://mxcode.net/contex</strong></p></a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="border-top: 2px dotted #0098da;">
-                        <p style="font-size:10pt; color: gray">Não é necessário responder este e-mail, mensagem automática.<p>
-                    </td>
-                  </tr>
-                </table>
-            </td>
-        </tr>
-    </tbody>
-</table>                
+<table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="white">
+	<tbody>
+		<tr>
+          <td valign="top" width="100%">
+            <table id="inner_table" align="center" cellpadding="0" cellspacing="0" border="0" align="center">
+              <tr >
+                <td colspan="2" style="border-bottom: 4px solid #0098da;">
+                  <img src="https://mxcode.net/contex/assets/img/contex_brand.png" alt="CONTEX - Sistema de Gestão" style="width:120px;">
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <p style="font-size: 16pt">Olá, ' . $nomeremetente . '!</p>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <p>Recebemos um pedido para alteração de sua senha de cadastro em nosso sistema.</p>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <p>Origem da solicitação:
+                    <br />
+                    IP: ' . $ip . '
+                    <br />
+                    Navegador: ' . $navegador . '
+                    <br />
+                    Data e hora: ' . $date . '
+                    <br />
+                    <br />
+                    Caso você tenha solicitado a troca de sua senha, clique no botão abaixo:</p>
+                </td>
+              </tr>
+              <tr>
+                <td style="border-radius: 3px; padding: 10px 20px 0px; text-align: left">
+                  <a href="' . $link . '" target="_blank" style="padding: 10px 30px; background-color:#0098da; border: 1px solid #0098da;border-radius: 3px;font-family: Helvetica, Arial, sans-serif;font-size: 14px; color: #ffffff;text-decoration: none;font-weight:bold;display: inline-block;">
+                    REDEFINIR SENHA         
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <p>Por questões de segurança, este link só estará válido por alguns minutos, caso seu link tenha expirado, faça uma nova solicitação clicando no botão <strong>Esqueci minha senha</strong> na página inicial do sistema.</p>
+                  <p>Caso não tenha solicitado a troca de sua senha, por favor, desconsidere e exclua este email, nenhuma outra ação é necessária. Não se preocupe, sua conta está segura.</p>
+                  <p>Caso necessite de suporte específico, contate-nos em <a href="mailto:suporte@mxcode.net?Subject=Solicitação de suporte" target="_top"><strong>suporte@mxcode.net</strong></a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span>Atenciosamente,</span>
+                  <br>
+                  <span style="font-size: 14pt"><strong>Equipe MX Code Sistemas</strong></span>
+                  <br>
+                  <a href="https://mxcode.net/contex" target="_blank"><p><strong>https://mxcode.net/contex</strong></p></a>
+                </td>
+              </tr>
+              <tr>
+                <td style="border-top: 2px dotted #0098da;">
+                  <p style="font-size:10pt; color: gray">Não é necessário responder este e-mail, mensagem automática.<p>
+
+                </td>
+              </tr>
+            </table>
+          </td>
+		</tr>
+	</tbody>
+  </table>                
 </body>
 </html>
                 ';
