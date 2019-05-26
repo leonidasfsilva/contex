@@ -83,7 +83,7 @@ class Redefinirsenha extends CI_Controller
                     $headers_ = "MIME-Version: 1.0\r\n";
                     $headers_ .= "Content-type: text/html; charset=utf-8\r\n";
                     $headers_ .= "From: naoresponda@mxcode.net\r\n";
-                    $assunto_resposta = "Redefinição de senha";
+                    $assunto_resposta = "CONTEX - Sistema de Gestão [Redefinição de senha]";
 
                     $msg_resposta = '
 <html>
@@ -145,7 +145,7 @@ td {
                 <td>
                   <p>Por questões de segurança, este link só estará válido por alguns minutos, caso seu link tenha expirado, faça uma nova solicitação clicando no botão <strong>Esqueci minha senha</strong> na página inicial do sistema.</p>
                   <p>Caso não tenha solicitado a troca de sua senha, por favor, desconsidere e exclua este email, nenhuma outra ação é necessária. Não se preocupe, sua conta está segura.</p>
-                  <p>Caso necessite de suporte específico, contate-nos em <a href="mailto:suporte@mxcode.net?Subject=Solicitação de suporte" target="_top"><strong>suporte@mxcode.net</strong></a>
+                  <p>Caso necessite de suporte para o sistema Contex, contate-nos em <a href="mailto:suporte@mxcode.net?Subject=Solicitação de suporte" target="_top"><strong>suporte@mxcode.net</strong></a>
                 </td>
               </tr>
               <tr>
@@ -154,13 +154,14 @@ td {
                   <br>
                   <span style="font-size: 14pt"><strong>Equipe MX Code Sistemas</strong></span>
                   <br>
-                  <a href="https://mxcode.net/contex" target="_blank"><p><strong>https://mxcode.net/contex</strong></p></a>
+                  <a href="https://mxcode.net/contex" target="_blank"><p><strong>https://mxcode.net/contex</strong></a><br>CONTEX - Sistema de Gestão</p>
                 </td>
               </tr>
               <tr>
                 <td style="border-top: 2px dotted #0098da; padding-top: 20px">
-                  <p style="font-size:10pt; color: gray">Não é necessário responder este e-mail, mensagem automática.<p>
-
+                  <p style="font-size:10pt; color: gray">
+                  Não é necessário responder este e-mail, mensagem automática.
+                  <p>
                 </td>
               </tr>
             </table>
