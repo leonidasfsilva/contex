@@ -85,27 +85,28 @@ class Redefinirsenha extends CI_Controller
                     $headers_ .= "From: naoresponda@mxcode.net\r\n";
                     $assunto_resposta = "Redefinição de senha";
 
-                    $msg_resposta = '<html>
-                <head>
-                <style>
-                #inner_table {
-                  border: 2px solid lightgray;
-                  border-radius: 10px;
-                }
-                td {
-                  padding: 0px 20px 0px 20px;
-                  text-align: left;    
-                }
-                </style>
-                </head>
-                <body>
-                <table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="white">
-                    <tbody>
-                        <tr>
-                            <td valign="top" width="100%">
-                <table id="inner_table" style="width: 80%" align="center" cellpadding="0" cellspacing="0" border="0" align="center">
+                    $msg_resposta = '
+<html>
+<head>
+<style>
+#inner_table {
+  border: 2px solid lightgray;
+  border-radius: 10px;
+}
+td {
+  padding: 10px 20px 0px 20px;
+  text-align: left;    
+}
+</style>
+</head>
+<body>
+    <table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="white">
+	    <tbody>
+		    <tr>
+			    <td valign="top" width="100%">
+                <table id="inner_table" style="width: 90%" align="center" cellpadding="0" cellspacing="0" border="0" align="center">
                     <tr >
-                    <td colspan="2" style="border-bottom: 5px solid #0098da;">
+                    <td colspan="2" style="border-bottom: 4px solid #0098da;">
                         <img src="https://mxcode.net/contex/assets/img/contex_brand.png" alt="CONTEX - Sistema de Gestão" style="width:120px; padding: 20px 0 20px 0">
                     </td>
                   </tr>
@@ -121,7 +122,7 @@ class Redefinirsenha extends CI_Controller
                   </tr>
                   <tr>
                     <td>
-                        Origem da solicitação:
+                        <p>Origem da solicitação:
                                 <br />
                                 IP: ' . $ip . '
                                 <br />
@@ -130,7 +131,7 @@ class Redefinirsenha extends CI_Controller
                                 Data e hora: ' . $date . '
                                 <br />
                                 <br />
-                                Caso você tenha solicitado a troca de sua senha, clique no botão abaixo:
+                                Caso você tenha solicitado a troca de sua senha, clique no botão abaixo:</p>
                     </td>
                   </tr>
                   <tr>
@@ -144,7 +145,7 @@ class Redefinirsenha extends CI_Controller
                     <td>
                         <p>Por questões de segurança, este link só estará válido por alguns minutos, caso seu link tenha expirado, faça uma nova solicitação clicando no botão <strong>Esqueci minha senha</strong> na página inicial do sistema.</p>
                         <p>Caso não tenha solicitado a troca de sua senha, por favor, desconsidere e exclua este email, nenhuma outra ação é necessária. Não se preocupe, sua conta está segura.</p>
-                        <p>Caso necessite de suporte para o sistema Contex, contate-nos em <a href="mailto:suporte@mxcode.net?Subject=Solicitação de suporte" target="_top"><strong>suporte@mxcode.net</strong></a>
+                        <p>Caso necessite de suporte específico, contate-nos em <a href="mailto:suporte@mxcode.net?Subject=Solicitação de suporte" target="_top"><strong>suporte@mxcode.net</strong></a>
                     </td>
                   </tr>
                   <tr>
@@ -162,12 +163,13 @@ class Redefinirsenha extends CI_Controller
                     </td>
                   </tr>
                 </table>
-                </td>
-                </tr>
-                </tbody>
-                </table>                
-                </body>
-                </html>';
+            </td>
+        </tr>
+    </tbody>
+</table>                
+</body>
+</html>
+                ';
 
                     mail($emailremetente, $assunto_resposta, $msg_resposta, $headers_);
 
