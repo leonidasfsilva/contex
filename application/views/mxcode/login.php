@@ -62,9 +62,7 @@
 <section id="wrapper" class="login-register">
     <div class="login-box login-sidebar">
         <div class="text-center m-t-40">
-            <img class="contex-logo" src="<?php echo base_url() ?>assets/img/contex_logo.png" alt="Home"/>
-            <br/>
-            <img class="contex-words" src="<?php echo base_url() ?>assets/img/contex_words.png" alt="Home"/>
+            <img class="contex-words" src="<?php echo base_url() ?>assets/img/contex_brand.png" alt="CONTEX - Sistema de Gestão"/>
         </div>
         <div class="white-box box-login">
             <form class="form-horizontal floating-labels" id="formLogin" method="post" action="<?php echo base_url() ?>mxcode/verificarLogin">
