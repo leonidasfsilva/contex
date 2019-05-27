@@ -83,7 +83,7 @@ class Redefinirsenha extends CI_Controller
                     $headers_ = "MIME-Version: 1.0\r\n";
                     $headers_ .= "Content-type: text/html; charset=utf-8\r\n";
                     $headers_ .= "From: naoresponda@mxcode.net\r\n";
-                    $assunto_resposta = "CONTEX - Sistema de Gestão [Redefinição de senha]";
+                    $assunto_resposta = "CONTEX - Redefinição de senha";
 
                     $msg_resposta = '
 <html>
