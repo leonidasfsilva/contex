@@ -44,44 +44,9 @@
             </div>
         </div>
     </div>
-<!--    <div class="col-md-6">-->
-<!--        <div class="panel panel-default">-->
-<!--            <div class="panel-heading">-->
-<!--                <h2 style="font-size: 12pt">-->
-<!--                    <i class="fa fa-lock fa-lg fa-fw"></i>-->
-<!--                    Alterar Senha-->
-<!--                </h2>-->
-<!--            </div>-->
-<!--            <div class="panel-body ">-->
-<!--                <form id="formSenha" action="--><?php //echo base_url(); ?><!--mxcode/alterarSenha" method="post">-->
-<!--                    <div class="row">-->
-<!--                        <div class="form-group col-lg-12">-->
-<!--                            <label class="font-weight-bold" for="descricao">Senha Atual *</label>-->
-<!--                            <input class="form-control" type="password" id="oldSenha" name="oldSenha"/>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="row">-->
-<!--                        <div class="form-group col-lg-12">-->
-<!--                            <label class="font-weight-bold" for="descricao">Nova Senha *</label>-->
-<!--                            <input class="form-control" type="password" id="novaSenha" name="novaSenha"/>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="row">-->
-<!--                        <div class="form-group col-lg-12">-->
-<!--                            <label class="font-weight-bold" for="descricao">Confirme Nova Senha *</label>-->
-<!--                            <input class="form-control" type="password" name="confirmarSenha"/>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="panel-footer">-->
-<!--                        <button class="btn btn-primary btn-sm pull-right"><i class="fa fa-refresh fa-fw"></i> Alterar Senha</button>-->
-<!--                    </div>-->
-<!--                </form>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
 </div>
 
-<!-- Modal ALTERAR DADOS USUÁRIO -->
+<!-- Modal ATUALIZAR PERFIL DO USUÁRIO -->
 <div class="modal fade" id="modalEditarPerfil" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -164,6 +129,42 @@
     </div>
 </div>
 
+<!-- Modal ALTERAR SENHA DO USUÁRIO -->
+<div class="modal fade" id="modalAlterarSenha" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-white ">Alterar senha</h4>
+            </div>
+            <form id="formSenha" action="<?php echo base_url() ?>mxcode/alterarSenha" method="post" autocomplete="off">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <label for="oldSenha" class="font-weight-bold">Senha Atual *</label>
+                            <input class="form-control" type="password" id="oldSenha" name="oldSenha"/>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="novaSenha" class="font-weight-bold">Nova Senha *</label>
+                            <input type="password" class="form-control" id="novaSenha" name="novaSenha"/>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="confirmarSenha" class="font-weight-bold">Confirme Nova Senha *</label>
+                            <input type="password" class="form-control" id="confirmarSenha" name="confirmarSenha"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnCancelLancamento" class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                        <i class="fa fa-times fa-fw"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
     $(document).ready(function () {
 
@@ -198,7 +199,6 @@
                 confirmarSenha: {
                     required: "#novaSenha",
                     equalTo: "#novaSenha",
-                    minlength: 6
                 },
             },
             messages: {
