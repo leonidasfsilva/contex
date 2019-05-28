@@ -19,6 +19,7 @@ class Usuarios extends CI_Controller
         $this->load->model('usuarios_model', '', true);
         $this->data['menuUsuarios'] = 'Usuários';
         $this->data['menuConfiguracoes'] = 'Configurações';
+
     }
 
     function index()
@@ -30,7 +31,6 @@ class Usuarios extends CI_Controller
     {
 
         $this->load->library('pagination');
-
 
         $config['base_url'] = base_url() . 'usuarios/gerenciar/';
         $config['total_rows'] = $this->usuarios_model->count('usuarios');
@@ -201,6 +201,7 @@ class Usuarios extends CI_Controller
 
 
     }
+    
 
     public function excluir()
     {

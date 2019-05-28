@@ -19,6 +19,7 @@
     <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/fullcalendar.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.css" type="text/css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/plugins/jquery-cropper/css/cropper.css" type="text/css" rel="stylesheet">
 
     <link href="<?php echo base_url(); ?>assets/css/jquery.toast.min.css" rel="stylesheet">
 

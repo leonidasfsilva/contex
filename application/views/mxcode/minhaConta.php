@@ -1,13 +1,17 @@
 <div class="row">
-    <div class="col-md-6">
-        <div class="panel panel-profile">
+    <div class="col-md-12">
+        <div class="panel panel-profile panel-midnightblue">
             <div class="panel-heading">
                 <h2 style="font-size: 12pt">
                     <i class="fa fa-user-circle fa-lg fa-fw"></i>
                     Minha Conta
                 </h2>
                 <div class="panel-ctrls">
-                    <button href="#modalFiltrar" class="btn btn-default btn-sm" id="editar_perfil" data-toggle="modal" title="Editar perfil de usuário">
+                    <button href="#modalAlterarSenha" class="btn btn-primary btn-sm" id="alterar_senha" data-toggle="modal" title="Alterar senha da conta">
+                        <i class="fa fa-lock fa-fw"></i>
+                        Alterar Senha
+                    </button>
+                    <button href="#modalEditarPerfil" class="btn btn-primary btn-sm" id="editar_perfil" data-toggle="modal" title="Editar perfil de usuário">
                         <i class="fa fa-user-circle fa-fw"></i>
                         Editar Perfil
                     </button>
@@ -40,45 +44,149 @@
             </div>
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h2 style="font-size: 12pt">
-                    <i class="fa fa-lock fa-lg fa-fw"></i>
-                    Alterar Senha
-                </h2>
+<!--    <div class="col-md-6">-->
+<!--        <div class="panel panel-default">-->
+<!--            <div class="panel-heading">-->
+<!--                <h2 style="font-size: 12pt">-->
+<!--                    <i class="fa fa-lock fa-lg fa-fw"></i>-->
+<!--                    Alterar Senha-->
+<!--                </h2>-->
+<!--            </div>-->
+<!--            <div class="panel-body ">-->
+<!--                <form id="formSenha" action="--><?php //echo base_url(); ?><!--mxcode/alterarSenha" method="post">-->
+<!--                    <div class="row">-->
+<!--                        <div class="form-group col-lg-12">-->
+<!--                            <label class="font-weight-bold" for="descricao">Senha Atual *</label>-->
+<!--                            <input class="form-control" type="password" id="oldSenha" name="oldSenha"/>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="row">-->
+<!--                        <div class="form-group col-lg-12">-->
+<!--                            <label class="font-weight-bold" for="descricao">Nova Senha *</label>-->
+<!--                            <input class="form-control" type="password" id="novaSenha" name="novaSenha"/>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="row">-->
+<!--                        <div class="form-group col-lg-12">-->
+<!--                            <label class="font-weight-bold" for="descricao">Confirme Nova Senha *</label>-->
+<!--                            <input class="form-control" type="password" name="confirmarSenha"/>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="panel-footer">-->
+<!--                        <button class="btn btn-primary btn-sm pull-right"><i class="fa fa-refresh fa-fw"></i> Alterar Senha</button>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+</div>
+
+<!-- Modal ALTERAR DADOS USUÁRIO -->
+<div class="modal fade" id="modalEditarPerfil" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-white ">Editar perfil de usuário</h4>
             </div>
-            <div class="panel-body ">
-                <form id="formSenha" action="<?php echo base_url(); ?>mxcode/alterarSenha" method="post">
+            <form id="formAlterar" action="<?php echo base_url() ?>mxcode/atualizarPerfil" method="post" autocomplete="off">
+                <div class="modal-body">
                     <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label class="font-weight-bold" for="descricao">Senha Atual *</label>
-                            <input class="form-control" type="password" id="oldSenha" name="oldSenha"/>
+                        <div class="form-group col-md-12">
+                            <label class="font-weight-bold" for="nome">Nome *</label>
+                            <input id="nome" class="form-control" type="text" name="nome" value="<?php echo $dados->nome; ?>"/>
+                            <input id="id_usuarios" type="hidden" name="id_usuarios" value="<?php echo $dados->id_usuarios; ?>"/>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label class="font-weight-bold" for="descricao">Nova Senha *</label>
-                            <input class="form-control" type="password" id="novaSenha" name="novaSenha"/>
+                        <div class="form-group col-md-5">
+                            <label for="cpf" class="font-weight-bold">CPF</label>
+                            <input class="form-control" type="text" id="cpf" name="cpf" value="<?php echo $dados->cpf; ?>"/>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="rg" class="font-weight-bold">RG</label>
+                            <input type="text" class="form-control" id="rg" name="rg" value="<?php echo $dados->rg; ?>"/>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="cep" class="font-weight-bold">CEP</label>
+                            <input type="text" class="form-control" id="cep" name="cep" value="<?php echo $dados->cep; ?>"/>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label class="font-weight-bold" for="descricao">Confirme Nova Senha *</label>
-                            <input class="form-control" type="password" name="confirmarSenha"/>
+                        <div class="form-group col-md-8">
+                            <label for="logradouro" class="font-weight-bold">Logradouro</label>
+                            <input type="text" class="form-control" id="logradouro" name="logradouro" value="<?php echo $dados->logradouro; ?>"/>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="numero" class="font-weight-bold">Nº</label>
+                            <input type="text" class="form-control" id="numero" name="numero" value="<?php echo $dados->numero; ?>"/>
+                        </div>
+                        <div class="form-group col-md-2 mt30">
+                            <div class="checkbox icheck">
+                                <input type="checkbox" class="form-control" id="s_n" name="s_n" value="1" <?= $dados->s_n == 1 ? 'checked' : '' ?>>
+                            </div>
+                            <label for="s_n" class="font-weight-bold">S/N</label>
                         </div>
                     </div>
-                    <div class="panel-footer">
-                        <button class="btn btn-primary btn-sm pull-right"><i class="fa fa-refresh fa-fw"></i> Alterar Senha</button>
+                    <div class="row">
+                        <div class="form-group col-md-5">
+                            <label for="bairro" class="font-weight-bold">Bairro</label>
+                            <input type="text" class="form-control" id="bairro" name="bairro" value="<?php echo $dados->bairro; ?>"/>
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label for="cidade" class="font-weight-bold">Cidade</label>
+                            <input type="text" class="form-control" id="cidade" name="cidade" value="<?php echo $dados->cidade; ?>"/>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="uf" class="font-weight-bold">UF</label>
+                            <input type="text" class="form-control" id="uf" name="uf" value="<?php echo $dados->uf; ?>"/>
+                        </div>
                     </div>
-                </form>
-            </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="email" class="font-weight-bold">Email *</label>
+                            <input type="text" class="form-control" id="email" name="email" value="<?php echo $dados->email; ?>"/>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="telefone" class="font-weight-bold">Telefone</label>
+                            <input type="text" class="form-control" id="telefone" name="telefone" value="<?php echo $dados->telefone; ?>"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnCancelLancamento" class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                        <i class="fa fa-times fa-fw"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
 <script type="text/javascript">
     $(document).ready(function () {
+
+        $('#s_n').on('ifChanged', function (event) {
+            const checked = event.target.checked;
+            if (checked == true) {
+                $('#numero').attr('disabled', true);
+                $('#numero').val('');
+            } else {
+                $('#numero').removeAttr('disabled');
+            }
+        });
+
+        var s_n = $('#s_n').iCheck('update')[0].checked;
+        $.each($(s_n), function (key, value) {
+            if (s_n == true) {
+                $('#numero').attr('disabled', true);
+                $('#numero').val('');
+            } else {
+                $('#numero').removeAttr('disabled');
+            }
+        });
+
 
         $('#formSenha').validate({
             rules: {

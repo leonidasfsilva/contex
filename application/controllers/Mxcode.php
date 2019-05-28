@@ -35,10 +35,11 @@ class Mxcode extends CI_Controller
             redirect('mxcode/login');
         }
 
-        $this->data['usuario'] = $this->mxcode_model->getById($this->session->userdata('id'));
-        $this->data['view'] = 'mxcode/minhaConta';
-        $this->data['minhaConta'] = 'Conta';
-        $this->load->view('tema/topo', $this->data);
+        $data['dados'] = $this->mxcode_model->getUsuario(id_usuario());
+        $data['usuario'] = $this->mxcode_model->getById(id_usuario());
+        $data['view'] = 'mxcode/minhaConta';
+        $data['minhaConta'] = 'Conta';
+        $this->load->view('tema/topo', $data);
 
     }
 
@@ -206,7 +207,7 @@ class Mxcode extends CI_Controller
             redirect(base_url());
         }
 
-        if($_FILES['userfile']['size'] > 0) {
+        if ($_FILES['userfile']['size'] > 0) {
             $dir = 'assets/uploads/logomarcas';
             $image = $this->do_upload($_FILES['userfile'], base_url() . 'mxcode/emitente', $dir);
         } else {
@@ -345,7 +346,7 @@ class Mxcode extends CI_Controller
 
         $logo_atual = $this->mxcode_model->getLogoEmitente(id_usuario());
 
-        if($logo_atual->logomarca) {
+        if ($logo_atual->logomarca) {
             unlink('assets/uploads/logomarcas/' . $logo_atual->logomarca);
         }
         $dir = 'assets/uploads/logomarcas';
@@ -382,7 +383,7 @@ class Mxcode extends CI_Controller
         }
 
         $logo_atual = $this->mxcode_model->getLogoEmitente(id_usuario());
-        if($logo_atual) {
+        if ($logo_atual) {
             unlink('assets/uploads/logomarcas/' . $logo_atual->logomarca);
         }
         $nova_logo = null;
@@ -427,6 +428,32 @@ class Mxcode extends CI_Controller
         } else {
             $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar as informações.');
             redirect(base_url() . 'mxcode/emitente');
+        }
+
+    }
+
+    public function atualizarPerfil()
+    {
+
+        $data = array(
+            'nome' => $this->input->post('nome'),
+            'rg' => $this->input->post('rg'),
+            'cpf' => $this->input->post('cpf'),
+            'logradouro' => $this->input->post('logradouro'),
+            'numero' => $this->input->post('numero'),
+            'bairro' => $this->input->post('bairro'),
+            'cidade' => $this->input->post('cidade'),
+            'uf' => $this->input->post('uf'),
+            'email' => $this->input->post('email'),
+            'telefone' => $this->input->post('telefone'),
+        );
+
+        if ($this->mxcode_model->edit('usuarios', $data, 'id_usuarios', $this->input->post('id_usuarios')) == true) {
+            $this->session->set_flashdata('sucesso', 'Perfil de usuário atualizado com sucesso!');
+            redirect(base_url() . 'mxcode/minhaConta/');
+        } else {
+            $this->session->set_flashdata('sucesso', 'Ocorreu um erro ao atualizar perfil de usuário.');
+            redirect(base_url() . 'mxcode/minhaConta/');
         }
 
     }
