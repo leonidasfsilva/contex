@@ -439,6 +439,7 @@ class Mxcode extends CI_Controller
             'nome' => $this->input->post('nome'),
             'rg' => $this->input->post('rg'),
             'cpf' => $this->input->post('cpf'),
+            'cep' => $this->input->post('cep'),
             'logradouro' => $this->input->post('logradouro'),
             'numero' => $this->input->post('numero'),
             'bairro' => $this->input->post('bairro'),
