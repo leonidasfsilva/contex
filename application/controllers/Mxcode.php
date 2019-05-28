@@ -444,7 +444,7 @@ class Mxcode extends CI_Controller
             'bairro' => $this->input->post('bairro'),
             'cidade' => $this->input->post('cidade'),
             'uf' => $this->input->post('uf'),
-            'email' => $this->input->post('email'),
+//            'email' => $this->input->post('email'),
             'telefone' => $this->input->post('telefone'),
         );
 
