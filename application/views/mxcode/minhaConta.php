@@ -110,7 +110,7 @@
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label for="email" class="font-weight-bold">Email *</label>
-                            <input type="text" class="form-control" id="email" name="email" value="<?php echo $dados->email; ?>"/>
+                            <input type="text" class="form-control" id="email" name="email" value="<?php echo $dados->email; ?>" disabled/>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="telefone" class="font-weight-bold">Telefone</label>
