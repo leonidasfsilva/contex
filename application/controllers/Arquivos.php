@@ -5,18 +5,12 @@
 class Arquivos extends CI_Controller
 {
 
-    /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     *
-     */
-
     public function __construct()
     {
         parent::__construct();
 
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
+            redirect('mxcode/login');
         }
 
         $this->load->helper(array('codegen_helper'));

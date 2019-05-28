@@ -271,7 +271,7 @@ class Os extends CI_Controller
         }
 
         $this->data['custom_error'] = '';
-        $this->load->model('mapos_model');
+        $this->load->model('Mxcode_model');
         $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
@@ -296,7 +296,7 @@ class Os extends CI_Controller
         }
 
         $this->data['custom_error'] = '';
-        $this->load->model('mapos_model');
+        $this->load->model('Mxcode_model');
         $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
@@ -634,7 +634,7 @@ class Os extends CI_Controller
                 'tipo' => $this->input->post('tipo')
             );
 
-            if ($this->os_model->add('lancamentos', $data) == true) {
+            if ($this->os_model->add('Poupanca', $data) == true) {
 
                 $os = $this->input->post('os_id');
 

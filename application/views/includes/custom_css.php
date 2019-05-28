@@ -77,4 +77,9 @@
     /*    font-family: FontAwesome;*/
     /*    content: "\f00d";*/
     /*}*/
+
+    .user-avatar {
+        width: 128px;
+        height: 128px;
+    }
 </style>

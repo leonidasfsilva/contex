@@ -3,19 +3,12 @@
 class Usuarios extends CI_Controller
 {
 
-
-    /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     *
-     */
-
     function __construct()
     {
 
         parent::__construct();
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
+            redirect('mxcode/login');
         }
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar os usuários.');
@@ -26,6 +19,7 @@ class Usuarios extends CI_Controller
         $this->load->model('usuarios_model', '', true);
         $this->data['menuUsuarios'] = 'Usuários';
         $this->data['menuConfiguracoes'] = 'Configurações';
+
     }
 
     function index()
@@ -37,7 +31,6 @@ class Usuarios extends CI_Controller
     {
 
         $this->load->library('pagination');
-
 
         $config['base_url'] = base_url() . 'usuarios/gerenciar/';
         $config['total_rows'] = $this->usuarios_model->count('usuarios');
@@ -208,6 +201,7 @@ class Usuarios extends CI_Controller
 
 
     }
+    
 
     public function excluir()
     {

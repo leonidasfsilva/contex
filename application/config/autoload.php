@@ -70,7 +70,7 @@ $autoload['libraries'] = array(
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('url');
+$autoload['helper'] = array('url', 'codegen_helper', 'mpdf_helper');
 
 
 /*

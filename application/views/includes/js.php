@@ -6,6 +6,9 @@
 
 <!--<script src="--><?php //echo base_url(); ?><!--assets/plugins/pines-notify/pnotify.min.js"></script>-->
 <script src="<?php echo base_url(); ?>assets/plugins/jquery-notific8/jquery.notific8.js"></script>         <!-- Load Notific8 -->
+<script src="<?php echo base_url(); ?>assets/plugins/jquery-cropper/js/cropper.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/jquery-cropper/js/jquery-cropper.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/jquery-cropper/js/cropper-main.js"></script>
 
 <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-switch/bootstrap-switch.js"></script>         <!-- Load Bootstrap Switch JS -->
 

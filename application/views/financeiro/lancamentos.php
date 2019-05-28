@@ -2,35 +2,14 @@
 $periodo = $this->input->get('periodo');
 ?>
 
-<style type="text/css">
-
-    label.error {
-        color: #b94a48;
-    }
-
-    input.error {
-        border-color: #b94a48;
-    }
-
-    input.valid {
-        border-color: #5bb75b;
-    }
-
-    table {
-        font-family: Arial;
-        font-size: 11px;
-    }
-
-</style>
-
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h2 style="font-size: 12pt">
             <i class="fa fa-line-chart fa-lg fa-fw"></i>
-            Controle de Lançamentos
+            Conta Corrente
         </h2>
         <div class="panel-ctrls">
-            <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar faturas">
+            <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar lançamentos">
                 <i class="fa fa-filter fa-fw"></i>
                 Filtrar
             </button>
@@ -314,7 +293,7 @@ $periodo = $this->input->get('periodo');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Registrar nova entrada</h4>
             </div>
-            <form id="formReceita" action="<?php echo base_url() ?>financeiro/lancamentos/receita" method="post" autocomplete="off">
+            <form id="formReceita" action="<?php echo base_url() ?>financeiro/contaCorrente/receita" method="post" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
@@ -385,7 +364,7 @@ $periodo = $this->input->get('periodo');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Registrar nova saída</h4>
             </div>
-            <form id="formDespesa" action="<?php echo base_url() ?>financeiro/lancamentos/despesa" method="post" autocomplete="off">
+            <form id="formDespesa" action="<?php echo base_url() ?>financeiro/contaCorrente/despesa" method="post" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
@@ -455,7 +434,7 @@ $periodo = $this->input->get('periodo');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Detalhes do lançamento</h4>
             </div>
-            <form id="formEditar" action="<?php echo base_url() ?>financeiro/lancamentos/editar" method="post">
+            <form id="formEditar" action="<?php echo base_url() ?>financeiro/contaCorrente/editar" method="post">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
@@ -533,7 +512,7 @@ $periodo = $this->input->get('periodo');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Excluir lançamento</h4>
             </div>
-            <form id="formNovaFatura" action="<?php echo base_url(); ?>financeiro/lancamentos/excluir" method="post">
+            <form id="formExcluir" action="<?php echo base_url(); ?>financeiro/contaCorrente/excluir" method="post">
                 <div class="modal-body">
                     <p>Deseja realmente excluir este lançamento?</p>
                     <input id="idExcluir" type="hidden" name="id" value=""/>

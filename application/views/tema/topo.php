@@ -100,7 +100,7 @@
         <ul class="nav navbar-nav">
             <!--    MEGAMENU-->
             <li class="dropdown">
-<!--                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Megamenu<span class="caret"></span></a>-->
+                <!--                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Megamenu<span class="caret"></span></a>-->
                 <ul class="dropdown-menu" style="width: 900px;">
                     <li>
                         <div class="yamm-content container-sm-height">
@@ -164,7 +164,7 @@
                                 </div>
                                 <div class="col-sm-3 col-sm-height yamm-col">
                                     <h3 class="yamm-category">Rem</h3>
-                                    <img src="assets/demo/stockphoto/communication_12_carousel.jpg" class="mb20 img-responsive" style="width: 100%;">
+                                    <img src="#" class="mb20 img-responsive" style="width: 100%;">
                                     <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. totam rem aperiam eaque ipsa quae ab illo
                                         inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
                                 </div>
@@ -177,7 +177,7 @@
 
             <!--    DROPDOWN-->
             <li class="dropdown" id="widget-classicmenu">
-<!--                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<span class="caret"></span></a>-->
+                <!--                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<span class="caret"></span></a>-->
                 <ul class="dropdown-menu" role="menu">
                     <li><a href="#">Action</a></li>
                     <li><a href="#">Another action</a></li>
@@ -195,11 +195,11 @@
     <!--    TOP NAVBAR-->
     <ul class="nav navbar-nav toolbar pull-right">
         <li class="dropdown toolbar-icon-bg">
-<!--            <a href="#" id="navbar-links-toggle" data-toggle="collapse" data-target="header>.navbar-collapse" data-placement="bottom" title="Exibir Menu Superior">-->
-<!--				<span class="icon-bg">-->
-<!--					<i class="fa fa-fw fa-chevron-down"></i>-->
-<!--				</span>-->
-<!--            </a>-->
+            <!--            <a href="#" id="navbar-links-toggle" data-toggle="collapse" data-target="header>.navbar-collapse" data-placement="bottom" title="Exibir Menu Superior">-->
+            <!--				<span class="icon-bg">-->
+            <!--					<i class="fa fa-fw fa-chevron-down"></i>-->
+            <!--				</span>-->
+            <!--            </a>-->
         </li>
 
         <!--        BUSCA-->
@@ -320,7 +320,7 @@
                     <ul class="scroll-content">
                         <li class="">
                             <a href="#">
-                                <img class="msg-avatar" src="assets/demo/avatar/avatar_09.png" alt="avatar"/>
+                                <img class="msg-avatar" src="<?php echo base_url() ?>assets/demo/avatar/avatar_09.png" alt="avatar"/>
                                 <div class="msg-content">
                                     <span class="name">Steven Shipe</span>
                                     <span class="msg">Nonummy nibh epismod lorem ipsum</span>
@@ -330,7 +330,7 @@
                         </li>
                         <li>
                             <a href="#">
-                                <img class="msg-avatar" src="assets/demo/avatar/avatar_01.png" alt="avatar"/>
+                                <img class="msg-avatar" src="<?php echo base_url() ?>assets/demo/avatar/avatar_01.png" alt="avatar"/>
                                 <div class="msg-content">
                                     <span class="name">Roxann Hollingworth <i class="fa fa-paperclip attachment"></i></span>
                                     <span class="msg">Lorem ipsum dolor sit amet consectetur adipisicing elit</span>
@@ -340,7 +340,7 @@
                         </li>
                         <li>
                             <a href="#">
-                                <img class="msg-avatar" src="assets/demo/avatar/avatar_05.png" alt="avatar"/>
+                                <img class="msg-avatar" src="<?php echo base_url() ?>assets/demo/avatar/avatar_05.png" alt="avatar"/>
                                 <div class="msg-content">
                                     <span class="name">Diamond Harlands</span>
                                     <span class="msg">:)</span>
@@ -350,7 +350,7 @@
                         </li>
                         <li>
                             <a href="#">
-                                <img class="msg-avatar" src="assets/demo/avatar/avatar_02.png" alt="avatar"/>
+                                <img class="msg-avatar" src="<?php echo base_url() ?>assets/demo/avatar/avatar_02.png" alt="avatar"/>
                                 <div class="msg-content">
                                     <span class="name">Michael Serio <i class="fa fa-paperclip attachment"></i></span>
                                     <span class="msg">Sed distinctio dolores fuga molestiae modi?</span>
@@ -360,7 +360,7 @@
                         </li>
                         <li>
                             <a href="#">
-                                <img class="msg-avatar" src="assets/demo/avatar/avatar_03.png" alt="avatar"/>
+                                <img class="msg-avatar" src="<?php echo base_url() ?>assets/demo/avatar/avatar_03.png" alt="avatar"/>
                                 <div class="msg-content">
                                     <span class="name">Matt Jones</span>
                                     <span class="msg">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et mole</span>
@@ -370,7 +370,7 @@
                         </li>
                         <li>
                             <a href="#">
-                                <img class="msg-avatar" src="assets/demo/avatar/avatar_07.png" alt="avatar"/>
+                                <img class="msg-avatar" src="<?php echo base_url() ?>assets/demo/avatar/avatar_07.png" alt="avatar"/>
                                 <div class="msg-content">
                                     <span class="name">John Doe</span>
                                     <span class="msg">Neque porro quisquam est qui dolorem</span>
@@ -491,12 +491,15 @@
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
                                     <li class="<?= (isset($menuFinanceiro)) ? 'active' : ''; ?>">
-                                        <a href="javascript:;"><i class="fa fa-dollar fa-fw"></i>
+                                        <a href="javascript:"><i class="fa fa-dollar fa-fw"></i>
                                             <span>Financeiro</span>
                                         </a>
-                                        <ul class="acc-menu">
+                                        <ul class="acc-menu sub-menu">
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
-                                                <li><a href="<?php echo base_url() ?>financeiro/lancamentos">Lançamentos</a></li>
+                                                <li><a href="<?php echo base_url() ?>financeiro/contaCorrente">Conta Corrente</a></li>
+                                            <?php } ?>
+                                            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPoupanca')) { ?>
+                                                <li><a href="<?php echo base_url() ?>financeiro/contaPoupanca">Conta Poupança</a></li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) { ?>
                                                 <li><a href="<?php echo base_url() ?>financeiro/faturas">Faturas</a></li>
@@ -504,16 +507,13 @@
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPendencias')) { ?>
                                                 <li><a href="<?php echo base_url() ?>financeiro/pendencias">Pendências</a></li>
                                             <?php } ?>
-                                            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPoupanca')) { ?>
-                                                <li><a href="javascript:" class="poupanca">Poupança</a></li>
-                                            <?php } ?>
                                         </ul>
                                     </li>
                                 <?php } ?>
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rCliente') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rProduto') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rServico') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rOs') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rVenda')) { ?>
                                     <li class="<?= (isset($menuRelatorios)) ? 'active' : ''; ?>">
-                                        <a href="javascript:;"><i class="fa fa-list-alt fa-fw"></i>
+                                        <a href="javascript:"><i class="fa fa-list-alt fa-fw"></i>
                                             <span>Relatórios</span>
                                         </a>
                                         <ul class="acc-menu">
@@ -544,7 +544,7 @@
                                     $this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao') ||
                                     $this->permission->checkPermission($this->session->userdata('permissao'), 'cBackup')) { ?>
                                     <li class="<?= (isset($menuConfiguracoes)) ? 'active' : ''; ?>">
-                                        <a href="javascript:;"><i class="fa fa-cogs fa-fw"></i>
+                                        <a href="javascript:"><i class="fa fa-cogs fa-fw"></i>
                                             <span>Config. do Sistema</span>
                                         </a>
                                         <ul class="acc-menu">
@@ -579,25 +579,38 @@
                     <!--                    BREADCRUMB-->
                     <ol class="breadcrumb">
                         <li class="">
-                            <a href="<?= base_url() ?>">
+                            <a href="<?= base_url() ?>" title="Painel Inicial">
                                 Painel Inicial
                             </a>
                         </li>
-                        <?php if ($this->uri->segment(1) != null) { ?>
+                        <?php if ($this->uri->segment(1)) { ?>
                             <li class="active">
-                                <a href="<?= base_url() . '' . $this->uri->segment(1) ?>" class="tip-bottom"
+                                <a href="<?= base_url() . '' . $this->uri->segment(1) ?>"
                                    title="<?php echo ucfirst($this->uri->segment(1)); ?>">
                                     <?= ucfirst($this->uri->segment(1)); ?>
                                 </a>
                             </li>
-                            <li>
-                                <?php if ($this->uri->segment(2) != null) { ?>
-                                    <a href="<?php echo base_url() . '' . $this->uri->segment(1) . '/' . $this->uri->segment(2) . '/' . $this->uri->segment(3) ?>"
-                                       class="current tip-bottom" title="<?php echo ucfirst($this->uri->segment(2)); ?>">
+                            <?php if ($this->uri->segment(2)) { ?>
+                                <li>
+                                    <a href="<?php echo base_url() . '' . $this->uri->segment(1) . '/' . $this->uri->segment(2) ?>"
+                                       title="<?php echo ucfirst($this->uri->segment(2)); ?>">
                                         <?php echo ucfirst($this->uri->segment(2)); ?>
                                     </a>
-                                <?php } ?>
-                            </li>
+                                </li>
+                            <?php } ?>
+                            <?php if ($this->uri->segment(3)) { ?>
+                                <li>
+                                    <a href="<?php echo base_url() . '' . $this->uri->segment(1) . '/' . $this->uri->segment(2) . '/' . $this->uri->segment(3) ?>"
+                                       title="<?php echo ucfirst($this->uri->segment(3)); ?>">
+                                        <?php echo ucfirst($this->uri->segment(3)); ?>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <?php if ($this->uri->segment(4)) { ?>
+                                <li>
+                                    ...
+                                </li>
+                            <?php } ?>
                         <?php } ?>
                     </ol>
 
@@ -633,14 +646,13 @@
                     <div class="clearfix">
                         <ul class="list-unstyled list-inline pull-left pl-sm">
                             <a href="https://mxcode.net" target="_blank">
-                                <li><h6 style="margin: 0;">CONTEX - Sistema de Gestão <?php echo date('Y'); ?> &copy; MX Code Sistemas - Leônidas Ferreira</h6></li>
+                                <li><h6 style="margin: 0;">CONTEX - Sistema de Gestão &copy; <?php echo date('Y'); ?> MX Code Sistemas - Leônidas Ferreira</h6></li>
                             </a>
                         </ul>
                         <button class="pull-right btn btn-link btn-xs hidden-print" id="back-to-top"><i class="fa fa-arrow-up"></i></button>
                     </div>
                 </footer>
                 <!--                FOOTER-->
-
             </div>
         </div>
     </div>

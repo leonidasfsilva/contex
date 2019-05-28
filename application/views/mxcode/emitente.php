@@ -131,31 +131,33 @@
                 </a>
             </div>
         </div>
-        <div class="panel-body">
-            <table class="table table-bordered">
-                <tbody>
-                <tr>
-                    <td style="width: 25%; padding: 15px">
-                        <?php if ($dados->logomarca) { ?>
-                            <img style="width: 200px" src="<?php echo base_url() .'assets/uploads/logomarcas/'. $dados->logomarca; ?> ">
-                        <?php } else { ?>
-                            <p class="alert alert-inverse">
-                                Nenhuma logomarca cadastrada
-                            </p>
-                        <?php } ?>
-                    </td>
-                    <td>
-                        <span style="font-size: 18px; "><?php echo $dados->emitente; ?></span>
-                        <br>
-                        <span>CNPJ: <?php echo $dados->cnpj; ?></span>
-                        <br>
-                        <span><?php echo $dados->logradouro . ', ' . $dados->numero . ', ' . $dados->bairro . ' - ' . $dados->cidade . ' / ' . $dados->uf; ?> </span>
-                        <br>
-                        <span> Email: <?php echo $dados->email . ' - Fone: ' . $dados->telefone; ?></span>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+        <div class="panel-body panel-no-padding">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                        <td style="width: 30%; padding: 15px">
+                            <?php if ($dados->logomarca) { ?>
+                                <img style="width: 150px" src="<?php echo base_url() . 'assets/uploads/logomarcas/' . $dados->logomarca; ?> ">
+                            <?php } else { ?>
+                                <p class="alert alert-inverse">
+                                    Nenhuma logomarca cadastrada
+                                </p>
+                            <?php } ?>
+                        </td>
+                        <td style="padding: 15px">
+                            <span style="font-size: 18px; "><?php echo $dados->emitente; ?></span>
+                            <br>
+                            <span>CNPJ: <?php echo $dados->cnpj; ?></span>
+                            <br>
+                            <span><?php echo $dados->logradouro . ', ' . $dados->numero . ', ' . $dados->bairro . ' - ' . $dados->cidade . ' / ' . $dados->uf; ?> </span>
+                            <br>
+                            <span> Email: <?php echo $dados->email . ' - Fone: ' . $dados->telefone; ?></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
             <div class="panel-footer">
                 <p class="alert alert-info">
                     <i class="fa fa-exclamation-circle fa-lg fa-fw"></i>
@@ -271,9 +273,9 @@
                     </div>
                     <div class="modal-footer">
                         <?php if ($dados->logomarca) { ?>
-                        <a href="#modalExcluirLogo" data-toggle="modal" class="btn btn-danger btn-sm pull-left">
-                            <i class="fa fa-trash-o fa-fw"></i> Excluir Logo
-                        </a>
+                            <a href="#modalExcluirLogo" data-toggle="modal" class="btn btn-danger btn-sm pull-left">
+                                <i class="fa fa-trash-o fa-fw"></i> Excluir Logo
+                            </a>
                         <?php } ?>
                         <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                             <i class="fa fa-times fa-fw"></i> Cancelar

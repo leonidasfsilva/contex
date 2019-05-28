@@ -3,24 +3,16 @@
 class Produtos extends CI_Controller
 {
     
-    /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     *
-     */
-    
     function __construct()
     {
         parent::__construct();
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
+            redirect('mxcode/login');
         }
 
         $this->load->helper(array('form', 'codegen_helper'));
         $this->load->model('produtos_model', '', true);
         $this->data['menuProdutos'] = 'Produtos';
-        $this->id_usuario = $this->session->userdata('id');
-
     }
 
     function index()
@@ -64,7 +56,7 @@ class Produtos extends CI_Controller
         
         $this->pagination->initialize($config);
 
-        $this->data['results'] = $this->produtos_model->get('produtos', 'idProdutos,descricao,unidade,precoCompra,precoVenda,estoque,estoqueMinimo', '', $this->id_usuario, $config['per_page'], $this->uri->segment(3));
+        $this->data['results'] = $this->produtos_model->get('produtos', 'idProdutos,descricao,unidade,precoCompra,precoVenda,estoque,estoqueMinimo', '', id_usuario(), $config['per_page'], $this->uri->segment(3));
        
         $this->data['view'] = 'produtos/produtos';
         $this->load->view('tema/topo', $this->data);
@@ -105,7 +97,7 @@ class Produtos extends CI_Controller
                 'estoqueMinimo' => set_value('estoqueMinimo'),
                 'saida' => set_value('saida'),
                 'entrada' => set_value('entrada'),
-                'id_usuario' => $this->id_usuario
+                'id_usuario' => id_usuario()
             );
 
             if ($this->produtos_model->add('produtos', $data) == true) {

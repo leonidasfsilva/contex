@@ -5,7 +5,6 @@
 class Redefinirsenha extends CI_Controller
 {
 
-
     /**
      * author: Leônidas Ferreira
      * email: leonidas.f.silva@hotmail.com
@@ -16,10 +15,7 @@ class Redefinirsenha extends CI_Controller
     {
         parent::__construct();
         $this->load->model('redefinicao_model', '', true);
-        $this->load->helper(array('codegen_helper'));
         $this->load->library('form_validation');
-        $this->id_usuario = $this->session->userdata('id');
-
     }
 
     public function index($data = null)
@@ -28,7 +24,7 @@ class Redefinirsenha extends CI_Controller
             redirect('mxcode/login');
         }
 //        redirect('redefinirsenha/');
-        $this->load->view('mapos/redefinir_senha', $data);
+        $this->load->view('mxcode/redefinir_senha', $data);
 
     }
 
@@ -86,53 +82,96 @@ class Redefinirsenha extends CI_Controller
                     //AUTO RESPOSTA
                     $headers_ = "MIME-Version: 1.0\r\n";
                     $headers_ .= "Content-type: text/html; charset=utf-8\r\n";
-                    $headers_ .= "From: naoresponda@mxcode.net\r\n";
-                    $assunto_resposta = "Redefinição de senha";
+                    $headers_ .= "From: nao-responda@mxcode.net\r\n";
+                    $assunto_resposta = "CONTEX - Redefinição de senha";
 
                     $msg_resposta = '
-                <p>Olá, ' . $nomeremetente . '!</p>
-                <p>Recebemos um pedido para alteração de sua senha de cadastro em nosso sistema.
-                <br />
-                Origem da solicitação:
-                <br />
-                IP: ' . $ip . '
-                <br />
-                Navegador: ' . $navegador . '
-                <br />
-                Data e hora: ' . $date . '
-                <br />
-                <br />
-                Caso você tenha solicitado a troca de sua senha, clique no botão abaixo:
-                <br />
-                <br />
-                <table width="100%" cellspacing="0" cellpadding="0">
-                    <tr>
-                        <td>
-                            <table cellspacing="0" cellpadding="0">
-                                <tr>
-                                    <td style="border-radius: 2px;" bgcolor="#ED2939">
-                                        <a href="' . $link . '" target="_blank" style="padding: 8px 12px; border: 1px solid #ED2939;border-radius: 2px;font-family: Helvetica, Arial, sans-serif;font-size: 14px; color: #ffffff;text-decoration: none;font-weight:bold;display: inline-block;">
-                                            Redefinir minha senha         
-                                        </a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-                <br />
-                <p>Por questões de segurança, este link só estará válido por alguns minutos, caso seu link tenha expirado, faça uma nova solicitação clicando no botão <strong>Esqueci minha senha</strong></a> na página inicial do sistema.
-                <br />
-                Caso não tenha solicitado a troca de sua senha, por favor, desconsidere e exclua este email, nenhuma outra ação é necessária. Não se preocupe, sua conta está segura.
-                <br />
-                <p>Caso necessite de suporte específico, contate-nos em <a href="mailto:suporte@mxcode.net?Subject=Solicitação de suporte" target="_top"><strong>suporte@mxcode.net</strong></a>
-                <br />
-                <p>Atenciosamente,</p>
-                <h3><strong>Equipe MX Code Sistemas.</strong></h3>
-                <a href="https://mxcode.net" target="_blank"><strong>https://mxcode.net</strong></a><br />
-                <br />_________________________________________________________________________
-                <br />
-                Não é necessário responder este e-mail, mensagem automática.';
+<html>
+<head>
+<style>
+#inner_table {
+  border: 2px solid lightgray;
+  border-radius: 10px;
+}
+td {
+  padding: 0px 20px 20px 20px;
+  text-align: left;    
+}
+</style>
+</head>
+<body>
+<table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="white">
+	<tbody>
+		<tr>
+          <td valign="top" width="100%">
+            <table id="inner_table" align="center" cellpadding="0" cellspacing="0" border="0" align="center">
+              <tr>
+                <td colspan="2" style="border-bottom: 4px solid #0098da; padding: 20px 20px 20px 20px;">
+                  <img src="https://mxcode.net/contex/assets/img/contex_brand.png" alt="CONTEX - Sistema de Gestão" style="width:120px;">
+                </td>
+              </tr>
+              <tr>
+                <td style="padding-top: 20px">
+                  <span style="font-size: 16pt;">Olá, ' . $nomeremetente . '!</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span>Recebemos uma solicitação de alteração de senha para seu cadastro em nosso sistema.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span>Origem da solicitação:
+                    <br />
+                    IP: ' . $ip . '
+                    <br />
+                    Navegador: ' . $navegador . '
+                    <br />
+                    Data e hora: ' . $date . '
+                    <br />
+                    <br />
+                    Caso você tenha solicitado a troca de sua senha, clique no botão abaixo:</span>
+                </td>
+              </tr>
+              <tr>
+                <td style="border-radius: 3px; padding: 20px 20px 40px 20px; text-align: left">
+                  <a href="' . $link . '" target="_blank" style="padding: 10px 30px; background-color:#0098da; border: 1px solid #0098da;border-radius: 3px;font-family: Helvetica, Arial, sans-serif;font-size: 14px; color: #ffffff;text-decoration: none;font-weight:bold;display: inline-block;">
+                    REDEFINIR SENHA         
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <p>Por questões de segurança, este link só estará válido por alguns minutos, caso este link já tenha expirado, efetue uma nova solicitação clicando no botão <strong>Esqueci minha senha</strong> na página inicial do sistema.</p>
+                  <p>Caso não tenha solicitado a troca de sua senha, por favor, desconsidere e exclua este email, nenhuma outra ação é necessária. Não se preocupe, sua conta está segura.</p>
+                  <p>Caso necessite de suporte para o sistema Contex, contate-nos em <a href="mailto:suporte@mxcode.net?Subject=Solicitação de suporte" target="_top"><strong>suporte@mxcode.net</strong></a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span>Atenciosamente,</span>
+                  <br>
+                  <span style="font-size: 14pt"><strong>Equipe MX Code Sistemas</strong></span>
+                  <br>
+                  <a href="https://mxcode.net/contex" target="_blank"><p><strong>https://mxcode.net/contex</strong></a><br>CONTEX - Sistema de Gestão</p>
+                </td>
+              </tr>
+              <tr>
+                <td style="border-top: 2px dotted #0098da; padding-top: 20px">
+                  <p style="font-size:10pt; color: gray">
+                  Não é necessário responder este e-mail, mensagem automática.
+                  <p>
+                </td>
+              </tr>
+            </table>
+          </td>
+		</tr>
+	</tbody>
+  </table>                
+</body>
+</html>
+                ';
 
                     mail($emailremetente, $assunto_resposta, $msg_resposta, $headers_);
 
@@ -230,8 +269,8 @@ class Redefinirsenha extends CI_Controller
         } else {
             $id = (int)$this->input->post('id');
             $token = $this->input->post('token');
-            $novasenha = $this->input->post('novasenha');
-            $repitasenha = $this->input->post('repitasenha');
+            $novasenha = $this->input->post('novaSenha');
+            $repitasenha = $this->input->post('confirmarSenha');
 
             if (($token != null) && ($id != null)) {
 
@@ -248,52 +287,38 @@ class Redefinirsenha extends CI_Controller
                     $validade = 30;
 
                     if (isset($result->validade) && $result->validade < $validade) {
-                        $this->form_validation->set_error_delimiters('<div class="alert alert-danger alert-dismissible small font-weight-bold" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> ', '</div>');
-                        $this->form_validation->set_rules('novasenha', '"Nova senha"', 'required|min_length[6]');
-//                        $this->form_validation->set_rules('repitasenha', '"Confirme nova senha"', 'required|min_length[6]');
 
                         $query = $this->redefinicao_model->getDadosUsuarioById($resultToken->id_usuario);
                         $result = $query->row();
 
-                        if ($this->form_validation->run() == FALSE) {
+                        if (($novasenha != null) && ($repitasenha != null) && ($novasenha == $repitasenha)) {
                             $data = array(
+                                'senha' => password_hash($repitasenha, PASSWORD_DEFAULT)
+                            );
+
+                            $this->redefinicao_model->atualizaAdmin($resultToken->id_usuario, $data);
+                            $this->redefinicao_model->invalidaToken($id);
+                            $this->session->set_flashdata('sucesso', 'Senha alterada com sucesso!');
+                            redirect('mxcode/login');
+
+                        } elseif (($novasenha != null) && ($repitasenha != null) && ($novasenha != $repitasenha)) {
+                            $data3 = array(
                                 'id' => $id,
                                 'nome' => $result->nome,
                                 'token' => $token,
+                                'senhaAlterada' => false
                             );
-                            $this->load->view('mapos/redefinir_senha', $data);
+                            $this->session->set_flashdata('erro', 'As senhas não correspondem.');
+                            $this->load->view('mxcode/redefinir_senha', $data3);
 
                         } else {
+                            $this->session->set_flashdata(
+                                'erro',
+                                'Link de redefinição de senha expirado. Solicite um novo link clicando no botão <a href="javascript:" onclick="recuperar_senha()">Esqueci minha senha</a>.');
+                            redirect('mxcode/login');
 
-                            if (($novasenha != null) && ($repitasenha != null) && ($novasenha == $repitasenha)) {
-                                $data = array(
-                                    'senha' => password_hash($repitasenha, PASSWORD_DEFAULT)
-                                );
-
-                                $this->redefinicao_model->atualizaAdmin($resultToken->id_usuario, $data);
-                                $this->redefinicao_model->invalidaToken($id);
-                                $this->session->set_flashdata('sucesso', 'Senha alterada com sucesso!');
-                                redirect('mxcode/login');
-
-                            } elseif (($novasenha != null) && ($repitasenha != null) && ($novasenha != $repitasenha)) {
-                                $data3 = array(
-                                    'id' => $id,
-                                    'nome' => $result->nome,
-                                    'token' => $token,
-                                    'senhaAlterada' => false
-                                );
-                                $this->session->set_flashdata('erro', 'As senhas não correspondem.');
-                                $this->load->view('mapos/redefinir_senha', $data3);
-
-                            } else {
-                                $this->session->set_flashdata(
-                                    'erro',
-                                    'Link de redefinição de senha expirado. Solicite um novo link clicando no botão <a href="javascript:" onclick="recuperar_senha()">Esqueci minha senha</a>.');
-                                redirect('mxcode/login');
-
-                            }
                         }
+
                     } else {
                         $this->session->set_flashdata(
                             'erro',

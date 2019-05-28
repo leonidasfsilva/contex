@@ -3,23 +3,15 @@
 class Clientes extends CI_Controller
 {
 
-    /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     *
-     */
-
     function __construct()
     {
         parent::__construct();
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
+            redirect('mxcode/login');
         }
-        $this->load->helper(array('codegen_helper'));
         $this->load->model('clientes_model', '', true);
         $this->load->model('pendencia_model', '', true);
         $this->data['menuClientes'] = 'clientes';
-        $this->id_usuario = $this->session->userdata('id');
     }
 
     function index()
@@ -120,7 +112,7 @@ class Clientes extends CI_Controller
             redirect(base_url());
         }
 
-        $verificacao = $this->clientes_model->verificaClienteUsuario($id, $this->id_usuario);
+        $verificacao = $this->clientes_model->verificaClienteUsuario($id, id_usuario());
 
         if($verificacao == 0) {
             $this->session->set_flashdata('erro', 'Cliente não encontrado para este usuário');
@@ -166,7 +158,7 @@ class Clientes extends CI_Controller
             redirect(base_url());
         }
 
-        $verificacao = $this->clientes_model->verificaClienteUsuario($id, $this->id_usuario);
+        $verificacao = $this->clientes_model->verificaClienteUsuario($id, id_usuario());
 
         if($verificacao == 0) {
             $this->session->set_flashdata('erro', 'Cliente não encontrado para este usuário');
@@ -176,8 +168,8 @@ class Clientes extends CI_Controller
         $this->data['custom_error'] = '';
         $this->data['result'] = $this->clientes_model->getById($id);
         $this->data['os'] = $this->clientes_model->getOsByCliente($id);
-        $this->data['total_credito'] = $this->pendencia_model->getPendenciasTotalCredito($this->id_usuario);
-        $this->data['total_debito'] = $this->pendencia_model->getPendenciasTotalDebito($this->id_usuario);
+        $this->data['total_credito'] = $this->clientes_model->getPendenciasCreditoCliente(id_usuario(), $id);
+        $this->data['total_debito'] = $this->clientes_model->getPendenciasDebitoCliente(id_usuario(), $id);
         $this->data['pendencias'] = $this->clientes_model->getPendenciasByCliente($id);
         $this->data['view'] = 'clientes/visualizar';
         $this->load->view('tema/topo', $this->data);

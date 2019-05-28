@@ -43,7 +43,7 @@ class Vendas_model extends CI_Model
         $this->db->from('vendas');
         $this->db->join('clientes', 'clientes.idClientes = vendas.clientes_id');
         $this->db->join('usuarios', 'usuarios.id_usuarios = vendas.usuarios_id');
-        $this->db->join('lancamentos', 'vendas.idVendas = lancamentos.vendas_id', 'LEFT');
+        $this->db->join('Poupanca', 'vendas.idVendas = lancamentos.vendas_id', 'LEFT');
         $this->db->where('vendas.idVendas', $id);
         $this->db->limit(1);
         return $this->db->get()->row();

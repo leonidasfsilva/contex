@@ -4,24 +4,17 @@
 
 class Relatorios extends CI_Controller
 {
-
-
-    /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     *
-     */
     
     public function __construct()
     {
         parent::__construct();
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
+            redirect('mxcode/login');
         }
         
         $this->load->model('Relatorios_model', '', true);
         $this->load->model('Usuarios_model', '', true);
-        $this->load->model('Mapos_model', '', true);
+        $this->load->model('Mxcode_model', '', true);
         $this->load->helper('mpdf');
 
         $this->data['menuRelatorios'] = 'Relatórios';
@@ -273,7 +266,7 @@ class Relatorios extends CI_Controller
             redirect(base_url());
         }
 
-        $data['lancamentos'] = $this->Relatorios_model->financeiroRapid();
+        $data['Poupanca'] = $this->Relatorios_model->financeiroRapid();
 
         $this->load->helper('mpdf');
         $html = $this->load->view('relatorios/imprimir/imprimirFinanceiro', $data, true);
@@ -294,7 +287,7 @@ class Relatorios extends CI_Controller
         $tipo = $this->input->get('tipo');
         $situacao = $this->input->get('situacao');
 
-        $data['lancamentos'] = $this->Relatorios_model->financeiroCustom($dataInicial, $dataFinal, $tipo, $situacao);
+        $data['Poupanca'] = $this->Relatorios_model->financeiroCustom($dataInicial, $dataFinal, $tipo, $situacao);
         $html = $this->load->view('relatorios/imprimir/imprimirFinanceiro', $data, true);
 //        print_array($data['lancamentos']);
 //        exit;

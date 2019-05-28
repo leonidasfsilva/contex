@@ -1,6 +1,6 @@
 <?php
 
-class Mapos_model extends CI_Model
+class Mxcode_model extends CI_Model
 {
 
     function __construct()
@@ -182,5 +182,14 @@ class Mapos_model extends CI_Model
         $this->db->where('status', 1);
         $this->db->limit(1);
         return $this->db->get('usuarios')->row();
+    }
+
+    function gravaLog($data)
+    {
+        $this->db->insert('logs', $data);
+        if ($this->db->affected_rows() == 1) {
+            return true;
+        }
+        return false;
     }
 }

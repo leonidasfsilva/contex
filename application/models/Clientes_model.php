@@ -92,7 +92,28 @@ class Clientes_model extends CI_Model
 
     public function verificaClienteUsuario($id, $id_usuario)
     {
-        $this->db->where('id_clientes = ' . $id . ' AND id_usuario = ' . $id_usuario.' AND status = 1');
+        $this->db->where('id_clientes = ' . $id . ' AND id_usuario = ' . $id_usuario . ' AND status = 1');
         return $this->db->get('clientes')->num_rows();
     }
+
+    function getPendenciasCreditoCliente($id_usuario, $id_cliente)
+    {
+        $this->db
+            ->select('SUM(valor) AS total')
+            ->from('pendencias')
+            ->where('status = 1 AND tipo = 1 AND quitado = 0 AND id_usuario  = ' . $id_usuario . ' AND id_cliente =' . $id_cliente);
+
+        return $this->db->get()->row();
+    }
+
+    function getPendenciasDebitoCliente($id_usuario, $id_cliente)
+    {
+        $this->db
+            ->select('SUM(valor) AS total')
+            ->from('pendencias')
+            ->where('status = 1 AND tipo = 2 AND quitado = 0 AND id_usuario  = ' . $id_usuario . ' AND id_cliente =' . $id_cliente);
+
+        return $this->db->get()->row();
+    }
+
 }

@@ -8,12 +8,9 @@ class Mxcode extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('mapos_model', '', true);
+        $this->load->model('mxcode_model', '', true);
         $this->load->helper('file');
         $this->load->library('upload');
-        $this->load->helper(array('codegen_helper'));
-        $this->id_usuario = $this->session->userdata('id');
-
     }
 
     public function index()
@@ -22,12 +19,12 @@ class Mxcode extends CI_Controller
             redirect('mxcode/login');
         }
 
-//        $this->data['ordens'] = $this->mapos_model->getOsAbertas();
-//        $this->data['produtos'] = $this->mapos_model->getProdutosMinimo();
-//        $this->data['os'] = $this->mapos_model->getOsEstatisticas();
-//        $this->data['estatisticas_financeiro'] = $this->mapos_model->getEstatisticasFinanceiro();
+//        $this->data['ordens'] = $this->mxcode_model->getOsAbertas();
+//        $this->data['produtos'] = $this->mxcode_model->getProdutosMinimo();
+//        $this->data['os'] = $this->mxcode_model->getOsEstatisticas();
+//        $this->data['estatisticas_financeiro'] = $this->mxcode_model->getEstatisticasFinanceiro();
         $this->data['menuPainel'] = 'Index';
-        $this->data['view'] = 'mapos/painel';
+        $this->data['view'] = 'mxcode/painel';
         $this->load->view('tema/topo', $this->data);
 
     }
@@ -38,10 +35,11 @@ class Mxcode extends CI_Controller
             redirect('mxcode/login');
         }
 
-        $this->data['usuario'] = $this->mapos_model->getById($this->session->userdata('id'));
-        $this->data['view'] = 'mapos/minhaConta';
-        $this->data['minhaConta'] = 'Conta';
-        $this->load->view('tema/topo', $this->data);
+        $data['dados'] = $this->mxcode_model->getUsuario(id_usuario());
+        $data['usuario'] = $this->mxcode_model->getById(id_usuario());
+        $data['view'] = 'mxcode/minhaConta';
+        $data['minhaConta'] = 'Conta';
+        $this->load->view('tema/topo', $data);
 
     }
 
@@ -53,11 +51,11 @@ class Mxcode extends CI_Controller
         $oldSenha = $this->input->post('oldSenha');
         $senha = $this->input->post('novaSenha');
 
-        $usuario = $this->mapos_model->getUsuario($this->session->userdata('id'));
+        $usuario = $this->mxcode_model->getUsuario($this->session->userdata('id'));
 
 
         if (password_verify($oldSenha, $usuario->senha)) {
-            $result = $this->mapos_model->alterarSenha($usuario->id_usuarios, $senha);
+            $result = $this->mxcode_model->alterarSenha($usuario->id_usuarios, $senha);
             if ($result == true) {
                 $this->session->set_flashdata('sucesso', 'Senha alterada com sucesso!');
                 redirect(base_url() . 'mxcode/minhaConta');
@@ -81,12 +79,12 @@ class Mxcode extends CI_Controller
 
         $termo = $this->input->get('termo');
 
-        $data['results'] = $this->mapos_model->pesquisar($termo);
+        $data['results'] = $this->mxcode_model->pesquisar($termo);
         $this->data['produtos'] = $data['results']['produtos'];
         $this->data['servicos'] = $data['results']['servicos'];
         $this->data['os'] = $data['results']['os'];
         $this->data['clientes'] = $data['results']['clientes'];
-        $this->data['view'] = 'mapos/pesquisa';
+        $this->data['view'] = 'mxcode/pesquisa';
         $this->load->view('tema/topo', $this->data);
 
     }
@@ -94,12 +92,13 @@ class Mxcode extends CI_Controller
     public function login()
     {
 
-        $this->load->view('mapos/login');
+        $this->load->view('mxcode/login');
 
     }
 
     public function sair()
     {
+        gravaLog(id_usuario(), 'Logoff no sistema', getenv("REMOTE_ADDR"));
         $this->session->sess_destroy();
         redirect('mxcode/login');
     }
@@ -124,7 +123,7 @@ class Mxcode extends CI_Controller
         } else {
             $email = $this->input->post('email');
             $password = $this->input->post('senha');
-            $usuario = $this->mapos_model->check_credentials($email);
+            $usuario = $this->mxcode_model->check_credentials($email);
 
             if ($usuario) {
                 if (password_verify($password, $usuario->senha)) {
@@ -136,6 +135,7 @@ class Mxcode extends CI_Controller
                         'logado' => true
                     );
                     $this->session->set_userdata($session_data);
+                    gravaLog($usuario->id_usuarios, 'Login no sistema', getenv("REMOTE_ADDR"));
                     redirect('/');
                 } else {
                     $this->session->set_flashdata('erro', 'Dados de acesso inválidos, por favor tente novamente.');
@@ -190,8 +190,8 @@ class Mxcode extends CI_Controller
         }
 
         $data['menuConfiguracoes'] = 'Configuracoes';
-        $data['dados'] = $this->mapos_model->getEmitente($this->id_usuario);
-        $data['view'] = 'mapos/emitente';
+        $data['dados'] = $this->mxcode_model->getEmitente(id_usuario());
+        $data['view'] = 'mxcode/emitente';
         $this->load->view('tema/topo', $data);
     }
 
@@ -207,7 +207,7 @@ class Mxcode extends CI_Controller
             redirect(base_url());
         }
 
-        if($_FILES['userfile']['size'] > 0) {
+        if ($_FILES['userfile']['size'] > 0) {
             $dir = 'assets/uploads/logomarcas';
             $image = $this->do_upload($_FILES['userfile'], base_url() . 'mxcode/emitente', $dir);
         } else {
@@ -228,10 +228,10 @@ class Mxcode extends CI_Controller
             'cep' => $this->input->post('cep'),
             'telefone' => $this->input->post('telefone'),
             'email' => $this->input->post('email'),
-            'id_usuario' => $this->id_usuario,
+            'id_usuario' => id_usuario(),
         );
 
-        $retorno = $this->mapos_model->add('emitente', $data);
+        $retorno = $this->mxcode_model->add('emitente', $data);
         if ($retorno == true) {
             $this->session->set_flashdata('sucesso', 'Informações cadastradas com sucesso!');
             redirect(base_url() . 'mxcode/emitente');
@@ -271,7 +271,7 @@ class Mxcode extends CI_Controller
             'email' => $this->input->post('email'),
         );
 
-        $retorno = $this->mapos_model->edit('emitente', $data, 'id_emitente', $this->input->post('id_emitente'));
+        $retorno = $this->mxcode_model->edit('emitente', $data, 'id_emitente', $this->input->post('id_emitente'));
         if ($retorno == true) {
             $this->session->set_flashdata('sucesso', 'Informações alteradas com sucesso.');
             redirect(base_url() . 'mxcode/emitente');
@@ -344,16 +344,16 @@ class Mxcode extends CI_Controller
             redirect(base_url() . 'mxcode/emitente');
         }
 
-        $logo_atual = $this->mapos_model->getLogoEmitente($this->id_usuario);
+        $logo_atual = $this->mxcode_model->getLogoEmitente(id_usuario());
 
-        if($logo_atual->logomarca) {
+        if ($logo_atual->logomarca) {
             unlink('assets/uploads/logomarcas/' . $logo_atual->logomarca);
         }
         $dir = 'assets/uploads/logomarcas';
         $image = $this->do_upload($_FILES['userfile'], base_url() . 'mxcode/emitente', $dir);
         $logo = $image;
 
-        $retorno = $this->mapos_model->editLogo($id, $logo);
+        $retorno = $this->mxcode_model->editLogo($id, $logo);
         if ($retorno) {
             $this->session->set_flashdata('sucesso', 'Logomarca alterada com sucesso!');
             redirect(base_url() . 'mxcode/emitente');
@@ -382,12 +382,12 @@ class Mxcode extends CI_Controller
             redirect(base_url() . 'mxcode/emitente');
         }
 
-        $logo_atual = $this->mapos_model->getLogoEmitente($this->id_usuario);
-        if($logo_atual) {
+        $logo_atual = $this->mxcode_model->getLogoEmitente(id_usuario());
+        if ($logo_atual) {
             unlink('assets/uploads/logomarcas/' . $logo_atual->logomarca);
         }
         $nova_logo = null;
-        $retorno = $this->mapos_model->editLogo($id, $nova_logo);
+        $retorno = $this->mxcode_model->editLogo($id, $nova_logo);
 
         if ($retorno) {
             $this->session->set_flashdata('sucesso', 'Logomarca excluída com sucesso!');
@@ -421,7 +421,7 @@ class Mxcode extends CI_Controller
         $image = $this->do_upload($_FILES['userfile']);
         $logo = 'assets/uploads/' . $image;
 
-        $retorno = $this->mapos_model->editLogo($id, $logo);
+        $retorno = $this->mxcode_model->editLogo($id, $logo);
         if ($retorno) {
             $this->session->set_flashdata('success', 'As informações foram alteradas com sucesso.');
             redirect(base_url() . 'mxcode/emitente');
@@ -431,4 +431,32 @@ class Mxcode extends CI_Controller
         }
 
     }
+
+    public function atualizarPerfil()
+    {
+
+        $data = array(
+            'nome' => $this->input->post('nome'),
+            'rg' => $this->input->post('rg'),
+            'cpf' => $this->input->post('cpf'),
+            'cep' => $this->input->post('cep'),
+            'logradouro' => $this->input->post('logradouro'),
+            'numero' => $this->input->post('numero'),
+            'bairro' => $this->input->post('bairro'),
+            'cidade' => $this->input->post('cidade'),
+            'uf' => $this->input->post('uf'),
+//            'email' => $this->input->post('email'),
+            'telefone' => $this->input->post('telefone'),
+        );
+
+        if ($this->mxcode_model->edit('usuarios', $data, 'id_usuarios', $this->input->post('id_usuarios')) == true) {
+            $this->session->set_flashdata('sucesso', 'Perfil de usuário atualizado com sucesso!');
+            redirect(base_url() . 'mxcode/minhaConta/');
+        } else {
+            $this->session->set_flashdata('sucesso', 'Ocorreu um erro ao atualizar perfil de usuário.');
+            redirect(base_url() . 'mxcode/minhaConta/');
+        }
+
+    }
+
 }

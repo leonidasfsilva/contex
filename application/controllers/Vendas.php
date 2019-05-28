@@ -2,28 +2,19 @@
 
 class Vendas extends CI_Controller
 {
-    
-
-    /**
-     * author: Ramon Silva
-     * email: silva018-mg@yahoo.com.br
-     *
-     */
-    
     function __construct()
     {
         parent::__construct();
         
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mapos/login');
+            redirect('mxcode/login');
         }
         
         $this->load->helper(array('form','codegen_helper'));
         $this->load->model('vendas_model', '', true);
         $this->load->model('usuarios_model', '', true);
-        $this->load->model('financeiro_model', '', true);
+        $this->load->model('Poupanca_model', '', true);
         $this->data['menuVendas'] = 'Vendas';
-        $this->id_usuario = $this->session->userdata('id');
     }
     
     function index()
@@ -103,7 +94,7 @@ class Vendas extends CI_Controller
 
             $data = array(
                 'dataVenda' => $dataVenda,
-                'id_usuario' => $this->id_usuario,
+                'id_usuario' => id_usuario(),
                 'clientes_id' => $this->input->post('clientes_id'),
                 'usuarios_id' => $this->input->post('usuarios_id'),
                 'faturado' => 0
@@ -119,7 +110,7 @@ class Vendas extends CI_Controller
             }
         }
 
-        $this->data['usuario'] = $this->usuarios_model->getById($this->id_usuario);
+        $this->data['usuario'] = $this->usuarios_model->getById(id_usuario());
         $this->data['view'] = 'vendas/adicionarVenda';
         $this->load->view('tema/topo', $this->data);
     }
@@ -192,7 +183,7 @@ class Vendas extends CI_Controller
         }
 
         $this->data['custom_error'] = '';
-        $this->load->model('mapos_model');
+        $this->load->model('Mxcode_model');
         $this->data['result'] = $this->vendas_model->getById($this->uri->segment(3));
         $this->data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
@@ -216,7 +207,7 @@ class Vendas extends CI_Controller
         }
 
         $this->data['custom_error'] = '';
-        $this->load->model('mapos_model');
+        $this->load->model('Mxcode_model');
         $this->data['result'] = $this->vendas_model->getById($this->uri->segment(3));
         $this->data['produtos'] = $this->vendas_model->getProdutos($this->uri->segment(3));
         $this->data['emitente'] = $this->mapos_model->getEmitente();
@@ -266,7 +257,7 @@ class Vendas extends CI_Controller
 
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
-            $this->vendas_model->autoCompleteCliente($q, $this->id_usuario);
+            $this->vendas_model->autoCompleteCliente($q, id_usuario());
         }
 
     }
@@ -382,7 +373,7 @@ class Vendas extends CI_Controller
             }
 
             $data = array(
-                'id_usuario' => $this->id_usuario,
+                'id_usuario' => id_usuario(),
                 'vendas_id' => $venda_id,
                 'descricao' => padronizarString(set_value('descricao')),
                 'valor' => $this->input->post('valor'),
@@ -395,7 +386,7 @@ class Vendas extends CI_Controller
                 'tipo' => $this->input->post('tipo')
             );
 
-            if ($this->vendas_model->add('lancamentos', $data) == true) {
+            if ($this->vendas_model->add('Poupanca', $data) == true) {
                 
                 $venda = $this->input->post('vendas_id');
 
