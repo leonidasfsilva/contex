@@ -174,7 +174,7 @@ $(function () {
                         $('#getCroppedCanvasModal').modal().find('#image-cropped').attr('src', result.toDataURL(uploadedImageType));
                         // $('#getCroppedCanvasModal').modal().find('.modal-body').html(result);
                         var btn = $('#send_cropped_avatar');
-                        var url = "../editarFotoUsuario";
+                        var url = "editarFotoUsuario";
 
                         btn.click(function () {
                             result.toBlob(function (blob) {

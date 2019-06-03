@@ -45,8 +45,7 @@ $route['404_override'] = '';
 $route['financeiro'] = 'financeiro/index';
 //$route['financeiro/faturas/detalhes'] = 'faturas/detalhes';
 //$route['financeiro/faturas/detalhes/(:any)'] = 'faturas/detalhes/$1';
-
-
+$route['editarFotoUsuario'] = "mxcode/editarFotoUsuario";
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
