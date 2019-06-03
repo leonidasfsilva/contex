@@ -73,7 +73,6 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#telefone').mask("(99) 9999-99990");
 
         $('#formCliente').validate({
             rules: {

@@ -1,4 +1,9 @@
 <script>
+    $('#telefone').mask("(99) 9999-99990");
+    $('#cep').mask("99999-999");
+    $('#cpf').mask("999.999.999-99");
+    $('#rg').mask("99.999.999-9");
+
     setTimeout(function () {
         $(".preloader").fadeOut();
     },500);
@@ -51,20 +56,22 @@
             $("#ibge").val("");
         }
 
-        //Quando o campo cep perde o foco.
-        $("#cep").blur(function () {
+        //Quando o campo cep possui algum caracter digitado.
+        $("#cep").keyup(function () {
 
             //Nova variável "cep" somente com dígitos.
             var cep = $(this).val().replace(/\D/g, '');
 
             //Verifica se campo cep possui valor informado.
-            if (cep != "") {
+            if ( cep.length > 7 && cep != "" ) {
 
                 //Expressão regular para validar o CEP.
                 var validacep = /^[0-9]{8}$/;
 
                 //Valida o formato do CEP.
                 if (validacep.test(cep)) {
+
+
 
                     //Preenche os campos com "..." enquanto consulta webservice.
                     $("#logradouro").val("aguarde...");

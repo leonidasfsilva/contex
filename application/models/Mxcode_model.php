@@ -173,7 +173,6 @@ class Mxcode_model extends CI_Model
         $this->db->set('logomarca', $logo);
         $this->db->where('id_emitente', $id);
         return $this->db->update('emitente');
-
     }
 
     public function check_credentials($email)
@@ -192,4 +191,21 @@ class Mxcode_model extends CI_Model
         }
         return false;
     }
+
+    public function getAvatarUsuario($id_usuario)
+    {
+        $this->db->select('avatar');
+        $this->db->from('usuarios');
+        $this->db->where('id_usuarios = ' . $id_usuario . ' AND status = ' . 1);
+        $this->db->limit(1);
+        return $this->db->get()->row();
+    }
+
+    public function editAvatarUsuario($id, $logo)
+    {
+        $this->db->set('avatar', $logo);
+        $this->db->where('id_usuarios', $id);
+        return $this->db->update('usuarios');
+    }
+
 }

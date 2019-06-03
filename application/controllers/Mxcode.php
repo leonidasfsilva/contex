@@ -255,7 +255,6 @@ class Mxcode extends CI_Controller
             redirect(base_url());
         }
 
-
         $data = array(
             'emitente' => padronizarString($this->input->post('emitente')),
             'cnpj' => $this->input->post('cnpj'),
@@ -290,10 +289,10 @@ class Mxcode extends CI_Controller
             redirect('mxcode/login');
         }
 
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
-            redirect(base_url());
-        }
+//        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
+//            $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
+//            redirect(base_url());
+//        }
 
         $image_upload_folder = $dir;
 
@@ -401,40 +400,40 @@ class Mxcode extends CI_Controller
 
     public function editarFotoUsuario()
     {
-
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
             redirect('mxcode/login');
         }
+//        $t = $this->input->post($_FILES);
+//        print_array($t);
+//        exit;
+        if ($_FILES['userfile']['size'] > 0) {
 
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
-            redirect(base_url());
-        }
+            $dir = 'assets/uploads/avatars';
+            $avatar_atual = $this->mxcode_model->getAvatarUsuario(id_usuario());
 
-        $id = $this->input->post('id');
-        if ($id == null || !is_numeric($id)) {
-            $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar a logomarca.');
-            redirect(base_url() . 'mxcode/emitente');
-        }
-        delete_files(FCPATH . 'assets/uploads/');
+            if ($avatar_atual->avatar) {
+                unlink($dir . '/' . $avatar_atual->avatar);
+            }
+            $image = $this->do_upload($_FILES['userfile'], base_url() . 'mxcode/minhaConta', $dir);
 
-        $image = $this->do_upload($_FILES['userfile']);
-        $logo = 'assets/uploads/' . $image;
+            $retorno = $this->mxcode_model->editAvatarUsuario(id_usuario(), $image);
+            if ($retorno) {
+                $this->session->set_flashdata('sucesso', 'Foto de usuário alterada com sucesso!');
+//                redirect(base_url() . 'mxcode/minhaConta');
+            } else {
+                $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar alterar a foto de usuário.');
+//                redirect(base_url() . 'mxcode/minhaConta');
+            }
 
-        $retorno = $this->mxcode_model->editLogo($id, $logo);
-        if ($retorno) {
-            $this->session->set_flashdata('success', 'As informações foram alteradas com sucesso.');
-            redirect(base_url() . 'mxcode/emitente');
         } else {
-            $this->session->set_flashdata('error', 'Ocorreu um erro ao tentar alterar as informações.');
-            redirect(base_url() . 'mxcode/emitente');
+            $this->session->set_flashdata('erro', 'Nenhum arquivo enviado.');
+            redirect(base_url() . 'mxcode/minhaConta');
         }
 
     }
 
     public function atualizarPerfil()
     {
-
         $data = array(
             'nome' => $this->input->post('nome'),
             'rg' => $this->input->post('rg'),
@@ -442,6 +441,7 @@ class Mxcode extends CI_Controller
             'cep' => $this->input->post('cep'),
             'logradouro' => $this->input->post('logradouro'),
             'numero' => $this->input->post('numero'),
+            's_n' => $this->input->post('s_n') == 1 ? 1 : 0,
             'bairro' => $this->input->post('bairro'),
             'cidade' => $this->input->post('cidade'),
             'uf' => $this->input->post('uf'),

@@ -420,7 +420,7 @@
                             <a href="<?php echo site_url(); ?>mxcode/minhaConta">
                                 <div class="tabular-row">
                                     <div class="tabular-cell welcome-avatar">
-                                        <img src="<?php echo base_url(); ?>assets/img/avatars/padrao.png" class="avatar">
+                                        <img src="<?php echo $usuario->avatar != null ? base_url() . 'assets/uploads/avatars/' . $usuario->avatar : base_url() . 'assets/img/avatars/padrao.png'; ?>" class="avatar">
                                     </div>
                                     <div class="tabular-cell welcome-options">
                                         <span class="welcome-text">Bem-vindo,</span>

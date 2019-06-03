@@ -349,7 +349,7 @@ $periodo = $this->input->get('periodo');
                             <input class="form-control money" id="valor" type="text" name="valor"/>
                         </div>
                         <div class="form-group col-lg-6">
-                            <label for="vencimento" class="font-weight-bold">Data de Aplicação</label>
+                            <label for="vencimento" class="font-weight-bold">Data de Resgate</label>
                             <input class="form-control datepicker" id="vencimento" type="text" name="vencimento"/>
                         </div>
                     </div>

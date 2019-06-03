@@ -82,4 +82,23 @@
         width: 128px;
         height: 128px;
     }
+
+    .cropper-container {
+        max-height: 400px !important;
+    }
+
+    .image-cropped {
+        width: auto;
+        height: auto;
+    }
+
+    .avatar-cropped {
+        width: 128px;
+        height: 128px;
+        margin-left: -64px;
+        left: 50%;
+        position: relative;
+        margin-bottom: 16px;
+    }
+
 </style>

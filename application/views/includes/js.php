@@ -1,8 +1,9 @@
 <!--    JS CORE-->
 
-<script src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.min.js"></script>                            <!-- Load jQuery -->
-<script src="<?php echo base_url(); ?>assets/js/jqueryui-1.9.2.min.js"></script>                            <!-- Load jQueryUI -->
-<script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>                                <!-- Load Bootstrap -->
+<script src="<?php echo base_url(); ?>assets/js/jquery-3.4.1.js"></script>
+<!--<script src="--><?php //echo base_url(); ?><!--assets/js/jquery-1.10.2.min.js"></script>                           -->
+<script src="<?php echo base_url(); ?>assets/js/jqueryui-1.9.2.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
 
 <!--<script src="--><?php //echo base_url(); ?><!--assets/plugins/pines-notify/pnotify.min.js"></script>-->
 <script src="<?php echo base_url(); ?>assets/plugins/jquery-notific8/jquery.notific8.js"></script>         <!-- Load Notific8 -->
@@ -60,6 +61,5 @@
 <script src="<?php echo base_url(); ?>assets/plugins/pnotify/iife/PNotifyNonBlock.js"></script>
 <script src="<?php echo base_url(); ?>assets/plugins/pnotify/iife/PNotifyReference.js"></script>
 <script src="<?php echo base_url(); ?>assets/plugins/pnotify/iife/PNotifyStyleMaterial.js"></script>
-
 
 </head>
