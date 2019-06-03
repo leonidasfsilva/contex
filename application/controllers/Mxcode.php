@@ -23,9 +23,11 @@ class Mxcode extends CI_Controller
 //        $this->data['produtos'] = $this->mxcode_model->getProdutosMinimo();
 //        $this->data['os'] = $this->mxcode_model->getOsEstatisticas();
 //        $this->data['estatisticas_financeiro'] = $this->mxcode_model->getEstatisticasFinanceiro();
-        $this->data['menuPainel'] = 'Index';
-        $this->data['view'] = 'mxcode/painel';
-        $this->load->view('tema/topo', $this->data);
+        $data['menuPainel'] = 'Index';
+        $data['usuario'] = $this->mxcode_model->getById(id_usuario());
+        $data['view'] = 'mxcode/painel';
+
+        $this->load->view('tema/topo', $data);
 
     }
 
