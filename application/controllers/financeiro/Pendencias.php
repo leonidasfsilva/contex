@@ -340,7 +340,7 @@ class Pendencias extends CI_Controller
                 'valor' => $pendencia->valor,
                 'data_lancamento' => $pendencia->data_pendencia,
                 'data_pagamento' => $pendencia->data_pagamento,
-                'cliente_fornecedor' => $cliente->nomeCliente,
+                'cliente_fornecedor' => $cliente->nome,
                 'forma_pgto' => $_REQUEST['forma_pagamento'],
                 'tipo' => $pendencia->tipo,
                 'baixado' => 1,
