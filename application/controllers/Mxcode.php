@@ -135,6 +135,7 @@ class Mxcode extends CI_Controller
                 if (password_verify($password, $usuario->senha)) {
                     $session_data = array(
                         'nome' => $usuario->nome,
+                        'avatar' => $usuario->avatar,
                         'email' => $usuario->email,
                         'id' => $usuario->id_usuarios,
                         'permissao' => $usuario->permissoes_id,
@@ -424,6 +425,17 @@ class Mxcode extends CI_Controller
 
             $retorno = $this->mxcode_model->editAvatarUsuario(id_usuario(), $image);
             if ($retorno) {
+                $usuario = $this->mxcode_model->getUsuario(id_usuario());
+                $session_data = array(
+                    'nome' => $usuario->nome,
+                    'avatar' => $usuario->avatar,
+                    'email' => $usuario->email,
+                    'id' => $usuario->id_usuarios,
+                    'permissao' => $usuario->permissoes_id,
+                    'logado' => true
+                );
+                $this->session->set_userdata($session_data);
+
                 $this->session->set_flashdata('sucesso', 'Foto de usuário alterada com sucesso!');
 //                redirect(base_url() . 'mxcode/minhaConta');
             } else {

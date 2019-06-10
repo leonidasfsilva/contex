@@ -21,7 +21,7 @@
                 <div class="user-card">
                     <div class="avatar avatar-overlay">
                         <a href="#modalAlterarFoto" data-toggle="modal" title="Alterar foto de perfil ">
-                            <img src="<?php echo $usuario->avatar != null ? base_url() . 'assets/uploads/avatars/' . $usuario->avatar : base_url() . 'assets/img/avatars/padrao.png'; ?>" class="img-responsive img-circle avatar-image">
+                            <img src="<?php echo $this->session->userdata('avatar') != null ? base_url() . 'assets/uploads/avatars/' . $this->session->userdata('avatar') : base_url() . 'assets/img/avatars/padrao.png'; ?>" class="img-responsive img-circle avatar-image">
                             <div class="avatar-image-hover">
                                 <i class="fa fa-pencil fa-2x fa-fw"></i>
                             </div>
