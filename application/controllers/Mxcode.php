@@ -312,9 +312,9 @@ class Mxcode extends CI_Controller
         $upload_config = array(
             'upload_path' => $image_upload_folder,
             'allowed_types' => 'png|jpg|jpeg|bmp|gif',
-            'max_size' => 2048,
-            'max_widht' => 2548,
-            'max_height' => 2048,
+            'max_size' => 5000,
+            'max_widht' => 5000,
+            'max_height' => 5000,
             'remove_space' => true,
             'encrypt_name' => true,
         );
@@ -435,7 +435,7 @@ class Mxcode extends CI_Controller
                 $config['height'] = 200;
                 $config['new_image'] = ($dir) . '/' . $data['upload_data']['file_name'];
                 $this->image_lib->initialize($config);
-                if (!$this->image_lib->resize()){
+                if (!$this->image_lib->resize()) {
                     $this->session->set_flashdata('erro', $this->image_lib->display_errors());
                 }
             }
@@ -453,15 +453,51 @@ class Mxcode extends CI_Controller
                 );
                 $this->session->set_userdata($session_data);
 
-                $this->session->set_flashdata('sucesso', 'Foto de usuário alterada com sucesso!');
+                $this->session->set_flashdata('sucesso', 'Foto de perfil alterada com sucesso!');
 //                redirect(base_url() . 'mxcode/minhaConta');
             } else {
-                $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar alterar a foto de usuário.');
+                $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar alterar a foto de perfil.');
 //                redirect(base_url() . 'mxcode/minhaConta');
             }
 
         } else {
             $this->session->set_flashdata('erro', 'Nenhum arquivo enviado.');
+            redirect(base_url() . 'mxcode/minhaConta');
+        }
+
+    }
+
+    public function excluirFotoUsuario()
+    {
+
+        if ((!session_id()) || (!$this->session->userdata('logado'))) {
+            redirect('mxcode/login');
+        }
+
+        $dir = 'assets/uploads/avatars';
+        $avatar_atual = $this->mxcode_model->getAvatarUsuario(id_usuario());
+
+        if ($avatar_atual->avatar) {
+            unlink($dir . '/' . $avatar_atual->avatar);
+        }
+
+        $retorno = $this->mxcode_model->excluirAvatarUsuario(id_usuario());
+        if ($retorno) {
+            $usuario = $this->mxcode_model->getUsuario(id_usuario());
+            $session_data = array(
+                'nome' => $usuario->nome,
+                'avatar' => $usuario->avatar,
+                'email' => $usuario->email,
+                'id' => $usuario->id_usuarios,
+                'permissao' => $usuario->permissoes_id,
+                'logado' => true
+            );
+            $this->session->set_userdata($session_data);
+
+            $this->session->set_flashdata('sucesso', 'Foto de perfil removida com sucesso!');
+            redirect(base_url() . 'mxcode/minhaConta');
+        } else {
+            $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar excluir a foto de perfil.');
             redirect(base_url() . 'mxcode/minhaConta');
         }
 

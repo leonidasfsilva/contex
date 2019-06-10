@@ -208,4 +208,11 @@ class Mxcode_model extends CI_Model
         return $this->db->update('usuarios');
     }
 
+    public function excluirAvatarUsuario($id)
+    {
+        $this->db->set('avatar', null);
+        $this->db->where('id_usuarios', $id);
+        return $this->db->update('usuarios');
+    }
+
 }

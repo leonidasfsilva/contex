@@ -21,7 +21,8 @@
                 <div class="user-card">
                     <div class="avatar avatar-overlay">
                         <a href="#modalAlterarFoto" data-toggle="modal" title="Alterar foto de perfil ">
-                            <img src="<?php echo $this->session->userdata('avatar') != null ? base_url() . 'assets/uploads/avatars/' . $this->session->userdata('avatar') : base_url() . 'assets/img/avatars/padrao.png'; ?>" class="img-responsive img-circle avatar-image">
+                            <img src="<?php echo $this->session->userdata('avatar') != null ? base_url() . 'assets/uploads/avatars/' . $this->session->userdata('avatar') : base_url() . 'assets/img/avatars/padrao.png'; ?>"
+                                 class="img-responsive img-circle avatar-image">
                             <div class="avatar-image-hover">
                                 <i class="fa fa-pencil fa-2x fa-fw"></i>
                             </div>
@@ -205,86 +206,94 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Alterar foto de perfil</h4>
             </div>
-            <form id="formFoto" action="<?php echo base_url() ?>mxcode/alterarSenha" method="post" autocomplete="off">
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="form-group col-md-12">
-                            <label for="foto" class="font-weight-bold">Nova Foto *</label>
-                            <label class="btn btn-primary btn-upload btn-block" for="inputImage" data-toggle="tooltip" data-animation="false" title="" data-original-title="Selecionar imagem para perfil">
-                                <input type="file" class="sr-only" id="inputImage" name="file" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff">
-                                <span class="docs-tooltip">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label class="btn btn-primary btn-upload btn-block" for="inputImage" data-toggle="tooltip" data-animation="false" title="" data-original-title="Selecionar imagem para perfil">
+                            <input type="file" class="sr-only" id="inputImage" name="file" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff">
+                            <span class="docs-tooltip">
                                   <i class="fa fa-folder-open fa-fw"></i> Selecionar Imagem
                                 </span>
-                            </label>
+                        </label>
+                    </div>
+                </div>
+                <?php if ($this->session->userdata('avatar') != null) { ?>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <button href="#modalExcluirFotoUsuario" class="btn btn-danger btn-block" data-toggle="modal" title="Excluir foto de perfil">
+                                <span class="docs-tooltip">
+                                      <i class="fa fa-trash-o fa-fw"></i> Excluir Foto
+                                </span>
+                            </button>
                         </div>
                     </div>
-                    <div class="hidden" id="div_img_cropper">
-                        <div class="row">
-                            <div class="col-md-12 form-group img-cropper">
-                                <div class="cropper-container">
-                                    <img id="img-cropper" alt="Picture" class="cropper-hidden">
-                                </div>
+                <?php } ?>
+                <div class="hidden" id="div_img_cropper">
+                    <div class="row">
+                        <div class="col-md-12 form-group img-cropper">
+                            <div class="cropper-container">
+                                <img id="img-cropper" alt="Picture" class="cropper-hidden">
                             </div>
                         </div>
-                        <!--                        CONTROLS BUTTONS-->
-                        <div class="row">
-                            <div class="col-md-12 docs-buttons form-group">
-                                <div class="btn-group col-md-4">
-                                    <button type="button" class="btn btn-primary" data-method="zoom" data-option="0.1" title="Aumentar zoom">
+                    </div>
+                    <!--                        CONTROLS BUTTONS-->
+                    <div class="row">
+                        <div class="col-md-12 docs-buttons form-group">
+                            <div class="btn-group col-md-4">
+                                <button type="button" class="btn btn-primary" data-method="zoom" data-option="0.1" title="Aumentar zoom">
                                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="Aumentar zoom">
                                       <span class="fa fa-search-plus fa-fw"></span> + Zoom
                                     </span>
-                                    </button>
-                                    <button type="button" class="btn btn-primary" data-method="zoom" data-option="-0.1" title="Diminuir zoom">
+                                </button>
+                                <button type="button" class="btn btn-primary" data-method="zoom" data-option="-0.1" title="Diminuir zoom">
                                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="Diminuir zoom">
                                       <span class="fa fa-search-minus fa-fw"></span> - Zoom
                                     </span>
-                                    </button>
-                                </div>
-                                <div class="btn-group col-md-4">
-                                    <button type="button" class="btn btn-primary" data-method="scaleX" data-option="-1" title="Inverter horizontalmente">
+                                </button>
+                            </div>
+                            <div class="btn-group col-md-4">
+                                <button type="button" class="btn btn-primary" data-method="scaleX" data-option="-1" title="Inverter horizontalmente">
                                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="Inverter horizontalmente">
                                       <span class="fa fa-exchange fa-fw"></span> Horizontal
                                     </span>
-                                    </button>
-                                    <button type="button" class="btn btn-primary" data-method="scaleY" data-option="-1" title="Inverter verticalmente">
+                                </button>
+                                <button type="button" class="btn btn-primary" data-method="scaleY" data-option="-1" title="Inverter verticalmente">
                                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="Inverter verticalmente">
                                       <span class="fa fa-exchange fa-rotate-90 fa-fw"></span> Vertical
                                     </span>
-                                    </button>
-                                </div>
-                                <div class="btn-group col-md-4">
-                                    <button type="button" class="btn btn-primary" data-method="rotate" data-option="-45" title="Girar para esquerda">
+                                </button>
+                            </div>
+                            <div class="btn-group col-md-4">
+                                <button type="button" class="btn btn-primary" data-method="rotate" data-option="-45" title="Girar para esquerda">
                                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="Girar para esquerda">
                                       <span class="fa fa-rotate-left fa-fw"></span> Girar Esq.
                                     </span>
-                                    </button>
-                                    <button type="button" class="btn btn-primary" data-method="rotate" data-option="45" title="Girar para direitat">
+                                </button>
+                                <button type="button" class="btn btn-primary" data-method="rotate" data-option="45" title="Girar para direitat">
                                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="Girar para direita">
                                       <span class="fa fa-rotate-right fa-fw"></span> Girar Dir.
-                                    </span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 docs-buttons form-group">
-                                <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-method="getCroppedCanvas" data-animation="false" data-original-title="Finalizar edição">
-                                    <span class="docs-tooltip">
-                                      <span class="fa fa-check fa-fw"></span> Finalizar
                                     </span>
                                 </button>
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-12 docs-buttons form-group">
+                            <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-method="getCroppedCanvas" data-animation="false" data-original-title="Finalizar edição">
+                                    <span class="docs-tooltip">
+                                      <span class="fa fa-check fa-fw"></span> Finalizar
+                                    </span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <!--                <div class="modal-footer">-->
-                <!--                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">-->
-                <!--                        <i class="fa fa-times fa-fw"></i> Cancelar-->
-                <!--                    </button>-->
-                <!--                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>-->
-                <!--                </div>-->
-            </form>
+            </div>
+            <!--                <div class="modal-footer">-->
+            <!--                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">-->
+            <!--                        <i class="fa fa-times fa-fw"></i> Cancelar-->
+            <!--                    </button>-->
+            <!--                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>-->
+            <!--                </div>-->
         </div>
     </div>
 </div>
@@ -310,6 +319,29 @@
                 </button>
                 <button type="button" id="send_cropped_avatar" class="btn btn-success btn-sm"><i class="fa fa-check fa-fw"></i> Confirmar</button>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal EXCLUIR FOTO DO USUÁRIO -->
+<div class="modal fade" id="modalExcluirFotoUsuario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-white ">Excluir foto de perfil</h4>
+            </div>
+            <form id="formExcluirFoto" action="<?php echo base_url() ?>mxcode/excluirFotoUsuario" method="post">
+                <div class="modal-body">
+                    <p>Deseja realmente excluir sua foto de perfil de usuário?</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir">
+                        <i class="fa fa-times fa-fw"></i> Cancelar
+                    </button>
+                    <button class="btn btn-danger btn-sm" id="btnExcluir"><i class="fa fa-check fa-fw"></i> Excluir</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
