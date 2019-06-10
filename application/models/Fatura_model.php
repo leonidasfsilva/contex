@@ -41,7 +41,7 @@ class Fatura_model extends CI_Model
 
         $this->db->select($fields);
         $this->db->from($table);
-        $this->db->order_by('data_compra', 'id_assoc' ,'asc');
+        $this->db->order_by('data_compra', 'id_assoc', 'asc');
         $this->db->limit($perpage, $start);
         if ($where) {
             $this->db->where($where . ' AND status = 1 AND id_fatura = ' . $id_fatura);
@@ -333,6 +333,40 @@ class Fatura_model extends CI_Model
             'status = 1 AND id_fatura = ' . $id_fatura . ' AND id_usuario = ' . $id_usuario);
 
         return $this->db->count_all_results();
+
+    }
+
+    function getSaldoFaturasPendentes($id_usuario)
+    {
+        $this->db
+            ->select('SUM(a.valor_parcela) AS total')
+            ->from('lancamentos_faturas_assoc AS a')
+            ->join('faturas AS b', 'b.id_fatura = a.id_fatura AND b.status = a.status')
+            ->where('b.id_usuario = ' . $id_usuario . ' AND b.fatura_paga != 1 AND a.status = 1');
+        return $this->db->get()->row();
+
+    }
+
+    function getSaldoFaturasVencidas($id_usuario)
+    {
+        $this->db
+            ->select('SUM(a.valor_parcela) AS total')
+            ->from('lancamentos_faturas_assoc AS a')
+            ->join('faturas AS b', 'b.id_fatura = a.id_fatura AND b.status = a.status')
+            ->where('b.id_usuario = ' . $id_usuario . ' AND b.fatura_paga != 1 AND a.status = 1')
+            ->where('date(b.vencimento) < date(now())');
+        return $this->db->get()->row();
+
+    }
+
+    function getSaldoFaturasPagas($id_usuario)
+    {
+        $this->db
+            ->select('SUM(a.valor_parcela) AS total')
+            ->from('lancamentos_faturas_assoc AS a')
+            ->join('faturas AS b', 'b.id_fatura = a.id_fatura AND b.status = a.status')
+            ->where('b.id_usuario = ' . $id_usuario . ' AND b.fatura_paga = 1 AND a.status = 1');
+        return $this->db->get()->row();
 
     }
 

@@ -73,6 +73,9 @@ class Faturas extends CI_Controller
             12 => '12 x',
         );
 
+        $this->data['saldoVencidas'] = $this->fatura_model->getSaldoFaturasVencidas(id_usuario());
+        $this->data['saldoPendente'] = $this->fatura_model->getSaldoFaturasPendentes(id_usuario());
+        $this->data['saldoQuitado'] = $this->fatura_model->getSaldoFaturasPagas(id_usuario());
         $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
         $this->data['faturaAberta'] = $this->fatura_model->getFaturaAbertaUsuario(id_usuario());
         $this->data['results'] = $this->fatura_model->get('faturas', '*', $where, id_usuario(), $config['per_page'], $this->input->get('per_page'));
@@ -81,9 +84,6 @@ class Faturas extends CI_Controller
         $this->load->view('tema/topo', $this->data);
     }
 
-    /**
-     * @param null $id
-     */
     public function detalhes($id = null)
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) {
