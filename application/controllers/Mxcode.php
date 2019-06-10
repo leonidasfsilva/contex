@@ -11,6 +11,7 @@ class Mxcode extends CI_Controller
         $this->load->model('mxcode_model', '', true);
         $this->load->helper('file');
         $this->load->library('upload');
+        $this->load->library('image_lib');
     }
 
     public function index()
@@ -100,11 +101,12 @@ class Mxcode extends CI_Controller
 
     public function sair()
     {
-        if ((session_id()) || ($this->session->userdata('logado'))) {
+        if ((session_id()) && ($this->session->userdata('logado'))) {
             gravaLog(id_usuario(), 'Logoff no sistema', getenv("REMOTE_ADDR"));
             $this->session->sess_destroy();
             redirect('mxcode/login');
         } else {
+            $this->session->sess_destroy();
             redirect('mxcode/login');
         }
     }
@@ -311,6 +313,8 @@ class Mxcode extends CI_Controller
             'upload_path' => $image_upload_folder,
             'allowed_types' => 'png|jpg|jpeg|bmp|gif',
             'max_size' => 2048,
+            'max_widht' => 2548,
+            'max_height' => 2048,
             'remove_space' => true,
             'encrypt_name' => true,
         );
@@ -410,9 +414,7 @@ class Mxcode extends CI_Controller
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
             redirect('mxcode/login');
         }
-//        $t = $this->input->post($_FILES);
-//        print_array($t);
-//        exit;
+
         if ($_FILES['userfile']['size'] > 0) {
 
             $dir = 'assets/uploads/avatars';
@@ -421,7 +423,22 @@ class Mxcode extends CI_Controller
             if ($avatar_atual->avatar) {
                 unlink($dir . '/' . $avatar_atual->avatar);
             }
-            $image = $this->do_upload($_FILES['userfile'], base_url() . 'mxcode/minhaConta', $dir);
+
+            if ($image = $this->do_upload($_FILES['userfile'], base_url() . 'mxcode/minhaConta', $dir)) {
+                $data = array('upload_data' => $this->upload->data());
+
+                $config['image_library'] = 'gd2';
+                $config['source_image'] = ($dir) . '/' . $data['upload_data']['file_name'];
+                $config['create_thumb'] = false;
+                $config['maintain_ratio'] = true;
+                $config['width'] = 200;
+                $config['height'] = 200;
+                $config['new_image'] = ($dir) . '/' . $data['upload_data']['file_name'];
+                $this->image_lib->initialize($config);
+                if (!$this->image_lib->resize()){
+                    $this->session->set_flashdata('erro', $this->image_lib->display_errors());
+                }
+            }
 
             $retorno = $this->mxcode_model->editAvatarUsuario(id_usuario(), $image);
             if ($retorno) {
