@@ -521,10 +521,10 @@ class Mxcode extends CI_Controller
         );
 
         if ($this->mxcode_model->edit('usuarios', $data, 'id_usuarios', $this->input->post('id_usuarios')) == true) {
-            $this->session->set_flashdata('sucesso', 'Perfil de usuário atualizado com sucesso!');
+            $this->session->set_flashdata('sucesso', 'Conta de usuário atualizada com sucesso!');
             redirect(base_url() . 'mxcode/minhaConta/');
         } else {
-            $this->session->set_flashdata('sucesso', 'Ocorreu um erro ao atualizar perfil de usuário.');
+            $this->session->set_flashdata('sucesso', 'Ocorreu um erro ao atualizar conta de usuário.');
             redirect(base_url() . 'mxcode/minhaConta/');
         }
 
