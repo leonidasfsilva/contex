@@ -238,42 +238,58 @@
                     </div>
                     <!--                        CONTROLS BUTTONS-->
                     <div class="row">
-                        <div class="col-md-12 docs-buttons form-group">
-                            <div class="btn-group col-md-4">
-                                <button type="button" class="btn btn-primary" data-method="zoom" data-option="0.1" title="Aumentar zoom">
+                        <div class="col-md-4 docs-buttons form-group">
+                            <div class="btn-group btn-group-justified">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary " data-method="zoom" data-option="0.1" title="Aumentar zoom">
                                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="Aumentar zoom">
-                                      <span class="fa fa-search-plus fa-fw"></span> + Zoom
+                                      <i class="fa fa-search-plus fa-fw"></i>
                                     </span>
-                                </button>
-                                <button type="button" class="btn btn-primary" data-method="zoom" data-option="-0.1" title="Diminuir zoom">
+                                    </button>
+                                </div>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary " data-method="zoom" data-option="-0.1" title="Diminuir zoom">
                                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="Diminuir zoom">
-                                      <span class="fa fa-search-minus fa-fw"></span> - Zoom
+                                      <i class="fa fa-search-minus fa-fw"></i>
                                     </span>
-                                </button>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="btn-group col-md-4">
-                                <button type="button" class="btn btn-primary" data-method="scaleX" data-option="-1" title="Inverter horizontalmente">
+                        </div>
+                        <div class="col-md-4 docs-buttons form-group">
+                            <div class="btn-group btn-group-justified">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary " data-method="scaleX" data-option="-1" title="Inverter horizontalmente">
                                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="Inverter horizontalmente">
-                                      <span class="fa fa-exchange fa-fw"></span> Horizontal
+                                      <i class="fa fa-exchange fa-fw"></i>
                                     </span>
-                                </button>
-                                <button type="button" class="btn btn-primary" data-method="scaleY" data-option="-1" title="Inverter verticalmente">
+                                    </button>
+                                </div>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary " data-method="scaleY" data-option="-1" title="Inverter verticalmente">
                                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="Inverter verticalmente">
-                                      <span class="fa fa-exchange fa-rotate-90 fa-fw"></span> Vertical
+                                      <i class="fa fa-exchange fa-rotate-90 fa-fw"></i>
                                     </span>
-                                </button>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="btn-group col-md-4">
-                                <button type="button" class="btn btn-primary" data-method="rotate" data-option="-45" title="Girar para esquerda">
+                        </div>
+                        <div class="col-md-4 docs-buttons form-group">
+                            <div class="btn-group btn-group-justified">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary " data-method="rotate" data-option="-45" title="Girar para esquerda">
                                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="Girar para esquerda">
-                                      <span class="fa fa-rotate-left fa-fw"></span> Girar Esq.
+                                      <i class="fa fa-rotate-left fa-fw"></i>
                                     </span>
-                                </button>
-                                <button type="button" class="btn btn-primary" data-method="rotate" data-option="45" title="Girar para direitat">
+                                    </button>
+                                </div>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary " data-method="rotate" data-option="45" title="Girar para direitat">
                                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="Girar para direita">
-                                      <span class="fa fa-rotate-right fa-fw"></span> Girar Dir.
+                                      <i class="fa fa-rotate-right fa-fw"></i>
                                     </span>
-                                </button>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
