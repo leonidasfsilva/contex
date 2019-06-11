@@ -238,7 +238,7 @@
                     </div>
                     <!--                        CONTROLS BUTTONS-->
                     <div class="row">
-                        <div class="col-md-4 docs-buttons form-group">
+                        <div class="col-xs-4 docs-buttons form-group">
                             <div class="btn-group btn-group-justified">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-primary " data-method="zoom" data-option="0.1" title="Aumentar zoom">
@@ -256,7 +256,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4 docs-buttons form-group">
+                        <div class="col-xs-4 docs-buttons form-group">
                             <div class="btn-group btn-group-justified">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-primary " data-method="scaleX" data-option="-1" title="Inverter horizontalmente">
@@ -274,7 +274,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4 docs-buttons form-group">
+                        <div class="col-xs-4 docs-buttons form-group">
                             <div class="btn-group btn-group-justified">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-primary " data-method="rotate" data-option="-45" title="Girar para esquerda">
