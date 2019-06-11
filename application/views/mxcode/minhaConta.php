@@ -241,16 +241,16 @@
                         <div class="col-xs-4 docs-buttons form-group">
                             <div class="btn-group btn-group-justified">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-primary " data-method="zoom" data-option="0.1" title="Aumentar zoom">
+                                    <button type="button" class="btn btn-primary" data-method="zoom" data-option="0.1" title="Aumentar zoom">
                                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="Aumentar zoom">
-                                      <i class="fa fa-search-plus fa-fw"></i>
+                                      <i class="fa fa-search-plus fa-lg fa-fw"></i>
                                     </span>
                                     </button>
                                 </div>
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-primary " data-method="zoom" data-option="-0.1" title="Diminuir zoom">
+                                    <button type="button" class="btn btn-primary" data-method="zoom" data-option="-0.1" title="Diminuir zoom">
                                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="Diminuir zoom">
-                                      <i class="fa fa-search-minus fa-fw"></i>
+                                      <i class="fa fa-search-minus fa-lg fa-fw"></i>
                                     </span>
                                     </button>
                                 </div>
@@ -259,16 +259,16 @@
                         <div class="col-xs-4 docs-buttons form-group">
                             <div class="btn-group btn-group-justified">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-primary " data-method="scaleX" data-option="-1" title="Inverter horizontalmente">
+                                    <button type="button" class="btn btn-primary" data-method="scaleX" data-option="-1" title="Inverter horizontalmente">
                                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="Inverter horizontalmente">
-                                      <i class="fa fa-exchange fa-fw"></i>
+                                      <i class="fa fa-exchange fa-lg fa-fw"></i>
                                     </span>
                                     </button>
                                 </div>
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-primary " data-method="scaleY" data-option="-1" title="Inverter verticalmente">
+                                    <button type="button" class="btn btn-primary" data-method="scaleY" data-option="-1" title="Inverter verticalmente">
                                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="Inverter verticalmente">
-                                      <i class="fa fa-exchange fa-rotate-90 fa-fw"></i>
+                                      <i class="fa fa-exchange fa-rotate-90 fa-lg fa-fw"></i>
                                     </span>
                                     </button>
                                 </div>
@@ -277,16 +277,16 @@
                         <div class="col-xs-4 docs-buttons form-group">
                             <div class="btn-group btn-group-justified">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-primary " data-method="rotate" data-option="-45" title="Girar para esquerda">
+                                    <button type="button" class="btn btn-primary" data-method="rotate" data-option="-45" title="Girar para esquerda">
                                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="Girar para esquerda">
-                                      <i class="fa fa-rotate-left fa-fw"></i>
+                                      <i class="fa fa-rotate-left fa-lg fa-fw"></i>
                                     </span>
                                     </button>
                                 </div>
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-primary " data-method="rotate" data-option="45" title="Girar para direitat">
+                                    <button type="button" class="btn btn-primary" data-method="rotate" data-option="45" title="Girar para direitat">
                                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="Girar para direita">
-                                      <i class="fa fa-rotate-right fa-fw"></i>
+                                      <i class="fa fa-rotate-right fa-lg fa-fw"></i>
                                     </span>
                                     </button>
                                 </div>
