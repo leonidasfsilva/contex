@@ -18,8 +18,8 @@ $(function () {
     var options = {
         aspectRatio: 100/100,
         autoCropArea: 0.5,
-        minCropBoxWidth: 100,
-        minCropBoxHeight: 100,
+        dragMode: 'move',
+        cropBoxMovable: false,
         cropBoxResizable: false,
         preview: '.img-preview',
         crop: function (e) {
