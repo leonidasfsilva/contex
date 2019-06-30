@@ -108,7 +108,7 @@ class Faturas extends CI_Controller
 
         $config['base_url'] = site_url() . 'financeiro/faturas/';
         $config['total_rows'] = $this->fatura_model->count('faturas', 'status = 1 AND id_usuario = ' . id_usuario());
-        $config['per_page'] = 100;
+        $config['per_page'] = 200;
         $config['page_query_string'] = true;
         $config['next_link'] = 'Próxima';
         $config['prev_link'] = 'Anterior';
