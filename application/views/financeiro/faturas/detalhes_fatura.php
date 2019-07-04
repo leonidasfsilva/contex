@@ -399,7 +399,7 @@ $periodo = $this->input->get('periodo');
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-lg-4">
+                        <div class="form-group col-lg-4" style="margin-top: -10px;" id="div_parcelada">
                             <div class="checkbox icheck">
                                 <input type="checkbox" class="form-control" id="parcelada" name="compra_parcelada" value="1">
                             </div>
@@ -426,10 +426,23 @@ $periodo = $this->input->get('periodo');
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="btnCancelLancamento" class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
-                        <i class="fa fa-times fa-fw"></i> Cancelar
-                    </button>
-                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Registrar</button>
+                    <div class="row">
+                        <div class="text-left col-xs-4" style="margin-top: -10px;">
+                            <div class="checkbox icheck">
+                                <input type="checkbox" class="form-control" id="estorno" name="estorno" value="1">
+                            </div>
+                            <label for="estorno" class="font-weight-bold">Estorno</label>
+                        </div>
+
+                        <div class="col-xs-8">
+                            <button id="btnCancelLancamento" class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                                <i class="fa fa-times fa-fw"></i> Cancelar
+                            </button>
+                            <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Registrar</button>
+
+                        </div>
+                    </div>
+
                 </div>
             </form>
         </div>
@@ -647,6 +660,7 @@ $periodo = $this->input->get('periodo');
 
 
         var parcelada = $('#parcelada').iCheck('update')[0].checked;
+        var estorno = $('#estorno').iCheck('update')[0].checked;
 
         $.each($(parcelada), function (key, value) {
             if (parcelada == true) {
@@ -656,16 +670,36 @@ $periodo = $this->input->get('periodo');
             }
         });
 
-        $('#parcelada, #parceladaEditar').on('ifChanged', function (event) {
-            mudaICheck(event);
+        $.each($(estorno), function (key, value) {
+            if (estorno == true) {
+                $('#div_parcelada').addClass('hidden');
+            } else {
+                $('#div_parcelada').removeClass('hidden');
+            }
         });
 
-        function mudaICheck(event) {
+        $('#parcelada, #parceladaEditar').on('ifChanged', function (event) {
+            mudaICheckParcelamento(event);
+        });
+        $('#estorno, #estornoEditar').on('ifChanged', function (event) {
+            mudaICheckEstorno(event);
+        });
+
+        function mudaICheckParcelamento(event) {
             const checked = event.target.checked;
             if (checked == true) {
                 $('#divParcelamento, #divParcelamentoEditar').removeClass('hidden');
             } else {
                 $('#divParcelamento, #divParcelamentoEditar').addClass('hidden');
+            }
+        }
+
+        function mudaICheckEstorno(event) {
+            const checked = event.target.checked;
+            if (checked == true) {
+                $('#div_parcelada').addClass('hidden');
+            } else {
+                $('#div_parcelada').removeClass('hidden');
             }
         }
 
