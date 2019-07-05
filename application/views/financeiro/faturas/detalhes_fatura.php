@@ -204,6 +204,10 @@ $periodo = $this->input->get('periodo');
                                 $total_parcelas = $r->total_parcelas;
                             }
 
+                            if ($s->estorno == 1) {
+                                $color = 'green';
+                            }
+
                             $data_compra = date(('d/m/Y'), strtotime($r->data_compra));
 
                             $debitoFatura += $r->valor_parcela;
@@ -216,11 +220,17 @@ $periodo = $this->input->get('periodo');
                             echo '<td>' . $n_parcela . '/' . $total_parcelas . '</td>';
                             echo '<td class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor_parcela, 2, ',', '.') . '</span></td>';
 
+                            if ($r->valor_total < 0) {
+                                $valor = number_format(abs($r->valor_total), 2, ',', '.');
+                            } else {
+                                $valor = number_format($r->valor_total, 2, ',', '.');
+                            }
+
                             echo '<td>';
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
                                 echo '<button type="button" href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Detalhes" id_lancamento="' .
-                                    $s->id_lancamento . '" descricao="' . $s->descricao . '" valor="' . number_format($s->valor_total, 2, ',', '.') . '" data_compra="' .
-                                    date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" n_parcelas="' . $r->total_parcelas . '" valor_parcela="' .
+                                    $s->id_lancamento . '" descricao="' . $s->descricao . '" valor="' . $valor . '" data_compra="' .
+                                    date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas . '" valor_parcela="' .
                                     number_format($r->valor_parcela, 2, ',', '.') . '" ' . $disabled_lancamento_1 . ' ' . $disabled_lancamento_2 . '>
                                 <i class="fa fa-search-plus fa-lg fa-fw"></i></button>';
                             }
@@ -478,7 +488,7 @@ $periodo = $this->input->get('periodo');
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-lg-4">
+                        <div class="form-group col-lg-4" id="div_parceladaEditar">
                             <div class="checkbox icheck">
                                 <input type="checkbox" class="form-control" id="parceladaEditar" name="compra_parcelada" value="1">
                             </div>
@@ -505,10 +515,23 @@ $periodo = $this->input->get('periodo');
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="btnCancelLancamento" class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
-                        <i class="fa fa-times fa-fw"></i> Cancelar
-                    </button>
-                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Registrar</button>
+                    <div class="row">
+                        <div class="text-left col-xs-4" style="margin-top: -10px;">
+                            <div class="checkbox icheck">
+                                <input type="checkbox" class="form-control" id="estornoEditar" name="estorno" value="1">
+                            </div>
+                            <label for="estornoEditar" class="font-weight-bold">Estorno</label>
+                        </div>
+
+                        <div class="col-xs-8">
+                            <button id="btnCancelLancamento" class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                                <i class="fa fa-times fa-fw"></i> Cancelar
+                            </button>
+                            <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Registrar</button>
+
+                        </div>
+                    </div>
+
                 </div>
             </form>
         </div>
@@ -672,9 +695,9 @@ $periodo = $this->input->get('periodo');
 
         $.each($(estorno), function (key, value) {
             if (estorno == true) {
-                $('#div_parcelada').addClass('hidden');
+                $('#div_parcelada, #div_parceladaEditar').addClass('hidden');
             } else {
-                $('#div_parcelada').removeClass('hidden');
+                $('#div_parcelada, #div_parceladaEditar').removeClass('hidden');
             }
         });
 
@@ -697,9 +720,9 @@ $periodo = $this->input->get('periodo');
         function mudaICheckEstorno(event) {
             const checked = event.target.checked;
             if (checked == true) {
-                $('#div_parcelada').addClass('hidden');
+                $('#div_parcelada, #div_parceladaEditar').addClass('hidden');
             } else {
-                $('#div_parcelada').removeClass('hidden');
+                $('#div_parcelada, #div_parceladaEditar').removeClass('hidden');
             }
         }
 
@@ -759,6 +782,7 @@ $periodo = $this->input->get('periodo');
             $("#qnt_parcelasEditar").val($(this).attr('n_parcelas'));
             $("#urlLancamentoEditar").val($(location).attr('href'));
             console.log($(this).attr('n_parcelas'));
+            var estorno = $(this).attr('estorno');
             var parcelada = $(this).attr('parcelada');
             if (parcelada == 1) {
                 $('#parceladaEditar').iCheck('check');
@@ -766,6 +790,13 @@ $periodo = $this->input->get('periodo');
             } else {
                 $('#parceladaEditar').iCheck('uncheck');
                 $("#divParcelamentoEditar").addClass('hidden');
+            }
+            if (estorno == 1) {
+                $('#estornoEditar').iCheck('check');
+                $("#div_parceladaEditar").addClass('hidden');
+            } else {
+                $('#estornoEditar').iCheck('uncheck');
+                $("#div_parceladaEditar").removeClass('hidden');
             }
 
         });

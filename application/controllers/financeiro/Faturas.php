@@ -372,6 +372,13 @@ class Faturas extends CI_Controller
             $qnt_parcelas = 1;
         }
 
+        if ($this->input->post('estorno')) {
+            $estorno = 1;
+            $valor = '-' . $valor;
+        } else {
+            $estorno = 0;
+        }
+
         if ($this->input->post('data_compra')) {
             $data_compra = $this->input->post('data_compra');
             $data_compra = explode('/', $data_compra);
@@ -403,6 +410,7 @@ class Faturas extends CI_Controller
                 'valor_total' => $valor,
                 'total_parcelas' => $qnt_parcelas,
                 'compra_parcelada' => $this->input->post('compra_parcelada'),
+                'estorno' => $estorno,
                 'data_compra' => $data_compra,
                 'mes_referencia' => $mes,
                 'ano_referencia' => $ano,
