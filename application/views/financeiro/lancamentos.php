@@ -103,29 +103,52 @@ $periodo = $this->input->get('periodo');
 
                     if ($r->baixado == 0) {
                         $status = 'Pendente';
-                        $label_status = 'danger';
+                        $label_status = 'warning';
 
                     } else {
                         $status = 'Efetivado';
-                        $label_status = 'success';
+                        $label_status = 'primary';
 
                     };
 
                     if ($r->tipo == 1) {
                         $color = 'green';
-                        $label = 'success';
+                        $label_tipo = 'success';
+                        $tipo = 'ENTRADA';
+
 
                     } else {
                         $color = 'red';
-                        $label = 'danger';
+                        $label_tipo = 'danger';
+                        $tipo = 'SAÍDA';
+
                     }
+
+                    if ($r->cliente_fornecedor) {
+                        $fornecedor = $r->cliente_fornecedor;
+                    } else {
+                        $fornecedor = "&nbsp;";
+                    }
+
+                    if($r->tipo == 1) {
+                        $tipo = 'ENTRADA';
+                    } else {
+                        $tipo = 'SAÍDA';
+                    }
+
+                    foreach ($formasPagamento as $f) {
+                        if($f->id_forma == $r->forma_pgto) {
+                            $forma_pgto = $f->nome;
+                        }
+                    }
+
 
                     echo '<tr>';
                     echo '<td>' . $vencimento . '</td>';
 //                    echo '<td><span class="badge badge-' . $label . '">' . ucfirst($r->tipo) . '</span></td>';
-                    echo '<td>' . strtoupper($r->descricao) . '</td>';
-                    echo '<td><span class="label label-' . $label_status . '">' . strtoupper($status) . '</span></td>';
-                    echo '<td style=" color: ' . $color . '"> ' . number_format($r->valor, 2, ',', '.') . '</td>';
+                    echo '<td>' . strtoupper($r->descricao) . '<br><span class="small">' . ($fornecedor) . '</span></td>';
+                    echo '<td><span class="label label-' . $label_tipo . '">' . strtoupper($tipo) . '</span><br><span class="label label-' . $label_status . '">' . strtoupper($status) . '</span></td>';
+                    echo '<td><span style=" color: ' . $color . '"> ' . number_format($r->valor, 2, ',', '.') . '</span><br><span class="small">' . ($forma_pgto) . '</td>';
 
                     if ($r->valor < 0) {
                         $valor = number_format(abs($r->valor), 2, ',', '.');
