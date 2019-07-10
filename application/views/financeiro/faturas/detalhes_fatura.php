@@ -206,6 +206,8 @@ $periodo = $this->input->get('periodo');
 
                             if ($s->estorno == 1) {
                                 $color = 'green';
+                            } else {
+                                $color = 'black';
                             }
 
                             $data_compra = date(('d/m/Y'), strtotime($r->data_compra));
