@@ -62,7 +62,7 @@ class Redefinirsenha extends CI_Controller
                     $last_id = $this->db->insert_id();
 
                     $ajax = array(
-                        'token' => $token,
+//                        'token' => $token,
                         'email' => $result->email,
                         'id' => $last_id,
                         'validacao' => true
