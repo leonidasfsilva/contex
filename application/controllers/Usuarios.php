@@ -86,8 +86,8 @@ class Usuarios extends CI_Controller
                 'uf' => set_value('estado'),
                 'email' => set_value('email'),
                 'senha' => password_hash($this->input->post('senha'), PASSWORD_DEFAULT),
-                'telefone' => set_value('telefone'),
-                'celular' => set_value('celular'),
+                'telefone_2' => set_value('telefone'),
+                'telefone' => set_value('celular'),
                 'status' => set_value('situacao'),
                 'permissoes_id' => $this->input->post('permissoes_id'),
             );
@@ -139,7 +139,7 @@ class Usuarios extends CI_Controller
 
             if ($this->input->post('id_usuarios') == 1 && $this->input->post('situacao') == 0) {
                 $this->session->set_flashdata('erro', 'O administrador padrão não pode ser desativado!');
-                redirect(base_url() . 'index.php/usuarios/editar/' . $this->input->post('id_usuarios'));
+                redirect(base_url() . 'usuarios/editar/' . $this->input->post('id_usuarios'));
             }
 
             $senha = $this->input->post('senha');
@@ -157,8 +157,8 @@ class Usuarios extends CI_Controller
                     'uf' => $this->input->post('uf'),
                     'email' => $this->input->post('email'),
                     'senha' => $senha,
-                    'telefone' => $this->input->post('telefone'),
-                    'celular' => $this->input->post('celular'),
+                    'telefone_2' => $this->input->post('telefone'),
+                    'telefone' => $this->input->post('celular'),
                     'status' => $this->input->post('situacao'),
                     'permissoes_id' => $this->input->post('permissoes_id')
                 );
@@ -174,8 +174,8 @@ class Usuarios extends CI_Controller
                     'cidade' => $this->input->post('cidade'),
                     'uf' => $this->input->post('uf'),
                     'email' => $this->input->post('email'),
-                    'telefone' => $this->input->post('telefone'),
-                    'celular' => $this->input->post('celular'),
+                    'telefone_2' => $this->input->post('telefone'),
+                    'telefone' => $this->input->post('celular'),
                     'status' => $this->input->post('situacao'),
                     'permissoes_id' => $this->input->post('permissoes_id')
                 );
@@ -208,6 +208,6 @@ class Usuarios extends CI_Controller
 
         $ID = $this->uri->segment(3);
         $this->usuarios_model->delete('usuarios', 'id_usuarios', $ID);
-        redirect(base_url() . 'index.php/usuarios/gerenciar/');
+        redirect(base_url() . 'statuusuarios/gerenciar/');
     }
 }
