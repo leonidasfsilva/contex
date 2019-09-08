@@ -207,6 +207,11 @@ class Usuarios extends CI_Controller
     {
         $id = $this->input->post('id');
 
+        if($id == 1) {
+            $this->session->set_flashdata('erro', 'O administrador do sistema não pode ser desativado.');
+            redirect(base_url() . 'usuarios/gerenciar/');
+        }
+
         $data = array(
             'status' => 0
         );
