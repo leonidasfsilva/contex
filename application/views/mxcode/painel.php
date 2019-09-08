@@ -30,24 +30,6 @@
                 <div class="tile-sparkline">
                     <div class="tile-sparkline-heading clearfix">
                         <div class="pull-left">
-                            <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Meus Investimentos</span>
-                            <span class="tile-sparkline-subheading block mb10">Valor total investido</span>
-                            <h2 class="block">R$ <?= number_format($contaPoupanca->total, 2, ',', '.') ?></h2>
-                        </div>
-                        <div class="pull-right">
-                            <span><i class="fas fa-piggy-bank fa-lg fa-fw"></i></span>
-                        </div>
-                    </div>
-                    <div class="tile-sparkline-footer">
-                        <a href="<?= base_url() ?>financeiro/contaPoupanca" class="font-weight-bold">Ver detalhes </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-4">
-                <div class="tile-sparkline">
-                    <div class="tile-sparkline-heading clearfix">
-                        <div class="pull-left">
                             <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Cartão de Crédito</span>
                             <span class="tile-sparkline-subheading block mb10">Valor da fatura atual</span>
                             <h2 class="block">R$ <?= number_format($fatura->total, 2, ',', '.') ?></h2>
@@ -58,6 +40,24 @@
                     </div>
                     <div class="tile-sparkline-footer">
                         <a href="<?= base_url() ?>financeiro/faturas" class="font-weight-bold">Ver detalhes </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="tile-sparkline">
+                    <div class="tile-sparkline-heading clearfix">
+                        <div class="pull-left">
+                            <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Meus Investimentos</span>
+                            <span class="tile-sparkline-subheading block mb10">Valor total investido</span>
+                            <h2 class="block">R$ <?= number_format($contaPoupanca->total, 2, ',', '.') ?></h2>
+                        </div>
+                        <div class="pull-right">
+                            <span><i class="fas fa-piggy-bank fa-lg fa-fw"></i></span>
+                        </div>
+                    </div>
+                    <div class="tile-sparkline-footer">
+                        <a href="<?= base_url() ?>financeiro/contaPoupanca" class="font-weight-bold">Ver detalhes </a>
                     </div>
                 </div>
             </div>
