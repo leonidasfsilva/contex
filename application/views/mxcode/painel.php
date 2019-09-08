@@ -48,7 +48,7 @@
                 <div class="tile-sparkline">
                     <div class="tile-sparkline-heading clearfix">
                         <div class="pull-left">
-                            <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">sta</span>
+                            <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Cartão de Crédito</span>
                             <span class="tile-sparkline-subheading block mb10">Valor da fatura atual</span>
                             <h2 class="block">R$ <?= number_format($fatura->total, 2, ',', '.') ?></h2>
                         </div>
