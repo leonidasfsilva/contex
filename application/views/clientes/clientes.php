@@ -1,25 +1,4 @@
-<style type="text/css">
-
-    label.error {
-        color: #b94a48;
-    }
-
-    input.error {
-        border-color: #b94a48;
-    }
-
-    input.valid {
-        border-color: #5bb75b;
-    }
-
-    table {
-        font-family: Arial;
-        font-size: 11px;
-    }
-
-</style>
 <?php if (!$results) { ?>
-
     <div class="panel panel-midnightblue">
         <div class="panel-heading">
             <h2>

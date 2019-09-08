@@ -21,6 +21,7 @@ class Os extends CI_Controller
 
         $this->load->helper(array('form', 'codegen_helper'));
         $this->load->model('os_model', '', true);
+        $this->load->model('mxcode_model', '', true);
         $this->data['menuOs'] = 'OS';
     }
 
@@ -89,7 +90,6 @@ class Os extends CI_Controller
 
         $this->data['view'] = 'os/os';
         $this->load->view('tema/topo', $this->data);
-
 
     }
 
@@ -275,7 +275,7 @@ class Os extends CI_Controller
         $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
-        $this->data['emitente'] = $this->mapos_model->getEmitente();
+        $this->data['emitente'] = $this->mxcode_model->getEmitente(id_usuario());
 
         $this->data['view'] = 'os/visualizarOs';
         $this->load->view('tema/topo', $this->data);
@@ -300,7 +300,7 @@ class Os extends CI_Controller
         $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
-        $this->data['emitente'] = $this->mapos_model->getEmitente();
+        $this->data['emitente'] = $this->mxcode_model->getEmitente();
 
         $this->load->view('os/imprimirOs', $this->data);
 

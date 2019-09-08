@@ -138,7 +138,7 @@
                     <tr>
                         <td style="width: 30%; padding: 15px">
                             <?php if ($dados->logomarca) { ?>
-                                <img style="width: 150px" src="<?php echo base_url() . 'assets/uploads/logomarcas/' . $dados->logomarca; ?> ">
+                                <img style="width: 150px" src="<?php echo base_url() . 'assets/uploads/logomarcas/' . $dados->logomarca; ?>">
                             <?php } else { ?>
                                 <p class="alert alert-inverse">
                                     Nenhuma logomarca cadastrada
