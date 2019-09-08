@@ -9,6 +9,9 @@ class Mxcode extends CI_Controller
     {
         parent::__construct();
         $this->load->model('mxcode_model', '', true);
+        $this->load->model('financeiro_model', '', true);
+        $this->load->model('poupanca_model', '', true);
+        $this->load->model('fatura_model', '', true);
         $this->load->helper('file');
         $this->load->library('upload');
         $this->load->library('image_lib');
@@ -26,6 +29,9 @@ class Mxcode extends CI_Controller
 //        $this->data['estatisticas_financeiro'] = $this->mxcode_model->getEstatisticasFinanceiro();
         $data['menuPainel'] = 'Index';
         $data['usuario'] = $this->mxcode_model->getById(id_usuario());
+        $data['contaCorrente'] = $this->financeiro_model->getTotal(id_usuario());
+        $data['contaPoupanca'] = $this->poupanca_model->getTotal(id_usuario());
+        $data['fatura'] = $this->fatura_model->getValorTotalFaturaAtual(id_usuario());
         $data['view'] = 'mxcode/painel';
 
         $this->load->view('tema/topo', $data);

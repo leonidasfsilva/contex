@@ -325,6 +325,24 @@ class Fatura_model extends CI_Model
 
     }
 
+    function getValorTotalFaturaAtual($id_usuario)
+    {
+        $this->db
+            ->select('id_fatura')
+            ->from('faturas')
+            ->where('status = 1 AND fatura_aberta = 1 AND id_usuario = ' . $id_usuario);
+        $result = $this->db->get()->row();
+
+        $this->db
+            ->select('SUM(valor_parcela) AS total')
+            ->from('lancamentos_faturas_assoc')
+            ->where('status = 1 AND id_fatura = ' . $result->id_fatura);
+
+        $result = $this->db->get()->row();
+        return $result;
+
+    }
+
     function getFaturaUsuario($id_fatura, $id_usuario)
     {
         $this->db->select('*');

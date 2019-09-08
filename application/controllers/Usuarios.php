@@ -208,6 +208,6 @@ class Usuarios extends CI_Controller
 
         $ID = $this->uri->segment(3);
         $this->usuarios_model->delete('usuarios', 'id_usuarios', $ID);
-        redirect(base_url() . 'statuusuarios/gerenciar/');
+        redirect(base_url() . 'usuarios/gerenciar/');
     }
 }
