@@ -58,14 +58,14 @@ class Usuarios_model extends CI_Model
         return false;
     }
     
-    function delete($table, $fieldID, $ID)
+    function delete($table, $data, $fieldID, $ID)
     {
         $this->db->where($fieldID, $ID);
-        $this->db->delete($table);
+        $this->db->update($table, $data);
         if ($this->db->affected_rows() == '1') {
             return true;
         }
-        
+
         return false;
     }
     

@@ -29,7 +29,8 @@
             </table>
         </div>
     </div>
-<?php } else { ?>
+<?php }
+else { ?>
     <div class="panel panel-midnightblue">
         <div class="panel-heading">
             <h2>

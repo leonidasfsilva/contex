@@ -203,11 +203,39 @@ class Usuarios extends CI_Controller
     }
     
 
-    public function excluir()
+    public function desativar()
     {
+        $id = $this->input->post('id');
 
-        $ID = $this->uri->segment(3);
-        $this->usuarios_model->delete('usuarios', 'id_usuarios', $ID);
-        redirect(base_url() . 'usuarios/gerenciar/');
+        $data = array(
+            'status' => 0
+        );
+
+        if($this->usuarios_model->delete('usuarios', $data, 'id_usuarios', $id) == true){
+            $this->session->set_flashdata('sucesso', 'Usuário desativado com sucesso!');
+            redirect(base_url() . 'usuarios/gerenciar/');
+
+        } else{
+            $this->session->set_flashdata('erro', 'Erro ao tentar desativar usuário.');
+            redirect(base_url() . 'usuarios/gerenciar/');
+        }
+    }
+
+    public function ativar()
+    {
+        $id = $this->input->post('id');
+
+        $data = array(
+            'status' => 1
+        );
+
+        if($this->usuarios_model->delete('usuarios', $data, 'id_usuarios', $id) == true){
+            $this->session->set_flashdata('sucesso', 'Usuário ativado com sucesso!');
+            redirect(base_url() . 'usuarios/gerenciar/');
+
+        } else{
+            $this->session->set_flashdata('erro', 'Erro ao tentar ativar usuário.');
+            redirect(base_url() . 'usuarios/gerenciar/');
+        }
     }
 }

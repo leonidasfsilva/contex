@@ -2,7 +2,7 @@
     <form method="get" action="<?php echo base_url(); ?>os/gerenciar">
         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aOs')) { ?>
             <div class="span3">
-                <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="btn btn-success span12"><i class="icon-plus icon-white"></i>
+                <a href="<?php echo base_url(); ?>os/adicionar" class="btn btn-success span12"><i class="icon-plus icon-white"></i>
                     Adicionar OS</a>
             </div>
         <?php } ?>
@@ -156,7 +156,7 @@ if (!$results) { ?>
 
 <!-- Modal -->
 <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/os/excluir" method="post">
+    <form action="<?php echo base_url() ?>os/excluir" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel">Excluir OS</h5>

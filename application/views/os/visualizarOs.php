@@ -180,13 +180,7 @@ $totalProdutos = 0;?>
                         <hr />
                     
                         <h4 style="text-align: right">Valor Total: R$ <?php echo number_format($totalProdutos + $totalServico, 2, ',', '.');?></h4>
-
                     </div>
-            
-
-                    
-                    
-              
                 </div>
             </div>
         </div>

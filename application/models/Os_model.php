@@ -219,7 +219,7 @@ class Os_model extends CI_Model
         $this->db->select('*');
         $this->db->limit(5);
         $this->db->like('nome', $q);
-        $this->db->where('situacao', 1);
+        $this->db->where('status', 1);
         $query = $this->db->get('usuarios');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
