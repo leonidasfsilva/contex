@@ -141,6 +141,11 @@ class Mxcode extends CI_Controller
 
             if ($usuario) {
                 if (password_verify($password, $usuario->senha)) {
+                    if ($usuario->status == 0) {
+                        $this->session->set_flashdata('erro', 'Conta desativada.<br>Por favor, contate o administrador do sitema.');
+                        redirect('mxcode/login');
+                    }
+
                     $session_data = array(
                         'nome' => $usuario->nome,
                         'avatar' => $usuario->avatar,
@@ -153,7 +158,7 @@ class Mxcode extends CI_Controller
                     gravaLog($usuario->id_usuarios, 'Login no sistema', getenv("REMOTE_ADDR"));
                     redirect('/');
                 } else {
-                    $this->session->set_flashdata('erro', 'Dados de acesso inválidos, por favor tente novamente.');
+                    $this->session->set_flashdata('erro', '1Dados de acesso inválidos, por favor tente novamente.');
                     redirect('mxcode/login');
                 }
             } else {
