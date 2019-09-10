@@ -158,7 +158,7 @@ class Mxcode extends CI_Controller
                     gravaLog($usuario->id_usuarios, 'Login no sistema', getenv("REMOTE_ADDR"));
                     redirect('/');
                 } else {
-                    $this->session->set_flashdata('erro', '1Dados de acesso inválidos, por favor tente novamente.');
+                    $this->session->set_flashdata('erro', 'Dados de acesso inválidos, por favor tente novamente.');
                     redirect('mxcode/login');
                 }
             } else {
