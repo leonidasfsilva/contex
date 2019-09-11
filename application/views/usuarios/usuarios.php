@@ -3,7 +3,7 @@
         <div class="panel-heading">
             <h2>
                 <i class="fa fa-user-circle fa-lg fa-fw"></i>
-                Usuários do Sistema
+                Gestão de Usuários do Sistema
             </h2>
             <div class="panel-ctrls">
                 <a href="<?php echo base_url(); ?>usuarios/adicionar" class="btn btn-primary btn-sm"><i
@@ -34,7 +34,7 @@
         <div class="panel-heading">
             <h2>
                 <i class="fa fa-user-circle fa-lg fa-fw"></i>
-                Usuários do Sistema
+                Gestão de Usuários do Sistema
             </h2>
             <div class="panel-ctrls">
                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>

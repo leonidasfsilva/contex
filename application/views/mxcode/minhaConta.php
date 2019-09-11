@@ -143,7 +143,10 @@
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label for="email" class="font-weight-bold">Email *</label>
-                            <input type="text" class="form-control" id="email" name="email" value="<?php echo $dados->email; ?>" disabled/>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="email" name="email" value="<?php echo $dados->email; ?>" disabled/>
+                                <span class="input-group-addon" title="Para alterar seu email de cadastro, contate o administrador do sistema."><i class="fa fa-info-circle fa-fw"></i></span>
+                            </div>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="telefone" class="font-weight-bold">Telefone</label>

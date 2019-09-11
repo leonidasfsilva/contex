@@ -116,9 +116,9 @@
 
 <?php } else { ?>
 
-    <div class="panel panel-default">
+    <div class="panel panel-midnightblue">
         <div class="panel-heading">
-            <h2 style="font-size: 12pt">
+            <h2>
                 <i class="fa fa-id-card-o fa-lg fa-fw"></i>
                 Dados do Emitente
             </h2>
@@ -160,7 +160,7 @@
             </div>
             <div class="panel-footer">
                 <p class="alert alert-info">
-                    <i class="fa fa-exclamation-circle fa-lg fa-fw"></i>
+                    <i class="fa fa-info-circle fa-lg fa-fw"></i>
                     Os dados acima serão utilizados no cabeçalho das telas de impressão.
                 </p>
             </div>
