@@ -22,19 +22,16 @@
             </div>
             <div class="row">
                 <div class="form-group col-md-4">
-                    <label for="telefone" class="control-label font-weight-bold">Telefone *</label>
+                    <label for="telefone" class="control-label font-weight-bold">Telefone</label>
                     <input type="text" class="form-control" id="telefone" name="telefone">
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="email" class="control-label font-weight-bold">Email</label>
+                    <label for="email" class="control-label font-weight-bold">Email *</label>
                     <input type="text" class="form-control" id="email" name="email">
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="senha" class="control-label font-weight-bold">Senha</label>
-                    <i class="fa fa-info-circle tip-top"
-                       title="Caso não queira alterar a senha, mantenha este campo em branco."></i>
-                    <input type="password" class="form-control" id="senha" name="senha"
-                           placeholder="">
+                    <label for="senha" class="control-label font-weight-bold">Senha *</label>
+                    <input type="password" class="form-control" id="senha" name="senha">
                 </div>
             </div>
             <div class="row">
@@ -74,7 +71,7 @@
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="permissoes_id" class="control-label font-weight-bold">Permissão</label>
+                    <label for="permissoes_id" class="control-label font-weight-bold">Permissão *</label>
                     <select class="form-control" name="permissoes_id" id="permissoes_id">
                         <option value="">-- Selecione --</option>
                         <?php foreach ($permissoes as $p) {
@@ -83,7 +80,7 @@
                     </select>
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="situacao" class="control-label font-weight-bold">Status</label>
+                    <label for="situacao" class="control-label font-weight-bold">Status *</label>
                     <select class="form-control" name="situacao" id="situacao">
                         <option value="">-- Selecione --</option>
                         <option value="1">Ativo</option>
@@ -134,10 +131,10 @@
                 nome: {required: true},
                 permissoes_id: {required: true},
                 situacao: {required: true},
-                nome: {required: true},
                 cpf: {required: false},
-                telefone: {required: true},
-                email: {required: false},
+                telefone: {required: false},
+                email: {required: true},
+                senha: {required: true},
                 logradouro: {required: false},
                 numero: {required: false},
                 bairro: {required: false},
@@ -149,7 +146,8 @@
                 nome: {required: 'Informe o nome'},
                 cpf: {required: 'Campo Requerido.'},
                 telefone: {required: 'Informe o telefone'},
-                email: {required: 'Campo Requerido.'},
+                email: {required: 'Informe o email'},
+                senha: {required: 'Defina uma senha'},
                 logradouro: {required: 'Campo Requerido.'},
                 numero: {required: 'Campo Requerido.'},
                 bairro: {required: 'Campo Requerido.'},

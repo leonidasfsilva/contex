@@ -123,7 +123,12 @@ class Usuarios extends CI_Controller
             redirect(base_url() . 'usuarios/editar/' . $this->input->post('id_usuarios'));
         }
 
-        if ($this->input->post('id_usuarios')) {
+        if ($_POST) {
+
+            if(!$this->input->post('email')) {
+                $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar editar usuário: email não informado.');
+                redirect(base_url() . 'usuarios/editar/' . $this->input->post('id_usuarios'));
+            }
 
             $verificacao = $this->usuarios_model->verificaEmailUsuario($this->input->post('email'), $this->input->post('id_usuarios'));
 

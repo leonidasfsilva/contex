@@ -23,12 +23,12 @@
             </div>
             <div class="row">
                 <div class="form-group col-md-4">
-                    <label for="telefone" class="control-label font-weight-bold">Telefone *</label>
+                    <label for="telefone" class="control-label font-weight-bold">Telefone</label>
                     <input type="text" class="form-control" id="telefone" name="telefone"
                            value="<?php echo $result->telefone; ?>">
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="email" class="control-label font-weight-bold">Email</label>
+                    <label for="email" class="control-label font-weight-bold">Email *</label>
                     <input type="text" class="form-control" id="email" name="email"
                            value="<?php echo $result->email; ?>">
                 </div>
@@ -148,12 +148,12 @@
         });
 
 
-        $('#formCliente').validate({
+        $('#formUsuario').validate({
             rules: {
                 nome: {required: true},
                 cpf: {required: false},
-                telefone: {required: true},
-                email: {required: false},
+                telefone: {required: false},
+                email: {required: true},
                 logradouro: {required: false},
                 numero: {required: false},
                 bairro: {required: false},
@@ -165,7 +165,7 @@
                 nome: {required: 'Informe o nome'},
                 cpf: {required: 'Campo Requerido.'},
                 telefone: {required: 'Informe o telefone'},
-                email: {required: 'Campo Requerido.'},
+                email: {required: 'Informe o email'},
                 logradouro: {required: 'Campo Requerido.'},
                 numero: {required: 'Campo Requerido.'},
                 bairro: {required: 'Campo Requerido.'},

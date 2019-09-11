@@ -142,7 +142,7 @@ class Mxcode extends CI_Controller
             if ($usuario) {
                 if (password_verify($password, $usuario->senha)) {
                     if ($usuario->status == 0) {
-                        $this->session->set_flashdata('erro', 'Conta inativa.<br>Por favor, contate o administrador do sistema.');
+                        $this->session->set_flashdata('erro', 'Conta de usuário desativada.<br>Por favor, contate o administrador do sistema.');
                         redirect('mxcode/login');
                     }
 
