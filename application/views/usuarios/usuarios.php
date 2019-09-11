@@ -62,11 +62,11 @@
                     if ($r->status == 1) {
                         $status = 'Ativo';
                         $label_status = 'success';
-                        $btn_status = '<a href="#modalDesativar" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-danger btn-sm" title="Inativar usuário"><i class="fa fa-times-circle fa-lg fa-fw" ></i></a>';
+                        $btn_status = '<a href="#modalDesativar" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-danger btn-sm" title="Desativar"><i class="fa fa-times-circle fa-lg fa-fw" ></i></a>';
                     } else {
                         $status = 'Inativo';
                         $label_status = 'danger';
-                        $btn_status = '<a href="#modalAtivar" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-success btn-sm" title="Ativar usuário"><i class="fa fa-check-circle fa-lg fa-fw" ></i></a>';
+                        $btn_status = '<a href="#modalAtivar" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-success btn-sm" title="Ativar"><i class="fa fa-check-circle fa-lg fa-fw" ></i></a>';
                     }
 
                     echo '<tr>';
@@ -102,11 +102,11 @@ echo $this->pagination->create_links();
         <div class="modal-content">
             <div class="modal-header bg-danger">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white ">Desativar usuário</h4>
+                <h4 class="modal-title text-white ">Desativar conta de usuário</h4>
             </div>
             <form action="<?php echo base_url() ?>usuarios/desativar" method="post">
                 <div class="modal-body">
-                    <p>Deseja realmente desativar este usuário?</p>
+                    <p>Deseja realmente desativar esta conta de usuário?</p>
                     <input type="hidden" id="id_desativar" name="id" value=""/>
                 </div>
                 <div class="modal-footer">
@@ -127,11 +127,11 @@ echo $this->pagination->create_links();
         <div class="modal-content">
             <div class="modal-header bg-success">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white ">Ativar usuário</h4>
+                <h4 class="modal-title text-white ">Ativar conta de usuário</h4>
             </div>
             <form action="<?php echo base_url() ?>usuarios/ativar" method="post">
                 <div class="modal-body">
-                    <p>Deseja realmente ativar este usuário?</p>
+                    <p>Deseja realmente ativar esta conta usuário?</p>
                     <input type="hidden" id="id_ativar" name="id" value=""/>
                 </div>
                 <div class="modal-footer">

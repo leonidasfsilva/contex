@@ -192,13 +192,12 @@ class Usuarios extends CI_Controller
 
     }
 
-    public
     function desativar()
     {
         $id = $this->input->post('id');
 
         if ($id == 1) {
-            $this->session->set_flashdata('erro', 'O administrador do sistema não pode ser desativado.');
+            $this->session->set_flashdata('erro', 'A conta de administrador do sistema não pode ser desativada.');
             redirect(base_url() . 'usuarios/gerenciar/');
         }
 
@@ -207,16 +206,15 @@ class Usuarios extends CI_Controller
         );
 
         if ($this->usuarios_model->delete('usuarios', $data, 'id_usuarios', $id) == true) {
-            $this->session->set_flashdata('sucesso', 'Usuário desativado com sucesso!');
+            $this->session->set_flashdata('sucesso', 'Conta de usuário desativada com sucesso!');
             redirect(base_url() . 'usuarios/gerenciar/');
 
         } else {
-            $this->session->set_flashdata('erro', 'Erro ao tentar desativar usuário.');
+            $this->session->set_flashdata('erro', 'Erro ao tentar desativar conta de usuário.');
             redirect(base_url() . 'usuarios/gerenciar/');
         }
     }
 
-    public
     function ativar()
     {
         $id = $this->input->post('id');
@@ -226,16 +224,15 @@ class Usuarios extends CI_Controller
         );
 
         if ($this->usuarios_model->delete('usuarios', $data, 'id_usuarios', $id) == true) {
-            $this->session->set_flashdata('sucesso', 'Usuário ativado com sucesso!');
+            $this->session->set_flashdata('sucesso', 'Conta de usuário ativada com sucesso!');
             redirect(base_url() . 'usuarios/gerenciar/');
 
         } else {
-            $this->session->set_flashdata('erro', 'Erro ao tentar ativar usuário.');
+            $this->session->set_flashdata('erro', 'Erro ao tentar ativar conta de usuário.');
             redirect(base_url() . 'usuarios/gerenciar/');
         }
     }
 
-    public
     function visualizar($id)
     {
 
