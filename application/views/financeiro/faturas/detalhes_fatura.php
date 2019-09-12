@@ -191,7 +191,6 @@ $periodo = $this->input->get('periodo');
 
                         if ($s->id_lancamento == $r->id_lancamento) {
 
-
                             if ($r->n_parcela < 10) {
                                 $n_parcela = str_pad($r->n_parcela, 2, '0', STR_PAD_LEFT);
                             } else {
@@ -211,9 +210,7 @@ $periodo = $this->input->get('periodo');
                             }
 
                             $data_compra = date(('d/m/Y'), strtotime($r->data_compra));
-
                             $debitoFatura += $r->valor_parcela;
-
 
                             echo '<tr>';
                             echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
@@ -244,7 +241,6 @@ $periodo = $this->input->get('periodo');
                             echo '</td>';
                             echo '</tr>';
                         }
-
                     }
                 } ?>
                 </tbody>
@@ -258,7 +254,7 @@ $periodo = $this->input->get('periodo');
                     </tr>
                     </thead>
                     <tr>
-                        <td colspan="2" style="text-align: left; font-weight: bold">(=) LANÇAMENTOS MARCADOS</td>
+                        <td colspan="2" style="text-align: left; font-weight: bold">(=) LANÇAMENTOS SELECIONADOS</td>
                         <td colspan="1" style="text-align: right; font-weight: bold" id="valor_soma_parcelas">
                             0,00
                         </td>
@@ -593,7 +589,6 @@ $periodo = $this->input->get('periodo');
 
         // Calculate the total invoice amount from selected items only
         function somaValorParcelas() {
-            console.log(marcados);
             var Soma = 0;
             // iterate through each td based on class and add the values
             $(".valor_parcela").each(function () {
@@ -601,12 +596,12 @@ $periodo = $this->input->get('periodo');
                 if ($(this).closest('tr').find('.soma_parcelas').is(':checked')) {
                     var value = $('span', this).text();
                     value = jquery_format(value);
-                    console.log('valor do elemento: ' + value);
+                    // console.log('valor do elemento: ' + value);
                     // add only if the value is number
                     if (!isNaN(value) && value.length != 0) {
                         Soma += parseFloat(value);
                     } else {
-                        console.log('erro no método somaValorParcelas()');
+                        // console.log('erro no método somaValorParcelas()');
                     }
                 }
             });

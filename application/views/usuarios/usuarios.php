@@ -156,6 +156,5 @@ echo $this->pagination->create_links();
         });
 
     });
-
 </script>
 

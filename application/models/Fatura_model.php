@@ -63,9 +63,9 @@ class Fatura_model extends CI_Model
         $this->db->order_by('id_lancamento', 'asc');
         $this->db->limit($perpage, $start);
         if ($where) {
-            $this->db->where($where . ' AND status = 1 ');
+            $this->db->where($where . ' AND status = 1 AND id_fatura = ' . $id_fatura);
         } else {
-            $this->db->where('status = 1');
+            $this->db->where('status = 1 AND id_fatura = ' . $id_fatura);
         }
 
         $query = $this->db->get();
