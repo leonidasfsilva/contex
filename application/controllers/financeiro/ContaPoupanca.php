@@ -372,6 +372,7 @@ class ContaPoupanca extends CI_Controller
             if ($this->input->post('debito_conta')) {
                 $data2 = array(
                     'descricao' => $descricao,
+                    'cliente_fornecedor' => padronizarString($this->session->userdata('nome')),
                     'valor' => $valor_corrente,
                     'id_usuario' => id_usuario(),
                     'data_lancamento' => $vencimento,
@@ -435,6 +436,7 @@ class ContaPoupanca extends CI_Controller
             if ($this->input->post('debito_conta')) {
                 $data2 = array(
                     'descricao' => $descricao,
+                    'cliente_fornecedor' => padronizarString($this->session->userdata('nome')),
                     'valor' => $valor,
                     'id_usuario' => id_usuario(),
                     'data_lancamento' => $vencimento,
