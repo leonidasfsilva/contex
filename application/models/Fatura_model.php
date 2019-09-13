@@ -240,20 +240,26 @@ class Fatura_model extends CI_Model
         return $this->db->count_all_results();
     }
 
-    function getLancamentoEditavel($id, $mes, $ano)
+    function getLancamentoEditavel($mes, $ano)
     {
-
-        $this->db->select('*');
+        $this->db->select('id_lancamento');
         $this->db->from('lancamentos_faturas_assoc');
-        $this->db->where(
-            'n_parcela = 1 AND status = 1 AND id_lancamento = ' . $id .
-            ' AND mes_referencia = ' . $mes . ' AND ano_referencia = ' . $ano
-        );
+        $this->db->where('n_parcela', 1);
+        $this->db->where('status', 1);
+        $this->db->where('mes_referencia', $mes);
+        $this->db->where('ano_referencia', $ano);
 
-        $query = $this->db->get();
-        $result = $query->row();
+        $rows = $this->db->count_all_results('', false);
 
-        return $query;
+        if ($rows > 0) {
+            foreach ($this->db->get()->result() as $row) {
+                $data[] = $row->id_lancamento;
+            }
+            return $data;
+        } else {
+            return false;
+        }
+//        return $result;
     }
 
     function getUltimaFaturaAberta($id_usuario)

@@ -157,13 +157,15 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
                 foreach ($results as $r) {
                     foreach ($subresults as $s) {
-                        if ($this->fatura_model->getLancamentoEditavel($r->id_lancamento, $mes_referencia, $ano_referencia)->num_rows() > 0) {
-                            $disabled_lancamento_2 = '';
-                        } else {
-                            $disabled_lancamento_2 = 'disabled';
-                        }
 
                         if ($s->id_lancamento == $r->id_lancamento) {
+
+                            if (in_array($r->id_lancamento, $lancamentoEditavel, true)) {
+                                $disabled_lancamento_2 = '';
+                            } else {
+                                $disabled_lancamento_2 = 'disabled';
+                            }
+
 
                             if ($r->n_parcela < 10) {
                                 $n_parcela = str_pad($r->n_parcela, 2, '0', STR_PAD_LEFT);
