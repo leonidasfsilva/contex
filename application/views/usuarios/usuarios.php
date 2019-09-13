@@ -1,95 +1,65 @@
-<?php if (!$results) { ?>
-    <div class="panel panel-midnightblue">
-        <div class="panel-heading">
-            <h2>
-                <i class="fa fa-user-circle fa-lg fa-fw"></i>
-                Gestão de Usuários do Sistema
-            </h2>
-            <div class="panel-ctrls">
+<div class="panel panel-midnightblue">
+    <div class="panel-heading">
+        <h3>
+            <i class="fa fa-user-circle fa-lg fa-fw"></i>
+            Gestão de Usuários do Sistema
+        </h3>
+        <div class="panel-ctrls">
+            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
                 <a href="<?php echo base_url(); ?>usuarios/adicionar" class="btn btn-primary btn-sm"><i
-                            class="fa fa-plus-square fa-fw"></i> Adicionar Cliente</a>
-            </div>
-        </div>
-        <div class="panel-body panel-no-padding table-responsive">
-            <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer"
-                   role="grid" style="width: 100%;">
-                <thead>
-                <tr role="row">
-                    <th style="width: 30px">ID</th>
-                    <th>Nome</th>
-                    <th>Telefone</th>
-                    <th style="width: 100px">Ações</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td colspan="5">Nenhum cliente cadastrado</td>
-                </tr>
-                </tbody>
-            </table>
+                            class="fa fa-plus-square fa-fw"></i> Adicionar Usuário</a>
+            <?php } ?>
         </div>
     </div>
-<?php } else { ?>
-    <div class="panel panel-midnightblue">
-        <div class="panel-heading">
-            <h2>
-                <i class="fa fa-user-circle fa-lg fa-fw"></i>
-                Gestão de Usuários do Sistema
-            </h2>
-            <div class="panel-ctrls">
-                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
-                    <a href="<?php echo base_url(); ?>usuarios/adicionar" class="btn btn-primary btn-sm"><i
-                                class="fa fa-plus-square fa-fw"></i> Adicionar Usuário</a>
-                <?php } ?>
-            </div>
-        </div>
-        <div class="panel-body panel-no-padding table-responsive">
-            <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer"
-                   role="grid" style="width: 100%;">
-                <thead>
-                <tr role="row">
-                    <th style="width: 30px">ID</th>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>Permissão</th>
-                    <th>Status</th>
-                    <th style="width: 150px">Ações</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($results as $r) {
-
-                    if ($r->status == 1) {
-                        $status = 'Ativo';
-                        $label_status = 'success';
-                        $btn_status = '<a href="#modalDesativar" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-danger btn-sm" title="Desativar"><i class="fa fa-times-circle fa-lg fa-fw" ></i></a>';
-                    } else {
-                        $status = 'Inativo';
-                        $label_status = 'danger';
-                        $btn_status = '<a href="#modalAtivar" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-success btn-sm" title="Ativar"><i class="fa fa-check-circle fa-lg fa-fw" ></i></a>';
-                    }
-
-                    echo '<tr>';
-                    echo '<td>' . $r->id_usuarios . '</td>';
-                    echo '<td>' . $r->nome . '</td>';
-                    echo '<td>' . $r->email . '</td>';
-                    echo '<td>' . $r->permissao . '</td>';
-                    echo '<td><span class="label label-' . $label_status . '">' . strtoupper($status) . '</span></td>';
-                    echo '<td style="text-align: center">';
-                    echo '<a href="' . base_url() . 'usuarios/visualizar/' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-info btn-sm" title="Ver detalhes"><i class="fa fa-search-plus fa-lg fa-fw"></i></a>';
-                    echo '<a href="' . base_url() . 'usuarios/editar/' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-primary btn-sm" title="Editar usuário"><i class="fa fa-edit fa-lg fa-fw"></i></a>';
-                    echo $btn_status;
-                    echo '</td>';
-                    echo '</tr>';
-                } ?>
+    <div class="panel-body panel-no-padding table-responsive">
+        <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer"
+               role="grid" style="width: 100%;">
+            <thead>
+            <tr role="row">
+                <th style="width: 30px">ID</th>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Permissão</th>
+                <th>Status</th>
+                <th style="width: 150px">Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php if (!$results) { ?>
                 <tr>
-
+                    <td colspan="5">Nenhum usuário cadastrado</td>
                 </tr>
-                </tbody>
-            </table>
-        </div>
+            <?php } else {
+            foreach ($results as $r) {
+
+                if ($r->status == 1) {
+                    $status = 'Ativo';
+                    $label_status = 'success';
+                    $btn_status = '<a href="#modalDesativar" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-danger btn-sm" title="Desativar"><i class="fa fa-times-circle fa-lg fa-fw" ></i></a>';
+                } else {
+                    $status = 'Inativo';
+                    $label_status = 'danger';
+                    $btn_status = '<a href="#modalAtivar" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-success btn-sm" title="Ativar"><i class="fa fa-check-circle fa-lg fa-fw" ></i></a>';
+                }
+
+                echo '<tr>';
+                echo '<td>' . $r->id_usuarios . '</td>';
+                echo '<td>' . $r->nome . '</td>';
+                echo '<td>' . $r->email . '</td>';
+                echo '<td>' . $r->permissao . '</td>';
+                echo '<td><span class="label label-' . $label_status . '">' . strtoupper($status) . '</span></td>';
+                echo '<td style="text-align: center">';
+                echo '<a href="' . base_url() . 'usuarios/visualizar/' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-info btn-sm" title="Ver detalhes"><i class="fa fa-search-plus fa-lg fa-fw"></i></a>';
+                echo '<a href="' . base_url() . 'usuarios/editar/' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-primary btn-sm" title="Editar usuário"><i class="fa fa-edit fa-lg fa-fw"></i></a>';
+                echo $btn_status;
+                echo '</td>';
+                echo '</tr>';
+            } ?>
+            </tbody>
+        </table>
     </div>
-    <?php
+</div>
+<?php
 }
 
 echo $this->pagination->create_links();

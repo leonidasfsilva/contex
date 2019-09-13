@@ -1,9 +1,9 @@
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
-        <h2>
+        <h3>
             <i class="fa fa-user-circle fa-lg fa-fw"></i>
             Editar Dados do Usuário
-        </h2>
+        </h3>
     </div>
     <div class="panel-body">
         <?php if ($custom_error != '') {

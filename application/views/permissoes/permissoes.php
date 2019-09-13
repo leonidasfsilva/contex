@@ -30,10 +30,7 @@ if (!$results) { ?>
         </div>
     </div>
 
-<?php } else {
-
-
-    ?>
+<?php } else { ?>
     <div class="widget-box">
         <div class="widget-title">
         <span class="icon">

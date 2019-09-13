@@ -1,13 +1,12 @@
 <?php $situacao = $this->input->get('situacao');
 $periodo = $this->input->get('periodo');
 ?>
-
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
-        <h2 style="font-size: 12pt">
+        <h3>
             <i class="fas fa-piggy-bank fa-lg fa-fw"></i>
             Conta Poupança
-        </h2>
+        </h3>
         <div class="panel-ctrls">
             <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar lançamentos">
                 <i class="fa fa-filter fa-fw"></i>

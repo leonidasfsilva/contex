@@ -2,33 +2,12 @@
 $periodo = $this->input->get('periodo');
 ?>
 
-<style type="text/css">
-
-    label.error {
-        color: #b94a48;
-    }
-
-    input.error {
-        border-color: #b94a48;
-    }
-
-    input.valid {
-        border-color: #5bb75b;
-    }
-
-    table {
-        font-family: Arial;
-        font-size: 11px;
-    }
-
-</style>
-
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
-        <h2 style="font-size: 12pt">
+        <h3>
             <i class="fa fa-thumb-tack fa-lg fa-fw"></i>
             Controle de Pendências
-        </h2>
+        </h3>
         <div class="panel-ctrls">
             <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar pendências">
                 <i class="fa fa-filter fa-fw"></i>
@@ -43,6 +22,7 @@ $periodo = $this->input->get('periodo');
             <?php } ?>
         </div>
     </div>
+
     <?php if ($results) { ?>
 
     <div class="panel-heading">

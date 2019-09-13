@@ -10005,6 +10005,24 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 ul .panel .panel-heading h2 {
     padding: 0 !important;
 }
+.panel .panel-heading h3 {
+    /*color: #607d8b;*/
+    height: 100%;
+    width: auto;
+    float: left;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 13px 0 13px;
+    position: relative;
+    margin: 0;
+    line-height: 20px;
+}
+.panel .panel-heading h3 i {
+    margin-right: 4px;
+}
+ul .panel .panel-heading h3 {
+    padding: 0 !important;
+}
 .panel .panel-heading .panel-ctrls {
     width: auto;
     float: right;

@@ -2,10 +2,10 @@
     <div class="col-md-12">
         <div class="panel panel-profile panel-midnightblue">
             <div class="panel-heading">
-                <h2 style="font-size: 12pt">
+                <h3>
                     <i class="fa fa-user-circle fa-lg fa-fw"></i>
                     Minha Conta
-                </h2>
+                </h3>
                 <div class="panel-ctrls">
                     <button href="#modalAlterarSenha" class="btn btn-primary btn-sm" id="alterar_senha" data-toggle="modal" title="Alterar senha da conta">
                         <i class="fa fa-lock fa-fw"></i>

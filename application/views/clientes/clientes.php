@@ -1,10 +1,10 @@
 <?php if (!$results) { ?>
     <div class="panel panel-midnightblue">
         <div class="panel-heading">
-            <h2>
+            <h3>
                 <i class="fa fa-group fa-lg fa-fw"></i>
                 Lista de Clientes
-            </h2>
+            </h3>
             <div class="panel-ctrls">
                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
                     <a href="<?php echo base_url(); ?>clientes/adicionar" class="btn btn-primary btn-sm"><i class="fa fa-plus-square fa-fw"></i> Adicionar Cliente</a>
@@ -33,10 +33,10 @@
 else { ?>
     <div class="panel panel-midnightblue">
         <div class="panel-heading">
-            <h2>
+            <h3>
                 <i class="fa fa-group fa-lg fa-fw"></i>
                 Lista de Clientes
-            </h2>
+            </h3>
             <div class="panel-ctrls">
                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
                     <a href="<?php echo base_url(); ?>clientes/adicionar" class="btn btn-primary btn-sm"><i class="fa fa-plus-square fa-fw"></i> Adicionar Cliente</a>

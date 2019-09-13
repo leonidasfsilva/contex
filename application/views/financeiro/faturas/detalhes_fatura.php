@@ -1,33 +1,7 @@
 <?php $situacao = $this->input->get('situacao');
 $periodo = $this->input->get('periodo');
-?>
 
-<style type="text/css">
-
-    label.error {
-        color: #b94a48;
-    }
-
-    input.error {
-        border-color: #b94a48;
-    }
-
-    input.valid {
-        border-color: #5bb75b;
-    }
-
-    .table-bordeless td, .table-bordeless th {
-        border: none;
-    }
-
-    table {
-        font-family: Arial;
-        font-size: 11px;
-    }
-
-</style>
-
-<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
+if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
     if ($status_fatura == 1) {
         $disabled_lancamento_1 = '';
         $statusFatura = 'ABERTA';
@@ -67,10 +41,10 @@ $periodo = $this->input->get('periodo');
 
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
-        <h2 style="font-size: 12pt">
+        <h3>
             <i class="fa fa-credit-card fa-lg fa-fw"></i>
             Detalhes da Fatura: # <?= $id_fatura ?>
-        </h2>
+        </h3>
         <div class="panel-ctrls">
             <a href="<?php echo base_url() ?>financeiro/faturas" class="btn btn-sm btn-default"><i class="fa fa-arrow-left fa-fw"></i> Faturas</a>
             <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar faturas">

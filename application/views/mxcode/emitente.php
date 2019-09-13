@@ -1,10 +1,10 @@
 <?php if (!isset($dados) || $dados == null) { ?>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h2 style="font-size: 12pt">
+            <h3>
                 <i class="fa fa-id-card-o fa-lg fa-fw"></i>
                 Dados do Emitente
-            </h2>
+            </h3>
             <div class="panel-ctrls">
                 <!--                <button href="#modalFiltrar" class="btn btn-default btn-sm" id="editar_perfil" data-toggle="modal" title="Editar perfil de usuário">-->
                 <!--                    <i class="fa fa-user-circle fa-fw"></i>-->
@@ -118,10 +118,10 @@
 
     <div class="panel panel-midnightblue">
         <div class="panel-heading">
-            <h2>
+            <h3>
                 <i class="fa fa-id-card-o fa-lg fa-fw"></i>
                 Dados do Emitente
-            </h2>
+            </h3>
             <div class="panel-ctrls">
                 <a href="#modalAlterar" data-toggle="modal" class="btn btn-primary btn-sm">
                     <i class="fa fa-edit fa-fw"></i> Alterar Dados

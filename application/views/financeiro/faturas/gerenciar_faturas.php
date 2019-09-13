@@ -17,10 +17,10 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
-        <h2 style="font-size: 12pt">
+        <h3>
             <i class="fa fa-credit-card fa-lg fa-fw"></i>
             Controle de Faturas
-        </h2>
+        </h3>
         <div class="panel-ctrls">
             <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar faturas">
                 <i class="fa fa-filter fa-fw"></i>
