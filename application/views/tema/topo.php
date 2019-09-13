@@ -225,7 +225,7 @@
 
         <!--        BOTAO DO MENU SUSPENSO-->
         <li class="toolbar-icon-bg demo-headerdrop-hidden">
-            <a href="#" id="headerbardropdown" data-placement="bottom" title="Menu Suspenso">
+            <a href="#" id="headerbardropdown" data-placement="bottom" title="Menu suspenso">
                 <span class="icon-bg">
                     <i class="fa fa-fw fa-level-down"></i>
                 </span>
@@ -235,7 +235,7 @@
 
         <!--        TELA CHEIA-->
         <li class="toolbar-icon-bg hidden-xs" id="trigger-fullscreen">
-            <a href="#" class="toggle-fullscreen" data-toggle="tooltips" data-placement="bottom" title='Tela Cheia'>
+            <a href="#" class="toggle-fullscreen" data-toggle="tooltips" data-placement="bottom" title='Ativar/desativar exibição em tela cheia'>
                 <span class="icon-bg"><i class="fa fa-fw fa-arrows-alt"></i></span></i></a>
         </li>
         <!--        TELA CHEIA-->
@@ -320,7 +320,7 @@
                     <ul class="scroll-content">
                         <li class="">
                             <a href="#">
-<!--                                <img class="msg-avatar" src="--><?php //echo base_url() ?><!--assets/demo/avatar/avatar_09.png" alt="avatar"/>-->
+                                <!--                                <img class="msg-avatar" src="--><?php //echo base_url() ?><!--assets/demo/avatar/avatar_09.png" alt="avatar"/>-->
                                 <div class="msg-content">
                                     <span class="name">Steven Shipe</span>
                                     <span class="msg">Nonummy nibh epismod lorem ipsum</span>
@@ -330,7 +330,7 @@
                         </li>
                         <li>
                             <a href="#">
-<!--                                <img class="msg-avatar" src="--><?php //echo base_url() ?><!--assets/demo/avatar/avatar_01.png" alt="avatar"/>-->
+                                <!--                                <img class="msg-avatar" src="--><?php //echo base_url() ?><!--assets/demo/avatar/avatar_01.png" alt="avatar"/>-->
                                 <div class="msg-content">
                                     <span class="name">Roxann Hollingworth <i class="fa fa-paperclip attachment"></i></span>
                                     <span class="msg">Lorem ipsum dolor sit amet consectetur adipisicing elit</span>
@@ -340,7 +340,7 @@
                         </li>
                         <li>
                             <a href="#">
-<!--                                <img class="msg-avatar" src="--><?php //echo base_url() ?><!--assets/demo/avatar/avatar_05.png" alt="avatar"/>-->
+                                <!--                                <img class="msg-avatar" src="--><?php //echo base_url() ?><!--assets/demo/avatar/avatar_05.png" alt="avatar"/>-->
                                 <div class="msg-content">
                                     <span class="name">Diamond Harlands</span>
                                     <span class="msg">:)</span>
@@ -350,7 +350,7 @@
                         </li>
                         <li>
                             <a href="#">
-<!--                                <img class="msg-avatar" src="--><?php //echo base_url() ?><!--assets/demo/avatar/avatar_02.png" alt="avatar"/>-->
+                                <!--                                <img class="msg-avatar" src="--><?php //echo base_url() ?><!--assets/demo/avatar/avatar_02.png" alt="avatar"/>-->
                                 <div class="msg-content">
                                     <span class="name">Michael Serio <i class="fa fa-paperclip attachment"></i></span>
                                     <span class="msg">Sed distinctio dolores fuga molestiae modi?</span>
@@ -360,7 +360,7 @@
                         </li>
                         <li>
                             <a href="#">
-<!--                                <img class="msg-avatar" src="--><?php //echo base_url() ?><!--assets/demo/avatar/avatar_03.png" alt="avatar"/>-->
+                                <!--                                <img class="msg-avatar" src="--><?php //echo base_url() ?><!--assets/demo/avatar/avatar_03.png" alt="avatar"/>-->
                                 <div class="msg-content">
                                     <span class="name">Matt Jones</span>
                                     <span class="msg">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et mole</span>
@@ -370,7 +370,7 @@
                         </li>
                         <li>
                             <a href="#">
-<!--                                <img class="msg-avatar" src="--><?php //echo base_url() ?><!--assets/demo/avatar/avatar_07.png" alt="avatar"/>-->
+                                <!--                                <img class="msg-avatar" src="--><?php //echo base_url() ?><!--assets/demo/avatar/avatar_07.png" alt="avatar"/>-->
                                 <div class="msg-content">
                                     <span class="name">John Doe</span>
                                     <span class="msg">Neque porro quisquam est qui dolorem</span>
@@ -391,9 +391,9 @@
             <a href="#" class="dropdown-toggle " data-toggle='dropdown' data-placement="bottom" title="<?= $this->session->userdata('nome') ?>">
                 <span class="icon-bg"><i class="fa fa-fw fa-user-circle"></i></span></a>
             <ul class="dropdown-menu userinfo arrow">
-                <li><a href="javascript:" id="btn_teste"><span class="pull-left">Perfil</span> <span class="badge badge-info">80%</span></a></li>
+                <!--                <li><a href="javascript:" id="btn_teste"><span class="pull-left">Perfil</span> <span class="badge badge-info">80%</span></a></li>-->
                 <li><a href="<?php echo site_url(); ?>mxcode/minhaConta"><span class="pull-left">Minha Conta</span> <i class="pull-right fa fa-user-circle fa-lg"></i></a></li>
-                <li><a href="javascript:"><span class="pull-left">Configurações</span> <i class="pull-right fa fa-cog fa-lg"></i></a></li>
+                <!--                <li><a href="javascript:"><span class="pull-left">Configurações</span> <i class="pull-right fa fa-cog fa-lg"></i></a></li>-->
                 <!--                <li class="divider"></li>-->
                 <!--                <li><a href="#"><span class="pull-left">Earnings</span> <i class="pull-right fa fa-line-chart"></i></a></li>-->
                 <!--                <li><a href="#"><span class="pull-left">Statement</span> <i class="pull-right fa fa-list-alt"></i></a></li>-->
@@ -420,7 +420,8 @@
                             <a href="<?php echo site_url(); ?>mxcode/minhaConta">
                                 <div class="tabular-row">
                                     <div class="tabular-cell welcome-avatar">
-                                        <img src="<?php echo $this->session->userdata('avatar') != null ? base_url() . 'assets/uploads/avatars/' . $this->session->userdata('avatar') : base_url() . 'assets/img/avatars/padrao.png'; ?>" class="avatar">
+                                        <img src="<?php echo $this->session->userdata('avatar') != null ? base_url() . 'assets/uploads/avatars/' . $this->session->userdata('avatar') : base_url() . 'assets/img/avatars/padrao.png'; ?>"
+                                             class="avatar">
                                     </div>
                                     <div class="tabular-cell welcome-options">
                                         <span class="welcome-text">Bem-vindo,</span>

@@ -1,14 +1,3 @@
-<!--Action boxes-->
-<!--<div class="panel panel-midnightblue">-->
-<!--    <div class="panel-heading">-->
-<!--        <h2>-->
-<!--            <i class="fa fa-dollar fa-lg fa-fw"></i>-->
-<!--            Painel Financeiro-->
-<!--        </h2>-->
-<!--    </div>-->
-<!--    <div class="panel-body">-->
-<!--    </div>-->
-<!--</div>-->
 <div class="row">
     <div class="col-sm-4">
         <div class="tile-sparkline">
@@ -147,7 +136,6 @@
             </a>
         </div>
     <?php endif ?>
-
 </div>
 
 

@@ -7,13 +7,13 @@
                     Minha Conta
                 </h3>
                 <div class="panel-ctrls">
-                    <button href="#modalAlterarSenha" class="btn btn-primary btn-sm" id="alterar_senha" data-toggle="modal" title="Alterar senha da conta">
+                    <button href="#modalAlterarSenha" class="btn btn-primary btn-sm" id="alterar_senha" data-toggle="modal" title="Alterar senha de acesso">
                         <i class="fa fa-lock fa-fw"></i>
                         Alterar Senha
                     </button>
-                    <button href="#modalEditarPerfil" class="btn btn-primary btn-sm" id="editar_perfil" data-toggle="modal" title="Editar perfil de usuário">
+                    <button href="#modalEditarPerfil" class="btn btn-primary btn-sm" id="editar_perfil" data-toggle="modal" title="Alterar dados de usuário">
                         <i class="fa fa-user-circle fa-fw"></i>
-                        Editar Perfil
+                        Alterar Dados
                     </button>
                 </div>
             </div>
@@ -85,7 +85,7 @@
         <div class="modal-content">
             <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white ">Editar perfil de usuário</h4>
+                <h4 class="modal-title text-white ">Alterar dados de usuário</h4>
             </div>
             <form id="formAlterar" action="<?php echo base_url() ?>mxcode/atualizarPerfil" method="post" autocomplete="off">
                 <div class="modal-body">
@@ -171,7 +171,7 @@
         <div class="modal-content">
             <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white ">Alterar senha</h4>
+                <h4 class="modal-title text-white ">Alterar senha de acesso</h4>
             </div>
             <form id="formSenha" action="<?php echo base_url() ?>mxcode/alterarSenha" method="post" autocomplete="off">
                 <div class="modal-body">
