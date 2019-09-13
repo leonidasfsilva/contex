@@ -165,7 +165,7 @@ class Faturas extends CI_Controller
                 $this->data['fatura_paga'] = ($this->data['fatura']->fatura_paga);
                 $this->data['lancamentoEditavel'] = $this->fatura_model->getLancamentoEditavel($id_fatura, $this->data['fatura']->mes_referencia, $this->data['fatura']->ano_referencia);
                 $this->data['results'] = $this->fatura_model->getLancamentosAssoc('lancamentos_faturas_assoc', '*', $id_fatura, $where, $config['per_page'], $this->input->get('per_page'));
-                $this->data['subresults'] = $this->fatura_model->getLancamentos('lancamentos_faturas', '*', $id_fatura, $where, $config['per_page'], $this->input->get('per_page'));
+                $this->data['subresults'] = $this->fatura_model->getLancamentos('lancamentos_faturas', '*', id_usuario(), $where, $config['per_page'], $this->input->get('per_page'));
 
                 $this->data['view'] = 'financeiro/faturas/detalhes_fatura';
                 $this->load->view('tema/topo', $this->data);

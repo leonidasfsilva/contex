@@ -44,9 +44,12 @@ class Fatura_model extends CI_Model
         $this->db->order_by('data_compra', 'id_assoc', 'asc');
         $this->db->limit($perpage, $start);
         if ($where) {
-            $this->db->where($where . ' AND status = 1 AND id_fatura = ' . $id_fatura);
+            $this->db->where($where);
+            $this->db->where('status', 1);
+            $this->db->where('id_fatura', $id_fatura);
         } else {
-            $this->db->where('status = 1 AND id_fatura = ' . $id_fatura);
+            $this->db->where('status', 1);
+            $this->db->where('id_fatura', $id_fatura);
         }
 
         $query = $this->db->get();
@@ -55,7 +58,7 @@ class Fatura_model extends CI_Model
         return $result;
     }
 
-    function getLancamentos($table, $fields, $id_fatura, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
+    function getLancamentos($table, $fields, $id_usuario, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
 
         $this->db->select($fields);
@@ -63,9 +66,12 @@ class Fatura_model extends CI_Model
         $this->db->order_by('id_lancamento', 'asc');
         $this->db->limit($perpage, $start);
         if ($where) {
-            $this->db->where($where . ' AND status = 1 AND id_fatura = ' . $id_fatura);
+            $this->db->where($where);
+            $this->db->where('status', 1);
+            $this->db->where('id_usuario', $id_usuario);
         } else {
-            $this->db->where('status = 1 AND id_fatura = ' . $id_fatura);
+            $this->db->where('status', 1);
+            $this->db->where('id_usuario', $id_usuario);
         }
 
         $query = $this->db->get();
