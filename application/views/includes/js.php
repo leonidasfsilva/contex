@@ -49,17 +49,17 @@
 
 <!-- Pnotify-->
 
-<!--<script src="--><?php //echo base_url(); ?><!--assets/plugins/pnotify/iife/PNotify.js"></script>-->
-<!--<script src="--><?php //echo base_url(); ?><!--assets/plugins/pnotify/iife/PNotifyAnimate.js"></script>-->
-<!--<script src="--><?php //echo base_url(); ?><!--assets/plugins/pnotify/iife/PNotifyButtons.js"></script>-->
-<!--<script src="--><?php //echo base_url(); ?><!--assets/plugins/pnotify/iife/PNotifyCallbacks.js"></script>-->
-<!--<script src="--><?php //echo base_url(); ?><!--assets/plugins/pnotify/iife/PNotifyCompat.js"></script>-->
-<!--<script src="--><?php //echo base_url(); ?><!--assets/plugins/pnotify/iife/PNotifyConfirm.js"></script>-->
-<!--<script src="--><?php //echo base_url(); ?><!--assets/plugins/pnotify/iife/PNotifyDesktop.js"></script>-->
-<!--<script src="--><?php //echo base_url(); ?><!--assets/plugins/pnotify/iife/PNotifyHistory.js"></script>-->
-<!--<script src="--><?php //echo base_url(); ?><!--assets/plugins/pnotify/iife/PNotifyMobile.js"></script>-->
-<!--<script src="--><?php //echo base_url(); ?><!--assets/plugins/pnotify/iife/PNotifyNonBlock.js"></script>-->
-<!--<script src="--><?php //echo base_url(); ?><!--assets/plugins/pnotify/iife/PNotifyReference.js"></script>-->
-<!--<script src="--><?php //echo base_url(); ?><!--assets/plugins/pnotify/iife/PNotifyStyleMaterial.js"></script>-->
+<script src="<?php echo base_url(); ?>assets/plugins/pnotify/iife/PNotify.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/pnotify/iife/PNotifyAnimate.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/pnotify/iife/PNotifyButtons.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/pnotify/iife/PNotifyCallbacks.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/pnotify/iife/PNotifyCompat.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/pnotify/iife/PNotifyConfirm.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/pnotify/iife/PNotifyDesktop.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/pnotify/iife/PNotifyHistory.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/pnotify/iife/PNotifyMobile.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/pnotify/iife/PNotifyNonBlock.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/pnotify/iife/PNotifyReference.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/pnotify/iife/PNotifyStyleMaterial.js"></script>
 
 </head>
