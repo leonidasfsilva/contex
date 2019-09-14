@@ -177,8 +177,8 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-md-4">
-                            <label for="oldSenha" class="font-weight-bold">Senha Atual *</label>
-                            <input class="form-control" type="password" id="oldSenha" name="oldSenha"/>
+                            <label for="anitgaSenha" class="font-weight-bold">Senha Atual *</label>
+                            <input class="form-control" type="password" id="anitgaSenha" name="antigaSenha"/>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="novaSenha" class="font-weight-bold">Nova Senha *</label>
@@ -426,7 +426,7 @@
 
         $('#formSenha').validate({
             rules: {
-                oldSenha: {required: true},
+                antigaSenha: {required: true},
                 novaSenha: {
                     required: true,
                     minlength: 6
@@ -437,7 +437,7 @@
                 },
             },
             messages: {
-                oldSenha: {required: 'Digite sua senha atual'},
+                antigaSenha: {required: 'Digite sua senha atual'},
                 novaSenha: {
                     required: 'Digite sua nova senha',
                     minlength: 'A nova senha deve conter no mínimo 6 caracteres'

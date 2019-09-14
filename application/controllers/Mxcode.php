@@ -57,13 +57,13 @@ class Mxcode extends CI_Controller
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
             redirect('mxcode/login');
         }
-        $oldSenha = $this->input->post('oldSenha');
+        $antigaSenha = $this->input->post('antigaSenha');
         $senha = $this->input->post('novaSenha');
 
         $usuario = $this->mxcode_model->getUsuario($this->session->userdata('id'));
 
 
-        if (password_verify($oldSenha, $usuario->senha)) {
+        if (password_verify($antigaSenha, $usuario->senha)) {
             $result = $this->mxcode_model->alterarSenha($usuario->id_usuarios, $senha);
             if ($result == true) {
                 $this->session->set_flashdata('sucesso', 'Senha alterada com sucesso!');
