@@ -21,7 +21,7 @@
                 <th>Email</th>
                 <th>Permissão</th>
                 <th>Status</th>
-                <th style="width: 150px">Ações</th>
+                <th style="width: 170px">Ações</th>
             </tr>
             </thead>
             <tbody>
@@ -35,10 +35,10 @@
                 if ($r->status == 1) {
                     $status = 'Ativo';
                     $label_status = 'success';
-                    $btn_status = '<a href="#modalDesativar" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-danger btn-sm" title="Desativar"><i class="fa fa-times-circle fa-lg fa-fw" ></i></a>';
+                    $btn_status = '<a href="#modalDesativar" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-warning btn-sm" title="Desativar"><i class="fa fa-minus-circle fa-lg fa-fw" ></i></a>';
                 } else {
                     $status = 'Inativo';
-                    $label_status = 'danger';
+                    $label_status = 'warning';
                     $btn_status = '<a href="#modalAtivar" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-success btn-sm" title="Ativar"><i class="fa fa-check-circle fa-lg fa-fw" ></i></a>';
                 }
 
@@ -49,10 +49,10 @@
                 echo '<td>' . $r->permissao . '</td>';
                 echo '<td><span class="label label-' . $label_status . '">' . strtoupper($status) . '</span></td>';
                 echo '<td style="text-align: center">';
-                echo '<a href="' . base_url() . 'usuarios/visualizar/' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-info btn-sm" title="Ver detalhes"><i class="fa fa-search-plus fa-lg fa-fw"></i></a>';
-                echo '<a href="' . base_url() . 'usuarios/editar/' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-primary btn-sm" title="Editar usuário"><i class="fa fa-edit fa-lg fa-fw"></i></a>';
+                echo '<a href="' . base_url() . 'usuarios/visualizar/' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-info btn-sm" title="Detalhes"><i class="fa fa-search-plus fa-lg fa-fw"></i></a>';
+                echo '<a href="' . base_url() . 'usuarios/editar/' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-primary btn-sm" title="Editar"><i class="fas fa-pencil-alt fa-lg fa-fw"></i></a>';
                 echo $btn_status;
-                echo '</td>';
+                echo '<a href="#modalExcluir" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-danger btn-sm" title="Excluir"><i class="far fa-trash-alt fa-lg fa-fw" ></i></a>';                echo '</td>';
                 echo '</tr>';
             } ?>
             </tbody>

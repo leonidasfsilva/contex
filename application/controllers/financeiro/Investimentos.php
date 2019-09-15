@@ -2,7 +2,7 @@
     exit('No direct script access allowed');
 }
 
-class ContaPoupanca extends CI_Controller
+class Investimentos extends CI_Controller
 {
 
     public function __construct()
@@ -12,25 +12,25 @@ class ContaPoupanca extends CI_Controller
             redirect('mxcode/login');
         }
 
-        $this->load->model('poupanca_model', '', true);
+        $this->load->model('investimentos_model', '', true);
         $this->load->model('financeiro_model', '', true);
         $this->load->model('pendencia_model', '', true);
         $this->load->model('fatura_model', '', true);
         $this->load->model('clientes_model', '', true);
-        $this->data['menuFinanceiro'] = 'Poupanca';
-        $this->global_url = site_url() . 'financeiro/contaPoupanca/';
+        $this->data['menuFinanceiro'] = 'investimentos';
+        $this->global_url = site_url() . 'financeiro/investimentos/';
 
     }
 
     public function index()
     {
-        $this->poupanca();
+        $this->investimentos();
     }
 
     //MODULO DE LANCAMENTOS
-    public function poupanca()
+    public function investimentos()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vPoupanca')) {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vInvestimentos')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar poupança.');
             redirect(base_url());
         }
@@ -286,8 +286,8 @@ class ContaPoupanca extends CI_Controller
 
         $this->load->library('pagination');
 
-        $config['base_url'] = site_url() . 'financeiro/poupanca/?periodo=' . $periodo . '&situacao=' . $situacao;
-        $config['total_rows'] = $this->poupanca_model->count('poupanca', 'status = 1 AND id_usuario = ' . id_usuario());
+        $config['base_url'] = site_url() . 'financeiro/investimentos/?periodo=' . $periodo . '&situacao=' . $situacao;
+        $config['total_rows'] = $this->investimentos_model->count('investimentos', 'status = 1 AND id_usuario = ' . id_usuario());
         $config['per_page'] = 100;
         $config['page_query_string'] = true;
         $config['next_link'] = 'Próxima';
@@ -311,13 +311,13 @@ class ContaPoupanca extends CI_Controller
 
         $this->pagination->initialize($config);
 
-        $this->data['total_entradas'] = $this->poupanca_model->getTotalEntradas(id_usuario());
-        $this->data['saidas_pendentes'] = $this->poupanca_model->getSaidasPendentes(id_usuario());
-        $this->data['entradas_pendentes'] = $this->poupanca_model->getEntradasPendentes(id_usuario());
-        $this->data['total'] = $this->poupanca_model->getTotal(id_usuario());
+        $this->data['total_entradas'] = $this->investimentos_model->getTotalEntradas(id_usuario());
+        $this->data['saidas_pendentes'] = $this->investimentos_model->getSaidasPendentes(id_usuario());
+        $this->data['entradas_pendentes'] = $this->investimentos_model->getEntradasPendentes(id_usuario());
+        $this->data['total'] = $this->investimentos_model->getTotal(id_usuario());
         $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
-        $this->data['results'] = $this->poupanca_model->get(
-            'poupanca',
+        $this->data['results'] = $this->investimentos_model->get(
+            'investimentos',
             '*',
             $where,
             id_usuario(),
@@ -326,14 +326,14 @@ class ContaPoupanca extends CI_Controller
             $config['per_page'],
             $this->input->get('per_page'));
 
-        $this->data['view'] = 'financeiro/poupanca';
+        $this->data['view'] = 'financeiro/investimentos';
         $this->load->view('tema/topo', $this->data);
 
     }
 
     function aplicacao()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aPoupanca')) {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aInvestimentos')) {
             $this->session->set_flashdata('erro', 'Você não tem permissão para adicionar lançamentos.');
             redirect(base_url());
         }
@@ -356,7 +356,7 @@ class ContaPoupanca extends CI_Controller
         if ($this->input->post('descricao')) {
             $descricao = padronizarString($this->input->post('descricao'));
         } else {
-            $descricao = 'APLICACAO EM CONTA POUPANCA';
+            $descricao = 'APLICACAO EM INVESTIMENTOS';
         }
 
         $data = array(
@@ -368,7 +368,7 @@ class ContaPoupanca extends CI_Controller
             'tipo' => 1
         );
 
-        if ($this->poupanca_model->add('poupanca', $data) == true) {
+        if ($this->investimentos_model->add('investimentos', $data) == true) {
             if ($this->input->post('debito_conta')) {
                 $data2 = array(
                     'descricao' => $descricao,
@@ -397,7 +397,7 @@ class ContaPoupanca extends CI_Controller
 
     function resgate()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aPoupanca')) {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aInvestimentos')) {
             $this->session->set_flashdata('erro', 'Você não tem permissão para adicionar lançamentos.');
             redirect(base_url());
         }
@@ -414,25 +414,25 @@ class ContaPoupanca extends CI_Controller
         if (!validate_money($this->input->post('valor'))) {
             $valor = str_replace(array('.', ','), array('', '.'), $this->input->post('valor'));
         }
-        $valor_poupanca = '-' . $valor;
+        $valor_investimentos = '-' . $valor;
 
 
         if ($this->input->post('descricao')) {
             $descricao = padronizarString($this->input->post('descricao'));
         } else {
-            $descricao = 'RESGATE DE CONTA POUPANCA';
+            $descricao = 'RESGATE DE INVESTIMENTOS';
         }
 
         $data = array(
             'descricao' => $descricao,
-            'valor' => $valor_poupanca,
+            'valor' => $valor_investimentos,
             'id_usuario' => id_usuario(),
             'data_lancamento' => $vencimento,
             'forma_pgto' => ($this->input->post('formaPgto')),
             'tipo' => 2
         );
 
-        if ($this->financeiro_model->add('poupanca', $data) == true) {
+        if ($this->financeiro_model->add('investimentos', $data) == true) {
             if ($this->input->post('debito_conta')) {
                 $data2 = array(
                     'descricao' => $descricao,
@@ -463,7 +463,7 @@ class ContaPoupanca extends CI_Controller
 
     public function editar()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'ePoupanca')) {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eInvestimentos')) {
             $this->session->set_flashdata('erro', 'Você não tem permissão para editar lançamentos.');
             redirect(base_url());
         }
@@ -487,14 +487,14 @@ class ContaPoupanca extends CI_Controller
                 if ($this->input->post('descricao')) {
                     $descricao = padronizarString($this->input->post('descricao'));
                 } else {
-                    $descricao = 'RESGATE DE CONTA POUPANCA';
+                    $descricao = 'RESGATE DE INVESTIMENTOS';
                 }
                 $valor = '-' . $valor;
             } elseif ($tipo == 1) {
                 if ($this->input->post('descricao')) {
                     $descricao = padronizarString($this->input->post('descricao'));
                 } else {
-                    $descricao = 'APLICAÇÃO EM CONTA POUPANCA';
+                    $descricao = 'APLICAÇÃO EM INVESTIMENTOS';
                 }
             }
 
@@ -508,7 +508,7 @@ class ContaPoupanca extends CI_Controller
                 'tipo' => $tipo
             );
 
-            if ($this->poupanca_model->edit('poupanca', $data, 'id_lancamentos', $this->input->post('id')) == true) {
+            if ($this->investimentos_model->edit('investimentos', $data, 'id_lancamentos', $this->input->post('id')) == true) {
                 $this->session->set_flashdata('sucesso', 'Lançamento editado com sucesso!');
                 redirect($urlAtual);
             } else {
@@ -530,7 +530,7 @@ class ContaPoupanca extends CI_Controller
     public function excluir()
     {
 
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dPoupanca')) {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dInvestimentos')) {
             $this->session->set_flashdata('erro', 'Você não tem permissão para excluir lançamentos.');
             redirect($this->global_url);
         }
@@ -547,7 +547,7 @@ class ContaPoupanca extends CI_Controller
                 'status' => 0
             );
 
-            if ($this->financeiro_model->delete('poupanca', $data, 'id_lancamentos', $id) == true) {
+            if ($this->financeiro_model->delete('investimentos', $data, 'id_lancamentos', $id) == true) {
                 $this->session->set_flashdata('sucesso', 'Lançamento excluído com sucesso!');
                 redirect($urlAtual);
 

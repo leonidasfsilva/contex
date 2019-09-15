@@ -125,10 +125,10 @@ class Permissoes extends CI_Controller
                 'dPendencias' => $this->input->post('dPendencias'),
                 'vPendencias' => $this->input->post('vPendencias'),
 
-                'aPoupanca' => $this->input->post('aPoupanca'),
-                'ePoupanca' => $this->input->post('ePoupanca'),
-                'dPoupanca' => $this->input->post('dPoupanca'),
-                'vPoupanca' => $this->input->post('vPoupanca'),
+                'aInvestimentos' => $this->input->post('aInvestimentos'),
+                'eInvestimentos' => $this->input->post('eInvestimentos'),
+                'dInvestimentos' => $this->input->post('dInvestimentos'),
+                'vInvestimentos' => $this->input->post('vInvestimentos'),
 
                 'cUsuario' => $this->input->post('cUsuario'),
                 'cEmitente' => $this->input->post('cEmitente'),
@@ -212,10 +212,10 @@ class Permissoes extends CI_Controller
                 'dArquivo' => $this->input->post('dArquivo'),
                 'vArquivo' => $this->input->post('vArquivo'),
 
-                'aPoupanca' => $this->input->post('aPoupanca'),
-                'ePoupanca' => $this->input->post('ePoupanca'),
-                'dPoupanca' => $this->input->post('dPoupanca'),
-                'vPoupanca' => $this->input->post('vPoupanca'),
+                'aInvestimentos' => $this->input->post('aInvestimentos'),
+                'eInvestimentos' => $this->input->post('eInvestimentos'),
+                'dInvestimentos' => $this->input->post('dInvestimentos'),
+                'vInvestimentos' => $this->input->post('vInvestimentos'),
 
                 'aPendencias' => $this->input->post('aPendencias'),
                 'ePendencias' => $this->input->post('ePendencias'),

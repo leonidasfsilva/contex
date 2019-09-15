@@ -2,7 +2,7 @@
     exit('No direct script access allowed');
 }
 
-class Poupanca_model extends CI_Model
+class Investimentos_model extends CI_Model
 {
     function __construct()
     {
@@ -94,7 +94,7 @@ class Poupanca_model extends CI_Model
     {
         $this->db
             ->select('SUM(valor) AS total')
-            ->from('poupanca')
+            ->from('investimentos')
             ->where('status = 1 AND id_usuario = ' . $id_usuario);
 
         return $this->db->get()->row();
@@ -105,7 +105,7 @@ class Poupanca_model extends CI_Model
     {
         $this->db
             ->select('SUM(valor) AS total')
-            ->from('poupanca')
+            ->from('investimentos')
             ->where('status = 1 AND tipo = 2 AND id_usuario = ' . $id_usuario);
 
         return $this->db->get()->row();
@@ -116,7 +116,7 @@ class Poupanca_model extends CI_Model
     {
         $this->db
             ->select('SUM(valor) AS total')
-            ->from('poupanca')
+            ->from('investimentos')
             ->where('status = 1 AND tipo = 1 AND id_usuario = ' . $id_usuario);
 
         return $this->db->get()->row();
@@ -127,7 +127,7 @@ class Poupanca_model extends CI_Model
     {
         $this->db
             ->select('SUM(valor) AS total')
-            ->from('poupanca')
+            ->from('investimentos')
             ->where(' status = 1 AND id_usuario = ' . $id_usuario);
 
         return $this->db->get()->row();

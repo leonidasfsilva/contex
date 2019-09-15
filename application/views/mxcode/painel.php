@@ -3,7 +3,7 @@
         <div class="tile-sparkline">
             <div class="tile-sparkline-heading clearfix">
                 <div class="pull-left">
-                    <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Conta Corrente</span>
+                    <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Lançamentos</span>
                     <span class="tile-sparkline-subheading block mb10">Saldo disponível</span>
                     <h2 class="block">R$ <?= number_format($contaCorrente->total, 2, ',', '.') ?></h2>
                 </div>
@@ -12,7 +12,7 @@
                 </div>
             </div>
             <div class="tile-sparkline-footer">
-                <a href="<?= base_url() ?>financeiro/contaCorrente" class="font-weight-bold">Ver detalhes </a>
+                <a href="<?= base_url() ?>financeiro/lancamentos" class="font-weight-bold">Ver detalhes </a>
             </div>
         </div>
     </div>
@@ -44,11 +44,11 @@
                     <h2 class="block">R$ <?= number_format($contaPoupanca->total, 2, ',', '.') ?></h2>
                 </div>
                 <div class="pull-right">
-                    <span><i class="fas fa-piggy-bank fa-lg fa-fw"></i></span>
+                    <span><i class="fas fa-hand-holding-usd fa-lg fa-fw"></i></span>
                 </div>
             </div>
             <div class="tile-sparkline-footer">
-                <a href="<?= base_url() ?>financeiro/contaPoupanca" class="font-weight-bold">Ver detalhes </a>
+                <a href="<?= base_url() ?>financeiro/investimentos" class="font-weight-bold">Ver detalhes </a>
             </div>
         </div>
     </div>

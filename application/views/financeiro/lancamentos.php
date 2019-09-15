@@ -5,7 +5,7 @@ $periodo = $this->input->get('periodo');
     <div class="panel-heading">
         <h3>
             <i class="fa fa-line-chart fa-lg fa-fw"></i>
-            Conta Corrente
+            Lançamentos
         </h3>
         <div class="panel-ctrls">
             <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar lançamentos">
@@ -315,7 +315,7 @@ $periodo = $this->input->get('periodo');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Registrar nova entrada</h4>
             </div>
-            <form id="formReceita" action="<?php echo base_url() ?>financeiro/contaCorrente/receita" method="post" autocomplete="off">
+            <form id="formReceita" action="<?php echo base_url() ?>financeiro/lancamentos/receita" method="post" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
@@ -386,7 +386,7 @@ $periodo = $this->input->get('periodo');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Registrar nova saída</h4>
             </div>
-            <form id="formDespesa" action="<?php echo base_url() ?>financeiro/contaCorrente/despesa" method="post" autocomplete="off">
+            <form id="formDespesa" action="<?php echo base_url() ?>financeiro/lancamentos/despesa" method="post" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
@@ -456,7 +456,7 @@ $periodo = $this->input->get('periodo');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Detalhes do lançamento</h4>
             </div>
-            <form id="formEditar" action="<?php echo base_url() ?>financeiro/contaCorrente/editar" method="post">
+            <form id="formEditar" action="<?php echo base_url() ?>financeiro/lancamentos/editar" method="post">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
@@ -534,7 +534,7 @@ $periodo = $this->input->get('periodo');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Excluir lançamento</h4>
             </div>
-            <form id="formExcluir" action="<?php echo base_url(); ?>financeiro/contaCorrente/excluir" method="post">
+            <form id="formExcluir" action="<?php echo base_url(); ?>financeiro/lancamentos/excluir" method="post">
                 <div class="modal-body">
                     <p>Deseja realmente excluir este lançamento?</p>
                     <input id="idExcluir" type="hidden" name="id" value=""/>

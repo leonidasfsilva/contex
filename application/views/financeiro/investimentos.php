@@ -4,15 +4,15 @@ $periodo = $this->input->get('periodo');
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h3>
-            <i class="fas fa-piggy-bank fa-lg fa-fw"></i>
-            Conta Poupança
+            <i class="fas fa-hand-holding-usd fa-lg fa-fw"></i>
+            Investimentos
         </h3>
         <div class="panel-ctrls">
             <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar lançamentos">
                 <i class="fa fa-filter fa-fw"></i>
                 Filtrar
             </button>
-            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aPoupanca')) { ?>
+            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aInvestimentos')) { ?>
                 <a href="#modalAplicacao" id="entrada" data-toggle="modal" role="button" class="btn btn-success btn-sm tip-bottom" title="Registrar nova aplicação">
                     <i class="fa fa-plus-square fa-fw"></i>
                     Aplicar
@@ -275,7 +275,7 @@ $periodo = $this->input->get('periodo');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Registrar nova aplicação</h4>
             </div>
-            <form id="formAplicacao" action="<?php echo base_url() ?>financeiro/contaPoupanca/aplicacao" method="post" autocomplete="off">
+            <form id="formAplicacao" action="<?php echo base_url() ?>financeiro/investimentos/aplicacao" method="post" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
@@ -333,7 +333,7 @@ $periodo = $this->input->get('periodo');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Registrar novo resgate</h4>
             </div>
-            <form id="formResgate" action="<?php echo base_url() ?>financeiro/contaPoupanca/resgate" method="post" autocomplete="off">
+            <form id="formResgate" action="<?php echo base_url() ?>financeiro/investimentos/resgate" method="post" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
@@ -391,7 +391,7 @@ $periodo = $this->input->get('periodo');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Detalhes do lançamento</h4>
             </div>
-            <form id="formEditar" action="<?php echo base_url() ?>financeiro/contaPoupanca/editar" method="post">
+            <form id="formEditar" action="<?php echo base_url() ?>financeiro/investimentos/editar" method="post">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
@@ -451,7 +451,7 @@ $periodo = $this->input->get('periodo');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Excluir lançamento</h4>
             </div>
-            <form id="formExcluir" action="<?php echo base_url(); ?>financeiro/contaPoupanca/excluir" method="post">
+            <form id="formExcluir" action="<?php echo base_url(); ?>financeiro/investimentos/excluir" method="post">
                 <div class="modal-body">
                     <p>Deseja realmente excluir este lançamento?</p>
                     <input id="idExcluir" type="hidden" name="id" value=""/>

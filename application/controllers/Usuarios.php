@@ -88,7 +88,7 @@ class Usuarios extends CI_Controller
                 'email' => $this->input->post('email'),
                 'senha' => password_hash($this->input->post('senha'), PASSWORD_DEFAULT),
                 'telefone' => $this->input->post('telefone'),
-                'status' => $this->input->post('situacao'),
+                'ativo' => $this->input->post('situacao'),
                 'permissoes_id' => $this->input->post('permissoes_id')
 
             );
@@ -207,7 +207,7 @@ class Usuarios extends CI_Controller
         }
 
         $data = array(
-            'status' => 0
+            'ativo' => 0
         );
 
         if ($this->usuarios_model->delete('usuarios', $data, 'id_usuarios', $id) == true) {
@@ -220,12 +220,35 @@ class Usuarios extends CI_Controller
         }
     }
 
+    function excluir()
+    {
+        $id = $this->input->post('id');
+
+        if ($id == 1) {
+            $this->session->set_flashdata('erro', 'A conta de administrador do sistema não pode ser excluída.');
+            redirect(base_url() . 'usuarios/gerenciar/');
+        }
+
+        $data = array(
+            'status' => 0
+        );
+
+        if ($this->usuarios_model->delete('usuarios', $data, 'id_usuarios', $id) == true) {
+            $this->session->set_flashdata('sucesso', 'Conta de usuário excluída com sucesso!');
+            redirect(base_url() . 'usuarios/gerenciar/');
+
+        } else {
+            $this->session->set_flashdata('erro', 'Erro ao tentar excluir conta de usuário.');
+            redirect(base_url() . 'usuarios/gerenciar/');
+        }
+    }
+
     function ativar()
     {
         $id = $this->input->post('id');
 
         $data = array(
-            'status' => 1
+            'ativo' => 1
         );
 
         if ($this->usuarios_model->delete('usuarios', $data, 'id_usuarios', $id) == true) {

@@ -2,7 +2,7 @@
     exit('No direct script access allowed');
 }
 
-class ContaCorrente extends CI_Controller
+class Lancamentos extends CI_Controller
 {
 
     public function __construct()

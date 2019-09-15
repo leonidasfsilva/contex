@@ -1,26 +1,26 @@
 <div class="row">
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) : ?>
         <div class="col-md-6">
-            <a href="<?= base_url() ?>financeiro/contaCorrente" class="shortcut-tile tile-blue">
+            <a href="<?= base_url() ?>financeiro/lancamentos" class="shortcut-tile tile-blue">
                 <div class="tile-body">
                     <div class="pull-left"><i class="fa fa-line-chart fa-fw"></i></div>
                     <!--                            <div class="pull-right"><span class="badge">2</span></div>-->
                 </div>
                 <div class="tile-footer">
-                    Conta Corrente
+                    Lançamentos
                 </div>
             </a>
         </div>
     <?php endif ?>
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPoupanca')): ?>
         <div class="col-md-6">
-            <a href="<?= base_url() ?>financeiro/contaPoupanca" class="shortcut-tile tile-green">
+            <a href="<?= base_url() ?>financeiro/investimentos" class="shortcut-tile tile-green">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fas fa-piggy-bank fa-fw"></i></div>
+                    <div class="pull-left"><i class="fas fa-hand-holding-usd fa-fw"></i></div>
                     <!--                            <div class="pull-right"><span class="badge">3</span></div>-->
                 </div>
                 <div class="tile-footer">
-                    Conta Poupança
+                    Investimentos
                 </div>
             </a>
         </div>

@@ -497,10 +497,10 @@
                                         </a>
                                         <ul class="acc-menu sub-menu">
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
-                                                <li><a href="<?php echo base_url() ?>financeiro/contaCorrente">Conta Corrente</a></li>
+                                                <li><a href="<?php echo base_url() ?>financeiro/lancamentos">Lançamentos</a></li>
                                             <?php } ?>
-                                            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPoupanca')) { ?>
-                                                <li><a href="<?php echo base_url() ?>financeiro/contaPoupanca">Conta Poupança</a></li>
+                                            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vInvestimentos')) { ?>
+                                                <li><a href="<?php echo base_url() ?>financeiro/investimentos">Investimentos</a></li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) { ?>
                                                 <li><a href="<?php echo base_url() ?>financeiro/faturas">Faturas</a></li>
