@@ -1,4 +1,5 @@
 <div class="row">
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')){ ?>
     <div class="col-sm-4">
         <div class="tile-sparkline">
             <div class="tile-sparkline-heading clearfix">
@@ -16,7 +17,9 @@
             </div>
         </div>
     </div>
+    <?php } ?>
 
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')){ ?>
     <div class="col-sm-4">
         <div class="tile-sparkline">
             <div class="tile-sparkline-heading clearfix">
@@ -34,7 +37,9 @@
             </div>
         </div>
     </div>
+    <?php } ?>
 
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vInvestimentos')){ ?>
     <div class="col-sm-4">
         <div class="tile-sparkline">
             <div class="tile-sparkline-heading clearfix">
@@ -52,6 +57,7 @@
             </div>
         </div>
     </div>
+    <?php } ?>
 </div>
 <div class="row">
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) : ?>
