@@ -12,7 +12,7 @@
             </a>
         </div>
     <?php endif ?>
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPoupanca')): ?>
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vInvestimentos')): ?>
         <div class="col-md-6">
             <a href="<?= base_url() ?>financeiro/investimentos" class="shortcut-tile tile-green">
                 <div class="tile-body">

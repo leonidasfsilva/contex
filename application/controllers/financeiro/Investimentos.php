@@ -31,7 +31,7 @@ class Investimentos extends CI_Controller
     public function investimentos()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vInvestimentos')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar poupança.');
+            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar investimentos.');
             redirect(base_url());
         }
         $where = '';
