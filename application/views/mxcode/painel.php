@@ -1,62 +1,63 @@
 <div class="row">
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')){ ?>
-    <div class="col-sm-4">
-        <div class="tile-sparkline">
-            <div class="tile-sparkline-heading clearfix">
-                <div class="pull-left">
-                    <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Lançamentos</span>
-                    <span class="tile-sparkline-subheading block mb10">Saldo disponível</span>
-                    <h2 class="block">R$ <?= number_format($contaCorrente->total, 2, ',', '.') ?></h2>
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
+        <div class="col-sm-4">
+            <div class="tile-sparkline">
+                <div class="tile-sparkline-heading clearfix">
+                    <div class="pull-left">
+                        <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Lançamentos</span>
+                        <span class="tile-sparkline-subheading block mb10">Saldo disponível</span>
+                        <h2 class="block">R$ <?= number_format($contaCorrente->total, 2, ',', '.') ?></h2>
+                    </div>
+                    <div class="pull-right">
+                        <span><i class="fa fa-chart-line fa-lg fa-fw"></i></span>
+                    </div>
                 </div>
-                <div class="pull-right">
-                    <span><i class="fa fa-chart-line fa-lg fa-fw"></i></span>
+                <div class="tile-sparkline-footer-clean">
+                    <a href="<? //= base_url() ?>financeiro/lancamentos" class="font-weight-bold">Ver detalhes </a>
                 </div>
-            </div>
-            <div class="tile-sparkline-footer">
-                <a href="<?= base_url() ?>financeiro/lancamentos" class="font-weight-bold">Ver detalhes </a>
+
             </div>
         </div>
-    </div>
     <?php } ?>
 
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')){ ?>
-    <div class="col-sm-4">
-        <div class="tile-sparkline">
-            <div class="tile-sparkline-heading clearfix">
-                <div class="pull-left">
-                    <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Cartão de Crédito</span>
-                    <span class="tile-sparkline-subheading block mb10">Valor da fatura atual</span>
-                    <h2 class="block">R$ <?= number_format($fatura->total, 2, ',', '.') ?></h2>
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) { ?>
+        <div class="col-sm-4">
+            <div class="tile-sparkline">
+                <div class="tile-sparkline-heading clearfix">
+                    <div class="pull-left">
+                        <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Cartão de Crédito</span>
+                        <span class="tile-sparkline-subheading block mb10">Valor da fatura atual</span>
+                        <h2 class="block">R$ <?= number_format($fatura->total, 2, ',', '.') ?></h2>
+                    </div>
+                    <div class="pull-right">
+                        <span><i class="fa fa-credit-card fa-lg fa-fw"></i></span>
+                    </div>
                 </div>
-                <div class="pull-right">
-                    <span><i class="fa fa-credit-card fa-lg fa-fw"></i></span>
+                <div class="tile-sparkline-footer-clean">
+                    <a href="<?= base_url() ?>financeiro/faturas" class="font-weight-bold">Ver detalhes </a>
                 </div>
-            </div>
-            <div class="tile-sparkline-footer">
-                <a href="<?= base_url() ?>financeiro/faturas" class="font-weight-bold">Ver detalhes </a>
             </div>
         </div>
-    </div>
     <?php } ?>
 
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vInvestimentos')){ ?>
-    <div class="col-sm-4">
-        <div class="tile-sparkline">
-            <div class="tile-sparkline-heading clearfix">
-                <div class="pull-left">
-                    <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Meus Investimentos</span>
-                    <span class="tile-sparkline-subheading block mb10">Valor total investido</span>
-                    <h2 class="block">R$ <?= number_format($contaPoupanca->total, 2, ',', '.') ?></h2>
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vInvestimentos')) { ?>
+        <div class="col-sm-4">
+            <div class="tile-sparkline">
+                <div class="tile-sparkline-heading clearfix">
+                    <div class="pull-left">
+                        <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Meus Investimentos</span>
+                        <span class="tile-sparkline-subheading block mb10">Valor total investido</span>
+                        <h2 class="block">R$ <?= number_format($contaPoupanca->total, 2, ',', '.') ?></h2>
+                    </div>
+                    <div class="pull-right">
+                        <span><i class="fas fa-hand-holding-usd fa-lg fa-fw"></i></span>
+                    </div>
                 </div>
-                <div class="pull-right">
-                    <span><i class="fas fa-hand-holding-usd fa-lg fa-fw"></i></span>
+                <div class="tile-sparkline-footer-clean">
+                    <a href="<?= base_url() ?>financeiro/investimentos" class="font-weight-bold">Ver detalhes </a>
                 </div>
-            </div>
-            <div class="tile-sparkline-footer">
-                <a href="<?= base_url() ?>financeiro/investimentos" class="font-weight-bold">Ver detalhes </a>
             </div>
         </div>
-    </div>
     <?php } ?>
 </div>
 <div class="row">

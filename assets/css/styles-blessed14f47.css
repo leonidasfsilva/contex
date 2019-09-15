@@ -3345,10 +3345,17 @@ a.amazo-tile {
 }
 .tile-sparkline .tile-sparkline-footer {
   padding: 16px;
-  background: #fafafa;
+  background: #f8f8f8;
   font-size: 11px;
   border-top: 1px solid #eeeeee;
-  border-radius: 0 0 2px 2px;
+  border-radius: 0 0 5px 5px;
+}
+.tile-sparkline .tile-sparkline-footer-clean {
+  padding: 0px 16px 16px 16px;
+  /*background: #f8f8f8;*/
+  font-size: 11px;
+  /*border-top: 1px solid #eeeeee;*/
+  border-radius: 0 0 5px 5px;
 }
 .info-tile .tile-body .easypiechart {
   margin: 0 auto;
