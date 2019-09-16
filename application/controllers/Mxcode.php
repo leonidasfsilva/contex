@@ -108,7 +108,7 @@ class Mxcode extends CI_Controller
     public function sair()
     {
         if ((session_id()) && ($this->session->userdata('logado'))) {
-            gravaLog(id_usuario(), 'Logoff no sistema', getenv("REMOTE_ADDR"));
+            gravaLog(id_usuario(), nome_usuario(), email_usuario(), 'Logoff no sistema', getenv("REMOTE_ADDR"));
             $this->session->sess_destroy();
             redirect('mxcode/login');
         } else {
