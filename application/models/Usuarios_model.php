@@ -7,8 +7,6 @@ class Usuarios_model extends CI_Model
         parent::__construct();
     }
 
-    
-
     function get($perpage = 0, $start = 0, $one = false)
     {
         
@@ -16,7 +14,8 @@ class Usuarios_model extends CI_Model
         $this->db->select('usuarios.*, permissoes.nome as permissao');
         $this->db->limit($perpage, $start);
         $this->db->join('permissoes', 'usuarios.permissoes_id = permissoes.idPermissao', 'left');
-  
+        $this->db->where('usuarios.status', 1);
+
         $query = $this->db->get();
         
         $result =  !$one  ? $query->result() : $query->row();

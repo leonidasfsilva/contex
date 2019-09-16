@@ -32,7 +32,7 @@
             <?php } else {
             foreach ($results as $r) {
 
-                if ($r->status == 1) {
+                if ($r->ativo == 1) {
                     $status = 'Ativo';
                     $label_status = 'success';
                     $btn_status = '<a href="#modalDesativar" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-warning btn-sm" title="Desativar"><i class="fa fa-minus-circle fa-lg fa-fw" ></i></a>';
@@ -90,6 +90,31 @@ echo $this->pagination->create_links();
     </div>
 </div>
 
+<!-- Modal DESATIVAR-->
+<div class="modal fade" id="modalExcluir" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-white ">Excluir conta de usuário</h4>
+            </div>
+            <form action="<?php echo base_url() ?>usuarios/excluir" method="post">
+                <div class="modal-body">
+                    <p>Deseja realmente excluir esta conta de usuário?</p>
+                    <input type="hidden" id="id_excluir" name="id" value=""/>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
+                        Cancelar
+                    </button>
+                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt fa-fw"></i> Excluir</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Modal ATIVAR-->
 <div class="modal fade" id="modalAtivar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
@@ -121,7 +146,7 @@ echo $this->pagination->create_links();
         $('a').click(function (event) {
 
             var usuario = $(this).attr('usuario');
-            $('#id_ativar, #id_desativar').val(usuario);
+            $('#id_ativar, #id_desativar, #id_excluir').val(usuario);
 
         });
 
