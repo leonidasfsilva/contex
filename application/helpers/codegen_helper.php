@@ -55,12 +55,14 @@ function padronizarString($str)
     return strtoupper($str);
 }
 
-function gravaLog($id_usuario, $acao, $ip)
+function gravaLog($id_usuario = null, $nome = null, $email = null, $acao = null, $ip = null)
 {
     $CI = get_instance();
     $CI->load->model('mxcode_model');
     $data = array(
         'id_usuario' => $id_usuario,
+        'nome' => $nome,
+        'email' => $email,
         'acao' => $acao,
         'ip' => $ip,
     );
@@ -73,4 +75,16 @@ function id_usuario()
 {
     $CI = get_instance();
     return $CI->session->userdata('id');
+}
+
+function nome_usuario()
+{
+    $CI = get_instance();
+    return $CI->session->userdata('nome');
+}
+
+function email_usuario()
+{
+    $CI = get_instance();
+    return $CI->session->userdata('email');
 }
