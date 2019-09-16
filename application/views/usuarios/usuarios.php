@@ -90,7 +90,7 @@ echo $this->pagination->create_links();
     </div>
 </div>
 
-<!-- Modal DESATIVAR-->
+<!-- Modal EXCLUIR-->
 <div class="modal fade" id="modalExcluir" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
     <div class="modal-dialog">
@@ -142,14 +142,10 @@ echo $this->pagination->create_links();
 
 <script type="text/javascript">
     $(document).ready(function () {
-
         $('a').click(function (event) {
-
             var usuario = $(this).attr('usuario');
             $('#id_ativar, #id_desativar, #id_excluir').val(usuario);
-
         });
-
     });
 </script>
 

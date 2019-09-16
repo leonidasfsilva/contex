@@ -141,7 +141,7 @@ class Mxcode extends CI_Controller
 
             if ($usuario) {
                 if (password_verify($password, $usuario->senha)) {
-                    if ($usuario->status == 0) {
+                    if ($usuario->ativo == 0) {
                         $this->session->set_flashdata('erro', 'Conta de usuário desativada.<br>Por favor, contate o administrador do sistema.');
                         redirect('mxcode/login');
                     }
@@ -154,6 +154,7 @@ class Mxcode extends CI_Controller
                         'permissao' => $usuario->permissoes_id,
                         'logado' => true
                     );
+
                     $this->session->set_userdata($session_data);
                     gravaLog($usuario->id_usuarios, 'Login no sistema', getenv("REMOTE_ADDR"));
                     redirect('/');
