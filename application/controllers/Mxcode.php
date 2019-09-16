@@ -159,7 +159,7 @@ class Mxcode extends CI_Controller
                     gravaLog(id_usuario(), nome_usuario(), email_usuario(), 'Login no sistema', getenv("REMOTE_ADDR"));
                     redirect('/');
                 } else {
-                    gravaLog($usuario->id_usuario, $usuario->nome, $usuario->email, 'Tentativa de login recusada: senha incorreta', getenv("REMOTE_ADDR"));
+                    gravaLog($usuario->id_usuarios, $usuario->nome, $usuario->email, 'Tentativa de login recusada: senha incorreta', getenv("REMOTE_ADDR"));
                     $this->session->set_flashdata('erro', 'Dados de acesso inválidos, por favor tente novamente.');
                     redirect('mxcode/login');
                 }
