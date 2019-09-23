@@ -159,11 +159,13 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     foreach ($subresults as $s) {
 
                         if ($s->id_lancamento == $r->id_lancamento) {
+                            if (is_array($lancamentoEditavel)) {
 
-                            if (in_array($r->id_lancamento, $lancamentoEditavel, true)) {
-                                $disabled_lancamento_2 = '';
-                            } else {
-                                $disabled_lancamento_2 = 'disabled';
+                                if (in_array($r->id_lancamento, $lancamentoEditavel, true)) {
+                                    $disabled_lancamento_2 = '';
+                                } else {
+                                    $disabled_lancamento_2 = 'disabled';
+                                }
                             }
 
 
