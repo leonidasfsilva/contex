@@ -1,7 +1,7 @@
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h3>
-            <i class="fa fa-user-plus fa-lg fa-fw"></i>
+            <i class="fas fa-user-plus fa-lg fa-fw"></i>
             Cadastrar Novo Cliente
         </h3>
     </div>

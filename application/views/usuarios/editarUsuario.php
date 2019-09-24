@@ -1,7 +1,7 @@
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h3>
-            <i class="fa fa-user-circle fa-lg fa-fw"></i>
+            <i class="fas fa-user-edit fa-lg fa-fw"></i>
             Editar Dados do Usuário
         </h3>
     </div>
@@ -114,8 +114,8 @@
                 <div class="row pull-right">
                     <div class="col-md-12 ">
                         <a href="<?php echo base_url() ?>usuarios" id="" class="btn btn-default btn-sm"><i
-                                    class="fa fa-arrow-left fa-fw"></i> Voltar</a>
-                        <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar
+                                    class="fas fa-arrow-left fa-fw"></i> Voltar</a>
+                        <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-check fa-fw"></i> Salvar
                         </button>
                     </div>
                 </div>

@@ -196,7 +196,7 @@ $(function () {
                                         window.location.reload();
                                     },
                                     error: function () {
-                                        alert('Erro!');
+                                        alert('Erro ao tentar salvar imagem!');
                                     }
 
                                 });

@@ -3,16 +3,16 @@
         <div class="panel panel-profile panel-midnightblue">
             <div class="panel-heading">
                 <h3>
-                    <i class="fa fa-user-circle fa-lg fa-fw"></i>
+                    <i class="fas fa-user-cog fa-lg fa-fw"></i>
                     Minha Conta
                 </h3>
                 <div class="panel-ctrls">
                     <button href="#modalAlterarSenha" class="btn btn-primary btn-sm" id="alterar_senha" data-toggle="modal" title="Alterar senha de acesso">
-                        <i class="fa fa-lock fa-fw"></i>
+                        <i class="fas fa-key fa-fw"></i>
                         Alterar Senha
                     </button>
                     <button href="#modalEditarPerfil" class="btn btn-primary btn-sm" id="editar_perfil" data-toggle="modal" title="Alterar dados de usuário">
-                        <i class="fa fa-user-circle fa-fw"></i>
+                        <i class="fas fa-user-edit fa-fw"></i>
                         Alterar Dados
                     </button>
                 </div>
@@ -24,7 +24,7 @@
                             <img src="<?php echo $this->session->userdata('avatar') != null ? base_url() . 'assets/uploads/avatars/' . $this->session->userdata('avatar') : base_url() . 'assets/img/avatars/padrao.png'; ?>"
                                  class="img-responsive img-circle avatar-image">
                             <div class="avatar-image-hover">
-                                <i class="fa fa-pencil fa-2x fa-fw"></i>
+                                <i class="fas fa-paint-brush fa-2x fa-fw"></i>
                             </div>
                         </a>
                     </div>
@@ -67,11 +67,11 @@
                     </ul>
                     <hr class="">
                     <div class="text-center">
-                        <a href="javascript:" class="btn btn-social btn-facebook"><i class="fa fa-facebook"></i></a>
-                        <a href="javascript:" class="btn btn-social btn-twitter"><i class="fa fa-twitter"></i></a>
-                        <a href="javascript:" class="btn btn-social btn-github"><i class="fa fa-github"></i></a>
-                        <a href="javascript:" class="btn btn-social btn-flickr"><i class="fa fa-flickr"></i></a>
-                        <a href="javascript:" class="btn btn-social btn-instagram"><i class="fa fa-instagram"></i></a>
+                        <a href="javascript:" class="btn btn-social btn-facebook" title="Facebook"><i class="fab fa-facebook-f fa-fw"></i></a>
+                        <a href="javascript:" class="btn btn-social btn-twitter" title="Twitter"><i class="fab fa-twitter fa-fw"></i></a>
+                        <a href="javascript:" class="btn btn-social btn-github" title="GitHub"><i class="fab fa-github fa-fw"></i></a>
+                        <a href="javascript:" class="btn btn-social btn-flickr" title="Flickr"><i class="fab fa-flickr fa-fw"></i></a>
+                        <a href="javascript:" class="btn btn-social btn-instagram" title="Instagram"><i class="fab fa-instagram fa-fw"></i></a>
                     </div>
                 </div>
             </div>
@@ -143,9 +143,9 @@
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label for="email" class="font-weight-bold">Email *</label>
-                            <div class="input-group">
+                            <div class="input-group" title="Para alterar seu email de cadastro, contate o administrador do sistema">
                                 <input type="text" class="form-control" id="email" name="email" value="<?php echo $dados->email; ?>" disabled/>
-                                <span class="input-group-addon" title="Para alterar seu email de cadastro, contate o administrador do sistema."><i class="fa fa-info-circle fa-fw"></i></span>
+                                <span class="input-group-addon"><i class="fas fa-info-circle fa-lg fa-fw"></i></span>
                             </div>
                         </div>
                         <div class="form-group col-md-6">
@@ -215,7 +215,7 @@
                         <label class="btn btn-primary btn-upload btn-block" for="inputImage" data-toggle="tooltip" data-animation="false" title="" data-original-title="Selecionar imagem para perfil">
                             <input type="file" class="sr-only" id="inputImage" name="file" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff">
                             <span class="docs-tooltip">
-                                  <i class="fa fa-folder-open fa-fw"></i> Selecionar Imagem
+                                  <i class="fas fa-folder-open fa-fw"></i> Selecionar Imagem
                                 </span>
                         </label>
                     </div>
@@ -225,7 +225,7 @@
                         <div class="form-group col-md-12">
                             <button href="#modalExcluirFotoUsuario" class="btn btn-danger btn-block" data-toggle="modal" title="Excluir foto de perfil">
                                 <span class="docs-tooltip">
-                                      <i class="fa fa-trash-o fa-fw"></i> Excluir Foto
+                                      <i class="fas fa-trash-alt fa-fw"></i> Excluir Foto
                                 </span>
                             </button>
                         </div>
@@ -246,14 +246,14 @@
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-primary" data-method="zoom" data-option="0.1" title="Aumentar zoom">
                                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="Aumentar zoom">
-                                      <i class="fa fa-search-plus fa-lg fa-fw"></i>
+                                      <i class="fas fa-search-plus fa-lg fa-fw"></i>
                                     </span>
                                     </button>
                                 </div>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-primary" data-method="zoom" data-option="-0.1" title="Diminuir zoom">
                                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="Diminuir zoom">
-                                      <i class="fa fa-search-minus fa-lg fa-fw"></i>
+                                      <i class="fas fa-search-minus fa-lg fa-fw"></i>
                                     </span>
                                     </button>
                                 </div>
@@ -264,14 +264,14 @@
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-primary" data-method="scaleX" data-option="-1" title="Inverter horizontalmente">
                                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="Inverter horizontalmente">
-                                      <i class="fa fa-exchange fa-lg fa-fw"></i>
+                                      <i class="fas fa-exchange-alt fa-lg fa-fw"></i>
                                     </span>
                                     </button>
                                 </div>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-primary" data-method="scaleY" data-option="-1" title="Inverter verticalmente">
                                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="Inverter verticalmente">
-                                      <i class="fa fa-exchange fa-rotate-90 fa-lg fa-fw"></i>
+                                      <i class="fas fa-exchange-alt fa-rotate-90 fa-lg fa-fw"></i>
                                     </span>
                                     </button>
                                 </div>
@@ -282,14 +282,14 @@
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-primary" data-method="rotate" data-option="-45" title="Girar para esquerda">
                                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="Girar para esquerda">
-                                      <i class="fa fa-rotate-left fa-lg fa-fw"></i>
+                                      <i class="fas fa-undo fa-lg fa-fw"></i>
                                     </span>
                                     </button>
                                 </div>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-primary" data-method="rotate" data-option="45" title="Girar para direitat">
                                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="Girar para direita">
-                                      <i class="fa fa-rotate-right fa-lg fa-fw"></i>
+                                      <i class="fas fa-redo fa-lg fa-fw"></i>
                                     </span>
                                     </button>
                                 </div>
@@ -300,7 +300,7 @@
                         <div class="col-md-12 docs-buttons form-group">
                             <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-method="getCroppedCanvas" data-animation="false" data-original-title="Finalizar edição">
                                     <span class="docs-tooltip">
-                                      <span class="fa fa-check fa-fw"></span> Finalizar
+                                      <span class="fas fa-check fa-fw"></span> Finalizar
                                     </span>
                             </button>
                         </div>

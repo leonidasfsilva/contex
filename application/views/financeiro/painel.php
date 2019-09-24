@@ -3,7 +3,7 @@
         <div class="col-md-6">
             <a href="<?= base_url() ?>financeiro/lancamentos" class="shortcut-tile tile-blue">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fa fa-line-chart fa-fw"></i></div>
+                    <div class="pull-left"><i class="fas fa-line-chart fa-fw"></i></div>
                     <!--                            <div class="pull-right"><span class="badge">2</span></div>-->
                 </div>
                 <div class="tile-footer">
@@ -16,7 +16,7 @@
         <div class="col-md-6">
             <a href="<?= base_url() ?>financeiro/faturas" class="shortcut-tile tile-midnightblue">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fa fa-credit-card fa-fw"></i></div>
+                    <div class="pull-left"><i class="fas fa-credit-card fa-fw"></i></div>
                     <!--                            <div class="pull-right"><span class="badge">5</span></div>-->
                 </div>
                 <div class="tile-footer">
@@ -42,7 +42,7 @@
         <div class="col-md-6">
             <a href="<?= base_url() ?>financeiro/pendencias" class="shortcut-tile tile-danger">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fa fa-thumb-tack fa-fw"></i></div>
+                    <div class="pull-left"><i class="fas fa-file-invoice-dollar fa-fw"></i></div>
                 </div>
                 <div class="tile-footer">
                     Pendências

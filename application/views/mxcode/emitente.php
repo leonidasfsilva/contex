@@ -2,7 +2,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3>
-                <i class="fa fa-id-card-o fa-lg fa-fw"></i>
+                <i class="fas fa-id-card fa-lg fa-fw"></i>
                 Dados do Emitente
             </h3>
             <div class="panel-ctrls">
@@ -19,7 +19,7 @@
             </div>
             <div class="panel-footer">
                 <a href="#modalCadastrar" data-toggle="modal" role="button" class="btn btn-primary pull-right">
-                    <i class="fa fa-plus fa-fw"></i> Cadastrar Dados
+                    <i class="fas fa-plus fa-fw"></i> Cadastrar Dados
                 </a>
 
             </div>
@@ -115,19 +115,18 @@
     </div>
 
 <?php } else { ?>
-
     <div class="panel panel-midnightblue">
         <div class="panel-heading">
             <h3>
-                <i class="fa fa-id-card-o fa-lg fa-fw"></i>
+                <i class="fas fa-id-card fa-lg fa-fw"></i>
                 Dados do Emitente
             </h3>
             <div class="panel-ctrls">
-                <a href="#modalAlterar" data-toggle="modal" class="btn btn-primary btn-sm">
-                    <i class="fa fa-edit fa-fw"></i> Alterar Dados
+                <a href="#modalAlterar" data-toggle="modal" class="btn btn-primary btn-sm" title="Alterar dados de emitente">
+                    <i class="fas fa-edit fa-fw"></i> Alterar Dados
                 </a>
-                <a href="#modalLogo" data-toggle="modal" class="btn btn-primary btn-sm">
-                    <i class="fa fa-picture-o fa-fw"></i> Alterar Logo
+                <a href="#modalLogo" data-toggle="modal" class="btn btn-primary btn-sm" title="Alterar logotipo">
+                    <i class="fas fa-image fa-fw"></i> Alterar Logo
                 </a>
             </div>
         </div>
@@ -157,10 +156,10 @@
                     </tr>
                     </tbody>
                 </table>
-            </div>
-            <div class="panel-footer">
+<!--            </div>-->
+<!--            <div class="panel-footer">-->
                 <p class="alert alert-info">
-                    <i class="fa fa-info-circle fa-lg fa-fw"></i>
+                    <i class="fas fa-info-circle fa-lg fa-fw"></i>
                     Os dados acima serão utilizados no cabeçalho das telas de impressão.
                 </p>
             </div>
@@ -274,7 +273,7 @@
                     <div class="modal-footer">
                         <?php if ($dados->logomarca) { ?>
                             <a href="#modalExcluirLogo" data-toggle="modal" class="btn btn-danger btn-sm pull-left">
-                                <i class="fa fa-trash-o fa-fw"></i> Excluir Logo
+                                <i class="fas fa-trash-alt fa-fw"></i> Excluir Logo
                             </a>
                         <?php } ?>
                         <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">

@@ -41,8 +41,10 @@
 
         $('#menu-switcher').click(function () {
             if ($('#body').hasClass('sidebar-collapsed')) {
+                // SIDEBAR OCULTO
                 $('#menu-toggle-icon').toggleClass('fa-chevron-left fa-ellipsis-v')
             } else {
+                // SIDEBAR EXPOSTO
                 $('#menu-toggle-icon').toggleClass('fa-chevron-left fa-ellipsis-v')
             }
         });

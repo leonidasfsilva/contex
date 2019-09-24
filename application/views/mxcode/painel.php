@@ -9,7 +9,7 @@
                         <h2 class="block">R$ <?= number_format($contaCorrente->total, 2, ',', '.') ?></h2>
                     </div>
                     <div class="pull-right">
-                        <span><i class="fa fa-chart-line fa-lg fa-fw"></i></span>
+                        <span><i class="fas fa-chart-line fa-lg fa-fw"></i></span>
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
@@ -30,7 +30,7 @@
                         <h2 class="block">R$ <?= number_format($fatura->total, 2, ',', '.') ?></h2>
                     </div>
                     <div class="pull-right">
-                        <span><i class="fa fa-credit-card fa-lg fa-fw"></i></span>
+                        <span><i class="fas fa-credit-card fa-lg fa-fw"></i></span>
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
@@ -65,7 +65,7 @@
         <div class="col-md-6">
             <a href="<?= base_url() ?>financeiro" class="shortcut-tile tile-green">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fa fa-dollar fa-fw"></i></div>
+                    <div class="pull-left"><i class="fas fa-dollar fa-fw"></i></div>
                     <!--                            <div class="pull-right"><span class="badge">16</span></div>-->
                 </div>
                 <div class="tile-footer">
@@ -79,7 +79,7 @@
         <div class="col-md-6">
             <a href="<?= base_url() ?>clientes" class="shortcut-tile tile-primary">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fa fa-group fa-fw"></i></div>
+                    <div class="pull-left"><i class="fas fa-group fa-fw"></i></div>
                     <!--                            <div class="pull-right"><span class="badge">2</span></div>-->
                 </div>
                 <div class="tile-footer">
@@ -93,7 +93,7 @@
         <div class="col-md-6">
             <a href="<?= base_url() ?>produtos" class="shortcut-tile tile-indigo">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fa fa-barcode fa-fw"></i></div>
+                    <div class="pull-left"><i class="fas fa-barcode fa-fw"></i></div>
                     <!--                            <div class="pull-right"><span class="badge">5</span></div>-->
                 </div>
                 <div class="tile-footer">
@@ -107,7 +107,7 @@
         <div class="col-md-6">
             <a href="<?= base_url() ?>servicos" class="shortcut-tile tile-orange">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fa fa-wrench fa-fw"></i></div>
+                    <div class="pull-left"><i class="fas fa-wrench fa-fw"></i></div>
                 </div>
                 <div class="tile-footer">
                     Serviços
@@ -120,7 +120,7 @@
         <div class="col-md-6">
             <a href="<?= base_url() ?>os" class="shortcut-tile tile-danger">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fa fa-tags fa-fw"></i></div>
+                    <div class="pull-left"><i class="fas fa-tags fa-fw"></i></div>
                     <!--                            <div class="pull-right"><span class="badge">3</span></div>-->
                 </div>
                 <div class="tile-footer">
@@ -134,7 +134,7 @@
         <div class="col-md-6">
             <a href="<?= base_url() ?>vendas" class="shortcut-tile tile-magenta">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fa fa-shopping-cart fa-fw"></i></div>
+                    <div class="pull-left"><i class="fas fa-shopping-cart fa-fw"></i></div>
                     <!--                            <div class="pull-right"><span class="badge">10</span></div>-->
                 </div>
                 <div class="tile-footer">

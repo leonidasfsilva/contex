@@ -14,11 +14,11 @@ $periodo = $this->input->get('periodo');
             </button>
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aInvestimentos')) { ?>
                 <a href="#modalAplicacao" id="entrada" data-toggle="modal" role="button" class="btn btn-success btn-sm tip-bottom" title="Registrar nova aplicação">
-                    <i class="fa fa-plus-square fa-fw"></i>
+                    <i class="fas fa-plus-square fa-fw"></i>
                     Aplicar
                 </a>
                 <a href="#modalResgate" id="saida" data-toggle="modal" role="button" class="btn btn-danger btn-sm tip-bottom" title="Registrar novo resgate">
-                    <i class="fa fa-minus-square fa-fw"></i>
+                    <i class="fas fa-minus-square fa-fw"></i>
                     Resgatar
                 </a>
             <?php } ?>
@@ -135,10 +135,10 @@ $periodo = $this->input->get('periodo');
                             $r->id_lancamentos . '" descricao="' . $r->descricao . '" valor="' . $valor . '" vencimento="' .
                             date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
                             $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '">
-                                <i class="fa fa-search-plus fa-lg fa-fw"></i></a>';
+                                <i class="fas fa-search-plus fa-lg fa-fw"></i></a>';
                     }
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
-                        echo '<a href="#modalExcluir" data-toggle="modal" idLancamento="' . $r->id_lancamentos . '" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>';
+                        echo '<a href="#modalExcluir" data-toggle="modal" idLancamento="' . $r->id_lancamentos . '" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw"></i></a>';
                     }
 
                     echo '</td>';

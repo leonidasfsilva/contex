@@ -18,17 +18,17 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h3>
-            <i class="fa fa-credit-card fa-lg fa-fw"></i>
+            <i class="fas fa-credit-card fa-lg fa-fw"></i>
             Controle de Faturas
         </h3>
         <div class="panel-ctrls">
             <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar faturas">
-                <i class="fa fa-filter fa-fw"></i>
+                <i class="fas fa-filter fa-fw"></i>
                 Filtrar
             </button>
             <button href="#modalNovaFatura" id="novaFatura" data-toggle="modal" role="button" class="btn btn-primary btn-sm tip-bottom"
                     title="Abrir nova fatura" <?= $disabledFatura ?>>
-                <i class="fa fa-plus-square fa-fw"></i>
+                <i class="fas fa-plus-square fa-fw"></i>
                 Nova Fatura
             </button>
         </div>
@@ -102,20 +102,20 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         $status = 'FECHADA';
                         $label = 'inverse';
                         $disabled = 'disabled';
-                        $iconFechar = 'fa fa-lock';
+                        $iconFechar = 'fas fa-lock';
 
                     } else if ($r->fatura_aberta == 2) {
                         $status = '';
                         $label = '';
                         $disabledPagar = 'disabled';
                         $disabled = 'disabled';
-                        $iconFechar = 'fa fa-unlock-alt';
+                        $iconFechar = 'fas fa-unlock';
 
                     } else {
                         $status = 'ABERTA';
                         $label = 'default';
                         $disabledPagar = 'disabled';
-                        $iconFechar = 'fa fa-unlock-alt';
+                        $iconFechar = 'fas fa-unlock';
 
                     }
 
@@ -123,20 +123,20 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         $pagamento = 'PENDENTE';
                         $labelPgto = 'danger';
                         $color = 'red';
-                        $iconPagar = 'fa fa-check-square-o';
+                        $iconPagar = 'far fa-check-square';
 
                     } else if ($r->fatura_paga == 1) {
                         $pagamento = 'PAGA';
                         $labelPgto = 'success';
                         $color = 'green';
-                        $iconPagar = 'fa fa-check-square';
+                        $iconPagar = 'fas fa-check-square';
                         $disabledPagar = 'disabled';
 
                     } else {
                         $pagamento = '';
                         $labelPgto = '';
                         $color = 'red';
-                        $iconPagar = 'fa fa-check-square-o';
+                        $iconPagar = 'far fa-check-square';
                     }
 
                     $valor_total = $this->fatura_model->getValorTotalFatura($r->id_fatura)->valor_total;
@@ -158,10 +158,10 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                 <i class="' . $iconFechar . ' fa-lg fa-fw"></i></button>';
 
                         echo '<a href="' . base_url() . 'financeiro/faturas/detalhes/' . $r->id_fatura . '" type="button" id="btn_detalhes" style="margin-right: 1%" class="btn btn-primary btn-sm detalhes" title="Detalhes da Fatura" id_fatura="' . $r->id_fatura . '">
-                                <i class="fa fa-search-plus fa-lg fa-fw"></i></a>';
+                                <i class="fas fa-search-plus fa-lg fa-fw"></i></a>';
                     }
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dFaturas')) {
-                        echo '<a href="#modalExcluir" data-toggle="modal" id_fatura="' . $r->id_fatura . '" class="btn btn-danger btn-sm excluir" title="Excluir Fatura"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>';
+                        echo '<a href="#modalExcluir" data-toggle="modal" id_fatura="' . $r->id_fatura . '" class="btn btn-danger btn-sm excluir" title="Excluir Fatura"><i class="fas fa-trash-alt fa-lg fa-fw"></i></a>';
                     }
                     echo '</td>';
                     echo '</tr>';

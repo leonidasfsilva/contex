@@ -5,18 +5,18 @@ $periodo = $this->input->get('periodo');
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h3>
-            <i class="fa fa-thumb-tack fa-lg fa-fw"></i>
+            <i class="fas fa-file-invoice-dollar fa-lg fa-fw"></i>
             Controle de Pendências
         </h3>
         <div class="panel-ctrls">
             <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar pendências">
-                <i class="fa fa-filter fa-fw"></i>
+                <i class="fas fa-filter fa-fw"></i>
                 Filtrar
             </button>
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
                 <a href="#modalPendencia" id="pendencia" data-toggle="modal" role="button" class="btn btn-primary btn-sm tip-bottom"
                    title="Registrar nova pendência">
-                    <i class="fa fa-plus-square fa-fw"></i>
+                    <i class="fas fa-plus-square fa-fw"></i>
                     Nova Pendência
                 </a>
             <?php } ?>
@@ -94,13 +94,13 @@ $periodo = $this->input->get('periodo');
                         $status = 'Pendente';
                         $color = 'red';
                         $label = 'danger';
-                        $icon = 'fa fa-check-square-o';
+                        $icon = 'far fa-check-square';
 
                     } else {
                         $status = 'Pago';
                         $color = 'green';
                         $label = 'success';
-                        $icon = 'fa fa-check-square';
+                        $icon = 'fas fa-check-square';
 
                     };
                     $disabled = '';
@@ -137,10 +137,10 @@ $periodo = $this->input->get('periodo');
                             $r->id_pendencia . '" descricao="' . $r->descricao . '" valor="' . $valor . '" data_pendencia="' . date('d/m/Y', strtotime($r->data_pendencia)) .
                             '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" quitado="' .
                             $r->quitado . '" id_cliente="' . $r->id_cliente . '" tipo="' . $r->tipo . '">
-                                <i class="fa fa-search-plus fa-lg fa-fw"></i></button>';
+                                <i class="fas fa-search-plus fa-lg fa-fw"></i></button>';
                     }
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
-                        echo '<a href="#modalExcluir" data-toggle="modal" id_pendencia="' . $r->id_pendencia . '" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>';
+                        echo '<a href="#modalExcluir" data-toggle="modal" id_pendencia="' . $r->id_pendencia . '" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw"></i></a>';
                     }
 
                     echo '</td>';

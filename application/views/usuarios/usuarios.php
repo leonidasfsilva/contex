@@ -1,13 +1,13 @@
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h3>
-            <i class="fa fa-user-circle fa-lg fa-fw"></i>
+            <i class="fas fa-users-cog fa-lg fa-fw"></i>
             Gestão de Usuários do Sistema
         </h3>
         <div class="panel-ctrls">
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
                 <a href="<?php echo base_url(); ?>usuarios/adicionar" class="btn btn-primary btn-sm"><i
-                            class="fa fa-plus-square fa-fw"></i> Adicionar Usuário</a>
+                            class="fas fa-plus-square fa-fw"></i> Adicionar Usuário</a>
             <?php } ?>
         </div>
     </div>
@@ -35,11 +35,11 @@
                 if ($r->ativo == 1) {
                     $status = 'Ativo';
                     $label_status = 'success';
-                    $btn_status = '<a href="#modalDesativar" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-warning btn-sm" title="Desativar"><i class="fa fa-minus-circle fa-lg fa-fw" ></i></a>';
+                    $btn_status = '<a href="#modalDesativar" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-warning btn-sm" title="Desativar"><i class="fas fa-minus-circle fa-lg fa-fw" ></i></a>';
                 } else {
                     $status = 'Inativo';
                     $label_status = 'warning';
-                    $btn_status = '<a href="#modalAtivar" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-success btn-sm" title="Ativar"><i class="fa fa-check-circle fa-lg fa-fw" ></i></a>';
+                    $btn_status = '<a href="#modalAtivar" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-success btn-sm" title="Ativar"><i class="fas fa-check-circle fa-lg fa-fw" ></i></a>';
                 }
 
                 echo '<tr>';
@@ -49,10 +49,10 @@
                 echo '<td>' . $r->permissao . '</td>';
                 echo '<td><span class="label label-' . $label_status . '">' . strtoupper($status) . '</span></td>';
                 echo '<td style="text-align: center">';
-                echo '<a href="' . base_url() . 'usuarios/visualizar/' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-info btn-sm" title="Detalhes"><i class="fa fa-search-plus fa-lg fa-fw"></i></a>';
-                echo '<a href="' . base_url() . 'usuarios/editar/' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-primary btn-sm" title="Editar"><i class="fas fa-pencil-alt fa-lg fa-fw"></i></a>';
+                echo '<a href="' . base_url() . 'usuarios/visualizar/' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-info btn-sm" title="Detalhes"><i class="fas fa-search-plus fa-lg fa-fw"></i></a>';
+                echo '<a href="' . base_url() . 'usuarios/editar/' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-primary btn-sm" title="Editar"><i class="fas fa-edit fa-lg fa-fw"></i></a>';
                 echo $btn_status;
-                echo '<a href="#modalExcluir" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-danger btn-sm" title="Excluir"><i class="far fa-trash-alt fa-lg fa-fw" ></i></a>';                echo '</td>';
+                echo '<a href="#modalExcluir" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-danger btn-sm" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw" ></i></a>';                echo '</td>';
                 echo '</tr>';
             } ?>
             </tbody>
@@ -70,7 +70,7 @@ echo $this->pagination->create_links();
      aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-danger">
+            <div class="modal-header bg-warning">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Desativar conta de usuário</h4>
             </div>
@@ -83,7 +83,7 @@ echo $this->pagination->create_links();
                     <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
                         Cancelar
                     </button>
-                    <button class="btn btn-danger btn-sm"><i class="fa fa-check fa-fw"></i> Desativar</button>
+                    <button class="btn btn-warning btn-sm"><i class="fa fa-check fa-fw"></i> Desativar</button>
                 </div>
             </form>
         </div>

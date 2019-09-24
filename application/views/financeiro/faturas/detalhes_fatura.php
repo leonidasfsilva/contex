@@ -42,18 +42,18 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h3>
-            <i class="fa fa-credit-card fa-lg fa-fw"></i>
+            <i class="fas fa-credit-card fa-lg fa-fw"></i>
             Detalhes da Fatura: # <?= $id_fatura ?>
         </h3>
         <div class="panel-ctrls">
-            <a href="<?php echo base_url() ?>financeiro/faturas" class="btn btn-sm btn-default"><i class="fa fa-arrow-left fa-fw"></i> Faturas</a>
+            <a href="<?php echo base_url() ?>financeiro/faturas" class="btn btn-sm btn-default"><i class="fas fa-arrow-left fa-fw"></i> Faturas</a>
             <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar faturas">
-                <i class="fa fa-filter fa-fw"></i>
+                <i class="fas fa-filter fa-fw"></i>
                 Filtrar
             </button>
             <button href="#modalLancamento" id="novoLancamento" data-toggle="modal" class="btn btn-primary btn-sm"
                     title="Cadastrar novo lançamento"<?= $disabled_lancamento_1 ?>>
-                <i class="fa fa-plus-square fa-fw"></i>
+                <i class="fas fa-plus-square fa-fw"></i>
                 Novo Lançamento
             </button>
         </div>
@@ -121,20 +121,20 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             <div class="panel-ctrls">
                 <span class="hidden" id="div_btn_marcar">
                     <button class="btn btn-default btn-sm marcar_desmarcar" id="marcar_todos" title="Marcar todos os lançamentos da fatura">
-                        <i class="fa fa-check-square fa-fw"></i>
+                        <i class="fas fa-check-square fa-fw"></i>
                         Marcar Todos
                     </button>
                     <button class="btn btn-default marcar_desmarcar btn-sm hidden" id="desmarcar_todos" title="Desmarcar todos os lançamentos da fatura">
-                        <i class="fa fa-square-o fa-fw"></i>
+                        <i class="far fa-square fa-fw"></i>
                         Desmarcar Todos
                     </button>
                 </span>
                 <button class="btn btn-default btn-sm habilita_desabilita_soma" id="exibir_soma" title="Habilitar soma de lançamentos individuais">
-                    <i class="fa fa-toggle-on fa-fw"></i>
+                    <i class="fas fa-toggle-on fa-fw"></i>
                     Habilitar Soma
                 </button>
                 <button class="btn btn-default btn-sm habilita_desabilita_soma hidden" id="esconder_soma" title="Desabilitar soma de lançamentos individuais">
-                    <i class="fa fa-toggle-off fa-fw"></i>
+                    <i class="fas fa-toggle-off fa-fw"></i>
                     Desabilitar Soma
                 </button>
             </div>
@@ -209,11 +209,11 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                     $s->id_lancamento . '" descricao="' . $s->descricao . '" valor="' . $valor . '" data_compra="' .
                                     date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas . '" valor_parcela="' .
                                     number_format($r->valor_parcela, 2, ',', '.') . '" ' . $disabled_lancamento_1 . ' ' . $disabled_lancamento_2 . '>
-                                <i class="fa fa-search-plus fa-lg fa-fw"></i></button>';
+                                <i class="fas fa-search-plus fa-lg fa-fw"></i></button>';
                             }
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
                                 echo '<button type="button" href="#modalExcluir" data-toggle="modal" id_lancamento="' . $s->id_lancamento . '" class="btn btn-danger btn-sm excluir" title="Excluir" ' . $disabled_lancamento_1 . ' ' . $disabled_lancamento_2 . '>
-                                            <i class="fa fa-trash-o fa-lg fa-fw"></i></button>';
+                                            <i class="fas fa-trash-alt fa-lg fa-fw"></i></button>';
                             }
 
                             echo '</td>';
@@ -348,9 +348,9 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir">
-                        <i class="fa fa-times fa-fw"></i> Cancelar
+                        <i class="fas fa-times fa-fw"></i> Cancelar
                     </button>
-                    <button class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Filtrar</button>
+                    <button class="btn btn-primary btn-sm"><i class="fas fa-check fa-fw"></i> Filtrar</button>
                 </div>
             </form>
         </div>

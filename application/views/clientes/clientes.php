@@ -2,12 +2,12 @@
     <div class="panel panel-midnightblue">
         <div class="panel-heading">
             <h3>
-                <i class="fa fa-group fa-lg fa-fw"></i>
-                Lista de Clientes
+                <i class="fas fa-group fa-lg fa-fw"></i>
+                Cadastro de Clientes
             </h3>
             <div class="panel-ctrls">
                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
-                    <a href="<?php echo base_url(); ?>clientes/adicionar" class="btn btn-primary btn-sm"><i class="fa fa-plus-square fa-fw"></i> Adicionar Cliente</a>
+                    <a href="<?php echo base_url(); ?>clientes/adicionar" class="btn btn-primary btn-sm"><i class="fas fa-plus-square fa-fw"></i> Adicionar Cliente</a>
                 <?php } ?>
             </div>
         </div>
@@ -34,12 +34,12 @@ else { ?>
     <div class="panel panel-midnightblue">
         <div class="panel-heading">
             <h3>
-                <i class="fa fa-group fa-lg fa-fw"></i>
-                Lista de Clientes
+                <i class="fas fa-group fa-lg fa-fw"></i>
+                Cadastro de Clientes
             </h3>
             <div class="panel-ctrls">
                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
-                    <a href="<?php echo base_url(); ?>clientes/adicionar" class="btn btn-primary btn-sm"><i class="fa fa-plus-square fa-fw"></i> Adicionar Cliente</a>
+                    <a href="<?php echo base_url(); ?>clientes/adicionar" class="btn btn-primary btn-sm"><i class="fas fa-plus-square fa-fw"></i> Adicionar Cliente</a>
                 <?php } ?>
             </div>
         </div>
@@ -61,13 +61,13 @@ else { ?>
                     echo '<td>' . $r->telefone . '</td>';
                     echo '<td style="text-align: center">';
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) {
-                        echo '<a href="' . base_url() . 'clientes/visualizar/' . $r->id_clientes . '" style="margin-right: 1%" class="btn btn-info btn-sm" title="Ver detalhes"><i class="fa fa-search-plus fa-lg fa-fw"></i></a>';
+                        echo '<a href="' . base_url() . 'clientes/visualizar/' . $r->id_clientes . '" style="margin-right: 1%" class="btn btn-info btn-sm" title="Ver detalhes"><i class="fas fa-search-plus fa-lg fa-fw"></i></a>';
                     }
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
-                        echo '<a href="' . base_url() . 'clientes/editar/' . $r->id_clientes . '" style="margin-right: 1%" class="btn btn-primary btn-sm" title="Editar cliente"><i class="fa fa-edit fa-lg fa-fw"></i></a>';
+                        echo '<a href="' . base_url() . 'clientes/editar/' . $r->id_clientes . '" style="margin-right: 1%" class="btn btn-primary btn-sm" title="Editar"><i class="fas fa-edit fa-lg fa-fw"></i></a>';
                     }
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dCliente')) {
-                        echo '<a href="#modalExcluir" role="button" data-toggle="modal" cliente="' . $r->id_clientes . '" style="margin-right: 1%" class="btn btn-danger btn-sm" title="Excluir cliente"><i class="fa fa-trash-o fa-lg fa-fw" ></i></a>';
+                        echo '<a href="#modalExcluir" role="button" data-toggle="modal" cliente="' . $r->id_clientes . '" style="margin-right: 1%" class="btn btn-danger btn-sm" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw" ></i></a>';
                     }
 
 

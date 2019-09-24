@@ -1347,12 +1347,12 @@ img {
     height: auto;
 }
 
-.avatar-overlay {
-    background-color: #00aced;
+.avatar-overlay:hover {
     color: #00aced;
+    background: rgba(0, 172, 237, 0.31);
 }
 .avatar-overlay:hover img {
-    opacity: 0.9;
+    opacity: 0.5;
     cursor: pointer;
 }
 /*.avatar-image {*/
@@ -1379,6 +1379,8 @@ img {
 .avatar:hover .avatar-image {
     /*opacity: 0.3;*/
     /*cursor: pointer;*/
+    z-index: 1 !important;
+
 }
 
 .avatar:hover .avatar-image-hover {

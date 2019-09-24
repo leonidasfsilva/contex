@@ -10,45 +10,56 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-xs-6 col-sm-2">
-                <a href="#" class="shortcut-tile tile-brown">
+                <a href="#" class="shortcut-tile tile-green">
                     <div class="tile-body">
-                        <div class="pull-left"><i class="fa fa-pencil"></i></div>
+                        <div class="pull-left"><i class="fas fa-pencil-alt fa-fw"></i></div>
                     </div>
                     <div class="tile-footer">
-                        Create Post
+                        Criar Postagem
                     </div>
                 </a>
             </div>
             <div class="col-xs-6 col-sm-2">
-                <a href="#" class="shortcut-tile tile-grape">
+                <a href="#" class="shortcut-tile tile-alizarin">
                     <div class="tile-body">
-                        <div class="pull-left"><i class="fa fa-group"></i></div>
+                        <div class="pull-left"><i class="fas fa-group fa-fw"></i></div>
                         <div class="pull-right"><span class="badge">2</span></div>
                     </div>
                     <div class="tile-footer">
-                        Contacts
+                        Contatos
                     </div>
                 </a>
             </div>
             <div class="col-xs-6 col-sm-2">
                 <a href="#" class="shortcut-tile tile-primary">
                     <div class="tile-body">
-                        <div class="pull-left"><i class="fa fa-envelope-o"></i></div>
+                        <div class="pull-left"><i class="fas fa-inbox fa-fw"></i></div>
                         <div class="pull-right"><span class="badge">10</span></div>
                     </div>
                     <div class="tile-footer">
-                        Messages
+                        Mensagens
                     </div>
                 </a>
             </div>
             <div class="col-xs-6 col-sm-2">
-                <a href="#" class="shortcut-tile tile-inverse">
+                <a href="#" class="shortcut-tile tile-magenta">
                     <div class="tile-body">
-                        <div class="pull-left"><i class="fa fa-camera"></i></div>
+                        <div class="pull-left"><i class="fas fa-camera fa-fw"></i></div>
                         <div class="pull-right"><span class="badge">3</span></div>
                     </div>
                     <div class="tile-footer">
-                        Gallery
+                        Galeria
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-xs-6 col-sm-2">
+                <a href="#" class="shortcut-tile tile-orange">
+                    <div class="tile-body">
+                        <div class="pull-left"><i class="fas fa-tools fa-fw"></i></div>
+                    </div>
+                    <div class="tile-footer">
+                        Plugins
                     </div>
                 </a>
             </div>
@@ -56,20 +67,10 @@
             <div class="col-xs-6 col-sm-2">
                 <a href="#" class="shortcut-tile tile-midnightblue">
                     <div class="tile-body">
-                        <div class="pull-left"><i class="fa fa-cog"></i></div>
+                        <div class="pull-left"><i class="fas fa-cog fa-fw"></i></div>
                     </div>
                     <div class="tile-footer">
-                        Settings
-                    </div>
-                </a>
-            </div>
-            <div class="col-xs-6 col-sm-2">
-                <a href="#" class="shortcut-tile tile-orange">
-                    <div class="tile-body">
-                        <div class="pull-left"><i class="fa fa-wrench"></i></div>
-                    </div>
-                    <div class="tile-footer">
-                        Plugins
+                        Configurações
                     </div>
                 </a>
             </div>
@@ -83,7 +84,7 @@
 	<span id="trigger-sidebar" class="toolbar-trigger toolbar-icon-bg">
 		<a data-placement="bottom" title="Exibir/Ocultar Menu" id="menu-switcher">
             <span class="icon-bg menu-toggle">
-                <i id="menu-toggle-icon" class="fa fa-fw"></i>
+                <i id="menu-toggle-icon" class="fas fa-fw"></i>
             </span>
         </a>
 	</span>
@@ -205,7 +206,7 @@
         <!--        BUSCA-->
         <li class="dropdown toolbar-icon-bg demo-search-hidden">
             <a href="#" class="dropdown-toggle " data-toggle="dropdown" data-placement="bottom" title="Pesquisa">
-                <span class="icon-bg"><i class="fa fa-fw fa-search"></i></span></a>
+                <span class="icon-bg"><i class="fas fa-fw fa-search"></i></span></a>
             <div class="dropdown-menu dropdown-alternate arrow search dropdown-menu-form">
                 <div class="dd-header">
                     <span>Pesquisa</span>
@@ -227,7 +228,7 @@
         <li class="toolbar-icon-bg demo-headerdrop-hidden">
             <a href="#" id="headerbardropdown" data-placement="bottom" title="Menu suspenso">
                 <span class="icon-bg">
-                    <i class="fa fa-fw fa-level-down"></i>
+                    <i class="fas fa-fw fa-level-down-alt"></i>
                 </span>
             </a>
         </li>
@@ -236,7 +237,7 @@
         <!--        TELA CHEIA-->
         <li class="toolbar-icon-bg hidden-xs" id="trigger-fullscreen">
             <a href="#" class="toggle-fullscreen" data-toggle="tooltips" data-placement="bottom" title='Ativar/desativar exibição em tela cheia'>
-                <span class="icon-bg"><i class="fa fa-fw fa-arrows-alt"></i></span></i></a>
+                <span class="icon-bg"><i class="fas fa-fw fa-expand-arrows-alt"></i></span></i></a>
         </li>
         <!--        TELA CHEIA-->
 
@@ -244,7 +245,7 @@
         <li class="dropdown toolbar-icon-bg">
             <a href="#" class="hasnotifications dropdown-toggle" data-toggle="dropdown" data-placement="bottom" title="Notificações">
                 <span class="icon-bg">
-                    <i class="fa fa-fw fa-bell"></i>
+                    <i class="fas fa-fw fa-bell"></i>
                 </span>
                 <!--                <span class="badge badge-info">5</span>-->
             </a>
@@ -309,7 +310,7 @@
         <!--        MENSAGENS-->
         <li class="dropdown toolbar-icon-bg hidden-xs">
             <a href="#" class="hasnotifications dropdown-toggle " data-toggle='dropdown' data-placement="bottom" title="Mensagens">
-                <span class="icon-bg"><i class="fa fa-fw fa-envelope"></i></span></a>
+                <span class="icon-bg"><i class="fas fa-fw fa-envelope"></i></span></a>
             <div class="dropdown-menu dropdown-alternate messages arrow">
                 <div class="dd-header">
                     <span>Messages</span>
@@ -389,17 +390,17 @@
         <!--MENU USUARIO-->
         <li class="dropdown toolbar-icon-bg">
             <a href="#" class="dropdown-toggle " data-toggle='dropdown' data-placement="bottom" title="<?= $this->session->userdata('nome') ?>">
-                <span class="icon-bg"><i class="fa fa-fw fa-user-circle"></i></span></a>
+                <span class="icon-bg"><i class="fas fa-user-circle fa-fw"></i></span></a>
             <ul class="dropdown-menu userinfo arrow">
                 <!--                <li><a href="javascript:" id="btn_teste"><span class="pull-left">Perfil</span> <span class="badge badge-info">80%</span></a></li>-->
-                <li><a href="<?php echo site_url(); ?>mxcode/minhaConta"><span class="pull-left">Minha Conta</span> <i class="pull-right fa fa-user-circle fa-lg"></i></a></li>
+                <li title="Dados da conta"><a href="<?php echo site_url(); ?>mxcode/minhaConta"><span class="pull-left">Minha Conta</span> <i class="pull-right fas fa-user-cog fa-lg"></i></a></li>
                 <!--                <li><a href="javascript:"><span class="pull-left">Configurações</span> <i class="pull-right fa fa-cog fa-lg"></i></a></li>-->
                 <!--                <li class="divider"></li>-->
                 <!--                <li><a href="#"><span class="pull-left">Earnings</span> <i class="pull-right fa fa-line-chart"></i></a></li>-->
                 <!--                <li><a href="#"><span class="pull-left">Statement</span> <i class="pull-right fa fa-list-alt"></i></a></li>-->
                 <!--                <li><a href="#"><span class="pull-left">Withdrawals</span> <i class="pull-right fa fa-dollar"></i></a></li>-->
                 <li class="divider"></li>
-                <li><a href="<?php echo site_url(); ?>mxcode/sair"><span class="pull-left">Sair</span> <i class="pull-right fa fa-sign-out fa-lg"></i></a></li>
+                <li title="Encerrar sessão"><a href="<?php echo site_url(); ?>mxcode/sair"><span class="pull-left">Sair</span> <i class="pull-right fas fa-power-off fa-lg"></i></a></li>
             </ul>
         </li>
         <!--MENU USUARIO-->
@@ -437,14 +438,14 @@
                                 <li class="nav-separator"></li>
 
                                 <li class="<?= (isset($menuPainel)) ? 'active' : ''; ?>">
-                                    <a href="<?php echo base_url() ?>"><i class="fa fa-home fa-fw"></i>
+                                    <a href="<?php echo base_url() ?>"><i class="fas fa-home fa-fw"></i>
                                         <span>Painel Inicial</span>
                                     </a>
                                 </li>
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) { ?>
                                     <li class="<?= (isset($menuClientes)) ? 'active' : ''; ?>">
-                                        <a href="<?php echo base_url() ?>clientes"><i class="fa fa-group fa-fw"></i>
+                                        <a href="<?php echo base_url() ?>clientes"><i class="fas fa-group fa-fw"></i>
                                             <span>Clientes</span>
                                         </a>
                                     </li>
@@ -452,7 +453,7 @@
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) { ?>
                                     <li class="<?= (isset($menuProdutos)) ? 'active' : ''; ?>">
-                                        <a href="<?php echo base_url() ?>produtos"><i class="fa fa-barcode fa-fw"></i>
+                                        <a href="<?php echo base_url() ?>produtos"><i class="fas fa-barcode fa-fw"></i>
                                             <span>Produtos</span>
                                         </a>
                                     </li>
@@ -460,7 +461,7 @@
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vServico')) { ?>
                                     <li class="<?= (isset($menuServicos)) ? 'active' : ''; ?>">
-                                        <a href="<?php echo base_url() ?>servicos"><i class="fa fa-wrench fa-fw"></i>
+                                        <a href="<?php echo base_url() ?>servicos"><i class="fas fa-wrench fa-fw"></i>
                                             <span>Serviços</span>
                                         </a>
                                     </li>
@@ -468,7 +469,7 @@
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) { ?>
                                     <li class="<?= (isset($menuOs)) ? 'active' : ''; ?>">
-                                        <a href="<?php echo base_url() ?>os"><i class="fa fa-tags fa-fw"></i>
+                                        <a href="<?php echo base_url() ?>os"><i class="fas fa-tags fa-fw"></i>
                                             <span>Ordens de Serviço</span>
                                         </a>
                                     </li>
@@ -476,7 +477,7 @@
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) { ?>
                                     <li class="<?= (isset($menuVendas)) ? 'active' : ''; ?>">
-                                        <a href="<?php echo base_url() ?>vendas"><i class="fa fa-shopping-cart fa-fw"></i>
+                                        <a href="<?php echo base_url() ?>vendas"><i class="fas fa-shopping-cart fa-fw"></i>
                                             <span>Vendas</span>
                                         </a>
                                     </li>
@@ -484,7 +485,7 @@
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')) { ?>
                                     <li class="<?= (isset($menuArquivos)) ? 'active' : ''; ?>">
-                                        <a href="<?php echo base_url() ?>arquivos"><i class="fa fa-hdd-o fa-fw"></i>
+                                        <a href="<?php echo base_url() ?>arquivos"><i class="fas fa-hdd fa-fw"></i>
                                             <span>Arquivos</span>
                                         </a>
                                     </li>
@@ -492,7 +493,7 @@
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
                                     <li class="<?= (isset($menuFinanceiro)) ? 'active' : ''; ?>">
-                                        <a href="javascript:"><i class="fa fa-dollar fa-fw"></i>
+                                        <a href="javascript:"><i class="fas fa-dollar-sign fa-fw"></i>
                                             <span>Financeiro</span>
                                         </a>
                                         <ul class="acc-menu sub-menu">
@@ -514,7 +515,7 @@
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rCliente') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rProduto') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rServico') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rOs') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rVenda')) { ?>
                                     <li class="<?= (isset($menuRelatorios)) ? 'active' : ''; ?>">
-                                        <a href="javascript:"><i class="fa fa-list-alt fa-fw"></i>
+                                        <a href="javascript:"><i class="fas fa-file-alt fa-fw"></i>
                                             <span>Relatórios</span>
                                         </a>
                                         <ul class="acc-menu">
@@ -545,7 +546,7 @@
                                     $this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao') ||
                                     $this->permission->checkPermission($this->session->userdata('permissao'), 'cBackup')) { ?>
                                     <li class="<?= (isset($menuConfiguracoes)) ? 'active' : ''; ?>">
-                                        <a href="javascript:"><i class="fa fa-cogs fa-fw"></i>
+                                        <a href="javascript:"><i class="fas fa-cogs fa-fw"></i>
                                             <span>Config. do Sistema</span>
                                         </a>
                                         <ul class="acc-menu">

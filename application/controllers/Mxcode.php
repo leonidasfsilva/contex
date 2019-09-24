@@ -452,6 +452,9 @@ class Mxcode extends CI_Controller
                 if (!$this->image_lib->resize()) {
                     $this->session->set_flashdata('erro', $this->image_lib->display_errors());
                 }
+            } else {
+                $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar alterar a foto de perfil.<br>ERRO: do_upload()');
+//                redirect(base_url() . 'mxcode/minhaConta');
             }
 
             $retorno = $this->mxcode_model->editAvatarUsuario(id_usuario(), $image);
@@ -470,7 +473,7 @@ class Mxcode extends CI_Controller
                 $this->session->set_flashdata('sucesso', 'Foto de perfil alterada com sucesso!');
 //                redirect(base_url() . 'mxcode/minhaConta');
             } else {
-                $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar alterar a foto de perfil.');
+                $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar alterar a foto de perfil.<br>ERRO: editAvatarUsuario()');
 //                redirect(base_url() . 'mxcode/minhaConta');
             }
 

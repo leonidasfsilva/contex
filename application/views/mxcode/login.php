@@ -15,6 +15,7 @@
     <link href="<?php echo base_url(); ?>assets/css/agile-style.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,400italic,600,700' rel='stylesheet' type='text/css'>
     <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/font-awesome5/css/fontawesome5.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.css" type="text/css" rel="stylesheet">
 
 
@@ -89,7 +90,7 @@
                     <div class="form-group text-center m-t-20">
                         <div class="row">
                             <div class="col-xs-12">
-                                <button class="btn btn-login btn-block waves-effect waves-light" type="submit">Acessar <i class="fa fa-sign-in fa-fw"></i></button>
+                                <button class="btn btn-login btn-block waves-effect waves-light" type="submit">Acessar <i class="fas fa-sign-in-alt fa-fw"></i></button>
                             </div>
                         </div>
                     </div>
@@ -184,8 +185,8 @@
         showCancelButton: true,
         showCloseButton: true,
         reverseButtons: true,
-        confirmButtonText: '<i class="fa fa-refresh fa-fw"></i> Tentar de novo ',
-        cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
+        confirmButtonText: '<i class="fas fa-redo fa-fw"></i> Tentar de novo ',
+        cancelButtonText: '<i class="fas fa-times fa-fw"></i> Fechar ',
     }).then((result) => {
         if (result.value) {
             recuperar_senha();
@@ -205,8 +206,8 @@
         showConfirmButton: true,
         showCancelButton: false,
         showCloseButton: true,
-        confirmButtonText: '<i class="fa fa-check fa-fw"></i> OK ',
-        cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
+        confirmButtonText: '<i class="fas fa-check fa-fw"></i> OK ',
+        cancelButtonText: '<i class="fas fa-times fa-fw"></i> Fechar ',
         reverseButtons: true,
     }).then((result) => {
         if (result.value) {
@@ -224,12 +225,12 @@
             // timer: 5000,
             title: 'Indisponível',
             html: 'O registro de usuários encontra-se indisponível no momento. Contate o administrador do sistema para obter uma conta.',
-            showConfirmButton: false,
+            showConfirmButton: true,
             showCancelButton: false,
             showCloseButton: true,
             reverseButtons: true,
-            confirmButtonText: '<i class="fa fa-refresh fa-fw"></i> Tentar de novo ',
-            cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
+            confirmButtonText: '<i class="fas fa-check fa-fw"></i> Entendi ',
+            cancelButtonText: '<i class="fas fa-times fa-fw"></i> Fechar ',
         });
     });
 
@@ -241,8 +242,8 @@
             input: 'email',
             inputPlaceholder: 'Digite seu e-mail',
             showCancelButton: true,
-            confirmButtonText: '<i class="fa fa-send fa-fw"></i> Enviar ',
-            cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
+            confirmButtonText: '<i class="fas fa-send fa-fw"></i> Enviar ',
+            cancelButtonText: '<i class="fas fa-times fa-fw"></i> Fechar ',
             reverseButtons: true,
             showCloseButton: true,
             showLoaderOnConfirm: true,
@@ -282,8 +283,8 @@
                                     showConfirmButton: true,
                                     showCancelButton: false,
                                     showCloseButton: true,
-                                    confirmButtonText: '<i class="fa fa-check fa-fw"></i> OK ',
-                                    cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
+                                    confirmButtonText: '<i class="fas fa-check fa-fw"></i> OK ',
+                                    cancelButtonText: '<i class="fas fa-times fa-fw"></i> Fechar ',
                                     reverseButtons: true,
                                     html:
                                         '<p class="">Enviamos um e-mail para <strong class="text-success">' +
@@ -308,8 +309,8 @@
                                     showCancelButton: true,
                                     reverseButtons: true,
                                     showCloseButton: true,
-                                    confirmButtonText: '<i class="fa fa-refresh fa-fw"></i> Tentar de novo ',
-                                    cancelButtonText: '<i class="fa fa-times fa-fw"></i> Cancelar ',
+                                    confirmButtonText: '<i class="fas fa-redo fa-fw"></i> Tentar de novo ',
+                                    cancelButtonText: '<i class="fas fa-times fa-fw"></i> Cancelar ',
                                 }).then((result) => {
                                     if (result.value) {
                                         recuperar_senha();

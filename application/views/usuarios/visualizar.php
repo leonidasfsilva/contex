@@ -8,9 +8,9 @@
         </h2>
         <div class="panel-ctrls">
             <a href="<?php echo base_url() ?>usuarios" class="btn btn-default btn-sm "><i
-                        class="fa fa-arrow-left fa-fw"></i> Voltar</a>
-            <a title="Editar detalhes do cliente" class="btn btn-primary btn-sm "
-               href=" <?= base_url() . 'usuarios/editar/' . $result->id_usuarios ?>"><i class="fa fa-edit fa-fw"></i>
+                        class="fas fa-arrow-left fa-fw"></i> Voltar</a>
+            <a title="Editar dados do usuário" class="btn btn-primary btn-sm "
+               href=" <?= base_url() . 'usuarios/editar/' . $result->id_usuarios ?>"><i class="fas fa-edit fa-fw"></i>
                 Editar</a>
         </div>
     </div>
@@ -23,7 +23,7 @@
                         <a class="accordion-title" data-toggle="collapse" data-parent="#accordionB"
                            href="#collapseaOne">
                             <h2>
-                                <i class="fa fa-id-card fa-fw"></i>
+                                <i class="fas fa-id-card fa-lg fa-fw"></i>
                                 Dados Pessoais
                             </h2>
                         </a>
@@ -57,7 +57,7 @@
                         <a class="accordion-title" data-toggle="collapse" data-parent="#accordionB"
                            href="#collapseaTwo">
                             <h2>
-                                <i class="fa fa-phone fa-fw"></i>
+                                <i class="fas fa-phone-alt fa-lg fa-fw"></i>
                                 Contatos
                             </h2>
                         </a>
@@ -87,7 +87,7 @@
                         <a class="accordion-title" data-toggle="collapse" data-parent="#accordionB"
                            href="#collapseaThree">
                             <h2>
-                                <i class="fa fa-map-marker fa-fw"></i>
+                                <i class="fas fa-map-marker-alt fa-lg fa-fw"></i>
                                 Endereço
                             </h2>
                         </a>

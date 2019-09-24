@@ -7,9 +7,9 @@
             </ul>
         </h2>
         <div class="panel-ctrls">
-            <a href="<?php echo base_url() ?>clientes" class="btn btn-default btn-sm "><i class="fa fa-arrow-left fa-fw"></i> Voltar</a>
+            <a href="<?php echo base_url() ?>clientes" class="btn btn-default btn-sm "><i class="fas fa-arrow-left fa-fw"></i> Voltar</a>
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
-                echo '<a title="Editar detalhes do cliente" class="btn btn-primary btn-sm " href="' . base_url() . 'clientes/editar/' . $result->id_clientes . '"><i class="fa fa-edit fa-fw"></i> Editar</a>';
+                echo '<a title="Editar dados do cliente" class="btn btn-primary btn-sm " href="' . base_url() . 'clientes/editar/' . $result->id_clientes . '"><i class="fas fa-edit fa-fw"></i> Editar</a>';
             } ?>
         </div>
     </div>
@@ -21,7 +21,7 @@
                     <div class="panel accordion-item">
                         <a class="accordion-title" data-toggle="collapse" data-parent="#accordionB" href="#collapseaOne">
                             <h2>
-                                <i class="fa fa-id-card fa-fw"></i>
+                                <i class="fas fa-id-card fa-lg fa-fw"></i>
                                 Dados Pessoais
                             </h2>
                         </a>
@@ -54,7 +54,7 @@
                     <div class="panel accordion-item">
                         <a class="accordion-title" data-toggle="collapse" data-parent="#accordionB" href="#collapseaTwo">
                             <h2>
-                                <i class="fa fa-phone fa-fw"></i>
+                                <i class="fas fa-phone-alt fa-lg fa-fw"></i>
                                 Contatos
                             </h2>
                         </a>
@@ -83,7 +83,7 @@
                     <div class="panel accordion-item">
                         <a class="accordion-title" data-toggle="collapse" data-parent="#accordionB" href="#collapseaThree">
                             <h2>
-                                <i class="fa fa-map-marker fa-fw"></i>
+                                <i class="fas fa-map-marker-alt fa-lg fa-fw"></i>
                                 Endereço
                             </h2>
                         </a>
