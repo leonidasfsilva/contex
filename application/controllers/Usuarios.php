@@ -118,10 +118,10 @@ class Usuarios extends CI_Controller
             redirect(base_url());
         }
 
-        if ($this->input->post('id_usuarios') == 1 && $this->input->post('situacao') == 0) {
-            $this->session->set_flashdata('erro', 'O administrador do sistema não pode ser desativado.');
-            redirect(base_url() . 'usuarios/editar/' . $this->input->post('id_usuarios'));
-        }
+//        if ($this->input->post('id_usuarios') == 1 && $this->input->post('situacao') == 0) {
+//            $this->session->set_flashdata('erro', 'O administrador do sistema não pode ser desativado.');
+//            redirect(base_url() . 'usuarios/editar/' . $this->input->post('id_usuarios'));
+//        }
 
         if ($_POST) {
 

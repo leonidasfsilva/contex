@@ -96,7 +96,7 @@
                     </select>
                 </div>
                 <div class="form-group col-md-6">
-                    <?php if ($result->status == 1) {
+                    <?php if ($result->ativo == 1) {
                         $status = 'ATIVO';
                         $color = 'green';
 
