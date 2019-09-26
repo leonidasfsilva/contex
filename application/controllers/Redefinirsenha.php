@@ -152,7 +152,7 @@ td {
                 <td>
                   <span>Atenciosamente,</span>
                   <br>
-                  <span style="font-size: 14pt"><strong>Equipe MX Code Sistemas</strong></span>
+                  <span style="font-size: 14pt"><strong>Equipe MXCODE Sistemas</strong></span>
                   <br>
                   <a href="https://mxcode.net/contex" target="_blank"><p><strong>https://mxcode.net/contex</strong></a><br>CONTEX - Sistema de Gestão</p>
                 </td>

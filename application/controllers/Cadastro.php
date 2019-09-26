@@ -168,7 +168,7 @@ td {
                 <td>
                   <span>Atenciosamente,</span>
                   <br>
-                  <span style="font-size: 14pt"><strong>Equipe MX Code Sistemas</strong></span>
+                  <span style="font-size: 14pt"><strong>Equipe MXCODE Sistemas</strong></span>
                   <br>
                   <a href="https://mxcode.net/contex" target="_blank"><p><strong>https://mxcode.net/contex</strong></a><br>CONTEX - Sistema de Gestão</p>
                 </td>
@@ -228,12 +228,12 @@ td {
 
                             $qr = $this->cadastro_model->getPreCadastroById($result->id_pre_cadastro);
                             if ($qr->num_rows() > 0) {
-                                $rs = $qr->row();
+                                $result = $qr->row();
 
                                 $data = array(
-                                    'nome' => $rs->nome,
-                                    'email' => $rs->email,
-                                    'senha' => $rs->senha,
+                                    'nome' => $result->nome,
+                                    'email' => $result->email,
+                                    'senha' => $result->senha,
                                     'permissoes_id' => 6,
                                     'ativo' => 1,
                                 );
