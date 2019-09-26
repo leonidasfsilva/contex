@@ -76,9 +76,8 @@ class Cadastro extends CI_Controller
 
             $validacao = array(
                 'id_pre_cadastro' => $last_id,
-                'nome' => $nome,
                 'email' => $email,
-                'senha' => $senhaUsuario,
+                'token' => $token,
             );
 
             if ($this->cadastro_model->gravaValidacao($validacao) == true) {
