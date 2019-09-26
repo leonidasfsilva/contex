@@ -290,10 +290,10 @@
                                     cancelButtonText: '<i class="fas fa-times fa-fw"></i> Fechar ',
                                 }).then((result) => {
                                     if (result.value) {
-                                        window.location.replace('<?= site_url() ?>' + 'mxcode/login');
                                         setTimeout(function () {
                                             recuperar_senha();
                                         }, 1000);
+                                        window.location.replace('<?= site_url() ?>' + 'mxcode/login');
                                     } else {
 
                                     }
