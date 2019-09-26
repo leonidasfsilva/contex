@@ -68,27 +68,25 @@ class Cadastro extends CI_Controller
             );
 
             if ($this->cadastro_model->gravaPreCadastro($preCadastro) == true) {
-                $last_id = $this->db->insert_id();
+                $id_pre_cadastro = $this->db->insert_id();
             } else {
                 $this->session->set_flashdata('erro', 'Não foi possível registrar pré cadastro de usuário.<br>ERRO: gravaPreCadastro()');
                 redirect('cadastro');
             }
 
             $validacao = array(
-                'id_pre_cadastro' => $last_id,
+                'id_pre_cadastro' => $id_pre_cadastro,
                 'email' => $email,
                 'token' => $token,
             );
 
-            if ($this->cadastro_model->gravaValidacao($validacao) == true) {
-                $last_id = $this->db->insert_id();
-            } else {
+            if (!$this->cadastro_model->gravaValidacao($validacao) == true) {
                 $this->session->set_flashdata('erro', 'Não foi possível registrar pré cadastro de usuário.<br>ERRO: gravaValidacao()');
                 redirect('cadastro');
             }
 
             //aqui entra o MAIL() para enviar o link de verificação de conta com o token e id de validação gerado para o usuário
-            $link = base_url('cadastro/validacao?token=' . $token . '&id=' . $last_id);
+            $link = base_url('cadastro/validacao?token=' . $token . '&id=' . $id_pre_cadastro);
             $date = date("d/m/Y h:i");
             $ip = getenv("REMOTE_ADDR");
             $navegador = $_SERVER['HTTP_USER_AGENT'];
@@ -194,7 +192,7 @@ td {
             $this->session->set_flashdata(
                 'sucesso',
                 'Pré cadastro realizado com sucesso!<br>Enviamos um e-mail para <strong class="text-success">' . $email . '</strong> verifique sua caixa de entrada ou pasta de <i>spam</i> e siga as instruções para validar sua conta.');
-            redirect('cadastro');
+            redirect('mxcode/login');
         }
     }
 
