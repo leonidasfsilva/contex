@@ -137,7 +137,7 @@ class Cadastro_model extends CI_Model
         return false;
     }
 
-    function validaTokenById($id)
+    function getValidacaoById($id)
     {
         $this->db
             ->where('id_validacao', $id)

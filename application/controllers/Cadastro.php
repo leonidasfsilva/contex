@@ -80,13 +80,15 @@ class Cadastro extends CI_Controller
                 'token' => $token,
             );
 
-            if (!$this->cadastro_model->gravaValidacao($validacao) == true) {
+            if ($this->cadastro_model->gravaValidacao($validacao) == true) {
+                $id_validacao = $this->db->insert_id();
+            } else {
                 $this->session->set_flashdata('erro', 'Não foi possível registrar pré cadastro de usuário.<br>ERRO: gravaValidacao()');
                 redirect('cadastro');
             }
 
             //aqui entra o MAIL() para enviar o link de verificação de conta com o token e id de validação gerado para o usuário
-            $link = base_url('cadastro/validacao?token=' . $token . '&id=' . $id_pre_cadastro);
+            $link = base_url('cadastro/validacao?token=' . $token . '&id=' . $id_validacao);
             $date = date("d/m/Y h:i");
             $ip = getenv("REMOTE_ADDR");
             $navegador = $_SERVER['HTTP_USER_AGENT'];
@@ -206,7 +208,7 @@ td {
             $id = $this->input->get('id');
 
             if ($id != null) {
-                $query = $this->cadastro_model->validaTokenById($id);
+                $query = $this->cadastro_model->getValidacaoById($id);
 
                 if ($query->num_rows() > 0) {
                     $result = $query->row();
@@ -222,9 +224,9 @@ td {
 
                         if (isset($result->validade) && $result->validade < $validade) {
 
-                            $this->cadastro_model->validaPreCadastro($id);
+                            $this->cadastro_model->validaPreCadastro($result->id_pre_cadastro);
 
-                            $qr = $this->cadastro_model->getPreCadastroById($id);
+                            $qr = $this->cadastro_model->getPreCadastroById($result->id_pre_cadastro);
                             if ($qr->num_rows() > 0) {
                                 $result = $qr->row();
 
