@@ -178,7 +178,7 @@ class Mxcode_model extends CI_Model
     public function check_credentials($email)
     {
         $this->db->where('email', $email);
-//        $this->db->where('status', 1);
+        $this->db->where('status', 1);
         $this->db->limit(1);
         return $this->db->get('usuarios')->row();
     }
