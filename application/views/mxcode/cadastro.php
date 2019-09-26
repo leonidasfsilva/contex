@@ -94,6 +94,11 @@
                         <label for="email">Email</label>
                     </div>
                     <div class="form-group">
+                        <input class="form-control" type="email" id="email2" name="email2" required/>
+                        <span class="highlight"></span> <span class="bar"></span>
+                        <label for="email">Confirme seu email</label>
+                    </div>
+                    <div class="form-group">
                         <div class="row">
                             <div class="col-xs-6">
                                 <input type="password" class="form-control" id="novaSenha" name="novaSenha" required/>
@@ -133,12 +138,16 @@
             nome: {required: true},
             sobrenome: {required: true},
             email: {required: true},
+            email2: {
+                required: true,
+                equalTo: '#email'
+            },
             novaSenha: {
                 required: true,
                 minlength: 6
             },
             confirmarSenha: {
-                required: "#novaSenha",
+                required: true,
                 equalTo: "#novaSenha"
             },
         },
@@ -152,6 +161,11 @@
             email: {
                 required: 'Informe seu email',
                 email: 'Por favor, informe um email válido'
+            },
+            email2: {
+                required: 'Confirme seu email',
+                email: 'Por favor, informe um email válido',
+                equalTo: 'Os emails não correspondem'
             },
             novaSenha: {
                 required: 'Crie uma senha de acesso',
