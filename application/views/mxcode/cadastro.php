@@ -279,8 +279,8 @@
                             else if (res.validacao == 'ja_validado') {
                                 Swal.fire({
                                     position: 'top',
-                                    type: 'error',
-                                    title: 'Conta inexistente!',
+                                    type: 'success',
+                                    title: 'Conta já verificada!',
                                     html: 'A conta registrada com o email <strong class="text-success"> ' + res.email + '</strong> já foi verificada, caso tenha esquecido sua senha, clique no botão',
                                     showConfirmButton: true,
                                     showCancelButton: true,
