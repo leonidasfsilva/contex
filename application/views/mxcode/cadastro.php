@@ -309,7 +309,7 @@
                                     cancelButtonText: '<i class="fas fa-times fa-fw"></i> Cancelar ',
                                 }).then((result) => {
                                     if (result.value) {
-                                        recuperar_senha();
+                                        verificar_conta();
                                     } else {
 
                                     }
