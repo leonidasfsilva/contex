@@ -238,7 +238,7 @@
                         cache: false,
                         success: function (res) {
                             // var res = jQuery.parseJSON(resposta);
-                            if (res.validacao == true) {
+                            if (res.validacao == 'ok') {
                                 Swal.fire({
                                     position: 'top',
                                     type: 'success',
@@ -257,6 +257,26 @@
                                 }).then((result) => {
                                     if (result.value) {
                                         //window.location.replace('<?//= site_url() ?>//' + 'redefinirsenha/verificacao?token=' + res.token + '&id=' + res.id);
+                                    } else {
+
+                                    }
+                                })
+                            }
+                            else if (res.validacao == 'ja_validado') {
+                                Swal.fire({
+                                    position: 'top',
+                                    type: 'error',
+                                    title: 'Conta inexistente!',
+                                    html: 'A conta registrada com o email <strong class="text-success"> ' + res.email + '</strong> já foi verificada, caso tenha esquecido sua senha, clique no botão',
+                                    showConfirmButton: true,
+                                    showCancelButton: true,
+                                    reverseButtons: true,
+                                    showCloseButton: true,
+                                    confirmButtonText: '<i class="fas fa-user-lock fa-fw"></i> Esqueci minha senha ',
+                                    cancelButtonText: '<i class="fas fa-times fa-fw"></i> Fechar ',
+                                }).then((result) => {
+                                    if (result.value) {
+                                        recuperar_senha();
                                     } else {
 
                                     }
@@ -280,6 +300,7 @@
 
                                     }
                                 })
+
                             }
                         },
                         error: function () {

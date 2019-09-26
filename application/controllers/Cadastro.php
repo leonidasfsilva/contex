@@ -215,9 +215,17 @@ td {
 
                     $qr = $this->cadastro_model->getPreCadastrobyId($result->id_pre_cadastro)->row();
 
+                    if($qr->validado == 1) {
+                        $data = array(
+                            'validacao' => 'ja_validado',
+                            'email' => $email
+                        );
+                        echo json_encode($data, JSON_PRETTY_PRINT);
+                    }
+
                     $ajax = array(
                         'email' => $result->email,
-                        'validacao' => true
+                        'validacao' => 'ok'
                     );
 
                     //aqui entra o MAIL() para enviar o link de verificação de conta com o token e id de validação gerado para o usuário
@@ -321,22 +329,16 @@ td {
 </body>
 </html>
                 ';
-
                     mail($emaildestinatario, $assunto_resposta, $msg_resposta, $headers_);
-
                     echo json_encode($ajax, JSON_PRETTY_PRINT);
-
                 } else {
                     $data = array(
-                        'validacao' => false,
+                        'validacao' => 'email_nao_registrado',
                         'email' => $email
                     );
                     echo json_encode($data, JSON_PRETTY_PRINT);
-
                 }
             }
-
-
         }
     }
 
@@ -381,6 +383,7 @@ td {
                                 );
 
                                 if ($this->cadastro_model->registraUsuario($data) == true) {
+                                    $this->cadastro_model->invalidaToken($id);
                                     $this->session->set_flashdata(
                                         'sucesso',
                                         'Conta verificada com sucesso!<br>Obrigado por validar sua conta, agora você já pode acessar o sistema utilizando seu email e senha.');

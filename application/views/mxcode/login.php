@@ -304,7 +304,8 @@
                                     position: 'top',
                                     type: 'error',
                                     title: 'Conta inexistente!',
-                                    html: 'Não encontramos nenhuma conta cadastrada com o email <strong class="text-danger"> ' + res.email + '</strong>.',
+                                    html: 'Não encontramos nenhuma conta cadastrada com o email <strong class="text-danger"> ' + res.email + '</strong>. Caso queira criar uma conta com este ' +
+                                        'email,<br> <a href="<?php echo base_url() ?>cadastro">clique aqui para se cadastrar</a>.',
                                     showConfirmButton: true,
                                     showCancelButton: true,
                                     reverseButtons: true,

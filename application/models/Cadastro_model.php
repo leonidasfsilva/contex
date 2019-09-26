@@ -148,8 +148,7 @@ class Cadastro_model extends CI_Model
     function getValidacaoByEmail($email)
     {
         $this->db
-            ->where('email', $email)
-            ->where('status', 1);
+            ->where('email', $email);
         return $this->db->get('validacao_conta');
     }
 
