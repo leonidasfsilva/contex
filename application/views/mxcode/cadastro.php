@@ -292,7 +292,7 @@
                                     if (result.value) {
                                         setTimeout(function () {
                                             recuperar_senha();
-                                        }, 1000);
+                                        }, 3000);
                                         window.location.replace('<?= site_url() ?>' + 'mxcode/login');
                                     } else {
 
