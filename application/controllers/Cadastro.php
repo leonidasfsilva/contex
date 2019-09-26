@@ -213,6 +213,8 @@ td {
                 if ($query->num_rows() > 0) {
                     $result = $query->row();
 
+                    $qr = $this->cadastro_model->getPreCadastrobyId($result->id_pre_cadastro)->row();
+
                     $ajax = array(
                         'email' => $result->email,
                         'validacao' => true
@@ -223,7 +225,7 @@ td {
                     $date = date("d/m/Y h:i");
                     $ip = getenv("REMOTE_ADDR");
                     $navegador = $_SERVER['HTTP_USER_AGENT'];
-                    $nomedestinatario = $result->nome;
+                    $nomedestinatario = $qr->nome;
                     $emaildestinatario = $email;
 
                     //AUTO RESPOSTA
