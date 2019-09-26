@@ -217,23 +217,23 @@ td {
                     if ($tokenUsuario != null && $tokenUsuario == $tokenReal) {
 
                         $query = $this->cadastro_model->verificaValidadeToken($id);
-                        $result = $query->row();
+                        $rs = $query->row();
 
                         //tempo de validade do link (em minutos)
                         $validade = 30;
 
-                        if (isset($result->validade) && $result->validade < $validade) {
+                        if (isset($rs->validade) && $rs->validade < $validade) {
 
                             $this->cadastro_model->validaPreCadastro($result->id_pre_cadastro);
 
                             $qr = $this->cadastro_model->getPreCadastroById($result->id_pre_cadastro);
                             if ($qr->num_rows() > 0) {
-                                $result = $qr->row();
+                                $rs = $qr->row();
 
                                 $data = array(
-                                    'nome' => $result->nome,
-                                    'email' => $result->email,
-                                    'senha' => $result->senha,
+                                    'nome' => $rs->nome,
+                                    'email' => $rs->email,
+                                    'senha' => $rs->senha,
                                     'permissoes_id' => 6,
                                     'ativo' => 1,
                                 );
