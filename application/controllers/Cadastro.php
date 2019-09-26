@@ -159,7 +159,7 @@ td {
               </tr>
               <tr>
                 <td>
-                  <p>Por questões de segurança, este link só estará válido por alguns minutos, caso este link já tenha expirado, efetue uma nova solicitação clicando no botão <strong>Não recebi o email de verificação</strong> na página inicial do sistema.</p>
+                  <p>Por questões de segurança, este link só estará válido por alguns minutos, caso este link já tenha expirado, efetue uma nova solicitação clicando no botão <strong>Não recebi o email de verificação</strong> na página de cadastro do sistema.</p>
                   <p>Caso não tenha solicitado o cadastro em nosso sistema, por favor, desconsidere e exclua este email, nenhuma outra ação é necessária.</p>
                   <p>Caso ainda esteja com dúvidas, contate-nos em <a href="mailto:suporte@mxcode.net?Subject=Solicitação de suporte" target="_top"><strong>suporte@mxcode.net</strong></a>
                 </td>
@@ -224,7 +224,7 @@ td {
 
                         if (isset($result->validade) && $result->validade < $validade) {
 
-                            $qr = $this->cadastro_model->getPreCadastroById($result->id_usuario);
+                            $qr = $this->cadastro_model->getPreCadastroById($id);
                             if ($qr->num_rows() > 0) {
                                 $result = $qr->row();
 
