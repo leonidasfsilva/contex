@@ -224,6 +224,8 @@ td {
 
                         if (isset($result->validade) && $result->validade < $validade) {
 
+                            $this->cadastro_model->validaPreCadastro($id);
+
                             $qr = $this->cadastro_model->getPreCadastroById($id);
                             if ($qr->num_rows() > 0) {
                                 $result = $qr->row();

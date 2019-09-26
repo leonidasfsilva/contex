@@ -175,7 +175,7 @@
         }
     });
 
-    $('#formLogin').submit(function (event) {
+    $('#formCadastro').submit(function (event) {
         var form = this;
         event.preventDefault();
         $('#btn-acessar').addClass('disabled');

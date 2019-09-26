@@ -101,6 +101,7 @@ class Cadastro_model extends CI_Model
     {
         $this->db->from('usuarios');
         $this->db->where('email', $email);
+        $this->db->where('status', 1);
 
         if($this->db->count_all_results() == 0) {
             return false;
@@ -142,6 +143,14 @@ class Cadastro_model extends CI_Model
             ->where('id_validacao', $id)
             ->where('status', 1);
         return $this->db->get('validacao_conta');
+    }
+
+    function validaPreCadastro($id)
+    {
+        $this->db
+            ->set('validado', 1)
+            ->where('id_pre_cadastro', $id)
+            ->update('pre_cadastro');
     }
 
     function verificaValidadeToken($id)
