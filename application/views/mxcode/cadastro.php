@@ -230,16 +230,14 @@
                 $(function () {
                     $.ajax({
                         type: "POST",
-                        url: "<?= site_url('cadastro/verificarconta'); ?>",
+                        url: "<?= site_url('cadastro/reenviarverificacao'); ?>",
                         data: {
                             'email': result.value
                         }, // <--- THIS IS THE CHANGE
                         dataType: 'json',
                         cache: false,
                         success: function (res) {
-
                             // var res = jQuery.parseJSON(resposta);
-
                             if (res.validacao == true) {
                                 Swal.fire({
                                     position: 'top',
@@ -255,7 +253,7 @@
                                         '<p class="">Enviamos um e-mail para <strong class="text-success">' +
                                         res.email +
                                         '</strong>, ' +
-                                        'verifique sua caixa de entrada ou pasta de <i>spam</i> e siga as instruções de recuperação.</p>',
+                                        'verifique sua caixa de entrada ou pasta de <i>spam</i> e siga as instruções para validar sua conta.</p>',
                                 }).then((result) => {
                                     if (result.value) {
                                         //window.location.replace('<?//= site_url() ?>//' + 'redefinirsenha/verificacao?token=' + res.token + '&id=' + res.id);
@@ -263,8 +261,7 @@
 
                                     }
                                 })
-                            }
-                            if (res.validacao == false) {
+                            } else {
                                 Swal.fire({
                                     position: 'top',
                                     type: 'error',

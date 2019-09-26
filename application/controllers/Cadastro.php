@@ -198,6 +198,146 @@ td {
         }
     }
 
+    public function reenviarVerificacao()
+    {
+        if ($this->session->userdata('logado') == true) {
+            redirect('mxcode/login');
+        } else {
+            if (!$_POST) {
+                redirect('cadastro');
+            }
+
+            $email = $this->input->post('email');
+            if ($email != null) {
+                $query = $this->cadastro_model->getValidacaoByEmail($email);
+                if ($query->num_rows() > 0) {
+                    $result = $query->row();
+
+                    $ajax = array(
+                        'email' => $result->email,
+                        'validacao' => true
+                    );
+
+                    //aqui entra o MAIL() para enviar o link de verificação de conta com o token e id de validação gerado para o usuário
+                    $link = base_url('cadastro/validacao?token=' . $result->token . '&id=' . $result->id_validacao);
+                    $date = date("d/m/Y h:i");
+                    $ip = getenv("REMOTE_ADDR");
+                    $navegador = $_SERVER['HTTP_USER_AGENT'];
+                    $nomedestinatario = $result->nome;
+                    $emaildestinatario = $email;
+
+                    //AUTO RESPOSTA
+                    $headers_ = "MIME-Version: 1.0\r\n";
+                    $headers_ .= "Content-type: text/html; charset=utf-8\r\n";
+                    $headers_ .= "From: nao-responda@mxcode.net\r\n";
+                    $assunto_resposta = "CONTEX - Validação de sua conta";
+
+                    $msg_resposta = '
+<html>
+<head>
+<style>
+#inner_table {
+  border: 2px solid lightgray;
+  border-radius: 10px;
+}
+td {
+  padding: 0px 20px 20px 20px;
+  text-align: left;    
+}
+</style>
+</head>
+<body>
+<table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="white">
+	<tbody>
+		<tr>
+          <td valign="top" width="100%">
+            <table id="inner_table" align="center" cellpadding="0" cellspacing="0" border="0" align="center">
+              <tr>
+                <td colspan="2" style="border-bottom: 4px solid #0098da; padding: 20px 20px 20px 20px;">
+                  <img src="' . base_url() . 'assets/img/contex_brand.png" alt="CONTEX - Sistema de Gestão" style="width:120px;">
+                </td>
+              </tr>
+              <tr>
+                <td style="padding-top: 20px">
+                  <span style="font-size: 16pt;">Olá, ' . $nomedestinatario . '!</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span>Recebemos sua solicitação de cadastro em nosso sistema.</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span>Origem da solicitação:
+                    <br />
+                    IP: ' . $ip . '
+                    <br />
+                    Navegador: ' . $navegador . '
+                    <br />
+                    Data e hora: ' . $date . '
+                    <br />
+                    <br />
+                    Precisamos verificar se foi você mesmo quem solicitou o cadastro em nosso sistema, para confirmar a verificação, clique no botão abaixo para validar sua conta:</span>
+                </td>
+              </tr>
+              <tr>
+                <td style="border-radius: 3px; padding: 20px 20px 40px 20px; text-align: left">
+                  <a href="' . $link . '" target="_blank" style="padding: 10px 30px; background-color:#0098da; border: 1px solid #0098da;border-radius: 3px;font-family: Helvetica, Arial, sans-serif;font-size: 14px; color: #ffffff;text-decoration: none;font-weight:bold;display: inline-block;">
+                    VALIDAR MINHA CONTA         
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <p>Por questões de segurança, este link só estará válido por alguns minutos, caso este link já tenha expirado, efetue uma nova solicitação clicando no botão <strong>Não recebi o email de verificação</strong> na página de cadastro do sistema.</p>
+                  <p>Caso não tenha solicitado o cadastro em nosso sistema, por favor, desconsidere e exclua este email, nenhuma outra ação é necessária.</p>
+                  <p>Caso ainda esteja com dúvidas, contate-nos em <a href="mailto:suporte@mxcode.net?Subject=Solicitação de suporte" target="_top"><strong>suporte@mxcode.net</strong></a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span>Atenciosamente,</span>
+                  <br>
+                  <span style="font-size: 14pt"><strong>Equipe MXCODE Sistemas</strong></span>
+                  <br>
+                  <a href="https://mxcode.net/contex" target="_blank"><p><strong>https://mxcode.net/contex</strong></a><br>CONTEX - Sistema de Gestão</p>
+                </td>
+              </tr>
+              <tr>
+                <td style="border-top: 2px dotted #0098da; padding-top: 20px">
+                  <p style="font-size:10pt; color: gray">
+                  Não é necessário responder este e-mail, mensagem automática.
+                  <p>
+                </td>
+              </tr>
+            </table>
+          </td>
+		</tr>
+	</tbody>
+  </table>                
+</body>
+</html>
+                ';
+
+                    mail($emaildestinatario, $assunto_resposta, $msg_resposta, $headers_);
+
+                    echo json_encode($ajax, JSON_PRETTY_PRINT);
+
+                } else {
+                    $data = array(
+                        'validacao' => false,
+                        'email' => $email
+                    );
+                    echo json_encode($data, JSON_PRETTY_PRINT);
+
+                }
+            }
+
+
+        }
+    }
+
     public function validacao()
     {
         if ($this->session->userdata('logado') == true) {
