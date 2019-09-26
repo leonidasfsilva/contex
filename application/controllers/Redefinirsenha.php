@@ -107,7 +107,7 @@ td {
             <table id="inner_table" align="center" cellpadding="0" cellspacing="0" border="0" align="center">
               <tr>
                 <td colspan="2" style="border-bottom: 4px solid #0098da; padding: 20px 20px 20px 20px;">
-                  <img src="https://mxcode.net/contex/assets/img/contex_brand.png" alt="CONTEX - Sistema de Gestão" style="width:120px;">
+                  <img src="' . base_url() . '/assets/img/contex_brand.png" alt="CONTEX - Sistema de Gestão" style="width:120px;">
                 </td>
               </tr>
               <tr>

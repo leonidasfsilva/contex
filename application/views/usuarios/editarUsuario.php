@@ -32,10 +32,9 @@
                     <input type="text" class="form-control" id="email" name="email"
                            value="<?php echo $result->email; ?>">
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-4" title="Caso não queira alterar a senha, mantenha este campo em branco">
                     <label for="senha" class="control-label font-weight-bold">Senha</label>
-                    <i class="fa fa-info-circle tip-top"
-                       title="Caso não queira alterar a senha, mantenha este campo em branco."></i>
+                    <i class="fas fa-info-circle fa-lg fa-fw tip-top"></i>
                     <input type="password" class="form-control" id="senha" name="senha"
                            placeholder="Não preencha caso não queira alterar">
                 </div>

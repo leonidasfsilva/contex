@@ -100,6 +100,9 @@ class Mxcode extends CI_Controller
 
     public function login()
     {
+        if (($this->session->userdata('logado'))) {
+            redirect($this->index());
+        }
 
         $this->load->view('mxcode/login');
 

@@ -1,6 +1,6 @@
 <?php
 
-class Redefinicao_model extends CI_Model
+class Cadastro_model extends CI_Model
 {
 
     /**
@@ -66,7 +66,6 @@ class Redefinicao_model extends CI_Model
         if ($this->db->affected_rows() == '1') {
             return true;
         }
-
         return false;
     }
 
@@ -98,45 +97,73 @@ class Redefinicao_model extends CI_Model
         return $this->db->count_all($table);
     }
 
-    function getDadosUsuarioByEmail($email)
+    function verificaEmailExistente($email)
     {
+        $this->db->from('usuarios');
         $this->db->where('email', $email);
-        return $this->db->get('usuarios');
+
+        if($this->db->count_all_results() == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
-    function gravaToken($data)
+    function gravaPreCadastro($data)
     {
-        $this->db->insert('recuperacao_senha', $data);
+        $this->db->insert('pre_cadastro', $data);
+        if ($this->db->affected_rows() == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    function gravaValidacao($data)
+    {
+        $this->db->insert('validacao_conta', $data);
+        if ($this->db->affected_rows() == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    function registraUsuario($data)
+    {
+        $this->db->insert('usuarios', $data);
+        if ($this->db->affected_rows() == 1) {
+            return true;
+        }
+        return false;
     }
 
     function validaTokenById($id)
     {
         $this->db
-            ->where('id_recuperacao_senha', $id)
+            ->where('id_validacao', $id)
             ->where('status', 1);
-        return $this->db->get('recuperacao_senha');
+        return $this->db->get('validacao_conta');
     }
 
     function verificaValidadeToken($id)
     {
         $this->db
             ->select('*, TIMESTAMPDIFF(MINUTE , data_solicitacao, CURRENT_TIMESTAMP) AS validade')
-            ->where('id_recuperacao_senha', $id);
-        return $this->db->get('recuperacao_senha');
+            ->where('id_validacao', $id);
+        return $this->db->get('validacao_conta');
     }
 
     function invalidaToken($id)
     {
         $this->db
             ->set('status', 0)
-            ->where('id_recuperacao_senha', $id)
-            ->update('recuperacao_senha');
+            ->where('id_validacao', $id)
+            ->update('validacao_conta');
     }
 
-    function getDadosUsuarioById($id)
+    function getPreCadastroById($id)
     {
-        $this->db->where('id_usuarios', $id);
-        return $this->db->get('usuarios');
+        $this->db->where('id_pre_cadastro', $id);
+        return $this->db->get('pre_cadastro');
     }
 
     function atualizaAdmin($id, $data)

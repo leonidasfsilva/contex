@@ -216,7 +216,7 @@
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Pesquisar...">
                         <span class="input-group-btn">
-						    <button type="submit" class="btn btn-primary"><i class="fa fa-search fa-fw"></i></button>
+						    <button type="submit" class="btn btn-primary"><i class="fas fa-search fa-fw"></i></button>
 					    </span>
                     </div>
                 </form>
@@ -648,7 +648,7 @@
                     <div class="clearfix">
                         <ul class="list-unstyled list-inline pull-left pl-sm">
                             <a href="https://mxcode.net" target="_blank">
-                                <li><h6 style="margin: 0;">CONTEX - Sistema de Gestão &copy; <?php echo date('Y'); ?> MX Code Sistemas - Leônidas Ferreira</h6></li>
+                                <li><h6 style="margin: 0;">CONTEX - Sistema de Gestão &copy; <?php echo date('Y'); ?> MX Code Sistemas</h6></li>
                             </a>
                         </ul>
                         <button class="pull-right btn btn-link btn-xs hidden-print" id="back-to-top"><i class="fa fa-arrow-up"></i></button>

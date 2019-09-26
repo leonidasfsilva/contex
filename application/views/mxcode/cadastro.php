@@ -66,45 +66,56 @@
             <img class="contex-words" src="<?php echo base_url() ?>assets/img/contex_brand.png" alt="CONTEX - Sistema de Gestão"/>
         </div>
         <div class="white-box box-login">
-            <form class="form-horizontal floating-labels" id="formLogin" method="post" action="<?php echo base_url() ?>mxcode/verificarLogin">
+            <form class="form-horizontal floating-labels" id="formCadastro" method="post" action="<?= site_url('cadastro/cadastrar') ?>" autocomplete="off">
                 <div class="preloader-login">
                     <div class="cssload-speeding-wheel"></div>
                 </div>
                 <div class="before-loading">
                     <div class="form-group">
-                        <h3 class="font-bold m-b-40">Efetue seu login</h3>
+                        <h3 class="font-bold">Crie sua conta</h3>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="email" name="email" required/>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <input type="text" class="form-control" id="nome" name="nome" required/>
+                                <span class="highlight"></span> <span class="bar"></span>
+                                <label for="nome">Nome</label>
+                            </div>
+                            <div class="col-xs-6">
+                                <input type="text" class="form-control" id="sobrenome" name="sobrenome" required/>
+                                <span class="highlight"></span> <span class="bar"></span>
+                                <label for="sobrenome">Sobrenome</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="email" id="email" name="email" required/>
                         <span class="highlight"></span> <span class="bar"></span>
                         <label for="email">Email</label>
                     </div>
                     <div class="form-group">
-                        <input class="form-control" type="password" id="senha" name="senha" required/>
-                        <span class="highlight"></span> <span class="bar"></span>
-                        <label for="email">Senha</label>
-                    </div>
-                    <div class="form-group">
-                        <a href="javascript:" onclick="recuperar_senha()" class="text-primary pull-right">Esqueci minha senha</a>
-                    </div>
-                    <div class="form-group text-center m-t-20">
                         <div class="row">
-                            <div class="col-xs-12">
-                                <button class="btn btn-login btn-block waves-effect waves-light" type="submit"><i class="fas fa-user-lock fa-fw"></i> Acessar</button>
+                            <div class="col-xs-6">
+                                <input type="password" class="form-control" id="novaSenha" name="novaSenha" required/>
+                                <span class="highlight"></span> <span class="bar"></span>
+                                <label for="novaSenha">Defina sua senha</label>
+                            </div>
+                            <div class="col-xs-6">
+                                <input class="form-control" type="password" id="confirmarSenha" name="confirmarSenha" required/>
+                                <span class="highlight"></span> <span class="bar"></span>
+                                <label for="confirmarSenha">Confirme sua senha</label>
                             </div>
                         </div>
                     </div>
-                    <!--                <div class="row">-->
-                    <!--                    <div class="col-xs-12 col-sm-12 col-md-12 m-t-10 text-center">-->
-                    <!--                        <div class="social">-->
-                    <!--                            <a href="javascript:" class="btn btn-facebook" data-toggle="tooltip" title="Login com sua conta do Facebook"> <i aria-hidden="true" class="fa fa-facebook"></i> </a>-->
-                    <!--                            <a href="javascript:" class="btn btn-googleplus" data-toggle="tooltip" title="Login com sua conta do Google"> <i aria-hidden="true" class="fa fa-google"></i> </a>-->
-                    <!--                        </div>-->
-                    <!--                    </div>-->
-                    <!--                </div>-->
+                    <div class="form-group">
+                        <a href="javascript:" onclick="verificar_conta()" class="text-primary pull-right">Não recebi o email de verificação</a>
+                    </div>
+                    <div class="form-group text-center">
+                        <button class="btn btn-login btn-block waves-effect waves-light" type="submit"><i class="far fa-check-circle fa-fw"></i> Cadastrar</button>
+                    </div>
                     <div class="form-group m-b-0">
                         <div class="col-sm-12 text-center">
-                            <p>Não tem uma conta? <a href="<?php echo base_url() ?>cadastro" class="text-primary"><b>Cadastre-se</b></a>.</p>
+                            <p>Já possui uma conta? <a href="<?php echo base_url() ?>mxcode/login" id="login" class="text-primary"><b>Efetue seu login</b></a>.</p>
                         </div>
                     </div>
                 </div>
@@ -113,33 +124,43 @@
     </div>
 </section>
 
+<!-- End loading site level scripts -->
+
+
 <script type="text/javascript">
-
-    $('#eye_span').click(function (e) {
-        e.preventDefault();
-        if ($('#senha').attr('type') == 'password') {
-            $('#senha').attr('type', 'text');
-            $('#eye').attr('class', 'fa fa-eye fa-fw');
-        } else {
-            $('#senha').attr('type', 'password');
-            $('#eye').attr('class', 'fa fa-eye-slash fa-fw');
-        }
-    });
-
-    $('#eye_span').mouseout(function (e) {
-        $('#senha').attr('type', 'password');
-        $('#eye').attr('class', 'fa fa-eye-slash fa-fw');
-
-    });
-
-    $('#formLogin').validate({
+    $('#formCadastro').validate({
         rules: {
+            nome: {required: true},
+            sobrenome: {required: true},
             email: {required: true},
-            senha: {required: true},
+            novaSenha: {
+                required: true,
+                minlength: 6
+            },
+            confirmarSenha: {
+                required: "#novaSenha",
+                equalTo: "#novaSenha"
+            },
         },
         messages: {
-            email: {required: 'Digite seu email'},
-            senha: {required: 'Digite sua senha'},
+            nome: {
+                required: 'Informe seu nome',
+            },
+            sobrenome: {
+                required: 'Informe seu sobrenome',
+            },
+            email: {
+                required: 'Informe seu email',
+                email: 'Por favor, informe um email válido'
+            },
+            novaSenha: {
+                required: 'Crie uma senha de acesso',
+                minlength: 'A senha deve conter no mínimo 6 caracteres',
+            },
+            confirmarSenha: {
+                required: 'Repita sua senha de acesso',
+                equalTo: 'As senhas não correspondem',
+            },
         },
 
         errorClass: "help-block",
@@ -154,7 +175,6 @@
         }
     });
 
-
     $('#formLogin').submit(function (event) {
         var form = this;
         event.preventDefault();
@@ -164,7 +184,7 @@
         $(".progress-bar").animate({
             width: "100%"
         }, 1000);
-        if($(form).valid()) {
+        if ($(form).valid()) {
             $(".before-loading").fadeOut();
             $(".preloader-login").fadeIn();
 
@@ -174,71 +194,16 @@
         }
     });
 
-    <?php if ($this->session->flashdata('erro') != null) { ?>
-    Swal.fire({
-        position: 'top',
-        type: 'error',
-        // timer: 5000,
-        title: 'Erro!',
-        html: '<?= $this->session->flashdata('erro') ?>',
-        showConfirmButton: false,
-        showCancelButton: true,
-        showCloseButton: true,
-        reverseButtons: true,
-        confirmButtonText: '<i class="fas fa-redo fa-fw"></i> Tentar de novo ',
-        cancelButtonText: '<i class="fas fa-times fa-fw"></i> Fechar ',
-    }).then((result) => {
-        if (result.value) {
-            recuperar_senha();
-        } else {
-
-        }
+    $('#cancelToken').click(function () {
+        var form = $('#form_invalidar_token');
+        form.submit();
     });
-    <?php } ?>
 
-    <?php if ($this->session->flashdata('sucesso') != null) { ?>
-    Swal.fire({
-        position: 'top',
-        type: 'success',
-        title: 'Feito!',
-        // timer: 5000,
-        html: '<?= $this->session->flashdata('sucesso') ?>',
-        showConfirmButton: true,
-        showCancelButton: false,
-        showCloseButton: true,
-        confirmButtonText: '<i class="fas fa-check fa-fw"></i> OK ',
-        cancelButtonText: '<i class="fas fa-times fa-fw"></i> Fechar ',
-        reverseButtons: true,
-    }).then((result) => {
-        if (result.value) {
-
-        } else {
-
-        }
-    });
-    <?php } ?>
-
-    $('#registro').click(function () {
+    function verificar_conta() {
         Swal.fire({
             position: 'top',
-            type: 'info',
-            // timer: 5000,
-            title: 'Indisponível',
-            html: 'O registro de usuários encontra-se indisponível no momento. Contate o administrador do sistema para obter uma conta.',
-            showConfirmButton: true,
-            showCancelButton: false,
-            showCloseButton: true,
-            reverseButtons: true,
-            confirmButtonText: '<i class="fas fa-check fa-fw"></i> Entendi ',
-            cancelButtonText: '<i class="fas fa-times fa-fw"></i> Fechar ',
-        });
-    });
-
-    function recuperar_senha() {
-        Swal.fire({
-            position: 'top',
-            title: 'Esqueceu sua senha?',
-            html: '<div>Informe seu email de cadastro e lhe enviaremos instruções para alterar sua senha:</div>',
+            title: 'Não recebeu o email de verificação?',
+            html: '<div>Informe o email que utilizou em seu cadastro e lhe enviaremos um novo email para confirmar sua conta:</div>',
             input: 'email',
             inputPlaceholder: 'Digite seu email',
             showCancelButton: true,
@@ -265,7 +230,7 @@
                 $(function () {
                     $.ajax({
                         type: "POST",
-                        url: "<?= site_url('redefinirsenha/gerartoken'); ?>",
+                        url: "<?= site_url('cadastro/verificarconta'); ?>",
                         data: {
                             'email': result.value
                         }, // <--- THIS IS THE CHANGE
@@ -333,6 +298,52 @@
             }
         })
     }
+
+
+    <?php if ($this->session->flashdata('erro') != null) { ?>
+    Swal.fire({
+        position: 'top',
+        type: 'error',
+        // timer: 5000,
+        title: 'Erro!',
+        html: '<?= $this->session->flashdata('erro') ?>',
+        showConfirmButton: false,
+        showCancelButton: true,
+        showCloseButton: true,
+        reverseButtons: true,
+        confirmButtonText: '<i class="fa fa-refresh fa-fw"></i> Tentar de novo ',
+        cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
+    }).then((result) => {
+        if (result.value) {
+            recuperar_senha();
+        } else {
+
+        }
+    });
+    <?php } ?>
+
+    <?php if ($this->session->flashdata('sucesso') != null) { ?>
+    Swal.fire({
+        position: 'top',
+        type: 'success',
+        title: 'Feito!',
+        // timer: 5000,
+        html: '<?= $this->session->flashdata('sucesso') ?>',
+        showConfirmButton: true,
+        showCancelButton: false,
+        showCloseButton: true,
+        confirmButtonText: '<i class="fa fa-check fa-fw"></i> OK ',
+        cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
+        reverseButtons: true,
+    }).then((result) => {
+        if (result.value) {
+
+        } else {
+
+        }
+    });
+    <?php } ?>
+
 </script>
 </body>
 </html>
