@@ -8,6 +8,10 @@ $periodo = $this->input->get('periodo');
             Lançamentos
         </h3>
         <div class="panel-ctrls">
+            <button class="btn btn-default btn-sm" id="teste-btn" title="Testar">
+                <i class="fas fa-sync fa-fw"></i>
+                Testar
+            </button>
             <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar lançamentos">
                 <i class="fas fa-filter fa-fw"></i>
                 Filtrar

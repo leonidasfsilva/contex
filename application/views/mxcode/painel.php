@@ -13,7 +13,7 @@
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
-                    <a href="<? //= base_url() ?>financeiro/lancamentos" class="font-weight-bold">Ver detalhes </a>
+                    <a href="<?= base_url() ?>financeiro/lancamentos" class="font-weight-bold">Ver detalhes </a>
                 </div>
 
             </div>

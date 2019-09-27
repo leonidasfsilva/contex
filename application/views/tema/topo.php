@@ -618,7 +618,7 @@
 
                     <!--                CONTEUDO-->
                     <div class="container-fluid conteudo-principal">
-                        <div class="preloader">
+                        <div class="preloader" style="display: none">
                             <div class="cssload-speeding-wheel"></div>
                         </div>
                         <?php if ($this->session->flashdata('error') != null) { ?>
@@ -635,9 +635,11 @@
                             </div>
                         <?php } ?>
                         <!--CONTEUDO PRINCIPAL-->
-                        <?php if (isset($view)) {
-                            echo $this->load->view($view, null, true);
-                        } ?>
+                        <div class="subconteudo-principal">
+                            <?php if (isset($view)) {
+                                echo $this->load->view($view, null, true);
+                            } ?>
+                        </div>
                         <!--CONTEUDO PRINCIPAL-->
 
                     </div>

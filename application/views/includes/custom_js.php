@@ -1,12 +1,48 @@
 <script>
+    $(document).on('ready', function (event) {
+        $(".preloader").show();
+        setTimeout(function () {
+            $(".preloader").fadeOut();
+        }, 500);
+    });
+
+    $(document).on('click', 'a:not([href="javascript:"],[href="#"])', function () {
+        $(".subconteudo-principal").hide();
+        $(".preloader").show();
+    });
+
+        $(document).on('submit', 'form', function (event) {
+        var form = this;
+        event.preventDefault();
+        // $('#btn-acessar').addClass('disabled');
+        // $('#btn-acessar').html('Acessando... <i class="fa fa-spinner fa-pulse fa-fw"></i>');
+        // $('#progress-acessar').removeClass('hidden');
+        // $(".progress-bar").animate({
+        //     width: "100%"
+        // }, 1000);
+        if ($(form).valid()) {
+            // console.log('executou preloader');
+            $(".subconteudo-principal").fadeOut();
+            $(".preloader").fadeIn();
+
+            setTimeout(function () {
+                form.submit();
+            }, 1000);
+        }
+    });
+
+    $(document).on('click', '#teste-btn', function () {
+        // console.log('teste ok!');
+        $(".preloader").fadeIn();
+        setTimeout(function () {
+            $(".preloader").fadeOut();
+        }, 1000);
+    });
+
     $('#telefone').mask("(99) 9999-99990");
     $('#cep').mask("99999-999");
     $('#cpf').mask("999.999.999-99");
     $('#rg').mask("99.999.999-9");
-
-    setTimeout(function () {
-        $(".preloader").fadeOut();
-    },500);
 
     <?php
     $url = current_url();
@@ -65,14 +101,13 @@
             var cep = $(this).val().replace(/\D/g, '');
 
             //Verifica se campo cep possui valor informado.
-            if ( cep.length > 7 && cep != "" ) {
+            if (cep.length > 7 && cep != "") {
 
                 //Expressão regular para validar o CEP.
                 var validacep = /^[0-9]{8}$/;
 
                 //Valida o formato do CEP.
                 if (validacep.test(cep)) {
-
 
 
                     //Preenche os campos com "..." enquanto consulta webservice.
