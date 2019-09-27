@@ -6,7 +6,7 @@
         }, 500);
     });
 
-    $(document).on('click', 'a:not([href="javascript:"],[href="#"])', function () {
+    $(document).on('click', 'a:not([href="javascript:"],[href="#"], [data-toggle="modal"])', function () {
         $(".subconteudo-principal").hide();
         $(".preloader").show();
     });
