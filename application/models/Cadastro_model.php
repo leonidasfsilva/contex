@@ -103,7 +103,7 @@ class Cadastro_model extends CI_Model
         $this->db->where('email', $email);
         $this->db->where('status', 1);
 
-        if($this->db->count_all_results() == 0) {
+        if ($this->db->count_all_results() == 0) {
             return false;
         } else {
             return true;
@@ -154,10 +154,10 @@ class Cadastro_model extends CI_Model
 
     function validaPreCadastro($id)
     {
-        $this->db
-            ->set('validado', 1)
-            ->where('id_pre_cadastro', $id)
-            ->update('pre_cadastro');
+        $this->db->set('validado', 1);
+        $this->db->set('status', 0);
+        $this->db->where('id_pre_cadastro', $id);
+        $this->db->update('pre_cadastro');
     }
 
     function verificaValidadeToken($id)
@@ -180,6 +180,18 @@ class Cadastro_model extends CI_Model
     {
         $this->db->where('id_pre_cadastro', $id);
         return $this->db->get('pre_cadastro');
+    }
+
+    function verificaPreCadastroByEmail($email)
+    {
+        $this->db->from('pre_cadastro');
+        $this->db->where('email', $email);
+        $this->db->where('validado', 1);
+        if ($this->db->count_all_results() == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     function atualizaAdmin($id, $data)

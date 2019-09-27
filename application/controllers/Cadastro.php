@@ -44,8 +44,14 @@ class Cadastro extends CI_Controller
             $confirmarSenha = $this->input->post('confirmarSenha');
 
             if ($this->cadastro_model->verificaEmailExistente($email) == true) {
-                gravaLog(null, 'Usuário desconhecido', $email, 'Tentativa de cadastro recusada: email já existente', getenv("REMOTE_ADDR"));
+                gravaLog(null, 'Usuário desconhecido', $email, 'Tentativa de cadastro recusada: conta já existente', getenv("REMOTE_ADDR"));
                 $this->session->set_flashdata('erro', 'O email informado já se encontra em uso, por favor informe um email diferente.');
+                redirect('cadastro');
+            }
+
+            if ($this->cadastro_model->verificaPreCadastroByEmail($email) == true) {
+                gravaLog(null, 'Usuário desconhecido', $email, 'Tentativa de cadastro recusada: pré-cadastro aguardando validação', getenv("REMOTE_ADDR"));
+                $this->session->set_flashdata('erro', 'Já existe uma conta aguardando validação para o email informado, valide sua conta através do link enviado para o seu email. Caso não tenha recebido o email, <a href="javascript:" onclick="verificar_conta()">clique aqui</a>.');
                 redirect('cadastro');
             }
 
