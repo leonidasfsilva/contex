@@ -94,7 +94,7 @@
                         <label for="email">Email</label>
                     </div>
                     <div class="form-group">
-                        <input class="form-control" type="email" id="email2" name="email2" required/>
+                        <input class="form-control" type="text" id="email2" name="email2" required/>
                         <span class="highlight"></span> <span class="bar"></span>
                         <label for="email">Confirme seu email</label>
                     </div>
@@ -281,19 +281,20 @@
                                     position: 'top',
                                     type: 'success',
                                     title: 'Conta já verificada!',
-                                    html: 'A conta registrada com o email <strong class="text-success"> ' + res.email + '</strong> já foi verificada, caso tenha esquecido sua senha, clique no botão',
+                                    html: 'A conta registrada com o email <strong class="text-success"> ' + res.email +
+                                        '</strong> já foi verificada, acesse sua conta utilizando seu email e senha cadastrados.',
                                     showConfirmButton: true,
                                     showCancelButton: true,
                                     reverseButtons: true,
                                     showCloseButton: true,
-                                    confirmButtonText: '<i class="fas fa-user-lock fa-fw"></i> Esqueci minha senha ',
+                                    confirmButtonText: '<i class="fas fa-sign-in-alt fa-fw"></i> Acessar ',
                                     cancelButtonText: '<i class="fas fa-times fa-fw"></i> Fechar ',
                                 }).then((result) => {
                                     if (result.value) {
+                                        //$('body').load('<?//= site_url() ?>//' + 'mxcode/login', function () {
+                                        //    recuperar_senha();
+                                        //});
                                         window.location.replace('<?= site_url() ?>' + 'mxcode/login');
-                                        setTimeout(function () {
-                                            recuperar_senha();
-                                        }, 3000);
                                     } else {
 
                                     }
