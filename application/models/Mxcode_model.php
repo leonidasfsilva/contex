@@ -53,26 +53,30 @@ class Mxcode_model extends CI_Model
 
     }
 
-    function pesquisar($termo)
+    function pesquisar($termo, $id)
     {
         $data = array();
         // buscando clientes
-        $this->db->like('nomeCliente', $termo);
+        $this->db->like('nome', $termo);
+        $this->db->where('id_usuario', $id);
         $this->db->limit(5);
         $data['clientes'] = $this->db->get('clientes')->result();
 
         // buscando os
         $this->db->like('idOs', $termo);
+        $this->db->where('id_usuario', $id);
         $this->db->limit(5);
         $data['os'] = $this->db->get('os')->result();
 
         // buscando produtos
         $this->db->like('descricao', $termo);
+        $this->db->where('id_usuario', $id);
         $this->db->limit(5);
         $data['produtos'] = $this->db->get('produtos')->result();
 
         //buscando serviços
         $this->db->like('nome', $termo);
+        $this->db->where('id_usuario', $id);
         $this->db->limit(5);
         $data['servicos'] = $this->db->get('servicos')->result();
 

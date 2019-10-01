@@ -18,9 +18,7 @@
                     <i class="icon-barcode"></i>
                 </span>
                 <h5>Produtos</h5>
-
             </div>
-
             <div class="widget-content nopadding">
 
                

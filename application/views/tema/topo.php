@@ -82,7 +82,7 @@
 <header id="topnav" class="navbar navbar-midnightblue navbar-fixed-top clearfix" role="banner">
 
 	<span id="trigger-sidebar" class="toolbar-trigger toolbar-icon-bg">
-		<a data-placement="bottom" title="Exibir/Ocultar Menu" id="menu-switcher">
+		<a href="javascript:" data-placement="bottom" title="Exibir/Ocultar Menu" id="menu-switcher">
             <span class="icon-bg menu-toggle">
                 <i id="menu-toggle-icon" class="fas fa-fw"></i>
             </span>
@@ -650,7 +650,7 @@
                     <div class="clearfix">
                         <ul class="list-unstyled list-inline pull-left pl-sm">
                             <a href="https://mxcode.net" target="_blank">
-                                <li><h6 style="margin: 0;">CONTEX - Sistema de Gestão &copy; <?php echo date('Y'); ?> MX Code Sistemas</h6></li>
+                                <li><h6 style="margin: 0;">CONTEX - Sistema de Gestão &copy; <?php echo date('Y'); ?> MXCODE Sistemas Web</h6></li>
                             </a>
                         </ul>
                         <button class="pull-right btn btn-link btn-xs hidden-print" id="back-to-top"><i class="fa fa-arrow-up"></i></button>

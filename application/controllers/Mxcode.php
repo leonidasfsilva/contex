@@ -88,7 +88,7 @@ class Mxcode extends CI_Controller
 
         $termo = $this->input->get('termo');
 
-        $data['results'] = $this->mxcode_model->pesquisar($termo);
+        $data['results'] = $this->mxcode_model->pesquisar($termo, id_usuario());
         $this->data['produtos'] = $data['results']['produtos'];
         $this->data['servicos'] = $data['results']['servicos'];
         $this->data['os'] = $data['results']['os'];
