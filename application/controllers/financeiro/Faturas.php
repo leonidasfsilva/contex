@@ -108,7 +108,7 @@ class Faturas extends CI_Controller
 
         $config['base_url'] = site_url() . 'financeiro/faturas/';
         $config['total_rows'] = $this->fatura_model->count('faturas', 'status = 1 AND id_usuario = ' . id_usuario());
-        $config['per_page'] = 200;
+        $config['per_page'] = 0;
         $config['page_query_string'] = true;
         $config['next_link'] = 'Próxima';
         $config['prev_link'] = 'Anterior';
@@ -166,6 +166,10 @@ class Faturas extends CI_Controller
                 $this->data['lancamentoEditavel'] = $this->fatura_model->getLancamentoEditavel($this->data['mes_referencia'], $this->data['ano_referencia']);
                 $this->data['results'] = $this->fatura_model->getLancamentosAssoc('lancamentos_faturas_assoc', '*', $id_fatura, $where, $config['per_page'], $this->input->get('per_page'));
                 $this->data['subresults'] = $this->fatura_model->getLancamentos('lancamentos_faturas', '*', id_usuario(), $where, $config['per_page'], $this->input->get('per_page'));
+
+//                print_array($this->data['results']);
+//                print_array($this->data['subresults']);
+//                exit;
 
                 $this->data['view'] = 'financeiro/faturas/detalhes_fatura';
                 $this->load->view('tema/topo', $this->data);
