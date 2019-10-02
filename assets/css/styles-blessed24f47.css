@@ -3180,6 +3180,12 @@ fieldset[disabled] .btn.btn-social.btn-windows-alt.active {
 .badge-sky[href]:focus {
     background-color: #00635a;
 }
+.sidebar {
+    position: fixed;
+    width: 248px;
+    /*z-index: 1;*/
+    /*display: contents;*/
+}
 .sidebar nav.widget-body > ul.acc-menu .badge.badge-primary {
     background-color: #03a9f4;
 }

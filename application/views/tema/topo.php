@@ -411,11 +411,10 @@
 
 <div id="wrapper">
     <div id="layout-static">
-
         <!--                    SIDEBAR-->
         <div class="static-sidebar-wrapper sidebar-midnightblue">
             <div class="static-sidebar">
-                <div class="sidebar">
+                <div class="sidebar block">
                     <div class="widget stay-on-collapse" id="widget-welcomebox">
                         <div class="widget-body welcome-box tabular">
                             <a href="<?php echo site_url(); ?>mxcode/minhaConta">
@@ -565,7 +564,6 @@
                                         </ul>
                                     </li>
                                 <?php } ?>
-
                             </ul>
                         </nav>
                     </div>
