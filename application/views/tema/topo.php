@@ -3,7 +3,7 @@
 <?php $this->load->view('includes/js'); ?>
 <?php $this->load->view('includes/custom_js'); ?>
 
-<body class="infobar-offcanvas sidebar-hideon-collapse" id="body">
+<body class="infobar-offcanvas infobar-overlay sidebar-hideon-collapse sidebar-scroll" id="body">
 
 <!--    MENU SUSPENSO-->
 <div id="headerbar">

@@ -7192,7 +7192,7 @@ footer h6 {
     color: #455a64;
 }
 .sidebar-scroll {
-    position: relative;
+    position: static;
 }
 .sidebar-scroll .static-sidebar {
     position: fixed !important;
