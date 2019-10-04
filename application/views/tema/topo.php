@@ -3,7 +3,7 @@
 <?php $this->load->view('includes/js'); ?>
 <?php $this->load->view('includes/custom_js'); ?>
 
-<body class="infobar-offcanvas" id="body">
+<body class="infobar-overlay sidebar-hideon-collapse infobar-offcanvas sidebar-scroll" id="body">
 
 <!--    MENU SUSPENSO-->
 <div id="headerbar">
@@ -414,7 +414,7 @@
         <!--                    SIDEBAR-->
         <div class="static-sidebar-wrapper sidebar-midnightblue">
             <div class="static-sidebar">
-                <div class="sidebar block">
+                <div class="sidebar scroll-content">
                     <div class="widget stay-on-collapse" id="widget-welcomebox">
                         <div class="widget-body welcome-box tabular">
                             <a href="<?php echo site_url(); ?>mxcode/minhaConta">
@@ -435,7 +435,6 @@
                         <nav role="navigation" class="widget-body">
                             <ul class="acc-menu">
                                 <li class="nav-separator"></li>
-
                                 <li class="<?= (isset($menuPainel)) ? 'active' : ''; ?>">
                                     <a href="<?php echo base_url() ?>"><i class="fas fa-home fa-fw"></i>
                                         <span>Painel Inicial</span>
@@ -495,7 +494,7 @@
                                         <a href="javascript:"><i class="fas fa-dollar-sign fa-fw"></i>
                                             <span>Financeiro</span>
                                         </a>
-                                        <ul class="acc-menu sub-menu">
+                                        <ul class="acc-menu">
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
                                                 <li><a href="<?php echo base_url() ?>financeiro/lancamentos">Lançamentos</a></li>
                                             <?php } ?>

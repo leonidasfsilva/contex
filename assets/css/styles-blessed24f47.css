@@ -3180,7 +3180,7 @@ fieldset[disabled] .btn.btn-social.btn-windows-alt.active {
 .badge-sky[href]:focus {
     background-color: #00635a;
 }
-.sidebar {
+.fixed-sidebar {
     position: fixed;
     width: 248px;
 }
@@ -7197,10 +7197,10 @@ footer h6 {
 .sidebar-scroll .static-sidebar {
     position: fixed !important;
 }
-body.sidebar-hideon-collpase.sidebar-collapsed .static-sidebar-wrapper {
+body.sidebar-hideon-collapse.sidebar-collapsed .static-sidebar-wrapper {
     display: none;
 }
-body.sidebar-hideon-collpase .static-sidebar-wrapper {
+body.sidebar-hideon-collapse .static-sidebar-wrapper {
     display: table-cell;
 }
 body.layout-boxed {
