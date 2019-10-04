@@ -3,7 +3,7 @@
 <?php $this->load->view('includes/js'); ?>
 <?php $this->load->view('includes/custom_js'); ?>
 
-<body class="infobar-overlay sidebar-hideon-collapse infobar-offcanvas sidebar-scroll" id="body">
+<body class="infobar-offcanvas sidebar-hideon-collapse sidebar-scroll" id="body">
 
 <!--    MENU SUSPENSO-->
 <div id="headerbar">
@@ -414,7 +414,7 @@
         <!--                    SIDEBAR-->
         <div class="static-sidebar-wrapper sidebar-midnightblue">
             <div class="static-sidebar">
-                <div class="sidebar scroll-content">
+                <div class="sidebar">
                     <div class="widget stay-on-collapse" id="widget-welcomebox">
                         <div class="widget-body welcome-box tabular">
                             <a href="<?php echo site_url(); ?>mxcode/minhaConta">
