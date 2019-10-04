@@ -414,7 +414,7 @@
         <!--                    SIDEBAR-->
         <div class="static-sidebar-wrapper sidebar-midnightblue">
             <div class="static-sidebar">
-                <div class="sidebar fixed-sidebar">
+                <div class="sidebar">
                     <div class="widget stay-on-collapse" id="widget-welcomebox">
                         <div class="widget-body welcome-box tabular">
                             <a href="<?php echo site_url(); ?>mxcode/minhaConta">
