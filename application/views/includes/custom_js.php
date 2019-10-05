@@ -1,4 +1,8 @@
 <script>
+    $(function () {
+        $('.popover-btn').popover()
+    })
+
     $(document).on('ready', function (event) {
         $(".preloader").show();
         setTimeout(function () {
@@ -6,7 +10,7 @@
         }, 500);
     });
 
-    $(document).on('click', 'a:not([href="javascript:"],[href="#"], [data-toggle="modal"])', function () {
+    $(document).on('click', 'a:not([href="javascript:"],[href="#"], [data-toggle="modal"], [data-toggle="collapse"], [data-toggle="tab"])', function () {
         $(".subconteudo-principal").hide();
         $(".preloader").show();
     });
