@@ -55,8 +55,7 @@ class Lancamentos extends CI_Controller
                     }
                 }
             }
-        }
-        else {
+        } else {
 
             // busca lançamentos do dia
             if ($periodo == '7dias') {
@@ -333,7 +332,6 @@ class Lancamentos extends CI_Controller
 
     function receita()
     {
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
             $this->session->set_flashdata('erro', 'Você não tem permissão para adicionar lançamentos.');
             redirect(base_url());
@@ -369,7 +367,7 @@ class Lancamentos extends CI_Controller
             'data_pagamento' => $recebimento != null ? $recebimento : $vencimento,
             'baixado' => $this->input->post('recebido') ?: 0,
             'cliente_fornecedor' => padronizarString($this->input->post('fornecedor')),
-            'forma_pgto' => ($this->input->post('formaPgto')),
+            'forma_pgto' => ($this->input->post('formaPgto') ?: 6),
             'tipo' => 1
         );
 
@@ -383,12 +381,10 @@ class Lancamentos extends CI_Controller
 
         $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar registrar entrada.');
         redirect($urlAtual);
-
     }
 
     function despesa()
     {
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
             $this->session->set_flashdata('erro', 'Você não tem permissão para adicionar lançamentos.');
             redirect(base_url());
@@ -425,7 +421,7 @@ class Lancamentos extends CI_Controller
             'data_pagamento' => $pagamento != null ? $pagamento : $vencimento,
             'baixado' => $this->input->post('pago') ?: 0,
             'cliente_fornecedor' => padronizarString($this->input->post('fornecedor')),
-            'forma_pgto' => ($this->input->post('formaPgto')),
+            'forma_pgto' => ($this->input->post('formaPgto') ?: 3),
             'tipo' => 2
         );
 
@@ -439,14 +435,10 @@ class Lancamentos extends CI_Controller
 
         $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar registrar saída.');
         redirect($urlAtual);
-
-
     }
 
     public function editar()
     {
-//        print_array($_REQUEST);
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
             $this->session->set_flashdata('erro', 'Você não tem permissão para editar lançamentos.');
             redirect(base_url());
