@@ -75,7 +75,7 @@ class Clientes_model extends CI_Model
 
     public function getOsByCliente($id)
     {
-        $this->db->where('clientes_id', $id);
+        $this->db->where('id_cliente', $id);
         $this->db->order_by('idOs', 'desc');
         $this->db->limit(10);
         return $this->db->get('os')->result();
