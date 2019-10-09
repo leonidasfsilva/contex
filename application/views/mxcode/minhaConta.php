@@ -51,9 +51,12 @@
                             <?php if ($usuario->s_n) {
                                 echo 'S/N';
                             } else {
-                                echo $usuario->numero;
+                                echo 'nº '.$usuario->numero;
                             }
                             ?>
+                        </li>
+                        <li>
+                            <strong>Complemento:</strong> <?php echo $usuario->complemento ?>
                         </li>
                         <li>
                             <strong>Bairro:</strong> <?php echo $usuario->bairro ?>
@@ -124,6 +127,12 @@
                                 <input type="checkbox" class="form-control" id="s_n" name="s_n" value="1" <?= $dados->s_n == 1 ? 'checked' : '' ?>>
                             </div>
                             <label for="s_n" class="font-weight-bold">S/N</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12" id="div_complemento">
+                            <label for="complemento" class="font-weight-bold">Complemento</label>
+                            <input type="text" class="form-control" id="complemento" name="complemento" value="<?php echo $dados->complemento; ?>"/>
                         </div>
                     </div>
                     <div class="row">
