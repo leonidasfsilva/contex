@@ -42,7 +42,6 @@ class Pendencia_model extends CI_Model
         return $result;
     }
 
-
     function getById($id)
     {
         $this->db->where('id_pendencia', $id);
@@ -179,12 +178,12 @@ class Pendencia_model extends CI_Model
         return $this->db->get()->row();
     }
 
-    function getTotal($id_usuario)
+    function getTotalDebito($id_usuario)
     {
         $this->db
             ->select('SUM(valor) AS total')
             ->from('pendencias')
-            ->where('status = 1 AND id_usuario = ' . $id_usuario);
+            ->where('status = 1 AND tipo = 2 AND quitado = 0 AND id_usuario  = ' . $id_usuario);
         return $this->db->get()->row();
 
     }
