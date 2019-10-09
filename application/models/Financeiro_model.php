@@ -131,7 +131,6 @@ class Financeiro_model extends CI_Model
             ->where(' baixado = 1 AND status = 1 AND id_usuario = ' . $id_usuario);
 
         return $this->db->get()->row();
-
     }
 
     function getFormasPagamento()

@@ -89,6 +89,7 @@
             }
         });
 
+        // API CEP DOS CORREIOS (viacep.com.br)
         function limpa_formulário_cep() {
             // Limpa valores do formulário de cep.
             $("#logradouro").val("");
@@ -97,7 +98,6 @@
             $("#uf").val("");
             $("#ibge").val("");
         }
-
         //Quando o campo cep possui algum caracter digitado.
         $("#cep").keyup(function () {
 
@@ -122,7 +122,7 @@
                     $("#ibge").val("aguarde...");
 
                     //Consulta o webservice viacep.com.br/
-                    $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
+                    $.getJSON("https://viacep.com.br/ws/" + cep + "/json/", function (dados) {
 
                         if (!("erro" in dados)) {
                             //Atualiza os campos com os valores da consulta.
@@ -176,6 +176,7 @@
                 limpa_formulário_cep();
             }
         });
+        // FIM API CEP CORREIOS
 
         $('.datepicker').datepicker({
             language: 'pt-BR',

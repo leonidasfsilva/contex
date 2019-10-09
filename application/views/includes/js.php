@@ -35,6 +35,7 @@
 <script src="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.js"></script>
 
 <script src="<?php echo base_url(); ?>assets/js/application.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/application2.js"></script>
 <script src="<?php echo base_url(); ?>assets/demo/demo.js"></script>
 <script src="<?php echo base_url(); ?>assets/demo/demo-switcher.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/maskmoney.js"></script>

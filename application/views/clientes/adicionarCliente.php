@@ -35,13 +35,25 @@
                     <label for="cep" class="control-label font-weight-bold">CEP</label>
                     <input type="text" class="form-control" id="cep" name="cep" value="<?php echo set_value('cep'); ?>">
                 </div>
-                <div class="form-group col-md-8">
+                <div class="form-group col-md-7">
                     <label for="logradouro" class="control-label font-weight-bold">Logradouro</label>
                     <input type="text" class="form-control" id="logradouro" name="logradouro" value="<?php echo set_value('logradouro'); ?>">
                 </div>
                 <div class="form-group col-md-2">
                     <label for="numero" class="control-label font-weight-bold">Número</label>
-                    <input type="text" class="form-control" id="numero" name="numero" value="<?php echo set_value('numero'); ?>">
+                    <input type="number" class="form-control" id="numero" name="numero" value="<?php echo set_value('numero'); ?>">
+                </div>
+                <div class="form-group col-md-1 mt30">
+                    <div class="checkbox icheck">
+                        <input type="checkbox" class="form-control" id="s_n" name="s_n" value="1">
+                    </div>
+                    <label for="s_n" class="font-weight-bold">S/N</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <label for="complemento" class="control-label font-weight-bold">Complemento</label>
+                    <input type="text" class="form-control" id="complemento" name="complemento">
                 </div>
             </div>
             <div class="row">
@@ -72,7 +84,25 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#telefone').mask("(99) 9999-99990");
+        $('#s_n').on('ifChanged', function (event) {
+            const checked = event.target.checked;
+            if (checked == true) {
+                $('#numero').val('');
+                $('#numero').attr('disabled', true);
+            } else {
+                $('#numero').removeAttr('disabled');
+            }
+        });
+
+        var s_n = $('#s_n').iCheck('update')[0].checked;
+        $.each($(s_n), function (key, value) {
+            if (s_n == true) {
+                $('#numero').val('');
+                $('#numero').attr('disabled', true);
+            } else {
+                $('#numero').removeAttr('disabled');
+            }
+        });
 
         $('#formCliente').validate({
             rules: {

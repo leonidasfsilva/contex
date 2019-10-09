@@ -113,8 +113,8 @@
         $('#s_n').on('ifChanged', function (event) {
             const checked = event.target.checked;
             if (checked == true) {
-                $('#numero').attr('disabled', true);
                 $('#numero').val('');
+                $('#numero').attr('disabled', true);
             } else {
                 $('#numero').removeAttr('disabled');
             }
@@ -123,8 +123,8 @@
         var s_n = $('#s_n').iCheck('update')[0].checked;
         $.each($(s_n), function (key, value) {
             if (s_n == true) {
-                $('#numero').attr('disabled', true);
                 $('#numero').val('');
+                $('#numero').attr('disabled', true);
             } else {
                 $('#numero').removeAttr('disabled');
             }
