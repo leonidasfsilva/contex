@@ -44,9 +44,6 @@
                             <strong>RG:</strong> <?php echo $usuario->rg ?>
                         </li>
                         <li>
-                            <strong>CEP:</strong> <?php echo $usuario->cep ?>
-                        </li>
-                        <li>
                             <strong>Logradouro:</strong> <?php echo $usuario->logradouro ?>,
                             <?php if ($usuario->s_n) {
                                 echo 'S/N';
@@ -66,6 +63,9 @@
                         </li>
                         <li>
                             <strong>UF:</strong> <?php echo $usuario->uf ?>
+                        </li>
+                        <li>
+                            <strong>CEP:</strong> <?php echo $usuario->cep ?>
                         </li>
                     </ul>
                     <hr class="">
