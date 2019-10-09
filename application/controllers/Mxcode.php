@@ -12,6 +12,7 @@ class Mxcode extends CI_Controller
         $this->load->model('financeiro_model', '', true);
         $this->load->model('investimentos_model', '', true);
         $this->load->model('fatura_model', '', true);
+        $this->load->model('pendencia_model', '', true);
         $this->load->helper('file');
         $this->load->library('upload');
         $this->load->library('image_lib');
@@ -29,8 +30,9 @@ class Mxcode extends CI_Controller
 //        $this->data['estatisticas_financeiro'] = $this->mxcode_model->getEstatisticasFinanceiro();
         $data['menuPainel'] = 'Index';
         $data['usuario'] = $this->mxcode_model->getById(id_usuario());
-        $data['contaCorrente'] = $this->financeiro_model->getTotal(id_usuario());
-        $data['contaPoupanca'] = $this->investimentos_model->getTotal(id_usuario());
+        $data['lancamentos'] = $this->financeiro_model->getTotal(id_usuario());
+        $data['investimentos'] = $this->investimentos_model->getTotal(id_usuario());
+        $data['pendencias'] = $this->pendencia_model->getTotalDebito(id_usuario());
         $data['fatura'] = $this->fatura_model->getValorTotalFaturaAtual(id_usuario());
         $data['view'] = 'mxcode/painel';
 
@@ -529,6 +531,7 @@ class Mxcode extends CI_Controller
             'cpf' => $this->input->post('cpf'),
             'cep' => $this->input->post('cep'),
             'logradouro' => $this->input->post('logradouro'),
+            'complemento' => $this->input->post('complemento'),
             'numero' => $this->input->post('numero'),
             's_n' => $this->input->post('s_n') == 1 ? 1 : 0,
             'bairro' => $this->input->post('bairro'),
