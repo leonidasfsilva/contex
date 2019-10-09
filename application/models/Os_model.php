@@ -22,7 +22,7 @@ class Os_model extends CI_Model
 
         $this->db->select($fields . ',clientes.nome');
         $this->db->from($table);
-        $this->db->join('clientes', 'clientes.id_clientes = os.clientes_id');
+        $this->db->join('clientes', 'clientes.id_clientes = os.id_cliente');
         $this->db->limit($perpage, $start);
         $this->db->order_by('idOs', 'desc');
         if ($where) {
@@ -57,8 +57,8 @@ class Os_model extends CI_Model
 
         $this->db->select($fields . ',clientes.nome, usuarios.nome as user_nome');
         $this->db->from($table);
-        $this->db->join('clientes', 'clientes.id_clientes = os.clientes_id');
-        $this->db->join('usuarios', 'usuarios.id_usuarios = os.usuarios_id', 'left');
+        $this->db->join('clientes', 'clientes.id_clientes = os.id_cliente');
+        $this->db->join('usuarios', 'usuarios.id_usuarios = os.id_usuario', 'left');
 
         // condicionais da pesquisa
 
@@ -70,7 +70,7 @@ class Os_model extends CI_Model
         // condicional de clientes
         if (array_key_exists('pesquisa', $where)) {
             if ($lista_clientes != null) {
-                $this->db->where_in('os.clientes_id', $lista_clientes);
+                $this->db->where_in('os.id_cliente', $lista_clientes);
             }
         }
 
@@ -98,8 +98,8 @@ class Os_model extends CI_Model
     {
         $this->db->select('os.*, clientes.*, usuarios.telefone as user_telefone, usuarios.email as user_email, usuarios.nome as user_nome');
         $this->db->from('os');
-        $this->db->join('clientes', 'clientes.id_clientes = os.clientes_id', 'left');
-        $this->db->join('usuarios', 'usuarios.id_usuarios = os.usuarios_id');
+        $this->db->join('clientes', 'clientes.id_clientes = os.id_cliente', 'left');
+        $this->db->join('usuarios', 'usuarios.id_usuarios = os.id_usuario');
         $this->db->where('os.idOs', $id);
         $this->db->limit(1);
         return $this->db->get()->row();
