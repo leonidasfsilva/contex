@@ -149,15 +149,23 @@
                             <br>
                             <span>CNPJ: <?php echo $dados->cnpj; ?></span>
                             <br>
-                            <span><?php echo $dados->logradouro . ', ' . $dados->numero . ', ' . $dados->bairro . ' - ' . $dados->cidade . ' / ' . $dados->uf; ?> </span>
+                            <span><?php echo $dados->logradouro . ', '
+                                    . ($dados->s_n == 1 ? 'S/N' : $dados->numero)
+                                    . ($dados->complemento == null ? : ', '.$dados->complemento); ?>
+                            </span>
+                            <br>
+                            <span><?php echo $dados->bairro . ' - '
+                                    . $dados->cidade . ' / '
+                                    . $dados->uf; ?>
+                            </span>
                             <br>
                             <span> Email: <?php echo $dados->email . ' - Fone: ' . $dados->telefone; ?></span>
                         </td>
                     </tr>
                     </tbody>
                 </table>
-<!--            </div>-->
-<!--            <div class="panel-footer">-->
+                <!--            </div>-->
+                <!--            <div class="panel-footer">-->
                 <p class="alert alert-info">
                     <i class="fas fa-info-circle fa-lg fa-fw"></i>
                     Os dados acima serão utilizados no cabeçalho das telas de impressão.
@@ -211,6 +219,12 @@
                                     <input type="checkbox" class="form-control" id="s_n" name="s_n" value="1" <?= $dados->s_n == 1 ? 'checked' : '' ?>>
                                 </div>
                                 <label for="s_n" class="font-weight-bold">S/N</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-12" id="div_complemento">
+                                <label for="complemento" class="font-weight-bold">Complemento</label>
+                                <input type="text" class="form-control" id="complemento" name="complemento" value="<?php echo $dados->complemento; ?>"/>
                             </div>
                         </div>
                         <div class="row">
