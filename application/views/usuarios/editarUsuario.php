@@ -61,7 +61,13 @@
                     </div>
                     <label for="s_n" class="font-weight-bold">S/N</label>
                 </div>
-
+            </div>
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <label for="complemento" class="control-label font-weight-bold">Complemento</label>
+                    <input type="text" class="form-control" id="complemento" name="complemento"
+                           value="<?php echo $result->complemento; ?>">
+                </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-5">

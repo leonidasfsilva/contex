@@ -80,6 +80,7 @@ class Usuarios extends CI_Controller
                 'cpf' => $this->input->post('cpf'),
                 'cep' => $this->input->post('cep'),
                 'logradouro' => $this->input->post('logradouro'),
+                'complemento' => $this->input->post('complemento'),
                 'numero' => $this->input->post('numero'),
                 's_n' => $this->input->post('s_n') == 1 ? 1 : 0,
                 'bairro' => $this->input->post('bairro'),
@@ -150,6 +151,7 @@ class Usuarios extends CI_Controller
                     'cpf' => $this->input->post('cpf'),
                     'cep' => $this->input->post('cep'),
                     'logradouro' => $this->input->post('logradouro'),
+                    'complemento' => $this->input->post('complemento'),
                     'numero' => $this->input->post('numero'),
                     's_n' => $this->input->post('s_n') == 1 ? 1 : 0,
                     'bairro' => $this->input->post('bairro'),
@@ -161,12 +163,12 @@ class Usuarios extends CI_Controller
                     'permissoes_id' => $this->input->post('permissoes_id')
                 );
             } else {
-
                 $data = array(
                     'nome' => $this->input->post('nome'),
                     'cpf' => $this->input->post('cpf'),
                     'cep' => $this->input->post('cep'),
                     'logradouro' => $this->input->post('logradouro'),
+                    'complemento' => $this->input->post('complemento'),
                     'numero' => $this->input->post('numero'),
                     's_n' => $this->input->post('s_n') == 1 ? 1 : 0,
                     'bairro' => $this->input->post('bairro'),
