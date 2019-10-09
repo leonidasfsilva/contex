@@ -1,12 +1,13 @@
+<!--WIDGETS-->
 <div class="row">
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
-        <div class="col-sm-4">
+        <div class="col-lg-6">
             <div class="tile-sparkline">
                 <div class="tile-sparkline-heading clearfix">
                     <div class="pull-left">
                         <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Lançamentos</span>
                         <span class="tile-sparkline-subheading block mb10">Saldo disponível</span>
-                        <h2 class="block">R$ <?= number_format($contaCorrente->total, 2, ',', '.') ?></h2>
+                        <h2 class="block">R$ <?= number_format($lancamentos->total, 2, ',', '.') ?></h2>
                     </div>
                     <div class="pull-right">
                         <span><i class="fas fa-chart-line fa-lg fa-fw"></i></span>
@@ -21,7 +22,7 @@
     <?php } ?>
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) { ?>
-        <div class="col-sm-4">
+        <div class="col-lg-6">
             <div class="tile-sparkline">
                 <div class="tile-sparkline-heading clearfix">
                     <div class="pull-left">
@@ -40,8 +41,28 @@
         </div>
     <?php } ?>
 
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPendencias')) { ?>
+        <div class="col-lg-6">
+            <div class="tile-sparkline">
+                <div class="tile-sparkline-heading clearfix">
+                    <div class="pull-left">
+                        <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Pendências</span>
+                        <span class="tile-sparkline-subheading block mb10">Pendências a pagar</span>
+                        <h2 class="block">R$ <?= number_format($pendencias->total, 2, ',', '.') ?></h2>
+                    </div>
+                    <div class="pull-right">
+                        <span><i class="fas fa-file-invoice-dollar fa-lg fa-fw"></i></span>
+                    </div>
+                </div>
+                <div class="tile-sparkline-footer-clean">
+                    <a href="<?= base_url() ?>financeiro/pendencias" class="font-weight-bold">Ver detalhes </a>
+                </div>
+            </div>
+        </div>
+    <?php } ?>
+
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vInvestimentos')) { ?>
-        <div class="col-sm-4">
+        <div class="col-lg-6">
             <div class="tile-sparkline">
                 <div class="tile-sparkline-heading clearfix">
                     <div class="pull-left">
@@ -60,6 +81,8 @@
         </div>
     <?php } ?>
 </div>
+
+<!--PAINEL DE LINKS-->
 <div class="row">
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) : ?>
         <div class="col-md-6">
