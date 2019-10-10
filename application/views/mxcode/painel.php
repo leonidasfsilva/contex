@@ -68,7 +68,7 @@
                     <div class="pull-left">
                         <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Meus Investimentos</span>
                         <span class="tile-sparkline-subheading block mb10">Valor total investido</span>
-                        <h2 class="block">R$ <?= number_format($contaPoupanca->total, 2, ',', '.') ?></h2>
+                        <h2 class="block">R$ <?= number_format($investimentos->total, 2, ',', '.') ?></h2>
                     </div>
                     <div class="pull-right">
                         <span><i class="fas fa-hand-holding-usd fa-lg fa-fw"></i></span>
