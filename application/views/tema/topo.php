@@ -79,7 +79,7 @@
 </div>
 <!--    MENU SUSPENSO-->
 
-<header id="topnav" class="navbar navbar-midnightblue navbar-fixed-top clearfix" role="banner">
+<header id="topnav" class="navbar navbar <?= (isset($topbar_color) ? $topbar_color : 'navbar-midnightblue') ?> navbar-fixed-top clearfix" role="banner">
 
 	<span id="trigger-sidebar" class="toolbar-trigger toolbar-icon-bg">
 		<a href="javascript:" data-placement="bottom" title="Exibir/Ocultar Menu" id="menu-switcher">
@@ -412,7 +412,7 @@
 <div id="wrapper">
     <div id="layout-static">
         <!--                    SIDEBAR-->
-        <div class="static-sidebar-wrapper sidebar-midnightblue">
+        <div class="static-sidebar-wrapper <?= (isset($sidebar_color) ? $sidebar_color : 'sidebar-midnightblue') ?>">
             <div class="static-sidebar">
                 <div class="sidebar">
                     <div class="widget stay-on-collapse" id="widget-welcomebox">
