@@ -257,7 +257,7 @@ $periodo_pendencia = $this->input->get('periodo');
                                 <option value="todos">Todos</option>
                                 <option value="especifico"<?php if ($periodo_pendencia == 'especifico') {
                                     echo 'selected';
-                                } ?>>Período específico
+                                } ?>>PERÍODO ESPECÍFICO
                                 </option>
                             </select>
                         </div>
