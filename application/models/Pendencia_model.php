@@ -37,7 +37,7 @@ class Pendencia_model extends CI_Model
         }
         $this->db->order_by('quitado', 'desc');
         $this->db->order_by('id_pendencia', 'asc');
-        $this->db->order_by('data_pendencia', 'asc');
+        $this->db->order_by('data_vencimento', 'asc');
         $query = $this->db->get();
 
         $result = !$one ? $query->result() : $query->row();

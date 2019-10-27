@@ -33,6 +33,7 @@ class Pendencias extends CI_Controller
             $this->session->set_flashdata('erro', 'Você não tem permissão para visualizar pendências.');
             redirect(base_url());
         }
+        $periodo = $this->input->get('periodo');
         $status = $this->input->get('status');
         $cliente = $this->input->get('cliente');
         $inicio = $this->input->get('inicio');
@@ -64,7 +65,7 @@ class Pendencias extends CI_Controller
         $config['last_tag_open'] = '<li>';
         $config['last_tag_close'] = '</li>';
 
-//        $limit = $this->pendencia_model->count('pendencias', 'status = 1 AND quitado = 0 AND id_usuario = ' . id_usuario());
+        $limit = $this->pendencia_model->count('pendencias', 'status = 1 AND quitado = 0 AND id_usuario = ' . id_usuario());
 
         if (isset($status) && $status != null) {
             $limit = null;
@@ -86,6 +87,10 @@ class Pendencias extends CI_Controller
             }
         }
 
+        if (isset($periodo) && $periodo == 'todos') {
+            $limit = null;
+        }
+
         if (isset($cliente) && $cliente != null) {
             $limit = null;
             if (!isset($where)) {
@@ -104,9 +109,9 @@ class Pendencias extends CI_Controller
 
             $limit = null;
             if (!isset($where)) {
-                $where = 'data_pendencia BETWEEN "' . $inicio . '" AND "' . $fim . '"';
+                $where = 'data_vencimento BETWEEN "' . $inicio . '" AND "' . $fim . '"';
             } else {
-                $where .= ' AND data_pendencia BETWEEN "' . $inicio . '" AND "' . $fim . '"';
+                $where .= ' AND data_vencimento BETWEEN "' . $inicio . '" AND "' . $fim . '"';
             }
 
         }
@@ -150,7 +155,7 @@ class Pendencias extends CI_Controller
 
         $valor = $this->input->post('valor');
         $tipo = $this->input->post('tipo');
-        $data_pendencia = $this->input->post('data_pendencia');
+        $data_pendencia = $this->input->post('data_vencimento');
 
         if (!validate_money($valor)) {
             $valor = str_replace(array('.', ','), array('', '.'), $valor);
@@ -179,7 +184,7 @@ class Pendencias extends CI_Controller
             'descricao' => padronizarString($this->input->post('descricao')),
             'tipo' => $tipo,
             'valor' => $valor,
-            'data_pendencia' => $data_pendencia,
+            'data_vencimento' => $data_pendencia,
         );
 
         if ($this->pendencia_model->add('pendencias', $data) == true) {
@@ -205,7 +210,7 @@ class Pendencias extends CI_Controller
 
             $valor = $this->input->post('valor');
             $tipo = $this->input->post('tipo');
-            $data_pendencia = $this->input->post('data_pendencia');
+            $data_pendencia = $this->input->post('data_vencimento');
 
             if (!validate_money($valor)) {
                 $valor = str_replace(array('.', ','), array('', '.'), $valor);
@@ -227,7 +232,7 @@ class Pendencias extends CI_Controller
                 'descricao' => padronizarString($this->input->post('descricao')),
                 'tipo' => $tipo,
                 'valor' => $valor,
-                'data_pendencia' => $data_pendencia,
+                'data_vencimento' => $data_pendencia,
             );
 
             if ($this->pendencia_model->edit('pendencias', $data, 'id_pendencia', $this->input->post('id_pendencia')) == true) {
@@ -315,7 +320,7 @@ class Pendencias extends CI_Controller
                 'id_usuario' => $pendencia->id_usuario,
                 'descricao' => $pendencia->descricao,
                 'valor' => $pendencia->valor,
-                'data_lancamento' => $pendencia->data_pendencia,
+                'data_lancamento' => $pendencia->data_vencimento,
                 'data_pagamento' => $pendencia->data_pagamento,
                 'cliente_fornecedor' => $cliente->nome,
                 'forma_pgto' => $_REQUEST['forma_pagamento'],

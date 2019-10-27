@@ -1,5 +1,6 @@
 <?php $status_pendencia = $this->input->get('status');
 $cliente = $this->input->get('cliente');
+$periodo_pendencia = $this->input->get('periodo');
 ?>
 
 <div class="panel panel-midnightblue">
@@ -25,31 +26,31 @@ $cliente = $this->input->get('cliente');
 
     <?php if ($results) { ?>
 
-    <div class="panel-heading">
-        <h2>
-            Saldo Resumido
-        </h2>
-    </div>
-    <div class="panel-body panel-no-padding">
-        <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
-            <thead>
-            <tr role="row">
-                <th colspan="2" style="text-align: left !important;">Descrição</th>
-                <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
-            </tr>
-            </thead>
-            <tr>
-                <td colspan="2" style="text-align: left; color: green">(+) SALDO PARCIAL DE PENDÊNCIAS CRÉDITO</td>
-                <td colspan="1" style="text-align: right; color: green">
-                    <?php echo number_format($pendencias_credito->total, 2, ',', '.') ?></td>
-            </tr>
-            <tr>
-                <td colspan="2" style="text-align: left; color: red">(-) SALDO PARCIAL DE PENDÊNCIAS DÉBITO</td>
-                <td colspan="1" style="text-align: right; color: red">
-                    <?php echo number_format($pendencias_debito->total, 2, ',', '.') ?></td>
-            </tr>
-        </table>
-    </div>
+        <div class="panel-heading">
+            <h2>
+                Saldo Resumido
+            </h2>
+        </div>
+        <div class="panel-body panel-no-padding">
+            <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
+                <thead>
+                <tr role="row">
+                    <th colspan="2" style="text-align: left !important;">Descrição</th>
+                    <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
+                </tr>
+                </thead>
+                <tr>
+                    <td colspan="2" style="text-align: left; color: green">(+) SALDO PARCIAL DE PENDÊNCIAS CRÉDITO</td>
+                    <td colspan="1" style="text-align: right; color: green">
+                        <?php echo number_format($pendencias_credito->total, 2, ',', '.') ?></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: left; color: red">(-) SALDO PARCIAL DE PENDÊNCIAS DÉBITO</td>
+                    <td colspan="1" style="text-align: right; color: red">
+                        <?php echo number_format($pendencias_debito->total, 2, ',', '.') ?></td>
+                </tr>
+            </table>
+        </div>
     <?php } ?>
 </div>
 
@@ -64,7 +65,7 @@ $cliente = $this->input->get('cliente');
             <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
                 <thead>
                 <tr role="row">
-                    <th style="text-align: left !important;">Data</th>
+                    <th style="text-align: left !important;">Vencimento</th>
                     <!--                    <th style="text-align: left !important;">Tipo</th>-->
                     <th style="text-align: left !important;">Descrição</th>
                     <th style="text-align: left !important;">Cliente</th>
@@ -80,7 +81,7 @@ $cliente = $this->input->get('cliente');
                 $totalDespesa = 0;
                 $saldo = 0;
                 foreach ($results as $r) {
-                    $data_pendencia = date(('d/m'), strtotime($r->data_pendencia));
+                    $data_pendencia = date(('d/m/Y'), strtotime($r->data_vencimento));
 
                     if ($r->tipo == 1) {
                         $tipo = 'Credito';
@@ -134,7 +135,7 @@ $cliente = $this->input->get('cliente');
                                 <i class="' . $icon . ' fa-lg fa-fw"></i></button>';
 
                         echo '<button ' . $disabled . ' href="#modalEditar" style="margin-right: 1%" class="btn btn-primary btn-sm editar" data-toggle="modal" title="Editar" id_pendencia="' .
-                            $r->id_pendencia . '" descricao="' . $r->descricao . '" valor="' . $valor . '" data_pendencia="' . date('d/m/Y', strtotime($r->data_pendencia)) .
+                            $r->id_pendencia . '" descricao="' . $r->descricao . '" valor="' . $valor . '" data_vencimento="' . date('d/m/Y', strtotime($r->data_pendencia)) .
                             '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" quitado="' .
                             $r->quitado . '" id_cliente="' . $r->id_cliente . '" tipo="' . $r->tipo . '">
                                 <i class="fas fa-search-plus fa-lg fa-fw"></i></button>';
@@ -250,8 +251,18 @@ $cliente = $this->input->get('cliente');
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-6">
-                            <label class="tooltips font-weight-bold" for="select_periodo" title="Filtrar pendências por período">Período <i class="fa fa-info-circle fa-fw"></i></label>
+                        <div class="form-group col-lg-6" style="margin-left: 0">
+                            <label for="select_periodo" class="tooltips font-weight-bold" title="Filtrar pendências por período">Período <i class="fa fa-info-circle fa-fw"></i></label>
+                            <select name="periodo" id="select_periodo" class="form-control">
+                                <option value="todos">Todos</option>
+                                <option value="especifico"<?php if ($periodo_pendencia == 'especifico') {
+                                    echo 'selected';
+                                } ?>>Período específico
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-lg-6" id="div_intervalo_data" hidden>
+                            <label class="tooltips font-weight-bold" title="Filtrar pendências por intervalo de data">Período específico <i class="fa fa-info-circle fa-fw"></i></label>
                             <div class="input-group">
                                 <span class="input-group-addon">de</span>
                                 <input type="text" class="form-control datepicker" name="inicio">
@@ -308,11 +319,12 @@ $cliente = $this->input->get('cliente');
                             <input class="form-control money" id="valor" type="text" name="valor"/>
                         </div>
                         <div class="form-group col-lg-4">
-                            <label for="data_pendencia" class="font-weight-bold">Data da Pendência</label>
-                            <input class="form-control datepicker" id="data_pendencia" type="text" name="data_pendencia"/>
+                            <label for="data_vencimento" class="font-weight-bold">Data de Vencimento</label>
+                            <input class="form-control datepicker" id="data_vencimento" type="text" name="data_vencimento"/>
                         </div>
                         <div class="form-group col-lg-4">
-                            <label for="tipo" class="font-weight-bold" title="CRÉDITO: entrada nos lançamentos / DÉBITO: saída nos lançamentos">Tipo de Pendência *<i class="fa fa-info-circle fa-fw"></i></label>
+                            <label for="tipo" class="font-weight-bold" title="CRÉDITO: entrada nos lançamentos / DÉBITO: saída nos lançamentos">Tipo de Pendência *<i
+                                        class="fa fa-info-circle fa-fw"></i></label>
                             <select class="form-control" name="tipo" id="tipo">
                                 <option value="">-- Selecione --</option>
                                 <option value="1">CREDITO</option>
@@ -369,11 +381,12 @@ $cliente = $this->input->get('cliente');
                             <input class="form-control money" id="valorEditar" type="text" name="valor"/>
                         </div>
                         <div class="form-group col-lg-4">
-                            <label for="data_pendenciaEditar" class="font-weight-bold">Data da Pendência</label>
-                            <input class="form-control datepicker" id="data_pendenciaEditar" type="text" name="data_pendencia"/>
+                            <label for="data_pendenciaEditar" class="font-weight-bold">Data de Vencimento</label>
+                            <input class="form-control datepicker" id="data_vencimentoEditar" type="text" name="data_vencimento"/>
                         </div>
                         <div class="form-group col-lg-4">
-                            <label for="tipoEditar" class="font-weight-bold" title="CRÉDITO: entrada nos lançamentos / DÉBITO: saída nos lançamentos">Tipo de Pendência *<i class="fa fa-info-circle fa-fw"></i></label>
+                            <label for="tipoEditar" class="font-weight-bold" title="CRÉDITO: entrada nos lançamentos / DÉBITO: saída nos lançamentos">Tipo de Pendência *<i
+                                        class="fa fa-info-circle fa-fw"></i></label>
                             <select class="form-control" name="tipo" id="tipoEditar">
                                 <option value="">-- Selecione --</option>
                                 <option value="1">CREDITO</option>
@@ -462,7 +475,26 @@ $cliente = $this->input->get('cliente');
 
 <script type="text/javascript">
 
+
+
     jQuery(document).ready(function ($) {
+
+        $('#select_periodo').change( function () {
+            const value = $(this).val();
+            if (value === 'especifico') {
+                $('#div_intervalo_data').show();
+            } else {
+                $('#div_intervalo_data').hide();
+            }
+        });
+
+        $('#select_periodo option:selected').each(function (index, element) {
+            if ($(this).val() == 'especifico') {
+                $('#div_intervalo_data').show();
+            } else {
+                $('#div_intervalo_data').hide();
+            }
+            });
 
         $(".money").maskMoney();
 
@@ -529,7 +561,7 @@ $cliente = $this->input->get('cliente');
             $("#id_pendencia").val($(this).attr('id_pendencia'));
             $("#descricaoEditar").val($(this).attr('descricao'));
             $("#id_clienteEditar").val($(this).attr('id_cliente'));
-            $("#data_pendenciaEditar").val($(this).attr('data_pendencia'));
+            $("#data_vencimentoEditar").val($(this).attr('data_vencimento'));
             $("#valorEditar").val($(this).attr('valor'));
             $("#tipoEditar").val($(this).attr('tipo'));
             $("#urlEditarPendencia").val($(location).attr('href'));
