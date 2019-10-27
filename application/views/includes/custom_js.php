@@ -183,7 +183,7 @@
             autoclose: true,
             format: 'dd/mm/yyyy',
             todayHighlight: true,
-            todayBtn: true
+            todayBtn: 'linked'
         });
 
         $('.tooltips').tooltip();

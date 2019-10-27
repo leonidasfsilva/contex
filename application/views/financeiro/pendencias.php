@@ -1,5 +1,5 @@
-<?php $situacao = $this->input->get('situacao');
-$periodo = $this->input->get('periodo');
+<?php $status_pendencia = $this->input->get('status');
+$cliente = $this->input->get('cliente');
 ?>
 
 <div class="panel panel-midnightblue">
@@ -218,59 +218,46 @@ $periodo = $this->input->get('periodo');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title">Filtrar pendências</h4>
             </div>
-            <form action="<?php echo current_url(); ?>" method="get" id="form_filtro">
+            <form action="<?php echo current_url(); ?>" method="get" id="form_filtro" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-6" style="margin-left: 0">
-                            <label class="tooltips font-weight-bold" title="Filtrar pendências por período específico">Período <i class="fa fa-info-circle fa-fw"></i></label>
-                            <select name="periodo" id="select_periodos" class="form-control">
-                                <option value="">Selecione o período</option>
-                                <option value="3dias"<?php if ($periodo == '3dias') {
+                            <label for="select_status" class="tooltips font-weight-bold" title="Filtrar pendências por status">Status <i class="fa fa-info-circle fa-fw"></i></label>
+                            <select name="status" id="select_status" class="form-control">
+                                <option value="todos">Todos</option>
+                                <option value="pendente"<?php if ($status_pendencia == 'pendente') {
                                     echo 'selected';
-                                } ?>>Últimos 3 dias
+                                } ?>>PENDENTE
                                 </option>
-                                <option value="5dias" <?php if ($periodo == '5dias') {
+                                <option value="pago" <?php if ($status_pendencia == 'pago') {
                                     echo 'selected';
-                                } ?>>Últimos 5 dias
-                                </option>
-                                <option value="7dias" <?php if ($periodo == '7dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 7 dias
-                                </option>
-                                <option value="15dias" <?php if ($periodo == '15dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 15 dias
-                                </option>
-                                <option value="30dias" <?php if ($periodo == '30dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 30 dias
-                                </option>
-                                <option value="60dias" <?php if ($periodo == '60dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 60 dias
-                                </option>
-                                <option value="90dias" <?php if ($periodo == '90dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 90 dias
-                                </option>
-                                <option value="todos" <?php if ($periodo == 'todos') {
-                                    echo 'selected';
-                                } ?>>Todos
+                                } ?>>PAGO
                                 </option>
                             </select>
                         </div>
                         <div class="col-lg-6">
-                            <label class="tooltips font-weight-bold" for="select_clientes" title="Filtrar pendências por cliente específico">Cliente <i class="fa fa-info-circle fa-fw"></i></label>
-                            <select class="form-control" id="select_clientes" name="id_cliente">
+                            <label class="tooltips font-weight-bold" for="select_clientes" title="Filtrar pendências por cliente">Cliente <i class="fa fa-info-circle fa-fw"></i></label>
+                            <select class="form-control" id="select_clientes" name="cliente">
                                 <option value="">Todos</option>
                                 <?php if ($clientes) {
                                     foreach ($clientes as $d) { ?>
-                                        <option value="<?= $d->id_clientes ?>" <?php if ($selected == $d->id_clientes) {
+                                        <option value="<?= $d->id_clientes ?>" <?php if ($selected_cliente == $d->id_clientes) {
                                             echo 'selected';
                                         } ?>><?= $d->nome ?></option>
                                     <?php }
                                 } ?>
                             </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label class="tooltips font-weight-bold" for="select_periodo" title="Filtrar pendências por período">Período <i class="fa fa-info-circle fa-fw"></i></label>
+                            <div class="input-group">
+                                <span class="input-group-addon">de</span>
+                                <input type="text" class="form-control datepicker" name="inicio">
+                                <span class="input-group-addon">até</span>
+                                <input type="text" class="form-control datepicker" name="fim">
+                            </div>
                         </div>
                     </div>
                 </div>
