@@ -1,5 +1,7 @@
 <?php $status_pendencia = $this->input->get('status');
 $cliente = $this->input->get('cliente');
+$inicio = $this->input->get('inicio');
+$fim = $this->input->get('fim');
 $periodo_pendencia = $this->input->get('periodo');
 ?>
 
@@ -265,9 +267,9 @@ $periodo_pendencia = $this->input->get('periodo');
                             <label class="tooltips font-weight-bold" title="Filtrar pendências por intervalo de data">Período específico <i class="fa fa-info-circle fa-fw"></i></label>
                             <div class="input-group">
                                 <span class="input-group-addon">de</span>
-                                <input type="text" class="form-control datepicker" name="inicio">
+                                <input type="text" class="form-control datepicker" id="dataInicial" name="inicio" value="<?=$inicio?>">
                                 <span class="input-group-addon">até</span>
-                                <input type="text" class="form-control datepicker" name="fim">
+                                <input type="text" class="form-control datepicker" id="dataFinal" name="fim" value="<?=$fim?>">
                             </div>
                         </div>
                     </div>
@@ -485,6 +487,8 @@ $periodo_pendencia = $this->input->get('periodo');
                 $('#div_intervalo_data').show();
             } else {
                 $('#div_intervalo_data').hide();
+                $('#dataInicial').val('');
+                $('#dataFinal').val('');
             }
         });
 
@@ -493,6 +497,8 @@ $periodo_pendencia = $this->input->get('periodo');
                 $('#div_intervalo_data').show();
             } else {
                 $('#div_intervalo_data').hide();
+                $('#dataInicial').val('');
+                $('#dataFinal').val('');
             }
             });
 
