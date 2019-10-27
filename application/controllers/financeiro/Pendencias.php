@@ -36,8 +36,8 @@ class Pendencias extends CI_Controller
         $periodo = $this->input->get('periodo');
         $status = $this->input->get('status');
         $cliente = $this->input->get('cliente');
-        $inicio = $this->input->get('inicio');
-        $fim = $this->input->get('fim');
+        $inicio = $this->input->get('dataInicial');
+        $fim = $this->input->get('dataFinal');
 
 
         $this->load->library('pagination');
