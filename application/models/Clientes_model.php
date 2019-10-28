@@ -85,7 +85,7 @@ class Clientes_model extends CI_Model
     {
         $this->db->where('id_cliente', $id);
         $this->db->where('status', 1);
-        $this->db->order_by('data_pendencia', 'asc');
+        $this->db->order_by('data_vencimento', 'asc');
         $this->db->order_by('id_pendencia', 'asc');
         return $this->db->get('pendencias')->result();
     }
