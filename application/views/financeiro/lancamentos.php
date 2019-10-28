@@ -1,5 +1,9 @@
-<?php $situacao = $this->input->get('situacao');
-$periodo = $this->input->get('periodo');
+<?php
+$status_lancamentos = $this->input->get('status');
+$tipo_lancamentos = $this->input->get('tipo');
+$periodo_lancamentos = $this->input->get('periodo');
+$inicio = $this->input->get('dataInicial');
+$fim = $this->input->get('dataFinal');
 ?>
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
@@ -129,14 +133,14 @@ $periodo = $this->input->get('periodo');
                         $fornecedor = "&nbsp;";
                     }
 
-                    if($r->tipo == 1) {
+                    if ($r->tipo == 1) {
                         $tipo = 'ENTRADA';
                     } else {
                         $tipo = 'SAÍDA';
                     }
 
                     foreach ($formasPagamento as $f) {
-                        if($f->id_forma == $r->forma_pgto) {
+                        if ($f->id_forma == $r->forma_pgto) {
                             $forma_pgto = $f->nome;
                         }
                     }
@@ -231,68 +235,89 @@ $periodo = $this->input->get('periodo');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title">Filtrar lançamentos</h4>
             </div>
-            <form action="<?php echo current_url(); ?>" method="get" id="form_filtro">
+            <form action="<?php echo current_url(); ?>" method="get" id="form_filtro" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
-                        <div class="form-group col-lg-6" style="margin-left: 0">
-                            <label class="tooltips font-weight-bold" title="Filtrar lançamentos por período específico">Período <i class="fa fa-info-circle fa-fw"></i></label>
-                            <select name="periodo" id="select_periodos" class="form-control">
-                                <option value="">Selecione o período</option>
-                                <option value="3dias"<?php if ($periodo == '3dias') {
+                        <div class="form-group col-lg-6">
+                            <label class="tip-top font-weight-bold" title="Filtrar lançamentos por tipo">Tipo <i class="fa fa-info-circle fa-fw"></i></label>
+                            <select class="form-control" id="select_tipo" name="tipo">
+                                <option value="todos">Todos</option>
+                                <option value="entrada" <?php if ($tipo_lancamentos == 'entrada') {
                                     echo 'selected';
-                                } ?>>Últimos 3 dias
+                                } ?>>ENTRADA
                                 </option>
-                                <option value="5dias" <?php if ($periodo == '5dias') {
+                                <option value="saida" <?php if ($tipo_lancamentos == 'saida') {
                                     echo 'selected';
-                                } ?>>Últimos 5 dias
-                                </option>
-                                <option value="7dias" <?php if ($periodo == '7dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 7 dias
-                                </option>
-                                <option value="15dias" <?php if ($periodo == '15dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 15 dias
-                                </option>
-                                <option value="30dias" <?php if ($periodo == '30dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 30 dias
-                                </option>
-                                <option value="60dias" <?php if ($periodo == '60dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 60 dias
-                                </option>
-                                <option value="90dias" <?php if ($periodo == '90dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 90 dias
-                                </option>
-                                <option value="todos" <?php if ($periodo == 'todos') {
-                                    echo 'selected';
-                                } ?>>Todos
+                                } ?>>SAÍDA
                                 </option>
                             </select>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="form-group col-lg-6">
                             <label class="tip-top font-weight-bold" title="Filtrar lançamentos por status">Status <i class="fa fa-info-circle fa-fw"></i></label>
-                            <select class="form-control" id="select_status" name="situacao">
+                            <select class="form-control" id="select_status" name="status">
                                 <option value="todos">Todos</option>
-                                <option value="previsto" <?php if ($situacao == 'previsto') {
+                                <option value="efetivado" <?php if ($status_lancamentos == 'efetivado') {
                                     echo 'selected';
-                                } ?>>Previsto
+                                } ?>>EFETIVADO
                                 </option>
-                                <option value="atrasado" <?php if ($situacao == 'atrasado') {
+                                <option value="pendente" <?php if ($status_lancamentos == 'pendente') {
                                     echo 'selected';
-                                } ?>>Atrasado
-                                </option>
-                                <option value="realizado" <?php if ($situacao == 'realizado') {
-                                    echo 'selected';
-                                } ?>>Efetivado
-                                </option>
-                                <option value="pendente" <?php if ($situacao == 'pendente') {
-                                    echo 'selected';
-                                } ?>>Pendente
+                                } ?>>PENDENTE
                                 </option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-6" style="margin-left: 0">
+                            <label class="tooltips font-weight-bold" title="Filtrar lançamentos por período específico">Período <i class="fa fa-info-circle fa-fw"></i></label>
+                            <select name="periodo" id="select_periodo" class="form-control">
+                                <option value="">== Selecione ==</option>
+                                <option value="todos" <?php if ($periodo_lancamentos == 'todos') {
+                                    echo 'selected';
+                                } ?>>Todos
+                                </option>
+                                <option value="3dias"<?php if ($periodo_lancamentos == '3dias') {
+                                    echo 'selected';
+                                } ?>>Últimos 3 dias
+                                </option>
+                                <option value="5dias" <?php if ($periodo_lancamentos == '5dias') {
+                                    echo 'selected';
+                                } ?>>Últimos 5 dias
+                                </option>
+                                <option value="7dias" <?php if ($periodo_lancamentos == '7dias') {
+                                    echo 'selected';
+                                } ?>>Últimos 7 dias
+                                </option>
+                                <option value="15dias" <?php if ($periodo_lancamentos == '15dias') {
+                                    echo 'selected';
+                                } ?>>Últimos 15 dias
+                                </option>
+                                <option value="30dias" <?php if ($periodo_lancamentos == '30dias') {
+                                    echo 'selected';
+                                } ?>>Últimos 30 dias
+                                </option>
+                                <option value="60dias" <?php if ($periodo_lancamentos == '60dias') {
+                                    echo 'selected';
+                                } ?>>Últimos 60 dias
+                                </option>
+                                <option value="90dias" <?php if ($periodo_lancamentos == '90dias') {
+                                    echo 'selected';
+                                } ?>>Últimos 90 dias
+                                </option>
+                                <option value="especifico"<?php if ($periodo_lancamentos == 'especifico') {
+                                    echo 'selected';
+                                } ?>>PERÍODO ESPECÍFICO
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6" id="div_intervalo_data" hidden>
+                            <label class="tooltips font-weight-bold" title="Filtrar lançamentos por intervalo de data">Período específico <i class="fa fa-info-circle fa-fw"></i></label>
+                            <div class="input-group">
+                                <span class="input-group-addon">de</span>
+                                <input type="text" class="form-control datepicker" id="dataInicial" name="dataInicial" value="<?= $inicio ?>">
+                                <span class="input-group-addon">até</span>
+                                <input type="text" class="form-control datepicker" id="dataFinal" name="dataFinal" value="<?= $fim ?>">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -552,10 +577,31 @@ $periodo = $this->input->get('periodo');
 <script type="text/javascript">
 
     $(document).on('change', '#select_periodo, #select_situacao', function () {
-        $("#form_filtro").submit();
+        // $("#form_filtro").submit();
     });
 
     jQuery(document).ready(function ($) {
+
+        $('#select_periodo').change(function () {
+            const value = $(this).val();
+            if (value === 'especifico') {
+                $('#div_intervalo_data').show();
+            } else {
+                $('#div_intervalo_data').hide();
+                $('#dataInicial').val('');
+                $('#dataFinal').val('');
+            }
+        });
+
+        $('#select_periodo option:selected').each(function (index, element) {
+            if ($(this).val() == 'especifico') {
+                $('#div_intervalo_data').show();
+            } else {
+                $('#div_intervalo_data').hide();
+                $('#dataInicial').val('');
+                $('#dataFinal').val('');
+            }
+        });
 
         $(".money").maskMoney();
 
@@ -672,8 +718,6 @@ $periodo = $this->input->get('periodo');
                 $("#pagoEditar").iCheck('uncheck');
                 $("#divPagamentoEditar").addClass('hidden');
             }
-
         });
-
     });
 </script>

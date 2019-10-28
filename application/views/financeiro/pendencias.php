@@ -1,4 +1,5 @@
-<?php $status_pendencia = $this->input->get('status');
+<?php
+$status_pendencia = $this->input->get('status');
 $cliente = $this->input->get('cliente');
 $inicio = $this->input->get('dataInicial');
 $fim = $this->input->get('dataFinal');
@@ -68,7 +69,6 @@ $periodo_pendencia = $this->input->get('periodo');
                 <thead>
                 <tr role="row">
                     <th style="text-align: left !important;">Vencimento</th>
-                    <!--                    <th style="text-align: left !important;">Tipo</th>-->
                     <th style="text-align: left !important;">Descrição</th>
                     <th style="text-align: left !important;">Cliente</th>
                     <th style="text-align: left !important;">Tipo</th>
@@ -238,7 +238,7 @@ $periodo_pendencia = $this->input->get('periodo');
                                 </option>
                             </select>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="form-group col-lg-6">
                             <label class="tooltips font-weight-bold" for="select_clientes" title="Filtrar pendências por cliente">Cliente <i class="fa fa-info-circle fa-fw"></i></label>
                             <select class="form-control" id="select_clientes" name="cliente">
                                 <option value="">Todos</option>
@@ -267,9 +267,9 @@ $periodo_pendencia = $this->input->get('periodo');
                             <label class="tooltips font-weight-bold" title="Filtrar pendências por intervalo de data">Período específico <i class="fa fa-info-circle fa-fw"></i></label>
                             <div class="input-group">
                                 <span class="input-group-addon">de</span>
-                                <input type="text" class="form-control datepicker" id="dataInicial" name="dataInicial" value="<?=$inicio?>">
+                                <input type="text" class="form-control datepicker" id="dataInicial" name="dataInicial" value="<?= $inicio ?>">
                                 <span class="input-group-addon">até</span>
-                                <input type="text" class="form-control datepicker" id="dataFinal" name="dataFinal" value="<?=$fim?>">
+                                <input type="text" class="form-control datepicker" id="dataFinal" name="dataFinal" value="<?= $fim ?>">
                             </div>
                         </div>
                     </div>
@@ -478,10 +478,9 @@ $periodo_pendencia = $this->input->get('periodo');
 <script type="text/javascript">
 
 
-
     jQuery(document).ready(function ($) {
 
-        $('#select_periodo').change( function () {
+        $('#select_periodo').change(function () {
             const value = $(this).val();
             if (value === 'especifico') {
                 $('#div_intervalo_data').show();
@@ -500,7 +499,7 @@ $periodo_pendencia = $this->input->get('periodo');
                 $('#dataInicial').val('');
                 $('#dataFinal').val('');
             }
-            });
+        });
 
         $(".money").maskMoney();
 

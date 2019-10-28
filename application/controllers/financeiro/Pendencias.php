@@ -69,9 +69,7 @@ class Pendencias extends CI_Controller
 
         if (isset($status) && $status != null) {
             $limit = null;
-            if ($status == 'todos') {
-
-            } elseif ($status == 'pendente') {
+            if ($status == 'pendente') {
                 if (!isset($where)) {
                     $where = 'quitado = 0';
                 } else {
@@ -113,7 +111,6 @@ class Pendencias extends CI_Controller
             } else {
                 $where .= ' AND data_vencimento BETWEEN "' . $inicio . '" AND "' . $fim . '"';
             }
-
         }
 
         $this->pagination->initialize($config);

@@ -9,33 +9,29 @@ class Financeiro_model extends CI_Model
         parent::__construct();
     }
 
-
-    function get($table, $fields, $where = '', $id_usuario, $limit, $rows, $perpage = 0, $start = 0, $one = false, $array = 'array')
+    function get($table, $fields, $where = '', $id_usuario, $limit = null, $rows = null, $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
-
         $this->db->select($fields);
         $this->db->from($table);
         $this->db->limit($perpage, $start);
 
         if ($where) {
             $this->db->where($where . ' AND status = 1 AND id_usuario = ' . $id_usuario);
-
         } else {
             $this->db->where('status = 1 AND id_usuario = ' . $id_usuario);
-
         }
 
         if ($limit) {
             if ($rows > $limit) {
-                $this->db->order_by('idLancamentos', 'asc');
+                $this->db->order_by('id_lancamento', 'asc');
                 $this->db->limit($limit, ($rows - $limit));
             }
         }
 
         $this->db->order_by('data_lancamento', 'asc');
         $query = $this->db->get();
-
         $result = !$one ? $query->result() : $query->row();
+
         return $result;
     }
 
@@ -80,12 +76,13 @@ class Financeiro_model extends CI_Model
         return false;
     }
 
-    function count($table, $where)
+    function count($table, $where, $id_usuario)
     {
-
         $this->db->from($table);
         if ($where) {
-            $this->db->where($where);
+            $this->db->where($where . ' AND status = 1 AND id_usuario = ' . $id_usuario);
+        } else {
+            $this->db->where('status = 1 AND id_usuario = ' . $id_usuario);
         }
         return $this->db->count_all_results();
     }

@@ -33,261 +33,104 @@ class Lancamentos extends CI_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar lançamentos.');
             redirect(base_url());
         }
-        $where = '';
+        $status = $this->input->get('status');
+        $tipo = $this->input->get('tipo');
         $periodo = $this->input->get('periodo');
-        $situacao = $this->input->get('situacao');
+        $inicio = $this->input->get('dataInicial');
+        $fim = $this->input->get('dataFinal');
 
-        // busca todos os lançamentos
-        if ($periodo == 'todos') {
+        switch ($periodo) {
+            case 'todos':
+                $limit = null;
+                break;
+            case '3dias':
+                $semana = $this->getLastThreeDays();
+                $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
+                break;
+            case '5dias':
+                $semana = $this->getLastFiveDays();
+                $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
+                break;
+            case '7dias':
+                $semana = $this->getLastSevenDays();
+                $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
+                break;
+            case '15dias':
+                $semana = $this->getLastFifteenDays();
+                $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
+                break;
+            case '30dias':
+                $semana = $this->getLastTirthyDays();
+                $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
+                break;
+            case '60dias':
+                $semana = $this->getLastSixtyDays();
+                $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
+                break;
+            case '90dias':
+                $semana = $this->getLastNinetyDays();
+                $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
+                break;
+            default:
+                $limit = 10;
+                break;
+        }
 
-            if ($situacao == 'previsto') {
-                $where = 'data_lancamento > "' . date('Y-m-d') . '" AND baixado = 0';
-            } else {
-                if ($situacao == 'atrasado') {
-                    $where = 'data_lancamento < "' . date('Y-m-d') . '" AND baixado = 0';
+        if (isset($status) && $status != null) {
+            if ($status == 'pendente') {
+                if (!isset($where)) {
+                    $where = 'baixado = 0';
                 } else {
-                    if ($situacao == 'realizado') {
-                        $where = 'baixado = 1';
-                    }
-
-                    if ($situacao == 'pendente') {
-                        $where = 'baixado = 0';
-                    }
+                    $where .= ' AND baixado = 0';
+                }
+            } elseif ($status == 'efetivado') {
+                if (!isset($where)) {
+                    $where = 'baixado = 1';
+                } else {
+                    $where .= ' AND baixado = 1';
                 }
             }
-        } else {
+        }
 
-            // busca lançamentos do dia
-            if ($periodo == '7dias') {
-                $semana = $this->getLastSevenDays();
-
-                $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
-
-            } else if ($periodo == null) {
-                $limit = 5;
-            } else {
-
-                // busca lançamentos da semana
-                if ($periodo == '5dias') {
-                    $semana = $this->getLastFiveDays();
-
-                    if (!isset($situacao) || $situacao == 'todos') {
-
-                        $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
-
-                    } else {
-                        if ($situacao == 'previsto') {
-                            $where = 'data_lancamento BETWEEN "' . date('Y-m-d') . '" AND "' . $semana[1] . '" AND baixado = "0"';
-                        } else {
-                            if ($situacao == 'atrasado') {
-                                $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . date('Y-m-d') . '" AND baixado = "0"';
-                            } else {
-                                if ($situacao == 'realizado') {
-                                    $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '" AND baixado = "1"';
-                                } else {
-                                    $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '" AND baixado = "0"';
-                                }
-                            }
-                        }
-                    }
-
+        if (isset($tipo) && $tipo != null) {
+            if ($tipo == 'entrada') {
+                if (!isset($where)) {
+                    $where = 'tipo = 1';
                 } else {
-
-                    // busca lançamentos da semana
-                    if ($periodo == '3dias') {
-                        $semana = $this->getLastThreeDays();
-
-                        if (!isset($situacao) || $situacao == 'todos') {
-
-                            $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
-
-                        } else {
-                            if ($situacao == 'previsto') {
-                                $where = 'data_lancamento BETWEEN "' . date('Y-m-d') . '" AND "' . $semana[1] . '" AND baixado = "0"';
-                            } else {
-                                if ($situacao == 'atrasado') {
-                                    $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . date('Y-m-d') . '" AND baixado = "0"';
-                                } else {
-                                    if ($situacao == 'realizado') {
-                                        $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '" AND baixado = "1"';
-                                    } else {
-                                        $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '" AND baixado = "0"';
-                                    }
-                                }
-                            }
-                        }
-
-                    } else {
-                        // busca lançamentos da semana
-                        if ($periodo == '15dias') {
-                            $semana = $this->getLastFifteenDays();
-
-                            if (!isset($situacao) || $situacao == 'todos') {
-
-                                $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
-
-                            } else {
-                                if ($situacao == 'previsto') {
-                                    $where = 'data_lancamento BETWEEN "' . date('Y-m-d') . '" AND "' . $semana[1] . '" AND baixado = "0"';
-                                } else {
-                                    if ($situacao == 'atrasado') {
-                                        $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . date('Y-m-d') . '" AND baixado = "0"';
-                                    } else {
-                                        if ($situacao == 'realizado') {
-                                            $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '" AND baixado = "1"';
-                                        } else {
-                                            $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '" AND baixado = "0"';
-                                        }
-                                    }
-                                }
-                            }
-
-                        } else {
-
-                            // busca lançamentos da semana
-                            if ($periodo == '30dias') {
-                                $semana = $this->getLastTirthyDays();
-
-                                if (!isset($situacao) || $situacao == 'todos') {
-
-                                    $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
-
-                                } else {
-                                    if ($situacao == 'previsto') {
-                                        $where = 'data_lancamento BETWEEN "' . date('Y-m-d') . '" AND "' . $semana[1] . '" AND baixado = "0"';
-                                    } else {
-                                        if ($situacao == 'atrasado') {
-                                            $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . date('Y-m-d') . '" AND baixado = "0"';
-                                        } else {
-                                            if ($situacao == 'realizado') {
-                                                $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '" AND baixado = "1"';
-                                            } else {
-                                                $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '" AND baixado = "0"';
-                                            }
-                                        }
-                                    }
-                                }
-
-                            } else {
-
-                                // busca lançamentos da semana
-                                if ($periodo == '60dias') {
-                                    $semana = $this->getLastSixtyDays();
-
-                                    if (!isset($situacao) || $situacao == 'todos') {
-
-                                        $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
-
-                                    } else {
-                                        if ($situacao == 'previsto') {
-                                            $where = 'data_lancamento BETWEEN "' . date('Y-m-d') . '" AND "' . $semana[1] . '" AND baixado = "0"';
-                                        } else {
-                                            if ($situacao == 'atrasado') {
-                                                $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . date('Y-m-d') . '" AND baixado = "0"';
-                                            } else {
-                                                if ($situacao == 'realizado') {
-                                                    $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '" AND baixado = "1"';
-                                                } else {
-                                                    $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '" AND baixado = "0"';
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                } else {
-
-                                    // busca lançamentos da semana
-                                    if ($periodo == '90dias') {
-                                        $semana = $this->getLastNinetyDays();
-
-                                        if (!isset($situacao) || $situacao == 'todos') {
-
-                                            $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
-
-                                        } else {
-                                            if ($situacao == 'previsto') {
-                                                $where = 'data_lancamento BETWEEN "' . date('Y-m-d') . '" AND "' . $semana[1] . '" AND baixado = "0"';
-                                            } else {
-                                                if ($situacao == 'atrasado') {
-                                                    $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . date('Y-m-d') . '" AND baixado = "0"';
-                                                } else {
-                                                    if ($situacao == 'realizado') {
-                                                        $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '" AND baixado = "1"';
-                                                    } else {
-                                                        $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '" AND baixado = "0"';
-                                                    }
-                                                }
-                                            }
-                                        }
-
-                                    } else {
-
-                                        // busca lançamento do mês
-
-
-                                        if ($periodo == 'mes') {
-
-                                            $mes = $this->getThisMonth();
-
-                                            if (!isset($situacao) || $situacao == 'todos') {
-
-                                                $where = 'data_lancamento BETWEEN "' . $mes[0] . '" AND "' . $mes[1] . '"';
-
-                                            } else {
-                                                if ($situacao == 'previsto') {
-                                                    $where = 'data_lancamento BETWEEN "' . date('Y-m-d') . '" AND "' . $mes[1] . '" AND baixado = "0"';
-                                                } else {
-                                                    if ($situacao == 'atrasado') {
-                                                        $where = 'data_lancamento BETWEEN "' . $mes[0] . '" AND "' . date('Y-m-d') . '" AND baixado = "0"';
-                                                    } else {
-                                                        if ($situacao == 'realizado') {
-                                                            $where = 'data_lancamento BETWEEN "' . $mes[0] . '" AND "' . $mes[1] . '" AND baixado = "1"';
-                                                        } else {
-                                                            $where = 'data_lancamento BETWEEN "' . $mes[0] . '" AND "' . $mes[1] . '" AND baixado = "0"';
-                                                        }
-
-                                                    }
-                                                }
-                                            }
-                                        } // busca lançamentos do ano
-                                        else {
-                                            $ano = $this->getThisYear();
-
-                                            if (!isset($situacao) || $situacao == 'todos') {
-
-                                                $where = 'data_lancamento BETWEEN "' . $ano[0] . '" AND "' . $ano[1] . '"';
-
-                                            } else {
-                                                if ($situacao == 'previsto') {
-                                                    $where = 'data_lancamento BETWEEN "' . date('Y-m-d') . '" AND "' . $ano[1] . '" AND baixado = "0"';
-                                                } else {
-                                                    if ($situacao == 'atrasado') {
-                                                        $where = 'data_lancamento BETWEEN "' . $ano[0] . '" AND "' . date('Y-m-d') . '" AND baixado = "0"';
-                                                    } else {
-                                                        if ($situacao == 'realizado') {
-                                                            $where = 'data_lancamento BETWEEN "' . $ano[0] . '" AND "' . $ano[1] . '" AND baixado = "1"';
-                                                        } else {
-                                                            $where = 'data_lancamento BETWEEN "' . $ano[0] . '" AND "' . $ano[1] . '" AND baixado = "0"';
-                                                        }
-
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    $where .= ' AND tipo = 1';
                 }
+            } elseif ($tipo == 'saida') {
+                if (!isset($where)) {
+                    $where = 'tipo = 2';
+                } else {
+                    $where .= ' AND tipo = 2';
+                }
+            }
+        }
+
+        if (isset($inicio) && isset($fim) && $inicio != null && $fim != null) {
+            $inicio = explode('/', $inicio);
+            $inicio = $inicio[2] . '-' . $inicio[1] . '-' . $inicio[0];
+
+            $fim = explode('/', $fim);
+            $fim = $fim[2] . '-' . $fim[1] . '-' . $fim[0];
+
+            $limit = null;
+            if (!isset($where)) {
+                $where = 'data_lancamento BETWEEN "' . $inicio . '" AND "' . $fim . '"';
+            } else {
+                $where .= ' AND data_lancamento BETWEEN "' . $inicio . '" AND "' . $fim . '"';
             }
         }
 
         $this->load->library('pagination');
 
-        $config['base_url'] = site_url() . 'financeiro/lancamentos/?periodo=' . $periodo . '&situacao=' . $situacao;
-        $config['total_rows'] = $this->financeiro_model->count('lancamentos', 'status = 1 AND id_usuario = ' . id_usuario());
-        $config['per_page'] = 100;
+        $config['base_url'] = site_url() . 'financeiro/lancamentos/';
+        $config['total_rows'] = $this->financeiro_model->count(
+            'lancamentos',
+            $where,
+            id_usuario());
+        $config['per_page'] = null;
         $config['page_query_string'] = true;
         $config['next_link'] = 'Próxima';
         $config['prev_link'] = 'Anterior';
@@ -317,7 +160,7 @@ class Lancamentos extends CI_Controller
         $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
         $this->data['results'] = $this->financeiro_model->get(
             'lancamentos',
-            'idLancamentos,descricao,valor,data_lancamento,data_pagamento,baixado,cliente_fornecedor,tipo,forma_pgto',
+            '*',
             $where,
             id_usuario(),
             $limit,
@@ -482,7 +325,7 @@ class Lancamentos extends CI_Controller
                 'tipo' => $tipo
             );
 
-            if ($this->financeiro_model->edit('lancamentos', $data, 'idLancamentos', $this->input->post('id')) == true) {
+            if ($this->financeiro_model->edit('lancamentos', $data, 'id_lancamento', $this->input->post('id')) == true) {
                 $this->session->set_flashdata('sucesso', 'Lançamento editado com sucesso!');
                 redirect($urlAtual);
             } else {
@@ -521,7 +364,7 @@ class Lancamentos extends CI_Controller
                 'status' => 0
             );
 
-            if ($this->financeiro_model->delete('lancamentos', $data, 'idLancamentos', $id) == true) {
+            if ($this->financeiro_model->delete('lancamentos', $data, 'id_lancamento', $id) == true) {
                 $this->session->set_flashdata('sucesso', 'Lançamento excluído com sucesso!');
                 redirect($urlAtual);
 
