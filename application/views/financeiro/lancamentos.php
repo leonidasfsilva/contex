@@ -17,12 +17,12 @@ $fim = $this->input->get('dataFinal');
                 Filtrar
             </button>
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
-                <a href="#modalReceita" id="entrada" data-toggle="modal" role="button" class="btn btn-success btn-sm tip-bottom"
+                <a href="#modalEntrada" id="entrada" data-toggle="modal" role="button" class="btn btn-success btn-sm tip-bottom"
                    title="Registrar nova entrada">
                     <i class="fas fa-plus-square fa-fw"></i>
                     Nova Entrada
                 </a>
-                <a href="#modalDespesa" id="saida" data-toggle="modal" role="button" class="btn btn-danger btn-sm tip-bottom" title="Registrar nova saída">
+                <a href="#modalSaida" id="saida" data-toggle="modal" role="button" class="btn btn-danger btn-sm tip-bottom" title="Registrar nova saída">
                     <i class="fas fa-minus-square fa-fw"></i>
                     Nova Saída
                 </a>
@@ -162,13 +162,13 @@ $fim = $this->input->get('dataFinal');
                     echo '<td>';
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
                         echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Detalhes" idLancamento="' .
-                            $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $valor . '" vencimento="' .
+                            $r->id_lancamento . '" descricao="' . $r->descricao . '" valor="' . $valor . '" vencimento="' .
                             date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
                             $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '">
                                 <i class="fas fa-search-plus fa-lg fa-fw"></i></a>';
                     }
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
-                        echo '<a href="#modalExcluir" data-toggle="modal" idLancamento="' . $r->idLancamentos . '" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw"></i></a>';
+                        echo '<a href="#modalExcluir" data-toggle="modal" idLancamento="' . $r->id_lancamento . '" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw"></i></a>';
                     }
 
                     echo '</td>';
@@ -333,14 +333,14 @@ $fim = $this->input->get('dataFinal');
 </div>
 
 <!-- Modal NOVA ENTRADA -->
-<div class="modal fade" id="modalReceita" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalEntrada" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-success">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Registrar nova entrada</h4>
             </div>
-            <form id="formReceita" action="<?php echo base_url() ?>financeiro/lancamentos/receita" method="post" autocomplete="off">
+            <form id="formReceita" action="<?php echo base_url() ?>financeiro/lancamentos/entrada" method="post" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
@@ -404,14 +404,14 @@ $fim = $this->input->get('dataFinal');
 </div>
 
 <!-- Modal NOVA SAIDA -->
-<div class="modal fade" id="modalDespesa" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalSaida" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-danger">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Registrar nova saída</h4>
             </div>
-            <form id="formDespesa" action="<?php echo base_url() ?>financeiro/lancamentos/despesa" method="post" autocomplete="off">
+            <form id="formDespesa" action="<?php echo base_url() ?>financeiro/lancamentos/saida" method="post" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
