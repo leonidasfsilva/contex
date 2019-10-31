@@ -326,7 +326,7 @@ class Lancamentos extends CI_Controller
             );
 
             if ($this->financeiro_model->edit('lancamentos', $data, 'id_lancamento', $this->input->post('id')) == true) {
-                $this->session->set_flashdata('sucesso', 'Lançamento editado com sucesso!');
+                $this->session->set_flashdata('sucesso', 'Lançamento alterado com sucesso!');
                 redirect($urlAtual);
             } else {
                 $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar editar este lançamento.');
