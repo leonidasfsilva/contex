@@ -137,7 +137,7 @@ $periodo_pendencia = $this->input->get('periodo');
                                 <i class="' . $icon . ' fa-lg fa-fw"></i></button>';
 
                         echo '<button ' . $disabled . ' href="#modalEditar" style="margin-right: 1%" class="btn btn-primary btn-sm editar" data-toggle="modal" title="Editar" id_pendencia="' .
-                            $r->id_pendencia . '" descricao="' . $r->descricao . '" valor="' . $valor . '" data_vencimento="' . date('d/m/Y', strtotime($r->data_pendencia)) .
+                            $r->id_pendencia . '" descricao="' . $r->descricao . '" valor="' . $valor . '" data_vencimento="' . date('d/m/Y', strtotime($r->data_vencimento)) .
                             '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" quitado="' .
                             $r->quitado . '" id_cliente="' . $r->id_cliente . '" tipo="' . $r->tipo . '">
                                 <i class="fas fa-search-plus fa-lg fa-fw"></i></button>';
