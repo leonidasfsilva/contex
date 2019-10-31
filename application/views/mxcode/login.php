@@ -105,7 +105,7 @@
                     <div class="form-group m-b-0">
                         <div class="col-sm-12 text-center">
                             <p>Não tem uma conta? <a href="<?php echo base_url() ?>cadastro" class="text-primary"><b>Cadastre-se</b></a>.</p>
-                            <p><a href="<?php echo base_url() ?>conecte" class="text-primary"><b>Acesso para clientes</b></a>.</p>
+<!--                            <p><a href="--><?php //echo base_url() ?><!--conecte" class="text-primary"><b>Acesso para clientes</b></a>.</p>-->
                         </div>
                     </div>
                 </div>
