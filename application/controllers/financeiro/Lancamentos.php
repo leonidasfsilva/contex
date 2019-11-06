@@ -173,7 +173,7 @@ class Lancamentos extends CI_Controller
 
     }
 
-    function entrada()
+    public function entrada()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
             $this->session->set_flashdata('erro', 'Você não tem permissão para adicionar lançamentos.');
@@ -226,7 +226,7 @@ class Lancamentos extends CI_Controller
         redirect($urlAtual);
     }
 
-    function saida()
+    public function saida()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
             $this->session->set_flashdata('erro', 'Você não tem permissão para adicionar lançamentos.');
