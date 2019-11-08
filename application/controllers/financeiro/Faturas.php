@@ -477,7 +477,7 @@ class Faturas extends CI_Controller
                         }
 
                         if ($this->fatura_model->add('lancamentos_faturas_assoc', $data1) == true) {
-                            $this->session->set_flashdata('sucesso', 'Lançamento editado com sucesso!');
+                            $this->session->set_flashdata('sucesso', 'Lançamento alterado com sucesso!');
                         } else {
                             $this->session->set_flashdata('erro', 'Erro ao tentar adicionar lançamentos_assoc!');
                             redirect($urlAtual);
@@ -500,15 +500,15 @@ class Faturas extends CI_Controller
                     );
 
                     if ($this->fatura_model->add('lancamentos_faturas_assoc', $data2) == true) {
-                        $this->session->set_flashdata('sucesso', 'Lançamento editado com sucesso!');
+                        $this->session->set_flashdata('sucesso', 'Lançamento alterado com sucesso!');
                     } else {
-                        $this->session->set_flashdata('erro', 'Erro ao tentar editar lançamentos_assoc!');
+                        $this->session->set_flashdata('erro', 'Erro ao tentar alterar lançamentos_assoc!');
                         redirect($urlAtual);
                     }
                 }
                 redirect($urlAtual);
             } else {
-                $this->session->set_flashdata('erro', 'Erro ao tentar editar lançamento de fatura.');
+                $this->session->set_flashdata('erro', 'Erro ao tentar alterar lançamento de fatura.');
                 redirect($urlAtual);
             }
             redirect($urlAtual);
