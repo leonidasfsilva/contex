@@ -23,7 +23,7 @@ class Financeiro_model extends CI_Model
 
         if ($limit) {
             if ($rows > $limit) {
-                $this->db->order_by('id_lancamento', 'asc');
+                $this->db->order_by('data_lancamento', 'asc');
                 $this->db->limit($limit, ($rows - $limit));
             }
         }
