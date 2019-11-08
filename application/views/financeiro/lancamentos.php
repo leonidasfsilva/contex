@@ -201,7 +201,7 @@ $fim = $this->input->get('dataFinal');
             <tr>
                 <td colspan="2" style="text-align: left;">(+) SALDO PROVISÓRIO EM CONTA</td>
                 <td colspan="1" style="text-align: right;">
-                    <?php echo number_format($total_entradas->total, 2, ',', '.') ?></td>
+                    <?php echo number_format($total_provisorio->total, 2, ',', '.') ?></td>
             </tr>
             <?php if ($saidas_pendentes->total) { ?>
                 <tr>
