@@ -2,8 +2,8 @@
     <div class="panel-heading">
         <h2>
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#tab-11-1" data-toggle="tab">Dados do Cliente</a></li>
-                <li><a href="#tab-11-3" data-toggle="tab">Pendências</a></li>
+                <li class="active"><a href="#tab_dados_cliente" data-toggle="tab">Dados do Cliente</a></li>
+                <li><a href="#tab_pendencias" data-toggle="tab">Pendências</a></li>
             </ul>
         </h2>
         <div class="panel-ctrls">
@@ -16,7 +16,7 @@
     <div class="panel-body">
         <div class="tab-content">
             <!--            TAB DADOS DO CLIENTE-->
-            <div class="tab-pane active" id="tab-11-1">
+            <div class="tab-pane active" id="tab_dados_cliente">
                 <div class="accordion-group" id="accordionB">
                     <div class="panel accordion-item">
                         <a class="accordion-title" data-toggle="collapse" data-parent="#accordionB" href="#collapseaOne">
@@ -133,7 +133,7 @@
                 </div>
             </div>
             <!--            TAB PENDENCIAS DO CLIENTE-->
-            <div class="tab-pane" id="tab-11-3">
+            <div class="tab-pane" id="tab_pendencias">
                 <?php if (!$pendencias) { ?>
                     <div class="panel panel-midnightblue">
                         <div class="panel-heading"></div>
@@ -202,7 +202,7 @@
                                     <tbody>
                                     <?php
                                     foreach ($pendencias as $r) {
-                                        $dataInicial = date(('d/m/Y'), strtotime($r->data_pendencia));
+                                        $dataInicial = date(('d/m/Y'), strtotime($r->data_vencimento));
                                         if ($r->data_pagamento != null) {
                                             $dataFinal = date(('d/m/Y'), strtotime($r->data_pagamento));
                                         } else {
