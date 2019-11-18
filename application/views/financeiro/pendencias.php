@@ -119,7 +119,7 @@ $periodo_pendencia = $this->input->get('periodo');
                     echo '<td>' . strtoupper($r->descricao) . '</td>';
                     foreach ($clientes as $d) {
                         if ($r->id_cliente == $d->id_clientes) {
-                            echo '<td>' . strtoupper($d->nome) . '</td>';
+                            echo '<td><a href="'. base_url() .'clientes/visualizar/'.$d->id_clientes.'">' . strtoupper($d->nome) . '</a></td>';
                         }
                     }
                     echo '<td><span class="label label-' . $colorTipo . '">' . strtoupper($tipo) . '</span></td>';
