@@ -419,16 +419,13 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </div>
                             <label for="estorno" class="font-weight-bold">Estorno</label>
                         </div>
-
                         <div class="col-xs-8">
                             <button id="btnCancelLancamento" class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                                 <i class="fa fa-times fa-fw"></i> Cancelar
                             </button>
-                            <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Registrar</button>
-
+                            <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
                         </div>
                     </div>
-
                 </div>
             </form>
         </div>
@@ -503,11 +500,9 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             <button id="btnCancelLancamento" class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                                 <i class="fa fa-times fa-fw"></i> Cancelar
                             </button>
-                            <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Registrar</button>
-
+                            <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
                         </div>
                     </div>
-
                 </div>
             </form>
         </div>
@@ -602,7 +597,6 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             }
         }
 
-
         $('#qnt_parcelas').on('change', function () {
             var parcelas = $(this).val();
             var valor = $('#valor').val();
@@ -656,7 +650,6 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             $('#formNovoLancamento').trigger("reset");
         });
 
-
         var parcelada = $('#parcelada').iCheck('update')[0].checked;
         var estorno = $('#estorno').iCheck('update')[0].checked;
 
@@ -679,6 +672,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         $('#parcelada, #parceladaEditar').on('ifChanged', function (event) {
             mudaICheckParcelamento(event);
         });
+
         $('#estorno, #estornoEditar').on('ifChanged', function (event) {
             mudaICheckEstorno(event);
         });
