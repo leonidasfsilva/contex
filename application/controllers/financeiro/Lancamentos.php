@@ -216,14 +216,14 @@ class Lancamentos extends CI_Controller
 
         if ($this->financeiro_model->add('lancamentos', $data) == true) {
             $this->session->set_flashdata('sucesso', 'Entrada registrada com sucesso!');
-            redirect($urlAtual);
+            redirect($this->global_url);
         } else {
             $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar registrar entrada.');
-            redirect($urlAtual);
+            redirect($this->global_url);
         }
 
         $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar registrar entrada.');
-        redirect($urlAtual);
+        redirect($this->global_url);
     }
 
     public function saida()
@@ -270,14 +270,14 @@ class Lancamentos extends CI_Controller
 
         if ($this->financeiro_model->add('lancamentos', $data) == true) {
             $this->session->set_flashdata('sucesso', 'Saída registrada com sucesso!');
-            redirect($urlAtual);
+            redirect($this->global_url);
         } else {
             $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar registrar saída.');
-            redirect($urlAtual);
+            redirect($this->global_url);
         }
 
         $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar registrar saída.');
-        redirect($urlAtual);
+        redirect($this->global_url);
     }
 
     public function editar()
@@ -327,14 +327,14 @@ class Lancamentos extends CI_Controller
 
             if ($this->financeiro_model->edit('lancamentos', $data, 'id_lancamento', $this->input->post('id')) == true) {
                 $this->session->set_flashdata('sucesso', 'Lançamento alterado com sucesso!');
-                redirect($urlAtual);
+                redirect($this->global_url);
             } else {
                 $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar editar este lançamento.');
-                redirect($urlAtual);
+                redirect($this->global_url);
             }
 
             $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar editar este lançamento.');
-            redirect($urlAtual);
+            redirect($this->global_url);
 
         } else {
             $this->session->set_flashdata('erro', 'Método não permitido.');
@@ -366,11 +366,11 @@ class Lancamentos extends CI_Controller
 
             if ($this->financeiro_model->delete('lancamentos', $data, 'id_lancamento', $id) == true) {
                 $this->session->set_flashdata('sucesso', 'Lançamento excluído com sucesso!');
-                redirect($urlAtual);
+                redirect($this->global_url);
 
             } else {
                 $this->session->set_flashdata('erro', 'Erro ao tentar excluir lançamento.');
-                redirect($urlAtual);
+                redirect($this->global_url);
             }
 
         }
