@@ -17,7 +17,7 @@ $fim = $this->input->get('dataFinal');
                     <div class="btn-group">
                         <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
                             <i class="fas fa-search fa-fw"></i>
-                            Pesquisar <span class="caret"></span>
+                            Pesquisar
                         </button>
                         <ul class="dropdown-menu">
                             <form action="<?php echo base_url() ?>financeiro/lancamentos/pesquisa" style="margin: 0px 15px 0 15px" method="post" id="pesquisa" autocomplete="off">
