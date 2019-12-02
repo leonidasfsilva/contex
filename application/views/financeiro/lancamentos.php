@@ -12,21 +12,54 @@ $fim = $this->input->get('dataFinal');
             Lançamentos
         </h3>
         <div class="panel-ctrls">
-            <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar lançamentos">
-                <i class="fas fa-filter fa-fw"></i>
-                Filtrar
-            </button>
-            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
-                <a href="#modalEntrada" id="entrada" data-toggle="modal" role="button" class="btn btn-success btn-sm tip-bottom"
-                   title="Registrar nova entrada">
-                    <i class="fas fa-plus-square fa-fw"></i>
-                    Nova Entrada
-                </a>
-                <a href="#modalSaida" id="saida" data-toggle="modal" role="button" class="btn btn-danger btn-sm tip-bottom" title="Registrar nova saída">
-                    <i class="fas fa-minus-square fa-fw"></i>
-                    Nova Saída
-                </a>
-            <?php } ?>
+            <ul class="demo-btns">
+                <li>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                            <i class="fas fa-search fa-fw"></i>
+                            Pesquisar <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <form action="<?php echo base_url() ?>financeiro/lancamentos/pesquisa" style="margin: 0px 15px 0 15px" method="post" id="pesquisa" autocomplete="off">
+                                <input type="hidden" id="urlPesquisa" name="urlAtual">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="termo" placeholder="Pesquisar" style="margin-top: 6px;" required>
+                                    <span class="input-group-btn">
+						                    <button type="submit" class="btn btn-primary"><i class="fas fa-search fa-fw"></i></button>
+					                    </span>
+                                </div>
+                            </form>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <div class="btn-group">
+                        <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar lançamentos">
+                            <i class="fas fa-filter fa-fw"></i>
+                            Filtrar
+                        </button>
+                    </div>
+                </li>
+                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
+                    <li>
+                        <div class="btn-group">
+                            <a href="#modalEntrada" id="entrada" data-toggle="modal" role="button" class="btn btn-success btn-sm tip-bottom"
+                               title="Registrar nova entrada">
+                                <i class="fas fa-plus-square fa-fw"></i>
+                                Entrada
+                            </a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn-group">
+                            <a href="#modalSaida" id="saida" data-toggle="modal" role="button" class="btn btn-danger btn-sm tip-bottom" title="Registrar nova saída">
+                                <i class="fas fa-minus-square fa-fw"></i>
+                                Saída
+                            </a>
+                        </div>
+                    </li>
+                <?php } ?>
+            </ul>
         </div>
     </div>
     <div class="panel-heading">
@@ -576,6 +609,10 @@ $fim = $this->input->get('dataFinal');
 
 <script type="text/javascript">
 
+    $('.dropdown-menu>form').click(function(e){
+        e.stopPropagation();
+    });
+
     $(document).on('change', '#select_periodo, #select_situacao', function () {
         // $("#form_filtro").submit();
     });
@@ -698,6 +735,10 @@ $fim = $this->input->get('dataFinal');
 
         $(document).on('click', '#saida', function () {
             $("#urlSaida").val($(location).attr('href'));
+        });
+
+        $('#pesquisa').submit(function (event) {
+            $("#urlPesquisa").val($(location).attr('href'));
         });
 
         $(document).on('click', '.editar', function (event) {

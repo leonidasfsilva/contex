@@ -376,6 +376,24 @@ class Lancamentos extends CI_Controller
         }
     }
 
+    public function pesquisa()
+    {
+        if ((!session_id()) || (!$this->session->userdata('logado'))) {
+            redirect('mxcode/login');
+        }
+
+        $urlAtual = $this->input->post('urlAtual');
+        $termo = $this->input->post('termo');
+        $this->load->library('pagination');
+        $this->data['total'] = $this->financeiro_model->getTotal(id_usuario());
+        $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
+        $this->data['results'] = $this->financeiro_model->pesquisa($termo, id_usuario());
+        $this->data['view'] = 'financeiro/lancamentos';
+        $this->load->view('tema/topo', $this->data);
+
+    }
+
+
 
     //MODULO DE TESTES
     public function getTeste($id = null)

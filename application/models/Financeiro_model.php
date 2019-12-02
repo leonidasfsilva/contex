@@ -137,4 +137,18 @@ class Financeiro_model extends CI_Model
         $result = !$one ? $query->result() : $query->row();
         return $result;
     }
+
+    function pesquisa($termo, $id)
+    {
+
+        //buscando lancamentos
+        $this->db->like('descricao', $termo);
+        $this->db->where('id_usuario', $id);
+        $this->db->where('status', 1);
+//        $this->db->limit(5);
+        $data = $this->db->get('lancamentos')->result();
+
+        return $data;
+    }
+
 }
