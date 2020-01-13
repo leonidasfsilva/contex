@@ -16,8 +16,8 @@
 
 <?php //require_once APPPATH . 'views/includes/css.php'; ?>
 <?php //require_once APPPATH . 'views/includes/js.php'; ?>
-<?php //$this->load->view('includes/css'); ?>
-<?php //$this->load->view('includes/js'); ?>
+<?php $this->load->view('includes/css'); ?>
+<?php $this->load->view('includes/js'); ?>
 
 <body style="background-color: transparent">
 <div class="">

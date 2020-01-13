@@ -80,7 +80,7 @@ class Relatorios_model extends CI_Model
 
     public function clientesRapid()
     {
-        $this->db->order_by('nomeCliente', 'asc');
+        $this->db->order_by('nome', 'asc');
         return $this->db->get('clientes')->result();
     }
 
@@ -178,13 +178,12 @@ class Relatorios_model extends CI_Model
 
         $dataInicial = date('Y-m-01');
         $dataFinal = date("Y-m-t");
-        $query = "SELECT * FROM lancamentos WHERE data_vencimento BETWEEN ? and ? ORDER BY tipo";
+        $query = "SELECT * FROM lancamentos WHERE data_lancamento BETWEEN ? and ? ORDER BY tipo";
         return $this->db->query($query, array($dataInicial, $dataFinal))->result();
     }
 
     public function financeiroCustom($dataInicial, $dataFinal, $tipo = null, $situacao = null)
     {
-
         $whereTipo = "";
         $whereSituacao = "";
 

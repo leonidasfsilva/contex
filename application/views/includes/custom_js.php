@@ -10,7 +10,12 @@
         }, 500);
     });
 
-    $(document).on('click', 'a:not([href="javascript:"],[href="#"], [data-toggle="modal"], [data-toggle="collapse"], [data-toggle="tab"])', function () {
+    $(document).on('click', 'a:not([href="javascript:"],' +
+        '[class="ui-corner-all"], ' +
+        '[href="#"], ' +
+        '[data-toggle="modal"], ' +
+        '[data-toggle="collapse"], ' +
+        '[data-toggle="tab"])', function () {
         $(".subconteudo-principal").hide();
         $(".preloader").show();
     });

@@ -214,8 +214,7 @@ $fim = $this->input->get('dataFinal');
             </div>
         </div>
     </div>
-    <?php
-} ?>
+<?php } ?>
 
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
@@ -609,7 +608,7 @@ $fim = $this->input->get('dataFinal');
 
 <script type="text/javascript">
 
-    $('.dropdown-menu>form').click(function(e){
+    $('.dropdown-menu>form').click(function (e) {
         e.stopPropagation();
     });
 

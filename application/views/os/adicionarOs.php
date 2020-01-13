@@ -30,8 +30,7 @@
                                         <div class="span6">
                                             <label for="cliente">Cliente<span class="required">*</span></label>
                                             <input id="cliente" class="span12" type="text" name="cliente" value=""/>
-                                            <input id="clientes_id" class="span12" type="hidden" name="clientes_id"
-                                                   value=""/>
+                                            <input id="clientes_id" class="span12" type="hidden" name="clientes_id" value=""/>
                                         </div>
                                         <div class="span6">
                                             <label for="tecnico">Técnico / Responsável<span
@@ -124,8 +123,6 @@
             select: function (event, ui) {
 
                 $("#clientes_id").val(ui.item.id);
-
-
             }
         });
 

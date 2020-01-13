@@ -3,6 +3,8 @@
 <script src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/jqueryui-1.9.2.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/jspdf.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/canvas2image.js"></script>
 
 <script src="<?php echo base_url(); ?>assets/plugins/jquery-notific8/jquery.notific8.js"></script>         <!-- Load Notific8 -->
 <script src="<?php echo base_url(); ?>assets/plugins/jquery-cropper/js/cropper.js"></script>
