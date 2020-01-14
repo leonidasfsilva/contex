@@ -145,7 +145,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 <tr role="row">
                     <th class="th_soma hidden" style="width: 10px !important;">Soma</th>
                     <th style="width: 100px !important;">Data Compra</th>
-                    <th style="width: 500px !important;">Descrição</th>
+                    <th style="width: 300px !important;">Descrição</th>
+                    <th style="width: 200px !important;"></th>
                     <th>Parcela</th>
                     <th>Valor Parcela (R$)</th>
                     <th style="width: 100px !important;">Ações</th>
@@ -157,17 +158,14 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
                 foreach ($results as $r) {
                     foreach ($subresults as $s) {
-
                         if ($s->id_lancamento == $r->id_lancamento) {
                             if (is_array($lancamentoEditavel)) {
-
                                 if (in_array($r->id_lancamento, $lancamentoEditavel, true)) {
                                     $disabled_lancamento_2 = '';
                                 } else {
                                     $disabled_lancamento_2 = 'disabled';
                                 }
                             }
-
 
                             if ($r->n_parcela < 10) {
                                 $n_parcela = str_pad($r->n_parcela, 2, '0', STR_PAD_LEFT);
@@ -194,6 +192,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
                             echo '<td>' . $data_compra . '</td>';
                             echo '<td>' . strtoupper($s->descricao) . '</td>';
+                            echo '<td>' . strtoupper($s->nome_cliente) . '</td>';
                             echo '<td>' . $n_parcela . '/' . $total_parcelas . '</td>';
                             echo '<td class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor_parcela, 2, ',', '.') . '</span></td>';
 
@@ -207,8 +206,9 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
                                 echo '<button type="button" href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Detalhes" id_lancamento="' .
                                     $s->id_lancamento . '" descricao="' . $s->descricao . '" valor="' . $valor . '" data_compra="' .
-                                    date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas . '" valor_parcela="' .
-                                    number_format($r->valor_parcela, 2, ',', '.') . '" ' . $disabled_lancamento_1 . ' ' . $disabled_lancamento_2 . '>
+                                    date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
+                                    '" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '" 
+                                    nome_cliente="' . $s->nome_cliente . '" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento_1 . ' ' . $disabled_lancamento_2 . '>
                                 <i class="fas fa-search-plus fa-lg fa-fw"></i></button>';
                             }
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
@@ -391,7 +391,6 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </div>
                             <label for="parcelada" class="font-weight-bold">Compra parcelada?</label>
                         </div>
-
                         <div id="divParcelamento" class="hidden">
                             <div class="form-group col-lg-4">
                                 <label for="qnt_parcelas" class="font-weight-bold">Nº Parcelas</label>
@@ -407,6 +406,21 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             <div class="form-group col-lg-4">
                                 <label for="valor_parcela" class="font-weight-bold">Valor da Parcela *</label>
                                 <input class="form-control money parcela" id="valor_parcela" type="text" name="valor_parcela"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-6" style="margin-top: -10px;" id="div_terceiros">
+                            <div class="checkbox icheck">
+                                <input type="checkbox" class="form-control" id="terceiros" name="compra_terceiros" value="1">
+                            </div>
+                            <label for="terceiros" class="font-weight-bold">Compra de terceiros?</label>
+                        </div>
+                        <div id="divTerceiros" class="hidden">
+                            <div class="form-group col-lg-6">
+                                <label for="nome_cliente" class="font-weight-bold">Cliente</label>
+                                <input class="form-control" id="nome_cliente" type="text" name="nome_cliente"/>
+                                <input id="id_cliente" type="hidden" name="id_cliente"/>
                             </div>
                         </div>
                     </div>
@@ -467,7 +481,6 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </div>
                             <label for="parceladaEditar" class="font-weight-bold">Compra parcelada?</label>
                         </div>
-
                         <div id="divParcelamentoEditar" class="hidden">
                             <div class="form-group col-lg-4">
                                 <label for="qnt_parcelasEditar" class="font-weight-bold">Nº Parcelas *</label>
@@ -483,6 +496,21 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             <div class="form-group col-lg-4">
                                 <label for="valor_parcelaEditar" class="font-weight-bold">Valor da Parcela *</label>
                                 <input class="form-control money parcela" id="valor_parcelaEditar" type="text" name="valor_parcela"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-6" style="margin-top: -10px;" id="div_terceirosEditar">
+                            <div class="checkbox icheck">
+                                <input type="checkbox" class="form-control" id="terceirosEditar" name="compra_terceiros" value="1">
+                            </div>
+                            <label for="terceirosEditar" class="font-weight-bold">Compra de terceiros?</label>
+                        </div>
+                        <div id="divTerceirosEditar" class="hidden">
+                            <div class="form-group col-lg-6">
+                                <label for="nome_clienteEditar" class="font-weight-bold">Cliente</label>
+                                <input class="form-control" id="nome_clienteEditar" type="text" name="nome_cliente"/>
+                                <input id="id_clienteEditar" type="hidden" name="id_cliente"/>
                             </div>
                         </div>
                     </div>
@@ -536,6 +564,14 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
 <script type="text/javascript">
     $(document).ready(function ($) {
+        $("#nome_cliente, #nome_clienteEditar").autocomplete({
+            source: "<?php echo base_url(); ?>financeiro/faturas/autoCompleteCliente",
+            minLength: 1,
+            select: function (event, ui) {
+                $("#id_cliente").val(ui.item.id);
+            }
+        });
+
         var marcados = false;
 
         somaValorParcelas();
@@ -653,6 +689,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
         var parcelada = $('#parcelada').iCheck('update')[0].checked;
         var estorno = $('#estorno').iCheck('update')[0].checked;
+        var terceiros = $('#terceiros').iCheck('update')[0].checked;
 
         $.each($(parcelada), function (key, value) {
             if (parcelada == true) {
@@ -665,8 +702,18 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         $.each($(estorno), function (key, value) {
             if (estorno == true) {
                 $('#div_parcelada, #div_parceladaEditar').addClass('hidden');
+                $('#divTerceiros, #divTerceirosEditar').addClass('hidden');
             } else {
                 $('#div_parcelada, #div_parceladaEditar').removeClass('hidden');
+                $('#divTerceiros #divTerceirosEditar').removeClass('hidden');
+            }
+        });
+
+        $.each($(terceiros), function (key, value) {
+            if (terceiros == true) {
+                $('#divTerceiros, #divTerceirosEditar').removeClass('hidden');
+            } else {
+                $('#divTerceiros, #divTerceirosEditar').addClass('hidden');
             }
         });
 
@@ -676,6 +723,10 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
         $('#estorno, #estornoEditar').on('ifChanged', function (event) {
             mudaICheckEstorno(event);
+        });
+
+        $('#terceiros, #terceirosEditar').on('ifChanged', function (event) {
+            mudaICheckTerceiros(event);
         });
 
         function mudaICheckParcelamento(event) {
@@ -690,9 +741,20 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         function mudaICheckEstorno(event) {
             const checked = event.target.checked;
             if (checked == true) {
-                $('#div_parcelada, #div_parceladaEditar').addClass('hidden');
+                $('#div_parcelada, #divParcelamento, #div_parceladaEditar, #divParcelamentoEditar').addClass('hidden');
+                $('#div_terceiros, #divTerceiros, #div_terceirosEditar, #divTerceirosEditar').addClass('hidden');
             } else {
-                $('#div_parcelada, #div_parceladaEditar').removeClass('hidden');
+                $('#div_parcelada, #divParcelamento, #div_parceladaEditar, #divParcelamentoEditar').removeClass('hidden');
+                $('#div_terceiros, #divTerceiros, #div_terceirosEditar, #divTerceirosEditar').removeClass('hidden');
+            }
+        }
+
+        function mudaICheckTerceiros(event) {
+            const checked = event.target.checked;
+            if (checked == true) {
+                $('#divTerceiros, #divTerceirosEditar').removeClass('hidden');
+            } else {
+                $('#divTerceiros, #divTerceirosEditar').addClass('hidden');
             }
         }
 
@@ -732,7 +794,6 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             }
         });
 
-
         $(document).on('click', '.excluir', function (event) {
             $("#idExcluir").val($(this).attr('id_lancamento'));
             $("#urlExcluirLancamento").val($(location).attr('href'));
@@ -744,15 +805,18 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
         $(document).on('click', '.editar', function (event) {
             $("#id_lancamentoEditar").val($(this).attr('id_lancamento'));
+            $("#id_clienteEditar").val($(this).attr('id_cliente'));
             $("#descricaoEditar").val($(this).attr('descricao'));
             $("#valorEditar").val($(this).attr('valor'));
             $("#valorParcelaEditar").val($(this).attr('valor_parcela'));
             $("#data_compraEditar").val($(this).attr('data_compra'));
             $("#valor_parcelaEditar").val($(this).attr('valor_parcela'));
+            $("#nome_clienteEditar").val($(this).attr('nome_cliente'));
             $("#qnt_parcelasEditar").val($(this).attr('n_parcelas'));
             $("#urlLancamentoEditar").val($(location).attr('href'));
-            console.log($(this).attr('n_parcelas'));
+
             var estorno = $(this).attr('estorno');
+            var terceiros = $(this).attr('terceiros');
             var parcelada = $(this).attr('parcelada');
             if (parcelada == 1) {
                 $('#parceladaEditar').iCheck('check');
@@ -767,6 +831,13 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             } else {
                 $('#estornoEditar').iCheck('uncheck');
                 $("#div_parceladaEditar").removeClass('hidden');
+            }
+            if (terceiros == 1) {
+                $('#terceirosEditar').iCheck('check');
+                $("#divTerceirosEditar").removeClass('hidden');
+            } else {
+                $('#terceirosEditar').iCheck('uncheck');
+                $("#divTerceirosEditar").addClass('hidden');
             }
 
         });
