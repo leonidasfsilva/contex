@@ -146,7 +146,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     <th class="th_soma hidden" style="width: 10px !important;">Soma</th>
                     <th style="width: 100px !important;">Data Compra</th>
                     <th style="width: 300px !important;">Descrição</th>
-                    <th style="width: 200px !important;"></th>
+                    <th style="width: 200px !important;">Cliente</th>
                     <th>Parcela</th>
                     <th>Valor Parcela (R$)</th>
                     <th style="width: 100px !important;">Ações</th>
