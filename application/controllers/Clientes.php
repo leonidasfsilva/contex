@@ -33,7 +33,7 @@ class Clientes extends CI_Controller
 
         $config['base_url'] = base_url() . 'clientes/gerenciar/';
         $config['total_rows'] = $this->clientes_model->count('clientes');
-        $config['per_page'] = 10;
+        $config['per_page'] = null;
         $config['next_link'] = 'Próxima';
         $config['prev_link'] = 'Anterior';
         $config['full_tag_open'] = '<div class="pagination alternate"><ul>';
