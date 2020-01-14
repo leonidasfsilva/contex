@@ -327,11 +327,23 @@ class Faturas extends CI_Controller
                             }
                             $vencimentoFormatado = ($ano_venc . '-' . $mes_venc . '-' . $dia_venc);
 
+                            if ($x > 9) {
+                                $parcela_atual = $x;
+                            } else {
+                                $parcela_atual = '0' . $x;
+                            }
+
+                            if ($qnt_parcelas > 9) {
+                                $total_parcelas = $qnt_parcelas;
+                            } else {
+                                $total_parcelas = '0' . $qnt_parcelas;
+                            }
+
                             $data2 = array(
                                 'id_lancamento_fatura' => $last_id,
                                 'id_usuario' => id_usuario(),
                                 'id_cliente' => $this->input->post('id_cliente'),
-                                'descricao' => padronizarString($this->input->post('descricao')),
+                                'descricao' => padronizarString($this->input->post('descricao')) . ' - ' . $parcela_atual . '/' . $total_parcelas,
                                 'tipo' => 1,
                                 'valor' => $valor_parcela,
                                 'data_vencimento' => $vencimentoFormatado,
@@ -553,11 +565,23 @@ class Faturas extends CI_Controller
                             }
                             $vencimentoFormatado = ($ano_venc . '-' . $mes_venc . '-' . $dia_venc);
 
+                            if ($x > 9) {
+                                $parcela_atual = $x;
+                            } else {
+                                $parcela_atual = '0' . $x;
+                            }
+
+                            if ($qnt_parcelas > 9) {
+                                $total_parcelas = $qnt_parcelas;
+                            } else {
+                                $total_parcelas = '0' . $qnt_parcelas;
+                            }
+
                             $data2 = array(
                                 'id_lancamento_fatura' => $id_lancamento,
                                 'id_usuario' => id_usuario(),
                                 'id_cliente' => $this->input->post('id_cliente'),
-                                'descricao' => padronizarString($this->input->post('descricao')),
+                                'descricao' => padronizarString($this->input->post('descricao')) . ' - ' . $parcela_atual . '/' . $total_parcelas,
                                 'tipo' => 1,
                                 'valor' => $valor_parcela,
                                 'data_vencimento' => $vencimentoFormatado,
