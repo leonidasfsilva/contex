@@ -13,6 +13,14 @@ function print_array($a)
 //    exit;
 }
 
+function print_array_exit($a)
+{
+    echo '<pre>';
+    print_r($a);
+    echo '</pre>';
+    exit;
+}
+
 function print_var($a)
 {
     echo '<pre>';

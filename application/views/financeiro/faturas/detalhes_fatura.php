@@ -568,7 +568,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             source: "<?php echo base_url(); ?>financeiro/faturas/autoCompleteCliente",
             minLength: 1,
             select: function (event, ui) {
-                $("#id_cliente").val(ui.item.id);
+                $("#id_cliente, #id_clienteEditar").val(ui.item.id);
             }
         });
 

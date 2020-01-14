@@ -419,6 +419,7 @@ class Faturas extends CI_Controller
 
     public function editarLancamento()
     {
+        print_array_exit($_POST);
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aFaturas')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para adicionar novos lançamentos de faturas.');
             redirect(base_url());
