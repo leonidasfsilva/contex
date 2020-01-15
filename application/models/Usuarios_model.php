@@ -1,7 +1,8 @@
 <?php
+
 class Usuarios_model extends CI_Model
 {
-    
+
     function __construct()
     {
         parent::__construct();
@@ -9,7 +10,7 @@ class Usuarios_model extends CI_Model
 
     function get($perpage = 0, $start = 0, $one = false)
     {
-        
+
         $this->db->from('usuarios');
         $this->db->select('usuarios.*, permissoes.nome as permissao');
         $this->db->limit($perpage, $start);
@@ -17,8 +18,8 @@ class Usuarios_model extends CI_Model
         $this->db->where('usuarios.status', 1);
 
         $query = $this->db->get();
-        
-        $result =  !$one  ? $query->result() : $query->row();
+
+        $result = !$one ? $query->result() : $query->row();
         return $result;
     }
 
@@ -34,17 +35,17 @@ class Usuarios_model extends CI_Model
         $this->db->limit(1);
         return $this->db->get('usuarios')->row();
     }
-    
+
     function add($table, $data)
     {
         $this->db->insert($table, $data);
         if ($this->db->affected_rows() == '1') {
             return true;
         }
-        
+
         return false;
     }
-    
+
     function edit($table, $data, $fieldID, $ID)
     {
         $this->db->where($fieldID, $ID);
@@ -53,10 +54,10 @@ class Usuarios_model extends CI_Model
         if ($this->db->affected_rows() >= 0) {
             return true;
         }
-        
+
         return false;
     }
-    
+
     function delete($table, $data, $fieldID, $ID)
     {
         $this->db->where($fieldID, $ID);
@@ -67,7 +68,7 @@ class Usuarios_model extends CI_Model
 
         return false;
     }
-    
+
     function count($table)
     {
         return $this->db->count_all($table);
@@ -90,6 +91,15 @@ class Usuarios_model extends CI_Model
         $this->db->where('email', $email);
         $this->db->where('id_usuarios', $id);
         return $this->db->get('usuarios')->num_rows();
+    }
+
+    public function getUsuariosAtivos()
+    {
+        return $this->db
+            ->where('ativo', 1)
+            ->where('status', 1)
+            ->get('usuarios')
+            ->result();
     }
 
 }

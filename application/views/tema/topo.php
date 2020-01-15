@@ -553,6 +553,7 @@
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) { ?>
                                                 <li><a href="<?php echo base_url() ?>mxcode/emitente">Emitente</a></li>
+                                                <li><a href="<?php echo base_url() ?>mxcode/notificacoes">Notificações</a></li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) { ?>
                                                 <li><a href="<?php echo base_url() ?>permissoes">Permissões</a></li>
