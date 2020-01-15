@@ -14,7 +14,8 @@ class Clientes_model extends CI_Model
 
         $this->db->select($fields);
         $this->db->from($table);
-        $this->db->order_by('id_clientes', 'asc');
+        $this->db->order_by('nome', 'asc');
+//        $this->db->order_by('id_clientes', 'asc');
         $this->db->limit($perpage, $start);
         if ($where) {
             $this->db->where($where . ' AND status = 1 AND id_usuario = ' . $id_usuario);
