@@ -17,6 +17,7 @@ class Usuarios extends CI_Controller
 
         $this->load->helper(array('form', 'codegen_helper'));
         $this->load->model('usuarios_model', '', true);
+        $this->load->model('configs_model', '', true);
         $this->data['menuUsuarios'] = 'Usuários';
         $this->data['menuConfiguracoes'] = 'Configurações';
 
@@ -71,11 +72,11 @@ class Usuarios extends CI_Controller
             $verificacao = $this->usuarios_model->verificaExisteEmail($this->input->post('email'));
 
             if ($verificacao == 1) {
-                $this->session->set_flashdata('erro', 'Email informado está em uso, informe um email diferente.');
-                redirect(base_url() . 'usuarios/');
+                $this->session->set_flashdata('erro', 'O email informado já encontra-se em uso, informe um email diferente.');
+                redirect(base_url() . 'usuarios/adicionar');
             }
 
-            $data = array(
+            $data1 = array(
                 'nome' => $this->input->post('nome'),
                 'cpf' => $this->input->post('cpf'),
                 'cep' => $this->input->post('cep'),
@@ -91,10 +92,16 @@ class Usuarios extends CI_Controller
                 'telefone' => $this->input->post('telefone'),
                 'ativo' => $this->input->post('situacao'),
                 'permissoes_id' => $this->input->post('permissoes_id')
-
             );
 
-            if ($this->usuarios_model->add('usuarios', $data) == true) {
+            if ($this->usuarios_model->add('usuarios', $data1) == true) {
+                $last_id = $this->db->insert_id('usuarios');
+
+                $data2 = array(
+                    'id_usuario' => $last_id,
+                    'nome' => $this->input->post('nome'),
+                );
+                $this->configs_model->registraConfigsUsuario($data2);
                 $this->session->set_flashdata('sucesso', 'Usuário cadastrado com sucesso!');
                 redirect(base_url() . 'usuarios/');
             } else {
@@ -126,7 +133,7 @@ class Usuarios extends CI_Controller
 
         if ($_POST) {
 
-            if(!$this->input->post('email')) {
+            if (!$this->input->post('email')) {
                 $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar editar usuário: email não informado.');
                 redirect(base_url() . 'usuarios/editar/' . $this->input->post('id_usuarios'));
             }
@@ -286,7 +293,6 @@ class Usuarios extends CI_Controller
 //        $this->data['pendencias'] = $this->clientes_model->getPendenciasByCliente($id);
         $this->data['view'] = 'usuarios/visualizar';
         $this->load->view('tema/topo', $this->data);
-
     }
 
 }

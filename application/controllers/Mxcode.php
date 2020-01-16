@@ -8,6 +8,7 @@ class Mxcode extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        $this->load->model('configs_model', '', true);
         $this->load->model('mxcode_model', '', true);
         $this->load->model('financeiro_model', '', true);
         $this->load->model('investimentos_model', '', true);
@@ -149,9 +150,11 @@ class Mxcode extends CI_Controller
                         redirect('mxcode/login');
                     }
 
+                    $configs_usuario = $this->configs_model->getConfigsUsuario($usuario->id_usuarios);
+
                     $session_data = array(
                         'nome' => $usuario->nome,
-                        'avatar' => $usuario->avatar,
+                        'avatar' => $configs_usuario->avatar,
                         'email' => $usuario->email,
                         'id' => $usuario->id_usuarios,
                         'permissao' => $usuario->permissoes_id,
@@ -463,18 +466,13 @@ class Mxcode extends CI_Controller
             }
 
             $retorno = $this->mxcode_model->editAvatarUsuario(id_usuario(), $image);
-            if ($retorno) {
-                $usuario = $this->mxcode_model->getUsuario(id_usuario());
-                $session_data = array(
-                    'nome' => $usuario->nome,
-                    'avatar' => $usuario->avatar,
-                    'email' => $usuario->email,
-                    'id' => $usuario->id_usuarios,
-                    'permissao' => $usuario->permissoes_id,
-                    'logado' => true
-                );
-                $this->session->set_userdata($session_data);
 
+            if ($retorno) {
+                $session_data = array(
+                    'avatar' => $image,
+                );
+
+                $this->session->set_userdata($session_data);
                 $this->session->set_flashdata('sucesso', 'Foto de perfil alterada com sucesso!');
 //                redirect(base_url() . 'mxcode/minhaConta');
             } else {

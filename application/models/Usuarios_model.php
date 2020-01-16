@@ -102,4 +102,11 @@ class Usuarios_model extends CI_Model
             ->result();
     }
 
+    public function getDadosUsuarios()
+    {
+        return $this->db
+            ->get('usuarios')
+            ->result();
+    }
+
 }

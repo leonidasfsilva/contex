@@ -1,6 +1,6 @@
 <?php
 
-class Mxcode_model extends CI_Model
+class Configs_model extends CI_Model
 {
 
     function __construct()
@@ -36,13 +36,12 @@ class Mxcode_model extends CI_Model
         return $this->db->get()->row();
     }
 
-    public function getUsuario($id)
+    public function getNotificacoesUsuario($id)
     {
-        $this->db->where('id_usuarios', $id);
-        $this->db->limit(1);
-        $usuario = $this->db->get('usuarios')->row();
-
-        return $usuario;
+        return $this->db
+            ->where('id_usuarios', $id)
+            ->get('notificacoes')
+            ->result();
     }
 
     public function alterarSenha($id, $newSenha)
@@ -199,8 +198,8 @@ class Mxcode_model extends CI_Model
     public function getAvatarUsuario($id_usuario)
     {
         $this->db->select('avatar');
-        $this->db->from('configs_usuario');
-        $this->db->where('id_usuario = ' . $id_usuario . ' AND status = ' . 1);
+        $this->db->from('usuarios');
+        $this->db->where('id_usuarios = ' . $id_usuario . ' AND status = ' . 1);
         $this->db->limit(1);
         return $this->db->get()->row();
     }
@@ -208,15 +207,41 @@ class Mxcode_model extends CI_Model
     public function editAvatarUsuario($id, $logo)
     {
         $this->db->set('avatar', $logo);
-        $this->db->where('id_usuario', $id);
-        return $this->db->update('configs_usuario');
+        $this->db->where('id_usuarios', $id);
+        return $this->db->update('usuarios');
     }
 
     public function excluirAvatarUsuario($id)
     {
         $this->db->set('avatar', null);
-        $this->db->where('id_usuario', $id);
-        return $this->db->update('configs_usuario');
+        $this->db->where('id_usuarios', $id);
+        return $this->db->update('usuarios');
     }
+
+    public function getDadosConfigs()
+    {
+        return $this->db
+            ->get('configs_usuario')
+            ->result();
+    }
+
+    function registraConfigsUsuario($data)
+    {
+        $this->db->insert('configs_usuario', $data);
+        if ($this->db->affected_rows() == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    public function getConfigsUsuario($id_usuario)
+    {
+        return $this->db
+            ->where('id_usuario', $id_usuario)
+            ->limit(1)
+            ->get('configs_usuario')
+            ->row();
+    }
+
 
 }
