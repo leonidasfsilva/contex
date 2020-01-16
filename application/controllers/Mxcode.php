@@ -503,14 +503,9 @@ class Mxcode extends CI_Controller
 
         $retorno = $this->mxcode_model->excluirAvatarUsuario(id_usuario());
         if ($retorno) {
-            $usuario = $this->mxcode_model->getUsuario(id_usuario());
+            $configs_usuario = $this->configs_model->getConfigsUsuario(id_usuario());
             $session_data = array(
-                'nome' => $usuario->nome,
-                'avatar' => $usuario->avatar,
-                'email' => $usuario->email,
-                'id' => $usuario->id_usuarios,
-                'permissao' => $usuario->permissoes_id,
-                'logado' => true
+                'avatar' => $configs_usuario->avatar,
             );
             $this->session->set_userdata($session_data);
 
