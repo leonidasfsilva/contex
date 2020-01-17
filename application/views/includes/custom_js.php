@@ -1,5 +1,17 @@
 <script>
+    $(document).ready(function () {
+        if( exec != true) {
+            force_refresh();
+            let exec = true;
+        }
+    });
+
+    function force_refresh() {
+        window.location.reload(true);
+    }
+
     $(function () {
+        $(".bootstrap-switch").bootstrapSwitch();
         $('.popover-btn').popover()
     })
 
@@ -20,7 +32,7 @@
         $(".preloader").show();
     });
 
-        $(document).on('submit', 'form', function (event) {
+    $(document).on('submit', 'form', function (event) {
         var form = this;
         event.preventDefault();
         // $('#btn-acessar').addClass('disabled');
@@ -103,6 +115,7 @@
             $("#uf").val("");
             $("#ibge").val("");
         }
+
         //Quando o campo cep possui algum caracter digitado.
         $("#cep").keyup(function () {
 
@@ -258,5 +271,34 @@
             }
         });
         <?php } ?>
+
+        $.fn.extend({
+            toggleText: function (a, b) {
+                return this.text(this.text() == b ? a : b);
+            }
+        });
+
+        $(".panel .expand").click(function () {
+            var n = $(this).closest(".panel");
+            var m = $(this).find(".expand-icon");
+            n.toggleClass("widget-fullscreen");
+            m.toggleClass("fa-expand-arrows-alt fa-compress-arrows-alt");
+            $("body").toggleClass("fullscreen-widget-active")
+        });
+
+        $(".panel .close-panel").click(function () {
+            $(this).closest(".panel").hide();
+        });
+
+        $('a.widget-collapse').click(function () {
+            $(this).find('.collapse-icon').toggleClass("fa-chevron-up fa-chevron-down");
+            $(this).find(".chevron-label").toggleText('ocultar', 'exibir');
+            let n = $(this).parents().eq(2);
+            n.find(".conteudo-widget").slideToggle({duration: 200});
+            // n.find(".conteudo-widget").toggleClass('hidden');
+            return false;
+        });
+
+
     });
 </script>
