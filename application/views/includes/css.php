@@ -23,7 +23,7 @@
 
     <link href="<?php echo base_url(); ?>assets/css/jquery.toast.min.css" rel="stylesheet">
 
-    <link href="<?php echo base_url(); ?>assets/css/styles.css" type="text/css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
+    <link href="<?php echo base_url(); ?>assets/css/styles.css?v=17012020" type="text/css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
     <link href="<?php echo base_url(); ?>assets/plugins/jstree/dist/themes/avenger/style.min.css" type="text/css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/codeprettifier/prettify.css" type="text/css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/iCheck/skins/minimal/blue.css" type="text/css" rel="stylesheet">
@@ -35,7 +35,7 @@
     <!-- The following CSS are included as plugins and can be removed if unused-->
     <link href="<?php echo base_url(); ?>assets/plugins/form-daterangepicker/daterangepicker-bs3.css" type="text/css" rel="stylesheet">    <!-- DateRangePicker -->
     <link href="<?php echo base_url(); ?>assets/plugins/fullcalendar/fullcalendar.css" type="text/css" rel="stylesheet">                    <!-- FullCalendar -->
-    <link href="<?php echo base_url(); ?>assets/plugins/bootstrap-switch/bootstrap-switch.css" type="text/css" rel="stylesheet"> <!--Bootstrap Switch CSS-->
+    <link href="<?php echo base_url(); ?>assets/plugins/bootstrap-switch/bootstrap-switch.css" type="text/css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/bootstrap-datepicker/bootstrap-datepicker.css" type="text/css" rel="stylesheet"> <!--Bootstrap Switch CSS-->
 
     <!--Pnotify CSS-->
