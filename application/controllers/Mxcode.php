@@ -150,11 +150,9 @@ class Mxcode extends CI_Controller
                         redirect('mxcode/login');
                     }
 
-                    $configs_usuario = $this->configs_model->getConfigsUsuario($usuario->id_usuarios);
-
                     $session_data = array(
                         'nome' => $usuario->nome,
-                        'avatar' => $configs_usuario->avatar,
+                        'avatar' => $usuario->avatar,
                         'email' => $usuario->email,
                         'id' => $usuario->id_usuarios,
                         'permissao' => $usuario->permissoes_id,
@@ -502,10 +500,11 @@ class Mxcode extends CI_Controller
         }
 
         $retorno = $this->mxcode_model->excluirAvatarUsuario(id_usuario());
+
         if ($retorno) {
-            $configs_usuario = $this->configs_model->getConfigsUsuario(id_usuario());
+            $usuario = $this->mxcode_model->getUsuario(id_usuario());
             $session_data = array(
-                'avatar' => $configs_usuario->avatar,
+                'avatar' => $usuario->avatar,
             );
             $this->session->set_userdata($session_data);
 
