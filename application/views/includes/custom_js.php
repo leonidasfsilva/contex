@@ -1,14 +1,14 @@
 <script>
-    $(document).ready(function () {
-        if( exec != true) {
-            force_refresh();
-            let exec = true;
-        }
-    });
-
-    function force_refresh() {
-        window.location.reload(true);
-    }
+    // $(document).ready(function () {
+    //     if( exec != true) {
+    //         force_refresh();
+    //         let exec = true;
+    //     }
+    // });
+    //
+    // function force_refresh() {
+    //     location.reload(true);
+    // }
 
     $(function () {
         $(".bootstrap-switch").bootstrapSwitch();
