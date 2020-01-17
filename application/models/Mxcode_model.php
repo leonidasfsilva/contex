@@ -199,8 +199,8 @@ class Mxcode_model extends CI_Model
     public function getAvatarUsuario($id_usuario)
     {
         $this->db->select('avatar');
-        $this->db->from('configs_usuario');
-        $this->db->where('id_usuario = ' . $id_usuario . ' AND status = ' . 1);
+        $this->db->from('usuarios');
+        $this->db->where('id_usuarios = ' . $id_usuario . ' AND status = ' . 1);
         $this->db->limit(1);
         return $this->db->get()->row();
     }
@@ -208,15 +208,15 @@ class Mxcode_model extends CI_Model
     public function editAvatarUsuario($id, $logo)
     {
         $this->db->set('avatar', $logo);
-        $this->db->where('id_usuario', $id);
-        return $this->db->update('configs_usuario');
+        $this->db->where('id_usuarios', $id);
+        return $this->db->update('usuarios');
     }
 
     public function excluirAvatarUsuario($id)
     {
         $this->db->set('avatar', null);
-        $this->db->where('id_usuario', $id);
-        return $this->db->update('configs_usuario');
+        $this->db->where('id_usuarios', $id);
+        return $this->db->update('usuarios');
     }
 
 }
