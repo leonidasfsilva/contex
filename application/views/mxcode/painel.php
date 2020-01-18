@@ -6,17 +6,22 @@
                 <div class="tile-sparkline-heading clearfix">
                     <div class="pull-left">
                         <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Lançamentos</span>
-                        <span class="tile-sparkline-subheading block mb10">Saldo disponível</span>
-                        <h2 class="block">R$ <?= number_format($lancamentos->total, 2, ',', '.') ?></h2>
+                        <div class="conteudo-widget " style="<?= ($widgetLancamentos == 1 ? '' : 'display: none;') ?>">
+                            <span class="tile-sparkline-subheading block mb10">Saldo disponível</span>
+                            <h2 class="block">R$ <?= number_format($lancamentos->total, 2, ',', '.') ?></h2>
+                        </div>
                     </div>
                     <div class="pull-right">
                         <span><i class="fas fa-chart-line fa-lg fa-fw"></i></span>
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
-                    <a href="<?= base_url() ?>financeiro/lancamentos" class="font-weight-bold">Ver detalhes </a>
+                    <a href="<?= base_url() ?>financeiro/lancamentos" class="font-weight-bold">ver detalhes </a>
+                    <a href="#" style="color: #607d8b" class="pull-right widget-collapse" id="widget_lancamentos">
+                        <span class="chevron-label">ocultar</span>
+                        <i class="fas fa-chevron-up fa-fw collapse-icon"></i>
+                    </a>
                 </div>
-
             </div>
         </div>
     <?php } ?>
@@ -27,35 +32,48 @@
                 <div class="tile-sparkline-heading clearfix">
                     <div class="pull-left">
                         <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Cartão de Crédito</span>
-                        <span class="tile-sparkline-subheading block mb10">Valor da fatura atual</span>
-                        <h2 class="block">R$ <?= number_format($fatura->total, 2, ',', '.') ?></h2>
+                        <div class="conteudo-widget " style="<?= ($widgetCartaoCredito == 1 ? '' : 'display: none;') ?>e">
+                            <span class="tile-sparkline-subheading block mb10">Valor da fatura atual</span>
+                            <h2 class="block">R$ <?= number_format($fatura->total, 2, ',', '.') ?></h2>
+                        </div>
                     </div>
                     <div class="pull-right">
                         <span><i class="fas fa-credit-card fa-lg fa-fw"></i></span>
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
-                    <a href="<?= base_url() ?>financeiro/faturas" class="font-weight-bold">Ver detalhes </a>
+                    <a href="<?= base_url() ?>financeiro/faturas" class="font-weight-bold">ver detalhes </a>
+                    <a href="#" style="color: #607d8b" class="pull-right widget-collapse" id="widget_credito">
+                        <span class="chevron-label">ocultar</span>
+                        <i class="fas fa-chevron-up fa-fw collapse-icon"></i>
+                    </a>
                 </div>
             </div>
         </div>
     <?php } ?>
-
+</div>
+<div class="row">
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPendencias')) { ?>
         <div class="col-lg-6">
             <div class="tile-sparkline">
                 <div class="tile-sparkline-heading clearfix">
                     <div class="pull-left">
                         <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Pendências</span>
-                        <span class="tile-sparkline-subheading block mb10">Pendências a pagar</span>
-                        <h2 class="block">R$ <?= number_format($pendencias->total, 2, ',', '.') ?></h2>
+                        <div class="conteudo-widget " style="<?= ($widgetPendencias == 1 ? '' : 'display: none;') ?>">
+                            <span class="tile-sparkline-subheading block mb10">Pendências a pagar</span>
+                            <h2 class="block">R$ <?= number_format($pendencias->total, 2, ',', '.') ?></h2>
+                        </div>
                     </div>
                     <div class="pull-right">
                         <span><i class="fas fa-file-invoice-dollar fa-lg fa-fw"></i></span>
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
-                    <a href="<?= base_url() ?>financeiro/pendencias" class="font-weight-bold">Ver detalhes </a>
+                    <a href="<?= base_url() ?>financeiro/pendencias" class="font-weight-bold">ver detalhes </a>
+                    <a href="#" style="color: #607d8b" class="pull-right widget-collapse" id="widget_pendencias">
+                        <span class="chevron-label">ocultar</span>
+                        <i class="fas fa-chevron-up fa-fw collapse-icon"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -67,15 +85,21 @@
                 <div class="tile-sparkline-heading clearfix">
                     <div class="pull-left">
                         <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Meus Investimentos</span>
-                        <span class="tile-sparkline-subheading block mb10">Valor total investido</span>
-                        <h2 class="block">R$ <?= number_format($investimentos->total, 2, ',', '.') ?></h2>
+                        <div class="conteudo-widget " style="<?= ($widgetInvestimentos == 1 ? '' : 'display: none;') ?>">
+                            <span class="tile-sparkline-subheading block mb10">Valor total investido</span>
+                            <h2 class="block">R$ <?= number_format($investimentos->total, 2, ',', '.') ?></h2>
+                        </div>
                     </div>
                     <div class="pull-right">
                         <span><i class="fas fa-hand-holding-usd fa-lg fa-fw"></i></span>
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
-                    <a href="<?= base_url() ?>financeiro/investimentos" class="font-weight-bold">Ver detalhes </a>
+                    <a href="<?= base_url() ?>financeiro/investimentos" class="font-weight-bold">ver detalhes </a>
+                    <a href="#" style="color: #607d8b" class="pull-right widget-collapse" id="widget_investimentos">
+                        <span class="chevron-label">ocultar</span>
+                        <i class="fas fa-chevron-up fa-fw collapse-icon"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -168,4 +192,6 @@
     <?php endif ?>
 </div>
 
+<script>
 
+</script>

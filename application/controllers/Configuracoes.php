@@ -2,7 +2,7 @@
     exit('No direct script access allowed');
 }
 
-class Mxcode extends CI_Controller
+class Configuracoes extends CI_Controller
 {
 
     public function __construct()
@@ -10,6 +10,7 @@ class Mxcode extends CI_Controller
         parent::__construct();
         $this->load->model('configs_model', '', true);
         $this->load->model('mxcode_model', '', true);
+        $this->load->model('usuarios_model', '', true);
         $this->load->model('financeiro_model', '', true);
         $this->load->model('investimentos_model', '', true);
         $this->load->model('fatura_model', '', true);
@@ -25,24 +26,15 @@ class Mxcode extends CI_Controller
             redirect('mxcode/login');
         }
 
-//        $this->data['ordens'] = $this->mxcode_model->getOsAbertas();
-//        $this->data['produtos'] = $this->mxcode_model->getProdutosMinimo();
-//        $this->data['os'] = $this->mxcode_model->getOsEstatisticas();
-//        $this->data['estatisticas_financeiro'] = $this->mxcode_model->getEstatisticasFinanceiro();
-        $data['menuPainel'] = 'Index';
-        $data['usuario'] = $this->mxcode_model->getById(id_usuario());
-        $data['lancamentos'] = $this->financeiro_model->getTotal(id_usuario());
-        $data['investimentos'] = $this->investimentos_model->getTotal(id_usuario());
-        $data['pendencias'] = $this->pendencia_model->getTotalDebito(id_usuario());
-        $data['fatura'] = $this->fatura_model->getValorTotalFaturaAtual(id_usuario());
-        $data['widgetLancamentos'] = $this->configs_model->getWidgetLancamentos(id_usuario());
-        $data['widgetCartaoCredito'] = $this->configs_model->getWidgetCartaoCredito(id_usuario());
-        $data['widgetInvestimentos'] = $this->configs_model->getWidgetInvestimentos(id_usuario());
-        $data['widgetPendencias'] = $this->configs_model->getWidgetPendencias(id_usuario());
-        $data['view'] = 'mxcode/painel';
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
+            redirect(base_url());
+        }
 
+        $data['menuConfiguracoes'] = true;
+        $data['dados'] = $this->configs_model->getConfigsUsuario(id_usuario());
+        $data['view'] = 'configuracoes/configuracoes';
         $this->load->view('tema/topo', $data);
-
     }
 
     public function minhaConta()
@@ -468,13 +460,18 @@ class Mxcode extends CI_Controller
             }
 
             $retorno = $this->mxcode_model->editAvatarUsuario(id_usuario(), $image);
-
             if ($retorno) {
+                $usuario = $this->mxcode_model->getUsuario(id_usuario());
                 $session_data = array(
-                    'avatar' => $image,
+                    'nome' => $usuario->nome,
+                    'avatar' => $usuario->avatar,
+                    'email' => $usuario->email,
+                    'id' => $usuario->id_usuarios,
+                    'permissao' => $usuario->permissoes_id,
+                    'logado' => true
                 );
-
                 $this->session->set_userdata($session_data);
+
                 $this->session->set_flashdata('sucesso', 'Foto de perfil alterada com sucesso!');
 //                redirect(base_url() . 'mxcode/minhaConta');
             } else {
@@ -504,11 +501,15 @@ class Mxcode extends CI_Controller
         }
 
         $retorno = $this->mxcode_model->excluirAvatarUsuario(id_usuario());
-
         if ($retorno) {
             $usuario = $this->mxcode_model->getUsuario(id_usuario());
             $session_data = array(
+                'nome' => $usuario->nome,
                 'avatar' => $usuario->avatar,
+                'email' => $usuario->email,
+                'id' => $usuario->id_usuarios,
+                'permissao' => $usuario->permissoes_id,
+                'logado' => true
             );
             $this->session->set_userdata($session_data);
 
@@ -549,4 +550,34 @@ class Mxcode extends CI_Controller
 
     }
 
+
+    public function setWidgetLancamentos(){
+        if($_POST['value'] == 1){
+            $this->configs_model->setWidgetLancamentos(id_usuario());
+        } else {
+            $this->configs_model->unsetWidgetLancamentos(id_usuario());
+        }
+    }
+
+    public function setWidgetCartaoCredito(){
+        if($_POST['value'] == 1){
+            $this->configs_model->setWidgetCartaoCredito(id_usuario());
+        } else {
+            $this->configs_model->unsetWidgetCartaoCredito(id_usuario());
+        }
+    }
+    public function setWidgetInvestimentos(){
+        if($_POST['value'] == 1){
+            $this->configs_model->setWidgetInvestimentos(id_usuario());
+        } else {
+            $this->configs_model->unsetWidgetInvestimentos(id_usuario());
+        }
+    }
+    public function setWidgetPendencias(){
+        if($_POST['value'] == 1){
+            $this->configs_model->setWidgetPendencias(id_usuario());
+        } else {
+            $this->configs_model->unsetWidgetPendencias(id_usuario());
+        }
+    }
 }

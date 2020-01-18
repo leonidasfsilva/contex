@@ -2,7 +2,6 @@
 
 class Configs_model extends CI_Model
 {
-
     function __construct()
     {
         parent::__construct();
@@ -12,7 +11,6 @@ class Configs_model extends CI_Model
 
     function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
-
         $this->db->select($fields);
         $this->db->from($table);
         $this->db->limit($perpage, $start);
@@ -239,8 +237,121 @@ class Configs_model extends CI_Model
         return $this->db
             ->where('id_usuario', $id_usuario)
             ->limit(1)
-            ->get('configs_usuario')
+            ->get('configs_usuario_assoc')
             ->row();
+    }
+
+
+    public function getWidgetLancamentos($id_usuario)
+    {
+        return $this->db
+            ->where('id_usuario', $id_usuario)
+            ->where('id_config_opcao', 3)
+            ->get('configs_usuario_assoc')
+            ->num_rows();
+    }
+
+    public function getWidgetCartaoCredito($id_usuario)
+    {
+        return $this->db
+            ->where('id_usuario', $id_usuario)
+            ->where('id_config_opcao', 4)
+            ->get('configs_usuario_assoc')
+            ->num_rows();
+    }
+
+    public function getWidgetInvestimentos($id_usuario)
+    {
+        return $this->db
+            ->where('id_usuario', $id_usuario)
+            ->where('id_config_opcao', 5)
+            ->get('configs_usuario_assoc')
+            ->num_rows();
+    }
+
+    public function getWidgetPendencias($id_usuario)
+    {
+        return $this->db
+            ->where('id_usuario', $id_usuario)
+            ->where('id_config_opcao', 6)
+            ->get('configs_usuario_assoc')
+            ->num_rows();
+    }
+
+    public function setWidgetLancamentos($id_usuario)
+    {
+        $this->db
+            ->insert('configs_usuario_assoc',
+                array(
+                    'id_config_opcao' => 3,
+                    'id_usuario' => $id_usuario
+                )
+            );
+    }
+
+    public function unsetWidgetLancamentos($id_usuario)
+    {
+        $this->db
+            ->where('id_usuario', $id_usuario)
+            ->where('id_config_opcao', 3)
+            ->delete('configs_usuario_assoc');
+    }
+
+    public function setWidgetCartaoCredito($id_usuario)
+    {
+        $this->db
+            ->insert('configs_usuario_assoc',
+                array(
+                    'id_config_opcao' => 4,
+                    'id_usuario' => $id_usuario
+                )
+            );
+    }
+
+    public function unsetWidgetCartaoCredito($id_usuario)
+    {
+        $this->db
+            ->where('id_usuario', $id_usuario)
+            ->where('id_config_opcao', 4)
+            ->delete('configs_usuario_assoc');
+    }
+
+    public function setWidgetInvestimentos($id_usuario)
+    {
+        $this->db
+            ->insert('configs_usuario_assoc',
+                array(
+                    'id_config_opcao' => 5,
+                    'id_usuario' => $id_usuario
+                )
+            );
+    }
+
+    public function unsetWidgetInvestimentos($id_usuario)
+    {
+        $this->db
+            ->where('id_usuario', $id_usuario)
+            ->where('id_config_opcao', 5)
+            ->delete('configs_usuario_assoc');
+    }
+
+    public function setWidgetPendencias($id_usuario)
+    {
+        $this->db
+            ->insert('configs_usuario_assoc',
+                array(
+                    'id_config_opcao' => 6,
+                    'id_usuario' => $id_usuario
+                )
+            );
+    }
+
+    public function unsetWidgetPendencias($id_usuario)
+    {
+        $this->db
+            ->where('id_usuario', $id_usuario)
+            ->where('id_config_opcao', 6)
+            ->delete('configs_usuario_assoc');
     }
 
 
