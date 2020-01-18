@@ -1,15 +1,4 @@
 <script>
-    // $(document).ready(function () {
-    //     if( exec != true) {
-    //         force_refresh();
-    //         let exec = true;
-    //     }
-    // });
-    //
-    // function force_refresh() {
-    //     location.reload(true);
-    // }
-
     $(function () {
         $(".bootstrap-switch").bootstrapSwitch();
         $('.popover-btn').popover()
@@ -290,12 +279,93 @@
             $(this).closest(".panel").hide();
         });
 
+        $.each($('.conteudo-widget'), function (key, value) {
+            if ($(this).css('display') == 'none') {
+                $(this).parents().eq(3).find('.collapse-icon').attr('class', 'fas fa-chevron-down fa-fw collapse-icon');
+                $(this).parents().eq(3).find(".chevron-label").text('exibir');
+            } else {
+                $(this).parents().eq(3).find('.collapse-icon').attr('class', 'fas fa-chevron-up fa-fw collapse-icon');
+                $(this).parents().eq(3).find(".chevron-label").text('ocultar');
+            }
+        });
+
         $('a.widget-collapse').click(function () {
-            $(this).find('.collapse-icon').toggleClass("fa-chevron-up fa-chevron-down");
-            $(this).find(".chevron-label").toggleText('ocultar', 'exibir');
-            let n = $(this).parents().eq(2);
-            n.find(".conteudo-widget").slideToggle({duration: 200});
-            // n.find(".conteudo-widget").toggleClass('hidden');
+            let n = $(this).parents().eq(2).find(".conteudo-widget");
+
+            if (n.css('display') == 'none') {
+                $(this).find('.collapse-icon').attr('class', 'fas fa-chevron-up fa-fw collapse-icon');
+                $(this).find(".chevron-label").text('ocultar');
+
+                if ($(this).attr('id') == 'widget_lancamentos') {
+                    $.ajax({
+                        type: "POST",
+                        url: "<?=base_url();?>configuracoes/setWidgetLancamentos",
+                        data: "value=" + 1,
+                        dataType: 'html',
+                    });
+                }
+                if ($(this).attr('id') == 'widget_credito') {
+                    $.ajax({
+                        type: "POST",
+                        url: "<?=base_url();?>configuracoes/setWidgetCartaoCredito",
+                        data: "value=" + 1,
+                        dataType: 'html',
+                    });
+                }
+                if ($(this).attr('id') == 'widget_investimentos') {
+                    $.ajax({
+                        type: "POST",
+                        url: "<?=base_url();?>configuracoes/setWidgetInvestimentos",
+                        data: "value=" + 1,
+                        dataType: 'html',
+                    });
+                }
+                if ($(this).attr('id') == 'widget_pendencias') {
+                    $.ajax({
+                        type: "POST",
+                        url: "<?=base_url();?>configuracoes/setWidgetPendencias",
+                        data: "value=" + 1,
+                        dataType: 'html',
+                    });
+                }
+            } else {
+                $(this).find('.collapse-icon').attr('class', 'fas fa-chevron-down fa-fw collapse-icon');
+                $(this).find(".chevron-label").text('exibir');
+
+                if ($(this).attr('id') == 'widget_lancamentos') {
+                    $.ajax({
+                        type: "POST",
+                        url: "<?=base_url();?>configuracoes/setWidgetLancamentos",
+                        data: "value=" + 0,
+                        dataType: 'html',
+                    });
+                }
+                if ($(this).attr('id') == 'widget_credito') {
+                    $.ajax({
+                        type: "POST",
+                        url: "<?=base_url();?>configuracoes/setWidgetCartaoCredito",
+                        data: "value=" + 0,
+                        dataType: 'html',
+                    });
+                }
+                if ($(this).attr('id') == 'widget_investimentos') {
+                    $.ajax({
+                        type: "POST",
+                        url: "<?=base_url();?>configuracoes/setWidgetInvestimentos",
+                        data: "value=" + 0,
+                        dataType: 'html',
+                    });
+                }
+                if ($(this).attr('id') == 'widget_pendencias') {
+                    $.ajax({
+                        type: "POST",
+                        url: "<?=base_url();?>configuracoes/setWidgetPendencias",
+                        data: "value=" + 0,
+                        dataType: 'html',
+                    });
+                }
+            }
+            n.slideToggle({duration: 200});
             return false;
         });
 

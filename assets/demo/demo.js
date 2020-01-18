@@ -170,22 +170,22 @@ $(function() {
 	});
 
 	function loadWeather(location, woeid) {
-	  $.simpleWeather({
-	    location: location,
-	    woeid: woeid,
-	    unit: 'c',
-	    success: function(weather) {
-	      html = '<h2><i class="ar ar-'+weather.code+'"></i> '+weather.temp+'&deg;'+weather.units.temp+'</h2>';
-	      html += '<ul><li><i class="fa fa-fw fa-map-marker"></i> '+weather.city+', '+weather.region+'</li>';
-	      html += '<li class="currently">'+weather.currently+'</li>';
-	      // html += '<li>'+weather.alt.temp+'&deg;F</li></ul>';  
-	      
-	      $(".weather-widget").html(html);
-	    },
-	    error: function(error) {
-	      $(".weather-widget").html('<p>'+error+'</p>');
-	    }
-	  });
+	  // $.simpleWeather({
+	  //   location: location,
+	  //   woeid: woeid,
+	  //   unit: 'c',
+	  //   success: function(weather) {
+	  //     html = '<h2><i class="ar ar-'+weather.code+'"></i> '+weather.temp+'&deg;'+weather.units.temp+'</h2>';
+	  //     html += '<ul><li><i class="fa fa-fw fa-map-marker"></i> '+weather.city+', '+weather.region+'</li>';
+	  //     html += '<li class="currently">'+weather.currently+'</li>';
+	  //     // html += '<li>'+weather.alt.temp+'&deg;F</li></ul>';
+	  //
+	  //     $(".weather-widget").html(html);
+	  //   },
+	  //   error: function(error) {
+	  //     $(".weather-widget").html('<p>'+error+'</p>');
+	  //   }
+	  // });
 	}
 
 

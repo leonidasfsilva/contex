@@ -9229,22 +9229,22 @@ ul.demo-btns > li {
   }
 }
 .bootstrap-switch {
-  /*display: inline-block;*/
-  /*cursor: pointer;*/
-  /*text-align: left;*/
-  /*overflow: hidden;*/
-  /*line-height: 8px;*/
-  /*-webkit-user-select: none;*/
-  /*-moz-user-select: none;*/
-  /*-ms-user-select: none;*/
-  /*user-select: none;*/
-  /*vertical-align: middle;*/
-  /*width: 64px;*/
-  /*box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2) inset;*/
-  /*border-radius: 24px;*/
+  display: inline-block;
+  cursor: pointer;
+  text-align: left;
+  overflow: hidden;
+  line-height: 8px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  vertical-align: middle;
+  width: 64px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2) inset;
+  border-radius: 24px;
 }
 .bootstrap-switch.bootstrap-switch-mini {
-  /*width: 36px;*/
+  width: 36px;
 }
 .bootstrap-switch.bootstrap-switch-mini .bootstrap-switch-handle-on,
 .bootstrap-switch.bootstrap-switch-mini .bootstrap-switch-handle-off,
@@ -9320,14 +9320,14 @@ ul.demo-btns > li {
   /*outline: 0;*/
 }
 .bootstrap-switch .bootstrap-switch-container {
-  /*display: inline-block;*/
-  /*position: relative;*/
-  /*width: 150%;*/
-  /*top: 0;*/
-  /*border-radius: 23px;*/
-  /*-webkit-transform-style: preserve-3d;*/
-  /*-moz-transform-style: preserve-3d;*/
-  /*transform-style: preserve-3d;*/
+  display: inline-block;
+  position: relative;
+  width: 150%;
+  top: 0;
+  border-radius: 23px;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  transform-style: preserve-3d;
 }
 .bootstrap-switch .bootstrap-switch-handle-on,
 .bootstrap-switch .bootstrap-switch-handle-off,
@@ -9345,9 +9345,9 @@ ul.demo-btns > li {
 }
 .bootstrap-switch .bootstrap-switch-handle-on,
 .bootstrap-switch .bootstrap-switch-handle-off {
-  /*text-align: center;*/
-  /*z-index: 1;*/
-  /*width: 50%;*/
+  text-align: center;
+  z-index: 1;
+  width: 50%;
 }
 .bootstrap-switch .bootstrap-switch-handle-on.bootstrap-switch-primary,
 .bootstrap-switch .bootstrap-switch-handle-off.bootstrap-switch-primary {
@@ -9391,9 +9391,9 @@ ul.demo-btns > li {
   /*padding-right: 12.499999999875%;*/
 }
 .bootstrap-switch .bootstrap-switch-handle-off {
-  /*border-bottom-right-radius: 23px;*/
-  /*border-top-right-radius: 23px;*/
-  /*padding-left: 12.499999999875%;*/
+  border-bottom-right-radius: 23px;
+  border-top-right-radius: 23px;
+  padding-left: 12.499999999875%;
 }
 .bootstrap-switch .bootstrap-switch-label {
   /*text-align: center;*/

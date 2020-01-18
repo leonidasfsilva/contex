@@ -62,7 +62,7 @@
 <?php
 }
 
-echo $this->pagination->create_links();
+//echo $this->pagination->create_links();
 ?>
 
 <!-- Modal DESATIVAR-->

@@ -1,5 +1,5 @@
 <label>&nbsp;</label>
-<a href="<?php echo base_url(); ?>index.php/permissoes/adicionar" class="btn btn-primary btn-sm">
+<a href="<?php echo base_url(); ?>permissoes/adicionar" class="btn btn-primary btn-sm">
     <i class="fa fa-plus-square fa-fw"></i> Adicionar Permissão</a>
 <?php
 if (!$results) { ?>
@@ -23,7 +23,7 @@ if (!$results) { ?>
                 </thead>
                 <tbody>
                 <tr>
-                    <td colspan="5">Nenhuma Permissão foi cadastrada</td>
+                    <td colspan="5">Nenhuma permissão cadastrada.</td>
                 </tr>
                 </tbody>
             </table>

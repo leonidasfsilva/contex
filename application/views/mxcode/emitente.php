@@ -1,5 +1,5 @@
 <?php if (!isset($dados) || $dados == null) { ?>
-    <div class="panel panel-default">
+    <div class="panel panel-midnightblue">
         <div class="panel-heading">
             <h3>
                 <i class="fas fa-id-card fa-lg fa-fw"></i>
@@ -21,7 +21,6 @@
                 <a href="#modalCadastrar" data-toggle="modal" role="button" class="btn btn-primary pull-right">
                     <i class="fas fa-plus fa-fw"></i> Cadastrar Dados
                 </a>
-
             </div>
         </div>
     </div>

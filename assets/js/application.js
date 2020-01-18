@@ -574,7 +574,7 @@ $(document).ready(function () {
     // Panel Collapses
     // -------------------------------
     $('a.panel-collapse').click(function () {
-        $(this).children().toggleClass("fa-chevron-down fa-chevron-up");
+        $(this).children().toggleClass("fa-minus fa-plus");
         $(this).closest(".panel-heading").next().slideToggle({duration: 200});
         $(this).closest(".panel-heading").toggleClass('rounded-bottom');
         return false;

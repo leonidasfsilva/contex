@@ -119,6 +119,18 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 Lançamentos da Fatura
             </h2>
             <div class="panel-ctrls">
+                <a href="#" class="button-icon close-panel">
+                    <i class="fas fa-times"></i>
+                </a>
+                <a href="#" class="button-icon expand">
+                    <i class="fas fa-expand-arrows-alt expand-icon"></i>
+                </a>
+                <a href="#" class="button-icon panel-collapse">
+                    <i class="fas fa-minus"></i>
+                </a>
+            </div>
+
+            <div class="panel-ctrls">
                 <span class="hidden" id="div_btn_marcar">
                     <button class="btn btn-default btn-sm marcar_desmarcar" id="marcar_todos" title="Marcar todos os lançamentos da fatura">
                         <i class="fas fa-check-square fa-fw"></i>

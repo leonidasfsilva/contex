@@ -79,6 +79,17 @@ $periodo = $this->input->get('periodo');
             <h2>
                 Extrato de Lançamentos
             </h2>
+            <div class="panel-ctrls">
+                <a href="#" class="button-icon close-panel">
+                    <i class="fas fa-times"></i>
+                </a>
+                <a href="#" class="button-icon expand">
+                    <i class="fas fa-expand-arrows-alt expand-icon"></i>
+                </a>
+                <a href="#" class="button-icon panel-collapse">
+                    <i class="fas fa-minus"></i>
+                </a>
+            </div>
         </div>
         <div class="panel-body panel-no-padding table-responsive">
             <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">

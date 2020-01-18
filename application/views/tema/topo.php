@@ -393,7 +393,12 @@
                 <span class="icon-bg"><i class="fas fa-user-circle fa-fw"></i></span></a>
             <ul class="dropdown-menu userinfo arrow">
                 <!--                <li><a href="javascript:" id="btn_teste"><span class="pull-left">Perfil</span> <span class="badge badge-info">80%</span></a></li>-->
-                <li title="Dados da conta"><a href="<?php echo site_url(); ?>mxcode/minhaConta"><span class="pull-left">Minha Conta</span> <i class="pull-right fas fa-user-cog fa-lg"></i></a></li>
+                <li title="Dados da conta">
+                    <a href="<?php echo base_url(); ?>mxcode/minhaConta"><span class="pull-left">Minha Conta</span> <i class="pull-right fas fa-user fa-lg"></i></a>
+                </li>
+                <li title="Configurações da conta">
+                    <a href="<?php echo base_url(); ?>configuracoes"><span class="pull-left">Configurações</span> <i class="pull-right fas fa-cog fa-lg"></i></a>
+                </li>
                 <!--                <li><a href="javascript:"><span class="pull-left">Configurações</span> <i class="pull-right fa fa-cog fa-lg"></i></a></li>-->
                 <!--                <li class="divider"></li>-->
                 <!--                <li><a href="#"><span class="pull-left">Earnings</span> <i class="pull-right fa fa-line-chart"></i></a></li>-->
@@ -553,7 +558,6 @@
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) { ?>
                                                 <li><a href="<?php echo base_url() ?>mxcode/emitente">Emitente</a></li>
-                                                <li><a href="<?php echo base_url() ?>mxcode/notificacoes">Notificações</a></li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) { ?>
                                                 <li><a href="<?php echo base_url() ?>permissoes">Permissões</a></li>
