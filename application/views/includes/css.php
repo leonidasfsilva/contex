@@ -20,13 +20,13 @@
     <link href="<?php echo base_url(); ?>assets/css/fullcalendar.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.css" type="text/css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/jquery-cropper/css/cropper.css" type="text/css" rel="stylesheet">
-
     <link href="<?php echo base_url(); ?>assets/css/jquery.toast.min.css" rel="stylesheet">
 
-    <link href="<?php echo base_url(); ?>assets/css/styles.css?v=<?=date('dmY_his')?>" type="text/css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
-    <link href="<?php echo base_url(); ?>assets/css/styles-blessed1.css?v=<?=date('dmY_his')?>" type="text/css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
-    <link href="<?php echo base_url(); ?>assets/css/styles-blessed2.css?v=<?=date('dmY_his')?>" type="text/css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
     <link href="<?php echo base_url(); ?>assets/css/styles-blessed3.css?v=<?=date('dmY_his')?>" type="text/css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
+    <link href="<?php echo base_url(); ?>assets/css/styles-blessed2.css?v=<?=date('d2mY_his')?>" type="text/css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
+    <link href="<?php echo base_url(); ?>assets/css/styles-blessed1.css?v=<?=date('dmY_his')?>" type="text/css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
+    <link href="<?php echo base_url(); ?>assets/css/styles.css?v=<?=date('dmY_his')?>" type="text/css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
+
     <link href="<?php echo base_url(); ?>assets/plugins/jstree/dist/themes/avenger/style.min.css" type="text/css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/codeprettifier/prettify.css" type="text/css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/iCheck/skins/minimal/blue.css" type="text/css" rel="stylesheet">
