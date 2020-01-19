@@ -142,10 +142,10 @@ class Financeiro_model extends CI_Model
     {
         //buscando lancamentos
         $this->db->select('*');
-        $this->db->where('id_usuario', $id);
-        $this->db->where('status', 1);
         $this->db->like('descricao', $termo);
         $this->db->or_like('cliente_fornecedor', $termo);
+        $this->db->where('id_usuario', $id);
+        $this->db->where('status', 1);
 //        $this->db->limit(5);
         return $this->db->get('lancamentos')->result();
     }

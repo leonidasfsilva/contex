@@ -1,6 +1,5 @@
 <script>
     $(function () {
-        $(".bootstrap-switch").bootstrapSwitch();
         $('.popover-btn').popover()
     })
 
