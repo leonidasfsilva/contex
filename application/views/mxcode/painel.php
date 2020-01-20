@@ -84,7 +84,7 @@
             <div class="tile-sparkline">
                 <div class="tile-sparkline-heading clearfix">
                     <div class="pull-left">
-                        <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Meus Investimentos</span>
+                        <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Investimentos</span>
                         <div class="conteudo-widget " style="<?= ($widgetInvestimentos == 1 ? '' : 'display: none;') ?>">
                             <span class="tile-sparkline-subheading block mb10">Valor total investido</span>
                             <h2 class="block">R$ <?= number_format($investimentos->total, 2, ',', '.') ?></h2>
