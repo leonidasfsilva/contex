@@ -15,7 +15,6 @@ class Faturas extends CI_Controller
         $this->load->model('pendencia_model', '', true);
         $this->load->model('fatura_model', '', true);
         $this->load->model('clientes_model', '', true);
-        $this->data['menuFinanceiro'] = 'Lancamentos';
     }
 
     public function index()
@@ -167,6 +166,8 @@ class Faturas extends CI_Controller
                 $data['results'] = $this->fatura_model->getLancamentosAssoc('lancamentos_faturas_assoc', '*', $id_fatura, $where, $config['per_page'], $this->input->get('per_page'));
                 $data['subresults'] = $this->fatura_model->getLancamentos('lancamentos_faturas', '*', id_usuario(), $where, $config['per_page'], $this->input->get('per_page'));
 
+                $data['menuFinanceiro'] = true;
+                $data['menuFaturas'] = true;
                 $data['view'] = 'financeiro/faturas/detalhes_fatura';
                 $this->load->view('tema/topo', $data);
             } else {

@@ -507,7 +507,9 @@
                                                 <li><a href="<?php echo base_url() ?>financeiro/investimentos">Investimentos</a></li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) { ?>
-                                                <li><a href="<?php echo base_url() ?>financeiro/faturas">Faturas</a></li>
+                                                <li class="<?= (isset($menuFaturas)) ? 'active' : ''; ?>">
+                                                    <a href="<?php echo base_url() ?>financeiro/faturas">Faturas</a>
+                                                </li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPendencias')) { ?>
                                                 <li><a href="<?php echo base_url() ?>financeiro/pendencias">Pendências</a></li>
