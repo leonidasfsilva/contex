@@ -129,7 +129,7 @@ class Faturas extends CI_Controller
         $config['last_tag_open'] = '<li>';
         $config['last_tag_close'] = '</li>';
 
-        $this->data['parcelas'] = array(
+        $data['parcelas'] = array(
             2 => '2 x',
             3 => '3 x',
             4 => '4 x',
@@ -156,19 +156,19 @@ class Faturas extends CI_Controller
 
             if ($faturaUsuario > 0) {
 
-                $this->data['fatura'] = $this->fatura_model->getDetalhesFatura($id_fatura);
-                $this->data['id_fatura'] = $id_fatura;
-                $this->data['mes_referencia'] = ($this->data['fatura']->mes_referencia);
-                $this->data['ano_referencia'] = ($this->data['fatura']->ano_referencia);
-                $this->data['status_fatura'] = ($this->data['fatura']->fatura_aberta);
-                $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
-                $this->data['fatura_paga'] = ($this->data['fatura']->fatura_paga);
-                $this->data['lancamentoEditavel'] = $this->fatura_model->getLancamentoEditavel($this->data['mes_referencia'], $this->data['ano_referencia']);
-                $this->data['results'] = $this->fatura_model->getLancamentosAssoc('lancamentos_faturas_assoc', '*', $id_fatura, $where, $config['per_page'], $this->input->get('per_page'));
-                $this->data['subresults'] = $this->fatura_model->getLancamentos('lancamentos_faturas', '*', id_usuario(), $where, $config['per_page'], $this->input->get('per_page'));
+                $data['fatura'] = $this->fatura_model->getDetalhesFatura($id_fatura);
+                $data['id_fatura'] = $id_fatura;
+                $data['mes_referencia'] = ($data['fatura']->mes_referencia);
+                $data['ano_referencia'] = ($data['fatura']->ano_referencia);
+                $data['status_fatura'] = ($data['fatura']->fatura_aberta);
+                $data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
+                $data['fatura_paga'] = ($data['fatura']->fatura_paga);
+                $data['lancamentoEditavel'] = $this->fatura_model->getLancamentoEditavel($data['mes_referencia'], $data['ano_referencia']);
+                $data['results'] = $this->fatura_model->getLancamentosAssoc('lancamentos_faturas_assoc', '*', $id_fatura, $where, $config['per_page'], $this->input->get('per_page'));
+                $data['subresults'] = $this->fatura_model->getLancamentos('lancamentos_faturas', '*', id_usuario(), $where, $config['per_page'], $this->input->get('per_page'));
 
-                $this->data['view'] = 'financeiro/faturas/detalhes_fatura';
-                $this->load->view('tema/topo', $this->data);
+                $data['view'] = 'financeiro/faturas/detalhes_fatura';
+                $this->load->view('tema/topo', $data);
             } else {
                 $this->session->set_flashdata('erro', 'Fatura solicitada não encontrada para este usuário.');
                 redirect($config['base_url']);

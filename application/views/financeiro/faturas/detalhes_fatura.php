@@ -160,7 +160,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     <th style="width: 300px !important;">Descrição</th>
                     <th style="width: 200px !important;">Cliente</th>
                     <th>Parcela</th>
-                    <th>Valor Parcela (R$)</th>
+                    <th>Valor Parcela (R$) <br> Valor Compra (R$)</th>
                     <th style="width: 100px !important;">Ações</th>
                 </tr>
                 </thead>
@@ -200,19 +200,22 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             $data_compra = date(('d/m/Y'), strtotime($r->data_compra));
                             $debitoFatura += $r->valor_parcela;
 
+                            if ($r->valor_total < 0) {
+                                $valor = number_format(abs($r->valor_total), 2, ',', '.');
+                            } else {
+                                $valor = number_format($r->valor_total, 2, ',', '.');
+                            }
+
                             echo '<tr>';
                             echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
                             echo '<td>' . $data_compra . '</td>';
                             echo '<td>' . strtoupper($s->descricao) . '</td>';
                             echo '<td>' . strtoupper($s->nome_cliente) . '</td>';
                             echo '<td>' . $n_parcela . '/' . $total_parcelas . '</td>';
-                            echo '<td class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor_parcela, 2, ',', '.') . '</span></td>';
-
-                            if ($r->valor_total < 0) {
-                                $valor = number_format(abs($r->valor_total), 2, ',', '.');
-                            } else {
-                                $valor = number_format($r->valor_total, 2, ',', '.');
-                            }
+                            echo '<td class="valor_parcela" style=" color: ' . $color .
+                                '"><span>' . number_format($r->valor_parcela, 2, ',', '.') .
+                                '</span><br><span>' . number_format($r->valor_total, 2, ',', '.') .
+                                '</span></td>';
 
                             echo '<td>';
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
