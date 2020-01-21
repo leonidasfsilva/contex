@@ -214,7 +214,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             echo '<td>' . $n_parcela . '/' . $total_parcelas . '</td>';
                             echo '<td class="valor_parcela" style=" color: ' . $color .
                                 '"><span>' . number_format($r->valor_parcela, 2, ',', '.') .
-                                '</span><br><span>' . number_format($r->valor_total, 2, ',', '.') .
+                                '</span><br><span style="color: grey">' . number_format($r->valor_total, 2, ',', '.') .
                                 '</span></td>';
 
                             echo '<td>';
