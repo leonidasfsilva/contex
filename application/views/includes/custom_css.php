@@ -2,6 +2,7 @@
     .switch-input {
         display: none;
     }
+
     .switch-label {
         position: relative;
         display: inline-block;
@@ -12,6 +13,7 @@
         margin: 16px;
         padding: 16px 0 16px 44px;
     }
+
     .switch-label:before, .switch-label:after {
         content: "";
         position: absolute;
@@ -24,6 +26,7 @@
         -webkit-transition: all 0.3s ease;
         transition: all 0.3s ease;
     }
+
     .switch-label:before {
         left: 1px;
         width: 34px;
@@ -31,6 +34,7 @@
         background-color: #c6c6c6;
         border-radius: 8px;
     }
+
     .switch-label:after {
         left: 0;
         width: 20px;
@@ -39,28 +43,33 @@
         border-radius: 50%;
         box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.14), 0 2px 5px 0 rgba(0, 0, 0, 0.098), 0 1px 5px 0 rgba(0, 0, 0, 0.084);
     }
+
     .switch-label .toggle--on {
         display: none;
     }
+
     .switch-label .toggle--off {
         display: inline-block;
     }
+
     .switch-input:checked + .switch-label:before {
         background-color: #a6d3cf;
     }
+
     .switch-input:checked + .switch-label:after {
         background-color: #009385;
         -ms-transform: translate(80%, -50%);
         -webkit-transform: translate(80%, -50%);
         transform: translate(80%, -50%);
     }
+
     .switch-input:checked + .switch-label .toggle--on {
         display: inline-block;
     }
+
     .switch-input:checked + .switch-label .toggle--off {
         display: none;
     }
-
 
 
     @keyframes page-load {
@@ -163,6 +172,33 @@
         left: 50%;
         position: relative;
         margin-bottom: 16px;
+    }
+
+    .note {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        padding: 15px;
+    }
+
+    .note-danger {
+        background-color: #ffdddd;
+        border-left: 6px solid #f44336;
+    }
+
+    .note-success {
+        background-color: #ddffdd;
+        border-left: 6px solid #4CAF50;
+    }
+
+    .note-info {
+        background-color: #e7f3fe;
+        border-left: 6px solid #2196F3;
+    }
+
+    /*NOTES*/
+    .note-warning {
+        background-color: #ffffcc;
+        border-left: 6px solid #ffeb3b;
     }
 
 </style>
