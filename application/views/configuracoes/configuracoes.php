@@ -1,13 +1,21 @@
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h3>
-            <i class="fas fa-users-cog fa-lg fa-fw"></i>
-            Configurações da Conta de Usuário
+            <i class="fas fa-user-cog fa-lg fa-fw"></i>
+            Configurações de Usuário
+        </h3>
+    </div>
+</div>
+<div class="panel panel-midnightblue">
+    <div class="panel-heading">
+        <h3>
+            <i class="fas fa-file-invoice-dollar fa-lg fa-fw"></i>
+            Faturas
         </h3>
         <div class="panel-ctrls">
-            <a href="#" class="button-icon close-panel">
-                <i class="fas fa-times"></i>
-            </a>
+            <!--            <a href="#" class="button-icon close-panel">-->
+            <!--                <i class="fas fa-times"></i>-->
+            <!--            </a>-->
             <a href="#" class="button-icon expand">
                 <i class="fas fa-expand-arrows-alt expand-icon"></i>
             </a>
@@ -16,16 +24,19 @@
             </a>
         </div>
     </div>
-    <div class="panel-body">
-        <input type="checkbox" id="id-name--1" name="set-name" class="switch-input" checked>
-        <label for="id-name--1" class="switch-label">Email de notificação para vencimento de faturas</label>
+    <div class="panel-body row">
+        <input type="checkbox" id="faturas_usuario" name="set-name" class="switch-input faturas" checked>
+        <label for="faturas_usuario" class="switch-label">Email de notificação para vencimento das faturas</label>
+        <br>
+        <input type="checkbox" id="faturas_clientes" name="set-name" class="switch-input faturas" checked>
+        <label for="faturas_clientes" class="switch-label">Notificar por email clientes sobre vencimento das faturas</label>
     </div>
 </div>
 
 <?php if (!isset($dados) || $dados == null) { ?>
 
-
 <?php } else { ?>
+
 <?php } ?>
 
 <script type="text/javascript">
