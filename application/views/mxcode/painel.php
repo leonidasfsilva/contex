@@ -171,7 +171,7 @@
                     <!--                            <div class="pull-right"><span class="badge">3</span></div>-->
                 </div>
                 <div class="tile-footer">
-                    OS
+                    Ordens de Serviço
                 </div>
             </a>
         </div>
@@ -193,5 +193,93 @@
 </div>
 
 <script>
+    $.each($('.conteudo-widget'), function (key, value) {
+        if ($(this).css('display') == 'none') {
+            $(this).parents().eq(3).find('.collapse-icon').attr('class', 'fas fa-chevron-down fa-fw collapse-icon');
+            $(this).parents().eq(3).find(".chevron-label").text('exibir');
+        } else {
+            $(this).parents().eq(3).find('.collapse-icon').attr('class', 'fas fa-chevron-up fa-fw collapse-icon');
+            $(this).parents().eq(3).find(".chevron-label").text('ocultar');
+        }
+    });
 
+    $('a.widget-collapse').click(function () {
+        let n = $(this).parents().eq(2).find(".conteudo-widget");
+
+        if (n.css('display') == 'none') {
+            $(this).find('.collapse-icon').attr('class', 'fas fa-chevron-up fa-fw collapse-icon');
+            $(this).find(".chevron-label").text('ocultar');
+
+            if ($(this).attr('id') == 'widget_lancamentos') {
+                $.ajax({
+                    type: "POST",
+                    url: "<?=base_url();?>configuracoes/setWidgetLancamentos",
+                    data: "value=" + 1,
+                    dataType: 'html',
+                });
+            }
+            if ($(this).attr('id') == 'widget_credito') {
+                $.ajax({
+                    type: "POST",
+                    url: "<?=base_url();?>configuracoes/setWidgetCartaoCredito",
+                    data: "value=" + 1,
+                    dataType: 'html',
+                });
+            }
+            if ($(this).attr('id') == 'widget_investimentos') {
+                $.ajax({
+                    type: "POST",
+                    url: "<?=base_url();?>configuracoes/setWidgetInvestimentos",
+                    data: "value=" + 1,
+                    dataType: 'html',
+                });
+            }
+            if ($(this).attr('id') == 'widget_pendencias') {
+                $.ajax({
+                    type: "POST",
+                    url: "<?=base_url();?>configuracoes/setWidgetPendencias",
+                    data: "value=" + 1,
+                    dataType: 'html',
+                });
+            }
+        } else {
+            $(this).find('.collapse-icon').attr('class', 'fas fa-chevron-down fa-fw collapse-icon');
+            $(this).find(".chevron-label").text('exibir');
+
+            if ($(this).attr('id') == 'widget_lancamentos') {
+                $.ajax({
+                    type: "POST",
+                    url: "<?=base_url();?>configuracoes/setWidgetLancamentos",
+                    data: "value=" + 0,
+                    dataType: 'html',
+                });
+            }
+            if ($(this).attr('id') == 'widget_credito') {
+                $.ajax({
+                    type: "POST",
+                    url: "<?=base_url();?>configuracoes/setWidgetCartaoCredito",
+                    data: "value=" + 0,
+                    dataType: 'html',
+                });
+            }
+            if ($(this).attr('id') == 'widget_investimentos') {
+                $.ajax({
+                    type: "POST",
+                    url: "<?=base_url();?>configuracoes/setWidgetInvestimentos",
+                    data: "value=" + 0,
+                    dataType: 'html',
+                });
+            }
+            if ($(this).attr('id') == 'widget_pendencias') {
+                $.ajax({
+                    type: "POST",
+                    url: "<?=base_url();?>configuracoes/setWidgetPendencias",
+                    data: "value=" + 0,
+                    dataType: 'html',
+                });
+            }
+        }
+        n.slideToggle({duration: 200});
+        return false;
+    });
 </script>
