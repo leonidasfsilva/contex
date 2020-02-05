@@ -14,19 +14,19 @@ $fim = $this->input->get('dataFinal');
         <div class="panel-ctrls">
             <ul class="demo-btns">
                 <li>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                    <div class="btn-group" id="div_pesquisa">
+                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" id="btn_pesquisa">
                             <i class="fas fa-search fa-fw"></i>
                             Pesquisar
                         </button>
-                        <ul class="dropdown-menu">
-                            <form action="<?php echo base_url() ?>financeiro/lancamentos/pesquisa" style="margin: 0px 15px 0 15px" method="post" id="pesquisa" autocomplete="off">
+                        <ul class="dropdown-menu dropdown-menu-left pull-right">
+                            <form action="<?php echo base_url() ?>financeiro/lancamentos/pesquisa" style="margin: 0 15px 0 15px" method="post" autocomplete="off">
                                 <input type="hidden" id="urlPesquisa" name="urlAtual">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" name="termo" placeholder="Pesquisar" style="margin-top: 6px;" required>
+                                    <input type="text" class="form-control" id="input_pesquisa" name="termo" placeholder="Pesquisar" style="margin-top: 6px;" required>
                                     <span class="input-group-btn">
 						                    <button type="submit" class="btn btn-primary"><i class="fas fa-search fa-fw"></i></button>
-					                    </span>
+                                    </span>
                                 </div>
                             </form>
                         </ul>
@@ -619,6 +619,10 @@ $fim = $this->input->get('dataFinal');
 </div>
 
 <script type="text/javascript">
+
+    $('#div_pesquisa').on('shown.bs.dropdown', function(e) {
+        $('#input_pesquisa').focus();
+    });
 
     $('.dropdown-menu>form').click(function (e) {
         e.stopPropagation();

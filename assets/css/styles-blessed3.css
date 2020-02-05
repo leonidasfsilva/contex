@@ -4499,6 +4499,9 @@ tbody.collapse.in {
 .open > .dropdown-menu {
     display: block;
 }
+.open > .dropdown-menu.dropdown-menu-left {
+    display: table;
+}
 
 .open > a {
     outline: 0;
@@ -4510,9 +4513,10 @@ tbody.collapse.in {
 }
 
 .dropdown-menu-left {
-    left: 0;
+    left: 0 !important;
     right: auto;
 }
+
 
 .dropdown-header {
     display: block;
