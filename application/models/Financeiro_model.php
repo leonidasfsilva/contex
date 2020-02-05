@@ -141,14 +141,12 @@ class Financeiro_model extends CI_Model
     function pesquisa($termo, $id)
     {
         //buscando lancamentos
-        $this->db->select('*');
-        $this->db->from('lancamentos');
-        $this->db->like('descricao', $termo);
-        $this->db->like('cliente_fornecedor', $termo);
+        $value = $this->db->escape_like_str($termo);
+        $this->db->where("(descricao LIKE '%$value%' || cliente_fornecedor LIKE '%$value%')");
         $this->db->where('status', 1);
         $this->db->where('id_usuario', $id);
 //        $this->db->limit(5);
-        return $this->db->get()->result();
+        return $this->db->get('lancamentos')->result();
     }
 
 }
