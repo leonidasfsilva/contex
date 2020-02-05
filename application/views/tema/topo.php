@@ -1,7 +1,10 @@
-<?php $this->load->view('includes/css'); ?>
-<?php $this->load->view('includes/custom_css'); ?>
-<?php $this->load->view('includes/js'); ?>
-<?php $this->load->view('includes/custom_js'); ?>
+<?php
+clearstatcache();
+$this->load->view('includes/css');
+$this->load->view('includes/custom_css');
+$this->load->view('includes/js');
+$this->load->view('includes/custom_js');
+?>
 
 <body class="infobar-offcanvas infobar-overlay sidebar-hideon-collapse sidebar-scroll" id="body">
 
@@ -309,19 +312,21 @@
 
         <!--        MENSAGENS-->
         <li class="dropdown toolbar-icon-bg hidden-xs">
-            <a href="#" class="hasnotifications dropdown-toggle " data-toggle='dropdown' data-placement="bottom" title="Mensagens">
-                <span class="icon-bg"><i class="fas fa-fw fa-envelope"></i></span></a>
+            <a href="#" class="hasnotifications dropdown-toggle " data-toggle='dropdown' data-placement="bottom" title="Chamados">
+                <span class="icon-bg"><i class="fas fa-fw fa-comments"></i></span></a>
             <div class="dropdown-menu dropdown-alternate messages arrow">
                 <div class="dd-header">
-                    <span>Messages</span>
-                    <span><a href="#">Settings</a></span>
+                    <span>Chamados</span>
+                    <span>
+<!--                        <a href="#">Settings</a>-->
+                    </span>
                 </div>
 
                 <div class="scrollthis scroll-pane">
                     <ul class="scroll-content">
                         <li class="">
                             <a href="#">
-                                <!--                                <img class="msg-avatar" src="--><?php //echo base_url() ?><!--assets/demo/avatar/avatar_09.png" alt="avatar"/>-->
+                                <img class="msg-avatar" src="<?php echo base_url() ?>assets/demo/avatar/avatar_09.png" alt="avatar"/>
                                 <div class="msg-content">
                                     <span class="name">Steven Shipe</span>
                                     <span class="msg">Nonummy nibh epismod lorem ipsum</span>
@@ -382,7 +387,7 @@
                     </ul>
                 </div>
 
-                <div class="dd-footer"><a href="#">View all messages</a></div>
+                <div class="dd-footer font-weight-bold"><a href="<?= base_url(); ?>chamados">ver todos</a></div>
             </div>
         </li>
         <!--        MENSAGENS-->
