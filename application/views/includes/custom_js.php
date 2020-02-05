@@ -1,4 +1,3 @@
-<?php ob_start();?>
 <script>
     $(function () {
         $('.popover-btn').popover()
@@ -301,4 +300,3 @@
         });
     });
 </script>
-<?php ob_end_flush();?>
