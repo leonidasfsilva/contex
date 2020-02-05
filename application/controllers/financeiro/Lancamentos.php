@@ -17,7 +17,7 @@ class Lancamentos extends CI_Controller
         $this->load->model('fatura_model', '', true);
         $this->load->model('clientes_model', '', true);
         $this->data['menuFinanceiro'] = 'Lancamentos';
-        $this->global_url = site_url() . 'financeiro/lancamentos/';
+        $this->global_url = site_url() . 'financeiro/lancamentos';
 
     }
 
@@ -125,7 +125,7 @@ class Lancamentos extends CI_Controller
 
         $this->load->library('pagination');
 
-        $config['base_url'] = site_url() . 'financeiro/lancamentos/';
+        $config['base_url'] = site_url() . 'financeiro/lancamentos';
         $config['total_rows'] = $this->financeiro_model->count(
             'lancamentos',
             $where,
