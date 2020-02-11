@@ -52,7 +52,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 Filtrar
             </button>
             <button href="#modalLancamento" id="novoLancamento" data-toggle="modal" class="btn btn-primary btn-sm"
-                    title="Cadastrar novo lançamento"<?= $disabled_lancamento_1 ?>>
+                    title="Cadastrar novo lançamento" <?= $disabled_lancamento_1 ?>>
                 <i class="fas fa-plus-square fa-fw"></i>
                 Novo Lançamento
             </button>
@@ -654,9 +654,12 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             var valor = $('#valor').val();
 
             var result = calculaValorParcela(parcelas, valor);
-            if(parcelas != null) {
+            if (parcelas != '' && valor != '') {
                 $('.parcela').val(result);
+            } else {
+                $('.parcela').val('');
             }
+            console.log(parcelas);
         });
 
         $('#qnt_parcelasEditar, #valorEditar').on('change', function () {
@@ -664,7 +667,9 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             var valor = $('#valorEditar').val();
 
             var result = calculaValorParcela(parcelas, valor);
-            $('#valor_parcelaEditar').val(result);
+            if (parcelas != null) {
+                $('#valor_parcelaEditar').val(result);
+            }
         });
 
         function calculaValorParcela(parcela, valor) {
@@ -790,7 +795,19 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 data_compra: {required: 'Informe a data da compra'},
                 qnt_parcelas: {required: 'Informe o número de parcelas'},
                 valor_parcela: {required: 'Informe o valor das parcelas'},
+            },
+
+            errorClass: "help-block",
+            errorElement: "p",
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
             }
+
         });
 
         $("#formEditarLancamento").validate({
@@ -808,7 +825,20 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 data_compra: {required: 'Informe a data da compra'},
                 qnt_parcelas: {required: 'Informe o número de parcelas'},
                 valor_parcela: {required: 'Informe o valor das parcelas'},
+            },
+
+            errorClass: "help-block",
+            errorElement: "p",
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
             }
+
+
         });
 
         $(document).on('click', '.excluir', function (event) {

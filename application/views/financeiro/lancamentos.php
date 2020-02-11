@@ -699,7 +699,19 @@ $fim = $this->input->get('dataFinal');
                 valor: {required: 'Informe o valor'},
                 vencimento: {required: 'Campo obrigatório'},
                 formaPgto: {required: 'Selecione a forma de pagamento'}
+            },
+
+            errorClass: "help-block",
+            errorElement: "p",
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
             }
+
         });
 
         $("#formDespesa").validate({
@@ -717,7 +729,19 @@ $fim = $this->input->get('dataFinal');
                 valor: {required: 'Informe o valor'},
                 vencimento: {required: 'Campo obrigatório'},
                 formaPgto: {required: 'Selecione a forma de pagamento'}
+            },
+
+            errorClass: "help-block",
+            errorElement: "p",
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
             }
+
         });
 
         $("#formEditar").validate({
@@ -735,7 +759,19 @@ $fim = $this->input->get('dataFinal');
                 valor: {required: 'Campo obrigatório'},
                 vencimento: {required: 'Campo obrigatório'},
                 formaPgto: {required: 'Selecione a forma de pagamento'}
+            },
+
+            errorClass: "help-block",
+            errorElement: "p",
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
             }
+
         });
 
 

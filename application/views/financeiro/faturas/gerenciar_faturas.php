@@ -481,7 +481,19 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             },
             messages: {
                 vencimento_fatura: {required: 'Informe a data de vencimento da fatura'}
+            },
+
+            errorClass: "help-block",
+            errorElement: "p",
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
             }
+
         });
 
         $("#formPagar").validate({
@@ -490,7 +502,19 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             },
             messages: {
                 forma_pagamento: {required: 'Selecione a forma de pagamento'},
+            },
+
+            errorClass: "help-block",
+            errorElement: "p",
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
             }
+
         });
 
         $(document).on('click', '#novaFatura', function () {
