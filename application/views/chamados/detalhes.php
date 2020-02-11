@@ -31,11 +31,11 @@
                         <div class="tabular-cell avatar">
                             <img src="<?php echo $this->chamados_model->getAvatarUsuario($chamado->id_usuario) != null ? base_url() . 'assets/uploads/avatars/' .
                                 $this->chamados_model->getAvatarUsuario($chamado->id_usuario) : base_url() . 'assets/img/avatars/padrao.png'; ?>"
-                                 alt="avatar">
+                                 alt="avatar" class="">
                         </div>
                         <div class="tabular-cell msg">
                             <p class="msgee"><?= $this->chamados_model->getNomeUsuario($chamado->id_usuario) ?></p>
-                            <pre class="chamado"><?= $chamado->descricao ?></pre>
+                            <p class="panel chamado p10"><?= nl2br($chamado->descricao) ?></p>
                             <!--                            <div class="well mb0 attachment">-->
                             <!--                                <div class="clearfix">-->
                             <!--									<span class="pull-left">-->
@@ -88,7 +88,7 @@
                                 </div>
                                 <div class="tabular-cell msg">
                                     <p class="msgee"><?= $this->chamados_model->getNomeUsuario($r->id_usuario) ?></p>
-                                    <pre class="chamado"><?= $r->resposta ?></pre>
+                                    <p class="panel chamado p10"><?= nl2br($r->resposta) ?></p>
                                 </div>
                                 <div class="tabular-cell time">
                                     <small><?= $intervalo?></small>

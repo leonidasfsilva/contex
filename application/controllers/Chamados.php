@@ -144,7 +144,6 @@ class Chamados extends CI_Controller
                 } else {
                     $data['intervalo'] = $dataformatada;
                 }
-
             } else {
                 $this->session->set_flashdata('erro', 'Chamado não encontrado para este usuário.');
                 redirect('chamados');
