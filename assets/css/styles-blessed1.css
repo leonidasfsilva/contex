@@ -4281,6 +4281,14 @@ ul.mailbox-msg-list li a.mailbox-msg-list-item div .msg {
   margin-top: 0;
   font-weight: 700;
 }
+.mailbox-panel section .message .msg p.msgee {
+  color: #455a64;
+  margin-top: 0;
+  font-weight: 700;
+}
+.mailbox-panel section .message .msg pre.chamado {
+  font-family: 'Roboto','Open Sans', 'Droid Sans', Tahoma, Arial, sans-serif;
+}
 .mailbox-panel section .message .msg a.msgee + p {
   padding-top: 4px;
 }

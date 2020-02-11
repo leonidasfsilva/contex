@@ -1,91 +1,80 @@
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <div class="panel panel-midnightblue">
-            <div class="panel-body panel-no-padding">
-                <div class="input-search-icon-sm">
-                    <button type="button" class="btn btn-block btn-primary"><i class="fas fa-plus fa-fw"></i> Abrir Chamado</button>
+            <div class="panel-heading">
+                <div class="col-md-4 col-xs-7 pull-left pl0">
+                    <div class="input-icon right">
+                        <i class="fas fa-fw fa-search" style="cursor: pointer"></i>
+                        <input type="text" class="form-control mt10" placeholder="Pesquisar chamados" name="pesquisa">
+                    </div>
                 </div>
+                <div class="pull-right pr0">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" href="#modalAbrirChamado">
+                        <i class="fas fa-plus fa-fw"></i> Abrir Chamado
+                    </button>
+                </div>
+            </div>
+            <div class="panel-body panel-no-padding">
+                <?php if ($chamados != null) {
+                    foreach ($chamados as $c) {
 
-                <!--                <div class="input-search-icon-sm">-->
-                <!--                    <input type="text" placeholder="Buscar chamados" class="form-control">-->
-                <!--                </div>-->
-                <ul class="mailbox-msg-list">
-                    <li>
-                        <a href="#" class="mailbox-msg-list-item">
-                            <span class="time">30s</span>
-                            <img src="assets/demo/avatar/avatar_09.png" alt="avatar" title="" style="">
-                            <div><span class="name">Kenneth Ross</span><span class="msg">Hey there, how's it going?</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="mailbox-msg-list-item">
-                            <span class="time">5m</span>
-                            <img src="assets/demo/avatar/avatar_01.png" alt="avatar">
-                            <div><span class="name">David Luke</span><span class="msg">Are we meeting this week...?</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="mailbox-msg-list-item">
-                            <span class="time">3h</span>
-                            <img src="assets/demo/avatar/avatar_05.png" alt="avatar"/>
-                            <div><span class="name">Jack Aviles</span><span class="msg">New UI looks good.</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="mailbox-msg-list-item">
-                            <span class="time">2d</span>
-                            <img src="assets/demo/avatar/avatar_07.png" alt="avatar"/>
-                            <div><span class="name">Darrell Ortega</span><span class="msg">Files uploaded to server.</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="mailbox-msg-list-item">
-                            <span class="time">2d</span>
-                            <img src="assets/demo/avatar/avatar_10.png" alt="avatar"/>
-                            <div><span class="name">Skyler Freeman</span><span class="msg">Files uploaded to server.</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="mailbox-msg-list-item">
-                            <span class="time">2d</span>
-                            <img src="assets/demo/avatar/avatar_13.png" alt="avatar"/>
-                            <div><span class="name">Walter Stephanie</span><span class="msg">Files uploaded to server.</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="mailbox-msg-list-item">
-                            <span class="time">2d</span>
-                            <img src="assets/demo/avatar/avatar_07.png" alt="avatar"/>
-                            <div><span class="name">David Thomas</span><span class="msg">Files uploaded to server.</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="mailbox-msg-list-item">
-                            <span class="time">2d</span>
-                            <img src="assets/demo/avatar/avatar_02.png" alt="avatar"/>
-                            <div><span class="name">Leonel Archie</span><span class="msg">Files uploaded to server.</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="mailbox-msg-list-item">
-                            <span class="time">2d</span>
-                            <img src="assets/demo/avatar/avatar_04.png" alt="avatar"/>
-                            <div><span class="name">Reginald Martin</span><span class="msg">Files uploaded to server.</span></div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="mailbox-msg-list-item">
-                            <span class="time">2d</span>
-                            <img src="assets/demo/avatar/avatar_08.png" alt="avatar"/>
-                            <div><span class="name">Jacob Davis</span><span class="msg">Files uploaded to server.</span></div>
-                        </a>
-                    </li>
-                </ul>
+                        $date_time = new DateTime($c->data_abertura);
+                        $hoje = new DateTime('now');
+                        $interval = $hoje->diff($date_time);
+                        $dataformatada = $date_time->format('d/m/Y H:i:s');
+
+                        if ($interval->m < 1) {
+                            if ($interval->d < 2) {
+                                if ($interval->h < 1) {
+                                    if ($interval->i < 01) {
+                                        $intervalo = $interval->s . 's';
+                                    } else {
+                                        $intervalo = $interval->i . 'm';
+                                    }
+                                } else {
+                                    $intervalo = $interval->h . 'h';
+                                }
+                            } else {
+                                $intervalo = $interval->d . 'd';
+                            }
+                        } else {
+                            $intervalo = $dataformatada;
+                        } ?>
+                        <ul class="mailbox-msg-list">
+                            <li>
+                                <a href="<?= base_url('chamados/detalhes/' . $c->id_chamado) ?>" class="mailbox-msg-list-item">
+                                    <span class="time"><?= ($intervalo) ?></span>
+                                    <img src="<?php echo $this->chamados_model->getAvatarUsuario($c->id_usuario) != null ? base_url() . 'assets/uploads/avatars/' .
+                                        $this->chamados_model->getAvatarUsuario($c->id_usuario) : base_url() . 'assets/img/avatars/padrao.png'; ?>"
+                                         alt="avatar" title="" style="">
+                                    <div>
+                                        <span class="name"><?= $this->chamados_model->getNomeUsuario($c->id_usuario) ?></span>
+                                        <span class="msg"><strong>(<?= $c->assunto ?>)</strong> - <?= $c->descricao ?></span>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    <?php }
+                } else { ?>
+                    <ul class="mailbox-msg-list">
+                        <li>
+                            <a href="javascript:" class="mailbox-msg-list-item" style="cursor: unset;">
+                                <!--                                <span class="time">30s</span>-->
+                                <!--                                <img src="assets/demo/avatar/avatar_09.png" alt="avatar" title="" style="">-->
+                                <div>
+                                    <span class="name">Nenhum chamado encontrado.</span>
+                                    <span class="msg">Clique no botão acima para abrir um novo chamado.</span>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                <?php } ?>
             </div>
         </div>
     </div>
+
     <div class="col-md-8">
-        <div class="panel panel-midnightblue">
+        <div class="panel panel-midnightblue" id="painel_chamado" hidden>
             <div class="panel-heading">
                 <h2 class="pull-left mt0 mb0">Chamado ID: # 37</h2>
                 <div class="panel-ctrls">
@@ -98,7 +87,6 @@
                             <li><a href="#"><i class="fas fa-trash-alt fa-fw"></i> Excluir Chamado</a></li>
                         </ul>
                     </div>
-
                     <a href="#" class="button-icon close-panel">
                         <i class="fas fa-times"></i>
                     </a>
@@ -168,8 +156,6 @@
                         </div>
                     </div>
                 </section>
-
-
                 <div class="panel-footer">
                     <textarea class="form-control" rows="4" placeholder="Escreva uma resposta" style="resize: none; "></textarea>
                     <div class="msg-composer">
@@ -182,156 +168,76 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </div>
     </div>
 
 </div>
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h2>
-                    Chamados
-                </h2>
-                <div class="panel-ctrls">
-                    <button href="#modalAbrirChamado" class="btn btn-primary btn-sm" id="abrir_chamado" data-toggle="modal" title="Abrir chamado">
-                        <i class="fas fa-plus fa-fw"></i>
-                        Abrir Chamado
+<!-- Modal ABRIR CHAMADO -->
+<div class="modal fade" id="modalAbrirChamado" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-white ">Abrir novo chamado</h4>
+            </div>
+            <form id="formAbrirChamado" action="<?php echo base_url() ?>chamados/abrirChamado" method="post" autocomplete="off">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label for="assunto" class="font-weight-bold">Assunto *</label>
+                            <select name="assunto" id="assunto" class="form-control">
+                                <option value=""><< Selecione >></option>
+                                <?php if ($assuntos) {
+                                    foreach ($assuntos as $a) { ?>
+                                        <option value="<?= $a->assunto ?>"><?= $a->assunto ?></option>
+                                    <?php }
+                                } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label for="cpf" class="font-weight-bold">Descrição *</label>
+                            <textarea class="form-control" id="descricao" name="descricao" rows="5"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnCancelLancamento" class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                        <i class="fa fa-times fa-fw"></i> Cancelar
                     </button>
-                    <!--                    <a href="#" class="button-icon close-panel">-->
-                    <!--                        <i class="fas fa-times"></i>-->
-                    <!--                    </a>-->
-                    <!--                    <a href="#" class="button-icon expand">-->
-                    <!--                        <i class="fas fa-expand-arrows-alt expand-icon"></i>-->
-                    <!--                    </a>-->
-                    <!--                    <a href="#" class="button-icon panel-collapse">-->
-                    <!--                        <i class="fas fa-minus"></i>-->
-                    <!--                    </a>-->
+                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Enviar</button>
                 </div>
-            </div>
-            <div class="panel-body p-n">
-                <div class="row">
-                    <div class="col-md-8 col-xs-12">
-                        <div class="panel-chat well m-n" id="chat" tabindex="5000" style="overflow-y: hidden; outline: none; border-radius: 0;">
-                            <div class="chat-message me">
-                                <div class="chat-contact">
-                                    <img src="assets/demo/avatar/avatar_13.png" alt="">
-                                </div>
-                                <div class="chat-text">
-                                    Chatroulette was one of those sites that didn’t impress me much because it was difficult to find someone to simply chat with.
-                                </div>
-                            </div>
-                            <div class="chat-message chat-primary">
-                                <div class="chat-contact">
-                                    <img src="assets/demo/avatar/avatar_02.png" alt="">
-                                </div>
-                                <div class="chat-text">
-                                    Well, that was almost like a visit to the local loony bin. Strangers starts talking to you, but you are unable to comprehend what they are
-                                    trying to say, and then they suddenly get distracted and leaves.
-                                </div>
-                            </div>
-                            <div class="chat-message chat-success">
-                                <div class="chat-contact">
-                                    <img src="assets/demo/avatar/avatar_07.png" alt="">
-                                </div>
-                                <div class="chat-text">
-                                    I found some really interesting people on omegle.
-                                </div>
-                            </div>
-                            <div class="chat-message chat-success">
-                                <div class="chat-contact">
-                                    <img src="assets/demo/avatar/avatar_03.png" alt="">
-                                </div>
-                                <div class="chat-text">
-                                    We talked about music, literature, life, etc.
-                                </div>
-                            </div>
-                            <div class="chat-message me">
-                                <div class="chat-contact">
-                                    <img src="assets/demo/avatar/avatar_13.png" alt="">
-                                </div>
-                                <div class="chat-text">
-                                    What about good old ICQ?
-                                </div>
-                            </div>
-                            <div class="chat-message me">
-                                <div class="chat-contact">
-                                    <img src="assets/demo/avatar/avatar_13.png" alt="">
-                                </div>
-                                <div class="chat-text">
-                                    It’s not a website.
-                                </div>
-                            </div>
-                            <div class="chat-message chat-success">
-                                <div class="chat-contact">
-                                    <img src="assets/demo/avatar/avatar_03.png" alt="">
-                                </div>
-                                <div class="chat-text">
-                                    I’m talking about icq.com, not the messenger.
-                                </div>
-                            </div>
-                            <div class="chat-message chat-success">
-                                <div class="chat-contact">
-                                    <img src="assets/demo/avatar/avatar_08.png" alt="">
-                                </div>
-                                <div class="chat-text">
-                                    Well, thank you for the pointer! I will eventually write a post about chatrooms and will definitely include ICQ.
-                                </div>
-                            </div>
-                            <div class="chat-message me">
-                                <div class="chat-contact">
-                                    <img src="assets/demo/avatar/avatar_13.png" alt="">
-                                </div>
-                                <div class="chat-text">
-                                    I’ve been using chatlack.com which is like chatroulette and iddin but with photos.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 hidden-xs">
-                        <div class="panel-body p-n">
-                            <ul class="chat-users mt-lg">
-                                <h4>Em Aberto<small> (5)</small></h4>
-                                <li data-stats="online"><a href="javascript:;"><img src="assets/demo/avatar/avatar_02.png" alt=""><span>Jeremy Potter</span></a></li>
-                                <li data-stats="online"><a href="javascript:;"><img src="assets/demo/avatar/avatar_07.png" alt=""><span>David Tennant</span></a></li>
-                                <li data-stats="online"><a href="javascript:;"><img src="assets/demo/avatar/avatar_03.png" alt=""><span>Anna Johansson</span></a></li>
-                                <li data-stats="busy"><a href="javascript:;"><img src="assets/demo/avatar/avatar_04.png" alt=""><span>Eric Jackson</span></a></li>
-                                <li data-stats="away"><a href="javascript:;"><img src="assets/demo/avatar/avatar_08.png" alt=""><span>Howard Jobs</span></a></li>
-                                <hr class="outsider">
-                                <h4>Finalizados<small> (10)</small></h4>
-                                <li data-stats="offline"><a href="javascript:;"><img src="assets/demo/avatar/avatar_10.png" alt=""><span>Annie Watson</span></a></li>
-                                <li data-stats="offline"><a href="javascript:;"><img src="assets/demo/avatar/avatar_09.png" alt=""><span>Alan Doyle</span></a></li>
-                                <li data-stats="offline"><a href="javascript:;"><img src="assets/demo/avatar/avatar_05.png" alt=""><span>Simon Corbett</span></a></li>
-                                <li data-stats="offline"><a href="javascript:;"><img src="assets/demo/avatar/avatar_01.png" alt=""><span>Polly Paton</span></a></li>
-                                <li data-stats="offline"><a href="javascript:;"><img src="assets/demo/avatar/avatar_10.png" alt=""><span>Annie Watson</span></a></li>
-                                <li data-stats="offline"><a href="javascript:;"><img src="assets/demo/avatar/avatar_09.png" alt=""><span>Alan Doyle</span></a></li>
-                                <li data-stats="offline"><a href="javascript:;"><img src="assets/demo/avatar/avatar_05.png" alt=""><span>Simon Corbett</span></a></li>
-                                <li data-stats="offline"><a href="javascript:;"><img src="assets/demo/avatar/avatar_01.png" alt=""><span>Polly Paton</span></a></li>
-                                <li data-stats="offline"><a href="javascript:;"><img src="assets/demo/avatar/avatar_10.png" alt=""><span>Annie Watson</span></a></li>
-                                <li data-stats="offline"><a href="javascript:;"><img src="assets/demo/avatar/avatar_09.png" alt=""><span>Alan Doyle</span></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="panel-footer p-md">
-                <form action="#">
-                    <div class="input-group">
-                        <input type="text" placeholder="Enter your message here" class="form-control">
-                        <span class="input-group-btn">
-            	    		<button type="button" class="btn btn-default"><i class="fa fa-arrow-right"></i></button>
-            	    	</span>
-                    </div>
-                </form>
-            </div>
+            </form>
         </div>
-
     </div>
 </div>
 
+<script>
+    $('#formAbrirChamado').validate({
+        rules: {
+            assunto: {required: true},
+            descricao: {required: true},
+        },
+        messages: {
+            assunto: {required: 'Selecione o assunto'},
+            descricao: {required: 'Descreva o ocorrido'},
+        },
+
+        errorClass: "help-block",
+        errorElement: "p",
+        highlight: function (element, errorClass, validClass) {
+            $(element).parents('.form-group').addClass('has-error');
+            $(element).parents('.form-group').removeClass('has-success');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).parents('.form-group').removeClass('has-error');
+            $(element).parents('.form-group').addClass('has-success');
+        }
+    });
+
+</script>
 
 

@@ -4,13 +4,25 @@ if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
+function differenceInHours($startdate, $enddate)
+{
+    $starttimestamp = strtotime($startdate);
+    $endtimestamp = strtotime($enddate);
+    $return =  abs($endtimestamp - $starttimestamp) / 3600;
+//    print_array($starttimestamp);
+//    print_array($endtimestamp);
+    return $return;
+}
+
+function versionApp() {
+    return '10.02.2020';
+}
 
 function print_array($a)
 {
     echo '<pre>';
     print_r($a);
     echo '</pre>';
-//    exit;
 }
 
 function print_array_exit($a)
@@ -26,6 +38,14 @@ function print_var($a)
     echo '<pre>';
     var_dump($a);
     echo '</pre>';
+}
+
+function print_var_exit($a)
+{
+    echo '<pre>';
+    var_dump($a);
+    echo '</pre>';
+    exit;
 }
 
 
