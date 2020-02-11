@@ -10,8 +10,8 @@
         cursor: pointer;
         font-weight: 500;
         text-align: left;
-        margin: 16px;
-        padding: 16px 0 16px 44px;
+        margin: 0px 0px 0px 10px;
+        padding: 10px 0px 10px 50px;
     }
 
     .switch-label:before, .switch-label:after {

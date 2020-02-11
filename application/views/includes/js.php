@@ -38,6 +38,7 @@
 <script src="<?php echo base_url(); ?>assets/js/jquery.mask.js"></script>
 <script src="<?php echo base_url(); ?>assets/plugins/fullcalendar/fullcalendar.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/plugins/wijets/wijets.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/form-jasnyupload/fileinput.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
 <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.pt-BR.min.js"></script>
 
