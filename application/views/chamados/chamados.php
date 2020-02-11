@@ -18,6 +18,12 @@
                 <?php if ($chamados != null) {
                     foreach ($chamados as $c) {
 
+                        if ($this->chamados_model->notificacaoChamado($c->id_chamado) > 0) {
+                            $notificacao = 'background-color: #00c5de2e;';
+                        } else {
+                            $notificacao = '';
+                        }
+
                         $date_time = new DateTime($c->data_abertura);
                         $hoje = new DateTime('now');
                         $interval = $hoje->diff($date_time);
@@ -41,7 +47,7 @@
                             $intervalo = $dataformatada;
                         } ?>
                         <ul class="mailbox-msg-list">
-                            <li>
+                            <li style="<?= $notificacao ?>">
                                 <a href="<?= base_url('chamados/detalhes/' . $c->id_chamado) ?>" class="mailbox-msg-list-item">
                                     <span class="time"><?= ($intervalo) ?></span>
                                     <img src="<?php echo $this->chamados_model->getAvatarUsuario($c->id_usuario) != null ? base_url() . 'assets/uploads/avatars/' .

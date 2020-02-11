@@ -310,10 +310,23 @@ $this->load->view('includes/custom_js');
         </li>
         <!--        NOTIFICAÇOES-->
 
-        <!--        MENSAGENS-->
+        <!--        CHAMADOS-->
         <li class="dropdown toolbar-icon-bg">
             <a href="#" class="hasnotifications dropdown-toggle " data-toggle='dropdown' data-placement="bottom" title="Chamados">
-                <span class="icon-bg"><i class="fas fa-fw fa-headset"></i></span></a>
+                <span class="icon-bg">
+                    <i class="fas fa-fw fa-headset"></i>
+                </span>
+                <!--                numero de notificações-->
+                <?php if ($this->session->userdata('permissao') == 1) {
+                    if (adminTemNotificacoes() > 0) { ?>
+                        <span class="badge badge-danger"><?= adminTemNotificacoes() ?></span>
+                    <?php }
+                } else {
+                    if (usuarioTemNotificacoes() > 0) { ?>
+                        <span class="badge badge-danger"><?= usuarioTemNotificacoes() ?></span>
+                    <?php }
+                } ?>
+            </a>
             <div class="dropdown-menu dropdown-alternate messages arrow">
                 <div class="dd-header">
                     <span>Chamados</span>
@@ -386,11 +399,10 @@ $this->load->view('includes/custom_js');
                         </li>
                     </ul>
                 </div>
-
                 <div class="dd-footer font-weight-bold"><a href="<?= base_url(); ?>chamados">ver todos</a></div>
             </div>
         </li>
-        <!--        MENSAGENS-->
+        <!--        CHAMADOS-->
 
         <!--MENU USUARIO-->
         <li class="dropdown toolbar-icon-bg">

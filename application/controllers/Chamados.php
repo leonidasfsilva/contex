@@ -74,7 +74,8 @@ class Chamados extends CI_Controller
             'assunto' => $assunto,
             'descricao' => $descricao,
             'id_usuario' => id_usuario(),
-            'status_chamado' => 1
+            'status_chamado' => 1,
+            'notifica_admin' => 1,
         );
 
         if ($this->chamados_model->add('chamados', $data) == true) {
@@ -102,6 +103,10 @@ class Chamados extends CI_Controller
         }
 
         if ($this->session->userdata('permissao') == 1) {
+            $data2 = array(
+                'notifica_admin' => 0
+            );
+            $this->chamados_model->edit('chamados', $data2, 'id_chamado', $id_chamado);
 
             $date_time = new DateTime($chamado->data_abertura);
             $hoje = new DateTime('now');
@@ -125,6 +130,10 @@ class Chamados extends CI_Controller
         } else {
             $chamadoUsuario = $this->chamados_model->verificaChamadoPertenceUsuario(id_usuario());
             if ($chamadoUsuario) {
+                $data2 = array(
+                    'notifica_usuario' => 0
+                );
+                $this->chamados_model->edit('chamados', $data2, 'id_chamado', $id_chamado);
 
                 $date_time = new DateTime($chamado->data_abertura);
                 $dataformatada = $date_time->format('d/m/Y H:i');
@@ -162,11 +171,27 @@ class Chamados extends CI_Controller
             redirect('chamados');
         }
 
-        $data = array(
-            'resposta' => $_POST['resposta'],
-            'id_usuario' => id_usuario(),
-            'id_chamado' => $id_chamado
-        );
+        if ($this->session->userdata('permissao') == 1) {
+            $data = array(
+                'resposta' => $_POST['resposta'],
+                'id_usuario' => id_usuario(),
+                'id_chamado' => $id_chamado,
+            );
+            $data2 = array(
+                'notifica_usuario' => 1
+            );
+            $this->chamados_model->edit('chamados', $data2, 'id_chamado', $id_chamado);
+        } else {
+            $data = array(
+                'resposta' => $_POST['resposta'],
+                'id_usuario' => id_usuario(),
+                'id_chamado' => $id_chamado,
+            );
+            $data2 = array(
+                'notifica_admin' => 1
+            );
+            $this->chamados_model->edit('chamados', $data2, 'id_chamado', $id_chamado);
+        }
 
         if ($this->chamados_model->add('chamados_respostas', $data) == true) {
             $this->session->set_flashdata('sucesso', 'Resposta enviada com sucesso!');
@@ -175,6 +200,11 @@ class Chamados extends CI_Controller
             $this->session->set_flashdata('erro', 'Erro ao tentar responder chamado.');
             redirect('chamados/detalhes/' . $id_chamado);
         }
+    }
+
+    public function getNotificacoesUsuario()
+    {
+        $this->chamados_model->usuarioTemNotificacoes(id_usuario());
     }
 
 }

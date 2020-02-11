@@ -63,7 +63,6 @@ class Chamados_model extends CI_Model
 
         return $data;
 
-
     }
 
     function add($table, $data)
@@ -83,7 +82,6 @@ class Chamados_model extends CI_Model
         if ($this->db->affected_rows() >= 0) {
             return true;
         }
-
         return false;
     }
 
@@ -115,6 +113,7 @@ class Chamados_model extends CI_Model
     {
         return $this->db
 //            ->where('status', 1)
+            ->order_by('data_abertura', 'desc')
             ->get('chamados')
             ->result();
     }
@@ -123,6 +122,7 @@ class Chamados_model extends CI_Model
     {
         return $this->db
             ->where('id_usuario', $id_usuario)
+            ->order_by('data_abertura', 'desc')
             ->get('chamados')
             ->result();
     }
@@ -167,4 +167,47 @@ class Chamados_model extends CI_Model
             ->get('chamados_respostas')
             ->result();
     }
+
+    function getNotificacoesUsuario($id_usuario)
+    {
+        return $this->db
+            ->where('id_usuario', $id_usuario)
+            ->get('chamados')
+            ->count_all_results();
+    }
+
+    function usuarioTemNotificacoes($id_usuario)
+    {
+        return $this->db
+            ->where('id_usuario', $id_usuario)
+            ->where('notifica_usuario', 1)
+            ->count_all_results('chamados');
+    }
+
+    function adminTemNotificacoes($id_usuario)
+    {
+        return $this->db
+//            ->where('id_usuario', $id_usuario)
+            ->where('notifica_admin', 1)
+            ->count_all_results('chamados');
+    }
+
+    function notificacaoChamado($id_chamado)
+    {
+        if ($this->session->userdata('permissao') == 1) {
+            return $this->db
+                ->where('id_chamado', $id_chamado)
+                ->where('notifica_admin', 1)
+                ->get('chamados')
+                ->num_rows();
+        } else {
+            return $this->db
+                ->where('id_chamado', $id_chamado)
+                ->where('notifica_usuario', 1)
+                ->get('chamados')
+                ->num_rows();
+        }
+    }
+
+
 }

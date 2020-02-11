@@ -8,6 +8,7 @@ class Mxcode extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        $this->load->model('chamados_model', '', true);
         $this->load->model('configs_model', '', true);
         $this->load->model('mxcode_model', '', true);
         $this->load->model('financeiro_model', '', true);
