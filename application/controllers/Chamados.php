@@ -87,7 +87,7 @@ class Chamados extends CI_Controller
         }
     }
 
-    public function detalhes($id_chamado)
+    public function detalhes($id_chamado = null)
     {
         if ($id_chamado == null) {
             $this->session->set_flashdata('erro', 'Método não permitido.');
@@ -114,7 +114,7 @@ class Chamados extends CI_Controller
             $dataformatada = $date_time->format('d/m/Y H:i:s');
 
             if ($interval->m < 1) {
-                if ($interval->d < 2) {
+                if ($interval->d < 1) {
                     if ($interval->h < 1) {
                         $data['intervalo'] = $interval->i . 'm';
                     } else {

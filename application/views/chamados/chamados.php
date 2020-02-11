@@ -30,9 +30,9 @@
                         $dataformatada = $date_time->format('d/m/Y H:i:s');
 
                         if ($interval->m < 1) {
-                            if ($interval->d < 2) {
+                            if ($interval->d < 1) {
                                 if ($interval->h < 1) {
-                                    if ($interval->i < 01) {
+                                    if ($interval->i < 1) {
                                         $intervalo = $interval->s . 's';
                                     } else {
                                         $intervalo = $interval->i . 'm';
@@ -64,12 +64,12 @@
                 } else { ?>
                     <ul class="mailbox-msg-list">
                         <li>
-                            <a href="javascript:" class="mailbox-msg-list-item" style="cursor: unset;">
+                            <a href="javascript:" class="mailbox-msg-list-item pl0" style="cursor: unset;">
                                 <!--                                <span class="time">30s</span>-->
                                 <!--                                <img src="assets/demo/avatar/avatar_09.png" alt="avatar" title="" style="">-->
                                 <div>
-                                    <span class="name">Nenhum chamado encontrado.</span>
-                                    <span class="msg">Clique no botão acima para abrir um novo chamado.</span>
+                                    <span class="name ml20">Nenhum chamado encontrado.</span>
+                                    <span class="msg ml20">Clique no botão acima para abrir um novo chamado.</span>
                                 </div>
                             </a>
                         </li>
