@@ -42,7 +42,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h3>
-            <i class="fas fa-credit-card fa-lg fa-fw"></i>
+            <i class="fas fa-file-invoice-dollar fa-lg fa-fw"></i>
             Detalhes da Fatura: # <?= $id_fatura ?>
         </h3>
         <div class="panel-ctrls">
@@ -410,7 +410,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             <div class="form-group col-lg-4">
                                 <label for="qnt_parcelas" class="font-weight-bold">Nº Parcelas</label>
                                 <select name="qnt_parcelas" id="qnt_parcelas" class="form-control qnt_parcelas">
-                                    <option value="">-- Selecione --</option>
+                                    <option value=""><< Selecione >></option>
                                     <?php if ($parcelas) {
                                         foreach ($parcelas as $k => $v) { ?>
                                             <option value="<?= $k ?>"><?= $v ?></option>
@@ -500,7 +500,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             <div class="form-group col-lg-4">
                                 <label for="qnt_parcelasEditar" class="font-weight-bold">Nº Parcelas *</label>
                                 <select name="qnt_parcelas" id="qnt_parcelasEditar" class="form-control qnt_parcelas">
-                                    <option value="">-- Selecione --</option>
+                                    <option value=""><< Selecione >></option>
                                     <?php if ($parcelas) {
                                         foreach ($parcelas as $k => $v) { ?>
                                             <option value="<?= $k ?>"><?= $v ?></option>
@@ -654,7 +654,9 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             var valor = $('#valor').val();
 
             var result = calculaValorParcela(parcelas, valor);
-            $('.parcela').val(result);
+            if(parcelas != null) {
+                $('.parcela').val(result);
+            }
         });
 
         $('#qnt_parcelasEditar, #valorEditar').on('change', function () {

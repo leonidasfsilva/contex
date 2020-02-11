@@ -18,7 +18,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h3>
-            <i class="fas fa-credit-card fa-lg fa-fw"></i>
+            <i class="fas fa-file-invoice-dollar fa-lg fa-fw"></i>
             Controle de Faturas
         </h3>
         <div class="panel-ctrls">

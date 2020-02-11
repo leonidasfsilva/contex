@@ -24,12 +24,17 @@
             </a>
         </div>
     </div>
-    <div class="panel-body row">
-        <input type="checkbox" id="faturas_usuario" name="set-name" class="switch-input faturas" checked>
-        <label for="faturas_usuario" class="switch-label">Email de notificação para vencimento das faturas</label>
-        <br>
-        <input type="checkbox" id="faturas_clientes" name="set-name" class="switch-input faturas" checked>
-        <label for="faturas_clientes" class="switch-label">Notificar por email clientes sobre vencimento das faturas</label>
+    <div class="panel-body">
+        <form action="#" class="form-horizontal row-border">
+            <div class="form-group">
+                <input type="checkbox" id="faturas_usuario" name="set-name" class="switch-input faturas" checked>
+                <label for="faturas_usuario" class="switch-label">Notificar usuário sobre vencimento das faturas</label>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" id="faturas_clientes" name="set-name" class="switch-input faturas" checked>
+                <label for="faturas_clientes" class="switch-label">Notificar clientes sobre vencimento das faturas</label>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -43,26 +48,6 @@
 
     $(document).ready(function () {
 
-        $('#s_n').on('ifChanged', function (event) {
-            const checked = event.target.checked;
-            if (checked == true) {
-                $('#numero').attr('disabled', true);
-                $('#numero').val('');
-            } else {
-                $('#numero').removeAttr('disabled');
-            }
-        });
-
-        var s_n = $('#s_n').iCheck('update')[0].checked;
-        $.each($(s_n), function (key, value) {
-            if (s_n == true) {
-                $('#numero').attr('disabled', true);
-                $('#numero').val('');
-            } else {
-                $('#numero').removeAttr('disabled');
-            }
-        });
-
         $("#formLogo").validate({
             rules: {
                 userfile: {required: true}
@@ -70,7 +55,6 @@
             messages: {
                 userfile: {required: 'Arquivo não informado'}
             },
-
             errorClass: "help-block",
             errorElement: "p",
             highlight: function (element, errorClass, validClass) {
