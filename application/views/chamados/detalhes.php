@@ -104,7 +104,15 @@
                         </div>
                         <div class="msg-composer">
                             <div class="pull-left">
-                                <button type="button" class="btn btn-default"><i class="fas fa-paperclip fa-fw"></i> Anexar</button>
+                                <div class="fileinput fileinput-new" data-provides="fileinput" style="cursor: pointer !important;">
+                                    <span class="btn btn-default btn-file" style="cursor: pointer !important;">
+                                        <span class="fileinput-new"><i class="fas fa-paperclip fa-fw" ></i> Anexar</span>
+                                        <span class="fileinput-exists"><i class="fas fa-refresh fa-fw"></i> Alterar</span>
+                                        <input name="arquivo" type="file" style="cursor: pointer !important;">
+                                    </span>
+                                    <span class="fileinput-filename"></span>
+                                    <a class="close fileinput-exists" data-dismiss="fileinput" href="#" style="float: none">&times;</a>
+                                </div>
                                 <!--                            <a href="#" class="btn btn-default"><i class="fa fa-camera"></i> Add Photos</a>-->
                             </div>
                             <div class="pull-right clearfix">
