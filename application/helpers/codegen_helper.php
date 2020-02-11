@@ -48,7 +48,6 @@ function print_var_exit($a)
     exit;
 }
 
-
 function clean_header($array)
 {
     $CI = get_instance();
@@ -115,4 +114,18 @@ function email_usuario()
 {
     $CI = get_instance();
     return $CI->session->userdata('email');
+}
+
+function usuarioTemNotificacoes() {
+    $CI = get_instance();
+    $CI->load->model('chamados_model');
+
+    return $CI->chamados_model->usuarioTemNotificacoes(id_usuario());
+}
+
+function adminTemNotificacoes() {
+    $CI = get_instance();
+    $CI->load->model('chamados_model');
+
+    return $CI->chamados_model->adminTemNotificacoes(id_usuario());
 }
