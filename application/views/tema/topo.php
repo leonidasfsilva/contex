@@ -245,7 +245,7 @@ $this->load->view('includes/custom_js');
         <!--        TELA CHEIA-->
 
         <!--        NOTIFICAÇOES-->
-        <li class="dropdown toolbar-icon-bg">
+        <li class="dropdown toolbar-icon-bg hidden-xs">
             <a href="#" class="hasnotifications dropdown-toggle" data-toggle="dropdown" data-placement="bottom" title="Notificações">
                 <span class="icon-bg">
                     <i class="fas fa-fw fa-bell"></i>
@@ -311,9 +311,9 @@ $this->load->view('includes/custom_js');
         <!--        NOTIFICAÇOES-->
 
         <!--        MENSAGENS-->
-        <li class="dropdown toolbar-icon-bg hidden-xs">
+        <li class="dropdown toolbar-icon-bg">
             <a href="#" class="hasnotifications dropdown-toggle " data-toggle='dropdown' data-placement="bottom" title="Chamados">
-                <span class="icon-bg"><i class="fas fa-fw fa-comments"></i></span></a>
+                <span class="icon-bg"><i class="fas fa-fw fa-headset"></i></span></a>
             <div class="dropdown-menu dropdown-alternate messages arrow">
                 <div class="dd-header">
                     <span>Chamados</span>
