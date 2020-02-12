@@ -28,7 +28,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             </button>
             <button href="#modalNovaFatura" id="novaFatura" data-toggle="modal" role="button" class="btn btn-primary btn-sm tip-bottom"
                     title="Abrir nova fatura" <?= $disabledFatura ?>>
-                <i class="fas fa-plus-square fa-fw"></i>
+                <i class="fas fa-plus fa-fw"></i>
                 Nova Fatura
             </button>
         </div>

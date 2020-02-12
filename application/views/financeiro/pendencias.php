@@ -21,7 +21,7 @@ $periodo_pendencia = $this->input->get('periodo');
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
                 <a href="#modalPendencia" id="pendencia" data-toggle="modal" role="button" class="btn btn-primary btn-sm tip-bottom"
                    title="Registrar nova pendência">
-                    <i class="fas fa-plus-square fa-fw"></i>
+                    <i class="fas fa-plus fa-fw"></i>
                     Nova Pendência
                 </a>
             <?php } ?>

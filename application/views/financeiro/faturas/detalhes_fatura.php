@@ -52,8 +52,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 Filtrar
             </button>
             <button href="#modalLancamento" id="novoLancamento" data-toggle="modal" class="btn btn-primary btn-sm"
-                    title="Cadastrar novo lançamento" <?= $disabled_lancamento_1 ?>>
-                <i class="fas fa-plus-square fa-fw"></i>
+                    title="Registrar novo lançamento" <?= $disabled_lancamento_1 ?>>
+                <i class="fas fa-plus fa-fw"></i>
                 Novo Lançamento
             </button>
         </div>

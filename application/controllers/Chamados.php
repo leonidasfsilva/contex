@@ -164,7 +164,7 @@ class Chamados extends CI_Controller
 
     }
 
-    public function responderChamado($id_chamado)
+    public function responder()
     {
         if (!$_POST) {
             $this->session->set_flashdata('erro', 'Método não permitido.');
@@ -175,30 +175,51 @@ class Chamados extends CI_Controller
             $data = array(
                 'resposta' => $_POST['resposta'],
                 'id_usuario' => id_usuario(),
-                'id_chamado' => $id_chamado,
+                'id_chamado' => $_POST['id_chamado'],
             );
             $data2 = array(
-                'notifica_usuario' => 1
+                'notifica_usuario' => 1,
             );
-            $this->chamados_model->edit('chamados', $data2, 'id_chamado', $id_chamado);
+            $this->chamados_model->edit('chamados', $data2, 'id_chamado', $_POST['id_chamado']);
         } else {
             $data = array(
                 'resposta' => $_POST['resposta'],
                 'id_usuario' => id_usuario(),
-                'id_chamado' => $id_chamado,
+                'id_chamado' => $_POST['id_chamado'],
             );
             $data2 = array(
                 'notifica_admin' => 1
             );
-            $this->chamados_model->edit('chamados', $data2, 'id_chamado', $id_chamado);
+            $this->chamados_model->edit('chamados', $data2, 'id_chamado', $_POST['id_chamado']);
         }
 
         if ($this->chamados_model->add('chamados_respostas', $data) == true) {
             $this->session->set_flashdata('sucesso', 'Resposta enviada com sucesso!');
-            redirect('chamados/detalhes/' . $id_chamado);
+            redirect('chamados/detalhes/' . $_POST['id_chamado']);
         } else {
             $this->session->set_flashdata('erro', 'Erro ao tentar responder chamado.');
-            redirect('chamados/detalhes/' . $id_chamado);
+            redirect('chamados/detalhes/' . $_POST['id_chamado']);
+        }
+    }
+
+    public function finalizar()
+    {
+        if (!$_POST) {
+            $this->session->set_flashdata('erro', 'Método não permitido.');
+            redirect('chamados');
+        }
+
+        $data = array(
+            'status_chamado' => 3,
+            'id_chamado' => $_POST['id_chamado'],
+        );
+
+        if ($this->chamados_model->edit('chamados', $data, 'id_chamado', $_POST['id_chamado']) == true) {
+            $this->session->set_flashdata('sucesso', 'Chamado finalizado com sucesso!');
+            redirect('chamados/detalhes/' . $_POST['id_chamado']);
+        } else {
+            $this->session->set_flashdata('erro', 'Erro ao tentar finalizar chamado.');
+            redirect('chamados/detalhes/' . $_POST['id_chamado']);
         }
     }
 

@@ -14,12 +14,12 @@ $periodo = $this->input->get('periodo');
             </button>
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aInvestimentos')) { ?>
                 <a href="#modalAplicacao" id="entrada" data-toggle="modal" role="button" class="btn btn-success btn-sm tip-bottom" title="Registrar nova aplicação">
-                    <i class="fas fa-plus-square fa-fw"></i>
-                    Aplicar
+                    <i class="fas fa-plus fa-fw"></i>
+                    Nova Aplicação
                 </a>
                 <a href="#modalResgate" id="saida" data-toggle="modal" role="button" class="btn btn-danger btn-sm tip-bottom" title="Registrar novo resgate">
-                    <i class="fas fa-minus-square fa-fw"></i>
-                    Resgatar
+                    <i class="fas fa-plus fa-fw"></i>
+                    Novo Resgate
                 </a>
             <?php } ?>
         </div>

@@ -79,7 +79,7 @@ class Chamados_model extends CI_Model
         $this->db->where($fieldID, $ID);
         $this->db->update($table, $data);
 
-        if ($this->db->affected_rows() >= 0) {
+        if ($this->db->affected_rows() > 0) {
             return true;
         }
         return false;
@@ -208,6 +208,15 @@ class Chamados_model extends CI_Model
                 ->num_rows();
         }
     }
+
+    function getStatusChamado($id_chamado)
+    {
+        return $this->db
+            ->where('id_chamado', $id_chamado)
+            ->get('chamados')
+            ->row('status_chamado');
+    }
+
 
 
 }
