@@ -11,51 +11,44 @@ $fim = $this->input->get('dataFinal');
             <i class="fas fa-line-chart fa-lg fa-fw"></i>
             Lançamentos
         </h3>
-        <div class="panel-ctrls">
-            <ul class="demo-btns">
+        <div class="row mr5 ml5">
+            <div class="panel-ctrls ml5">
                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
-                    <li>
-                        <div class="btn-group">
-                            <a href="#modalEntrada" id="entrada" data-toggle="modal" role="button" class="btn btn-success btn-sm tip-bottom"
-                               title="Registrar nova entrada">
-                                <i class="fas fa-plus fa-fw"></i>
-                                Nova Entrada
-                            </a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="btn-group">
-                            <a href="#modalSaida" id="saida" data-toggle="modal" role="button" class="btn btn-danger btn-sm tip-bottom" title="Registrar nova saída">
-                                <i class="fas fa-plus fa-fw"></i>
-                                Nova Saída
-                            </a>
-                        </div>
-                    </li>
+                    <a href="#modalEntrada" id="entrada" data-toggle="modal" role="button" class="btn btn-success btn-sm tip-bottom"
+                       title="Registrar nova entrada">
+                        <i class="fas fa-plus fa-fw"></i>
+                        Nova Entrada
+                    </a>
+                    <a href="#modalSaida" id="saida" data-toggle="modal" role="button" class="btn btn-danger btn-sm tip-bottom" title="Registrar nova saída">
+                        <i class="fas fa-plus fa-fw"></i>
+                        Nova Saída
+                    </a>
                 <?php } ?>
-            </ul>
-        </div>
-        <div class="panel-ctrls mr5">
-            <div class="btn-group" id="div_pesquisa">
-                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" id="btn_pesquisa">
-                    <i class="fas fa-search fa-fw"></i>
-                    Pesquisar
-                </button>
-                <ul class="dropdown-menu">
-                    <form action="<?php echo base_url() ?>financeiro/lancamentos/pesquisa" style="margin: 0 15px 0 15px" method="post" autocomplete="off">
-                        <input type="hidden" id="urlPesquisa" name="urlAtual">
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="input_pesquisa" name="termo" placeholder="Pesquisar" style="margin-top: 6px;" required>
-                            <span class="input-group-btn">
+            </div>
+            <div class="panel-ctrls">
+                <div class="btn-group" id="div_pesquisa">
+                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" id="btn_pesquisa">
+                        <i class="fas fa-search fa-fw"></i>
+                        Pesquisar
+                    </button>
+                    <ul class="dropdown-menu">
+                        <form action="<?php echo base_url() ?>financeiro/lancamentos/pesquisa" style="margin: 0 15px 0 15px" method="post" autocomplete="off">
+                            <input type="hidden" id="urlPesquisa" name="urlAtual">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="input_pesquisa" name="termo" placeholder="Pesquisar" style="margin-top: 6px;" required>
+                                <span class="input-group-btn">
 						                    <button type="submit" class="btn btn-primary"><i class="fas fa-search fa-fw"></i></button>
                                     </span>
-                        </div>
-                    </form>
-                </ul>
+                            </div>
+                        </form>
+                    </ul>
+                </div>
+                <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar lançamentos">
+                    <i class="fas fa-filter fa-fw"></i>
+                    Filtrar
+                </button>
             </div>
-            <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar lançamentos">
-                <i class="fas fa-filter fa-fw"></i>
-                Filtrar
-            </button>
+
         </div>
     </div>
     <div class="panel-heading">
@@ -616,7 +609,7 @@ $fim = $this->input->get('dataFinal');
 
 <script type="text/javascript">
 
-    $('#div_pesquisa').on('shown.bs.dropdown', function(e) {
+    $('#div_pesquisa').on('shown.bs.dropdown', function (e) {
         $('#input_pesquisa').focus();
     });
 
