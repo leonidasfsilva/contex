@@ -27,11 +27,11 @@
     <div class="panel-body">
         <form action="#" class="form-horizontal row-border">
             <div class="form-group">
-                <input type="checkbox" id="faturas_usuario" name="set-name" class="switch-input faturas" checked>
+                <input type="checkbox" id="faturas_usuario" name="set-name" class="switch-input faturas" >
                 <label for="faturas_usuario" class="switch-label">Notificar usuário sobre vencimento das faturas</label>
             </div>
             <div class="form-group">
-                <input type="checkbox" id="faturas_clientes" name="set-name" class="switch-input faturas" checked>
+                <input type="checkbox" id="faturas_clientes" name="set-name" class="switch-input faturas" >
                 <label for="faturas_clientes" class="switch-label">Notificar clientes sobre vencimento das faturas</label>
             </div>
         </form>

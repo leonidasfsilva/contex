@@ -439,24 +439,22 @@ $this->load->view('includes/custom_js');
                 <div class="sidebar">
                     <div class="widget stay-on-collapse" id="widget-welcomebox">
                         <div class="widget-body welcome-box tabular">
-                            <a href="<?php echo site_url(); ?>mxcode/minhaConta">
-                                <div class="tabular-row">
-                                    <div class="tabular-cell welcome-avatar">
-                                        <img src="<?php echo $this->session->userdata('avatar') != null ? base_url() . 'assets/uploads/avatars/' . $this->session->userdata('avatar') : base_url() . 'assets/img/avatars/padrao.png'; ?>"
-                                             class="avatar">
-                                    </div>
-                                    <div class="tabular-cell welcome-options">
-                                        <span class="welcome-text">Bem-vindo,</span>
-                                        <a href="<?php echo site_url(); ?>mxcode/minhaConta" class="name"><?= $this->session->userdata('nome') ?></a>
-                                    </div>
+                            <div class="tabular-row">
+                                <div class="tabular-cell welcome-avatar">
+                                    <img src="<?php echo $this->session->userdata('avatar') != null ? base_url('assets/uploads/avatars/') . $this->session->userdata('avatar') : base_url('assets/img/avatars/padrao.png'); ?>"
+                                         class="avatar">
                                 </div>
-                            </a>
+                                <div class="tabular-cell welcome-options">
+                                    <!--                                        <span class="welcome-text">Bem-vindo,</span>-->
+                                    <span class="name"><?= $this->session->userdata('nome') ?></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="widget stay-on-collapse" id="widget-sidebar">
                         <nav role="navigation" class="widget-body">
                             <ul class="acc-menu">
-                                <li class="nav-separator"></li>
+                                <!--                                <li class="nav-separator"></li>-->
                                 <li class="<?= (isset($menuPainel)) ? 'active' : ''; ?>">
                                     <a href="<?php echo base_url() ?>"><i class="fas fa-home fa-fw"></i>
                                         <span>Painel Inicial</span>

@@ -1,67 +1,37 @@
-<?php if (!$results) { ?>
-    <div class="panel panel-midnightblue">
-        <div class="panel-heading">
-            <h3>
-                <i class="fas fa-group fa-lg fa-fw"></i>
-                Cadastro de Clientes
-            </h3>
-            <div class="panel-ctrls">
-                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
-                    <a href="<?php echo base_url(); ?>clientes/adicionar" class="btn btn-primary btn-sm"><i class="fas fa-plus-square fa-fw"></i> Adicionar Cliente</a>
-                <?php } ?>
-            </div>
-        </div>
-        <div class="panel-body panel-no-padding table-responsive">
-            <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
-                <thead>
-                <tr role="row">
-                    <th style="width: 30px">ID</th>
-                    <th>Nome</th>
-                    <th>Telefone</th>
-                    <th style="width: 100px">Ações</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td colspan="5">Nenhum cliente cadastrado</td>
-                </tr>
-                </tbody>
-            </table>
+<div class="panel panel-midnightblue">
+    <div class="panel-heading">
+        <h3>
+            <i class="fas fa-group fa-lg fa-fw"></i>
+            Cadastro de Clientes
+        </h3>
+        <div class="panel-ctrls">
+            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
+                <a href="<?php echo base_url(); ?>clientes/adicionar" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus fa-fw"></i> Adicionar Cliente
+                </a>
+            <?php } ?>
         </div>
     </div>
-<?php }
-else { ?>
-    <div class="panel panel-midnightblue">
-        <div class="panel-heading">
-            <h3>
-                <i class="fas fa-group fa-lg fa-fw"></i>
-                Cadastro de Clientes
-            </h3>
-            <div class="panel-ctrls">
-                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
-                    <a href="<?php echo base_url(); ?>clientes/adicionar" class="btn btn-primary btn-sm"><i class="fas fa-plus-square fa-fw"></i> Adicionar Cliente</a>
-                <?php } ?>
-            </div>
-        </div>
-        <div class="panel-body panel-no-padding table-responsive">
-            <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
-                <thead>
-                <tr role="row">
-                    <th style="width: 30px">ID</th>
-                    <th>Nome</th>
-                    <th>Telefone</th>
-                    <th style="width: 150px">Ações</th>
-                </tr>
-                </thead>
-                <tbody>
+    <div class="panel-body panel-no-padding table-responsive">
+        <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
+            <?php if ($results) { ?>
+            <thead>
+            <tr role="row">
+                <th style="width: 30px">ID</th>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th style="width: 150px">Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
                 <?php foreach ($results as $r) {
-                    echo '<tr>';
                     echo '<td>' . $r->id_clientes . '</td>';
                     echo '<td>' . $r->nome . '</td>';
                     echo '<td>' . $r->telefone . '</td>';
                     echo '<td style="text-align: center">';
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) {
-                        echo '<a href="' . base_url() . 'clientes/visualizar/' . $r->id_clientes . '" style="margin-right: 1%" class="btn btn-info btn-sm" title="Ver detalhes"><i class="fas fa-search-plus fa-lg fa-fw"></i></a>';
+                        echo '<a href="' . base_url('clientes/visualizar/') . $r->id_clientes . '" style="margin-right: 1%" class="btn btn-info btn-sm" title="Ver detalhes"><i class="fas fa-search-plus fa-lg fa-fw"></i></a>';
                     }
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
                         echo '<a href="' . base_url() . 'clientes/editar/' . $r->id_clientes . '" style="margin-right: 1%" class="btn btn-primary btn-sm" title="Editar"><i class="fas fa-edit fa-lg fa-fw"></i></a>';
@@ -70,19 +40,17 @@ else { ?>
                         echo '<a href="#modalExcluir" role="button" data-toggle="modal" cliente="' . $r->id_clientes . '" style="margin-right: 1%" class="btn btn-danger btn-sm" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw" ></i></a>';
                     }
 
-
                     echo '</td>';
                     echo '</tr>';
-                } ?>
-                <tr>
-
-                </tr>
-                </tbody>
-            </table>
-        </div>
+                }
+                } else { ?>
+                    <td colspan="5">Nenhum cliente cadastrado</td>
+                <?php } ?>
+            </tr>
+            </tbody>
+        </table>
     </div>
-    <?php
-} ?>
+</div>
 
 <!-- Modal EXCLUIR-->
 <div class="modal fade" id="modalExcluir" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -110,7 +78,7 @@ else { ?>
 <script type="text/javascript">
     $(document).ready(function () {
 
-        $('a').click( function (event) {
+        $('a').click(function (event) {
 
             var cliente = $(this).attr('cliente');
             $('#idCliente').val(cliente);

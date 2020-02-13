@@ -45,8 +45,8 @@ switch ($status_chamado) {
                 </div>
             </div>
             <div class="panel-body mailbox-panel">
-                <div class="pull-right">
-                    <strong>Status: <span class="ml10 pull-right label label-<?= ($cor_status) ?>"> <?= ($status) ?></span></strong>
+                <div class="pull-right panel">
+                    <strong>Status do chamado: <span class="ml10 pull-right label label-<?= ($cor_status) ?>"> <?= ($status) ?></span></strong>
                 </div>
                 <section class="tabular">
                     <div class="message tabular-row">
