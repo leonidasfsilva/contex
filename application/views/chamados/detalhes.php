@@ -4,6 +4,7 @@ switch ($status_chamado) {
     case 1:
         $status = 'aberto';
         $cor_status = 'danger';
+        $disabled = '';
         break;
     case 2:
         $status = 'fechado';
@@ -12,6 +13,7 @@ switch ($status_chamado) {
     case 3:
         $status = 'finalizado';
         $cor_status = 'success';
+        $disabled = 'disabled';
         break;
 } ?>
 
@@ -24,15 +26,17 @@ switch ($status_chamado) {
                 </h2>
                 <div class="panel-ctrls">
                     <a href="<?= base_url('chamados') ?>" class="btn btn-default btn-sm"><i class="fas fa-arrow-left fa-fw"></i> Chamados</a>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
-                            <i class="fas fa-cog fa-fw"></i> Ações <i class="fa fa-angle-down fa-sm "></i>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <!--                            <li><a href="#modalResolverChamado" data-toggle="modal"><i class="fas fa-check-circle fa-fw"></i> Marcar como Resolvido</a></li>-->
-                            <li><a href="#modalFinalizarChamado" data-toggle="modal"><i class="fas fa-minus-circle fa-fw"></i> Finalizar Chamado</a></li>
-                        </ul>
-                    </div>
+                    <button href="#modalFinalizarChamado" data-toggle="modal" class="btn btn-primary btn-sm" <?= $disabled ?>><i class="fas fa-minus-circle fa-fw"></i> Finalizar Chamado</button>
+                    <!--                    <div class="btn-group">-->
+                    <!--                        <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">-->
+                    <!--                            <i class="fas fa-cog fa-fw"></i> Ações <i class="fa fa-angle-down fa-sm "></i>-->
+                    <!--                        </button>-->
+                    <!--                        <ul class="dropdown-menu">-->
+                    <!--                            <li>-->
+                    <!--                                <a href="#modalResolverChamado" data-toggle="modal"><i class="fas fa-check-circle fa-fw"></i> Marcar como Resolvido</a>-->
+                    <!--                            </li>-->
+                    <!--                        </ul>-->
+                    <!--                    </div>-->
                     <a href="#" class="button-icon close-panel">
                         <i class="fas fa-times"></i>
                     </a>
@@ -45,8 +49,8 @@ switch ($status_chamado) {
                 </div>
             </div>
             <div class="panel-body mailbox-panel">
-                <div class="pull-right panel">
-                    <strong>Status do chamado: <span class="ml10 pull-right label label-<?= ($cor_status) ?>"> <?= ($status) ?></span></strong>
+                <div class="pull-right panel p5">
+                    <strong>Status do chamado: <span style="margin-top: 2px" class="ml5 pull-right label label-<?= ($cor_status) ?>"> <?= ($status) ?></span></strong>
                 </div>
                 <section class="tabular">
                     <div class="message tabular-row">
@@ -106,8 +110,8 @@ switch ($status_chamado) {
                             } ?>
                             <div class="message tabular-row">
                                 <div class="tabular-cell avatar">
-                                    <img src="<?php echo $this->chamados_model->getAvatarUsuario($r->id_usuario) != null ? base_url() . 'assets/uploads/avatars/' .
-                                        $this->chamados_model->getAvatarUsuario($r->id_usuario) : base_url() . 'assets/img/avatars/padrao.png'; ?>"
+                                    <img src="<?php echo $this->chamados_model->getAvatarUsuario($r->id_usuario) != null ? base_url('assets/uploads/avatars/') .
+                                        $this->chamados_model->getAvatarUsuario($r->id_usuario) : base_url('assets/img/avatars/padrao.png') ?>"
                                          alt="avatar" class="">
                                 </div>
                                 <div class="tabular-cell msg">
@@ -120,6 +124,23 @@ switch ($status_chamado) {
                             </div>
                         <?php }
                     } ?>
+                    <?php if ($disabled == 'disabled') { ?>
+                        <div class="message tabular-row">
+                            <div class="tabular-cell avatar">
+                                <img src="<?= base_url('assets/img/avatars/padrao.png') ?>"
+                                     alt="avatar" class="">
+                            </div>
+                            <div class="tabular-cell msg">
+                                <p class="msgee">Sistema</p>
+                                <div class="alert alert-info">
+                                    <strong>Chamado finalizado, não é possível enviar novas respostas.</strong>
+                                </div>
+                            </div>
+                            <div class="tabular-cell time">
+                                <small></small>
+                            </div>
+                        </div>
+                    <?php } else { ?>
                 </section>
                 <div class="panel-footer">
                     <form id="formResponderChamado" action="<?php echo base_url('chamados/responder') ?>" method="post" autocomplete="off">
@@ -133,11 +154,11 @@ switch ($status_chamado) {
                         </div>
                         <div class="msg-composer">
                             <div class="pull-left">
-                                <div class="fileinput fileinput-new" data-provides="fileinput" style="cursor: pointer !important;">
-                                    <span class="btn btn-default btn-file" style="cursor: pointer !important;">
+                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                    <span class="btn btn-default btn-file">
                                         <span class="fileinput-new"><i class="fas fa-paperclip fa-fw"></i> Anexar</span>
                                         <span class="fileinput-exists"><i class="fas fa-refresh fa-fw"></i> Alterar</span>
-                                        <input name="arquivo" type="file" style="cursor: pointer !important;">
+                                        <input name="arquivo" type="file">
                                     </span>
                                     <span class="fileinput-filename"></span>
                                     <a class="close fileinput-exists" data-dismiss="fileinput" href="#" style="float: none">&times;</a>
@@ -152,6 +173,7 @@ switch ($status_chamado) {
                         </div>
                     </form>
                 </div>
+                <?php } ?>
             </div>
         </div>
     </div>

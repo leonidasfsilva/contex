@@ -68,12 +68,12 @@
                                     <span class="time"><?= ($intervalo) ?>
                                     <small style="display: block;" class="label label-<?= ($cor_status) ?>"><?= ($status) ?></small>
                                     </span>
-                                    <img src="<?php echo $this->chamados_model->getAvatarUsuario($c->id_usuario) != null ? base_url() . 'assets/uploads/avatars/' .
-                                        $this->chamados_model->getAvatarUsuario($c->id_usuario) : base_url() . 'assets/img/avatars/padrao.png'; ?>"
+                                    <img src="<?php echo $this->chamados_model->getAvatarUsuario($c->id_usuario) != null ? base_url('assets/uploads/avatars/') .
+                                        $this->chamados_model->getAvatarUsuario($c->id_usuario) : base_url('assets/img/avatars/padrao.png'); ?>"
                                          alt="avatar" title="" style="">
                                     <div>
                                         <span class="name"><?= $this->chamados_model->getNomeUsuario($c->id_usuario) ?></span>
-                                        <span class="msg"><strong>(<?= $c->assunto ?>)</strong> - <?= $c->descricao ?></span>
+                                        <span class="msg"><strong><?= '# '.$c->id_chamado .' - '. $c->assunto ?></strong> - <?= $c->descricao ?></span>
                                     </div>
                                 </a>
                             </li>
