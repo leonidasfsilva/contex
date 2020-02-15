@@ -8,6 +8,10 @@ class Chamados extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        if ((!session_id()) || (!$this->session->userdata('logado'))) {
+            redirect('mxcode/login');
+        }
+
         $this->load->model('chamados_model', '', true);
         $this->load->model('configs_model', '', true);
         $this->load->model('mxcode_model', '', true);
@@ -23,9 +27,6 @@ class Chamados extends CI_Controller
 
     public function index()
     {
-        if ((!session_id()) || (!$this->session->userdata('logado'))) {
-            redirect('mxcode/login');
-        }
 
 //        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {
 //            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar chamados.');
@@ -97,7 +98,7 @@ class Chamados extends CI_Controller
         $chamado = $this->chamados_model->getDetalhesChamado($id_chamado);
         $data['respostas'] = $this->chamados_model->getRespostasChamado($id_chamado);
 
-        if ($chamado == null) {
+        if (!$chamado) {
             $this->session->set_flashdata('erro', 'Chamado não encontrado.');
             redirect('chamados');
         }

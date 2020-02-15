@@ -71,6 +71,15 @@
                     <div class="cssload-speeding-wheel"></div>
                 </div>
                 <div class="before-loading">
+                    <?php if ($this->session->flashdata('error') != null) { ?>
+                        <div class="row">
+                            <div class="alert alert-danger">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <?php echo $this->session->flashdata('error'); ?>
+                            </div>
+                        </div>
+                    <?php } ?>
+
                     <div class="form-group">
                         <h3 class="font-bold m-b-40">Efetue seu login</h3>
                     </div>
@@ -105,7 +114,7 @@
                     <div class="form-group m-b-0">
                         <div class="col-sm-12 text-center">
                             <p>Não tem uma conta? <a href="<?php echo base_url() ?>cadastro" class="text-primary"><b>Cadastre-se</b></a>.</p>
-<!--                            <p><a href="--><?php //echo base_url() ?><!--conecte" class="text-primary"><b>Acesso para clientes</b></a>.</p>-->
+                            <!--                            <p><a href="--><?php //echo base_url() ?><!--conecte" class="text-primary"><b>Acesso para clientes</b></a>.</p>-->
                         </div>
                     </div>
                 </div>
@@ -165,7 +174,7 @@
         $(".progress-bar").animate({
             width: "100%"
         }, 1000);
-        if($(form).valid()) {
+        if ($(form).valid()) {
             $(".before-loading").fadeOut();
             $(".preloader-login").fadeIn();
 

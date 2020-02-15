@@ -111,6 +111,9 @@ class Mxcode extends CI_Controller
         if (($this->session->userdata('logado'))) {
             redirect($this->index());
         }
+        if($this->session->userdata('last_url')) {
+            $this->session->set_flashdata('error', 'Efetue seu login para continuar.');
+        }
         $this->load->view('mxcode/login');
     }
 
@@ -166,7 +169,12 @@ class Mxcode extends CI_Controller
 
                     $this->session->set_userdata($session_data);
                     gravaLog(id_usuario(), nome_usuario(), email_usuario(), 'Login no sistema', getenv("REMOTE_ADDR"));
-                    redirect('/');
+                    if ($this->session->userdata('last_url')) {
+//                        print_array_exit($this->session->userdata('last_url'));
+                        header('location:' . $this->session->userdata('last_url'));
+                    } else {
+                        redirect('/');
+                    }
                 } else {
                     gravaLog($usuario->id_usuarios, $usuario->nome, $usuario->email, 'Tentativa de login recusada: senha incorreta', getenv("REMOTE_ADDR"));
                     $this->session->set_flashdata('erro', 'Dados de acesso inválidos, por favor tente novamente.');
