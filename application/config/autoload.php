@@ -115,8 +115,25 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array();
+//$autoload['model'] = array(
+//    'anuncios_model',
+//    'arquivos_model',
+//    'cadastro_model',
+//    'chamados_model',
+//    'conecte_model',
+//    'configs_model',
+//    'clientes_model',
+//    'mxcode_model',
+//    'usuarios_model',
+//    'financeiro_model',
+//    'investimentos_model',
+//    'fatura_model',
+//    'pendencia_model',
+//    'usuarios_model',
+//    'redefinicao_model',
+//);
 
+$autoload['model'] = array('autoload_model');
 
 /* End of file autoload.php */
 /* Location: ./application/config/autoload.php */
