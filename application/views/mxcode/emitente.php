@@ -149,8 +149,8 @@
                             <span>CNPJ: <?php echo $dados->cnpj; ?></span>
                             <br>
                             <span><?php echo $dados->logradouro . ', '
-                                    . ($dados->s_n == 1 ? 'S/N' : $dados->numero)
-                                    . ($dados->complemento == null ? : ', '.$dados->complemento); ?>
+                                    . ($dados->s_n != null ? 'S/N' : $dados->numero)
+                                    . ($dados->complemento == null ? '' : ', '.$dados->complemento); ?>
                             </span>
                             <br>
                             <span><?php echo $dados->bairro . ' - '

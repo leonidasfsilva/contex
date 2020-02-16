@@ -570,6 +570,9 @@ $this->load->view('includes/custom_js');
                                             <span>Config. do Sistema</span>
                                         </a>
                                         <ul class="acc-menu">
+                                            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) { ?>
+                                                <li><a href="<?php echo base_url() ?>anuncios">Anúncios</a></li>
+                                            <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) { ?>
                                                 <li><a href="<?php echo base_url() ?>usuarios">Usuários</a></li>
                                             <?php } ?>

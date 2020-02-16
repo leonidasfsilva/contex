@@ -94,9 +94,7 @@ function gravaLog($id_usuario = null, $nome = null, $email = null, $acao = null,
         'acao' => $acao,
         'ip' => $ip,
     );
-
     $CI->mxcode_model->gravaLog($data);
-
 }
 
 function id_usuario()
@@ -136,30 +134,10 @@ function adminTemNotificacoes()
 function returnURL($get = null)
 {
     $CI = get_instance();
-
-//    $url = base_url(uri_string());
-//    $segments = $CI->uri->total_segments();
-//    $uri = uri_string();
-//    print_array_exit($get);
-//
-//    $currentURL = current_url();
-//    $params   = $_SERVER['QUERY_STRING'];
-//    $fullURL = $currentURL . '?' . $params;
     if ((!session_id()) || (!$CI->session->userdata('logado'))) {
         if ((uri_string() != 'mxcode/login') && (uri_string() != 'mxcode/verificarLogin')) {
-//            $url = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
             $url = base_url(uri_string());
             $CI->session->set_userdata('last_url', $url);
-//            print_array_exit($CI->session->userdata('last_url'));
         }
     }
 }
-
-function current_full_url()
-{
-    $CI = get_instance();
-    $url = $CI->config->site_url($CI->uri->uri_string());
-//    return $_SERVER['QUERY_STRING'] ? $url . '?' . $_SERVER['QUERY_STRING'] : $url;
-    print_array_exit($_SERVER['QUERY_STRING'] ? $url . '?' . $_SERVER['QUERY_STRING'] : $url);
-}
-
