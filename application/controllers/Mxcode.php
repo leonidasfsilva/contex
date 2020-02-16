@@ -8,6 +8,7 @@ class Mxcode extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+
         $this->load->model('chamados_model', '', true);
         $this->load->model('configs_model', '', true);
         $this->load->model('mxcode_model', '', true);
@@ -170,7 +171,6 @@ class Mxcode extends CI_Controller
                     $this->session->set_userdata($session_data);
                     gravaLog(id_usuario(), nome_usuario(), email_usuario(), 'Login no sistema', getenv("REMOTE_ADDR"));
                     if ($this->session->userdata('last_url')) {
-//                        print_array_exit($this->session->userdata('last_url'));
                         header('location:' . $this->session->userdata('last_url'));
                     } else {
                         redirect('/');

@@ -4,22 +4,12 @@
 
 class Chamados extends CI_Controller
 {
-
     public function __construct()
     {
         parent::__construct();
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
             redirect('mxcode/login');
         }
-
-        $this->load->model('chamados_model', '', true);
-        $this->load->model('configs_model', '', true);
-        $this->load->model('mxcode_model', '', true);
-        $this->load->model('usuarios_model', '', true);
-        $this->load->model('financeiro_model', '', true);
-        $this->load->model('investimentos_model', '', true);
-        $this->load->model('fatura_model', '', true);
-        $this->load->model('pendencia_model', '', true);
         $this->load->helper('file');
         $this->load->library('upload');
         $this->load->library('image_lib');
