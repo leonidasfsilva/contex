@@ -6,14 +6,27 @@
   * @author Mattia Larentis <mattia@larentis.eu> (http://larentis.eu)
   * @license Apache-2.0
   */
+.bootstrap-switch.bootstrap-switch-on .bootstrap-switch-container {
+  margin-left: 0%;
+}
+.bootstrap-switch.bootstrap-switch-on .bootstrap-switch-label {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+.bootstrap-switch.bootstrap-switch-off .bootstrap-switch-container {
+  margin-left: -50%;
+}
+.bootstrap-switch.bootstrap-switch-off .bootstrap-switch-label {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
 
 .bootstrap-switch {
   display: inline-block;
   direction: ltr;
   cursor: pointer;
-  border-radius: 4px;
-  border: 1px solid;
-  border-color: #ccc;
+  /*border-radius: 23px;*/
+  border: 1px solid #ccc;
   position: relative;
   text-align: left;
   overflow: hidden;
@@ -30,10 +43,13 @@
 }
 .bootstrap-switch .bootstrap-switch-container {
   display: inline-block;
+  position: relative;
+  width: 150%;
   top: 0;
-  border-radius: 4px;
-  -webkit-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0);
+  border-radius: 23px;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  transform-style: preserve-3d;
 }
 .bootstrap-switch .bootstrap-switch-handle-on,
 .bootstrap-switch .bootstrap-switch-handle-off,
@@ -47,6 +63,18 @@
   padding: 6px 12px;
   font-size: 14px;
   line-height: 20px;
+
+  /*-webkit-box-sizing: border-box;*/
+  /*-moz-box-sizing: border-box;*/
+  /*box-sizing: border-box;*/
+  /*cursor: pointer;*/
+  /*display: inline-block !important;*/
+  /*height: 100%;*/
+  /*padding-bottom: 4px;*/
+  /*padding-top: 4px;*/
+  /*font-size: 13px;*/
+  /*line-height: 24px;*/
+
 }
 .bootstrap-switch .bootstrap-switch-handle-on,
 .bootstrap-switch .bootstrap-switch-handle-off {
@@ -90,17 +118,32 @@
   z-index: 100;
   color: #333;
   background: #fff;
+
+  /*text-align: center;*/
+  /*margin-top: 0;*/
+  /*margin-bottom: 0;*/
+  /*z-index: 100;*/
+  /*position: absolute;*/
+  /*border-radius: 50% !important;*/
+  /*width: 33.333333333%;*/
+  /*margin-left: -16.66666667%;*/
+  /*margin-right: -16.66666667%;*/
+  /*color: #455a64;*/
+  /*background: #fafafa;*/
+  /*box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.1), 0px 0px 1px 0px rgba(0, 0, 0, 0.05);*/
 }
 .bootstrap-switch span::before {
   content: "\200b";
 }
 .bootstrap-switch .bootstrap-switch-handle-on {
-  border-bottom-left-radius: 3px;
-  border-top-left-radius: 3px;
+  border-bottom-left-radius: 23px;
+  border-top-left-radius: 23px;
+  padding-right: 12.499999999875%;
 }
 .bootstrap-switch .bootstrap-switch-handle-off {
-  border-bottom-right-radius: 3px;
-  border-top-right-radius: 3px;
+  border-bottom-right-radius: 23px;
+  border-top-right-radius: 23px;
+  padding-left: 12.499999999875%;
 }
 .bootstrap-switch input[type='radio'],
 .bootstrap-switch input[type='checkbox'] {

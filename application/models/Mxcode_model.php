@@ -1,4 +1,6 @@
-<?php
+<?php if (! defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
 class Mxcode_model extends CI_Model
 {
@@ -53,26 +55,30 @@ class Mxcode_model extends CI_Model
 
     }
 
-    function pesquisar($termo)
+    function pesquisar($termo, $id)
     {
         $data = array();
         // buscando clientes
-        $this->db->like('nomeCliente', $termo);
+        $this->db->like('nome', $termo);
+        $this->db->where('id_usuario', $id);
         $this->db->limit(5);
         $data['clientes'] = $this->db->get('clientes')->result();
 
         // buscando os
         $this->db->like('idOs', $termo);
+        $this->db->where('id_usuario', $id);
         $this->db->limit(5);
         $data['os'] = $this->db->get('os')->result();
 
         // buscando produtos
         $this->db->like('descricao', $termo);
+        $this->db->where('id_usuario', $id);
         $this->db->limit(5);
         $data['produtos'] = $this->db->get('produtos')->result();
 
         //buscando serviços
         $this->db->like('nome', $termo);
+        $this->db->where('id_usuario', $id);
         $this->db->limit(5);
         $data['servicos'] = $this->db->get('servicos')->result();
 
@@ -96,7 +102,7 @@ class Mxcode_model extends CI_Model
         $this->db->where($fieldID, $ID);
         $this->db->update($table, $data);
 
-        if ($this->db->affected_rows() >= 0) {
+        if ($this->db->affected_rows() > 0) {
             return true;
         }
 
@@ -173,7 +179,6 @@ class Mxcode_model extends CI_Model
         $this->db->set('logomarca', $logo);
         $this->db->where('id_emitente', $id);
         return $this->db->update('emitente');
-
     }
 
     public function check_credentials($email)
@@ -192,4 +197,28 @@ class Mxcode_model extends CI_Model
         }
         return false;
     }
+
+    public function getAvatarUsuario($id_usuario)
+    {
+        $this->db->select('avatar');
+        $this->db->from('usuarios');
+        $this->db->where('id_usuarios = ' . $id_usuario . ' AND status = ' . 1);
+        $this->db->limit(1);
+        return $this->db->get()->row();
+    }
+
+    public function editAvatarUsuario($id, $logo)
+    {
+        $this->db->set('avatar', $logo);
+        $this->db->where('id_usuarios', $id);
+        return $this->db->update('usuarios');
+    }
+
+    public function excluirAvatarUsuario($id)
+    {
+        $this->db->set('avatar', null);
+        $this->db->where('id_usuarios', $id);
+        return $this->db->update('usuarios');
+    }
+
 }

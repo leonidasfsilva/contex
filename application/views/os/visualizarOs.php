@@ -25,12 +25,22 @@ $totalProdutos = 0;?>
                                 <?php if ($emitente == null) {?>
                                             
                                 <tr>
-                                    <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>index.php/mapos/emitente">Configurar</a><<<</td>
+                                    <td colspan="3" class="alert">Você precisa configurar os dados do emitente. >>><a href="<?php echo base_url(); ?>mxcode/emitente">Configurar</a><<<</td>
                                 </tr>
                                 <?php } else {?>
                                 <tr>
-                                    <td style="width: 25%"><img src=" <?php echo $emitente[0]->url_logo; ?> "></td>
-                                    <td> <span style="font-size: 20px; "> <?php echo $emitente[0]->nome; ?></span> </br><span><?php echo $emitente[0]->cnpj; ?> </br> <?php echo $emitente[0]->rua.', '.$emitente[0]->numero.' - '.$emitente[0]->bairro.' - '.$emitente[0]->cidade.' - '.$emitente[0]->uf; ?> </span> </br> <span> E-mail: <?php echo $emitente[0]->email.' - Fone: '.$emitente[0]->telefone; ?></span></td>
+                                    <?php if ($emitente->logomarca) { ?>
+                                        <td style="width: 25%">
+                                            <img src="<?php echo base_url() . 'assets/uploads/logomarcas/' . $emitente->logomarca; ?>">
+                                        </td>
+                                    <?php } else { ?>
+                                        <td style="width: 25%">
+                                            <p class="alert alert-inverse">
+                                                Nenhuma logomarca cadastrada
+                                            </p>
+                                        </td>
+                                    <?php } ?>
+                                    <td> <span style="font-size: 20px; "> <?php echo $emitente->nome; ?></span> </br><span><?php echo $emitente->cnpj; ?> </br> <?php echo $emitente->rua.', '.$emitente->numero.' - '.$emitente->bairro.' - '.$emitente->cidade.' - '.$emitente->uf; ?> </span> </br> <span> E-mail: <?php echo $emitente->email.' - Fone: '.$emitente->telefone; ?></span></td>
                                     <td style="width: 18%; text-align: center">#Protocolo: <span ><?php echo $result->idOs?></span></br> </br> <span>Emissão: <?php echo date('d/m/Y')?></span></td>
                                 </tr>
 
@@ -46,10 +56,16 @@ $totalProdutos = 0;?>
                                         <ul>
                                             <li>
                                                 <span><h5>Cliente</h5>
-                                                <span><?php echo $result->nomeCliente?></span><br/>
-                                                <span><?php echo $result->rua?>, <?php echo $result->numero?>, <?php echo $result->bairro?></span>, 
-                                                <span><?php echo $result->cidade?> - <?php echo $result->estado?></span><br>
-                                                <span>Celular: <?php echo $result->celular?></span>
+                                                <span><?php echo $result->nome?></span><br/>
+                                                <span><?php echo $result->logradouro?>,
+                                                    <?php if ($result->s_n == 1) {
+                                                        echo 's/n';
+                                                    } else {
+                                                        echo $result->numero;
+                                                        }?>,
+                                                    <?php echo $result->bairro?></span> -
+                                                <span><?php echo $result->cidade?> / <?php echo $result->uf?></span><br>
+                                                <span>Telefone: <?php echo $result->telefone?></span>
                                             </li>
                                         </ul>
                                     </td>
@@ -57,9 +73,9 @@ $totalProdutos = 0;?>
                                         <ul>
                                             <li>
                                                 <span><h5>Responsável</h5></span>
-                                                <span><?php echo $result->nome?></span> <br/>
-                                                <span>Telefone: <?php echo $result->telefone?></span><br/>
-                                                <span>Email: <?php echo $result->email?></span>
+                                                <span><?php echo $result->user_nome?></span> <br/>
+                                                <span>Telefone: <?php echo $result->user_telefone?></span><br/>
+                                                <span>Email: <?php echo $result->user_email?></span>
                                             </li>
                                         </ul>
                                     </td>
@@ -164,13 +180,7 @@ $totalProdutos = 0;?>
                         <hr />
                     
                         <h4 style="text-align: right">Valor Total: R$ <?php echo number_format($totalProdutos + $totalServico, 2, ',', '.');?></h4>
-
                     </div>
-            
-
-                    
-                    
-              
                 </div>
             </div>
         </div>

@@ -15,6 +15,7 @@
     <link href="<?php echo base_url(); ?>assets/css/agile-style.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,400italic,600,700' rel='stylesheet' type='text/css'>
     <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/font-awesome5/css/fontawesome5.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.css" type="text/css" rel="stylesheet">
 
 
@@ -70,13 +71,22 @@
                     <div class="cssload-speeding-wheel"></div>
                 </div>
                 <div class="before-loading">
+                    <?php if ($this->session->flashdata('error') != null) { ?>
+                        <div class="row">
+                            <div class="alert alert-danger">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <?php echo $this->session->flashdata('error'); ?>
+                            </div>
+                        </div>
+                    <?php } ?>
+
                     <div class="form-group">
-                        <p class="font-bold">Efetue seu login</p>
+                        <h3 class="font-bold m-b-40">Efetue seu login</h3>
                     </div>
-                    <div class="form-group m-t-0 p-t-0  p-b-20">
+                    <div class="form-group">
                         <input type="text" class="form-control" id="email" name="email" required/>
                         <span class="highlight"></span> <span class="bar"></span>
-                        <label for="email">E-mail</label>
+                        <label for="email">Email</label>
                     </div>
                     <div class="form-group">
                         <input class="form-control" type="password" id="senha" name="senha" required/>
@@ -89,7 +99,7 @@
                     <div class="form-group text-center m-t-20">
                         <div class="row">
                             <div class="col-xs-12">
-                                <button class="btn btn-login btn-block waves-effect waves-light" type="submit">Acessar <i class="fa fa-sign-in fa-fw"></i></button>
+                                <button class="btn btn-login btn-block waves-effect waves-light" type="submit"><i class="fas fa-user-lock fa-fw"></i> Acessar</button>
                             </div>
                         </div>
                     </div>
@@ -103,7 +113,8 @@
                     <!--                </div>-->
                     <div class="form-group m-b-0">
                         <div class="col-sm-12 text-center">
-                            <p>Não tem uma conta? <a href="javascript:" id="registro" class="text-primary"><b>Registre-se</b></a>.</p>
+                            <p>Não tem uma conta? <a href="<?php echo base_url() ?>cadastro" class="text-primary"><b>Cadastre-se</b></a>.</p>
+                            <!--                            <p><a href="--><?php //echo base_url() ?><!--conecte" class="text-primary"><b>Acesso para clientes</b></a>.</p>-->
                         </div>
                     </div>
                 </div>
@@ -163,7 +174,7 @@
         $(".progress-bar").animate({
             width: "100%"
         }, 1000);
-        if($(form).valid()) {
+        if ($(form).valid()) {
             $(".before-loading").fadeOut();
             $(".preloader-login").fadeIn();
 
@@ -184,8 +195,8 @@
         showCancelButton: true,
         showCloseButton: true,
         reverseButtons: true,
-        confirmButtonText: '<i class="fa fa-refresh fa-fw"></i> Tentar de novo ',
-        cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
+        confirmButtonText: '<i class="fas fa-redo fa-fw"></i> Tentar de novo ',
+        cancelButtonText: '<i class="fas fa-times fa-fw"></i> Fechar ',
     }).then((result) => {
         if (result.value) {
             recuperar_senha();
@@ -205,8 +216,8 @@
         showConfirmButton: true,
         showCancelButton: false,
         showCloseButton: true,
-        confirmButtonText: '<i class="fa fa-check fa-fw"></i> OK ',
-        cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
+        confirmButtonText: '<i class="fas fa-check fa-fw"></i> OK ',
+        cancelButtonText: '<i class="fas fa-times fa-fw"></i> Fechar ',
         reverseButtons: true,
     }).then((result) => {
         if (result.value) {
@@ -224,12 +235,12 @@
             // timer: 5000,
             title: 'Indisponível',
             html: 'O registro de usuários encontra-se indisponível no momento. Contate o administrador do sistema para obter uma conta.',
-            showConfirmButton: false,
+            showConfirmButton: true,
             showCancelButton: false,
             showCloseButton: true,
             reverseButtons: true,
-            confirmButtonText: '<i class="fa fa-refresh fa-fw"></i> Tentar de novo ',
-            cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
+            confirmButtonText: '<i class="fas fa-check fa-fw"></i> Entendi ',
+            cancelButtonText: '<i class="fas fa-times fa-fw"></i> Fechar ',
         });
     });
 
@@ -237,12 +248,12 @@
         Swal.fire({
             position: 'top',
             title: 'Esqueceu sua senha?',
-            html: '<div>Informe seu e-mail de cadastro e lhe enviaremos instruções para alterar sua senha:</div>',
+            html: '<div>Informe seu email de cadastro e lhe enviaremos instruções para alterar sua senha:</div>',
             input: 'email',
-            inputPlaceholder: 'Digite seu e-mail',
+            inputPlaceholder: 'Digite seu email',
             showCancelButton: true,
-            confirmButtonText: '<i class="fa fa-send fa-fw"></i> Enviar ',
-            cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
+            confirmButtonText: '<i class="fas fa-send fa-fw"></i> Enviar ',
+            cancelButtonText: '<i class="fas fa-times fa-fw"></i> Fechar ',
             reverseButtons: true,
             showCloseButton: true,
             showLoaderOnConfirm: true,
@@ -282,8 +293,8 @@
                                     showConfirmButton: true,
                                     showCancelButton: false,
                                     showCloseButton: true,
-                                    confirmButtonText: '<i class="fa fa-check fa-fw"></i> OK ',
-                                    cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
+                                    confirmButtonText: '<i class="fas fa-check fa-fw"></i> OK ',
+                                    cancelButtonText: '<i class="fas fa-times fa-fw"></i> Fechar ',
                                     reverseButtons: true,
                                     html:
                                         '<p class="">Enviamos um e-mail para <strong class="text-success">' +
@@ -303,13 +314,14 @@
                                     position: 'top',
                                     type: 'error',
                                     title: 'Conta inexistente!',
-                                    html: 'Não encontramos nenhuma conta cadastrada com o email <strong class="text-danger"> ' + res.email + '</strong>.',
+                                    html: 'Não encontramos nenhuma conta cadastrada com o email <strong class="text-danger"> ' + res.email + '</strong>. Caso queira criar uma conta com este ' +
+                                        'email,<br> <a href="<?php echo base_url() ?>cadastro">clique aqui para se cadastrar</a>.',
                                     showConfirmButton: true,
                                     showCancelButton: true,
                                     reverseButtons: true,
                                     showCloseButton: true,
-                                    confirmButtonText: '<i class="fa fa-refresh fa-fw"></i> Tentar de novo ',
-                                    cancelButtonText: '<i class="fa fa-times fa-fw"></i> Cancelar ',
+                                    confirmButtonText: '<i class="fas fa-redo fa-fw"></i> Tentar de novo ',
+                                    cancelButtonText: '<i class="fas fa-times fa-fw"></i> Cancelar ',
                                 }).then((result) => {
                                     if (result.value) {
                                         recuperar_senha();
@@ -333,6 +345,5 @@
         })
     }
 </script>
-
 </body>
 </html>

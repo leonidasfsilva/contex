@@ -1,11 +1,8 @@
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/js/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.css"/>
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
-
 <div class="span12" style="margin-left: 0">
-    <form method="get" action="<?php echo base_url(); ?>index.php/os/gerenciar">
+    <form method="get" action="<?php echo base_url(); ?>os/gerenciar">
         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aOs')) { ?>
             <div class="span3">
-                <a href="<?php echo base_url(); ?>index.php/os/adicionar" class="btn btn-success span12"><i class="icon-plus icon-white"></i>
+                <a href="<?php echo base_url(); ?>os/adicionar" class="btn btn-success span12"><i class="icon-plus icon-white"></i>
                     Adicionar OS</a>
             </div>
         <?php } ?>
@@ -95,7 +92,7 @@ if (!$results) { ?>
                     $dataInicial = date(('d/m/Y'), strtotime($r->dataInicial));
                     $dataFinal = date(('d/m/Y'), strtotime($r->dataFinal));
 
-                    switch ($r->tipo) {
+                    switch ($r->status_os) {
                         case 'Aberto':
                             $cor = '#8A9B0F';
                             break;
@@ -121,21 +118,21 @@ if (!$results) { ?>
 
                     echo '<tr>';
                     echo '<td>' . $r->idOs . '</td>';
-                    echo '<td>' . $r->nomeCliente . '</td>';
                     echo '<td>' . $r->nome . '</td>';
+                    echo '<td>' . $r->user_nome . '</td>';
                     echo '<td>' . $dataInicial . '</td>';
                     echo '<td>' . $dataFinal . '</td>';
-                    echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->tipo . '</span> </td>';
+                    echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status_os . '</span> </td>';
 
                     echo '<td style="text-align: center">';
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-                        echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/visualizar/' . $r->idOs . '" class="btn btn-xs btn-info tip-top" title="Ver mais detalhes"><i class="fa fa-search-plus fa-lg fa-fw"></i></a>';
+                        echo '<a style="margin-right: 1%" href="' . base_url() . 'os/visualizar/' . $r->idOs . '" class="btn btn-xs btn-info tip-top" title="Ver mais detalhes"><i class="fa fa-search-plus fa-lg fa-fw"></i></a>';
                     }
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eOs')) {
-                        echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/editar/' . $r->idOs . '" class="btn btn-xs btn-primary tip-top" title="Editar"><i class="fa fa-edit fa-lg fa-fw"></i></a>';
+                        echo '<a style="margin-right: 1%" href="' . base_url() . 'os/editar/' . $r->idOs . '" class="btn btn-xs btn-primary tip-top" title="Editar"><i class="fa fa-edit fa-lg fa-fw"></i></a>';
                     }
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) {
-                        echo '<a style="margin-right: 1%" href="' . base_url() . 'index.php/os/imprimir/' . $r->idOs . '" target="_blank" class="btn btn-xs btn-inverse tip-top" title="Imprimir"><i class="fa fa-print fa-lg fa-fw"></i></a>';
+                        echo '<a style="margin-right: 1%" href="' . base_url() . 'os/imprimir/' . $r->idOs . '" target="_blank" class="btn btn-xs btn-inverse tip-top" title="Imprimir"><i class="fa fa-print fa-lg fa-fw"></i></a>';
                     }
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dOs')) {
                         echo '<a href="#modal-excluir" role="button" data-toggle="modal" os="' . $r->idOs . '" class="btn btn-xs btn-danger tip-top" title="Excluir"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>  ';
@@ -159,7 +156,7 @@ if (!$results) { ?>
 
 <!-- Modal -->
 <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/os/excluir" method="post">
+    <form action="<?php echo base_url() ?>os/excluir" method="post">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h5 id="myModalLabel">Excluir OS</h5>

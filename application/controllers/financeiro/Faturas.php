@@ -15,7 +15,6 @@ class Faturas extends CI_Controller
         $this->load->model('pendencia_model', '', true);
         $this->load->model('fatura_model', '', true);
         $this->load->model('clientes_model', '', true);
-        $this->data['menuFinanceiro'] = 'Lancamentos';
     }
 
     public function index()
@@ -73,6 +72,9 @@ class Faturas extends CI_Controller
             12 => '12 x',
         );
 
+        $this->data['saldoVencidas'] = $this->fatura_model->getSaldoFaturasVencidas(id_usuario());
+        $this->data['saldoPendente'] = $this->fatura_model->getSaldoFaturasPendentes(id_usuario());
+        $this->data['saldoQuitado'] = $this->fatura_model->getSaldoFaturasPagas(id_usuario());
         $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
         $this->data['faturaAberta'] = $this->fatura_model->getFaturaAbertaUsuario(id_usuario());
         $this->data['results'] = $this->fatura_model->get('faturas', '*', $where, id_usuario(), $config['per_page'], $this->input->get('per_page'));
@@ -81,9 +83,6 @@ class Faturas extends CI_Controller
         $this->load->view('tema/topo', $this->data);
     }
 
-    /**
-     * @param null $id
-     */
     public function detalhes($id = null)
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) {
@@ -108,7 +107,7 @@ class Faturas extends CI_Controller
 
         $config['base_url'] = site_url() . 'financeiro/faturas/';
         $config['total_rows'] = $this->fatura_model->count('faturas', 'status = 1 AND id_usuario = ' . id_usuario());
-        $config['per_page'] = 100;
+        $config['per_page'] = 0;
         $config['page_query_string'] = true;
         $config['next_link'] = 'Próxima';
         $config['prev_link'] = 'Anterior';
@@ -129,7 +128,7 @@ class Faturas extends CI_Controller
         $config['last_tag_open'] = '<li>';
         $config['last_tag_close'] = '</li>';
 
-        $this->data['parcelas'] = array(
+        $data['parcelas'] = array(
             2 => '2 x',
             3 => '3 x',
             4 => '4 x',
@@ -143,7 +142,7 @@ class Faturas extends CI_Controller
             12 => '12 x',
         );
 
-        if($id_fatura == null) {
+        if ($id_fatura == null) {
             $this->session->set_flashdata('erro', 'Método não permitido.');
             redirect($config['base_url']);
         }
@@ -156,19 +155,21 @@ class Faturas extends CI_Controller
 
             if ($faturaUsuario > 0) {
 
-                $this->data['fatura'] = $this->fatura_model->getDetalhesFatura($id_fatura);
-                $this->data['id_fatura'] = $id_fatura;
-                $this->data['mes_referencia'] = ($this->data['fatura']->mes_referencia);
-                $this->data['ano_referencia'] = ($this->data['fatura']->ano_referencia);
-                $this->data['status_fatura'] = ($this->data['fatura']->fatura_aberta);
-                $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
-                $this->data['fatura_paga'] = ($this->data['fatura']->fatura_paga);
-                $this->data['lancamentoEditavel'] = $this->fatura_model->getLancamentoEditavel($id_fatura, $this->data['fatura']->mes_referencia, $this->data['fatura']->ano_referencia);
-                $this->data['results'] = $this->fatura_model->getLancamentosAssoc('lancamentos_faturas_assoc', '*', $id_fatura, $where, $config['per_page'], $this->input->get('per_page'));
-                $this->data['subresults'] = $this->fatura_model->getLancamentos('lancamentos_faturas', '*', $id_fatura, $where, $config['per_page'], $this->input->get('per_page'));
+                $data['fatura'] = $this->fatura_model->getDetalhesFatura($id_fatura);
+                $data['id_fatura'] = $id_fatura;
+                $data['mes_referencia'] = ($data['fatura']->mes_referencia);
+                $data['ano_referencia'] = ($data['fatura']->ano_referencia);
+                $data['status_fatura'] = ($data['fatura']->fatura_aberta);
+                $data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
+                $data['fatura_paga'] = ($data['fatura']->fatura_paga);
+                $data['lancamentoEditavel'] = $this->fatura_model->getLancamentoEditavel($data['mes_referencia'], $data['ano_referencia']);
+                $data['results'] = $this->fatura_model->getLancamentosAssoc('lancamentos_faturas_assoc', '*', $id_fatura, $where, $config['per_page'], $this->input->get('per_page'));
+                $data['subresults'] = $this->fatura_model->getLancamentos('lancamentos_faturas', '*', id_usuario(), $where, $config['per_page'], $this->input->get('per_page'));
 
-                $this->data['view'] = 'financeiro/faturas/detalhes_fatura';
-                $this->load->view('tema/topo', $this->data);
+                $data['menuFinanceiro'] = true;
+                $data['menuFaturas'] = true;
+                $data['view'] = 'financeiro/faturas/detalhes_fatura';
+                $this->load->view('tema/topo', $data);
             } else {
                 $this->session->set_flashdata('erro', 'Fatura solicitada não encontrada para este usuário.');
                 redirect($config['base_url']);
@@ -203,6 +204,19 @@ class Faturas extends CI_Controller
             $compra_parcelada = 0;
         }
 
+        if ($this->input->post('compra_terceiros')) {
+            $compra_terceiros = 1;
+        } else {
+            $compra_terceiros = 0;
+        }
+
+        if ($this->input->post('estorno')) {
+            $estorno = 1;
+            $valor = '-' . $valor;
+        } else {
+            $estorno = 0;
+        }
+
         if ($this->input->post('data_compra')) {
             $data_compra = $this->input->post('data_compra');
             $data_compra = explode('/', $data_compra);
@@ -229,11 +243,15 @@ class Faturas extends CI_Controller
             //ARRAY LANCAMENTOS_FATURAS
             $data = array(
                 'id_fatura' => $ultimaFaturaAberta->id_fatura,
+                'id_cliente' => $this->input->post('id_cliente') ?: null,
                 'id_usuario' => id_usuario(),
                 'descricao' => padronizarString($this->input->post('descricao')),
+                'nome_cliente' => $this->input->post('nome_cliente') ? padronizarString($this->input->post('nome_cliente')) : null,
                 'valor_total' => $valor,
                 'total_parcelas' => $qnt_parcelas,
                 'compra_parcelada' => $compra_parcelada,
+                'compra_terceiros' => $compra_terceiros,
+                'estorno' => $estorno,
                 'data_compra' => $data_compra,
                 'mes_referencia' => $mes,
                 'ano_referencia' => $ano,
@@ -295,6 +313,45 @@ class Faturas extends CI_Controller
                             'total_parcelas' => $qnt_parcelas,
                         );
 
+                        //MONTA ARRAY DE PENDENCIA, NO CASO DE COMPRA DE TERCEIROS
+                        if ($compra_terceiros == 1) {
+
+                            $vencimento = $faturaReferencia->row()->vencimento;
+                            $vencimento = explode('-', $vencimento);
+                            $dia_venc = $vencimento[2];
+                            $mes_venc = $vencimento[1];
+                            $ano_venc = $vencimento[0];
+
+                            if ($mes_venc == 13) {
+                                $mes_venc = 01;
+                                $ano_venc++;
+                            }
+                            $vencimentoFormatado = ($ano_venc . '-' . $mes_venc . '-' . $dia_venc);
+
+                            if ($x > 9) {
+                                $parcela_atual = $x;
+                            } else {
+                                $parcela_atual = '0' . $x;
+                            }
+
+                            if ($qnt_parcelas > 9) {
+                                $total_parcelas = $qnt_parcelas;
+                            } else {
+                                $total_parcelas = '0' . $qnt_parcelas;
+                            }
+
+                            $data2 = array(
+                                'id_lancamento_fatura' => $last_id,
+                                'id_usuario' => id_usuario(),
+                                'id_cliente' => $this->input->post('id_cliente'),
+                                'descricao' => padronizarString($this->input->post('descricao')) . ' - ' . $parcela_atual . '/' . $total_parcelas,
+                                'tipo' => 1,
+                                'valor' => $valor_parcela,
+                                'data_vencimento' => $vencimentoFormatado,
+                            );
+                            $this->pendencia_model->add('pendencias', $data2);
+                        }
+
                         $mes++;
                         if ($mes == 13) {
                             $mes = 01;
@@ -312,7 +369,7 @@ class Faturas extends CI_Controller
                 } else {
                     //COMPRA A VISTA
                     //ARRAY LANCAMENTOS_FATURA_ASSOC
-                    $data2 = array(
+                    $data1 = array(
                         'id_lancamento' => $last_id,
                         'id_fatura' => $ultimaFaturaAberta->id_fatura,
                         'valor_parcela' => $valor,
@@ -324,7 +381,34 @@ class Faturas extends CI_Controller
                         'total_parcelas' => 1,
                     );
 
-                    if ($this->fatura_model->add('lancamentos_faturas_assoc', $data2) == true) {
+                    //MONTA ARRAY DE PENDENCIA, NO CASO DE COMPRA DE TERCEIROS
+                    if ($compra_terceiros == 1) {
+
+                        $vencimento = $ultimaFaturaAberta->vencimento;
+                        $vencimento = explode('-', $vencimento);
+                        $dia_venc = $vencimento[2];
+                        $mes_venc = $vencimento[1];
+                        $ano_venc = $vencimento[0];
+
+                        if ($mes_venc == 13) {
+                            $mes_venc = 01;
+                            $ano_venc++;
+                        }
+                        $vencimentoFormatado = ($ano_venc . '-' . $mes_venc . '-' . $dia_venc);
+
+                        $data2 = array(
+                            'id_lancamento_fatura' => $last_id,
+                            'id_usuario' => id_usuario(),
+                            'id_cliente' => $this->input->post('id_cliente'),
+                            'descricao' => padronizarString($this->input->post('descricao')),
+                            'tipo' => 1,
+                            'valor' => $valor,
+                            'data_vencimento' => $vencimentoFormatado,
+                        );
+                        $this->pendencia_model->add('pendencias', $data2);
+                    }
+
+                    if ($this->fatura_model->add('lancamentos_faturas_assoc', $data1) == true) {
                         $this->session->set_flashdata('sucesso', 'Lançamento adicionado com sucesso!');
                     } else {
                         $this->session->set_flashdata('erro', 'Erro ao tentar adicionar lançamentos_assoc!');
@@ -364,6 +448,19 @@ class Faturas extends CI_Controller
             $qnt_parcelas = 1;
         }
 
+        if ($this->input->post('estorno')) {
+            $estorno = 1;
+            $valor = '-' . $valor;
+        } else {
+            $estorno = 0;
+        }
+
+        if ($this->input->post('compra_terceiros')) {
+            $compra_terceiros = 1;
+        } else {
+            $compra_terceiros = 0;
+        }
+
         if ($this->input->post('data_compra')) {
             $data_compra = $this->input->post('data_compra');
             $data_compra = explode('/', $data_compra);
@@ -395,14 +492,19 @@ class Faturas extends CI_Controller
                 'valor_total' => $valor,
                 'total_parcelas' => $qnt_parcelas,
                 'compra_parcelada' => $this->input->post('compra_parcelada'),
+                'estorno' => $estorno,
                 'data_compra' => $data_compra,
                 'mes_referencia' => $mes,
                 'ano_referencia' => $ano,
+                'id_cliente' => $this->input->post('id_cliente'),
+                'nome_cliente' => padronizarString($this->input->post('nome_cliente')),
+                'compra_terceiros' => $compra_terceiros,
             );
             $edit = $this->fatura_model->edit('lancamentos_faturas', $data, 'id_lancamento', $id_lancamento);
             if ($edit == true) {
 
                 $this->fatura_model->delete_real('lancamentos_faturas_assoc', 'id_lancamento', $id_lancamento);
+                $this->fatura_model->delete_real('pendencias', 'id_lancamento_fatura', $id_lancamento);
 
                 //COMPRA PARCELADA
                 if ($this->input->post('compra_parcelada') == 1) {
@@ -427,9 +529,7 @@ class Faturas extends CI_Controller
                                 'fatura_aberta' => 2,
                             );
 
-                            if ($this->fatura_model->abrirFatura($data) == true) {
-
-                            } else {
+                            if (!$this->fatura_model->abrirFatura($data) == true) {
                                 $this->session->set_flashdata('erro', 'Erro ao tentar abrir nova fatura.');
                                 redirect($urlAtual);
                             }
@@ -450,6 +550,45 @@ class Faturas extends CI_Controller
                             'total_parcelas' => $qnt_parcelas,
                         );
 
+                        //MONTA ARRAY DE PENDENCIA, NO CASO DE COMPRA DE TERCEIROS
+                        if ($compra_terceiros == 1) {
+
+                            $vencimento = $faturaReferencia->row()->vencimento;
+                            $vencimento = explode('-', $vencimento);
+                            $dia_venc = $vencimento[2];
+                            $mes_venc = $vencimento[1];
+                            $ano_venc = $vencimento[0];
+
+                            if ($mes_venc == 13) {
+                                $mes_venc = 01;
+                                $ano_venc++;
+                            }
+                            $vencimentoFormatado = ($ano_venc . '-' . $mes_venc . '-' . $dia_venc);
+
+                            if ($x > 9) {
+                                $parcela_atual = $x;
+                            } else {
+                                $parcela_atual = '0' . $x;
+                            }
+
+                            if ($qnt_parcelas > 9) {
+                                $total_parcelas = $qnt_parcelas;
+                            } else {
+                                $total_parcelas = '0' . $qnt_parcelas;
+                            }
+
+                            $data2 = array(
+                                'id_lancamento_fatura' => $id_lancamento,
+                                'id_usuario' => id_usuario(),
+                                'id_cliente' => $this->input->post('id_cliente'),
+                                'descricao' => padronizarString($this->input->post('descricao')) . ' - ' . $parcela_atual . '/' . $total_parcelas,
+                                'tipo' => 1,
+                                'valor' => $valor_parcela,
+                                'data_vencimento' => $vencimentoFormatado,
+                            );
+                            $this->pendencia_model->add('pendencias', $data2);
+                        }
+
                         $mes++;
                         if ($mes == 13) {
                             $mes = 01;
@@ -457,7 +596,7 @@ class Faturas extends CI_Controller
                         }
 
                         if ($this->fatura_model->add('lancamentos_faturas_assoc', $data1) == true) {
-                            $this->session->set_flashdata('sucesso', 'Lançamento editado com sucesso!');
+                            $this->session->set_flashdata('sucesso', 'Lançamento alterado com sucesso!');
                         } else {
                             $this->session->set_flashdata('erro', 'Erro ao tentar adicionar lançamentos_assoc!');
                             redirect($urlAtual);
@@ -467,7 +606,7 @@ class Faturas extends CI_Controller
                 } else {
                     //COMPRA A VISTA
                     //ARRAY LANCAMENTOS_FATURA_ASSOC
-                    $data2 = array(
+                    $data1 = array(
                         'id_lancamento' => $id_lancamento,
                         'id_fatura' => $ultimaFaturaAberta->id_fatura,
                         'valor_parcela' => $valor,
@@ -479,16 +618,43 @@ class Faturas extends CI_Controller
                         'total_parcelas' => 1,
                     );
 
-                    if ($this->fatura_model->add('lancamentos_faturas_assoc', $data2) == true) {
-                        $this->session->set_flashdata('sucesso', 'Lançamento editado com sucesso!');
+                    //MONTA ARRAY DE PENDENCIA, NO CASO DE COMPRA DE TERCEIROS
+                    if ($compra_terceiros == 1) {
+
+                        $vencimento = $ultimaFaturaAberta->vencimento;
+                        $vencimento = explode('-', $vencimento);
+                        $dia_venc = $vencimento[2];
+                        $mes_venc = $vencimento[1];
+                        $ano_venc = $vencimento[0];
+
+                        if ($mes_venc == 13) {
+                            $mes_venc = 01;
+                            $ano_venc++;
+                        }
+                        $vencimentoFormatado = ($ano_venc . '-' . $mes_venc . '-' . $dia_venc);
+
+                        $data2 = array(
+                            'id_lancamento_fatura' => $id_lancamento,
+                            'id_usuario' => id_usuario(),
+                            'id_cliente' => $this->input->post('id_cliente'),
+                            'descricao' => padronizarString($this->input->post('descricao')),
+                            'tipo' => 1,
+                            'valor' => $valor,
+                            'data_vencimento' => $vencimentoFormatado,
+                        );
+                        $this->pendencia_model->add('pendencias', $data2);
+                    }
+
+                    if ($this->fatura_model->add('lancamentos_faturas_assoc', $data1) == true) {
+                        $this->session->set_flashdata('sucesso', 'Lançamento alterado com sucesso!');
                     } else {
-                        $this->session->set_flashdata('erro', 'Erro ao tentar editar lançamentos_assoc!');
+                        $this->session->set_flashdata('erro', 'Erro ao tentar alterar lançamentos_assoc!');
                         redirect($urlAtual);
                     }
                 }
                 redirect($urlAtual);
             } else {
-                $this->session->set_flashdata('erro', 'Erro ao tentar editar lançamento de fatura.');
+                $this->session->set_flashdata('erro', 'Erro ao tentar alterar lançamento de fatura.');
                 redirect($urlAtual);
             }
             redirect($urlAtual);
@@ -518,6 +684,7 @@ class Faturas extends CI_Controller
         if ($this->fatura_model->delete('lancamentos_faturas', $data, 'id_lancamento', $id_lancamento) == true) {
 
             $this->fatura_model->delete('lancamentos_faturas_assoc', $data, 'id_lancamento', $id_lancamento);
+            $this->pendencia_model->delete('pendencias', $data, 'id_lancamento_fatura', $id_lancamento);
 
             $this->session->set_flashdata('sucesso', 'Lançamento excluído com sucesso!');
             redirect($urlAtual);
@@ -679,6 +846,15 @@ class Faturas extends CI_Controller
             redirect($urlAtual);
         }
     }
+
+    public function autoCompleteCliente()
+    {
+        if (isset($_GET['term'])) {
+            $q = strtolower($_GET['term']);
+            $this->fatura_model->autoCompleteCliente($q, id_usuario());
+        }
+    }
+
 
     //MODULO DE RETORNO DE FILTROS POR PERIODO
     protected function getThisYear()

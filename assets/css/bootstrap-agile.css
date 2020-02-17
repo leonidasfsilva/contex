@@ -1597,7 +1597,7 @@ a.text-warning:focus, a.text-warning:hover {
 }
 
 .text-danger {
-    color: #a94442
+    /*color: #a94442*/
 }
 
 a.text-danger:focus, a.text-danger:hover {

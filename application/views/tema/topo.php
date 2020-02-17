@@ -1,54 +1,68 @@
-<?php $this->load->view('includes/css'); ?>
-<?php $this->load->view('includes/custom_css'); ?>
-<?php $this->load->view('includes/js'); ?>
-<?php $this->load->view('includes/custom_js'); ?>
+<?php
+clearstatcache();
+$this->load->view('includes/css');
+$this->load->view('includes/custom_css');
+$this->load->view('includes/js');
+$this->load->view('includes/custom_js');
+?>
 
-<body class="infobar-offcanvas" id="body">
+<body class="infobar-offcanvas infobar-overlay sidebar-hideon-collapse sidebar-scroll" id="body">
 
 <!--    MENU SUSPENSO-->
 <div id="headerbar">
     <div class="container-fluid">
         <div class="row">
             <div class="col-xs-6 col-sm-2">
-                <a href="#" class="shortcut-tile tile-brown">
+                <a href="#" class="shortcut-tile tile-green">
                     <div class="tile-body">
-                        <div class="pull-left"><i class="fa fa-pencil"></i></div>
+                        <div class="pull-left"><i class="fas fa-pencil-alt fa-fw"></i></div>
                     </div>
                     <div class="tile-footer">
-                        Create Post
+                        Criar Postagem
                     </div>
                 </a>
             </div>
             <div class="col-xs-6 col-sm-2">
-                <a href="#" class="shortcut-tile tile-grape">
+                <a href="#" class="shortcut-tile tile-alizarin">
                     <div class="tile-body">
-                        <div class="pull-left"><i class="fa fa-group"></i></div>
+                        <div class="pull-left"><i class="fas fa-group fa-fw"></i></div>
                         <div class="pull-right"><span class="badge">2</span></div>
                     </div>
                     <div class="tile-footer">
-                        Contacts
+                        Contatos
                     </div>
                 </a>
             </div>
             <div class="col-xs-6 col-sm-2">
                 <a href="#" class="shortcut-tile tile-primary">
                     <div class="tile-body">
-                        <div class="pull-left"><i class="fa fa-envelope-o"></i></div>
+                        <div class="pull-left"><i class="fas fa-inbox fa-fw"></i></div>
                         <div class="pull-right"><span class="badge">10</span></div>
                     </div>
                     <div class="tile-footer">
-                        Messages
+                        Mensagens
                     </div>
                 </a>
             </div>
             <div class="col-xs-6 col-sm-2">
-                <a href="#" class="shortcut-tile tile-inverse">
+                <a href="#" class="shortcut-tile tile-magenta">
                     <div class="tile-body">
-                        <div class="pull-left"><i class="fa fa-camera"></i></div>
+                        <div class="pull-left"><i class="fas fa-camera fa-fw"></i></div>
                         <div class="pull-right"><span class="badge">3</span></div>
                     </div>
                     <div class="tile-footer">
-                        Gallery
+                        Galeria
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-xs-6 col-sm-2">
+                <a href="#" class="shortcut-tile tile-orange">
+                    <div class="tile-body">
+                        <div class="pull-left"><i class="fas fa-tools fa-fw"></i></div>
+                    </div>
+                    <div class="tile-footer">
+                        Plugins
                     </div>
                 </a>
             </div>
@@ -56,20 +70,10 @@
             <div class="col-xs-6 col-sm-2">
                 <a href="#" class="shortcut-tile tile-midnightblue">
                     <div class="tile-body">
-                        <div class="pull-left"><i class="fa fa-cog"></i></div>
+                        <div class="pull-left"><i class="fas fa-cog fa-fw"></i></div>
                     </div>
                     <div class="tile-footer">
-                        Settings
-                    </div>
-                </a>
-            </div>
-            <div class="col-xs-6 col-sm-2">
-                <a href="#" class="shortcut-tile tile-orange">
-                    <div class="tile-body">
-                        <div class="pull-left"><i class="fa fa-wrench"></i></div>
-                    </div>
-                    <div class="tile-footer">
-                        Plugins
+                        Configurações
                     </div>
                 </a>
             </div>
@@ -78,12 +82,12 @@
 </div>
 <!--    MENU SUSPENSO-->
 
-<header id="topnav" class="navbar navbar-midnightblue navbar-fixed-top clearfix" role="banner">
+<header id="topnav" class="navbar navbar <?= (isset($topbar_color) ? $topbar_color : 'navbar-midnightblue') ?> navbar-fixed-top clearfix" role="banner">
 
 	<span id="trigger-sidebar" class="toolbar-trigger toolbar-icon-bg">
-		<a data-placement="bottom" title="Exibir/Ocultar Menu" id="menu-switcher">
+		<a href="javascript:" data-placement="bottom" title="Exibir/Ocultar Menu" id="menu-switcher">
             <span class="icon-bg menu-toggle">
-                <i id="menu-toggle-icon" class="fa fa-fw"></i>
+                <i id="menu-toggle-icon" class="fas fa-fw"></i>
             </span>
         </a>
 	</span>
@@ -205,7 +209,7 @@
         <!--        BUSCA-->
         <li class="dropdown toolbar-icon-bg demo-search-hidden">
             <a href="#" class="dropdown-toggle " data-toggle="dropdown" data-placement="bottom" title="Pesquisa">
-                <span class="icon-bg"><i class="fa fa-fw fa-search"></i></span></a>
+                <span class="icon-bg"><i class="fas fa-fw fa-search"></i></span></a>
             <div class="dropdown-menu dropdown-alternate arrow search dropdown-menu-form">
                 <div class="dd-header">
                     <span>Pesquisa</span>
@@ -215,7 +219,7 @@
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Pesquisar...">
                         <span class="input-group-btn">
-						    <button type="submit" class="btn btn-primary"><i class="fa fa-search fa-fw"></i></button>
+						    <button type="submit" class="btn btn-primary"><i class="fas fa-search fa-fw"></i></button>
 					    </span>
                     </div>
                 </form>
@@ -225,9 +229,9 @@
 
         <!--        BOTAO DO MENU SUSPENSO-->
         <li class="toolbar-icon-bg demo-headerdrop-hidden">
-            <a href="#" id="headerbardropdown" data-placement="bottom" title="Menu Suspenso">
+            <a href="#" id="headerbardropdown" data-placement="bottom" title="Menu suspenso">
                 <span class="icon-bg">
-                    <i class="fa fa-fw fa-level-down"></i>
+                    <i class="fas fa-fw fa-level-down-alt"></i>
                 </span>
             </a>
         </li>
@@ -235,16 +239,16 @@
 
         <!--        TELA CHEIA-->
         <li class="toolbar-icon-bg hidden-xs" id="trigger-fullscreen">
-            <a href="#" class="toggle-fullscreen" data-toggle="tooltips" data-placement="bottom" title='Tela Cheia'>
-                <span class="icon-bg"><i class="fa fa-fw fa-arrows-alt"></i></span></i></a>
+            <a href="#" class="toggle-fullscreen" data-toggle="tooltips" data-placement="bottom" title='Ativar/desativar exibição em tela cheia'>
+                <span class="icon-bg"><i class="fas fa-fw fa-expand-arrows-alt"></i></span></i></a>
         </li>
         <!--        TELA CHEIA-->
 
         <!--        NOTIFICAÇOES-->
-        <li class="dropdown toolbar-icon-bg">
+        <li class="dropdown toolbar-icon-bg hidden-xs">
             <a href="#" class="hasnotifications dropdown-toggle" data-toggle="dropdown" data-placement="bottom" title="Notificações">
                 <span class="icon-bg">
-                    <i class="fa fa-fw fa-bell"></i>
+                    <i class="fas fa-fw fa-bell"></i>
                 </span>
                 <!--                <span class="badge badge-info">5</span>-->
             </a>
@@ -306,14 +310,29 @@
         </li>
         <!--        NOTIFICAÇOES-->
 
-        <!--        MENSAGENS-->
-        <li class="dropdown toolbar-icon-bg hidden-xs">
-            <a href="#" class="hasnotifications dropdown-toggle " data-toggle='dropdown' data-placement="bottom" title="Mensagens">
-                <span class="icon-bg"><i class="fa fa-fw fa-envelope"></i></span></a>
+        <!--        CHAMADOS-->
+        <li class="dropdown toolbar-icon-bg">
+            <a href="#" class="hasnotifications dropdown-toggle " data-toggle='dropdown' data-placement="bottom" title="Chamados">
+                <span class="icon-bg">
+                    <i class="fas fa-fw fa-headset"></i>
+                </span>
+                <!--                numero de notificações-->
+                <?php if ($this->session->userdata('permissao') == 1) {
+                    if (adminTemNotificacoes() > 0) { ?>
+                        <span class="badge badge-danger"><?= adminTemNotificacoes() ?></span>
+                    <?php }
+                } else {
+                    if (usuarioTemNotificacoes() > 0) { ?>
+                        <span class="badge badge-danger"><?= usuarioTemNotificacoes() ?></span>
+                    <?php }
+                } ?>
+            </a>
             <div class="dropdown-menu dropdown-alternate messages arrow">
                 <div class="dd-header">
-                    <span>Messages</span>
-                    <span><a href="#">Settings</a></span>
+                    <span>Chamados</span>
+                    <span>
+<!--                        <a href="#">Settings</a>-->
+                    </span>
                 </div>
 
                 <div class="scrollthis scroll-pane">
@@ -330,7 +349,7 @@
                         </li>
                         <li>
                             <a href="#">
-                                <img class="msg-avatar" src="<?php echo base_url() ?>assets/demo/avatar/avatar_01.png" alt="avatar"/>
+                                <!--                                <img class="msg-avatar" src="--><?php //echo base_url() ?><!--assets/demo/avatar/avatar_01.png" alt="avatar"/>-->
                                 <div class="msg-content">
                                     <span class="name">Roxann Hollingworth <i class="fa fa-paperclip attachment"></i></span>
                                     <span class="msg">Lorem ipsum dolor sit amet consectetur adipisicing elit</span>
@@ -340,7 +359,7 @@
                         </li>
                         <li>
                             <a href="#">
-                                <img class="msg-avatar" src="<?php echo base_url() ?>assets/demo/avatar/avatar_05.png" alt="avatar"/>
+                                <!--                                <img class="msg-avatar" src="--><?php //echo base_url() ?><!--assets/demo/avatar/avatar_05.png" alt="avatar"/>-->
                                 <div class="msg-content">
                                     <span class="name">Diamond Harlands</span>
                                     <span class="msg">:)</span>
@@ -350,7 +369,7 @@
                         </li>
                         <li>
                             <a href="#">
-                                <img class="msg-avatar" src="<?php echo base_url() ?>assets/demo/avatar/avatar_02.png" alt="avatar"/>
+                                <!--                                <img class="msg-avatar" src="--><?php //echo base_url() ?><!--assets/demo/avatar/avatar_02.png" alt="avatar"/>-->
                                 <div class="msg-content">
                                     <span class="name">Michael Serio <i class="fa fa-paperclip attachment"></i></span>
                                     <span class="msg">Sed distinctio dolores fuga molestiae modi?</span>
@@ -360,7 +379,7 @@
                         </li>
                         <li>
                             <a href="#">
-                                <img class="msg-avatar" src="<?php echo base_url() ?>assets/demo/avatar/avatar_03.png" alt="avatar"/>
+                                <!--                                <img class="msg-avatar" src="--><?php //echo base_url() ?><!--assets/demo/avatar/avatar_03.png" alt="avatar"/>-->
                                 <div class="msg-content">
                                     <span class="name">Matt Jones</span>
                                     <span class="msg">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et mole</span>
@@ -370,7 +389,7 @@
                         </li>
                         <li>
                             <a href="#">
-                                <img class="msg-avatar" src="<?php echo base_url() ?>assets/demo/avatar/avatar_07.png" alt="avatar"/>
+                                <!--                                <img class="msg-avatar" src="--><?php //echo base_url() ?><!--assets/demo/avatar/avatar_07.png" alt="avatar"/>-->
                                 <div class="msg-content">
                                     <span class="name">John Doe</span>
                                     <span class="msg">Neque porro quisquam est qui dolorem</span>
@@ -380,26 +399,30 @@
                         </li>
                     </ul>
                 </div>
-
-                <div class="dd-footer"><a href="#">View all messages</a></div>
+                <div class="dd-footer font-weight-bold"><a href="<?= base_url(); ?>chamados">ver todos</a></div>
             </div>
         </li>
-        <!--        MENSAGENS-->
+        <!--        CHAMADOS-->
 
         <!--MENU USUARIO-->
         <li class="dropdown toolbar-icon-bg">
             <a href="#" class="dropdown-toggle " data-toggle='dropdown' data-placement="bottom" title="<?= $this->session->userdata('nome') ?>">
-                <span class="icon-bg"><i class="fa fa-fw fa-user-circle"></i></span></a>
+                <span class="icon-bg"><i class="fas fa-user-circle fa-fw"></i></span></a>
             <ul class="dropdown-menu userinfo arrow">
-                <li><a href="javascript:" id="btn_teste"><span class="pull-left">Perfil</span> <span class="badge badge-info">80%</span></a></li>
-                <li><a href="<?php echo site_url(); ?>mxcode/minhaConta"><span class="pull-left">Minha Conta</span> <i class="pull-right fa fa-user-circle fa-lg"></i></a></li>
-                <li><a href="javascript:"><span class="pull-left">Configurações</span> <i class="pull-right fa fa-cog fa-lg"></i></a></li>
+                <!--                <li><a href="javascript:" id="btn_teste"><span class="pull-left">Perfil</span> <span class="badge badge-info">80%</span></a></li>-->
+                <li title="Dados da conta">
+                    <a href="<?php echo base_url(); ?>mxcode/minhaConta"><span class="pull-left">Minha Conta</span> <i class="pull-right fas fa-user fa-lg"></i></a>
+                </li>
+                <li title="Configurações da conta">
+                    <a href="<?php echo base_url(); ?>configuracoes"><span class="pull-left">Configurações</span> <i class="pull-right fas fa-cog fa-lg"></i></a>
+                </li>
+                <!--                <li><a href="javascript:"><span class="pull-left">Configurações</span> <i class="pull-right fa fa-cog fa-lg"></i></a></li>-->
                 <!--                <li class="divider"></li>-->
                 <!--                <li><a href="#"><span class="pull-left">Earnings</span> <i class="pull-right fa fa-line-chart"></i></a></li>-->
                 <!--                <li><a href="#"><span class="pull-left">Statement</span> <i class="pull-right fa fa-list-alt"></i></a></li>-->
                 <!--                <li><a href="#"><span class="pull-left">Withdrawals</span> <i class="pull-right fa fa-dollar"></i></a></li>-->
                 <li class="divider"></li>
-                <li><a href="<?php echo site_url(); ?>mxcode/sair"><span class="pull-left">Sair</span> <i class="pull-right fa fa-sign-out fa-lg"></i></a></li>
+                <li title="Encerrar sessão"><a href="<?php echo site_url(); ?>mxcode/sair"><span class="pull-left">Sair</span> <i class="pull-right fas fa-power-off fa-lg"></i></a></li>
             </ul>
         </li>
         <!--MENU USUARIO-->
@@ -410,40 +433,37 @@
 
 <div id="wrapper">
     <div id="layout-static">
-
         <!--                    SIDEBAR-->
-        <div class="static-sidebar-wrapper sidebar-midnightblue">
+        <div class="static-sidebar-wrapper <?= (isset($sidebar_color) ? $sidebar_color : 'sidebar-midnightblue') ?>">
             <div class="static-sidebar">
                 <div class="sidebar">
                     <div class="widget stay-on-collapse" id="widget-welcomebox">
                         <div class="widget-body welcome-box tabular">
-                            <a href="<?php echo site_url(); ?>mxcode/minhaConta">
-                                <div class="tabular-row">
-                                    <div class="tabular-cell welcome-avatar">
-                                        <img src="<?php echo base_url(); ?>assets/img/avatars/padrao.png" class="avatar">
-                                    </div>
-                                    <div class="tabular-cell welcome-options">
-                                        <span class="welcome-text">Bem-vindo,</span>
-                                        <a href="<?php echo site_url(); ?>mxcode/minhaConta" class="name"><?= $this->session->userdata('nome') ?></a>
-                                    </div>
+                            <div class="tabular-row">
+                                <div class="tabular-cell welcome-avatar">
+                                    <img src="<?php echo $this->session->userdata('avatar') != null ? base_url('assets/uploads/avatars/') . $this->session->userdata('avatar') : base_url('assets/img/avatars/padrao.png'); ?>"
+                                         class="avatar">
                                 </div>
-                            </a>
+                                <div class="tabular-cell welcome-options">
+                                    <!--                                        <span class="welcome-text">Bem-vindo,</span>-->
+                                    <span class="name"><?= $this->session->userdata('nome') ?></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="widget stay-on-collapse" id="widget-sidebar">
                         <nav role="navigation" class="widget-body">
                             <ul class="acc-menu">
-                                <li class="nav-separator"></li>
-
+                                <!--                                <li class="nav-separator"></li>-->
                                 <li class="<?= (isset($menuPainel)) ? 'active' : ''; ?>">
-                                    <a href="<?php echo base_url() ?>"><i class="fa fa-home fa-fw"></i>
+                                    <a href="<?php echo base_url() ?>"><i class="fas fa-home fa-fw"></i>
                                         <span>Painel Inicial</span>
                                     </a>
                                 </li>
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) { ?>
                                     <li class="<?= (isset($menuClientes)) ? 'active' : ''; ?>">
-                                        <a href="<?php echo base_url() ?>clientes"><i class="fa fa-group fa-fw"></i>
+                                        <a href="<?php echo base_url() ?>clientes"><i class="fas fa-group fa-fw"></i>
                                             <span>Clientes</span>
                                         </a>
                                     </li>
@@ -451,7 +471,7 @@
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) { ?>
                                     <li class="<?= (isset($menuProdutos)) ? 'active' : ''; ?>">
-                                        <a href="<?php echo base_url() ?>produtos"><i class="fa fa-barcode fa-fw"></i>
+                                        <a href="<?php echo base_url() ?>produtos"><i class="fas fa-barcode fa-fw"></i>
                                             <span>Produtos</span>
                                         </a>
                                     </li>
@@ -459,7 +479,7 @@
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vServico')) { ?>
                                     <li class="<?= (isset($menuServicos)) ? 'active' : ''; ?>">
-                                        <a href="<?php echo base_url() ?>servicos"><i class="fa fa-wrench fa-fw"></i>
+                                        <a href="<?php echo base_url() ?>servicos"><i class="fas fa-wrench fa-fw"></i>
                                             <span>Serviços</span>
                                         </a>
                                     </li>
@@ -467,7 +487,7 @@
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) { ?>
                                     <li class="<?= (isset($menuOs)) ? 'active' : ''; ?>">
-                                        <a href="<?php echo base_url() ?>os"><i class="fa fa-tags fa-fw"></i>
+                                        <a href="<?php echo base_url() ?>os"><i class="fas fa-tags fa-fw"></i>
                                             <span>Ordens de Serviço</span>
                                         </a>
                                     </li>
@@ -475,7 +495,7 @@
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) { ?>
                                     <li class="<?= (isset($menuVendas)) ? 'active' : ''; ?>">
-                                        <a href="<?php echo base_url() ?>vendas"><i class="fa fa-shopping-cart fa-fw"></i>
+                                        <a href="<?php echo base_url() ?>vendas"><i class="fas fa-shopping-cart fa-fw"></i>
                                             <span>Vendas</span>
                                         </a>
                                     </li>
@@ -483,7 +503,7 @@
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')) { ?>
                                     <li class="<?= (isset($menuArquivos)) ? 'active' : ''; ?>">
-                                        <a href="<?php echo base_url() ?>arquivos"><i class="fa fa-hdd-o fa-fw"></i>
+                                        <a href="<?php echo base_url() ?>arquivos"><i class="fas fa-hdd fa-fw"></i>
                                             <span>Arquivos</span>
                                         </a>
                                     </li>
@@ -491,18 +511,20 @@
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
                                     <li class="<?= (isset($menuFinanceiro)) ? 'active' : ''; ?>">
-                                        <a href="javascript:"><i class="fa fa-dollar fa-fw"></i>
+                                        <a href="javascript:"><i class="fas fa-dollar-sign fa-fw"></i>
                                             <span>Financeiro</span>
                                         </a>
-                                        <ul class="acc-menu sub-menu">
+                                        <ul class="acc-menu">
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
-                                                <li><a href="<?php echo base_url() ?>financeiro/contaCorrente">Conta Corrente</a></li>
+                                                <li><a href="<?php echo base_url() ?>financeiro/lancamentos">Lançamentos</a></li>
                                             <?php } ?>
-                                            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPoupanca')) { ?>
-                                                <li><a href="<?php echo base_url() ?>financeiro/contaPoupanca">Conta Poupança</a></li>
+                                            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vInvestimentos')) { ?>
+                                                <li><a href="<?php echo base_url() ?>financeiro/investimentos">Investimentos</a></li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) { ?>
-                                                <li><a href="<?php echo base_url() ?>financeiro/faturas">Faturas</a></li>
+                                                <li class="<?= (isset($menuFaturas)) ? 'active' : ''; ?>">
+                                                    <a href="<?php echo base_url() ?>financeiro/faturas">Faturas</a>
+                                                </li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPendencias')) { ?>
                                                 <li><a href="<?php echo base_url() ?>financeiro/pendencias">Pendências</a></li>
@@ -513,7 +535,7 @@
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rCliente') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rProduto') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rServico') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rOs') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rVenda')) { ?>
                                     <li class="<?= (isset($menuRelatorios)) ? 'active' : ''; ?>">
-                                        <a href="javascript:"><i class="fa fa-list-alt fa-fw"></i>
+                                        <a href="javascript:"><i class="fas fa-file-alt fa-fw"></i>
                                             <span>Relatórios</span>
                                         </a>
                                         <ul class="acc-menu">
@@ -544,10 +566,13 @@
                                     $this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao') ||
                                     $this->permission->checkPermission($this->session->userdata('permissao'), 'cBackup')) { ?>
                                     <li class="<?= (isset($menuConfiguracoes)) ? 'active' : ''; ?>">
-                                        <a href="javascript:"><i class="fa fa-cogs fa-fw"></i>
+                                        <a href="javascript:"><i class="fas fa-cogs fa-fw"></i>
                                             <span>Config. do Sistema</span>
                                         </a>
                                         <ul class="acc-menu">
+                                            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) { ?>
+                                                <li><a href="<?php echo base_url() ?>anuncios">Anúncios</a></li>
+                                            <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) { ?>
                                                 <li><a href="<?php echo base_url() ?>usuarios">Usuários</a></li>
                                             <?php } ?>
@@ -563,14 +588,13 @@
                                         </ul>
                                     </li>
                                 <?php } ?>
-
                             </ul>
                         </nav>
                     </div>
                 </div>
             </div>
         </div>
-        <!--                    SIDEBAR-->
+        <!--                    SIDEBAR fim-->
 
         <div class="static-content-wrapper">
             <div class="static-content">
@@ -616,7 +640,7 @@
 
                     <!--                CONTEUDO-->
                     <div class="container-fluid conteudo-principal">
-                        <div class="preloader">
+                        <div class="preloader" style="display: none">
                             <div class="cssload-speeding-wheel"></div>
                         </div>
                         <?php if ($this->session->flashdata('error') != null) { ?>
@@ -633,9 +657,11 @@
                             </div>
                         <?php } ?>
                         <!--CONTEUDO PRINCIPAL-->
-                        <?php if (isset($view)) {
-                            echo $this->load->view($view, null, true);
-                        } ?>
+                        <div class="subconteudo-principal">
+                            <?php if (isset($view)) {
+                                echo $this->load->view($view, null, true);
+                            } ?>
+                        </div>
                         <!--CONTEUDO PRINCIPAL-->
 
                     </div>
@@ -646,7 +672,7 @@
                     <div class="clearfix">
                         <ul class="list-unstyled list-inline pull-left pl-sm">
                             <a href="https://mxcode.net" target="_blank">
-                                <li><h6 style="margin: 0;">CONTEX - Sistema de Gestão &copy; <?php echo date('Y'); ?> MX Code Sistemas - Leônidas Ferreira</h6></li>
+                                <li><h6 style="margin: 0;">CONTEX - Sistema de Gestão &copy; <?php echo date('Y'); ?> MXCODE Sistemas Web</h6></li>
                             </a>
                         </ul>
                         <button class="pull-right btn btn-link btn-xs hidden-print" id="back-to-top"><i class="fa fa-arrow-up"></i></button>

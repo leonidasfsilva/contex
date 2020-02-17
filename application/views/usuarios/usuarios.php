@@ -1,77 +1,151 @@
-<a href="<?php echo base_url() ?>index.php/usuarios/adicionar" class="btn btn-success"><i class="icon-plus icon-white"></i> Adicionar Usuário</a>
+<div class="panel panel-midnightblue">
+    <div class="panel-heading">
+        <h3>
+            <i class="fas fa-users-cog fa-lg fa-fw"></i>
+            Gestão de Usuários do Sistema
+        </h3>
+        <div class="panel-ctrls">
+            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
+                <a href="<?php echo base_url(); ?>usuarios/adicionar" class="btn btn-primary btn-sm"><i
+                            class="fas fa-plus-square fa-fw"></i> Adicionar Usuário</a>
+            <?php } ?>
+        </div>
+    </div>
+    <div class="panel-body panel-no-padding table-responsive">
+        <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer"
+               role="grid" style="width: 100%;">
+            <thead>
+            <tr role="row">
+                <th style="width: 30px">ID</th>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Permissão</th>
+                <th>Status</th>
+                <th style="width: 170px">Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php if (!$results) { ?>
+                <tr>
+                    <td colspan="5">Nenhum usuário cadastrado</td>
+                </tr>
+            <?php } else {
+            foreach ($results as $r) {
+
+                if ($r->ativo == 1) {
+                    $status = 'Ativo';
+                    $label_status = 'success';
+                    $btn_status = '<a href="#modalDesativar" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-warning btn-sm" title="Desativar"><i class="fas fa-minus-circle fa-lg fa-fw" ></i></a>';
+                } else {
+                    $status = 'Inativo';
+                    $label_status = 'warning';
+                    $btn_status = '<a href="#modalAtivar" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-success btn-sm" title="Ativar"><i class="fas fa-check-circle fa-lg fa-fw" ></i></a>';
+                }
+
+                echo '<tr>';
+                echo '<td>' . $r->id_usuarios . '</td>';
+                echo '<td>' . $r->nome . '</td>';
+                echo '<td>' . $r->email . '</td>';
+                echo '<td>' . $r->permissao . '</td>';
+                echo '<td><span class="label label-' . $label_status . '">' . strtoupper($status) . '</span></td>';
+                echo '<td style="text-align: center">';
+                echo '<a href="' . base_url() . 'usuarios/visualizar/' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-info btn-sm" title="Detalhes"><i class="fas fa-search-plus fa-lg fa-fw"></i></a>';
+                echo '<a href="' . base_url() . 'usuarios/editar/' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-primary btn-sm" title="Editar"><i class="fas fa-edit fa-lg fa-fw"></i></a>';
+                echo $btn_status;
+                echo '<a href="#modalExcluir" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-danger btn-sm" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw" ></i></a>';                echo '</td>';
+                echo '</tr>';
+            } ?>
+            </tbody>
+        </table>
+    </div>
+</div>
 <?php
-if (!$results) { ?>
-    <div class="widget-box">
-        <div class="widget-title">
-        <span class="icon">
-            <i class="fa fa-user-circle-o fa-lg fa-fw"></i>
-        </span>
-            <h5>Usuários</h5>
-        </div>
-        <div class="widget-content nopadding">
-            <table class="table table-bordered ">
-                <thead>
-                <tr style="backgroud-color: #2D335B">
-                    <th>#</th>
-                    <th>Nome</th>
-                    <th>CPF</th>
-                    <th>Telefone</th>
-                    <th>Nível</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td colspan="5">Nenhum Usuário Cadastrado</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+}
 
-<?php } else { ?>
+//echo $this->pagination->create_links();
+?>
 
-    <div class="widget-box">
-        <div class="widget-title">
-        <span class="icon">
-            <i class="fa fa-user-circle-o fa-lg fa-fw"></i>
-         </span>
-            <h5>Usuários</h5>
-        </div>
-        <div class="widget-content nopadding">
-            <table class="table table-bordered table-condensed">
-                <thead>
-                <tr style="backgroud-color: #2D335B">
-                    <th>#</th>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>Telefone</th>
-                    <th>Permissão</th>
-                    <th>Ações</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($results as $r) {
-
-                    echo '<tr>';
-                    echo '<td>' . $r->id_usuarios . '</td>';
-                    echo '<td>' . $r->nome . '</td>';
-                    echo '<td>' . $r->email . '</td>';
-                    echo '<td>' . $r->telefone . '</td>';
-                    echo '<td>' . $r->permissao . '</td>';
-                    echo '<td>
-                      <a href="' . base_url() . 'usuarios/editar/' . $r->id_usuarios . '" class="btn btn-info btn-sm tip-top" title="Editar Usuário"><i class="fa fa-edit fa-fw"></i></a>
-                  </td>';
-                    echo '</tr>';
-                } ?>
-                <tr>
-
-                </tr>
-                </tbody>
-            </table>
+<!-- Modal DESATIVAR-->
+<div class="modal fade" id="modalDesativar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-white ">Desativar conta de usuário</h4>
+            </div>
+            <form action="<?php echo base_url() ?>usuarios/desativar" method="post">
+                <div class="modal-body">
+                    <p>Deseja realmente desativar esta conta de usuário?</p>
+                    <input type="hidden" id="id_desativar" name="id" value=""/>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
+                        Cancelar
+                    </button>
+                    <button class="btn btn-warning btn-sm"><i class="fa fa-check fa-fw"></i> Desativar</button>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 
+<!-- Modal EXCLUIR-->
+<div class="modal fade" id="modalExcluir" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-white ">Excluir conta de usuário</h4>
+            </div>
+            <form action="<?php echo base_url() ?>usuarios/excluir" method="post">
+                <div class="modal-body">
+                    <p>Deseja realmente excluir esta conta de usuário?</p>
+                    <input type="hidden" id="id_excluir" name="id" value=""/>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
+                        Cancelar
+                    </button>
+                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt fa-fw"></i> Excluir</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-    <?php echo $this->pagination->create_links();
-} ?>
+<!-- Modal ATIVAR-->
+<div class="modal fade" id="modalAtivar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-white ">Ativar conta de usuário</h4>
+            </div>
+            <form action="<?php echo base_url() ?>usuarios/ativar" method="post">
+                <div class="modal-body">
+                    <p>Deseja realmente ativar esta conta usuário?</p>
+                    <input type="hidden" id="id_ativar" name="id" value=""/>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
+                        Cancelar
+                    </button>
+                    <button class="btn btn-success btn-sm"><i class="fa fa-check fa-fw"></i> Ativar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('a').click(function (event) {
+            var usuario = $(this).attr('usuario');
+            $('#id_ativar, #id_desativar, #id_excluir').val(usuario);
+        });
+    });
+</script>
+

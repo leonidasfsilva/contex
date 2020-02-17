@@ -16,8 +16,7 @@ class Pendencia_model extends CI_Model
         parent::__construct();
     }
 
-
-    function get($table, $fields, $where = '', $id_usuario, $limit = null, $rows, $perpage = 0, $start = 0, $one = false, $array = 'array')
+    function get($table, $fields, $where = null, $id_usuario, $limit = null, $rows, $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
 
         $this->db->select($fields);
@@ -32,16 +31,17 @@ class Pendencia_model extends CI_Model
         if ($limit) {
             if ($rows > $limit) {
                 $this->db->limit($limit, ($rows - $limit));
-                $this->db->order_by('id_pendencia', 'asc');
+//                $this->db->order_by('id_pendencia', 'asc');
             }
         }
-        $this->db->order_by('data_pendencia', 'asc');
+        $this->db->order_by('quitado', 'desc');
+        $this->db->order_by('id_pendencia', 'asc');
+        $this->db->order_by('data_vencimento', 'asc');
         $query = $this->db->get();
 
         $result = !$one ? $query->result() : $query->row();
         return $result;
     }
-
 
     function getById($id)
     {
@@ -65,7 +65,7 @@ class Pendencia_model extends CI_Model
         $this->db->where($fieldID, $ID);
         $this->db->update($table, $data);
 
-        if ($this->db->affected_rows() >= 0) {
+        if ($this->db->affected_rows() > 0) {
             return true;
         }
 
@@ -121,9 +121,7 @@ class Pendencia_model extends CI_Model
                     ->where($where . ' AND status = 1 AND tipo = 1 AND quitado = 0 AND id_usuario  = ' . $id_usuario);
             }
         }
-
         return $this->db->get()->row();
-
     }
 
     function getPendenciasParcialDebito($id_usuario, $id_cliente = null, $where = null)
@@ -153,10 +151,7 @@ class Pendencia_model extends CI_Model
                     ->where($where . ' AND status = 1 AND tipo = 2 AND quitado = 0 AND id_usuario  = ' . $id_usuario);
             }
         }
-
-
         return $this->db->get()->row();
-
     }
 
     function getPendenciasTotalCredito($id_usuario)
@@ -179,12 +174,12 @@ class Pendencia_model extends CI_Model
         return $this->db->get()->row();
     }
 
-    function getTotal($id_usuario)
+    function getTotalDebito($id_usuario)
     {
         $this->db
             ->select('SUM(valor) AS total')
             ->from('pendencias')
-            ->where('status = 1 AND id_usuario = ' . $id_usuario);
+            ->where('status = 1 AND tipo = 2 AND quitado = 0 AND id_usuario  = ' . $id_usuario);
         return $this->db->get()->row();
 
     }
@@ -192,7 +187,7 @@ class Pendencia_model extends CI_Model
     function getClientes($id_usuario)
     {
         $one = false;
-        $this->db->where('status = 1 AND id_usuario = ' . $id_usuario);
+        $this->db->where('id_usuario = ' . $id_usuario);
         $query = $this->db->get('clientes');
 
         $result = !$one ? $query->result() : $query->row();

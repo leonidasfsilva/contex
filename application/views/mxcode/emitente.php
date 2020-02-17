@@ -1,10 +1,10 @@
 <?php if (!isset($dados) || $dados == null) { ?>
-    <div class="panel panel-default">
+    <div class="panel panel-midnightblue">
         <div class="panel-heading">
-            <h2 style="font-size: 12pt">
-                <i class="fa fa-id-card-o fa-lg fa-fw"></i>
+            <h3>
+                <i class="fas fa-id-card fa-lg fa-fw"></i>
                 Dados do Emitente
-            </h2>
+            </h3>
             <div class="panel-ctrls">
                 <!--                <button href="#modalFiltrar" class="btn btn-default btn-sm" id="editar_perfil" data-toggle="modal" title="Editar perfil de usuário">-->
                 <!--                    <i class="fa fa-user-circle fa-fw"></i>-->
@@ -19,9 +19,8 @@
             </div>
             <div class="panel-footer">
                 <a href="#modalCadastrar" data-toggle="modal" role="button" class="btn btn-primary pull-right">
-                    <i class="fa fa-plus fa-fw"></i> Cadastrar Dados
+                    <i class="fas fa-plus fa-fw"></i> Cadastrar Dados
                 </a>
-
             </div>
         </div>
     </div>
@@ -115,19 +114,18 @@
     </div>
 
 <?php } else { ?>
-
-    <div class="panel panel-default">
+    <div class="panel panel-midnightblue">
         <div class="panel-heading">
-            <h2 style="font-size: 12pt">
-                <i class="fa fa-id-card-o fa-lg fa-fw"></i>
+            <h3>
+                <i class="fas fa-id-card fa-lg fa-fw"></i>
                 Dados do Emitente
-            </h2>
+            </h3>
             <div class="panel-ctrls">
-                <a href="#modalAlterar" data-toggle="modal" class="btn btn-primary btn-sm">
-                    <i class="fa fa-edit fa-fw"></i> Alterar Dados
+                <a href="#modalAlterar" data-toggle="modal" class="btn btn-primary btn-sm" title="Alterar dados de emitente">
+                    <i class="fas fa-edit fa-fw"></i> Alterar Dados
                 </a>
-                <a href="#modalLogo" data-toggle="modal" class="btn btn-primary btn-sm">
-                    <i class="fa fa-picture-o fa-fw"></i> Alterar Logo
+                <a href="#modalLogo" data-toggle="modal" class="btn btn-primary btn-sm" title="Alterar logotipo">
+                    <i class="fas fa-image fa-fw"></i> Alterar Logo
                 </a>
             </div>
         </div>
@@ -138,7 +136,7 @@
                     <tr>
                         <td style="width: 30%; padding: 15px">
                             <?php if ($dados->logomarca) { ?>
-                                <img style="width: 150px" src="<?php echo base_url() . 'assets/uploads/logomarcas/' . $dados->logomarca; ?> ">
+                                <img style="width: 150px" src="<?php echo base_url() . 'assets/uploads/logomarcas/' . $dados->logomarca; ?>">
                             <?php } else { ?>
                                 <p class="alert alert-inverse">
                                     Nenhuma logomarca cadastrada
@@ -150,17 +148,25 @@
                             <br>
                             <span>CNPJ: <?php echo $dados->cnpj; ?></span>
                             <br>
-                            <span><?php echo $dados->logradouro . ', ' . $dados->numero . ', ' . $dados->bairro . ' - ' . $dados->cidade . ' / ' . $dados->uf; ?> </span>
+                            <span><?php echo $dados->logradouro . ', '
+                                    . ($dados->s_n != null ? 'S/N' : $dados->numero)
+                                    . ($dados->complemento == null ? '' : ', '.$dados->complemento); ?>
+                            </span>
+                            <br>
+                            <span><?php echo $dados->bairro . ' - '
+                                    . $dados->cidade . ' / '
+                                    . $dados->uf; ?>
+                            </span>
                             <br>
                             <span> Email: <?php echo $dados->email . ' - Fone: ' . $dados->telefone; ?></span>
                         </td>
                     </tr>
                     </tbody>
                 </table>
-            </div>
-            <div class="panel-footer">
+                <!--            </div>-->
+                <!--            <div class="panel-footer">-->
                 <p class="alert alert-info">
-                    <i class="fa fa-exclamation-circle fa-lg fa-fw"></i>
+                    <i class="fas fa-info-circle fa-lg fa-fw"></i>
                     Os dados acima serão utilizados no cabeçalho das telas de impressão.
                 </p>
             </div>
@@ -212,6 +218,12 @@
                                     <input type="checkbox" class="form-control" id="s_n" name="s_n" value="1" <?= $dados->s_n == 1 ? 'checked' : '' ?>>
                                 </div>
                                 <label for="s_n" class="font-weight-bold">S/N</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-12" id="div_complemento">
+                                <label for="complemento" class="font-weight-bold">Complemento</label>
+                                <input type="text" class="form-control" id="complemento" name="complemento" value="<?php echo $dados->complemento; ?>"/>
                             </div>
                         </div>
                         <div class="row">
@@ -274,7 +286,7 @@
                     <div class="modal-footer">
                         <?php if ($dados->logomarca) { ?>
                             <a href="#modalExcluirLogo" data-toggle="modal" class="btn btn-danger btn-sm pull-left">
-                                <i class="fa fa-trash-o fa-fw"></i> Excluir Logo
+                                <i class="fas fa-trash-alt fa-fw"></i> Excluir Logo
                             </a>
                         <?php } ?>
                         <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">

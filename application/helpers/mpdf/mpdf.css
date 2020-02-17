@@ -1,4 +1,4 @@
-
+@import url('../../../assets/css/styles.css');
 
 
 /* LISTS */
@@ -53,7 +53,7 @@ a.mpdf_toc_a  {
 div.mpdf_toc_level_0 {		/* Whole line level 0 */
 	line-height: 1.5;
 	margin-left: 0;
-	padding-right: 0em;	/* should match the outdent specified for ToC; 0 is default; suggested value 2em */
+	padding-right: 2em;	/* should match the outdent specified for ToC; 0 is default; suggested value 2em */
 }
 span.mpdf_toc_t_level_0 {	/* Title level 0 - may be inside <a> */
 	font-weight: bold;
@@ -63,7 +63,7 @@ span.mpdf_toc_p_level_0 {	/* Page no. level 0 - may be inside <a> */
 div.mpdf_toc_level_1 {		/* Whole line level 1 */
 	margin-left: 2em;
 	text-indent: -2em;
-	padding-right: 0em;	/* should match the outdent specified for ToC; 0 is default; suggested value 2em */
+	padding-right: 2em;	/* should match the outdent specified for ToC; 0 is default; suggested value 2em */
 }
 span.mpdf_toc_t_level_1 {	/* Title level 1 */
 	font-style: italic;
@@ -74,7 +74,7 @@ span.mpdf_toc_p_level_1  {	/* Page no. level 1 - may be inside <a> */
 div.mpdf_toc_level_2 {		/* Whole line level 2 */
 	margin-left: 4em;
 	text-indent: -2em;
-	padding-right: 0em;	/* should match the outdent specified for ToC; 0 is default; suggested value 2em */
+	padding-right: 2em;	/* should match the outdent specified for ToC; 0 is default; suggested value 2em */
 }
 span.mpdf_toc_t_level_2 {	/* Title level 2 */
 }

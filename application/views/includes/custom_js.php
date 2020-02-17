@@ -1,7 +1,58 @@
 <script>
-    setTimeout(function () {
-        $(".preloader").fadeOut();
-    },500);
+    $(function () {
+        $('.popover-btn').popover()
+    })
+
+    $(document).on('ready', function (event) {
+        $(".preloader").show();
+        setTimeout(function () {
+            $(".preloader").fadeOut();
+        }, 500);
+    });
+
+    $(document).on('click', 'a:not([href="javascript:"],' +
+        '[class="js:"], ' +
+        '[class="ui-corner-all"], ' +
+        '[href="#"], ' +
+        '[data-toggle="modal"], ' +
+        '[data-toggle="collapse"], ' +
+        '[data-toggle="tab"])', function () {
+        $(".subconteudo-principal").hide();
+        $(".preloader").show();
+    });
+
+    $(document).on('submit', 'form', function (event) {
+        var form = this;
+        event.preventDefault();
+        // $('#btn-acessar').addClass('disabled');
+        // $('#btn-acessar').html('Acessando... <i class="fa fa-spinner fa-pulse fa-fw"></i>');
+        // $('#progress-acessar').removeClass('hidden');
+        // $(".progress-bar").animate({
+        //     width: "100%"
+        // }, 1000);
+        if ($(form).valid()) {
+            // console.log('executou preloader');
+            $(".subconteudo-principal").fadeOut();
+            $(".preloader").fadeIn();
+
+            setTimeout(function () {
+                form.submit();
+            }, 1000);
+        }
+    });
+
+    $(document).on('click', '#teste-btn', function () {
+        // console.log('teste ok!');
+        $(".preloader").fadeIn();
+        setTimeout(function () {
+            $(".preloader").fadeOut();
+        }, 1000);
+    });
+
+    $('#telefone').mask("(99) 9999-99990");
+    $('#cep').mask("99999-999");
+    $('#cpf').mask("999.999.999-99");
+    $('#rg').mask("99.999.999-9");
 
     <?php
     $url = current_url();
@@ -28,20 +79,27 @@
             if ($(this).hasClass('sidebar-collapsed')) {
                 // SIDEBAR OCULTO
                 $('#menu-toggle-icon').addClass('fa-ellipsis-v')
+                $('#menu-switcher').attr('title', 'Exibir menu')
             } else {
                 // SIDEBAR EXPOSTO
                 $('#menu-toggle-icon').addClass('fa-chevron-left')
+                $('#menu-switcher').attr('title', 'Ocultar menu')
             }
         });
 
         $('#menu-switcher').click(function () {
             if ($('#body').hasClass('sidebar-collapsed')) {
+                // SIDEBAR OCULTO
                 $('#menu-toggle-icon').toggleClass('fa-chevron-left fa-ellipsis-v')
+                $('#menu-switcher').attr('title', 'Exibir menu')
             } else {
+                // SIDEBAR EXPOSTO
                 $('#menu-toggle-icon').toggleClass('fa-chevron-left fa-ellipsis-v')
+                $('#menu-switcher').attr('title', 'Ocultar menu')
             }
         });
 
+        // API CEP DOS CORREIOS (viacep.com.br)
         function limpa_formulário_cep() {
             // Limpa valores do formulário de cep.
             $("#logradouro").val("");
@@ -51,20 +109,21 @@
             $("#ibge").val("");
         }
 
-        //Quando o campo cep perde o foco.
-        $("#cep").blur(function () {
+        //Quando o campo cep possui algum caracter digitado.
+        $("#cep").keyup(function () {
 
             //Nova variável "cep" somente com dígitos.
             var cep = $(this).val().replace(/\D/g, '');
 
             //Verifica se campo cep possui valor informado.
-            if (cep != "") {
+            if (cep.length > 7 && cep != "") {
 
                 //Expressão regular para validar o CEP.
                 var validacep = /^[0-9]{8}$/;
 
                 //Valida o formato do CEP.
                 if (validacep.test(cep)) {
+
 
                     //Preenche os campos com "..." enquanto consulta webservice.
                     $("#logradouro").val("aguarde...");
@@ -74,7 +133,7 @@
                     $("#ibge").val("aguarde...");
 
                     //Consulta o webservice viacep.com.br/
-                    $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
+                    $.getJSON("https://viacep.com.br/ws/" + cep + "/json/", function (dados) {
 
                         if (!("erro" in dados)) {
                             //Atualiza os campos com os valores da consulta.
@@ -128,13 +187,14 @@
                 limpa_formulário_cep();
             }
         });
+        // FIM API CEP CORREIOS
 
         $('.datepicker').datepicker({
             language: 'pt-BR',
             autoclose: true,
             format: 'dd/mm/yyyy',
             todayHighlight: true,
-            todayBtn: true
+            todayBtn: 'linked'
         });
 
         $('.tooltips').tooltip();
@@ -204,5 +264,44 @@
             }
         });
         <?php } ?>
+
+        $.fn.extend({
+            toggleText: function (a, b) {
+                return this.text(this.text() == b ? a : b);
+            }
+        });
+
+        $.each($('.expand-icon'), function (key, value) {
+            $(this).attr('class', 'fas fa-expand expand-icon');
+            $(this).attr('title', 'Expandir');
+        });
+
+        $(".panel .expand").click(function () {
+            var n = $(this).closest(".panel");
+            var m = $(this).find(".expand-icon");
+            n.toggleClass("widget-fullscreen");
+            m.toggleClass("fa-expand fa-compress");
+            $("body").toggleClass("fullscreen-widget-active")
+
+            if ($('body').hasClass("fullscreen-widget-active")) {
+                m.attr('title', 'Recolher')
+            } else {
+                m.attr('title', 'Expandir')
+            }
+        });
+
+        $(".panel .close-panel").click(function () {
+            $(this).closest(".panel").hide();
+        });
+
+        // -------------------------------
+        // Panel Collapses
+        // -------------------------------
+        $('.panel-collapse').click(function () {
+            $(this).children().toggleClass("fa-minus fa-plus");
+            $(this).closest(".panel-heading").next().slideToggle({duration: 200});
+            $(this).closest(".panel-heading").toggleClass('rounded-bottom');
+            return false;
+        });
     });
 </script>

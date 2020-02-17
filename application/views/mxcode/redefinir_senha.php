@@ -26,7 +26,6 @@
     <script src="<?php echo base_url(); ?>assets/js/agile-style.switcher.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/jquery.validate.js"></script>
-
 </head>
 <style>
     .preloader-login {
@@ -63,9 +62,7 @@
 <section id="wrapper" class="login-register">
     <div class="login-box login-sidebar">
         <div class="text-center m-t-40">
-            <img class="contex-logo" src="<?php echo base_url() ?>assets/img/contex_logo.png" alt="Home"/>
-            <br/>
-            <img class="contex-words" src="<?php echo base_url() ?>assets/img/contex_words.png" alt="Home"/>
+            <img class="contex-words" src="<?php echo base_url() ?>assets/img/contex_brand.png" alt="CONTEX - Sistema de Gestão"/>
         </div>
         <div class="white-box box-login">
             <form class="form-horizontal floating-labels" id="formLogin" method="post" action="<?= site_url('redefinirsenha/alterarsenha') ?>" autocomplete="off">
@@ -161,7 +158,7 @@
         $(".progress-bar").animate({
             width: "100%"
         }, 1000);
-        if($(form).valid()) {
+        if ($(form).valid()) {
             $(".before-loading").fadeOut();
             $(".preloader-login").fadeIn();
 

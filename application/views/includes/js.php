@@ -1,10 +1,9 @@
 <!--    JS CORE-->
+<script src="<?php echo base_url(); ?>assets/js/jquery-3.4.1.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/jqueryui-1.9.2.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
 
-<script src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.min.js"></script>                            <!-- Load jQuery -->
-<script src="<?php echo base_url(); ?>assets/js/jqueryui-1.9.2.min.js"></script>                            <!-- Load jQueryUI -->
-<script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>                                <!-- Load Bootstrap -->
-
-<!--<script src="--><?php //echo base_url(); ?><!--assets/plugins/pines-notify/pnotify.min.js"></script>-->
 <script src="<?php echo base_url(); ?>assets/plugins/jquery-notific8/jquery.notific8.js"></script>         <!-- Load Notific8 -->
 <script src="<?php echo base_url(); ?>assets/plugins/jquery-cropper/js/cropper.js"></script>
 <script src="<?php echo base_url(); ?>assets/plugins/jquery-cropper/js/jquery-cropper.js"></script>
@@ -26,8 +25,6 @@
 
 <script src="<?php echo base_url(); ?>assets/plugins/bootbox/bootbox.js"></script>                            <!-- Bootbox -->
 
-<script src="<?php echo base_url(); ?>assets/plugins/simpleWeather/jquery.simpleWeather.min.js"></script> <!-- Weather plugin-->
-
 <script src="<?php echo base_url(); ?>assets/plugins/nanoScroller/js/jquery.nanoscroller.min.js"></script> <!-- nano scroller -->
 
 <script src="<?php echo base_url(); ?>assets/plugins/jquery-mousewheel/jquery.mousewheel.min.js"></script>    <!-- Mousewheel support needed for jScrollPane -->
@@ -41,13 +38,11 @@
 <script src="<?php echo base_url(); ?>assets/js/jquery.mask.js"></script>
 <script src="<?php echo base_url(); ?>assets/plugins/fullcalendar/fullcalendar.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/plugins/wijets/wijets.js"></script>
-<!--    <script src="--><?php //echo base_url(); ?><!--assets/plugins/form-daterangepicker/moment.min.js"></script>                -->
-<!--    <script src="--><?php //echo base_url(); ?><!--assets/plugins/form-daterangepicker/daterangepicker.js"></script>           -->
+<script src="<?php echo base_url(); ?>assets/plugins/form-jasnyupload/fileinput.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
 <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.pt-BR.min.js"></script>
 
 <!-- Pnotify-->
-
 <script src="<?php echo base_url(); ?>assets/plugins/pnotify/iife/PNotify.js"></script>
 <script src="<?php echo base_url(); ?>assets/plugins/pnotify/iife/PNotifyAnimate.js"></script>
 <script src="<?php echo base_url(); ?>assets/plugins/pnotify/iife/PNotifyButtons.js"></script>
@@ -60,6 +55,5 @@
 <script src="<?php echo base_url(); ?>assets/plugins/pnotify/iife/PNotifyNonBlock.js"></script>
 <script src="<?php echo base_url(); ?>assets/plugins/pnotify/iife/PNotifyReference.js"></script>
 <script src="<?php echo base_url(); ?>assets/plugins/pnotify/iife/PNotifyStyleMaterial.js"></script>
-
 
 </head>

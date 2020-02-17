@@ -496,7 +496,7 @@ hr {
   color: #ffffff;
 }
 .text-danger {
-  color: #cbb2ae;
+  color: rgba(255, 8, 0, 0.74);
 }
 .text-muted {
   color: #8d9ea7;

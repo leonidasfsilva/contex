@@ -2,26 +2,26 @@
     <div class="panel-heading">
         <h2>
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#tab-11-1" data-toggle="tab">Dados do Cliente</a></li>
-                <li><a href="#tab-11-3" data-toggle="tab">Pendências</a></li>
+                <li class="active"><a href="#tab_dados_cliente" data-toggle="tab">Dados do Cliente</a></li>
+                <li><a href="#tab_pendencias" data-toggle="tab">Pendências</a></li>
             </ul>
         </h2>
         <div class="panel-ctrls">
-            <a href="<?php echo base_url() ?>clientes" class="btn btn-default btn-sm "><i class="fa fa-arrow-left fa-fw"></i> Voltar</a>
+            <a href="<?php echo base_url() ?>clientes" class="btn btn-default btn-sm "><i class="fas fa-arrow-left fa-fw"></i> Voltar</a>
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
-                echo '<a title="Editar detalhes do cliente" class="btn btn-primary btn-sm " href="' . base_url() . 'clientes/editar/' . $result->id_clientes . '"><i class="fa fa-edit fa-fw"></i> Editar</a>';
+                echo '<a title="Editar dados do cliente" class="btn btn-primary btn-sm " href="' . base_url() . 'clientes/editar/' . $result->id_clientes . '"><i class="fas fa-edit fa-fw"></i> Editar</a>';
             } ?>
         </div>
     </div>
     <div class="panel-body">
         <div class="tab-content">
             <!--            TAB DADOS DO CLIENTE-->
-            <div class="tab-pane active" id="tab-11-1">
+            <div class="tab-pane active" id="tab_dados_cliente">
                 <div class="accordion-group" id="accordionB">
                     <div class="panel accordion-item">
                         <a class="accordion-title" data-toggle="collapse" data-parent="#accordionB" href="#collapseaOne">
                             <h2>
-                                <i class="fa fa-id-card fa-fw"></i>
+                                <i class="fas fa-id-card fa-lg fa-fw"></i>
                                 Dados Pessoais
                             </h2>
                         </a>
@@ -54,7 +54,7 @@
                     <div class="panel accordion-item">
                         <a class="accordion-title" data-toggle="collapse" data-parent="#accordionB" href="#collapseaTwo">
                             <h2>
-                                <i class="fa fa-phone fa-fw"></i>
+                                <i class="fas fa-phone-alt fa-lg fa-fw"></i>
                                 Contatos
                             </h2>
                         </a>
@@ -83,7 +83,7 @@
                     <div class="panel accordion-item">
                         <a class="accordion-title" data-toggle="collapse" data-parent="#accordionB" href="#collapseaThree">
                             <h2>
-                                <i class="fa fa-map-marker fa-fw"></i>
+                                <i class="fas fa-map-marker-alt fa-lg fa-fw"></i>
                                 Endereço
                             </h2>
                         </a>
@@ -101,6 +101,11 @@
                                             <tr>
                                                 <td style="text-align: right"><strong>Número</strong></td>
                                                 <td><?php echo $result->numero ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align: right; width: 30%"><strong>Complemento</strong>
+                                                </td>
+                                                <td><?php echo $result->complemento ?></td>
                                             </tr>
                                             <tr>
                                                 <td style="text-align: right"><strong>Bairro</strong></td>
@@ -128,7 +133,7 @@
                 </div>
             </div>
             <!--            TAB PENDENCIAS DO CLIENTE-->
-            <div class="tab-pane" id="tab-11-3">
+            <div class="tab-pane" id="tab_pendencias">
                 <?php if (!$pendencias) { ?>
                     <div class="panel panel-midnightblue">
                         <div class="panel-heading"></div>
@@ -197,7 +202,7 @@
                                     <tbody>
                                     <?php
                                     foreach ($pendencias as $r) {
-                                        $dataInicial = date(('d/m/Y'), strtotime($r->data_pendencia));
+                                        $dataInicial = date(('d/m/Y'), strtotime($r->data_vencimento));
                                         if ($r->data_pagamento != null) {
                                             $dataFinal = date(('d/m/Y'), strtotime($r->data_pagamento));
                                         } else {

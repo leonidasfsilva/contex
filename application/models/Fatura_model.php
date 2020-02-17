@@ -16,7 +16,6 @@ class Fatura_model extends CI_Model
         parent::__construct();
     }
 
-
     function get($table, $fields, $where = '', $id_usuario, $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
 
@@ -38,24 +37,24 @@ class Fatura_model extends CI_Model
 
     function getLancamentosAssoc($table, $fields, $id_fatura, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
-
         $this->db->select($fields);
         $this->db->from($table);
-        $this->db->order_by('data_compra', 'id_assoc' ,'asc');
+        $this->db->order_by('data_compra', 'id_assoc', 'asc');
         $this->db->limit($perpage, $start);
         if ($where) {
-            $this->db->where($where . ' AND status = 1 AND id_fatura = ' . $id_fatura);
+            $this->db->where($where);
+            $this->db->where('status', 1);
+            $this->db->where('id_fatura', $id_fatura);
         } else {
-            $this->db->where('status = 1 AND id_fatura = ' . $id_fatura);
+            $this->db->where('status', 1);
+            $this->db->where('id_fatura', $id_fatura);
         }
-
         $query = $this->db->get();
-
         $result = !$one ? $query->result() : $query->row();
         return $result;
     }
 
-    function getLancamentos($table, $fields, $id_fatura, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
+    function getLancamentos($table, $fields, $id_usuario, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
 
         $this->db->select($fields);
@@ -63,9 +62,12 @@ class Fatura_model extends CI_Model
         $this->db->order_by('id_lancamento', 'asc');
         $this->db->limit($perpage, $start);
         if ($where) {
-            $this->db->where($where . ' AND status = 1 ');
+            $this->db->where($where);
+            $this->db->where('status', 1);
+            $this->db->where('id_usuario', $id_usuario);
         } else {
-            $this->db->where('status = 1');
+            $this->db->where('status', 1);
+            $this->db->where('id_usuario', $id_usuario);
         }
 
         $query = $this->db->get();
@@ -74,11 +76,56 @@ class Fatura_model extends CI_Model
         return $result;
     }
 
+    function getDetalhesFatura($id_fatura)
+    {
+        $this->db->select('*');
+        $this->db->from('faturas');
+        $this->db->where(
+            'id_fatura = ' . $id_fatura);
+        $query = $this->db->get();
+        $result = $query->row();
+
+        return $result;
+    }
+
+    function getFaturaUsuario($id_fatura, $id_usuario)
+    {
+        $this->db->select('*');
+        $this->db->from('faturas');
+        $this->db->where('status', 1);
+        $this->db->where('id_fatura', $id_fatura);
+        $this->db->where('id_usuario', $id_usuario);
+
+        return $this->db->count_all_results();
+
+    }
+
     function getById($id)
     {
         $this->db->where('id_fatura', $id);
         $this->db->limit(1);
         return $this->db->get('faturas')->row();
+    }
+
+    function getLancamentoEditavel($mes, $ano)
+    {
+        $this->db->select('id_lancamento');
+        $this->db->from('lancamentos_faturas_assoc');
+        $this->db->where('n_parcela', 1);
+        $this->db->where('status', 1);
+        $this->db->where('mes_referencia', $mes);
+        $this->db->where('ano_referencia', $ano);
+
+        $rows = $this->db->count_all_results('', false);
+
+        if ($rows > 0) {
+            foreach ($this->db->get()->result() as $row) {
+                $data[] = $row->id_lancamento;
+            }
+            return $data;
+        } else {
+            return $this->db->get()->result();
+        }
     }
 
     function add($table, $data)
@@ -234,22 +281,6 @@ class Fatura_model extends CI_Model
         return $this->db->count_all_results();
     }
 
-    function getLancamentoEditavel($id, $mes, $ano)
-    {
-
-        $this->db->select('*');
-        $this->db->from('lancamentos_faturas_assoc');
-        $this->db->where(
-            'n_parcela = 1 AND status = 1 AND id_lancamento = ' . $id .
-            ' AND mes_referencia = ' . $mes . ' AND ano_referencia = ' . $ano
-        );
-
-        $query = $this->db->get();
-        $result = $query->row();
-
-        return $query;
-    }
-
     function getUltimaFaturaAberta($id_usuario)
     {
         $one = false;
@@ -289,18 +320,6 @@ class Fatura_model extends CI_Model
         return false;
     }
 
-    function getDetalhesFatura($id_fatura)
-    {
-        $this->db->select('*');
-        $this->db->from('faturas');
-        $this->db->where(
-            'id_fatura = ' . $id_fatura);
-        $query = $this->db->get();
-        $result = $query->row();
-
-        return $result;
-    }
-
     function getFaturaReferencia($id_usuario, $mes, $ano)
     {
         $this->db->select('*');
@@ -325,15 +344,74 @@ class Fatura_model extends CI_Model
 
     }
 
-    function getFaturaUsuario($id_fatura, $id_usuario)
+    function getValorTotalFaturaAtual($id_usuario)
     {
-        $this->db->select('*');
-        $this->db->from('faturas');
-        $this->db->where(
-            'status = 1 AND id_fatura = ' . $id_fatura . ' AND id_usuario = ' . $id_usuario);
+        $this->db
+            ->select('id_fatura')
+            ->from('faturas')
+            ->where('status = 1 AND fatura_aberta = 1 AND id_usuario = ' . $id_usuario);
+        $result = $this->db->get()->row();
 
-        return $this->db->count_all_results();
+        $this->db
+            ->select('SUM(valor_parcela) AS total')
+            ->from('lancamentos_faturas_assoc')
+            ->where('status = 1 AND id_fatura = ' . $result->id_fatura);
+
+        $result = $this->db->get()->row();
+        return $result;
 
     }
+
+    function getSaldoFaturasPendentes($id_usuario)
+    {
+        $this->db
+            ->select('SUM(a.valor_parcela) AS total')
+            ->from('lancamentos_faturas_assoc AS a')
+            ->join('faturas AS b', 'b.id_fatura = a.id_fatura AND b.status = a.status')
+            ->where('b.id_usuario = ' . $id_usuario . ' AND b.fatura_paga != 1 AND a.status = 1')
+            ->where('date(b.vencimento) > date(now())');
+        return $this->db->get()->row();
+
+    }
+
+    function getSaldoFaturasVencidas($id_usuario)
+    {
+        $this->db
+            ->select('SUM(a.valor_parcela) AS total')
+            ->from('lancamentos_faturas_assoc AS a')
+            ->join('faturas AS b', 'b.id_fatura = a.id_fatura AND b.status = a.status')
+            ->where('b.id_usuario = ' . $id_usuario . ' AND b.fatura_paga != 1 AND a.status = 1')
+            ->where('date(b.vencimento) < date(now())');
+        return $this->db->get()->row();
+
+    }
+
+    function getSaldoFaturasPagas($id_usuario)
+    {
+        $this->db
+            ->select('SUM(a.valor_parcela) AS total')
+            ->from('lancamentos_faturas_assoc AS a')
+            ->join('faturas AS b', 'b.id_fatura = a.id_fatura AND b.status = a.status')
+            ->where('b.id_usuario = ' . $id_usuario . ' AND b.fatura_paga = 1 AND a.status = 1');
+        return $this->db->get()->row();
+
+    }
+
+    function autoCompleteCliente($q, $id_usuario)
+    {
+        $query = $this->db->select('*')
+            ->limit(5)
+            ->like('nome', $q)
+            ->where('id_usuario', $id_usuario)
+            ->where('status', 1)
+            ->get('clientes');
+        if ($query->num_rows() > 0) {
+            foreach ($query->result_array() as $row) {
+                $row_set[] = array('label' => $row['nome'], 'id' => $row['id_clientes']);
+            }
+            echo json_encode($row_set);
+        }
+    }
+
 
 }

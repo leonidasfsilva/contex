@@ -30,82 +30,22 @@ class Pendencias extends CI_Controller
     public function pendencias()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vPendencias')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar pendências.');
+            $this->session->set_flashdata('erro', 'Você não tem permissão para visualizar pendências.');
             redirect(base_url());
         }
-        $where = '';
         $periodo = $this->input->get('periodo');
-        $cliente = $this->input->get('id_cliente');
+        $status = $this->input->get('status');
+        $tipo = $this->input->get('tipo');
+        $cliente = $this->input->get('cliente');
+        $inicio = $this->input->get('dataInicial');
+        $fim = $this->input->get('dataFinal');
 
-        // busca todos os lançamentos
-        if ($periodo == 'todos') {
-
-
-        } else {
-
-            // busca lançamentos do dia
-            if ($periodo == '7dias') {
-                $semana = $this->getLastSevenDays();
-
-                $where = 'data_pendencia BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
-
-            } else if ($periodo == null) {
-                $limit = 5;
-            } else {
-
-                // busca lançamentos da semana
-                if ($periodo == '5dias') {
-                    $semana = $this->getLastFiveDays();
-                    $where = 'data_pendencia BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
-
-                } else {
-
-                    // busca lançamentos da semana
-                    if ($periodo == '3dias') {
-                        $semana = $this->getLastThreeDays();
-                        $where = 'data_pendencia BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
-
-                    } else {
-                        // busca lançamentos da semana
-                        if ($periodo == '15dias') {
-                            $semana = $this->getLastFifteenDays();
-                            $where = 'data_pendencia BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
-
-                        } else {
-
-                            // busca lançamentos da semana
-                            if ($periodo == '30dias') {
-                                $semana = $this->getLastTirthyDays();
-                                $where = 'data_pendencia BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
-
-                            } else {
-
-                                // busca lançamentos da semana
-                                if ($periodo == '60dias') {
-                                    $semana = $this->getLastSixtyDays();
-                                    $where = 'data_pendencia BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
-
-                                } else {
-
-                                    // busca lançamentos da semana
-                                    if ($periodo == '90dias') {
-                                        $semana = $this->getLastNinetyDays();
-                                        $where = 'data_pendencia BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
-
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
         $this->load->library('pagination');
 
         $config['base_url'] = site_url() . '/financeiro/pendencias/?periodo=' . $periodo;
         $config['total_rows'] = $this->pendencia_model->count('pendencias', 'status = 1 AND id_usuario = ' . id_usuario());
-        $config['per_page'] = 100;
+        $config['per_page'] = null;
         $config['page_query_string'] = true;
         $config['next_link'] = 'Próxima';
         $config['prev_link'] = 'Anterior';
@@ -126,11 +66,101 @@ class Pendencias extends CI_Controller
         $config['last_tag_open'] = '<li>';
         $config['last_tag_close'] = '</li>';
 
-        if ($cliente) {
-            if ($where == '') {
-                $where .= 'id_cliente = ' . $cliente;
+        $limit = $this->pendencia_model->count('pendencias', 'status = 1 AND quitado = 0 AND id_usuario = ' . id_usuario());
+
+        switch ($periodo) {
+            case 'todos':
+                $limit = null;
+                break;
+            case '3dias':
+                $semana = $this->getLastThreeDays();
+                $where = 'data_vencimento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
+                break;
+            case '5dias':
+                $semana = $this->getLastFiveDays();
+                $where = 'data_vencimento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
+                break;
+            case '7dias':
+                $semana = $this->getLastSevenDays();
+                $where = 'data_vencimento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
+                break;
+            case '15dias':
+                $semana = $this->getLastFifteenDays();
+                $where = 'data_vencimento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
+                break;
+            case '30dias':
+                $semana = $this->getLastTirthyDays();
+                $where = 'data_vencimento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
+                break;
+            case '60dias':
+                $semana = $this->getLastSixtyDays();
+                $where = 'data_vencimento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
+                break;
+            case '90dias':
+                $semana = $this->getLastNinetyDays();
+                $where = 'data_vencimento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
+                break;
+        }
+
+
+        if (isset($status) && $status != null) {
+            $limit = null;
+            if ($status == 'pendente') {
+                if (!isset($where)) {
+                    $where = 'quitado = 0';
+                } else {
+                    $where .= ' AND quitado = 0';
+                }
+            } elseif ($status == 'pago') {
+                if (!isset($where)) {
+                    $where = 'quitado = 1';
+                } else {
+                    $where .= ' AND quitado = 1';
+                }
+            }
+        }
+
+        if (isset($tipo) && $tipo != null) {
+            if ($tipo == 'credito') {
+                if (!isset($where)) {
+                    $where = 'tipo = 1';
+                } else {
+                    $where .= ' AND tipo = 1';
+                }
+            } elseif ($tipo == 'debito') {
+                if (!isset($where)) {
+                    $where = 'tipo = 2';
+                } else {
+                    $where .= ' AND tipo = 2';
+                }
+            }
+        }
+
+        if (isset($periodo) && $periodo == 'todos') {
+            $limit = null;
+        }
+
+        if (isset($cliente) && $cliente != null) {
+            $limit = null;
+            if (!isset($where)) {
+                $where = 'id_cliente = ' . $cliente;
             } else {
                 $where .= ' AND id_cliente = ' . $cliente;
+            }
+        }
+
+        if (isset($inicio) && isset($fim) && $inicio != null && $fim != null) {
+            $inicio = explode('/', $inicio);
+            $inicio = $inicio[2] . '-' . $inicio[1] . '-' . $inicio[0];
+
+            $fim = explode('/', $fim);
+            $fim = $fim[2] . '-' . $fim[1] . '-' . $fim[0];
+
+            $limit = null;
+            if (!isset($where)) {
+                $where = 'data_vencimento BETWEEN "' . $inicio . '" AND "' . $fim . '"';
+            } else {
+                $where .= ' AND data_vencimento BETWEEN "' . $inicio . '" AND "' . $fim . '"';
             }
         }
 
@@ -148,7 +178,7 @@ class Pendencias extends CI_Controller
 
         $this->data['clientes'] = $this->pendencia_model->getClientes(id_usuario());
         $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
-        $this->data['selected'] = $cliente;
+        $this->data['selected_cliente'] = $cliente;
 
         $this->data['pendencias_credito'] = $this->pendencia_model->getPendenciasParcialCredito(id_usuario(), $cliente, $where);
         $this->data['pendencias_debito'] = $this->pendencia_model->getPendenciasParcialDebito(id_usuario(), $cliente, $where);
@@ -162,7 +192,7 @@ class Pendencias extends CI_Controller
 
     }
 
-    function adicionar()
+    public function adicionar()
     {
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aPendencias')) {
@@ -173,7 +203,7 @@ class Pendencias extends CI_Controller
 
         $valor = $this->input->post('valor');
         $tipo = $this->input->post('tipo');
-        $data_pendencia = $this->input->post('data_pendencia');
+        $data_pendencia = $this->input->post('data_vencimento');
 
         if (!validate_money($valor)) {
             $valor = str_replace(array('.', ','), array('', '.'), $valor);
@@ -192,7 +222,7 @@ class Pendencias extends CI_Controller
             $data_pendencia = date('Y/m/d');
         }
 
-        if($tipo == 2) {
+        if ($tipo == 2) {
             $valor = '-' . $valor;
         }
 
@@ -202,7 +232,7 @@ class Pendencias extends CI_Controller
             'descricao' => padronizarString($this->input->post('descricao')),
             'tipo' => $tipo,
             'valor' => $valor,
-            'data_pendencia' => $data_pendencia,
+            'data_vencimento' => $data_pendencia,
         );
 
         if ($this->pendencia_model->add('pendencias', $data) == true) {
@@ -228,7 +258,7 @@ class Pendencias extends CI_Controller
 
             $valor = $this->input->post('valor');
             $tipo = $this->input->post('tipo');
-            $data_pendencia = $this->input->post('data_pendencia');
+            $data_pendencia = $this->input->post('data_vencimento');
 
             if (!validate_money($valor)) {
                 $valor = str_replace(array('.', ','), array('', '.'), $valor);
@@ -241,7 +271,7 @@ class Pendencias extends CI_Controller
                 $data_pendencia = date('Y-m-d');
             }
 
-            if($tipo == 2) {
+            if ($tipo == 2) {
                 $valor = '-' . $valor;
             }
 
@@ -250,7 +280,7 @@ class Pendencias extends CI_Controller
                 'descricao' => padronizarString($this->input->post('descricao')),
                 'tipo' => $tipo,
                 'valor' => $valor,
-                'data_pendencia' => $data_pendencia,
+                'data_vencimento' => $data_pendencia,
             );
 
             if ($this->pendencia_model->edit('pendencias', $data, 'id_pendencia', $this->input->post('id_pendencia')) == true) {
@@ -338,9 +368,9 @@ class Pendencias extends CI_Controller
                 'id_usuario' => $pendencia->id_usuario,
                 'descricao' => $pendencia->descricao,
                 'valor' => $pendencia->valor,
-                'data_lancamento' => $pendencia->data_pendencia,
+                'data_lancamento' => $pendencia->data_vencimento,
                 'data_pagamento' => $pendencia->data_pagamento,
-                'cliente_fornecedor' => $cliente->nomeCliente,
+                'cliente_fornecedor' => $cliente->nome,
                 'forma_pgto' => $_REQUEST['forma_pagamento'],
                 'tipo' => $pendencia->tipo,
                 'baixado' => 1,

@@ -1,29 +1,54 @@
-<?php $situacao = $this->input->get('situacao');
-$periodo = $this->input->get('periodo');
+<?php
+$status_lancamentos = $this->input->get('status');
+$tipo_lancamentos = $this->input->get('tipo');
+$periodo_lancamentos = $this->input->get('periodo');
+$inicio = $this->input->get('dataInicial');
+$fim = $this->input->get('dataFinal');
 ?>
-
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
-        <h2 style="font-size: 12pt">
-            <i class="fa fa-line-chart fa-lg fa-fw"></i>
-            Conta Corrente
-        </h2>
-        <div class="panel-ctrls">
-            <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar lançamentos">
-                <i class="fa fa-filter fa-fw"></i>
-                Filtrar
-            </button>
-            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
-                <a href="#modalReceita" id="entrada" data-toggle="modal" role="button" class="btn btn-success btn-sm tip-bottom"
-                   title="Registrar nova entrada">
-                    <i class="fa fa-plus-square fa-fw"></i>
-                    Nova Entrada
-                </a>
-                <a href="#modalDespesa" id="saida" data-toggle="modal" role="button" class="btn btn-danger btn-sm tip-bottom" title="Registrar nova saída">
-                    <i class="fa fa-minus-square fa-fw"></i>
-                    Nova Saída
-                </a>
-            <?php } ?>
+        <h3>
+            <i class="fas fa-line-chart fa-lg fa-fw"></i>
+            Lançamentos
+        </h3>
+        <div class="row mr5 ml5">
+            <div class="panel-ctrls ml5">
+                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
+                    <a href="#modalEntrada" id="entrada" data-toggle="modal" role="button" class="btn btn-success btn-sm tip-bottom"
+                       title="Registrar nova entrada">
+                        <i class="fas fa-plus fa-fw"></i>
+                        Nova Entrada
+                    </a>
+                    <a href="#modalSaida" id="saida" data-toggle="modal" role="button" class="btn btn-danger btn-sm tip-bottom" title="Registrar nova saída">
+                        <i class="fas fa-plus fa-fw"></i>
+                        Nova Saída
+                    </a>
+                <?php } ?>
+            </div>
+            <div class="panel-ctrls">
+                <div class="btn-group" id="div_pesquisa">
+                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" id="btn_pesquisa">
+                        <i class="fas fa-search fa-fw"></i>
+                        Pesquisar
+                    </button>
+                    <ul class="dropdown-menu">
+                        <form action="<?php echo base_url() ?>financeiro/lancamentos/pesquisa" style="margin: 0 15px 0 15px" method="post" autocomplete="off">
+                            <input type="hidden" id="urlPesquisa" name="urlAtual">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="input_pesquisa" name="termo" placeholder="Pesquisar" style="margin-top: 6px;" required>
+                                <span class="input-group-btn">
+						                    <button type="submit" class="btn btn-primary"><i class="fas fa-search fa-fw"></i></button>
+                                    </span>
+                            </div>
+                        </form>
+                    </ul>
+                </div>
+                <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar lançamentos">
+                    <i class="fas fa-filter fa-fw"></i>
+                    Filtrar
+                </button>
+            </div>
+
         </div>
     </div>
     <div class="panel-heading">
@@ -81,7 +106,19 @@ $periodo = $this->input->get('periodo');
             <h2>
                 Extrato de Lançamentos
             </h2>
+            <div class="panel-ctrls">
+                <a href="#" class="button-icon close-panel">
+                    <i class="fas fa-times"></i>
+                </a>
+                <a href="#" class="button-icon expand">
+                    <i class="fas fa-expand-arrows-alt expand-icon"></i>
+                </a>
+                <a href="#" class="button-icon panel-collapse">
+                    <i class="fas fa-minus"></i>
+                </a>
+            </div>
         </div>
+
         <div class="panel-body panel-no-padding table-responsive">
             <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
                 <thead>
@@ -103,29 +140,52 @@ $periodo = $this->input->get('periodo');
 
                     if ($r->baixado == 0) {
                         $status = 'Pendente';
-                        $label_status = 'danger';
+                        $label_status = 'warning';
 
                     } else {
                         $status = 'Efetivado';
-                        $label_status = 'success';
+                        $label_status = 'primary';
 
                     };
 
                     if ($r->tipo == 1) {
                         $color = 'green';
-                        $label = 'success';
+                        $label_tipo = 'success';
+                        $tipo = 'ENTRADA';
+
 
                     } else {
                         $color = 'red';
-                        $label = 'danger';
+                        $label_tipo = 'danger';
+                        $tipo = 'SAÍDA';
+
                     }
+
+                    if ($r->cliente_fornecedor) {
+                        $fornecedor = $r->cliente_fornecedor;
+                    } else {
+                        $fornecedor = "&nbsp;";
+                    }
+
+                    if ($r->tipo == 1) {
+                        $tipo = 'ENTRADA';
+                    } else {
+                        $tipo = 'SAÍDA';
+                    }
+
+                    foreach ($formasPagamento as $f) {
+                        if ($f->id_forma == $r->forma_pgto) {
+                            $forma_pgto = $f->nome;
+                        }
+                    }
+
 
                     echo '<tr>';
                     echo '<td>' . $vencimento . '</td>';
 //                    echo '<td><span class="badge badge-' . $label . '">' . ucfirst($r->tipo) . '</span></td>';
-                    echo '<td>' . strtoupper($r->descricao) . '</td>';
-                    echo '<td><span class="label label-' . $label_status . '">' . strtoupper($status) . '</span></td>';
-                    echo '<td style=" color: ' . $color . '"> ' . number_format($r->valor, 2, ',', '.') . '</td>';
+                    echo '<td>' . strtoupper($r->descricao) . '<br><span class="small">' . ($fornecedor) . '</span></td>';
+                    echo '<td><span class="label label-' . $label_tipo . '">' . strtoupper($tipo) . '</span><br><span class="label label-' . $label_status . '">' . strtoupper($status) . '</span></td>';
+                    echo '<td><span style=" color: ' . $color . '"> ' . number_format($r->valor, 2, ',', '.') . '</span><br><span class="small">' . ($forma_pgto) . '</td>';
 
                     if ($r->valor < 0) {
                         $valor = number_format(abs($r->valor), 2, ',', '.');
@@ -136,13 +196,13 @@ $periodo = $this->input->get('periodo');
                     echo '<td>';
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
                         echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Detalhes" idLancamento="' .
-                            $r->idLancamentos . '" descricao="' . $r->descricao . '" valor="' . $valor . '" vencimento="' .
+                            $r->id_lancamento . '" descricao="' . $r->descricao . '" valor="' . $valor . '" vencimento="' .
                             date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
                             $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '">
-                                <i class="fa fa-search-plus fa-lg fa-fw"></i></a>';
+                                <i class="fas fa-search-plus fa-lg fa-fw"></i></a>';
                     }
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
-                        echo '<a href="#modalExcluir" data-toggle="modal" idLancamento="' . $r->idLancamentos . '" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>';
+                        echo '<a href="#modalExcluir" data-toggle="modal" idLancamento="' . $r->id_lancamento . '" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw"></i></a>';
                     }
 
                     echo '</td>';
@@ -155,8 +215,7 @@ $periodo = $this->input->get('periodo');
             </div>
         </div>
     </div>
-    <?php
-} ?>
+<?php } ?>
 
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
@@ -175,7 +234,7 @@ $periodo = $this->input->get('periodo');
             <tr>
                 <td colspan="2" style="text-align: left;">(+) SALDO PROVISÓRIO EM CONTA</td>
                 <td colspan="1" style="text-align: right;">
-                    <?php echo number_format($total_entradas->total, 2, ',', '.') ?></td>
+                    <?php echo number_format($total_provisorio->total, 2, ',', '.') ?></td>
             </tr>
             <?php if ($saidas_pendentes->total) { ?>
                 <tr>
@@ -209,68 +268,89 @@ $periodo = $this->input->get('periodo');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title">Filtrar lançamentos</h4>
             </div>
-            <form action="<?php echo current_url(); ?>" method="get" id="form_filtro">
+            <form action="<?php echo current_url(); ?>" method="get" id="form_filtro" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
-                        <div class="form-group col-lg-6" style="margin-left: 0">
-                            <label class="tooltips font-weight-bold" title="Filtrar lançamentos por período específico">Período <i class="fa fa-info-circle fa-fw"></i></label>
-                            <select name="periodo" id="select_periodos" class="form-control">
-                                <option value="">Selecione o período</option>
-                                <option value="3dias"<?php if ($periodo == '3dias') {
+                        <div class="form-group col-lg-6">
+                            <label class="tip-top font-weight-bold" title="Filtrar lançamentos por tipo">Tipo <i class="fa fa-info-circle fa-fw"></i></label>
+                            <select class="form-control" id="select_tipo" name="tipo">
+                                <option value="todos">Todos</option>
+                                <option value="entrada" <?php if ($tipo_lancamentos == 'entrada') {
                                     echo 'selected';
-                                } ?>>Últimos 3 dias
+                                } ?>>ENTRADA
                                 </option>
-                                <option value="5dias" <?php if ($periodo == '5dias') {
+                                <option value="saida" <?php if ($tipo_lancamentos == 'saida') {
                                     echo 'selected';
-                                } ?>>Últimos 5 dias
-                                </option>
-                                <option value="7dias" <?php if ($periodo == '7dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 7 dias
-                                </option>
-                                <option value="15dias" <?php if ($periodo == '15dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 15 dias
-                                </option>
-                                <option value="30dias" <?php if ($periodo == '30dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 30 dias
-                                </option>
-                                <option value="60dias" <?php if ($periodo == '60dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 60 dias
-                                </option>
-                                <option value="90dias" <?php if ($periodo == '90dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 90 dias
-                                </option>
-                                <option value="todos" <?php if ($periodo == 'todos') {
-                                    echo 'selected';
-                                } ?>>Todos
+                                } ?>>SAÍDA
                                 </option>
                             </select>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="form-group col-lg-6">
                             <label class="tip-top font-weight-bold" title="Filtrar lançamentos por status">Status <i class="fa fa-info-circle fa-fw"></i></label>
-                            <select class="form-control" id="select_status" name="situacao">
+                            <select class="form-control" id="select_status" name="status">
                                 <option value="todos">Todos</option>
-                                <option value="previsto" <?php if ($situacao == 'previsto') {
+                                <option value="efetivado" <?php if ($status_lancamentos == 'efetivado') {
                                     echo 'selected';
-                                } ?>>Previsto
+                                } ?>>EFETIVADO
                                 </option>
-                                <option value="atrasado" <?php if ($situacao == 'atrasado') {
+                                <option value="pendente" <?php if ($status_lancamentos == 'pendente') {
                                     echo 'selected';
-                                } ?>>Atrasado
-                                </option>
-                                <option value="realizado" <?php if ($situacao == 'realizado') {
-                                    echo 'selected';
-                                } ?>>Efetivado
-                                </option>
-                                <option value="pendente" <?php if ($situacao == 'pendente') {
-                                    echo 'selected';
-                                } ?>>Pendente
+                                } ?>>PENDENTE
                                 </option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-6" style="margin-left: 0">
+                            <label class="tooltips font-weight-bold" title="Filtrar lançamentos por período específico">Período <i class="fa fa-info-circle fa-fw"></i></label>
+                            <select name="periodo" id="select_periodo" class="form-control">
+                                <option value="">== Selecione ==</option>
+                                <option value="todos" <?php if ($periodo_lancamentos == 'todos') {
+                                    echo 'selected';
+                                } ?>>Todos
+                                </option>
+                                <option value="3dias"<?php if ($periodo_lancamentos == '3dias') {
+                                    echo 'selected';
+                                } ?>>Últimos 3 dias
+                                </option>
+                                <option value="5dias" <?php if ($periodo_lancamentos == '5dias') {
+                                    echo 'selected';
+                                } ?>>Últimos 5 dias
+                                </option>
+                                <option value="7dias" <?php if ($periodo_lancamentos == '7dias') {
+                                    echo 'selected';
+                                } ?>>Últimos 7 dias
+                                </option>
+                                <option value="15dias" <?php if ($periodo_lancamentos == '15dias') {
+                                    echo 'selected';
+                                } ?>>Últimos 15 dias
+                                </option>
+                                <option value="30dias" <?php if ($periodo_lancamentos == '30dias') {
+                                    echo 'selected';
+                                } ?>>Últimos 30 dias
+                                </option>
+                                <option value="60dias" <?php if ($periodo_lancamentos == '60dias') {
+                                    echo 'selected';
+                                } ?>>Últimos 60 dias
+                                </option>
+                                <option value="90dias" <?php if ($periodo_lancamentos == '90dias') {
+                                    echo 'selected';
+                                } ?>>Últimos 90 dias
+                                </option>
+                                <option value="especifico"<?php if ($periodo_lancamentos == 'especifico') {
+                                    echo 'selected';
+                                } ?>>PERÍODO ESPECÍFICO
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6" id="div_intervalo_data" hidden>
+                            <label class="tooltips font-weight-bold" title="Filtrar lançamentos por intervalo de data">Período específico <i class="fa fa-info-circle fa-fw"></i></label>
+                            <div class="input-group">
+                                <span class="input-group-addon">de</span>
+                                <input type="text" class="form-control datepicker" id="dataInicial" name="dataInicial" value="<?= $inicio ?>">
+                                <span class="input-group-addon">até</span>
+                                <input type="text" class="form-control datepicker" id="dataFinal" name="dataFinal" value="<?= $fim ?>">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -286,14 +366,14 @@ $periodo = $this->input->get('periodo');
 </div>
 
 <!-- Modal NOVA ENTRADA -->
-<div class="modal fade" id="modalReceita" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalEntrada" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-success">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Registrar nova entrada</h4>
             </div>
-            <form id="formReceita" action="<?php echo base_url() ?>financeiro/contaCorrente/receita" method="post" autocomplete="off">
+            <form id="formReceita" action="<?php echo base_url() ?>financeiro/lancamentos/entrada" method="post" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
@@ -357,14 +437,14 @@ $periodo = $this->input->get('periodo');
 </div>
 
 <!-- Modal NOVA SAIDA -->
-<div class="modal fade" id="modalDespesa" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalSaida" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-danger">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Registrar nova saída</h4>
             </div>
-            <form id="formDespesa" action="<?php echo base_url() ?>financeiro/contaCorrente/despesa" method="post" autocomplete="off">
+            <form id="formDespesa" action="<?php echo base_url() ?>financeiro/lancamentos/saida" method="post" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
@@ -434,7 +514,7 @@ $periodo = $this->input->get('periodo');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Detalhes do lançamento</h4>
             </div>
-            <form id="formEditar" action="<?php echo base_url() ?>financeiro/contaCorrente/editar" method="post">
+            <form id="formEditar" action="<?php echo base_url() ?>financeiro/lancamentos/editar" method="post">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
@@ -512,7 +592,7 @@ $periodo = $this->input->get('periodo');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Excluir lançamento</h4>
             </div>
-            <form id="formExcluir" action="<?php echo base_url(); ?>financeiro/contaCorrente/excluir" method="post">
+            <form id="formExcluir" action="<?php echo base_url(); ?>financeiro/lancamentos/excluir" method="post">
                 <div class="modal-body">
                     <p>Deseja realmente excluir este lançamento?</p>
                     <input id="idExcluir" type="hidden" name="id" value=""/>
@@ -529,11 +609,40 @@ $periodo = $this->input->get('periodo');
 
 <script type="text/javascript">
 
+    $('#div_pesquisa').on('shown.bs.dropdown', function (e) {
+        $('#input_pesquisa').focus();
+    });
+
+    $('.dropdown-menu>form').click(function (e) {
+        e.stopPropagation();
+    });
+
     $(document).on('change', '#select_periodo, #select_situacao', function () {
-        $("#form_filtro").submit();
+        // $("#form_filtro").submit();
     });
 
     jQuery(document).ready(function ($) {
+
+        $('#select_periodo').change(function () {
+            const value = $(this).val();
+            if (value === 'especifico') {
+                $('#div_intervalo_data').show();
+            } else {
+                $('#div_intervalo_data').hide();
+                $('#dataInicial').val('');
+                $('#dataFinal').val('');
+            }
+        });
+
+        $('#select_periodo option:selected').each(function (index, element) {
+            if ($(this).val() == 'especifico') {
+                $('#div_intervalo_data').show();
+            } else {
+                $('#div_intervalo_data').hide();
+                $('#dataInicial').val('');
+                $('#dataFinal').val('');
+            }
+        });
 
         $(".money").maskMoney();
 
@@ -579,7 +688,19 @@ $periodo = $this->input->get('periodo');
                 valor: {required: 'Informe o valor'},
                 vencimento: {required: 'Campo obrigatório'},
                 formaPgto: {required: 'Selecione a forma de pagamento'}
+            },
+
+            errorClass: "help-block",
+            errorElement: "p",
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
             }
+
         });
 
         $("#formDespesa").validate({
@@ -597,7 +718,19 @@ $periodo = $this->input->get('periodo');
                 valor: {required: 'Informe o valor'},
                 vencimento: {required: 'Campo obrigatório'},
                 formaPgto: {required: 'Selecione a forma de pagamento'}
+            },
+
+            errorClass: "help-block",
+            errorElement: "p",
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
             }
+
         });
 
         $("#formEditar").validate({
@@ -615,7 +748,19 @@ $periodo = $this->input->get('periodo');
                 valor: {required: 'Campo obrigatório'},
                 vencimento: {required: 'Campo obrigatório'},
                 formaPgto: {required: 'Selecione a forma de pagamento'}
+            },
+
+            errorClass: "help-block",
+            errorElement: "p",
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
             }
+
         });
 
 
@@ -630,6 +775,10 @@ $periodo = $this->input->get('periodo');
 
         $(document).on('click', '#saida', function () {
             $("#urlSaida").val($(location).attr('href'));
+        });
+
+        $('#pesquisa').submit(function (event) {
+            $("#urlPesquisa").val($(location).attr('href'));
         });
 
         $(document).on('click', '.editar', function (event) {
@@ -650,8 +799,6 @@ $periodo = $this->input->get('periodo');
                 $("#pagoEditar").iCheck('uncheck');
                 $("#divPagamentoEditar").addClass('hidden');
             }
-
         });
-
     });
 </script>

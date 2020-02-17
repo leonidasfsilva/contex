@@ -27,7 +27,7 @@ class Conecte_model extends CI_Model
     public function getLastOs($cliente)
     {
         
-        $this->db->where('clientes_id', $cliente);
+        $this->db->where('id_cliente', $cliente);
         $this->db->limit(5);
 
         return $this->db->get('os')->result();
@@ -71,7 +71,7 @@ class Conecte_model extends CI_Model
         $this->db->select($fields);
         $this->db->from($table);
         $this->db->join('usuarios', 'os.usuarios_id = usuarios.id_usuarios', 'left');
-        $this->db->where('clientes_id', $cliente);
+        $this->db->where('id_cliente', $cliente);
         $this->db->limit($perpage, $start);
         $this->db->order_by('idOs', 'desc');
         if ($where) {
@@ -93,7 +93,7 @@ class Conecte_model extends CI_Model
     public function getDados()
     {
         
-        $this->db->where('idclientes', $this->session->userdata('cliente_id'));
+        $this->db->where('id_clientes', $this->session->userdata('id_clientes'));
         $this->db->limit(1);
         return $this->db->get('clientes')->row();
     }
@@ -104,7 +104,7 @@ class Conecte_model extends CI_Model
         $this->db->where($fieldID, $ID);
         $this->db->update($table, $data);
 
-        if ($this->db->affected_rows() >= 0) {
+        if ($this->db->affected_rows() > 0) {
             return true;
         }
         

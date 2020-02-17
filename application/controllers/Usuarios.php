@@ -17,6 +17,7 @@ class Usuarios extends CI_Controller
 
         $this->load->helper(array('form', 'codegen_helper'));
         $this->load->model('usuarios_model', '', true);
+        $this->load->model('configs_model', '', true);
         $this->data['menuUsuarios'] = 'Usuários';
         $this->data['menuConfiguracoes'] = 'Configurações';
 
@@ -66,37 +67,46 @@ class Usuarios extends CI_Controller
 
     function adicionar()
     {
+        if ($_POST) {
 
-        $this->load->library('form_validation');
-        $this->data['custom_error'] = '';
+            $verificacao = $this->usuarios_model->verificaExisteEmail($this->input->post('email'));
 
-        if ($this->form_validation->run('usuarios') == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="alert alert-danger">' . validation_errors() . '</div>' : false);
+            if ($verificacao == 1) {
+                $this->session->set_flashdata('erro', 'O email informado já encontra-se em uso, informe um email diferente.');
+                redirect(base_url() . 'usuarios/adicionar');
+            }
 
-        } else {
-
-            $data = array(
-                'nome' => set_value('nome'),
-                'rg' => set_value('rg'),
-                'cpf' => set_value('cpf'),
-                'logradouro' => set_value('rua'),
-                'numero' => set_value('numero'),
-                'bairro' => set_value('bairro'),
-                'cidade' => set_value('cidade'),
-                'uf' => set_value('estado'),
-                'email' => set_value('email'),
+            $data1 = array(
+                'nome' => $this->input->post('nome'),
+                'cpf' => $this->input->post('cpf'),
+                'cep' => $this->input->post('cep'),
+                'logradouro' => $this->input->post('logradouro'),
+                'complemento' => $this->input->post('complemento'),
+                'numero' => $this->input->post('numero'),
+                's_n' => $this->input->post('s_n') == 1 ? 1 : 0,
+                'bairro' => $this->input->post('bairro'),
+                'cidade' => $this->input->post('cidade'),
+                'uf' => $this->input->post('uf'),
+                'email' => $this->input->post('email'),
                 'senha' => password_hash($this->input->post('senha'), PASSWORD_DEFAULT),
-                'telefone' => set_value('telefone'),
-                'celular' => set_value('celular'),
-                'status' => set_value('situacao'),
-                'permissoes_id' => $this->input->post('permissoes_id'),
+                'telefone' => $this->input->post('telefone'),
+                'ativo' => $this->input->post('situacao'),
+                'permissoes_id' => $this->input->post('permissoes_id')
             );
 
-            if ($this->usuarios_model->add('usuarios', $data) == true) {
-                $this->session->set_flashdata('success', 'Usuário cadastrado com sucesso!');
-                redirect(base_url() . 'index.php/usuarios/adicionar/');
+            if ($this->usuarios_model->add('usuarios', $data1) == true) {
+                $last_id = $this->db->insert_id('usuarios');
+
+                $data2 = array(
+                    'id_usuario' => $last_id,
+                    'nome' => $this->input->post('nome'),
+                );
+                $this->configs_model->registraConfigsUsuario($data2);
+                $this->session->set_flashdata('sucesso', 'Usuário cadastrado com sucesso!');
+                redirect(base_url() . 'usuarios/');
             } else {
-                $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um erro.</p></div>';
+                $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar cadastrar usuário.');
+                redirect(base_url() . 'usuarios/');
 
             }
         }
@@ -106,40 +116,37 @@ class Usuarios extends CI_Controller
         $this->data['view'] = 'usuarios/adicionarUsuario';
         $this->load->view('tema/topo', $this->data);
 
-
     }
 
     function editar()
     {
 
-        if (!$this->uri->segment(3) || !is_numeric($this->uri->segment(3))) {
-            $this->session->set_flashdata('erro', 'Item não pode ser encontrado, parâmetro não foi passado corretamente.');
-            redirect('usuarios');
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para editar usuários.');
+            redirect(base_url());
         }
 
-        $this->load->library('form_validation');
-        $this->data['custom_error'] = '';
-        $this->form_validation->set_rules('nome', 'Nome', 'trim|required');
-        $this->form_validation->set_rules('rg', 'RG', 'trim|required');
-        $this->form_validation->set_rules('cpf', 'CPF', 'trim|required');
-        $this->form_validation->set_rules('logradouro', 'Logradouro', 'trim|required');
-        $this->form_validation->set_rules('numero', 'Número', 'trim|required');
-        $this->form_validation->set_rules('bairro', 'Bairro', 'trim|required');
-        $this->form_validation->set_rules('cidade', 'Cidade', 'trim|required');
-        $this->form_validation->set_rules('uf', 'UF', 'trim|required');
-        $this->form_validation->set_rules('email', 'Email', 'trim|required');
-        $this->form_validation->set_rules('telefone', 'Telefone', 'trim|required');
-        $this->form_validation->set_rules('situacao', 'Situação', 'trim|required');
-        $this->form_validation->set_rules('permissoes_id', 'Permissão', 'trim|required');
+//        if ($this->input->post('id_usuarios') == 1 && $this->input->post('situacao') == 0) {
+//            $this->session->set_flashdata('erro', 'O administrador do sistema não pode ser desativado.');
+//            redirect(base_url() . 'usuarios/editar/' . $this->input->post('id_usuarios'));
+//        }
 
-        if ($this->form_validation->run() == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
+        if ($_POST) {
 
-        } else {
+            if (!$this->input->post('email')) {
+                $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar editar usuário: email não informado.');
+                redirect(base_url() . 'usuarios/editar/' . $this->input->post('id_usuarios'));
+            }
 
-            if ($this->input->post('id_usuarios') == 1 && $this->input->post('situacao') == 0) {
-                $this->session->set_flashdata('erro', 'O administrador padrão não pode ser desativado!');
-                redirect(base_url() . 'index.php/usuarios/editar/' . $this->input->post('id_usuarios'));
+            $verificacao = $this->usuarios_model->verificaEmailUsuario($this->input->post('email'), $this->input->post('id_usuarios'));
+
+            if ($verificacao == 0) {
+                $verificacao = $this->usuarios_model->verificaExisteEmail($this->input->post('email'));
+
+                if ($verificacao == 1) {
+                    $this->session->set_flashdata('erro', 'Email informado está em uso, informe um email diferente.');
+                    redirect(base_url() . 'usuarios/editar/' . $this->input->post('id_usuarios'));
+                }
             }
 
             $senha = $this->input->post('senha');
@@ -148,48 +155,46 @@ class Usuarios extends CI_Controller
                 $senha = password_hash($senha, PASSWORD_DEFAULT);
                 $data = array(
                     'nome' => $this->input->post('nome'),
-                    'rg' => $this->input->post('rg'),
                     'cpf' => $this->input->post('cpf'),
+                    'cep' => $this->input->post('cep'),
                     'logradouro' => $this->input->post('logradouro'),
+                    'complemento' => $this->input->post('complemento'),
                     'numero' => $this->input->post('numero'),
+                    's_n' => $this->input->post('s_n') == 1 ? 1 : 0,
                     'bairro' => $this->input->post('bairro'),
                     'cidade' => $this->input->post('cidade'),
                     'uf' => $this->input->post('uf'),
                     'email' => $this->input->post('email'),
                     'senha' => $senha,
                     'telefone' => $this->input->post('telefone'),
-                    'celular' => $this->input->post('celular'),
-                    'status' => $this->input->post('situacao'),
                     'permissoes_id' => $this->input->post('permissoes_id')
                 );
             } else {
-
                 $data = array(
                     'nome' => $this->input->post('nome'),
-                    'rg' => $this->input->post('rg'),
                     'cpf' => $this->input->post('cpf'),
+                    'cep' => $this->input->post('cep'),
                     'logradouro' => $this->input->post('logradouro'),
+                    'complemento' => $this->input->post('complemento'),
                     'numero' => $this->input->post('numero'),
+                    's_n' => $this->input->post('s_n') == 1 ? 1 : 0,
                     'bairro' => $this->input->post('bairro'),
                     'cidade' => $this->input->post('cidade'),
                     'uf' => $this->input->post('uf'),
                     'email' => $this->input->post('email'),
                     'telefone' => $this->input->post('telefone'),
-                    'celular' => $this->input->post('celular'),
-                    'status' => $this->input->post('situacao'),
                     'permissoes_id' => $this->input->post('permissoes_id')
                 );
-
             }
-
 
             if ($this->usuarios_model->edit('usuarios', $data, 'id_usuarios', $this->input->post('id_usuarios')) == true) {
                 $this->session->set_flashdata('sucesso', 'Usuário editado com sucesso!');
                 redirect(base_url() . 'usuarios/editar/' . $this->input->post('id_usuarios'));
             } else {
-                $this->session->set_flashdata('sucesso', 'Ocorreu um erro ao tentar editar usuário.');
-                redirect('Mxcode');
+                $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar editar usuário.');
+                redirect(base_url() . 'usuarios/editar/' . $this->input->post('id_usuarios'));
             }
+
         }
 
         $this->data['result'] = $this->usuarios_model->getById($this->uri->segment(3));
@@ -199,15 +204,95 @@ class Usuarios extends CI_Controller
         $this->data['view'] = 'usuarios/editarUsuario';
         $this->load->view('tema/topo', $this->data);
 
-
     }
-    
 
-    public function excluir()
+    function desativar()
+    {
+        $id = $this->input->post('id');
+
+        if ($id == 1) {
+            $this->session->set_flashdata('erro', 'A conta de administrador do sistema não pode ser desativada.');
+            redirect(base_url() . 'usuarios/gerenciar/');
+        }
+
+        $data = array(
+            'ativo' => 0
+        );
+
+        if ($this->usuarios_model->delete('usuarios', $data, 'id_usuarios', $id) == true) {
+            $this->session->set_flashdata('sucesso', 'Conta de usuário desativada com sucesso!');
+            redirect(base_url() . 'usuarios/gerenciar/');
+
+        } else {
+            $this->session->set_flashdata('erro', 'Erro ao tentar desativar conta de usuário.');
+            redirect(base_url() . 'usuarios/gerenciar/');
+        }
+    }
+
+    function excluir()
+    {
+        $id = $this->input->post('id');
+
+        if ($id == 1) {
+            $this->session->set_flashdata('erro', 'A conta de administrador do sistema não pode ser excluída.');
+            redirect(base_url() . 'usuarios/gerenciar/');
+        }
+
+        $data = array(
+            'status' => 0
+        );
+
+        if ($this->usuarios_model->delete('usuarios', $data, 'id_usuarios', $id) == true) {
+            $this->session->set_flashdata('sucesso', 'Conta de usuário excluída com sucesso!');
+            redirect(base_url() . 'usuarios/gerenciar/');
+
+        } else {
+            $this->session->set_flashdata('erro', 'Erro ao tentar excluir conta de usuário.');
+            redirect(base_url() . 'usuarios/gerenciar/');
+        }
+    }
+
+    function ativar()
+    {
+        $id = $this->input->post('id');
+
+        $data = array(
+            'ativo' => 1
+        );
+
+        if ($this->usuarios_model->delete('usuarios', $data, 'id_usuarios', $id) == true) {
+            $this->session->set_flashdata('sucesso', 'Conta de usuário ativada com sucesso!');
+            redirect(base_url() . 'usuarios/gerenciar/');
+
+        } else {
+            $this->session->set_flashdata('erro', 'Erro ao tentar ativar conta de usuário.');
+            redirect(base_url() . 'usuarios/gerenciar/');
+        }
+    }
+
+    function visualizar($id)
     {
 
-        $ID = $this->uri->segment(3);
-        $this->usuarios_model->delete('usuarios', 'id_usuarios', $ID);
-        redirect(base_url() . 'index.php/usuarios/gerenciar/');
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar usuários.');
+            redirect(base_url());
+        }
+
+        $verificacao = $this->usuarios_model->verificaExisteUsuario($id);
+
+        if ($verificacao == 0) {
+            $this->session->set_flashdata('erro', 'Usuário solicitado não encontrado');
+            redirect(base_url() . 'usuarios/');
+        }
+
+        $this->data['custom_error'] = '';
+        $this->data['result'] = $this->usuarios_model->getById($id);
+//        $this->data['os'] = $this->usuarios_model->getOsByCliente($id);
+//        $this->data['total_credito'] = $this->clientes_model->getPendenciasCreditoCliente(id_usuario(), $id);
+//        $this->data['total_debito'] = $this->clientes_model->getPendenciasDebitoCliente(id_usuario(), $id);
+//        $this->data['pendencias'] = $this->clientes_model->getPendenciasByCliente($id);
+        $this->data['view'] = 'usuarios/visualizar';
+        $this->load->view('tema/topo', $this->data);
     }
+
 }

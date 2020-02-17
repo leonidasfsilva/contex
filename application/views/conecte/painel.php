@@ -36,7 +36,7 @@
                                 echo '<td>'.date('d/m/Y', strtotime($o->dataFinal)).'</td>';
                                 echo '<td>'.$o->garantia.'</td>';
                                 echo '<td>'.$o->status.'</td>';
-                                echo '<td> <a href="'.base_url().'index.php/mine/visualizarOs/'.$o->idOs.'" class="btn"> <i class="icon-eye-open" ></i> </a></td>';
+                                echo '<td> <a href="'.base_url().'conecte/visualizarOs/'.$o->idOs.'" class="btn btn-default btn-sm" title="Visualizar"><i class="fas fa-eye fa-fw" ></i></a></td>';
                                 echo '</tr>';
                             }
                         } else {
@@ -77,7 +77,7 @@
                                 echo '<td>'.date('d/m/Y', strtotime($p->dataVenda)).'</td>';
                                 echo '<td>'.$p->nome.'</td>';
                                 echo '<td>'.$faturado.'</td>';
-                                echo '<td> <a href="'.base_url().'index.php/mine/visualizarCompra/'.$p->idVendas.'" class="btn"> <i class="icon-eye-open" ></i> </a></td>';
+                                echo '<td> <a href="'.base_url().'conecte/visualizarCompra/'.$p->idVendas.'" class="btn btn-default btn-sm" title="Visualizar"><i class="fas fa-eye fa-fw" ></i></a></td>';
                                 echo '</tr>';
                             }
                         } else {

@@ -1,33 +1,7 @@
 <?php $situacao = $this->input->get('situacao');
 $periodo = $this->input->get('periodo');
-?>
 
-<style type="text/css">
-
-    label.error {
-        color: #b94a48;
-    }
-
-    input.error {
-        border-color: #b94a48;
-    }
-
-    input.valid {
-        border-color: #5bb75b;
-    }
-
-    .table-bordeless td, .table-bordeless th {
-        border: none;
-    }
-
-    table {
-        font-family: Arial;
-        font-size: 11px;
-    }
-
-</style>
-
-<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
+if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
     if ($status_fatura == 1) {
         $disabled_lancamento_1 = '';
         $statusFatura = 'ABERTA';
@@ -67,19 +41,19 @@ $periodo = $this->input->get('periodo');
 
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
-        <h2 style="font-size: 12pt">
-            <i class="fa fa-credit-card fa-lg fa-fw"></i>
+        <h3>
+            <i class="fas fa-file-invoice-dollar fa-lg fa-fw"></i>
             Detalhes da Fatura: # <?= $id_fatura ?>
-        </h2>
+        </h3>
         <div class="panel-ctrls">
-            <a href="<?php echo base_url() ?>financeiro/faturas" class="btn btn-sm btn-default"><i class="fa fa-arrow-left fa-fw"></i> Faturas</a>
+            <a href="<?php echo base_url() ?>financeiro/faturas" class="btn btn-sm btn-default"><i class="fas fa-arrow-left fa-fw"></i> Faturas</a>
             <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar faturas">
-                <i class="fa fa-filter fa-fw"></i>
+                <i class="fas fa-filter fa-fw"></i>
                 Filtrar
             </button>
             <button href="#modalLancamento" id="novoLancamento" data-toggle="modal" class="btn btn-primary btn-sm"
-                    title="Cadastrar novo lançamento"<?= $disabled_lancamento_1 ?>>
-                <i class="fa fa-plus-square fa-fw"></i>
+                    title="Registrar novo lançamento" <?= $disabled_lancamento_1 ?>>
+                <i class="fas fa-plus fa-fw"></i>
                 Novo Lançamento
             </button>
         </div>
@@ -145,22 +119,34 @@ $periodo = $this->input->get('periodo');
                 Lançamentos da Fatura
             </h2>
             <div class="panel-ctrls">
+                <a href="#" class="button-icon close-panel">
+                    <i class="fas fa-times"></i>
+                </a>
+                <a href="#" class="button-icon expand">
+                    <i class="fas fa-expand-arrows-alt expand-icon"></i>
+                </a>
+                <a href="#" class="button-icon panel-collapse">
+                    <i class="fas fa-minus"></i>
+                </a>
+            </div>
+
+            <div class="panel-ctrls">
                 <span class="hidden" id="div_btn_marcar">
                     <button class="btn btn-default btn-sm marcar_desmarcar" id="marcar_todos" title="Marcar todos os lançamentos da fatura">
-                        <i class="fa fa-check-square fa-fw"></i>
+                        <i class="fas fa-check-square fa-fw"></i>
                         Marcar Todos
                     </button>
                     <button class="btn btn-default marcar_desmarcar btn-sm hidden" id="desmarcar_todos" title="Desmarcar todos os lançamentos da fatura">
-                        <i class="fa fa-square-o fa-fw"></i>
+                        <i class="far fa-square fa-fw"></i>
                         Desmarcar Todos
                     </button>
                 </span>
                 <button class="btn btn-default btn-sm habilita_desabilita_soma" id="exibir_soma" title="Habilitar soma de lançamentos individuais">
-                    <i class="fa fa-toggle-on fa-fw"></i>
+                    <i class="fas fa-toggle-on fa-fw"></i>
                     Habilitar Soma
                 </button>
                 <button class="btn btn-default btn-sm habilita_desabilita_soma hidden" id="esconder_soma" title="Desabilitar soma de lançamentos individuais">
-                    <i class="fa fa-toggle-off fa-fw"></i>
+                    <i class="fas fa-toggle-off fa-fw"></i>
                     Desabilitar Soma
                 </button>
             </div>
@@ -171,9 +157,10 @@ $periodo = $this->input->get('periodo');
                 <tr role="row">
                     <th class="th_soma hidden" style="width: 10px !important;">Soma</th>
                     <th style="width: 100px !important;">Data Compra</th>
-                    <th style="width: 500px !important;">Descrição</th>
+                    <th style="width: 300px !important;">Descrição</th>
+                    <th style="width: 200px !important;">Cliente</th>
                     <th>Parcela</th>
-                    <th>Valor Parcela (R$)</th>
+                    <th>Valor Parcela (R$) <br> Valor Compra (R$)</th>
                     <th style="width: 100px !important;">Ações</th>
                 </tr>
                 </thead>
@@ -183,14 +170,14 @@ $periodo = $this->input->get('periodo');
 
                 foreach ($results as $r) {
                     foreach ($subresults as $s) {
-                        if ($this->fatura_model->getLancamentoEditavel($r->id_lancamento, $mes_referencia, $ano_referencia)->num_rows() > 0) {
-                            $disabled_lancamento_2 = '';
-                        } else {
-                            $disabled_lancamento_2 = 'disabled';
-                        }
-
                         if ($s->id_lancamento == $r->id_lancamento) {
-
+                            if (is_array($lancamentoEditavel)) {
+                                if (in_array($r->id_lancamento, $lancamentoEditavel, true)) {
+                                    $disabled_lancamento_2 = '';
+                                } else {
+                                    $disabled_lancamento_2 = 'disabled';
+                                }
+                            }
 
                             if ($r->n_parcela < 10) {
                                 $n_parcela = str_pad($r->n_parcela, 2, '0', STR_PAD_LEFT);
@@ -204,35 +191,49 @@ $periodo = $this->input->get('periodo');
                                 $total_parcelas = $r->total_parcelas;
                             }
 
-                            $data_compra = date(('d/m/Y'), strtotime($r->data_compra));
+                            if ($s->estorno == 1) {
+                                $color = 'green';
+                            } else {
+                                $color = 'black';
+                            }
 
+                            $data_compra = date(('d/m/Y'), strtotime($r->data_compra));
                             $debitoFatura += $r->valor_parcela;
 
+                            if ($r->valor_total < 0) {
+                                $valor = number_format(abs($r->valor_total), 2, ',', '.');
+                            } else {
+                                $valor = number_format($r->valor_total, 2, ',', '.');
+                            }
 
                             echo '<tr>';
                             echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
                             echo '<td>' . $data_compra . '</td>';
                             echo '<td>' . strtoupper($s->descricao) . '</td>';
+                            echo '<td>' . strtoupper($s->nome_cliente) . '</td>';
                             echo '<td>' . $n_parcela . '/' . $total_parcelas . '</td>';
-                            echo '<td class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor_parcela, 2, ',', '.') . '</span></td>';
+                            echo '<td class="valor_parcela" style=" color: ' . $color .
+                                '"><span>' . number_format($r->valor_parcela, 2, ',', '.') .
+                                '</span><br><span style="color: grey">' . number_format($r->valor_total, 2, ',', '.') .
+                                '</span></td>';
 
                             echo '<td>';
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
                                 echo '<button type="button" href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Detalhes" id_lancamento="' .
-                                    $s->id_lancamento . '" descricao="' . $s->descricao . '" valor="' . number_format($s->valor_total, 2, ',', '.') . '" data_compra="' .
-                                    date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" n_parcelas="' . $r->total_parcelas . '" valor_parcela="' .
-                                    number_format($r->valor_parcela, 2, ',', '.') . '" ' . $disabled_lancamento_1 . ' ' . $disabled_lancamento_2 . '>
-                                <i class="fa fa-search-plus fa-lg fa-fw"></i></button>';
+                                    $s->id_lancamento . '" descricao="' . $s->descricao . '" valor="' . $valor . '" data_compra="' .
+                                    date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
+                                    '" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '" 
+                                    nome_cliente="' . $s->nome_cliente . '" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento_1 . ' ' . $disabled_lancamento_2 . '>
+                                <i class="fas fa-search-plus fa-lg fa-fw"></i></button>';
                             }
                             if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
                                 echo '<button type="button" href="#modalExcluir" data-toggle="modal" id_lancamento="' . $s->id_lancamento . '" class="btn btn-danger btn-sm excluir" title="Excluir" ' . $disabled_lancamento_1 . ' ' . $disabled_lancamento_2 . '>
-                                            <i class="fa fa-trash-o fa-lg fa-fw"></i></button>';
+                                            <i class="fas fa-trash-alt fa-lg fa-fw"></i></button>';
                             }
 
                             echo '</td>';
                             echo '</tr>';
                         }
-
                     }
                 } ?>
                 </tbody>
@@ -246,7 +247,7 @@ $periodo = $this->input->get('periodo');
                     </tr>
                     </thead>
                     <tr>
-                        <td colspan="2" style="text-align: left; font-weight: bold">(=) LANÇAMENTOS MARCADOS</td>
+                        <td colspan="2" style="text-align: left; font-weight: bold">(=) LANÇAMENTOS SELECIONADOS</td>
                         <td colspan="1" style="text-align: right; font-weight: bold" id="valor_soma_parcelas">
                             0,00
                         </td>
@@ -362,9 +363,9 @@ $periodo = $this->input->get('periodo');
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir">
-                        <i class="fa fa-times fa-fw"></i> Cancelar
+                        <i class="fas fa-times fa-fw"></i> Cancelar
                     </button>
-                    <button class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Filtrar</button>
+                    <button class="btn btn-primary btn-sm"><i class="fas fa-check fa-fw"></i> Filtrar</button>
                 </div>
             </form>
         </div>
@@ -391,7 +392,7 @@ $periodo = $this->input->get('periodo');
                     <div class="row">
                         <div class="form-group col-lg-6">
                             <label for="valor" class="font-weight-bold">Valor da Compra *</label>
-                            <input class="form-control money" id="valor" type="text" name="valor"/>
+                            <input class="form-control money valor" id="valor" type="text" name="valor"/>
                         </div>
                         <div class="form-group col-lg-6">
                             <label for="data_compra" class="font-weight-bold">Data da Compra</label>
@@ -399,18 +400,17 @@ $periodo = $this->input->get('periodo');
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-lg-4">
+                        <div class="form-group col-lg-4" style="margin-top: -10px;" id="div_parcelada">
                             <div class="checkbox icheck">
                                 <input type="checkbox" class="form-control" id="parcelada" name="compra_parcelada" value="1">
                             </div>
                             <label for="parcelada" class="font-weight-bold">Compra parcelada?</label>
                         </div>
-
                         <div id="divParcelamento" class="hidden">
                             <div class="form-group col-lg-4">
                                 <label for="qnt_parcelas" class="font-weight-bold">Nº Parcelas</label>
-                                <select name="qnt_parcelas" id="qnt_parcelas" class="form-control">
-                                    <option value="">-- Selecione --</option>
+                                <select name="qnt_parcelas" id="qnt_parcelas" class="form-control qnt_parcelas">
+                                    <option value=""><< Selecione >></option>
                                     <?php if ($parcelas) {
                                         foreach ($parcelas as $k => $v) { ?>
                                             <option value="<?= $k ?>"><?= $v ?></option>
@@ -420,16 +420,41 @@ $periodo = $this->input->get('periodo');
                             </div>
                             <div class="form-group col-lg-4">
                                 <label for="valor_parcela" class="font-weight-bold">Valor da Parcela *</label>
-                                <input class="form-control money" id="valor_parcela" type="text" name="valor_parcela"/>
+                                <input class="form-control money parcela" id="valor_parcela" type="text" name="valor_parcela"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-6" style="margin-top: -10px;" id="div_terceiros">
+                            <div class="checkbox icheck">
+                                <input type="checkbox" class="form-control" id="terceiros" name="compra_terceiros" value="1">
+                            </div>
+                            <label for="terceiros" class="font-weight-bold">Compra de terceiros?</label>
+                        </div>
+                        <div id="divTerceiros" class="hidden">
+                            <div class="form-group col-lg-6">
+                                <label for="nome_cliente" class="font-weight-bold">Cliente</label>
+                                <input class="form-control" id="nome_cliente" type="text" name="nome_cliente"/>
+                                <input id="id_cliente" type="hidden" name="id_cliente"/>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="btnCancelLancamento" class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
-                        <i class="fa fa-times fa-fw"></i> Cancelar
-                    </button>
-                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Registrar</button>
+                    <div class="row">
+                        <div class="text-left col-xs-4" style="margin-top: -10px;">
+                            <div class="checkbox icheck">
+                                <input type="checkbox" class="form-control" id="estorno" name="estorno" value="1">
+                            </div>
+                            <label for="estorno" class="font-weight-bold">Estorno</label>
+                        </div>
+                        <div class="col-xs-8">
+                            <button id="btnCancelLancamento" class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                                <i class="fa fa-times fa-fw"></i> Cancelar
+                            </button>
+                            <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
@@ -457,7 +482,7 @@ $periodo = $this->input->get('periodo');
                     <div class="row">
                         <div class="form-group col-lg-6">
                             <label for="valor" class="font-weight-bold">Valor da Compra *</label>
-                            <input class="form-control money" id="valorEditar" type="text" name="valor"/>
+                            <input class="form-control money valor" id="valorEditar" type="text" name="valor"/>
                         </div>
                         <div class="form-group col-lg-6">
                             <label for="data_compra" class="font-weight-bold">Data da Compra</label>
@@ -465,18 +490,17 @@ $periodo = $this->input->get('periodo');
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-lg-4">
+                        <div class="form-group col-lg-4" id="div_parceladaEditar">
                             <div class="checkbox icheck">
                                 <input type="checkbox" class="form-control" id="parceladaEditar" name="compra_parcelada" value="1">
                             </div>
                             <label for="parceladaEditar" class="font-weight-bold">Compra parcelada?</label>
                         </div>
-
                         <div id="divParcelamentoEditar" class="hidden">
                             <div class="form-group col-lg-4">
                                 <label for="qnt_parcelasEditar" class="font-weight-bold">Nº Parcelas *</label>
-                                <select name="qnt_parcelas" id="qnt_parcelasEditar" class="form-control">
-                                    <option value="">-- Selecione --</option>
+                                <select name="qnt_parcelas" id="qnt_parcelasEditar" class="form-control qnt_parcelas">
+                                    <option value=""><< Selecione >></option>
                                     <?php if ($parcelas) {
                                         foreach ($parcelas as $k => $v) { ?>
                                             <option value="<?= $k ?>"><?= $v ?></option>
@@ -486,16 +510,42 @@ $periodo = $this->input->get('periodo');
                             </div>
                             <div class="form-group col-lg-4">
                                 <label for="valor_parcelaEditar" class="font-weight-bold">Valor da Parcela *</label>
-                                <input class="form-control money" id="valor_parcelaEditar" type="text" name="valor_parcela"/>
+                                <input class="form-control money parcela" id="valor_parcelaEditar" type="text" name="valor_parcela"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-6" style="margin-top: -10px;" id="div_terceirosEditar">
+                            <div class="checkbox icheck">
+                                <input type="checkbox" class="form-control" id="terceirosEditar" name="compra_terceiros" value="1">
+                            </div>
+                            <label for="terceirosEditar" class="font-weight-bold">Compra de terceiros?</label>
+                        </div>
+                        <div id="divTerceirosEditar" class="hidden">
+                            <div class="form-group col-lg-6">
+                                <label for="nome_clienteEditar" class="font-weight-bold">Cliente</label>
+                                <input class="form-control" id="nome_clienteEditar" type="text" name="nome_cliente"/>
+                                <input id="id_clienteEditar" type="hidden" name="id_cliente"/>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="btnCancelLancamento" class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
-                        <i class="fa fa-times fa-fw"></i> Cancelar
-                    </button>
-                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Registrar</button>
+                    <div class="row">
+                        <div class="text-left col-xs-4" style="margin-top: -10px;">
+                            <div class="checkbox icheck">
+                                <input type="checkbox" class="form-control" id="estornoEditar" name="estorno" value="1">
+                            </div>
+                            <label for="estornoEditar" class="font-weight-bold">Estorno</label>
+                        </div>
+
+                        <div class="col-xs-8">
+                            <button id="btnCancelLancamento" class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                                <i class="fa fa-times fa-fw"></i> Cancelar
+                            </button>
+                            <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
@@ -529,6 +579,14 @@ $periodo = $this->input->get('periodo');
 
 <script type="text/javascript">
     $(document).ready(function ($) {
+        $("#nome_cliente, #nome_clienteEditar").autocomplete({
+            source: "<?php echo base_url(); ?>financeiro/faturas/autoCompleteCliente",
+            minLength: 1,
+            select: function (event, ui) {
+                $("#id_cliente, #id_clienteEditar").val(ui.item.id);
+            }
+        });
+
         var marcados = false;
 
         somaValorParcelas();
@@ -555,7 +613,6 @@ $periodo = $this->input->get('periodo');
 
         // Calculate the total invoice amount from selected items only
         function somaValorParcelas() {
-            console.log(marcados);
             var Soma = 0;
             // iterate through each td based on class and add the values
             $(".valor_parcela").each(function () {
@@ -563,12 +620,12 @@ $periodo = $this->input->get('periodo');
                 if ($(this).closest('tr').find('.soma_parcelas').is(':checked')) {
                     var value = $('span', this).text();
                     value = jquery_format(value);
-                    console.log('valor do elemento: ' + value);
+                    // console.log('valor do elemento: ' + value);
                     // add only if the value is number
                     if (!isNaN(value) && value.length != 0) {
                         Soma += parseFloat(value);
                     } else {
-                        console.log('erro no método somaValorParcelas()');
+                        // console.log('erro no método somaValorParcelas()');
                     }
                 }
             });
@@ -591,21 +648,28 @@ $periodo = $this->input->get('periodo');
             }
         }
 
-
-        $('#qnt_parcelas').on('change', function () {
-            var parcelas = $(this).val();
+        //Metodos para função de parcelamento
+        $('#qnt_parcelas, #valor').on('change', function () {
+            var parcelas = $('#qnt_parcelas').val();
             var valor = $('#valor').val();
 
             var result = calculaValorParcela(parcelas, valor);
-            $('#valor_parcela').val(result);
+            if (parcelas != '' && valor != '') {
+                $('.parcela').val(result);
+            } else {
+                $('.parcela').val('');
+            }
+            console.log(parcelas);
         });
 
-        $('#qnt_parcelasEditar').on('change', function () {
-            var parcelas = $(this).val();
+        $('#qnt_parcelasEditar, #valorEditar').on('change', function () {
+            var parcelas = $('#qnt_parcelasEditar').val();
             var valor = $('#valorEditar').val();
 
             var result = calculaValorParcela(parcelas, valor);
-            $('#valor_parcelaEditar').val(result);
+            if (parcelas != null) {
+                $('#valor_parcelaEditar').val(result);
+            }
         });
 
         function calculaValorParcela(parcela, valor) {
@@ -645,8 +709,9 @@ $periodo = $this->input->get('periodo');
             $('#formNovoLancamento').trigger("reset");
         });
 
-
         var parcelada = $('#parcelada').iCheck('update')[0].checked;
+        var estorno = $('#estorno').iCheck('update')[0].checked;
+        var terceiros = $('#terceiros').iCheck('update')[0].checked;
 
         $.each($(parcelada), function (key, value) {
             if (parcelada == true) {
@@ -656,16 +721,62 @@ $periodo = $this->input->get('periodo');
             }
         });
 
-        $('#parcelada, #parceladaEditar').on('ifChanged', function (event) {
-            mudaICheck(event);
+        $.each($(estorno), function (key, value) {
+            if (estorno == true) {
+                $('#div_parcelada, #div_parceladaEditar').addClass('hidden');
+                $('#divTerceiros, #divTerceirosEditar').addClass('hidden');
+            } else {
+                $('#div_parcelada, #div_parceladaEditar').removeClass('hidden');
+                $('#divTerceiros #divTerceirosEditar').removeClass('hidden');
+            }
         });
 
-        function mudaICheck(event) {
+        $.each($(terceiros), function (key, value) {
+            if (terceiros == true) {
+                $('#divTerceiros, #divTerceirosEditar').removeClass('hidden');
+            } else {
+                $('#divTerceiros, #divTerceirosEditar').addClass('hidden');
+            }
+        });
+
+        $('#parcelada, #parceladaEditar').on('ifChanged', function (event) {
+            mudaICheckParcelamento(event);
+        });
+
+        $('#estorno, #estornoEditar').on('ifChanged', function (event) {
+            mudaICheckEstorno(event);
+        });
+
+        $('#terceiros, #terceirosEditar').on('ifChanged', function (event) {
+            mudaICheckTerceiros(event);
+        });
+
+        function mudaICheckParcelamento(event) {
             const checked = event.target.checked;
             if (checked == true) {
                 $('#divParcelamento, #divParcelamentoEditar').removeClass('hidden');
             } else {
                 $('#divParcelamento, #divParcelamentoEditar').addClass('hidden');
+            }
+        }
+
+        function mudaICheckEstorno(event) {
+            const checked = event.target.checked;
+            if (checked == true) {
+                $('#div_parcelada, #divParcelamento, #div_parceladaEditar, #divParcelamentoEditar').addClass('hidden');
+                $('#div_terceiros, #divTerceiros, #div_terceirosEditar, #divTerceirosEditar').addClass('hidden');
+            } else {
+                $('#div_parcelada, #divParcelamento, #div_parceladaEditar, #divParcelamentoEditar').removeClass('hidden');
+                $('#div_terceiros, #divTerceiros, #div_terceirosEditar, #divTerceirosEditar').removeClass('hidden');
+            }
+        }
+
+        function mudaICheckTerceiros(event) {
+            const checked = event.target.checked;
+            if (checked == true) {
+                $('#divTerceiros, #divTerceirosEditar').removeClass('hidden');
+            } else {
+                $('#divTerceiros, #divTerceirosEditar').addClass('hidden');
             }
         }
 
@@ -684,7 +795,19 @@ $periodo = $this->input->get('periodo');
                 data_compra: {required: 'Informe a data da compra'},
                 qnt_parcelas: {required: 'Informe o número de parcelas'},
                 valor_parcela: {required: 'Informe o valor das parcelas'},
+            },
+
+            errorClass: "help-block",
+            errorElement: "p",
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
             }
+
         });
 
         $("#formEditarLancamento").validate({
@@ -702,9 +825,21 @@ $periodo = $this->input->get('periodo');
                 data_compra: {required: 'Informe a data da compra'},
                 qnt_parcelas: {required: 'Informe o número de parcelas'},
                 valor_parcela: {required: 'Informe o valor das parcelas'},
-            }
-        });
+            },
 
+            errorClass: "help-block",
+            errorElement: "p",
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
+            }
+
+
+        });
 
         $(document).on('click', '.excluir', function (event) {
             $("#idExcluir").val($(this).attr('id_lancamento'));
@@ -717,14 +852,18 @@ $periodo = $this->input->get('periodo');
 
         $(document).on('click', '.editar', function (event) {
             $("#id_lancamentoEditar").val($(this).attr('id_lancamento'));
+            $("#id_clienteEditar").val($(this).attr('id_cliente'));
             $("#descricaoEditar").val($(this).attr('descricao'));
             $("#valorEditar").val($(this).attr('valor'));
             $("#valorParcelaEditar").val($(this).attr('valor_parcela'));
             $("#data_compraEditar").val($(this).attr('data_compra'));
             $("#valor_parcelaEditar").val($(this).attr('valor_parcela'));
+            $("#nome_clienteEditar").val($(this).attr('nome_cliente'));
             $("#qnt_parcelasEditar").val($(this).attr('n_parcelas'));
             $("#urlLancamentoEditar").val($(location).attr('href'));
-            console.log($(this).attr('n_parcelas'));
+
+            var estorno = $(this).attr('estorno');
+            var terceiros = $(this).attr('terceiros');
             var parcelada = $(this).attr('parcelada');
             if (parcelada == 1) {
                 $('#parceladaEditar').iCheck('check');
@@ -732,6 +871,20 @@ $periodo = $this->input->get('periodo');
             } else {
                 $('#parceladaEditar').iCheck('uncheck');
                 $("#divParcelamentoEditar").addClass('hidden');
+            }
+            if (estorno == 1) {
+                $('#estornoEditar').iCheck('check');
+                $("#div_parceladaEditar").addClass('hidden');
+            } else {
+                $('#estornoEditar').iCheck('uncheck');
+                $("#div_parceladaEditar").removeClass('hidden');
+            }
+            if (terceiros == 1) {
+                $('#terceirosEditar').iCheck('check');
+                $("#divTerceirosEditar").removeClass('hidden');
+            } else {
+                $('#terceirosEditar').iCheck('uncheck');
+                $("#divTerceirosEditar").addClass('hidden');
             }
 
         });

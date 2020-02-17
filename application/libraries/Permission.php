@@ -20,7 +20,6 @@
 
 class Permission
 {
-
     var $Permission = array();
     var $table = 'permissoes';//Nome tabela onde ficam armazenadas as permissões
     var $pk = 'idPermissao';// Nome da chave primaria da tabela
@@ -31,7 +30,6 @@ class Permission
         log_message('debug', "Permission Class Initialized");
         $this->CI =& get_instance();
         $this->CI->load->database();
-
     }
 
     public function checkPermission($idPermissao = null, $atividade = null)
@@ -49,24 +47,20 @@ class Permission
 
         if (is_array($this->Permission[0])) {
 
-        
             if (array_key_exists($atividade, $this->Permission[0])) {
                 // compara a atividade requisitada com a permissão.
                 if ($this->Permission[0][$atividade] == 1) {
                     return true;
                 }
                 return false;
-
             }
             return false;
         }
         return false;
-
-
     }
+
     private function loadPermission($id = null)
     {
-
         if ($id != null) {
             $this->CI->db->select($this->table.'.'.$this->select);
             $this->CI->db->where($this->pk, $id);
@@ -81,10 +75,7 @@ class Permission
                 return true;
             }
             return false;
-            
         }
         return false;
-
-
     }
 }

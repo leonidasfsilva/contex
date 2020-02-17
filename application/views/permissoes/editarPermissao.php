@@ -566,58 +566,58 @@
                                 <tr>
                                     <td colspan="4"></td>
                                 </tr>
-<!--                                POUPANÇA-->
+<!--                                INVESTIMENTOS-->
                                 <tr>
                                     <td>
                                         <div class="checkbox">
                                             <label>
-                                                <input <?php if (isset($permissoes['vPoupanca'])) {
-                                                    if ($permissoes['vPoupanca'] == '1') {
+                                                <input <?php if (isset($permissoes['vInvestimentos'])) {
+                                                    if ($permissoes['vInvestimentos'] == '1') {
                                                         echo 'checked';
                                                     }
-                                                } ?> name="vPoupanca" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Visualizar Poupança</span>
+                                                } ?> name="vInvestimentos" class="marcar" type="checkbox" value="1"/>
+                                                <span class="lbl"> Visualizar Investimentos</span>
                                             </label>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="checkbox">
                                             <label>
-                                                <input <?php if (isset($permissoes['aPoupanca'])) {
-                                                    if ($permissoes['aPoupanca'] == '1') {
+                                                <input <?php if (isset($permissoes['aInvestimentos'])) {
+                                                    if ($permissoes['aInvestimentos'] == '1') {
                                                         echo 'checked';
                                                     }
-                                                } ?> name="aPoupanca" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Adicionar Poupança</span>
+                                                } ?> name="aInvestimentos" class="marcar" type="checkbox" value="1"/>
+                                                <span class="lbl"> Adicionar Investimentos</span>
                                             </label>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="checkbox">
                                             <label>
-                                                <input <?php if (isset($permissoes['ePoupanca'])) {
-                                                    if ($permissoes['ePoupanca'] == '1') {
+                                                <input <?php if (isset($permissoes['eInvestimentos'])) {
+                                                    if ($permissoes['eInvestimentos'] == '1') {
                                                         echo 'checked';
                                                     }
-                                                } ?> name="ePoupanca" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Editar Poupança</span>
+                                                } ?> name="eInvestimentos" class="marcar" type="checkbox" value="1"/>
+                                                <span class="lbl"> Editar Investimentos</span>
                                             </label>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="checkbox">
                                             <label>
-                                                <input <?php if (isset($permissoes['dPoupanca'])) {
-                                                    if ($permissoes['dPoupanca'] == '1') {
+                                                <input <?php if (isset($permissoes['dInvestimentos'])) {
+                                                    if ($permissoes['dInvestimentos'] == '1') {
                                                         echo 'checked';
                                                     }
-                                                } ?> name="dPoupanca" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Excluir Poupança</span>
+                                                } ?> name="dInvestimentos" class="marcar" type="checkbox" value="1"/>
+                                                <span class="lbl"> Excluir Investimentos</span>
                                             </label>
                                         </div>
                                     </td>
                                 </tr>
-<!--                                fim POUPANÇA-->
+<!--                                fim INVESTIMENTOS-->
                                 <tr>
                                     <td colspan="4"></td>
                                 </tr>
@@ -634,7 +634,6 @@
                                             </label>
                                         </div>
                                     </td>
-
                                     <td>
                                         <div class="checkbox">
                                             <label>
@@ -647,7 +646,6 @@
                                             </label>
                                         </div>
                                     </td>
-
                                     <td>
                                         <div class="checkbox">
                                             <label>
@@ -660,7 +658,6 @@
                                             </label>
                                         </div>
                                     </td>
-
                                     <td>
                                         <div class="checkbox">
                                             <label>
@@ -673,11 +670,8 @@
                                             </label>
                                         </div>
                                     </td>
-
                                 </tr>
-
                                 <tr>
-
                                     <td>
                                         <div class="checkbox">
                                             <label>
@@ -690,7 +684,6 @@
                                             </label>
                                         </div>
                                     </td>
-
                                     <td>
                                         <div class="checkbox">
                                             <label>
@@ -704,14 +697,11 @@
                                         </div>
                                     </td>
                                     <td colspan="2"></td>
-
                                 </tr>
                                 <tr>
                                     <td colspan="4"></td>
                                 </tr>
-
                                 <tr>
-
                                     <td>
                                         <div class="checkbox">
                                             <label>
@@ -724,7 +714,6 @@
                                             </label>
                                         </div>
                                     </td>
-
                                     <td>
                                         <div class="checkbox">
                                             <label>
@@ -737,7 +726,6 @@
                                             </label>
                                         </div>
                                     </td>
-
                                     <td>
                                         <div class="checkbox">
                                             <label>
@@ -750,7 +738,6 @@
                                             </label>
                                         </div>
                                     </td>
-
                                     <td>
                                         <div class="checkbox">
                                             <label>
@@ -763,9 +750,7 @@
                                             </label>
                                         </div>
                                     </td>
-
                                 </tr>
-
                                 </tbody>
                             </table>
                         </div>
@@ -779,19 +764,12 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-
-
         </div>
-
     </form>
-
 </div>
 
-
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/validate.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
 

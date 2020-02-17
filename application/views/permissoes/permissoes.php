@@ -1,5 +1,5 @@
 <label>&nbsp;</label>
-<a href="<?php echo base_url(); ?>index.php/permissoes/adicionar" class="btn btn-primary btn-sm">
+<a href="<?php echo base_url(); ?>permissoes/adicionar" class="btn btn-primary btn-sm">
     <i class="fa fa-plus-square fa-fw"></i> Adicionar Permissão</a>
 <?php
 if (!$results) { ?>
@@ -23,17 +23,14 @@ if (!$results) { ?>
                 </thead>
                 <tbody>
                 <tr>
-                    <td colspan="5">Nenhuma Permissão foi cadastrada</td>
+                    <td colspan="5">Nenhuma permissão cadastrada.</td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-<?php } else {
-
-
-    ?>
+<?php } else { ?>
     <div class="widget-box">
         <div class="widget-title">
         <span class="icon">
@@ -66,9 +63,9 @@ if (!$results) { ?>
                     echo '<td>' . date('d/m/Y', strtotime($r->data)) . '</td>';
                     echo '<td>' . $situacao . '</td>';
                     echo '<td>
-                      <a href="' . base_url() . 'index.php/permissoes/editar/' . $r->idPermissao . '" class="btn btn-primary btn-xs tip-top" title="Editar Permissão"><i class="fa fa-edit fa-lg fa-fw"></i></a>
-                      <a href="#modal-desativar" role="button" data-toggle="modal" permissao="' . $r->idPermissao . '" class="btn btn-inverse btn-xs tip-top desativar" title="Desativar Permissão"><i class="fa fa-power-off fa-lg fa-fw"></i></a>
-                      <a href="#modal-excluir" role="button" data-toggle="modal" permissao="' . $r->idPermissao . '" class="btn btn-danger btn-xs tip-top excluir" title="Excluir Permissão"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>
+                      <a href="' . base_url() . 'permissoes/editar/' . $r->idPermissao . '" class="btn btn-primary btn-xs tip-top" title="Editar"><i class="fa fa-edit fa-lg fa-fw"></i></a>
+                      <a href="#modal-desativar" role="button" data-toggle="modal" permissao="' . $r->idPermissao . '" class="btn btn-inverse btn-xs tip-top desativar" title="Desativar"><i class="fa fa-power-off fa-lg fa-fw"></i></a>
+                      <a href="#modal-excluir" role="button" data-toggle="modal" permissao="' . $r->idPermissao . '" class="btn btn-danger btn-xs tip-top excluir" title="Excluir"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>
                   </td>';
                     echo '</tr>';
                 } ?>
@@ -85,7 +82,7 @@ if (!$results) { ?>
 
 <!-- Modal DESATIVAR-->
 <div id="modal-desativar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/permissoes/desativar" method="post">
+    <form action="<?php echo base_url() ?>permissoes/desativar" method="post">
         <div class="modal-header bg_inverse">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="myModalLabel">DESATIVAR PERMISSÃO</h3>
@@ -103,7 +100,7 @@ if (!$results) { ?>
 
 <!-- Modal EXCLUIR-->
 <div id="modal-excluir" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form action="<?php echo base_url() ?>index.php/permissoes/excluir" method="post">
+    <form action="<?php echo base_url() ?>permissoes/excluir" method="post">
         <div class="modal-header bg_danger">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="myModalLabel">EXCLUIR PERMISSÃO</h3>

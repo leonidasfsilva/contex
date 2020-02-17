@@ -4,7 +4,7 @@ if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
-function pdf_create($html, $filename, $stream = true, $landscape = false)
+function pdf_create($html, $filename, $stream = true, $css = false, $landscape = false)
 {
 
     require_once APPPATH . 'helpers/mpdf/mpdf.php';
@@ -15,7 +15,14 @@ function pdf_create($html, $filename, $stream = true, $landscape = false)
         $mpdf = new mPDF('c', 'A4');
     }
 
-    $mpdf->WriteHTML($html);
+    if($css) {
+        $mpdf->WriteHTML($css, 1);
+        $mpdf->WriteHTML($html, 2);
+    } else {
+        $mpdf->WriteHTML($html);
+
+    }
+
     ob_clean();  // eh  aqui que a mágica acontece!  :)
 
     if ($stream) {
@@ -25,4 +32,5 @@ function pdf_create($html, $filename, $stream = true, $landscape = false)
 
         return './uploads/temp/' . $filename . '.pdf';
     }
+
 }

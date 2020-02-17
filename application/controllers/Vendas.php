@@ -13,7 +13,7 @@ class Vendas extends CI_Controller
         $this->load->helper(array('form','codegen_helper'));
         $this->load->model('vendas_model', '', true);
         $this->load->model('usuarios_model', '', true);
-        $this->load->model('Poupanca_model', '', true);
+        $this->load->model('Investimentos_model', '', true);
         $this->data['menuVendas'] = 'Vendas';
     }
     

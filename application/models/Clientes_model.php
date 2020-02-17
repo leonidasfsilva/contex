@@ -1,4 +1,6 @@
-<?php
+<?php if (! defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
 class Clientes_model extends CI_Model
 {
@@ -14,7 +16,8 @@ class Clientes_model extends CI_Model
 
         $this->db->select($fields);
         $this->db->from($table);
-        $this->db->order_by('id_clientes', 'asc');
+        $this->db->order_by('nome', 'asc');
+//        $this->db->order_by('id_clientes', 'asc');
         $this->db->limit($perpage, $start);
         if ($where) {
             $this->db->where($where . ' AND status = 1 AND id_usuario = ' . $id_usuario);
@@ -50,7 +53,7 @@ class Clientes_model extends CI_Model
         $this->db->where($fieldID, $ID);
         $this->db->update($table, $data);
 
-        if ($this->db->affected_rows() >= 0) {
+        if ($this->db->affected_rows() > 0) {
             return true;
         }
 
@@ -75,7 +78,7 @@ class Clientes_model extends CI_Model
 
     public function getOsByCliente($id)
     {
-        $this->db->where('clientes_id', $id);
+        $this->db->where('id_cliente', $id);
         $this->db->order_by('idOs', 'desc');
         $this->db->limit(10);
         return $this->db->get('os')->result();
@@ -85,7 +88,7 @@ class Clientes_model extends CI_Model
     {
         $this->db->where('id_cliente', $id);
         $this->db->where('status', 1);
-        $this->db->order_by('data_pendencia', 'asc');
+        $this->db->order_by('data_vencimento', 'asc');
         $this->db->order_by('id_pendencia', 'asc');
         return $this->db->get('pendencias')->result();
     }

@@ -1,33 +1,8 @@
-<?php $situacao = $this->input->get('situacao');
+<?php
+$situacao = $this->input->get('situacao');
 $periodo = $this->input->get('periodo');
-?>
 
-<style type="text/css">
-
-    label.error {
-        color: #b94a48;
-    }
-
-    input.error {
-        border-color: #b94a48;
-    }
-
-    input.valid {
-        border-color: #5bb75b;
-    }
-
-    .table-bordeless td, .table-bordeless th {
-        border: none;
-    }
-
-    table {
-        font-family: Arial;
-        font-size: 11px;
-    }
-
-</style>
-
-<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aFaturas')) {
+if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aFaturas')) {
     if ($faturaAberta != 0) {
         $disabledFatura = 'disabled';
         $disabledLancamento = '';
@@ -40,53 +15,53 @@ $periodo = $this->input->get('periodo');
     ?>
 <?php } ?>
 
-    <div class="panel panel-midnightblue">
-        <div class="panel-heading">
-            <h2 style="font-size: 12pt">
-                <i class="fa fa-credit-card fa-lg fa-fw"></i>
-                Controle de Faturas
-            </h2>
-            <div class="panel-ctrls">
-                <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar faturas">
-                    <i class="fa fa-filter fa-fw"></i>
-                    Filtrar
-                </button>
-                <button href="#modalNovaFatura" id="novaFatura" data-toggle="modal" role="button" class="btn btn-primary btn-sm tip-bottom"
-                        title="Abrir nova fatura" <?= $disabledFatura ?>>
-                    <i class="fa fa-plus-square fa-fw"></i>
-                    Nova Fatura
-                </button>
-            </div>
-        </div>
-        <div class="panel-body panel-no-padding">
-            <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
-                <thead>
-                <tr>
-                    <th colspan="2" style="text-align: left !important;">Descrição</th>
-                    <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
-                </tr>
-                </thead>
-                <tr>
-                    <td colspan="2" style="text-align: left; color: green">(+) SALDO DE FATURAS QUITADAS</td>
-                    <td colspan="1" style="text-align: right; color: green">
-                        <?php echo number_format($quitadas->total, 2, ',', '.') ?></td>
-                </tr>
-                <tr>
-                    <td colspan="2" style="text-align: left; color: red">(-) SALDO DE FATURAS A VENCER</td>
-                    <td colspan="1" style="text-align: right; color: red">
-                        <?php echo number_format($pendencias->total, 2, ',', '.') ?></td>
-                </tr>
-                <?php if ($pendencias->total > 0) { ?>
-                    <tr>
-                        <td colspan="2" style="text-align: left; color: red">(-) SALDO DE FATURAS VENCIDAS</td>
-                        <td colspan="1" style="text-align: right; color: red">
-                            <?php echo number_format($pendencias->total, 2, ',', '.') ?></td>
-                    </tr>
-                <?php } ?>
-
-            </table>
+<div class="panel panel-midnightblue">
+    <div class="panel-heading">
+        <h3>
+            <i class="fas fa-file-invoice-dollar fa-lg fa-fw"></i>
+            Controle de Faturas
+        </h3>
+        <div class="panel-ctrls">
+            <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar faturas">
+                <i class="fas fa-filter fa-fw"></i>
+                Filtrar
+            </button>
+            <button href="#modalNovaFatura" id="novaFatura" data-toggle="modal" role="button" class="btn btn-primary btn-sm tip-bottom"
+                    title="Abrir nova fatura" <?= $disabledFatura ?>>
+                <i class="fas fa-plus fa-fw"></i>
+                Nova Fatura
+            </button>
         </div>
     </div>
+    <div class="panel-body panel-no-padding">
+        <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
+            <thead>
+            <tr>
+                <th colspan="2" style="text-align: left !important;">Descrição</th>
+                <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
+            </tr>
+            </thead>
+            <tr>
+                <td colspan="2" style="text-align: left; color: green">SALDO DE FATURAS QUITADAS</td>
+                <td colspan="1" style="text-align: right; color: green">
+                    <?php echo number_format($saldoQuitado->total, 2, ',', '.') ?></td>
+            </tr>
+            <?php if ($saldoVencidas->total > 0) { ?>
+                <tr>
+                    <td colspan="2" style="text-align: left; color: red">SALDO DE FATURAS VENCIDAS</td>
+                    <td colspan="1" style="text-align: right; color: red">
+                        <?php echo number_format($saldoVencidas->total, 2, ',', '.') ?></td>
+                </tr>
+            <?php } ?>
+            <tr>
+                <td colspan="2" style="text-align: left">SALDO DE FATURAS A VENCER</td>
+                <td colspan="1" style="text-align: right">
+                    <?php echo number_format($saldoPendente->total, 2, ',', '.') ?></td>
+            </tr>
+
+        </table>
+    </div>
+</div>
 <?php if ($results) { ?>
 
     <div class="panel panel-midnightblue">
@@ -94,6 +69,17 @@ $periodo = $this->input->get('periodo');
             <h2>
                 Registro de Faturas
             </h2>
+            <div class="panel-ctrls">
+                <a href="#" class="button-icon close-panel">
+                    <i class="fas fa-times"></i>
+                </a>
+                <a href="#" class="button-icon expand">
+                    <i class="fas fa-expand-arrows-alt expand-icon"></i>
+                </a>
+                <a href="#" class="button-icon panel-collapse">
+                    <i class="fas fa-minus"></i>
+                </a>
+            </div>
         </div>
         <div class="panel-body panel-no-padding table-responsive">
             <table class="table table-condensed table-striped table-bordeless table-hover" role="grid" style="width: 100%;">
@@ -127,20 +113,20 @@ $periodo = $this->input->get('periodo');
                         $status = 'FECHADA';
                         $label = 'inverse';
                         $disabled = 'disabled';
-                        $iconFechar = 'fa fa-lock';
+                        $iconFechar = 'fas fa-lock';
 
                     } else if ($r->fatura_aberta == 2) {
                         $status = '';
                         $label = '';
                         $disabledPagar = 'disabled';
                         $disabled = 'disabled';
-                        $iconFechar = 'fa fa-unlock-alt';
+                        $iconFechar = 'fas fa-unlock';
 
                     } else {
                         $status = 'ABERTA';
                         $label = 'default';
                         $disabledPagar = 'disabled';
-                        $iconFechar = 'fa fa-unlock-alt';
+                        $iconFechar = 'fas fa-unlock';
 
                     }
 
@@ -148,20 +134,20 @@ $periodo = $this->input->get('periodo');
                         $pagamento = 'PENDENTE';
                         $labelPgto = 'danger';
                         $color = 'red';
-                        $iconPagar = 'fa fa-check-square-o';
+                        $iconPagar = 'far fa-check-square';
 
                     } else if ($r->fatura_paga == 1) {
                         $pagamento = 'PAGA';
                         $labelPgto = 'success';
                         $color = 'green';
-                        $iconPagar = 'fa fa-check-square';
+                        $iconPagar = 'fas fa-check-square';
                         $disabledPagar = 'disabled';
 
                     } else {
                         $pagamento = '';
                         $labelPgto = '';
                         $color = 'red';
-                        $iconPagar = 'fa fa-check-square-o';
+                        $iconPagar = 'far fa-check-square';
                     }
 
                     $valor_total = $this->fatura_model->getValorTotalFatura($r->id_fatura)->valor_total;
@@ -183,10 +169,10 @@ $periodo = $this->input->get('periodo');
                                 <i class="' . $iconFechar . ' fa-lg fa-fw"></i></button>';
 
                         echo '<a href="' . base_url() . 'financeiro/faturas/detalhes/' . $r->id_fatura . '" type="button" id="btn_detalhes" style="margin-right: 1%" class="btn btn-primary btn-sm detalhes" title="Detalhes da Fatura" id_fatura="' . $r->id_fatura . '">
-                                <i class="fa fa-search-plus fa-lg fa-fw"></i></a>';
+                                <i class="fas fa-search-plus fa-lg fa-fw"></i></a>';
                     }
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dFaturas')) {
-                        echo '<a href="#modalExcluir" data-toggle="modal" id_fatura="' . $r->id_fatura . '" class="btn btn-danger btn-sm excluir" title="Excluir Fatura"><i class="fa fa-trash-o fa-lg fa-fw"></i></a>';
+                        echo '<a href="#modalExcluir" data-toggle="modal" id_fatura="' . $r->id_fatura . '" class="btn btn-danger btn-sm excluir" title="Excluir Fatura"><i class="fas fa-trash-alt fa-lg fa-fw"></i></a>';
                     }
                     echo '</td>';
                     echo '</tr>';
@@ -495,7 +481,19 @@ $periodo = $this->input->get('periodo');
             },
             messages: {
                 vencimento_fatura: {required: 'Informe a data de vencimento da fatura'}
+            },
+
+            errorClass: "help-block",
+            errorElement: "p",
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
             }
+
         });
 
         $("#formPagar").validate({
@@ -504,7 +502,19 @@ $periodo = $this->input->get('periodo');
             },
             messages: {
                 forma_pagamento: {required: 'Selecione a forma de pagamento'},
+            },
+
+            errorClass: "help-block",
+            errorElement: "p",
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
             }
+
         });
 
         $(document).on('click', '#novaFatura', function () {

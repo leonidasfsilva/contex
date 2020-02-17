@@ -86,13 +86,13 @@
                         </div>
                     </div>
 
-
+                    <input type="hidden" name="post" value="true"/>
 
                     <div class="form-actions">
                         <div class="span12">
                             <div class="span6 offset3">
-                                <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i> Alterar</button>
-                                <a href="<?php echo base_url() ?>index.php/mine/conta" id="" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
+                                <a href="<?php echo base_url() ?>conecte/conta" id="" class="btn btn-default"><i class="fas fa-arrow-left fa-fw"></i> Voltar</a>
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-check fa-fw"></i> Alterar</button>
                             </div>
                         </div>
                     </div>

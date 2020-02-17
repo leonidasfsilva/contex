@@ -1,9 +1,9 @@
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
-        <h2>
-            <i class="fa fa-user fa-lg fa-fw"></i>
+        <h3>
+            <i class="fas fa-user-edit fa-lg fa-fw"></i>
             Editar Dados do Cliente
-        </h2>
+        </h3>
     </div>
     <div class="panel-body">
         <?php if ($custom_error != '') {
@@ -36,13 +36,28 @@
                     <label for="cep" class="control-label font-weight-bold">CEP</label>
                     <input type="text" class="form-control" id="cep" name="cep" value="<?php echo $result->cep; ?>">
                 </div>
-                <div class="form-group col-md-8">
+                <div class="form-group col-md-7">
                     <label for="logradouro" class="control-label font-weight-bold">Logradouro</label>
                     <input type="text" class="form-control" id="logradouro" name="logradouro" value="<?php echo $result->logradouro; ?>">
                 </div>
                 <div class="form-group col-md-2">
                     <label for="numero" class="control-label font-weight-bold">Número</label>
-                    <input type="text" class="form-control" id="numero" name="numero" value="<?php echo $result->numero; ?>">
+                    <input type="text" class="form-control" id="numero" name="numero"
+                           value="<?php echo $result->numero; ?>">
+                </div>
+                <div class="form-group col-md-1 mt30">
+                    <div class="checkbox icheck">
+                        <input type="checkbox" class="form-control" id="s_n" name="s_n"
+                               value="1" <?= $result->s_n == 1 ? 'checked' : '' ?>>
+                    </div>
+                    <label for="s_n" class="font-weight-bold">S/N</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <label for="complemento" class="control-label font-weight-bold">Complemento</label>
+                    <input type="text" class="form-control" id="complemento" name="complemento"
+                           value="<?php echo $result->complemento; ?>">
                 </div>
             </div>
             <div class="row">
@@ -62,8 +77,8 @@
             <div class="panel-footer">
                 <div class="row pull-right">
                     <div class="col-md-12 ">
-                        <a href="<?php echo base_url() ?>clientes" id="" class="btn btn-default btn-sm"><i class="fa fa-arrow-left fa-fw"></i> Voltar</a>
-                        <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
+                        <a href="<?php echo base_url() ?>clientes" id="" class="btn btn-default btn-sm"><i class="fas fa-arrow-left fa-fw"></i> Voltar</a>
+                        <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-check fa-fw"></i> Salvar</button>
                     </div>
                 </div>
             </div>
@@ -73,7 +88,26 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#telefone').mask("(99) 9999-99990");
+
+        $('#s_n').on('ifChanged', function (event) {
+            const checked = event.target.checked;
+            if (checked == true) {
+                $('#numero').val('');
+                $('#numero').attr('disabled', true);
+            } else {
+                $('#numero').removeAttr('disabled');
+            }
+        });
+
+        var s_n = $('#s_n').iCheck('update')[0].checked;
+        $.each($(s_n), function (key, value) {
+            if (s_n == true) {
+                $('#numero').val('');
+                $('#numero').attr('disabled', true);
+            } else {
+                $('#numero').removeAttr('disabled');
+            }
+        });
 
         $('#formCliente').validate({
             rules: {

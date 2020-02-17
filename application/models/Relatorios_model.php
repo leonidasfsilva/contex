@@ -1,4 +1,7 @@
-<?php
+<?php if (! defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
+
 class Relatorios_model extends CI_Model
 {
 
@@ -44,7 +47,7 @@ class Relatorios_model extends CI_Model
         $this->db->where($fieldID, $ID);
         $this->db->update($table, $data);
 
-        if ($this->db->affected_rows() >= 0) {
+        if ($this->db->affected_rows() > 0) {
             return true;
         }
 
@@ -80,7 +83,7 @@ class Relatorios_model extends CI_Model
 
     public function clientesRapid()
     {
-        $this->db->order_by('nomeCliente', 'asc');
+        $this->db->order_by('nome', 'asc');
         return $this->db->get('clientes')->result();
     }
 
@@ -178,13 +181,12 @@ class Relatorios_model extends CI_Model
 
         $dataInicial = date('Y-m-01');
         $dataFinal = date("Y-m-t");
-        $query = "SELECT * FROM lancamentos WHERE data_vencimento BETWEEN ? and ? ORDER BY tipo";
+        $query = "SELECT * FROM lancamentos WHERE data_lancamento BETWEEN ? and ? ORDER BY tipo";
         return $this->db->query($query, array($dataInicial, $dataFinal))->result();
     }
 
     public function financeiroCustom($dataInicial, $dataFinal, $tipo = null, $situacao = null)
     {
-
         $whereTipo = "";
         $whereSituacao = "";
 

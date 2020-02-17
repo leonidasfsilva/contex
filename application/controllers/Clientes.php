@@ -33,7 +33,7 @@ class Clientes extends CI_Controller
 
         $config['base_url'] = base_url() . 'clientes/gerenciar/';
         $config['total_rows'] = $this->clientes_model->count('clientes');
-        $config['per_page'] = 10;
+        $config['per_page'] = null;
         $config['next_link'] = 'Próxima';
         $config['prev_link'] = 'Anterior';
         $config['full_tag_open'] = '<div class="pagination alternate"><ul>';
@@ -73,7 +73,7 @@ class Clientes extends CI_Controller
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
 
-        if($this->input->post('nome')){
+        if ($this->input->post('nome')) {
             $nome = padronizarString($this->input->post('nome'));
 
             $data = array(
@@ -82,6 +82,7 @@ class Clientes extends CI_Controller
                 'telefone' => $this->input->post('telefone'),
                 'email' => $this->input->post('email'),
                 'logradouro' => $this->input->post('logradouro'),
+                'complemento' => $this->input->post('complemento'),
                 'numero' => $this->input->post('numero'),
                 'bairro' => $this->input->post('bairro'),
                 'cidade' => $this->input->post('cidade'),
@@ -104,8 +105,12 @@ class Clientes extends CI_Controller
 
     }
 
-    function editar($id)
+    function editar($id = null)
     {
+        if ($id == null) {
+            $this->session->set_flashdata('erro', 'Método não permitido.');
+            redirect('clientes');
+        }
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para editar clientes.');
@@ -114,19 +119,20 @@ class Clientes extends CI_Controller
 
         $verificacao = $this->clientes_model->verificaClienteUsuario($id, id_usuario());
 
-        if($verificacao == 0) {
+        if ($verificacao == 0) {
             $this->session->set_flashdata('erro', 'Cliente não encontrado para este usuário');
             redirect(base_url() . 'clientes/');
         }
 
         $nome = padronizarString($this->input->post('nome'));
-        if($this->input->post('nome')){
+        if ($this->input->post('nome')) {
             $data = array(
                 'nome' => $nome,
                 'cpf' => $this->input->post('cpf'),
                 'telefone' => $this->input->post('telefone'),
                 'email' => $this->input->post('email'),
                 'logradouro' => $this->input->post('logradouro'),
+                'complemento' => $this->input->post('complemento'),
                 'numero' => $this->input->post('numero'),
                 'bairro' => $this->input->post('bairro'),
                 'cidade' => $this->input->post('cidade'),
@@ -150,8 +156,12 @@ class Clientes extends CI_Controller
 
     }
 
-    public function visualizar($id)
+    public function visualizar($id = null)
     {
+        if ($id == null) {
+            $this->session->set_flashdata('erro', 'Método não permitido.');
+            redirect('clientes');
+        }
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar clientes.');
@@ -160,7 +170,7 @@ class Clientes extends CI_Controller
 
         $verificacao = $this->clientes_model->verificaClienteUsuario($id, id_usuario());
 
-        if($verificacao == 0) {
+        if ($verificacao == 0) {
             $this->session->set_flashdata('erro', 'Cliente não encontrado para este usuário');
             redirect(base_url() . 'clientes/');
         }
@@ -178,8 +188,6 @@ class Clientes extends CI_Controller
 
     public function excluir()
     {
-
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dCliente')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para excluir clientes.');
             redirect(base_url());
@@ -235,11 +243,11 @@ class Clientes extends CI_Controller
 //        $this->db->where('clientes_id', $id);
 //        $this->db->delete('lancamentos');
 
-        if($this->clientes_model->delete('clientes', $data, 'id_clientes', $id) == true){
+        if ($this->clientes_model->delete('clientes', $data, 'id_clientes', $id) == true) {
             $this->session->set_flashdata('sucesso', 'Cliente excluído com sucesso!');
             redirect(base_url() . 'clientes/gerenciar/');
 
-        } else{
+        } else {
             $this->session->set_flashdata('erro', 'Erro ao tentar excluir cliente.');
             redirect(base_url() . 'clientes/gerenciar/');
         }
