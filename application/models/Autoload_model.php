@@ -1,5 +1,6 @@
-<?php
-
+<?php if (! defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
 class Autoload_model extends CI_Model {
 
@@ -14,9 +15,10 @@ class Autoload_model extends CI_Model {
             // Make sure we are not reloading autoload_models_model
             // Make sure we have a PHP file
             if(
-                strtolower(explode('.', $file)[0]) !== strtolower(__CLASS__) &&
-                strtolower(explode('.', $file)[1]) === 'php')
+                (explode('.', $file)[0]) !== (__CLASS__) &&
+                (explode('.', $file)[1]) === 'php')
             {
+//                $this->load->model(strtolower($file));
                 $this->load->model(explode('.', $file)[0]);
             }
         }

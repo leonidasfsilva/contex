@@ -116,7 +116,7 @@ $autoload['language'] = array();
 */
 
 $autoload['model'] = array(
-//    'anuncios_model',
+    'anuncios_model',
     'arquivos_model',
     'cadastro_model',
     'chamados_model',
