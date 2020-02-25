@@ -41,6 +41,7 @@
 <script src="<?php echo base_url(); ?>assets/plugins/form-jasnyupload/fileinput.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
 <script src="<?php echo base_url(); ?>assets/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.pt-BR.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/form-inputmask/jquery.inputmask.bundle.min.js"></script>
 
 <!-- Pnotify-->
 <script src="<?php echo base_url(); ?>assets/plugins/pnotify/iife/PNotify.js"></script>

@@ -3,6 +3,15 @@
         $('.modal_anuncio').each(function (key, value) {
             $('.modal_anuncio').modal('show');
         });
+
+        $('.datepicker').each(function (index, value) {
+            $(this).attr('data-inputmask', "'alias': 'date'");
+        });
+
+    });
+
+    $(function () {
+        $('.datepicker').inputmask('date',{placeholder:'dd/mm/aaaa'});
     });
 
     $(function () {
@@ -198,7 +207,7 @@
         $('.datepicker').datepicker({
             language: 'pt-BR',
             autoclose: true,
-            format: 'dd/mm/yyyy',
+            format: 'dd/mm/aaaa',
             todayHighlight: true,
             todayBtn: 'linked'
         });

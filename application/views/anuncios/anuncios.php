@@ -97,7 +97,7 @@
                             </div>
                             <div id="div_data">
                                 <div class="form-group col-sm-12">
-                                    <label for="data_expiracao" class="font-weight-bold">Data de expiração *</label>
+                                    <label for="data_expiracao" class="font-weight-bold ">Data de expiração *</label>
                                     <input class="form-control datepicker" type="text" id="data_expiracao" name="data_expiracao">
                                     <?php if ($data_expiracao != null && $validade == false) { ?>
                                         <span style="color: red" class="font-weight-bold">Anúncio expirado!</span>
