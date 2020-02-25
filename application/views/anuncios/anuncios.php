@@ -26,7 +26,7 @@
                 <th>Cabeçalho</th>
                 <th>Título</th>
                 <th>Status</th>
-                <th style="width: 130px">Ações</th>
+                <th style="width: 180px">Ações</th>
             </tr>
             </thead>
             <tbody>
@@ -61,8 +61,9 @@
                     echo '<td>' . $r->titulo . '</td>';
                     echo '<td><span class="label label-' . $label_tipo . '">' . strtoupper($habilitado) . '</span></td>';
                     echo '<td style="text-align: center">';
-                    echo '<a href="#modalConfigurar" data-toggle="modal" id_anuncio="' . $r->id_anuncio . '" data_expiracao="' . $data_expiracao . '" habilitado="' . $r->habilitado . '" nome_usuario="' . $r->nome_usuario . '" direcionado="' . $r->direcionado . '" style="margin-right: 1%" class="btn btn-info btn-sm configurar" title="Configurações"><i class="fas fa-cog fa-lg fa-fw"></i></a>';
+                    echo '<a href="#modalConfigurar" data-toggle="modal" id_anuncio="' . $r->id_anuncio . '" data_expiracao="' . $data_expiracao . '" habilitado="' . $r->habilitado . '" nome_usuario="' . $r->nome_usuario . '" direcionado="' . $r->direcionado . '" style="margin-right: 1%" class="btn btn-default btn-sm configurar" title="Configurações"><i class="fas fa-cog fa-lg fa-fw"></i></a>';
                     echo '<a href="' . base_url('anuncios/editar/') . $r->id_anuncio . '" style="margin-right: 1%" class="btn btn-primary btn-sm" title="Editar"><i class="fas fa-edit fa-lg fa-fw"></i></a>';
+                    echo '<a href="#modalCopiar" role="button" data-toggle="modal" id_anuncio="' . $r->id_anuncio . '" style="margin-right: 1%" class="btn btn-info btn-sm" title="Copiar"><i class="fas fa-copy fa-lg fa-fw" ></i></a>';
                     echo '<a href="#modalExcluir" role="button" data-toggle="modal" id_anuncio="' . $r->id_anuncio . '" style="margin-right: 1%" class="btn btn-danger btn-sm" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw" ></i></a>';
                     echo '</td>';
                     echo '</tr>';
@@ -80,9 +81,9 @@
 <div class="modal fade" id="modalConfigurar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-info">
+            <div class="modal-header bg-default">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white ">Configurações do anúncio</h4>
+                <h4 class="modal-title">Configurações do anúncio</h4>
             </div>
             <form id="formConfigurar" action="<?php echo base_url('anuncios/configurar') ?>" method="post" autocomplete="off">
                 <div class="modal-body">
@@ -126,7 +127,29 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i> Cancelar</button>
-                    <button class="btn btn-info btn-sm" id="btn_submit"><i class="fa fa-check fa-fw"></i> Salvar</button>
+                    <button class="btn btn-primary btn-sm" id="btn_submit"><i class="fa fa-check fa-fw"></i> Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal COPIAR-->
+<div class="modal fade" id="modalCopiar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-white ">Copiar anúncio</h4>
+            </div>
+            <form action="<?php echo base_url('anuncios/copiar') ?>" method="post">
+                <div class="modal-body">
+                    <p>Deseja realmente copiar este anúncio?</p>
+                    <input type="hidden" id="id_copiar" name="id_anuncio" value=""/>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i> Cancelar</button>
+                    <button class="btn btn-info btn-sm"><i class="fa fa-check fa-fw"></i> Copiar</button>
                 </div>
             </form>
         </div>
@@ -168,6 +191,7 @@
         var id_anuncio = $(this).attr('id_anuncio');
         $('#id_configurar').val(id_anuncio);
         $('#id_excluir').val(id_anuncio);
+        $('#id_copiar').val(id_anuncio);
     });
 
     $('#habilitado').on('ifChanged', function (event) {

@@ -172,6 +172,49 @@ class Anuncios extends CI_Controller
         }
     }
 
+    public function copiar()
+    {
+        $id_anuncio = $_POST['id_anuncio'];
+        // Get the columns
+        $cols = array();
+        $result = $this->db->query("SHOW COLUMNS FROM anuncios"); // Change table name
+//        print_array_exit($result->result_array());
+
+        while ($r = $result->unbuffered_row('array')) {
+            if (!in_array($r["Field"], array("id_anuncio"))) { // Edit array with any column names you want to exclude
+                $cols[] = $r["Field"];
+            }
+        }
+
+        // Build and do the insert
+        $result = $this->db->query("SELECT * FROM anuncios WHERE id_anuncio = $id_anuncio"); // Change table name and add selection criteria
+        while ($r = $result->unbuffered_row('array')) {
+
+            $insertSQL = "INSERT INTO anuncios (" . implode(", ", $cols) . ") VALUES ("; // Change table name
+            $count = count($cols);
+
+            foreach ($cols as $counter => $col) {
+                // This is where you can add any code to change the value of existing columns
+                $insertSQL .= '"'. ($r[$col]) . '"';
+                if ($counter < ($count - 1)) {
+                    $insertSQL .= ", ";
+                }
+            } // END foreach
+
+            $insertSQL .= ");";
+
+//            print_array_exit($insertSQL);
+            $this->db->query($insertSQL);
+            if ($this->db->affected_rows() > 0) {
+                $this->session->set_flashdata('sucesso', 'Anúncio copiado com sucesso!');
+                redirect('anuncios');
+            } else {
+                $this->session->set_flashdata('erro', 'Erro ao tentar copiar anúncio.');
+                redirect('anuncios');
+            }
+        } // END while
+    }
+
     public function autoCompleteUsuario()
     {
         if (isset($_GET['term'])) {
