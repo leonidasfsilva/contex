@@ -214,6 +214,35 @@ class Anuncios extends CI_Controller
         } // END while
     }
 
+    public function excluir()
+    {
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
+            $this->session->set_flashdata('erro', 'Você não tem permissão para excluir lançamentos.');
+            redirect($this->global_url);
+        }
+
+        $id_anuncio = $_POST['id_anuncio'];
+
+        if ($id_anuncio == null || !is_numeric($id_anuncio)) {
+            $this->session->set_flashdata('erro', 'Método não permitido.');
+            redirect('anuncios');
+        } else {
+            $data = array(
+                'status' => 0
+            );
+
+            if ($this->anuncios_model->edit('anuncios', $data, 'id_anuncio', $id_anuncio)) {
+                $this->session->set_flashdata('sucesso', 'Anúncio excluído com sucesso!');
+                redirect('anuncios');
+            } else {
+                $this->session->set_flashdata('erro', 'Erro ao tentar excluir anúncio.');
+                redirect('anuncios');
+            }
+
+        }
+    }
+
     public function autoCompleteUsuario()
     {
         if (isset($_GET['term'])) {

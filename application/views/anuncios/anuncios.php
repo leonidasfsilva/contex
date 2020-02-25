@@ -62,8 +62,8 @@
                     echo '<td><span class="label label-' . $label_tipo . '">' . strtoupper($habilitado) . '</span></td>';
                     echo '<td style="text-align: center">';
                     echo '<a href="#modalConfigurar" data-toggle="modal" id_anuncio="' . $r->id_anuncio . '" data_expiracao="' . $data_expiracao . '" habilitado="' . $r->habilitado . '" nome_usuario="' . $r->nome_usuario . '" direcionado="' . $r->direcionado . '" style="margin-right: 1%" class="btn btn-default btn-sm configurar" title="Configurações"><i class="fas fa-cog fa-lg fa-fw"></i></a>';
-                    echo '<a href="' . base_url('anuncios/editar/') . $r->id_anuncio . '" style="margin-right: 1%" class="btn btn-primary btn-sm" title="Editar"><i class="fas fa-edit fa-lg fa-fw"></i></a>';
-                    echo '<a href="#modalCopiar" role="button" data-toggle="modal" id_anuncio="' . $r->id_anuncio . '" style="margin-right: 1%" class="btn btn-info btn-sm" title="Copiar"><i class="fas fa-copy fa-lg fa-fw" ></i></a>';
+                    echo '<a href="' . base_url('anuncios/editar/') . $r->id_anuncio . '" style="margin-right: 1%" class="btn btn-info btn-sm" title="Editar"><i class="fas fa-edit fa-lg fa-fw"></i></a>';
+                    echo '<a href="#modalCopiar" role="button" data-toggle="modal" id_anuncio="' . $r->id_anuncio . '" style="margin-right: 1%" class="btn btn-primary btn-sm" title="Copiar"><i class="fas fa-copy fa-lg fa-fw" ></i></a>';
                     echo '<a href="#modalExcluir" role="button" data-toggle="modal" id_anuncio="' . $r->id_anuncio . '" style="margin-right: 1%" class="btn btn-danger btn-sm" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw" ></i></a>';
                     echo '</td>';
                     echo '</tr>';
