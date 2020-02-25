@@ -228,7 +228,7 @@ $this->load->view('includes/custom_js');
         <!--        BUSCA-->
 
         <!--        BOTAO DO MENU SUSPENSO-->
-        <li class="toolbar-icon-bg demo-headerdrop-hidden">
+        <li class="toolbar-icon-bg hidden-xs demo-headerdrop-hidden">
             <a href="#" id="headerbardropdown" data-placement="bottom" title="Menu suspenso">
                 <span class="icon-bg">
                     <i class="fas fa-fw fa-level-down-alt"></i>
@@ -238,7 +238,7 @@ $this->load->view('includes/custom_js');
         <!--        BOTAO DO MENU SUSPENSO-->
 
         <!--        TELA CHEIA-->
-        <li class="toolbar-icon-bg hidden-xs" id="trigger-fullscreen">
+        <li class="toolbar-icon-bg" id="trigger-fullscreen">
             <a href="#" class="toggle-fullscreen" data-toggle="tooltips" data-placement="bottom" title='Ativar/desativar exibição em tela cheia'>
                 <span class="icon-bg"><i class="fas fa-fw fa-expand-arrows-alt"></i></span></i></a>
         </li>
