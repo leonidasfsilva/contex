@@ -113,13 +113,6 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        function nl2br (str, is_xhtml) {
-            var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
-            console.log(is_xhtml)
-
-            return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1'+ breakTag +'$2');
-        }
-
         $('#cabecalho_modal').text($('#cabecalho').val());
         $('#titulo_anuncio').text($('#titulo').val());
         $('#descricao_anuncio').html(nl2br($('#descricao').val(), null));
@@ -155,6 +148,11 @@
             }
         });
     });
+
+    function nl2br (str, is_xhtml) {
+        var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+        return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1'+ breakTag +'$2');
+    }
 
     $("#formEditar").validate({
         rules: {
@@ -250,7 +248,7 @@
         if ($(this).val() == '') {
             $('#descricao_anuncio').text('Descrição do anúncio')
         } else {
-            $('#descricao_anuncio').text($(this).val())
+            $('#descricao_anuncio').html(nl2br($(this).val(), null))
         }
     });
 </script>
