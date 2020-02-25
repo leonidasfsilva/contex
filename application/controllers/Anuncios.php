@@ -17,19 +17,14 @@ class Anuncios extends CI_Controller
 
     public function index()
     {
-//        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {
-//            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar chamados.');
-//            redirect(base_url());
-//        }
-
-        $data['menuChamados'] = true;
-        if ($this->session->userdata('permissao') == 1) {
-            $data['chamados'] = $this->chamados_model->getChamados();
-        } else {
-            $data['chamados'] = $this->chamados_model->getChamadosUsuario(id_usuario());
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {
+            $this->session->set_flashdata('erro', 'Você não tem permissão para visualizar anúncios.');
+            redirect(base_url());
         }
-        $data['assuntos'] = $this->chamados_model->getAssuntos();
-        $data['view'] = 'chamados/chamados';
+
+        $data['menuConfiguracoes'] = true;
+        $data['results'] = $this->anuncios_model->getAnuncios();
+        $data['view'] = 'anuncios/anuncios';
         $this->load->view('tema/topo', $data);
     }
 
@@ -51,165 +46,136 @@ class Anuncios extends CI_Controller
 
     }
 
-    public function abrirChamado()
+    public function adicionar()
     {
-        $assunto = $_POST['assunto'];
-        $descricao = $_POST['descricao'];
+        if ($_POST) {
+            $exibir_rodape = $_POST['exibir_rodape'];
+            $exibir_botao = $_POST['exibir_botao'];
+            $descricao = $_POST['descricao'];
+            $titulo = $_POST['titulo'];
+            $cabecalho = $_POST['cabecalho'];
+            $rotulo_botao = $_POST['rotulo_botao'];
+            $link_botao = $_POST['link_botao'];
 
-        if ($assunto || $descricao == null) {
-            $this->session->set_flashdata('erro', 'Preencha os dados do chamado corretamente.');
-        }
-
-        $data = array(
-            'assunto' => $assunto,
-            'descricao' => $descricao,
-            'id_usuario' => id_usuario(),
-            'status_chamado' => 1,
-            'notifica_admin' => 1,
-        );
-
-        if ($this->chamados_model->add('chamados', $data) == true) {
-            $this->session->set_flashdata('sucesso', 'Chamado aberto com sucesso!');
-            redirect('chamados');
-        } else {
-            $this->session->set_flashdata('erro', 'Erro ao tentar abrir chamado.');
-            redirect('chamados');
-        }
-    }
-
-    public function detalhes($id_chamado = null)
-    {
-        if ($id_chamado == null) {
-            $this->session->set_flashdata('erro', 'Método não permitido.');
-            redirect('chamados');
-        }
-
-        $chamado = $this->chamados_model->getDetalhesChamado($id_chamado);
-        $data['respostas'] = $this->chamados_model->getRespostasChamado($id_chamado);
-
-        if (!$chamado) {
-            $this->session->set_flashdata('erro', 'Chamado não encontrado.');
-            redirect('chamados');
-        }
-
-        if ($this->session->userdata('permissao') == 1) {
-            $data2 = array(
-                'notifica_admin' => 0
+            $data = array(
+                'descricao' => $descricao,
+                'titulo' => $titulo,
+                'cabecalho' => $cabecalho,
+                'exibir_rodape' => $exibir_rodape,
+                'exibir_botao' => $exibir_botao,
+                'rotulo_botao' => $rotulo_botao,
+                'link_botao' => $link_botao,
             );
-            $this->chamados_model->edit('chamados', $data2, 'id_chamado', $id_chamado);
 
-            $date_time = new DateTime($chamado->data_abertura);
-            $hoje = new DateTime('now');
-            $interval = $hoje->diff($date_time);
-            $dataformatada = $date_time->format('d/m/Y H:i:s');
-
-            if ($interval->m < 1) {
-                if ($interval->d < 1) {
-                    if ($interval->h < 1) {
-                        $data['intervalo'] = $interval->i . 'm';
-                    } else {
-                        $data['intervalo'] = $interval->h . 'h';
-                    }
-                } else {
-                    $data['intervalo'] = $interval->d . 'd';
-                }
+            if ($this->anuncios_model->add('anuncios', $data) == true) {
+                $this->session->set_flashdata('sucesso', 'Anúncio cadastrado com sucesso!');
+                redirect('anuncios');
             } else {
-                $data['intervalo'] = $dataformatada;
+                $this->session->set_flashdata('erro', 'Erro ao tentar cadastrar anúncio.');
+                redirect('anuncios');
             }
 
-        } else {
-            $chamadoUsuario = $this->chamados_model->verificaChamadoPertenceUsuario(id_usuario());
-            if ($chamadoUsuario) {
-                $data2 = array(
-                    'notifica_usuario' => 0
-                );
-                $this->chamados_model->edit('chamados', $data2, 'id_chamado', $id_chamado);
-
-                $date_time = new DateTime($chamado->data_abertura);
-                $dataformatada = $date_time->format('d/m/Y H:i');
-                $hoje = new DateTime();
-                $interval = $hoje->diff($date_time);
-
-                if ($interval->m < 1) {
-                    if ($interval->d < 2) {
-                        if ($interval->h < 1) {
-                            $data['intervalo'] = $interval->i . 'm';
-                        } else {
-                            $data['intervalo'] = $interval->h . 'h';
-                        }
-                    } else {
-                        $data['intervalo'] = $interval->d . 'd';
-                    }
-                } else {
-                    $data['intervalo'] = $dataformatada;
-                }
-            } else {
-                $this->session->set_flashdata('erro', 'Chamado não encontrado para este usuário.');
-                redirect('chamados');
-            }
         }
-        $data['chamado'] = $chamado;
-        $data['view'] = 'chamados/detalhes';
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {
+            $this->session->set_flashdata('erro', 'Você não tem permissão para cadastrar anúncios.');
+            redirect(base_url());
+        }
+
+        $data['menuConfiguracoes'] = true;
+        $data['view'] = 'anuncios/adicionar';
         $this->load->view('tema/topo', $data);
-
     }
 
-    public function responder()
+    public function editar($id_anuncio = null)
+    {
+        if ($_POST) {
+            $data = array(
+                'exibir_rodape' => $_POST['exibir_rodape'],
+                'exibir_botao' => $_POST['exibir_botao'],
+                'rotulo_botao' => $_POST['rotulo_botao'],
+                'link_botao' => $_POST['link_botao'],
+                'cabecalho' => $_POST['cabecalho'],
+                'titulo' => $_POST['titulo'],
+                'descricao' => $_POST['descricao'],
+            );
+
+            if ($this->anuncios_model->edit('anuncios', $data, 'id_anuncio', $id_anuncio) == true) {
+                $this->session->set_flashdata('sucesso', 'Anúncio alterado com sucesso!');
+                redirect('anuncios/editar/' . $id_anuncio);
+            } else {
+                $this->session->set_flashdata('erro', 'Erro ao tentar alterar anúncio.');
+                redirect('anuncios/editar/' . $id_anuncio);
+            }
+
+        } else {
+            if ($id_anuncio == null) {
+                $this->session->set_flashdata('erro', 'Método não permitido.');
+                redirect('anuncios');
+            }
+
+            $anuncio = $this->anuncios_model->getDetalhesAnuncio($id_anuncio);
+
+            if (!$anuncio) {
+                $this->session->set_flashdata('erro', 'Anúncio não encontrado.');
+                redirect('anuncios');
+            }
+
+            $data['result'] = $anuncio;
+            $data['view'] = 'anuncios/editar';
+            $this->load->view('tema/topo', $data);
+        }
+    }
+
+    public function configurar()
     {
         if (!$_POST) {
             $this->session->set_flashdata('erro', 'Método não permitido.');
-            redirect('chamados');
+            redirect('anuncios');
         }
 
-        if ($this->session->userdata('permissao') == 1) {
-            $data = array(
-                'resposta' => $_POST['resposta'],
-                'id_usuario' => id_usuario(),
-                'id_chamado' => $_POST['id_chamado'],
-            );
-            $data2 = array(
-                'notifica_usuario' => 1,
-            );
-            $this->chamados_model->edit('chamados', $data2, 'id_chamado', $_POST['id_chamado']);
+        if ($_POST['data_expiracao'] != null) {
+            $data_expiracao = explode('/', $_POST['data_expiracao']);
+            $data_expiracao = $data_expiracao[2] . '-' . $data_expiracao[1] . '-' . $data_expiracao[0];
         } else {
-            $data = array(
-                'resposta' => $_POST['resposta'],
-                'id_usuario' => id_usuario(),
-                'id_chamado' => $_POST['id_chamado'],
-            );
-            $data2 = array(
-                'notifica_admin' => 1
-            );
-            $this->chamados_model->edit('chamados', $data2, 'id_chamado', $_POST['id_chamado']);
+            $data_expiracao = null;
         }
 
-        if ($this->chamados_model->add('chamados_respostas', $data) == true) {
-            $this->session->set_flashdata('sucesso', 'Resposta enviada com sucesso!');
-            redirect('chamados/detalhes/' . $_POST['id_chamado']);
+        if ($_POST['habilitado'] == 1) {
+            $habilitado = 1;
         } else {
-            $this->session->set_flashdata('erro', 'Erro ao tentar responder chamado.');
-            redirect('chamados/detalhes/' . $_POST['id_chamado']);
+            $habilitado = 0;
         }
-    }
 
-    public function finalizar()
-    {
-        if (!$_POST) {
-            $this->session->set_flashdata('erro', 'Método não permitido.');
-            redirect('chamados');
+        if ($_POST['direcionado'] == 1) {
+            $direcionado = 1;
+        } else {
+            $direcionado = null;
         }
 
         $data = array(
-            'status_chamado' => 3,
-            'id_chamado' => $_POST['id_chamado'],
+            'habilitado' => $habilitado,
+            'direcionado' => $direcionado,
+            'id_usuario' => $_POST['id_usuario'] ? $_POST['id_usuario'] : null,
+            'nome_usuario' => $_POST['nome_usuario'] ? $_POST['nome_usuario'] : null,
+            'data_expiracao' => $data_expiracao,
         );
 
-        if ($this->chamados_model->edit('chamados', $data, 'id_chamado', $_POST['id_chamado']) == true) {
-            $this->session->set_flashdata('sucesso', 'Chamado finalizado com sucesso!');
-            redirect('chamados/detalhes/' . $_POST['id_chamado']);
+        if ($this->anuncios_model->edit('anuncios', $data, 'id_anuncio', $_POST['id_anuncio'])) {
+            $this->session->set_flashdata('sucesso', 'Anúncio configurado com sucesso!');
+            redirect('anuncios');
         } else {
-            $this->session->set_flashdata('erro', 'Erro ao tentar finalizar chamado.');
-            redirect('chamados/detalhes/' . $_POST['id_chamado']);
+            $this->session->set_flashdata('erro', 'Erro ao tentar configurar anúncio.');
+            redirect('anuncios');
         }
     }
+
+    public function autoCompleteUsuario()
+    {
+        if (isset($_GET['term'])) {
+            $q = strtolower($_GET['term']);
+            $this->anuncios_model->autoCompleteUsuario($q);
+        }
+    }
+
 }

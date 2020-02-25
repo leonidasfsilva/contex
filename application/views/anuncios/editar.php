@@ -10,7 +10,7 @@
                     <a href="<?php echo base_url('anuncios') ?>" class="btn btn-sm btn-default">
                         <i class="fas fa-arrow-left fa-fw"></i> Anúncios
                     </a>
-                    <button type="button" id="submit" class="btn btn-primary btn-sm"><i class="fas fa-check fa-fw"></i> Cadastrar</button>
+                    <button type="button" id="submit" class="btn btn-primary btn-sm"><i class="fas fa-check fa-fw"></i> Salvar</button>
                 </div>
             </div>
             <div class="panel-body">
@@ -19,11 +19,11 @@
                         <h5 class="mt0 pt0">Opções do anúncio</h5>
                     </div>
                 </div>
-                <form id="formCadastroAnuncio" action="<?php echo base_url('anuncios/adicionar') ?>" method="post" autocomplete="off">
-                <div class="row mb30">
+                <form id="formEditar" action="<?php echo base_url('anuncios/editar/' . $result->id_anuncio) ?>" method="post" autocomplete="off">
+                    <div class="row mb30">
                         <div class="form-group col-sm-3 pb20">
                             <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control" id="rodape" name="exibir_rodape" value="1" checked>
+                                <input type="checkbox" class="form-control" id="rodape" name="exibir_rodape" value="1" <?= $result->exibir_rodape ? 'checked' : '' ?>>
                             </div>
                             <label for="rodape">Exibir rodapé do modal</label>
                         </div>
@@ -31,7 +31,7 @@
                             <div class="form-group col-sm-3">
                                 <div id="div_botao_link">
                                     <div class="checkbox icheck">
-                                        <input type="checkbox" class="form-control" name="exibir_botao" value="1" id="botao" checked>
+                                        <input type="checkbox" class="form-control" name="exibir_botao" value="1" id="botao" <?= $result->exibir_botao ? 'checked' : '' ?>>
                                     </div>
                                     <label for="botao">Exibir botão de link</label>
                                 </div>
@@ -39,29 +39,29 @@
                             <div id="div_rotulo">
                                 <div class="form-group col-sm-3 mt10">
                                     <label for="rotulo_botao" class="font-weight-bold">Rótulo do botão *</label>
-                                    <input class="form-control" type="text" id="rotulo_botao" name="rotulo_botao" placeholder="Botão de link">
+                                    <input class="form-control" type="text" id="rotulo_botao" name="rotulo_botao" placeholder="Botão de link" value="<?= $result->rotulo_botao ?>">
                                 </div>
                                 <div class="form-group col-sm-3 mt10">
-                                    <label for="rotulo_botao" class="font-weight-bold">Link do botão *</label>
-                                    <input class="form-control" type="text" id="link_botao" name="link_botao" placeholder="Link do botão">
+                                    <label for="link_botao" class="font-weight-bold">Link do botão *</label>
+                                    <input class="form-control" type="text" id="link_botao" name="link_botao" placeholder="Link do botão" value="<?= $result->link_botao ?>">
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-sm-6">
-                            <label for="rotulo_botao" class="font-weight-bold">Cabeçalho do modal</label>
-                            <input class="form-control" type="text" id="cabecalho" name="cabecalho">
+                            <label for="cabecalho" class="font-weight-bold">Cabeçalho do modal</label>
+                            <input class="form-control" type="text" id="cabecalho" name="cabecalho" value="<?= $result->cabecalho ?>">
                         </div>
                         <div class="form-group col-sm-6">
-                            <label for="rotulo_botao" class="font-weight-bold">Título do anúncio</label>
-                            <input class="form-control" type="text" id="titulo" name="titulo">
+                            <label for="titulo" class="font-weight-bold">Título do anúncio</label>
+                            <input class="form-control" type="text" id="titulo" name="titulo" value="<?= $result->titulo ?>">
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-sm-12">
-                            <label for="rotulo_botao" class="font-weight-bold">Descrição do anúncio *</label>
-                            <textarea class="form-control" id="descricao" name="descricao" rows="5"></textarea>
+                            <label for="descricao" class="font-weight-bold">Descrição do anúncio *</label>
+                            <textarea class="form-control" id="descricao" name="descricao" rows="5"><?= $result->descricao ?></textarea>
                         </div>
                     </div>
                 </form>
@@ -96,7 +96,14 @@
 </div>
 
 <script type="text/javascript">
-    $("#formCadastroAnuncio").validate({
+    $(document).ready(function () {
+        $('#cabecalho_modal').text($('#cabecalho').val());
+        $('#titulo_anuncio').text($('#titulo').val());
+        $('#descricao_anuncio').text($('#descricao').val());
+        $('#botao_link').text($('#rotulo_botao').val())
+    });
+
+    $("#formEditar").validate({
         rules: {
             descricao: {required: true},
             rotulo_botao: {required: true},
@@ -123,7 +130,7 @@
     });
 
     $('#submit').click(function () {
-        $('#formCadastroAnuncio').submit();
+        $('#formEditar').submit();
     });
 
     $('#rodape').on('ifChanged', function (event) {

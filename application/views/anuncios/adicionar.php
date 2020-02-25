@@ -42,7 +42,7 @@
                                     <input class="form-control" type="text" id="rotulo_botao" name="rotulo_botao" placeholder="Botão de link">
                                 </div>
                                 <div class="form-group col-sm-3 mt10">
-                                    <label for="rotulo_botao" class="font-weight-bold">Link do botão *</label>
+                                    <label for="link_botao" class="font-weight-bold">Link do botão *</label>
                                     <input class="form-control" type="text" id="link_botao" name="link_botao" placeholder="Link do botão">
                                 </div>
                             </div>
@@ -50,17 +50,17 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-sm-6">
-                            <label for="rotulo_botao" class="font-weight-bold">Cabeçalho do modal</label>
+                            <label for="cabecalho" class="font-weight-bold">Cabeçalho do modal</label>
                             <input class="form-control" type="text" id="cabecalho" name="cabecalho">
                         </div>
                         <div class="form-group col-sm-6">
-                            <label for="rotulo_botao" class="font-weight-bold">Título do anúncio</label>
+                            <label for="titulo" class="font-weight-bold">Título do anúncio</label>
                             <input class="form-control" type="text" id="titulo" name="titulo">
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-sm-12">
-                            <label for="rotulo_botao" class="font-weight-bold">Descrição do anúncio *</label>
+                            <label for="descricao" class="font-weight-bold">Descrição do anúncio *</label>
                             <textarea class="form-control" id="descricao" name="descricao" rows="5"></textarea>
                         </div>
                     </div>

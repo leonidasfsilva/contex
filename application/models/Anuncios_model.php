@@ -8,7 +8,6 @@ class Anuncios_model extends CI_Model
     {
         parent::__construct();
         $this->load->helper(array('codegen_helper'));
-
     }
 
     function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
@@ -81,10 +80,10 @@ class Anuncios_model extends CI_Model
         $this->db->where($fieldID, $ID);
         $this->db->update($table, $data);
 
-        if ($this->db->affected_rows() > 0) {
-            return true;
-        }
-        return false;
+//        if ($this->db->affected_rows() > 0) {
+//            return true;
+//        }
+        return true;
     }
 
     function delete($table, $fieldID, $ID)
@@ -110,4 +109,28 @@ class Anuncios_model extends CI_Model
             ->get('anuncios')
             ->result();
     }
+
+    function getDetalhesAnuncio($id_anuncio)
+    {
+        return $this->db
+            ->where('id_anuncio', $id_anuncio)
+            ->get('anuncios')
+            ->row();
+    }
+
+    function autoCompleteUsuario($q)
+    {
+        $query = $this->db->select('*')
+            ->limit(5)
+            ->like('nome', $q)
+            ->where('status', 1)
+            ->get('usuarios');
+        if ($query->num_rows() > 0) {
+            foreach ($query->result_array() as $row) {
+                $row_set[] = array('label' => $row['nome'], 'id' => $row['id_usuarios']);
+            }
+            echo json_encode($row_set);
+        }
+    }
+
 }
