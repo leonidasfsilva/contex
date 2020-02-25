@@ -103,6 +103,12 @@ function id_usuario()
     return $CI->session->userdata('id');
 }
 
+function permissao_usuario()
+{
+    $CI = get_instance();
+    return $CI->session->userdata('permissao');
+}
+
 function nome_usuario()
 {
     $CI = get_instance();

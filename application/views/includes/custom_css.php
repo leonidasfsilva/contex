@@ -201,4 +201,14 @@
         border-left: 6px solid #ffeb3b;
     }
 
+    .visiblemodal {
+        position: initial;
+        top: auto;
+        right: auto;
+        left: auto;
+        bottom: auto;
+        z-index: 1;
+        display: block;
+        overflow: hidden;
+    }
 </style>

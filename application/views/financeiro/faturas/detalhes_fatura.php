@@ -894,7 +894,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
             $.ajax({
                 type: "POST",
-                url: "<?php echo base_url();?>index.php/financeiro/excluirLancamento",
+                url: "<?php echo base_url('financeiro/excluirLancamento');?>",
                 data: "id=" + id,
                 dataType: 'json',
                 success: function (data) {
@@ -924,8 +924,6 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             });
             return false;
         });
-
-        $(".datepicker").datepicker({dateFormat: 'dd/mm/yy'});
 
     });
 </script>

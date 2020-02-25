@@ -1,7 +1,7 @@
 <script>
     $(function () {
         $('.popover-btn').popover()
-    })
+    });
 
     $(document).on('ready', function (event) {
         $(".preloader").show();

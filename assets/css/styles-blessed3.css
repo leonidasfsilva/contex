@@ -2,6 +2,10 @@
  *
  * Powered by Bootstrap and FontAwesome
  */
+.border-bottom {
+    border-bottom: 1px solid #eeeeee;
+}
+
 .font-weight-bold {
     font-weight: bold !important;
 }
@@ -1296,7 +1300,7 @@ html {
 }
 
 body {
-    font-family: 'Roboto','Open Sans', 'Droid Sans', Tahoma, Arial, sans-serif;
+    font-family: 'Roboto', 'Open Sans', 'Droid Sans', Tahoma, Arial, sans-serif;
     font-size: 13px;
     line-height: 1.54;
     color: #455a64;
@@ -1351,10 +1355,12 @@ img {
     color: #00aced;
     background: rgba(0, 172, 237, 0.31);
 }
+
 .avatar-overlay:hover img {
     opacity: 0.5;
     cursor: pointer;
 }
+
 /*.avatar-image {*/
 /*    opacity: 1;*/
 /*    display: block;*/
@@ -1556,7 +1562,7 @@ h4,
 
 h5,
 .h5 {
-    font-size: 13px;
+    font-size: 15px;
 }
 
 h6,
@@ -4499,6 +4505,7 @@ tbody.collapse.in {
 .open > .dropdown-menu {
     display: block;
 }
+
 .open > .dropdown-menu.dropdown-menu-left {
     display: table;
 }
@@ -7721,7 +7728,7 @@ h6,
 .h6 {
     margin-top: 16px;
     margin-bottom: 16px;
-    font-family: 'Roboto','Open Sans', 'Droid Sans', Tahoma, Arial, sans-serif;
+    font-family: 'Roboto', 'Open Sans', 'Droid Sans', Tahoma, Arial, sans-serif;
 }
 
 h1,

@@ -92,7 +92,7 @@ $this->load->view('includes/custom_js');
         </a>
 	</span>
 
-    <a class="navbar-brand" href="javascript:">CONTEX</a>
+    <a class="navbar-brand" href="javascript:" style="cursor: unset">CONTEX</a>
 
     <!--    MENU DIREITO-->
     <!--    <span id="trigger-infobar" class="toolbar-trigger toolbar-icon-bg">-->
@@ -446,7 +446,7 @@ $this->load->view('includes/custom_js');
                                 </div>
                                 <div class="tabular-cell welcome-options">
                                     <!--                                        <span class="welcome-text">Bem-vindo,</span>-->
-                                    <span class="name"><?= $this->session->userdata('nome') ?></span>
+                                    <span class="name" style="font-size: 13px; font-weight: 600"><?= $this->session->userdata('nome') ?></span>
                                 </div>
                             </div>
                         </div>
@@ -463,7 +463,7 @@ $this->load->view('includes/custom_js');
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) { ?>
                                     <li class="<?= (isset($menuClientes)) ? 'active' : ''; ?>">
-                                        <a href="<?php echo base_url() ?>clientes"><i class="fas fa-group fa-fw"></i>
+                                        <a href="<?php echo base_url('clientes') ?>"><i class="fas fa-group fa-fw"></i>
                                             <span>Clientes</span>
                                         </a>
                                     </li>
@@ -471,7 +471,7 @@ $this->load->view('includes/custom_js');
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) { ?>
                                     <li class="<?= (isset($menuProdutos)) ? 'active' : ''; ?>">
-                                        <a href="<?php echo base_url() ?>produtos"><i class="fas fa-barcode fa-fw"></i>
+                                        <a href="<?php echo base_url('produtos') ?>"><i class="fas fa-barcode fa-fw"></i>
                                             <span>Produtos</span>
                                         </a>
                                     </li>
@@ -479,7 +479,7 @@ $this->load->view('includes/custom_js');
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vServico')) { ?>
                                     <li class="<?= (isset($menuServicos)) ? 'active' : ''; ?>">
-                                        <a href="<?php echo base_url() ?>servicos"><i class="fas fa-wrench fa-fw"></i>
+                                        <a href="<?php echo base_url('servicos') ?>"><i class="fas fa-wrench fa-fw"></i>
                                             <span>Serviços</span>
                                         </a>
                                     </li>
@@ -487,7 +487,7 @@ $this->load->view('includes/custom_js');
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) { ?>
                                     <li class="<?= (isset($menuOs)) ? 'active' : ''; ?>">
-                                        <a href="<?php echo base_url() ?>os"><i class="fas fa-tags fa-fw"></i>
+                                        <a href="<?php echo base_url('os') ?>"><i class="fas fa-tags fa-fw"></i>
                                             <span>Ordens de Serviço</span>
                                         </a>
                                     </li>
@@ -495,7 +495,7 @@ $this->load->view('includes/custom_js');
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) { ?>
                                     <li class="<?= (isset($menuVendas)) ? 'active' : ''; ?>">
-                                        <a href="<?php echo base_url() ?>vendas"><i class="fas fa-shopping-cart fa-fw"></i>
+                                        <a href="<?php echo base_url('vendas') ?>"><i class="fas fa-shopping-cart fa-fw"></i>
                                             <span>Vendas</span>
                                         </a>
                                     </li>
@@ -503,7 +503,7 @@ $this->load->view('includes/custom_js');
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')) { ?>
                                     <li class="<?= (isset($menuArquivos)) ? 'active' : ''; ?>">
-                                        <a href="<?php echo base_url() ?>arquivos"><i class="fas fa-hdd fa-fw"></i>
+                                        <a href="<?php echo base_url('arquivos') ?>"><i class="fas fa-hdd fa-fw"></i>
                                             <span>Arquivos</span>
                                         </a>
                                     </li>
@@ -516,18 +516,18 @@ $this->load->view('includes/custom_js');
                                         </a>
                                         <ul class="acc-menu">
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
-                                                <li><a href="<?php echo base_url() ?>financeiro/lancamentos">Lançamentos</a></li>
+                                                <li><a href="<?php echo base_url('financeiro/lancamentos') ?>">Lançamentos</a></li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vInvestimentos')) { ?>
-                                                <li><a href="<?php echo base_url() ?>financeiro/investimentos">Investimentos</a></li>
+                                                <li><a href="<?php echo base_url('financeiro/investimentos') ?>">Investimentos</a></li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) { ?>
                                                 <li class="<?= (isset($menuFaturas)) ? 'active' : ''; ?>">
-                                                    <a href="<?php echo base_url() ?>financeiro/faturas">Faturas</a>
+                                                    <a href="<?php echo base_url('financeiro/faturas') ?>">Faturas</a>
                                                 </li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPendencias')) { ?>
-                                                <li><a href="<?php echo base_url() ?>financeiro/pendencias">Pendências</a></li>
+                                                <li><a href="<?php echo base_url('financeiro/pendencias') ?>">Pendências</a></li>
                                             <?php } ?>
                                         </ul>
                                     </li>

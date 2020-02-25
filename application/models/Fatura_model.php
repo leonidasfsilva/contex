@@ -412,6 +412,4 @@ class Fatura_model extends CI_Model
             echo json_encode($row_set);
         }
     }
-
-
 }
