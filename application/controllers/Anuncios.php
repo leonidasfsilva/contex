@@ -195,7 +195,7 @@ class Anuncios extends CI_Controller
 
             foreach ($cols as $counter => $col) {
                 // This is where you can add any code to change the value of existing columns
-                $insertSQL .= '"'. ($r[$col]) . '"';
+                $insertSQL .= $this->db->escape($r[$col]);
                 if ($counter < ($count - 1)) {
                     $insertSQL .= ", ";
                 }
@@ -203,7 +203,6 @@ class Anuncios extends CI_Controller
 
             $insertSQL .= ");";
 
-//            print_array_exit($insertSQL);
             $this->db->query($insertSQL);
             if ($this->db->affected_rows() > 0) {
                 $this->session->set_flashdata('sucesso', 'Anúncio copiado com sucesso!');
