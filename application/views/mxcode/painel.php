@@ -27,7 +27,7 @@ if ($anuncios) {
                             <?php if ($a->titulo) { ?>
                                 <h5 class="mt0 pt0" id="titulo_anuncio"><?= $a->titulo ?></h5>
                             <?php } ?>
-                            <pre class="p0" style="font-size: 13px; border: none; background-color: unset; font-family:'Roboto', sans-serif" id="descricao_anuncio"><?= ($a->descricao) ?></pre>
+                            <p class="p0" style="font-size: 13px; border: none; background-color: unset; font-family:'Roboto', sans-serif" id="descricao_anuncio"><?= nl2br($a->descricao) ?></p>
                         </div>
                         <div class="modal-footer <?= $a->exibir_rodape == 1 ? '' : 'hidden' ?>" id="div_rodape">
                             <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">

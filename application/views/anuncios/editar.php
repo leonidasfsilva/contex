@@ -94,7 +94,7 @@
                                 </div>
                                 <div class="modal-body">
                                     <h5 class="mt0 pt0" id="titulo_anuncio">Título do anúncio</h5>
-                                    <pre class="p0" style="font-size: 13px; border: none; background-color: unset; font-family:'Roboto', sans-serif" id="descricao_anuncio">Descrição do anúncio</pre>
+                                    <p class="p0" style="font-size: 13px; border: none; background-color: unset; font-family:'Roboto', sans-serif" id="descricao_anuncio">Descrição do anúncio</p>
                                 </div>
                                 <div class="modal-footer" id="div_rodape">
                                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
@@ -113,9 +113,16 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        function nl2br (str, is_xhtml) {
+            var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+            console.log(is_xhtml)
+
+            return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1'+ breakTag +'$2');
+        }
+
         $('#cabecalho_modal').text($('#cabecalho').val());
         $('#titulo_anuncio').text($('#titulo').val());
-        $('#descricao_anuncio').text($('#descricao').val());
+        $('#descricao_anuncio').html(nl2br($('#descricao').val(), null));
         $('#botao_link').text($('#rotulo_botao').val());
 
         let estilo = $('#estilo').val();
