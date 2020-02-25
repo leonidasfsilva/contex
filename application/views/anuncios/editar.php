@@ -1,3 +1,8 @@
+<style>
+    label {
+        cursor: pointer;
+    }
+</style>
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-midnightblue">
@@ -25,7 +30,7 @@
                             <div class="checkbox icheck">
                                 <input type="checkbox" class="form-control" id="rodape" name="exibir_rodape" value="1" <?= $result->exibir_rodape ? 'checked' : '' ?>>
                             </div>
-                            <label for="rodape">Exibir rodapé do modal</label>
+                            <label for="rodape" class="font-weight-bold">Exibir rodapé do modal</label>
                         </div>
                         <div id="div_master_rotulo">
                             <div class="form-group col-sm-3">
@@ -33,7 +38,7 @@
                                     <div class="checkbox icheck">
                                         <input type="checkbox" class="form-control" name="exibir_botao" value="1" id="botao" <?= $result->exibir_botao ? 'checked' : '' ?>>
                                     </div>
-                                    <label for="botao">Exibir botão de link</label>
+                                    <label for="botao" class="font-weight-bold">Exibir botão de link</label>
                                 </div>
                             </div>
                             <div id="div_rotulo">
@@ -49,11 +54,22 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-sm-6">
+                        <div class="form-group col-sm-4">
+                            <label for="estilo" class="font-weight-bold">Estilo do modal</label>
+                            <select name="estilo" id="estilo" class="form-control">
+                                <option value="bg-default" <?= $result->estilo == 'bg-default' ? 'selected' : '' ?>>DEFAULT</option>
+                                <option value="bg-primary" class="label-primary" <?= $result->estilo == 'bg-primary' ? 'selected' : '' ?>>PRIMARY</option>
+                                <option value="bg-info" class="label-info" <?= $result->estilo == 'bg-info' ? 'selected' : '' ?>>INFO</option>
+                                <option value="bg-success" class="label-success" <?= $result->estilo == 'bg-success' ? 'selected' : '' ?>>SUCCESS</option>
+                                <option value="bg-warning" class="label-warning" <?= $result->estilo == 'bg-warning' ? 'selected' : '' ?>>WARNING</option>
+                                <option value="bg-danger" class="label-danger" <?= $result->estilo == 'bg-danger' ? 'selected' : '' ?>>DANGER</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-4">
                             <label for="cabecalho" class="font-weight-bold">Cabeçalho do modal</label>
                             <input class="form-control" type="text" id="cabecalho" name="cabecalho" value="<?= $result->cabecalho ?>">
                         </div>
-                        <div class="form-group col-sm-6">
+                        <div class="form-group col-sm-4">
                             <label for="titulo" class="font-weight-bold">Título do anúncio</label>
                             <input class="form-control" type="text" id="titulo" name="titulo" value="<?= $result->titulo ?>">
                         </div>
@@ -84,7 +100,7 @@
                                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
                                         <i class="fas fa-times fa-fw"></i> Fechar
                                     </button>
-                                    <button type="button" class="btn btn-primary btn-sm" id="botao_link"> Botão de link</button>
+                                    <a href="<?= $result->link_botao ?>" class="btn btn-default btn-sm" id="botao_link"> Botão de link</a>
                                 </div>
                             </div><!-- /.modal-content -->
                         </div><!-- /.modal-dialog -->
@@ -100,7 +116,37 @@
         $('#cabecalho_modal').text($('#cabecalho').val());
         $('#titulo_anuncio').text($('#titulo').val());
         $('#descricao_anuncio').text($('#descricao').val());
-        $('#botao_link').text($('#rotulo_botao').val())
+        $('#botao_link').text($('#rotulo_botao').val());
+
+        let estilo = $('#estilo').val();
+
+        if(estilo != 'bg-default') {
+            $('.modal-header').attr('class','modal-header text-white ' + estilo);
+            $('.modal-title').attr('class','modal-title text-white');
+            $('#botao_link').attr('class','btn btn-sm text-white ' + estilo);
+        } else {
+            $('.modal-header').attr('class','modal-header ' + estilo);
+            $('.modal-title').attr('class','modal-title');
+            $('#botao_link').attr('class','btn btn-sm btn-default ' + estilo);
+        }
+
+        $('#rodape').each(function (key, value) {
+            let rodape = $(this).iCheck('update')[0].checked;
+            if (rodape === true) {
+                $('#div_rodape').removeClass('hidden');
+            } else {
+                $('#div_rodape').addClass('hidden');
+            }
+        });
+
+        $('#botao').each(function (key, value) {
+            let botao = $(this).iCheck('update')[0].checked;
+            if (botao === true) {
+                $('#botao_link').removeClass('hidden');
+            } else {
+                $('#botao_link').addClass('hidden');
+            }
+        });
     });
 
     $("#formEditar").validate({
@@ -127,6 +173,18 @@
             $(element).parents('.form-group').addClass('has-success');
         }
 
+    });
+
+    $('#estilo').change(function () {
+        if($(this).val() != 'bg-default') {
+            $('.modal-header').attr('class','modal-header text-white ' + $(this).val());
+            $('.modal-title').attr('class','modal-title text-white');
+            $('#botao_link').attr('class','btn btn-sm text-white ' + $(this).val());
+        } else {
+            $('.modal-header').attr('class','modal-header ' + $(this).val());
+            $('.modal-title').attr('class','modal-title');
+            $('#botao_link').attr('class','btn btn-sm btn-default ' + $(this).val());
+        }
     });
 
     $('#submit').click(function () {

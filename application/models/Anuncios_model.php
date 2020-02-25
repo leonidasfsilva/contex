@@ -102,12 +102,20 @@ class Anuncios_model extends CI_Model
         return $this->db->count_all($table);
     }
 
-    function getAnuncios()
+    function getAnuncios($where = null)
     {
-        return $this->db
-            ->where('status', 1)
-            ->get('anuncios')
-            ->result();
+        if($where) {
+            return $this->db
+                ->where('status', 1)
+                ->where($where)
+                ->get('anuncios')
+                ->result();
+        } else {
+            return $this->db
+                ->where('status', 1)
+                ->get('anuncios')
+                ->result();
+        }
     }
 
     function getDetalhesAnuncio($id_anuncio)

@@ -473,7 +473,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
-                            <label class="font-weight-bold" for="descricao">Descrição *</label>
+                            <label class="font-weight-bold" for="descricaoEditar">Descrição *</label>
                             <input class="form-control" id="descricaoEditar" type="text" name="descricao"/>
                             <input id="urlLancamentoEditar" type="hidden" name="urlAtual" value=""/>
                             <input id="id_lancamentoEditar" type="hidden" name="id_lancamento" value=""/>
@@ -481,11 +481,11 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-6">
-                            <label for="valor" class="font-weight-bold">Valor da Compra *</label>
+                            <label for="valorEditar" class="font-weight-bold">Valor da Compra *</label>
                             <input class="form-control money valor" id="valorEditar" type="text" name="valor"/>
                         </div>
                         <div class="form-group col-lg-6">
-                            <label for="data_compra" class="font-weight-bold">Data da Compra</label>
+                            <label for="data_compraEditar" class="font-weight-bold">Data da Compra</label>
                             <input class="form-control datepicker" id="data_compraEditar" type="text" name="data_compra"/>
                         </div>
                     </div>
@@ -924,6 +924,5 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             });
             return false;
         });
-
     });
 </script>

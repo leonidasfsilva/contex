@@ -1,3 +1,47 @@
+<?php
+$anuncios = $this->anuncios_model->getAnuncios('habilitado = 1');
+if ($anuncios) {
+    foreach ($anuncios as $a) {
+        $format = "d-m-Y";
+        $hoje = DateTime::createFromFormat($format, date('d-m-Y'));
+        $expiracao = DateTime::createFromFormat($format, date(('d-m-Y'), strtotime($a->data_expiracao)));
+        $validade = $expiracao > $hoje;
+
+        if ($validade == true) {
+            if ($a->estilo != 'bg-default') {
+                $estilo = $a->estilo;
+                $text_white = 'text-white';
+            } else {
+                $estilo = $a->estilo;
+                $text_white = '';
+            }
+            ?>
+            <div class="modal fade modal_anuncio" id="anuncio_<?= $a->id_anuncio ?>">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header <?= $estilo ?>">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title <?= $text_white ?>" id="cabecalho_modal"><?= $a->cabecalho ?></h4>
+                        </div>
+                        <div class="modal-body">
+                            <?php if ($a->titulo) { ?>
+                                <h5 class="mt0 pt0" id="titulo_anuncio"><?= $a->titulo ?></h5>
+                            <?php } ?>
+                            <pre class="p0" style="font-size: 13px; border: none; background-color: unset; font-family:'Roboto', sans-serif" id="descricao_anuncio"><?= ($a->descricao) ?></pre>
+                        </div>
+                        <div class="modal-footer <?= $a->exibir_rodape == 1 ? '' : 'hidden' ?>" id="div_rodape">
+                            <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+                                <i class="fas fa-times fa-fw"></i> Fechar
+                            </button>
+                            <a href="<?= $a->link_botao ?>" class="btn <?= $estilo . ' ' . $text_white ?> btn-sm <?= $a->exibir_botao ? '' : 'hidden' ?>" id="botao_link"><?= $a->rotulo_botao ?></a>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+        <?php }
+    }
+} ?>
+
 <!--WIDGETS-->
 <div class="row">
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>

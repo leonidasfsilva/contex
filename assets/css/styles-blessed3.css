@@ -1688,7 +1688,7 @@ a.text-danger:hover {
 }
 
 a.bg-primary:hover {
-    background-color: #0286c2;
+    background-color: rgba(51, 122, 183, 0.5);
 }
 
 .bg-success {
@@ -1696,7 +1696,7 @@ a.bg-primary:hover {
 }
 
 a.bg-success:hover {
-    background-color: #d8ecc2;
+    background-color: rgba(76, 175, 80, 0.51);
 }
 
 .bg-info {
@@ -1704,7 +1704,7 @@ a.bg-success:hover {
 }
 
 a.bg-info:hover {
-    background-color: #b4ecf3;
+    background-color: rgba(91, 192, 222, 0.51);
 }
 
 .bg-warning {
@@ -1712,7 +1712,7 @@ a.bg-info:hover {
 }
 
 a.bg-warning:hover {
-    background-color: #fff9b4;
+    background-color: rgba(240, 173, 78, 0.47);
 }
 
 .bg-danger {
@@ -1720,7 +1720,7 @@ a.bg-warning:hover {
 }
 
 a.bg-danger:hover {
-    background-color: #fab5ac;
+    background-color: rgba(255, 82, 77, 0.5);
 }
 
 .page-header {

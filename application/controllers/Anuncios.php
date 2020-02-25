@@ -98,6 +98,7 @@ class Anuncios extends CI_Controller
                 'cabecalho' => $_POST['cabecalho'],
                 'titulo' => $_POST['titulo'],
                 'descricao' => $_POST['descricao'],
+                'estilo' => $_POST['estilo'],
             );
 
             if ($this->anuncios_model->edit('anuncios', $data, 'id_anuncio', $id_anuncio) == true) {

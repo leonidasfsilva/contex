@@ -25,17 +25,30 @@
                 <th style="width: 30px">ID</th>
                 <th>Cabeçalho</th>
                 <th>Título</th>
-                <th>Exibição</th>
+                <th>Status</th>
                 <th style="width: 130px">Ações</th>
             </tr>
             </thead>
             <tbody>
             <tr>
                 <?php foreach ($results as $r) {
-                    $data_expiracao = date(('d/m/Y'), strtotime($r->data_expiracao));
-                    if($r->habilitado == 1) {
+                    if ($r->data_expiracao) {
+                        $data_expiracao = date(('d/m/Y'), strtotime($r->data_expiracao));
+                    }
+
+                    $format = "d-m-Y";
+                    $hoje = DateTime::createFromFormat($format, date('d-m-Y'));
+                    $expiracao = DateTime::createFromFormat($format, date(('d-m-Y'), strtotime($r->data_expiracao)));
+                    $validade = $expiracao > $hoje;
+
+                    if ($r->habilitado == 1) {
                         $label_tipo = 'success';
                         $habilitado = 'HABILITADO';
+
+                        if ($validade == false) {
+                            $label_tipo = 'warning';
+                            $habilitado = 'EXPIRADO';
+                        }
                     } else {
                         $label_tipo = 'danger';
                         $habilitado = 'DESABILITADO';
@@ -77,12 +90,15 @@
                                 <div class="checkbox icheck">
                                     <input type="checkbox" class="form-control" id="habilitado" name="habilitado" value="1">
                                 </div>
-                                <label for="habilitado">Habilitar anúncio</label>
+                                <label for="habilitado" class="font-weight-bold">Habilitar anúncio</label>
                             </div>
                             <div id="div_data">
                                 <div class="form-group col-sm-12">
                                     <label for="data_expiracao" class="font-weight-bold">Data de expiração *</label>
                                     <input class="form-control datepicker" type="text" id="data_expiracao" name="data_expiracao">
+                                <?php if($validade == false) { ?>
+                                    <span style="color: red" class="font-weight-bold">Anúncio expirado!</span>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>
@@ -92,7 +108,7 @@
                                     <div class="checkbox icheck">
                                         <input type="checkbox" class="form-control" name="direcionado" value="1" id="direcionado">
                                     </div>
-                                    <label for="direcionado">Exibir para um usuário específico</label>
+                                    <label for="direcionado" class="font-weight-bold">Exibir para um usuário específico</label>
                                 </div>
                             </div>
                             <div id="div_usuarios" class="hidden">
@@ -167,6 +183,7 @@
             $('#div_usuarios').removeClass('hidden');
         } else {
             $('#div_usuarios').addClass('hidden');
+            $('#nome_usuario').val('');
         }
     });
 
