@@ -34,6 +34,8 @@
                 <?php foreach ($results as $r) {
                     if ($r->data_expiracao) {
                         $data_expiracao = date(('d/m/Y'), strtotime($r->data_expiracao));
+                    } else {
+                        $data_expiracao = null;
                     }
 
                     $format = "d-m-Y";
@@ -45,7 +47,7 @@
                         $label_tipo = 'success';
                         $habilitado = 'HABILITADO';
 
-                        if ($validade == false) {
+                        if ($data_expiracao != null && $validade == false) {
                             $label_tipo = 'warning';
                             $habilitado = 'EXPIRADO';
                         }
@@ -96,8 +98,8 @@
                                 <div class="form-group col-sm-12">
                                     <label for="data_expiracao" class="font-weight-bold">Data de expiração *</label>
                                     <input class="form-control datepicker" type="text" id="data_expiracao" name="data_expiracao">
-                                <?php if($validade == false) { ?>
-                                    <span style="color: red" class="font-weight-bold">Anúncio expirado!</span>
+                                    <?php if ($data_expiracao != null && $validade == false) { ?>
+                                        <span style="color: red" class="font-weight-bold">Anúncio expirado!</span>
                                     <?php } ?>
                                 </div>
                             </div>

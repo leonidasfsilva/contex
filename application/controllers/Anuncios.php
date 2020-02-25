@@ -65,6 +65,7 @@ class Anuncios extends CI_Controller
                 'exibir_botao' => $exibir_botao,
                 'rotulo_botao' => $rotulo_botao,
                 'link_botao' => $link_botao,
+                'estilo' => $_POST['estilo'],
             );
 
             if ($this->anuncios_model->add('anuncios', $data) == true) {
@@ -151,7 +152,7 @@ class Anuncios extends CI_Controller
         if ($_POST['direcionado'] == 1) {
             $direcionado = 1;
         } else {
-            $direcionado = null;
+            $direcionado = 0;
         }
 
         $data = array(

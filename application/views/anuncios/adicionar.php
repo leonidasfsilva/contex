@@ -20,12 +20,12 @@
                     </div>
                 </div>
                 <form id="formCadastroAnuncio" action="<?php echo base_url('anuncios/adicionar') ?>" method="post" autocomplete="off">
-                <div class="row mb30">
+                    <div class="row mb30">
                         <div class="form-group col-sm-3 pb20">
                             <div class="checkbox icheck">
                                 <input type="checkbox" class="form-control" id="rodape" name="exibir_rodape" value="1" checked>
                             </div>
-                            <label for="rodape">Exibir rodapé do modal</label>
+                            <label for="rodape" class="font-weight-bold">Exibir rodapé do modal</label>
                         </div>
                         <div id="div_master_rotulo">
                             <div class="form-group col-sm-3">
@@ -33,7 +33,7 @@
                                     <div class="checkbox icheck">
                                         <input type="checkbox" class="form-control" name="exibir_botao" value="1" id="botao" checked>
                                     </div>
-                                    <label for="botao">Exibir botão de link</label>
+                                    <label for="botao" class="font-weight-bold">Exibir botão de link</label>
                                 </div>
                             </div>
                             <div id="div_rotulo">
@@ -49,11 +49,22 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-sm-6">
+                        <div class="form-group col-sm-4">
+                            <label for="estilo" class="font-weight-bold">Estilo do modal</label>
+                            <select name="estilo" id="estilo" class="form-control">
+                                <option value="bg-default">DEFAULT</option>
+                                <option value="bg-primary" class="label-primary">PRIMARY</option>
+                                <option value="bg-info" class="label-info">INFO</option>
+                                <option value="bg-success" class="label-success">SUCCESS</option>
+                                <option value="bg-warning" class="label-warning">WARNING</option>
+                                <option value="bg-danger" class="label-danger">DANGER</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-4">
                             <label for="cabecalho" class="font-weight-bold">Cabeçalho do modal</label>
                             <input class="form-control" type="text" id="cabecalho" name="cabecalho">
                         </div>
-                        <div class="form-group col-sm-6">
+                        <div class="form-group col-sm-4">
                             <label for="titulo" class="font-weight-bold">Título do anúncio</label>
                             <input class="form-control" type="text" id="titulo" name="titulo">
                         </div>
@@ -78,13 +89,13 @@
                                 </div>
                                 <div class="modal-body">
                                     <h5 class="mt0 pt0" id="titulo_anuncio">Título do anúncio</h5>
-                                    <pre class="p0" style="font-size: 13px; border: none; background-color: unset; font-family:'Roboto', sans-serif" id="descricao_anuncio">Descrição do anúncio</pre>
+                                    <p class="p0" style="font-size: 13px; border: none; background-color: unset; font-family:'Roboto', sans-serif" id="descricao_anuncio">Descrição do anúncio</p>
                                 </div>
                                 <div class="modal-footer" id="div_rodape">
                                     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
                                         <i class="fas fa-times fa-fw"></i> Fechar
                                     </button>
-                                    <button type="button" class="btn btn-primary btn-sm" id="botao_link"> Botão de link</button>
+                                    <button type="button" class="btn btn-default btn-sm" id="botao_link"> Botão de link</button>
                                 </div>
                             </div><!-- /.modal-content -->
                         </div><!-- /.modal-dialog -->
@@ -96,6 +107,25 @@
 </div>
 
 <script type="text/javascript">
+    function nl2br (str, is_xhtml) {
+        var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+        console.log(is_xhtml)
+
+        return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1'+ breakTag +'$2');
+    }
+
+    $('#estilo').change(function () {
+        if($(this).val() != 'bg-default') {
+            $('.modal-header').attr('class','modal-header text-white ' + $(this).val());
+            $('.modal-title').attr('class','modal-title text-white');
+            $('#botao_link').attr('class','btn btn-sm text-white ' + $(this).val());
+        } else {
+            $('.modal-header').attr('class','modal-header ' + $(this).val());
+            $('.modal-title').attr('class','modal-title');
+            $('#botao_link').attr('class','btn btn-sm btn-default ' + $(this).val());
+        }
+    });
+
     $("#formCadastroAnuncio").validate({
         rules: {
             descricao: {required: true},
@@ -178,7 +208,7 @@
         if ($(this).val() == '') {
             $('#descricao_anuncio').text('Descrição do anúncio')
         } else {
-            $('#descricao_anuncio').text($(this).val())
+            $('#descricao_anuncio').html(nl2br($(this).val(), null))
         }
     });
 </script>

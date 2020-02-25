@@ -1,7 +1,6 @@
 <script>
-
     $(document).ready(function () {
-        $.each($('.modal_anuncio'), function (key, value) {
+        $('.modal_anuncio').each(function (key, value) {
             $('.modal_anuncio').modal('show');
         });
     });

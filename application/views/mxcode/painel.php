@@ -1,5 +1,6 @@
 <?php
-$anuncios = $this->anuncios_model->getAnuncios('habilitado = 1');
+$anuncios = $this->anuncios_model->getAnuncios('habilitado = 1 AND direcionado != 1');
+$direcionados = $this->anuncios_model->getAnuncios('habilitado = 1 AND direcionado = 1 AND id_usuario = '. id_usuario());
 if ($anuncios) {
     foreach ($anuncios as $a) {
         $format = "d-m-Y";
@@ -34,6 +35,48 @@ if ($anuncios) {
                                 <i class="fas fa-times fa-fw"></i> Fechar
                             </button>
                             <a href="<?= $a->link_botao ?>" class="btn <?= $estilo . ' ' . $text_white ?> btn-sm <?= $a->exibir_botao ? '' : 'hidden' ?>" id="botao_link"><?= $a->rotulo_botao ?></a>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+        <?php }
+    }
+}
+
+if ($direcionados) {
+    foreach ($direcionados as $d) {
+        $format = "d-m-Y";
+        $hoje = DateTime::createFromFormat($format, date('d-m-Y'));
+        $expiracao = DateTime::createFromFormat($format, date(('d-m-Y'), strtotime($d->data_expiracao)));
+        $validade = $expiracao > $hoje;
+
+        if ($validade == true) {
+            if ($d->estilo != 'bg-default') {
+                $estilo = $d->estilo;
+                $text_white = 'text-white';
+            } else {
+                $estilo = $d->estilo;
+                $text_white = '';
+            }
+            ?>
+            <div class="modal fade modal_anuncio" id="anuncio_<?= $d->id_anuncio ?>">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header <?= $estilo ?>">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title <?= $text_white ?>" id="cabecalho_modal"><?= $d->cabecalho ?></h4>
+                        </div>
+                        <div class="modal-body">
+                            <?php if ($d->titulo) { ?>
+                                <h5 class="mt0 pt0" id="titulo_anuncio"><?= $d->titulo ?></h5>
+                            <?php } ?>
+                            <p class="p0" style="font-size: 13px; border: none; background-color: unset; font-family:'Roboto', sans-serif" id="descricao_anuncio"><?= nl2br($d->descricao) ?></p>
+                        </div>
+                        <div class="modal-footer <?= $d->exibir_rodape == 1 ? '' : 'hidden' ?>" id="div_rodape">
+                            <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+                                <i class="fas fa-times fa-fw"></i> Fechar
+                            </button>
+                            <a href="<?= $d->link_botao ?>" class="btn <?= $estilo . ' ' . $text_white ?> btn-sm <?= $d->exibir_botao ? '' : 'hidden' ?>" id="botao_link"><?= $d->rotulo_botao ?></a>
                         </div>
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
