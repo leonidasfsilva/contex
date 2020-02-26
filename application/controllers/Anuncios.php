@@ -216,7 +216,6 @@ class Anuncios extends CI_Controller
 
     public function excluir()
     {
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
             $this->session->set_flashdata('erro', 'Você não tem permissão para excluir lançamentos.');
             redirect($this->global_url);
@@ -239,7 +238,6 @@ class Anuncios extends CI_Controller
                 $this->session->set_flashdata('erro', 'Erro ao tentar excluir anúncio.');
                 redirect('anuncios');
             }
-
         }
     }
 

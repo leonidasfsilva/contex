@@ -61,10 +61,11 @@
                     echo '<td>' . $r->titulo . '</td>';
                     echo '<td><span class="label label-' . $label_tipo . '">' . strtoupper($habilitado) . '</span></td>';
                     echo '<td style="text-align: center">';
-                    echo '<a href="#modalConfigurar" data-toggle="modal" id_anuncio="' . $r->id_anuncio . '" data_expiracao="' . $data_expiracao . '" habilitado="' . $r->habilitado . '" nome_usuario="' . $r->nome_usuario . '" direcionado="' . $r->direcionado . '" style="margin-right: 1%" class="btn btn-inverse btn-sm configurar" title="Configurações"><i class="fas fa-cog fa-lg fa-fw"></i></a>';
+                    echo '<button href="#modalConfigurar" role="button" data-toggle="modal" id_anuncio="' . $r->id_anuncio . '" validade="' . $validade . '" data_expiracao="' . $data_expiracao . '" habilitado="' . $r->habilitado . '" nome_usuario="' . $r->nome_usuario . '" direcionado="' .
+                        $r->direcionado . '" style="margin-right: 1%" class="btn btn-inverse btn-sm configurar" title="Configurações"><i class="fas fa-cog fa-lg fa-fw"></i></button>';
                     echo '<a href="' . base_url('anuncios/editar/') . $r->id_anuncio . '" style="margin-right: 1%" class="btn btn-info btn-sm" title="Editar"><i class="fas fa-edit fa-lg fa-fw"></i></a>';
-                    echo '<a href="#modalCopiar" role="button" data-toggle="modal" id_anuncio="' . $r->id_anuncio . '" style="margin-right: 1%" class="btn btn-primary btn-sm" title="Copiar"><i class="fas fa-copy fa-lg fa-fw" ></i></a>';
-                    echo '<a href="#modalExcluir" role="button" data-toggle="modal" id_anuncio="' . $r->id_anuncio . '" style="margin-right: 1%" class="btn btn-danger btn-sm" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw" ></i></a>';
+                    echo '<button href="#modalCopiar" role="button" data-toggle="modal" id_anuncio="' . $r->id_anuncio . '" style="margin-right: 1%" class="btn btn-primary btn-sm" title="Copiar"><i class="fas fa-copy fa-lg fa-fw" ></i></button>';
+                    echo '<button href="#modalExcluir" role="button" data-toggle="modal" id_anuncio="' . $r->id_anuncio . '" style="margin-right: 1%" class="btn btn-danger btn-sm" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw" ></i></button>';
                     echo '</td>';
                     echo '</tr>';
                 }
@@ -85,7 +86,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white">Configurações do anúncio</h4>
             </div>
-            <form id="formConfigurar" action="<?php echo base_url('anuncios/configurar') ?>" method="post" autocomplete="off">
+            <form id="formConfigurar" action="<?= base_url('anuncios/configurar') ?>" method="post" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-sm-6">
@@ -99,9 +100,7 @@
                                 <div class="form-group col-sm-12">
                                     <label for="data_expiracao" class="font-weight-bold ">Data de expiração *</label>
                                     <input class="form-control datepicker" type="text" id="data_expiracao" name="data_expiracao">
-                                    <?php if ($data_expiracao != null && $validade == false) { ?>
-                                        <span style="color: red" class="font-weight-bold">Anúncio expirado!</span>
-                                    <?php } ?>
+                                    <span style="color: red" class="font-weight-bold hidden" id="anuncio_expirado">Anúncio expirado!</span>
                                 </div>
                             </div>
                         </div>
@@ -122,12 +121,12 @@
                                 </div>
                             </div>
                         </div>
-                        <input type="hidden" id="id_configurar" name="id_anuncio" value=""/>
                     </div>
                 </div>
+                <input type="hidden" id="id_configurar" name="id_anuncio"/>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i> Cancelar</button>
-                    <button class="btn btn-inverse btn-sm" id="btn_submit"><i class="fa fa-check fa-fw"></i> Salvar</button>
+                    <button class="btn btn-inverse btn-sm" type="submit"><i class="fa fa-check fa-fw"></i> Salvar</button>
                 </div>
             </form>
         </div>
@@ -138,7 +137,7 @@
 <div class="modal fade" id="modalCopiar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-info">
+            <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Copiar anúncio</h4>
             </div>
@@ -149,7 +148,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i> Cancelar</button>
-                    <button class="btn btn-info btn-sm"><i class="fa fa-check fa-fw"></i> Copiar</button>
+                    <button class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Copiar</button>
                 </div>
             </form>
         </div>
@@ -187,8 +186,8 @@
         }
     });
 
-    $('a').click(function (event) {
-        var id_anuncio = $(this).attr('id_anuncio');
+    $('td button').click(function (event) {
+        let id_anuncio = $(this).attr('id_anuncio');
         $('#id_configurar').val(id_anuncio);
         $('#id_excluir').val(id_anuncio);
         $('#id_copiar').val(id_anuncio);
@@ -213,11 +212,13 @@
         }
     });
 
-    $('.configurar').click(function () {
+    $('.configurar').click(function (event) {
         $("#nome_usuario").val($(this).attr('nome_usuario'));
         $("#data_expiracao").val($(this).attr('data_expiracao'));
-        var direcionado = $(this).attr('direcionado');
-        var habilitado = $(this).attr('habilitado');
+        let direcionado = $(this).attr('direcionado');
+        let habilitado = $(this).attr('habilitado');
+        let validade = $(this).attr('validade');
+
         if (direcionado == 1) {
             $('#direcionado').iCheck('check');
             $("#div_usuarios").removeClass('hidden');
@@ -225,6 +226,7 @@
             $('#direcionado').iCheck('uncheck');
             $("#div_usuarios").addClass('hidden');
         }
+
         if (habilitado == 1) {
             $('#habilitado').iCheck('check');
             $('#div_data').removeClass('hidden');
@@ -232,25 +234,24 @@
             $('#habilitado').iCheck('uncheck');
             $('#div_data').addClass('hidden');
         }
+
+        if (validade == false) {
+            $('#anuncio_expirado').removeClass('hidden');
+        } else {
+            $('#anuncio_expirado').addClass('hidden');
+        }
     });
 
     $("#formConfigurar").validate({
         rules: {
             data_expiracao: {required: true},
             nome_usuario: {required: true},
-            data_compra: {required: false},
-            qnt_parcelas: {required: true},
-            valor_parcela: {required: true},
 
         },
         messages: {
             data_expiracao: {required: 'Informe a data de expiração do anúncio'},
             nome_usuario: {required: 'Informe o nome do usuário'},
-            data_compra: {required: 'Informe a data da compra'},
-            qnt_parcelas: {required: 'Informe o número de parcelas'},
-            valor_parcela: {required: 'Informe o valor das parcelas'},
         },
-
         errorClass: "help-block",
         errorElement: "p",
         highlight: function (element, errorClass, validClass) {
@@ -261,7 +262,6 @@
             $(element).parents('.form-group').removeClass('has-error');
             $(element).parents('.form-group').addClass('has-success');
         }
-
     });
 
 </script>

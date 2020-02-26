@@ -22,7 +22,7 @@ switch ($status_chamado) {
         <div class="panel panel-midnightblue" id="painel_chamado">
             <div class="panel-heading">
                 <h2 class="pull-left mt0 mb0">
-                    Chamado: # <?= $chamado->id_chamado . ' - ' . $chamado->assunto ?>
+                    Chamado: <?= $chamado->id_chamado . ' - ' . $chamado->assunto ?>
                 </h2>
                 <div class="panel-ctrls">
                     <a href="<?= base_url('chamados') ?>" class="btn btn-default btn-sm"><i class="fas fa-arrow-left fa-fw"></i> Chamados</a>
