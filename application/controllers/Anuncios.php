@@ -10,6 +10,11 @@ class Anuncios extends CI_Controller
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
             redirect('mxcode/login');
         }
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {
+            $this->session->set_flashdata('erro', 'Você não tem permissão para gerenciar anúncios.');
+            redirect(base_url());
+        }
+
         $this->load->helper('file');
         $this->load->library('upload');
         $this->load->library('image_lib');
@@ -17,11 +22,6 @@ class Anuncios extends CI_Controller
 
     public function index()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {
-            $this->session->set_flashdata('erro', 'Você não tem permissão para visualizar anúncios.');
-            redirect(base_url());
-        }
-
         $data['menuConfiguracoes'] = true;
         $data['results'] = $this->anuncios_model->getAnuncios();
         $data['view'] = 'anuncios/anuncios';
@@ -174,6 +174,11 @@ class Anuncios extends CI_Controller
 
     public function copiar()
     {
+        if (!$_POST) {
+            $this->session->set_flashdata('erro', 'Método não permitido.');
+            redirect('anuncios');
+        }
+
         $id_anuncio = $_POST['id_anuncio'];
         // Get the columns
         $cols = array();
@@ -216,9 +221,9 @@ class Anuncios extends CI_Controller
 
     public function excluir()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
-            $this->session->set_flashdata('erro', 'Você não tem permissão para excluir lançamentos.');
-            redirect($this->global_url);
+        if (!$_POST) {
+            $this->session->set_flashdata('erro', 'Método não permitido.');
+            redirect('anuncios');
         }
 
         $id_anuncio = $_POST['id_anuncio'];

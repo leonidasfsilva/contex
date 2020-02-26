@@ -117,6 +117,9 @@
                                 <div class="form-group col-sm-12">
                                     <label for="nome_usuario" class="font-weight-bold">Nome do usuário *</label>
                                     <input class="form-control" id="nome_usuario" type="text" name="nome_usuario"/>
+                                    <span style="color: red" class="font-weight-bold hidden" id="icon_wait">
+                                        <i class="fas fa-spinner fa-fw fa-pulse"></i> Buscando, aguarde...
+                                    </span>
                                     <input id="id_usuario" type="hidden" name="id_usuario"/>
                                 </div>
                             </div>

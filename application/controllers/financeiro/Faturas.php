@@ -22,6 +22,16 @@ class Faturas extends CI_Controller
         $this->faturas();
     }
 
+    //MODULO DE CARTOES
+    public function cartoes()
+    {
+        $data['menuConfiguracoes'] = true;
+        $data['results'] = $this->anuncios_model->getAnuncios();
+        $data['view'] = 'financeiro/faturas';
+        $this->load->view('tema/topo', $data);
+
+    }
+
     //MODULO DE FATURAS
     public function faturas()
     {
@@ -79,7 +89,7 @@ class Faturas extends CI_Controller
         $this->data['faturaAberta'] = $this->fatura_model->getFaturaAbertaUsuario(id_usuario());
         $this->data['results'] = $this->fatura_model->get('faturas', '*', $where, id_usuario(), $config['per_page'], $this->input->get('per_page'));
 
-        $this->data['view'] = 'financeiro/faturas/gerenciar_faturas';
+        $this->data['view'] = 'faturas/gerenciar_faturas';
         $this->load->view('tema/topo', $this->data);
     }
 
@@ -105,7 +115,7 @@ class Faturas extends CI_Controller
 
         $this->load->library('pagination');
 
-        $config['base_url'] = site_url() . 'financeiro/faturas/';
+        $config['base_url'] = site_url() . 'faturas/';
         $config['total_rows'] = $this->fatura_model->count('faturas', 'status = 1 AND id_usuario = ' . id_usuario());
         $config['per_page'] = 0;
         $config['page_query_string'] = true;
@@ -168,7 +178,7 @@ class Faturas extends CI_Controller
 
                 $data['menuFinanceiro'] = true;
                 $data['menuFaturas'] = true;
-                $data['view'] = 'financeiro/faturas/detalhes_fatura';
+                $data['view'] = 'faturas/detalhes_fatura';
                 $this->load->view('tema/topo', $data);
             } else {
                 $this->session->set_flashdata('erro', 'Fatura solicitada não encontrada para este usuário.');
@@ -427,7 +437,6 @@ class Faturas extends CI_Controller
             redirect($urlAtual);
         }
         redirect($urlAtual);
-
     }
 
     public function editarLancamento()

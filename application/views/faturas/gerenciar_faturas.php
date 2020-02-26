@@ -600,6 +600,5 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             });
             return false;
         }
-
     });
 </script>
