@@ -207,7 +207,7 @@
         $('.datepicker').datepicker({
             language: 'pt-BR',
             autoclose: true,
-            format: 'dd/mm/aaaa',
+            format: 'dd/mm/yyyy',
             todayHighlight: true,
             todayBtn: 'linked'
         });
