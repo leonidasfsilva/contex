@@ -11,7 +11,7 @@
     });
 
     $(function () {
-        $('.datepicker').inputmask('date',{placeholder:'dd/mm/aaaa'});
+        $('.datepicker').inputmask('date',{placeholder:'__/__/____'});
     });
 
     $(function () {
