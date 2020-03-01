@@ -1,5 +1,6 @@
 <?php $situacao = $this->input->get('situacao');
 $periodo = $this->input->get('periodo');
+$cliente = $this->input->get('cliente');
 
 if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
     if ($status_fatura == 1) {
@@ -46,7 +47,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             Detalhes da Fatura: # <?= $id_fatura ?>
         </h3>
         <div class="panel-ctrls">
-            <a href="<?php echo base_url() ?>financeiro/faturas" class="btn btn-sm btn-default"><i class="fas fa-arrow-left fa-fw"></i> Faturas</a>
+            <a href="<?php echo base_url('financeiro/faturas') ?>" class="btn btn-sm btn-default"><i class="fas fa-arrow-left fa-fw"></i> Faturas</a>
             <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar faturas">
                 <i class="fas fa-filter fa-fw"></i>
                 Filtrar
@@ -341,22 +342,17 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                 </option>
                             </select>
                         </div>
-                        <div class="col-lg-6">
-                            <label class="tip-top font-weight-bold" title="Filtrar faturas por status">Status <i class="fa fa-info-circle fa-fw"></i></label>
-                            <select class="form-control" id="select_status" name="status">
-                                <option value="">Selecione o status</option>
-                                <option value="aberta"<?php if ($periodo == 'aberta') {
-                                    echo 'selected';
-                                } ?>>Aberta
-                                </option>
-                                <option value="fechada" <?php if ($periodo == 'fechada') {
-                                    echo 'selected';
-                                } ?>>Fechada
-                                </option>
-                                <option value="futura" <?php if ($periodo == 'futura') {
-                                    echo 'selected';
-                                } ?>>Futura
-                                </option>
+                        <div class="form-group col-lg-6">
+                            <label class="tooltips font-weight-bold" for="select_clientes" title="Filtrar pendências por cliente">Cliente <i class="fa fa-info-circle fa-fw"></i></label>
+                            <select class="form-control" id="select_clientes" name="cliente">
+                                <option value="">Todos</option>
+                                <?php if ($clientes) {
+                                    foreach ($clientes as $d) { ?>
+                                        <option value="<?= $d->id_clientes ?>" <?php if ($selected_cliente == $d->id_clientes) {
+                                            echo 'selected';
+                                        } ?>><?= $d->nome ?></option>
+                                    <?php }
+                                } ?>
                             </select>
                         </div>
                     </div>
@@ -380,7 +376,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Novo lançamento na fatura</h4>
             </div>
-            <form id="formNovoLancamento" action="<?php echo base_url() ?>financeiro/faturas/novoLancamento" method="post" autocomplete="off">
+            <form id="formNovoLancamento" action="<?php echo base_url('financeiro/faturas/novoLancamento') ?>" method="post" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">

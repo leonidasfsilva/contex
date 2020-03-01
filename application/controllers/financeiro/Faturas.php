@@ -11,25 +11,11 @@ class Faturas extends CI_Controller
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
             redirect('mxcode/login');
         }
-        $this->load->model('financeiro_model', '', true);
-        $this->load->model('pendencia_model', '', true);
-        $this->load->model('fatura_model', '', true);
-        $this->load->model('clientes_model', '', true);
     }
 
     public function index()
     {
         $this->faturas();
-    }
-
-    //MODULO DE CARTOES
-    public function cartoes()
-    {
-        $data['menuConfiguracoes'] = true;
-        $data['results'] = $this->anuncios_model->getAnuncios();
-        $data['view'] = 'financeiro/faturas';
-        $this->load->view('tema/topo', $data);
-
     }
 
     //MODULO DE FATURAS
@@ -110,8 +96,8 @@ class Faturas extends CI_Controller
 
         $urlAtual = $this->input->post('urlAtual');
 
-        $where = '';
         $periodo = $this->input->get('periodo');
+        $cliente = $this->input->get('cliente');
 
         $this->load->library('pagination');
 
@@ -154,7 +140,16 @@ class Faturas extends CI_Controller
 
         if ($id_fatura == null) {
             $this->session->set_flashdata('erro', 'Método não permitido.');
-            redirect($config['base_url']);
+            redirect('financeiro/faturas');
+        }
+
+        if (isset($cliente) && $cliente != null) {
+            $limit = null;
+            if (!isset($where)) {
+                $where = 'id_cliente = ' . $cliente;
+            } else {
+                $where .= ' AND id_cliente = ' . $cliente;
+            }
         }
 
         $faturaExistente = $this->fatura_model->getById($id_fatura);
@@ -165,6 +160,8 @@ class Faturas extends CI_Controller
 
             if ($faturaUsuario > 0) {
 
+                $data['clientes'] = $this->pendencia_model->getClientes(id_usuario());
+                $data['selected_cliente'] = $cliente;
                 $data['fatura'] = $this->fatura_model->getDetalhesFatura($id_fatura);
                 $data['id_fatura'] = $id_fatura;
                 $data['mes_referencia'] = ($data['fatura']->mes_referencia);
@@ -173,8 +170,8 @@ class Faturas extends CI_Controller
                 $data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
                 $data['fatura_paga'] = ($data['fatura']->fatura_paga);
                 $data['lancamentoEditavel'] = $this->fatura_model->getLancamentoEditavel($data['mes_referencia'], $data['ano_referencia']);
-                $data['results'] = $this->fatura_model->getLancamentosAssoc('lancamentos_faturas_assoc', '*', $id_fatura, $where, $config['per_page'], $this->input->get('per_page'));
                 $data['subresults'] = $this->fatura_model->getLancamentos('lancamentos_faturas', '*', id_usuario(), $where, $config['per_page'], $this->input->get('per_page'));
+                $data['results'] = $this->fatura_model->getLancamentosAssoc('lancamentos_faturas_assoc', '*', $id_fatura, $where = null, $config['per_page'], $this->input->get('per_page'));
 
                 $data['menuFinanceiro'] = true;
                 $data['menuFaturas'] = true;
@@ -854,6 +851,16 @@ class Faturas extends CI_Controller
             $this->session->set_flashdata('erro', 'Erro ao tentar pagar a fatura.');
             redirect($urlAtual);
         }
+    }
+
+    public function pesquisaLancamentos()
+    {
+        $termo = $this->input->post('termo');
+        $data['total'] = $this->faturas_model->getTotal(id_usuario());
+        $data['formasPagamento'] = $this->faturas_model->getFormasPagamento();
+        $data['results'] = $this->faturas_model->pesquisa($termo, id_usuario());
+        $data['view'] = 'financeiro/lancamentos';
+        $this->load->view('tema/topo', $data);
     }
 
     public function autoCompleteCliente()
