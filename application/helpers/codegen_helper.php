@@ -141,9 +141,15 @@ function returnURL($get = null)
 {
     $CI = get_instance();
     if ((!session_id()) || (!$CI->session->userdata('logado'))) {
-        if ((uri_string() != 'mxcode/login') && (uri_string() != 'mxcode/verificarLogin')) {
-            $url = base_url(uri_string());
-            $CI->session->set_userdata('last_url', $url);
+        $checkVars = array('mxcode/login', 'mxcode/verificarLogin', '');
+
+        if (!in_array(uri_string(), $checkVars, true)) {
+            $currentURL = current_url(); //for simple URL
+            $params = $_SERVER['QUERY_STRING']; //for parameters
+            $fullURL = $currentURL . '?' . $params; //full URL with parameter
+            $CI->session->set_userdata('last_url', $fullURL);
+        } else {
+            $CI->session->sess_destroy();
         }
     }
 }
