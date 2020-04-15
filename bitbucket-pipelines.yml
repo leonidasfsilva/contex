@@ -10,6 +10,6 @@ pipelines:
     producao:
       - step:
           script:
-            - ssh -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $BIT_USER_SSH@mxcode.net "cd /home4/mxcodene/public_html/contex/ && git --work-tree=/home4/mxcodene/public_html/contex/ remote update && git --work-tree=/home4/mxcodene/public_html/contex/ reset --hard origin/producao"
+            - ssh -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $MXCODE_ROOT_USER@mxcode.net "cd /home4/mxcodene/public_html/contex/ && git --work-tree=/home4/mxcodene/public_html/contex/ remote update && git --work-tree=/home4/mxcodene/public_html/contex/ reset --hard origin/producao"
 
 
