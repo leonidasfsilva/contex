@@ -155,7 +155,7 @@ switch ($status_chamado) {
                         <div class="msg-composer">
                             <div class="pull-left">
                                 <div class="fileinput fileinput-new" data-provides="fileinput">
-                                    <span class="btn btn-default btn-file">
+                                    <span class="btn btn-default btn-sm btn-file">
                                         <span class="fileinput-new"><i class="fas fa-paperclip fa-fw"></i> Anexar</span>
                                         <span class="fileinput-exists"><i class="fas fa-refresh fa-fw"></i> Alterar</span>
                                         <input name="arquivo" type="file">
@@ -166,8 +166,8 @@ switch ($status_chamado) {
                                 <!--                            <a href="#" class="btn btn-default"><i class="fa fa-camera"></i> Add Photos</a>-->
                             </div>
                             <div class="pull-right clearfix">
-                                <button type="submit" class="btn btn-primary send-btn pull-right">
-                                    <i class="fas fa-send fa-fw"></i> Enviar
+                                <button type="submit" class="btn btn-primary send-btn btn-sm pull-right">
+                                    <i class="fas fa-paper-plane fa-fw"></i> Enviar
                                 </button>
                             </div>
                         </div>
@@ -209,7 +209,7 @@ switch ($status_chamado) {
 <div class="modal fade" id="modalFinalizarChamado" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-success">
+            <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white">Finalizar chamado</h4>
             </div>
@@ -222,7 +222,7 @@ switch ($status_chamado) {
                     <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                         <i class="fa fa-times fa-fw"></i> Cancelar
                     </button>
-                    <button type="submit" class="btn btn-success btn-sm">
+                    <button type="submit" class="btn btn-primary btn-sm">
                         <i class="fa fa-check fa-fw"></i> Finalizar
                     </button>
                 </div>

@@ -4312,7 +4312,7 @@ ul.mailbox-msg-list li a.mailbox-msg-list-item div .msg {
   border-radius: 2px 2px 0 0;
 }
 .mailbox-panel .msg-composer {
-  padding: 8px 8px;
+  padding: 8px 8px 0 8px;
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 0 0 2px 2px;

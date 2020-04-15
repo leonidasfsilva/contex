@@ -312,7 +312,7 @@ $this->load->view('includes/custom_js');
 
         <!--        CHAMADOS-->
         <li class="dropdown toolbar-icon-bg">
-            <a href="<?= base_url('chamados') ?>" class="hasnotifications" title="Chamados">
+            <a href="<?= base_url('chamados') ?>" class="hasnotifications" title="Chamados de Suporte">
                 <span class="icon-bg">
                     <i class="fas fa-fw fa-headset"></i>
                 </span>

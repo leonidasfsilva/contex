@@ -2,15 +2,13 @@
     <div class="col-md-12">
         <div class="panel panel-midnightblue">
             <div class="panel-heading">
-                <div class="col-md-4 col-xs-7 pull-left pl0">
-                    <div class="input-icon right">
-                        <i class="fas fa-fw fa-search" style="cursor: pointer"></i>
-                        <input type="text" class="form-control mt10" placeholder="Pesquisar chamados" name="pesquisa">
-                    </div>
-                </div>
+                <h3>
+                    <i class="fas fa-headset fa-lg fa-fw"></i>
+                    Chamados de Suporte
+                </h3>
                 <div class="pull-right pr0">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" href="#modalAbrirChamado">
-                        <i class="fas fa-plus fa-fw"></i> Abrir Chamado
+                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" href="#modalAbrirChamado">
+                        <i class="fas fa-plus fa-fw"></i> Novo Chamado
                     </button>
                 </div>
             </div>
@@ -73,7 +71,7 @@
                                          alt="avatar" title="" style="">
                                     <div>
                                         <span class="name"><?= $this->chamados_model->getNomeUsuario($c->id_usuario) ?></span>
-                                        <span class="msg"><strong><?= '# '.$c->id_chamado .' - '. $c->assunto ?></strong> - <?= $c->descricao ?></span>
+                                        <span class="msg"><strong><?= '# '.$c->id_chamado .' - '. $c->assunto ?>:</strong> <?= $c->descricao ?></span>
                                     </div>
                                 </a>
                             </li>
@@ -104,7 +102,7 @@
         <div class="modal-content">
             <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white ">Abrir novo chamado</h4>
+                <h4 class="modal-title text-white ">Abrir novo chamado de suporte</h4>
             </div>
             <form id="formAbrirChamado" action="<?php echo base_url() ?>chamados/abrirChamado" method="post" autocomplete="off">
                 <div class="modal-body">
