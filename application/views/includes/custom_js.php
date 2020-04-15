@@ -1,28 +1,59 @@
 <script>
-    $(document).ready(function () {
-        $('.modal_anuncio').each(function (key, value) {
-            $('.modal_anuncio').modal('show');
-        });
-
-        $('.datepicker').each(function (index, value) {
-            $(this).attr('data-inputmask', "'alias': 'date'");
-        });
-
+    $(document).on('ready', function (event) {
+        $(".preloader").show();
+        setTimeout(function () {
+            hidePreLoader();
+        }, 500);
     });
 
+    function mountCard(form, container, timeout) {
+        let card = new Card({
+            // a selector or DOM element for the form where users will
+            // be entering their information
+            form: form, // *required*
+            // a selector or DOM element for the container
+            // where you want the card to appear
+            container: container, // *required*
+            formSelectors: {
+                numberInput: 'input[name="number"]', // optional — default input[name="number"]
+                expiryInput: 'input[name="expiry"]', // optional — default input[name="expiry"]
+                cvcInput: 'input[name="cvc"]', // optional — default input[name="cvc"]
+                nameInput: 'input[name="name"]' // optional - defaults input[name="name"]
+            },
+            width: 350, // optional — default 350px
+            formatting: true, // optional - default true
+            // Strings for translation - optional
+            messages: {
+                validDate: '', // optional - default 'valid\nthru'
+                monthYear: 'validade', // optional - default 'month/year'
+            },
+            // Default placeholders for rendered fields - optional
+            placeholders: {
+                number: '•••• •••• •••• ••••',
+                name: 'Nome e sobrenome',
+                expiry: 'MM / AA',
+                cvc: '•••'
+            },
+            masks: {
+                cardNumber: '•' // optional - mask card number
+            },
+            // if true, will log helpful messages for setting up Card
+            debug: true, // optional - default false
+        });
+        return card;
+    }
+
+    function hidePreLoader() {
+        if ($(".preloader").fadeOut()) {
+        }
+    }
+
     $(function () {
-        $('.datepicker').inputmask('date',{placeholder:'__/__/____'});
+        $('.datepicker').inputmask('date', {placeholder: '__/__/____'});
     });
 
     $(function () {
         $('.popover-btn').popover()
-    });
-
-    $(document).on('ready', function (event) {
-        $(".preloader").show();
-        setTimeout(function () {
-            $(".preloader").fadeOut();
-        }, 500);
     });
 
     $(document).on('click', 'a:not([href="javascript:"],' +
@@ -34,6 +65,7 @@
         '[data-toggle="tab"])', function () {
         $(".subconteudo-principal").hide();
         $(".preloader").show();
+
     });
 
     $(document).on('submit', 'form', function (event) {
@@ -319,4 +351,5 @@
             return false;
         });
     });
+
 </script>

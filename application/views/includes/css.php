@@ -15,6 +15,7 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,400italic,600,700' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700' rel='stylesheet' type='text/css'>
     <!--    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">-->
+    <link href="<?php echo base_url(); ?>assets/fonts/mark/stylesheet.css" rel="stylesheet" type="text/css">
     <link href="<?php echo base_url(); ?>assets/font-awesome5/css/fontawesome5.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/fullcalendar.css" rel="stylesheet">
@@ -43,4 +44,6 @@
 
     <!--Pnotify CSS-->
     <link href="<?php echo base_url(); ?>assets/plugins/pnotify/PNotifyBrightTheme.css" type="text/css" rel="stylesheet">
+
+    <link href="<?php echo base_url(); ?>assets/plugins/card/lib/css/card2.css" type="text/css" rel="stylesheet">
 

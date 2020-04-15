@@ -11,6 +11,7 @@ class Faturas extends CI_Controller
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
             redirect('mxcode/login');
         }
+        $this->load->library('pagination');
     }
 
     public function index()
@@ -28,8 +29,6 @@ class Faturas extends CI_Controller
         $where = '';
         $periodo = $this->input->get('periodo');
         $cliente = $this->input->get('id_cliente');
-
-        $this->load->library('pagination');
 
         $config['base_url'] = site_url() . '/faturas/?periodo=' . $periodo;
         $config['total_rows'] = $this->fatura_model->count('faturas', 'status = 1 AND id_usuario = ' . id_usuario());
@@ -68,12 +67,22 @@ class Faturas extends CI_Controller
             12 => '12 x',
         );
 
-        $this->data['saldoVencidas'] = $this->fatura_model->getSaldoFaturasVencidas(id_usuario());
-        $this->data['saldoPendente'] = $this->fatura_model->getSaldoFaturasPendentes(id_usuario());
-        $this->data['saldoQuitado'] = $this->fatura_model->getSaldoFaturasPagas(id_usuario());
+        $primeiro_cartao = $this->cartoes_model->getPrimeiroCartaoUsuario(id_usuario());
+
+        if ($_GET['id_cartao']) {
+            $id_cartao = $_GET['id_cartao'];
+        } else {
+            $id_cartao = $primeiro_cartao->id_cartao;
+        }
+
+        $this->data['cartao_selecionado'] = $id_cartao;
+        $this->data['cartoes'] = $this->cartoes_model->getCartoesUsuario(id_usuario());
+        $this->data['saldoVencidas'] = $this->fatura_model->getSaldoFaturasVencidas(id_usuario(), $id_cartao);
+        $this->data['saldoPendente'] = $this->fatura_model->getSaldoFaturasPendentes(id_usuario(), $id_cartao);
+        $this->data['saldoQuitado'] = $this->fatura_model->getSaldoFaturasPagas(id_usuario(), $id_cartao);
         $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
-        $this->data['faturaAberta'] = $this->fatura_model->getFaturaAbertaUsuario(id_usuario());
-        $this->data['results'] = $this->fatura_model->get('faturas', '*', $where, id_usuario(), $config['per_page'], $this->input->get('per_page'));
+        $this->data['faturaAberta'] = $this->fatura_model->getFaturaAbertaUsuario(id_usuario(), $id_cartao);
+        $this->data['results'] = $this->fatura_model->get('faturas', '*', $where, id_usuario(), $id_cartao, $config['per_page'], $this->input->get('per_page'));
 
         $this->data['view'] = 'faturas/gerenciar_faturas';
         $this->load->view('tema/topo', $this->data);
@@ -293,6 +302,7 @@ class Faturas extends CI_Controller
                             //ARRAY ABRIR NOVA FATURA
                             $data = array(
                                 'id_usuario' => id_usuario(),
+                                'id_cartao' => $ultimaFatura->id_cartao,
                                 'mes_referencia' => $mes,
                                 'ano_referencia' => $ano,
                                 'vencimento' => $vencimentoFormatado,
@@ -712,7 +722,6 @@ class Faturas extends CI_Controller
         $vencimento = $this->input->post('vencimento_fatura');
 
         try {
-
             $vencimento = explode('/', $vencimento);
             $vencimentoFormatado = $vencimento[2] . '-' . $vencimento[1] . '-' . $vencimento[0];
 
@@ -723,19 +732,19 @@ class Faturas extends CI_Controller
                 $mes = 12;
                 $ano--;
             }
-
         } catch (Exception $e) {
             $vencimento = date('Y/m/d');
         }
 
         $data = array(
             'id_usuario' => id_usuario(),
+            'id_cartao' => $_POST['id_cartao'],
             'mes_referencia' => $mes,
             'ano_referencia' => $ano,
             'vencimento' => $vencimentoFormatado,
         );
 
-        if ($this->fatura_model->abrirFatura($data) == true) {
+        if ($this->fatura_model->abrirFatura($data)) {
             $this->session->set_flashdata('sucesso', 'Fatura aberta com sucesso!');
             redirect($urlAtual);
         } else {
@@ -802,7 +811,7 @@ class Faturas extends CI_Controller
             $id_fatura = $this->input->post('id_fatura');
         } else {
             $this->session->set_flashdata('erro', 'Método não permitido.');
-            redirect('/faturas/');
+            redirect('financeiro/faturas/');
         }
 
         $data = array(
@@ -875,17 +884,14 @@ class Faturas extends CI_Controller
     //MODULO DE RETORNO DE FILTROS POR PERIODO
     protected function getThisYear()
     {
-
         $dias = date("z");
         $primeiro = date("Y-m-d", strtotime("-" . ($dias) . " day"));
         $ultimo = date("Y-m-d", strtotime("+" . (364 - $dias) . " day"));
         return array($primeiro, $ultimo);
-
     }
 
     protected function getThisWeek()
     {
-
         return array(date("Y/m/d", strtotime("last sunday", strtotime("now"))), date("Y/m/d", strtotime("next saturday", strtotime("now"))));
     }
 

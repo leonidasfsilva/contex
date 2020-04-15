@@ -390,7 +390,6 @@ class Lancamentos extends CI_Controller
         $this->data['results'] = $this->financeiro_model->pesquisa($termo, id_usuario());
         $this->data['view'] = 'financeiro/lancamentos';
         $this->load->view('tema/topo', $this->data);
-
     }
 
 

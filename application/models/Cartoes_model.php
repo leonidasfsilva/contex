@@ -1,0 +1,249 @@
+<?php if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
+
+class Cartoes_model extends CI_Model
+{
+
+    /**
+     * author: Leônidas Ferreira
+     * email: leonidas.f.silva@hotmail.com
+     *
+     */
+
+    function __construct()
+    {
+        parent::__construct();
+    }
+
+    function get($table, $fields, $where = '', $id_usuario, $perpage = 0, $start = 0, $one = false, $array = 'array')
+    {
+
+        $this->db->select($fields);
+        $this->db->from($table);
+        $this->db->order_by('vencimento', 'asc');
+        $this->db->limit($perpage, $start);
+        if ($where) {
+            $this->db->where($where . ' AND status = 1 AND id_usuario = ' . $id_usuario);
+        } else {
+            $this->db->where('status = 1 AND id_usuario = ' . $id_usuario);
+        }
+
+        $query = $this->db->get();
+
+        $result = !$one ? $query->result() : $query->row();
+        return $result;
+    }
+
+    function getLancamentosAssoc($table, $fields, $id_fatura, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
+    {
+        $this->db->select($fields);
+        $this->db->from($table);
+        $this->db->order_by('data_compra', 'id_assoc', 'asc');
+        $this->db->limit($perpage, $start);
+        if ($where) {
+            $this->db->where($where);
+            $this->db->where('status', 1);
+            $this->db->where('id_fatura', $id_fatura);
+        } else {
+            $this->db->where('status', 1);
+            $this->db->where('id_fatura', $id_fatura);
+        }
+        $query = $this->db->get();
+        $result = !$one ? $query->result() : $query->row();
+        return $result;
+    }
+
+    function getLancamentos($table, $fields, $id_usuario, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
+    {
+
+        $this->db->select($fields);
+        $this->db->from($table);
+        $this->db->order_by('id_lancamento', 'asc');
+        $this->db->limit($perpage, $start);
+        if ($where) {
+            $this->db->where($where);
+            $this->db->where('status', 1);
+            $this->db->where('id_usuario', $id_usuario);
+        } else {
+            $this->db->where('status', 1);
+            $this->db->where('id_usuario', $id_usuario);
+        }
+
+        $query = $this->db->get();
+
+        $result = !$one ? $query->result() : $query->row();
+        return $result;
+    }
+
+    function getDetalhesCartao($id_cartao)
+    {
+        return $this->db
+            ->where('id_cartao', $id_cartao)
+            ->get('cartoes')
+            ->row();
+    }
+
+    function getCartoesUsuario($id_usuario)
+    {
+        return $this->db
+            ->where('status', 1)
+            ->where('id_usuario', $id_usuario)
+            ->get('cartoes')
+            ->result();
+    }
+
+    function getPrimeiroCartaoUsuario($id_usuario)
+    {
+        return $this->db
+            ->where('status', 1)
+            ->where('id_usuario', $id_usuario)
+            ->order_by('id_cartao')
+            ->limit(1)
+            ->get('cartoes')
+            ->row();
+    }
+
+    function consultaFaturasCartao($id_cartao){
+        return $this->db
+            ->where('status', 1)
+            ->where('id_cartao', $id_cartao)
+            ->get('faturas')
+            ->row();
+    }
+
+    function getById($id)
+    {
+        $this->db->where('id_fatura', $id);
+        $this->db->limit(1);
+        return $this->db->get('faturas')->row();
+    }
+
+    function getLancamentoEditavel($mes, $ano)
+    {
+        $this->db->select('id_lancamento');
+        $this->db->from('lancamentos_faturas_assoc');
+        $this->db->where('n_parcela', 1);
+        $this->db->where('status', 1);
+        $this->db->where('mes_referencia', $mes);
+        $this->db->where('ano_referencia', $ano);
+
+        $rows = $this->db->count_all_results('', false);
+
+        if ($rows > 0) {
+            foreach ($this->db->get()->result() as $row) {
+                $data[] = $row->id_lancamento;
+            }
+            return $data;
+        } else {
+            return $this->db->get()->result();
+        }
+    }
+
+    function add($table, $data)
+    {
+        $this->db->insert($table, $data);
+        if ($this->db->affected_rows() == '1') {
+            return true;
+        }
+        return false;
+    }
+
+    function insert_id($table)
+    {
+        return $this->db->insert_id($table);
+    }
+
+    function edit($table, $data, $fieldID, $ID)
+    {
+        $this->db->where($fieldID, $ID);
+        $this->db->update($table, $data);
+
+        if (($this->db->error()['code'] != 0)) {
+            return $this->db->error()['code']['message']; // Or do whatever you gotta do here to raise an error
+        } else {
+            return true;
+        }
+
+    }
+
+    function delete($table, $data, $fieldID, $ID)
+    {
+        $this->db->where($fieldID, $ID);
+        $this->db->update($table, $data);
+        if ($this->db->affected_rows() == '1') {
+            return true;
+        }
+
+        return false;
+    }
+
+    function delete_real($table, $fieldID, $ID)
+    {
+        $this->db->where($fieldID, $ID);
+        $this->db->delete($table);
+        if ($this->db->affected_rows() == '1') {
+            return true;
+        }
+
+        return false;
+    }
+
+    function count($table, $where)
+    {
+
+        $this->db->from($table);
+        if ($where) {
+            $this->db->where($where);
+        }
+        return $this->db->count_all_results();
+    }
+
+    function getTotalQuitadas($id_usuario, $id_cliente = null)
+    {
+        if (!$id_cliente == null) {
+            $this->db
+                ->select('SUM(valor) AS total')
+                ->from('pendencias')
+                ->where('status = 1 AND quitado = 1 AND id_usuario  = ' . $id_usuario . ' AND id_cliente = ' . $id_cliente);
+        } else {
+            $this->db
+                ->select('SUM(valor) AS total')
+                ->from('pendencias')
+                ->where('status = 1 AND quitado = 1 AND id_usuario  = ' . $id_usuario);
+        }
+
+        return $this->db->get()->row();
+
+    }
+
+    function getTotalPendencias($id_usuario, $id_cliente = null)
+    {
+        if (!$id_cliente == null) {
+            $this->db
+                ->select('SUM(valor) AS total')
+                ->from('pendencias')
+                ->where('status = 1 AND quitado = 0 AND id_usuario = ' . $id_usuario . ' AND id_cliente = ' . $id_cliente);
+
+        } else {
+            $this->db
+                ->select('SUM(valor) AS total')
+                ->from('pendencias')
+                ->where('status = 1 AND quitado = 0 AND id_usuario = ' . $id_usuario);
+
+        }
+        return $this->db->get()->row();
+
+    }
+
+    function getTotal($id_usuario)
+    {
+        $this->db
+            ->select('SUM(valor) AS total')
+            ->from('pendencias')
+            ->where('status = 1 AND id_usuario = ' . $id_usuario);
+        return $this->db->get()->row();
+
+    }
+
+}

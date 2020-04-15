@@ -16,7 +16,7 @@ class Fatura_model extends CI_Model
         parent::__construct();
     }
 
-    function get($table, $fields, $where = '', $id_usuario, $perpage = 0, $start = 0, $one = false, $array = 'array')
+    function get($table, $fields, $where = null, $id_usuario, $id_cartao, $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
 
         $this->db->select($fields);
@@ -24,11 +24,11 @@ class Fatura_model extends CI_Model
         $this->db->order_by('vencimento', 'asc');
         $this->db->limit($perpage, $start);
         if ($where) {
-            $this->db->where($where . ' AND status = 1 AND id_usuario = ' . $id_usuario);
-        } else {
-            $this->db->where('status = 1 AND id_usuario = ' . $id_usuario);
+            $this->db->where($where);
         }
-
+        $this->db->where('status', 1);
+        $this->db->where('id_usuario', $id_usuario);
+        $this->db->where('id_cartao', $id_cartao);
         $query = $this->db->get();
 
         $result = !$one ? $query->result() : $query->row();
@@ -248,13 +248,13 @@ class Fatura_model extends CI_Model
 
     }
 
-    function getFaturaAbertaUsuario($id)
+    function getFaturaAbertaUsuario($id_usuario, $id_cartao)
     {
 
         $this->db->select('*');
         $this->db->from('faturas');
-        $this->db->where(
-            'fatura_aberta = 1 AND status = 1 AND id_usuario = ' . $id);
+        $this->db->where('fatura_aberta = 1 AND status = 1 AND id_usuario = ' . $id_usuario);
+        $this->db->where('id_cartao', $id_cartao);
 
         return $this->db->count_all_results();
     }
@@ -362,39 +362,39 @@ class Fatura_model extends CI_Model
 
     }
 
-    function getSaldoFaturasPendentes($id_usuario)
+    function getSaldoFaturasPendentes($id_usuario, $id_cartao)
     {
         $this->db
             ->select('SUM(a.valor_parcela) AS total')
             ->from('lancamentos_faturas_assoc AS a')
             ->join('faturas AS b', 'b.id_fatura = a.id_fatura AND b.status = a.status')
             ->where('b.id_usuario = ' . $id_usuario . ' AND b.fatura_paga != 1 AND a.status = 1')
+            ->where('id_cartao', $id_cartao)
             ->where('date(b.vencimento) > date(now())');
         return $this->db->get()->row();
-
     }
 
-    function getSaldoFaturasVencidas($id_usuario)
+    function getSaldoFaturasVencidas($id_usuario, $id_cartao)
     {
         $this->db
             ->select('SUM(a.valor_parcela) AS total')
             ->from('lancamentos_faturas_assoc AS a')
             ->join('faturas AS b', 'b.id_fatura = a.id_fatura AND b.status = a.status')
             ->where('b.id_usuario = ' . $id_usuario . ' AND b.fatura_paga != 1 AND a.status = 1')
+            ->where('id_cartao', $id_cartao)
             ->where('date(b.vencimento) < date(now())');
         return $this->db->get()->row();
-
     }
 
-    function getSaldoFaturasPagas($id_usuario)
+    function getSaldoFaturasPagas($id_usuario, $id_cartao)
     {
         $this->db
             ->select('SUM(a.valor_parcela) AS total')
             ->from('lancamentos_faturas_assoc AS a')
             ->join('faturas AS b', 'b.id_fatura = a.id_fatura AND b.status = a.status')
+            ->where('id_cartao', $id_cartao)
             ->where('b.id_usuario = ' . $id_usuario . ' AND b.fatura_paga = 1 AND a.status = 1');
         return $this->db->get()->row();
-
     }
 
     function autoCompleteCliente($q, $id_usuario)
