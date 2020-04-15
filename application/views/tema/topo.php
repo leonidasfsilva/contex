@@ -456,7 +456,7 @@ $this->load->view('includes/custom_js');
                             <ul class="acc-menu">
                                 <!--                                <li class="nav-separator"></li>-->
                                 <li class="<?= (isset($menuPainel)) ? 'active' : ''; ?>">
-                                    <a href="<?php echo base_url() ?>"><i class="fas fa-columns fa-fw"></i>
+                                    <a href="<?php echo base_url() ?>"><i class="fas fa-th-large fa-fw"></i>
                                         <span>Painel Inicial</span>
                                     </a>
                                 </li>
