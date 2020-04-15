@@ -3,7 +3,7 @@
         <div class="col-md-6">
             <a href="<?= base_url() ?>financeiro/lancamentos" class="shortcut-tile tile-blue">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fas fa-line-chart fa-fw"></i></div>
+                    <div class="pull-left"><i class="fas fa-chart-line fa-fw"></i></div>
                     <!--                            <div class="pull-right"><span class="badge">2</span></div>-->
                 </div>
                 <div class="tile-footer">
@@ -14,9 +14,20 @@
     <?php endif ?>
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')): ?>
         <div class="col-md-6">
-            <a href="<?= base_url() ?>financeiro/faturas" class="shortcut-tile tile-midnightblue">
+            <a href="<?= base_url() ?>financeiro/cartoes" class="shortcut-tile tile-inverse">
                 <div class="tile-body">
                     <div class="pull-left"><i class="fas fa-credit-card fa-fw"></i></div>
+                    <!--                            <div class="pull-right"><span class="badge">5</span></div>-->
+                </div>
+                <div class="tile-footer">
+                    Cartões
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6">
+            <a href="<?= base_url() ?>financeiro/faturas" class="shortcut-tile tile-midnightblue">
+                <div class="tile-body">
+                    <div class="pull-left"><i class="fas fa-file-invoice-dollar fa-fw"></i></div>
                     <!--                            <div class="pull-right"><span class="badge">5</span></div>-->
                 </div>
                 <div class="tile-footer">
@@ -42,7 +53,7 @@
         <div class="col-md-6">
             <a href="<?= base_url() ?>financeiro/pendencias" class="shortcut-tile tile-danger">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fas fa-file-invoice-dollar fa-fw"></i></div>
+                    <div class="pull-left"><i class="fas fa-money-check-alt fa-fw"></i></div>
                 </div>
                 <div class="tile-footer">
                     Pendências

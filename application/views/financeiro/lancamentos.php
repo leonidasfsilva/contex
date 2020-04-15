@@ -8,7 +8,7 @@ $fim = $this->input->get('dataFinal');
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h3>
-            <i class="fas fa-line-chart fa-lg fa-fw"></i>
+            <i class="fas fa-chart-line fa-lg fa-fw"></i>
             Lançamentos
         </h3>
         <div class="row mr5 ml5">

@@ -2,7 +2,7 @@
     <div class="panel-heading">
         <h3>
             <i class="fas fa-credit-card fa-lg fa-fw"></i>
-            Gestão de Cartões
+            Controle de Cartões
         </h3>
         <div class="panel-ctrls">
             <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar faturas">

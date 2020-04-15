@@ -199,7 +199,7 @@ if ($direcionados) {
         <div class="col-md-6">
             <a href="<?= base_url() ?>financeiro" class="shortcut-tile tile-sky">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fas fa-dollar fa-fw"></i></div>
+                    <div class="pull-left"><i class="fas fa-dollar-sign fa-fw"></i></div>
                     <!--                            <div class="pull-right"><span class="badge">16</span></div>-->
                 </div>
                 <div class="tile-footer">
@@ -213,7 +213,7 @@ if ($direcionados) {
         <div class="col-md-6">
             <a href="<?= base_url() ?>clientes" class="shortcut-tile tile-indigo">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fas fa-group fa-fw"></i></div>
+                    <div class="pull-left"><i class="fas fa-users fa-fw"></i></div>
                     <!--                            <div class="pull-right"><span class="badge">2</span></div>-->
                 </div>
                 <div class="tile-footer">
