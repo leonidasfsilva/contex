@@ -141,7 +141,7 @@ function returnURL($get = null)
 {
     $CI = get_instance();
     if ((!session_id()) || (!$CI->session->userdata('logado'))) {
-        $checkVars = array('mxcode/login', 'mxcode/verificarLogin', '');
+        $checkVars = array('mxcode/login', 'mxcode/verificarLogin');
 
         if (!in_array(uri_string(), $checkVars, true)) {
             $currentURL = current_url(); //for simple URL
