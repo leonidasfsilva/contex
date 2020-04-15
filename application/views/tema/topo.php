@@ -312,7 +312,7 @@ $this->load->view('includes/custom_js');
 
         <!--        CHAMADOS-->
         <li class="dropdown toolbar-icon-bg">
-            <a href="#" class="hasnotifications dropdown-toggle " data-toggle='dropdown' data-placement="bottom" title="Chamados">
+            <a href="<?= base_url('chamados') ?>" class="hasnotifications" title="Chamados">
                 <span class="icon-bg">
                     <i class="fas fa-fw fa-headset"></i>
                 </span>
@@ -327,80 +327,6 @@ $this->load->view('includes/custom_js');
                     <?php }
                 } ?>
             </a>
-            <div class="dropdown-menu dropdown-alternate messages arrow">
-                <div class="dd-header">
-                    <span>Chamados</span>
-                    <span>
-<!--                        <a href="#">Settings</a>-->
-                    </span>
-                </div>
-
-                <div class="scrollthis scroll-pane">
-                    <ul class="scroll-content">
-                        <li class="">
-                            <a href="#">
-                                <img class="msg-avatar" src="<?php echo base_url() ?>assets/demo/avatar/avatar_09.png" alt="avatar"/>
-                                <div class="msg-content">
-                                    <span class="name">Steven Shipe</span>
-                                    <span class="msg">Nonummy nibh epismod lorem ipsum</span>
-                                </div>
-                                <span class="msg-time">30s</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <!--                                <img class="msg-avatar" src="--><?php //echo base_url() ?><!--assets/demo/avatar/avatar_01.png" alt="avatar"/>-->
-                                <div class="msg-content">
-                                    <span class="name">Roxann Hollingworth <i class="fa fa-paperclip attachment"></i></span>
-                                    <span class="msg">Lorem ipsum dolor sit amet consectetur adipisicing elit</span>
-                                </div>
-                                <span class="msg-time">5m</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <!--                                <img class="msg-avatar" src="--><?php //echo base_url() ?><!--assets/demo/avatar/avatar_05.png" alt="avatar"/>-->
-                                <div class="msg-content">
-                                    <span class="name">Diamond Harlands</span>
-                                    <span class="msg">:)</span>
-                                </div>
-                                <span class="msg-time">3h</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <!--                                <img class="msg-avatar" src="--><?php //echo base_url() ?><!--assets/demo/avatar/avatar_02.png" alt="avatar"/>-->
-                                <div class="msg-content">
-                                    <span class="name">Michael Serio <i class="fa fa-paperclip attachment"></i></span>
-                                    <span class="msg">Sed distinctio dolores fuga molestiae modi?</span>
-                                </div>
-                                <span class="msg-time">12h</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <!--                                <img class="msg-avatar" src="--><?php //echo base_url() ?><!--assets/demo/avatar/avatar_03.png" alt="avatar"/>-->
-                                <div class="msg-content">
-                                    <span class="name">Matt Jones</span>
-                                    <span class="msg">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et mole</span>
-                                </div>
-                                <span class="msg-time">2d</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <!--                                <img class="msg-avatar" src="--><?php //echo base_url() ?><!--assets/demo/avatar/avatar_07.png" alt="avatar"/>-->
-                                <div class="msg-content">
-                                    <span class="name">John Doe</span>
-                                    <span class="msg">Neque porro quisquam est qui dolorem</span>
-                                </div>
-                                <span class="msg-time">7d</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="dd-footer font-weight-bold"><a href="<?= base_url(); ?>chamados">ver todos</a></div>
-            </div>
         </li>
         <!--        CHAMADOS-->
 
