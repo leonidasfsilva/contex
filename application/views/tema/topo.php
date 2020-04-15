@@ -456,14 +456,14 @@ $this->load->view('includes/custom_js');
                             <ul class="acc-menu">
                                 <!--                                <li class="nav-separator"></li>-->
                                 <li class="<?= (isset($menuPainel)) ? 'active' : ''; ?>">
-                                    <a href="<?php echo base_url() ?>"><i class="fas fa-home fa-fw"></i>
+                                    <a href="<?php echo base_url() ?>"><i class="fas fa-house-user fa-fw"></i>
                                         <span>Painel Inicial</span>
                                     </a>
                                 </li>
 
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) { ?>
                                     <li class="<?= (isset($menuClientes)) ? 'active' : ''; ?>">
-                                        <a href="<?php echo base_url('clientes') ?>"><i class="fas fa-group fa-fw"></i>
+                                        <a href="<?php echo base_url('clientes') ?>"><i class="fas fa-users fa-fw"></i>
                                             <span>Clientes</span>
                                         </a>
                                     </li>
