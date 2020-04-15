@@ -149,7 +149,8 @@ function returnURL($get = null)
             $fullURL = $currentURL . '?' . $params; //full URL with parameter
             $CI->session->set_userdata('last_url', $fullURL);
         } else {
-            $CI->session->sess_destroy();
+            $CI->session->unset_userdata('last_url');
+
         }
     }
 }
