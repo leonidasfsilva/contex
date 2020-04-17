@@ -20,10 +20,10 @@ class Vendas_model extends CI_Model
     function get($table, $fields, $where = '', $id_usuario, $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
         
-        $this->db->select($fields.', clientes.nomeCliente, clientes.idClientes');
+        $this->db->select($fields.', clientes.nome, clientes.id_clientes');
         $this->db->from($table);
         $this->db->limit($perpage, $start);
-        $this->db->join('clientes', 'clientes.idClientes = '.$table.'.clientes_id');
+        $this->db->join('clientes', 'clientes.id_clientes = '.$table.'.clientes_id');
         $this->db->order_by('idVendas', 'desc');
         if ($where) {
             $this->db->where($where . ' AND vendas.status = 1 AND vendas.id_usuario = ' . $id_usuario);
@@ -41,7 +41,7 @@ class Vendas_model extends CI_Model
     {
         $this->db->select('vendas.*, clientes.*, lancamentos.data_lancamento, usuarios.telefone, usuarios.email,usuarios.nome');
         $this->db->from('vendas');
-        $this->db->join('clientes', 'clientes.idClientes = vendas.clientes_id');
+        $this->db->join('clientes', 'clientes.id_clientes = vendas.clientes_id');
         $this->db->join('usuarios', 'usuarios.id_usuarios = vendas.usuarios_id');
         $this->db->join('Poupanca', 'vendas.idVendas = lancamentos.vendas_id', 'LEFT');
         $this->db->where('vendas.idVendas', $id);
@@ -126,7 +126,7 @@ class Vendas_model extends CI_Model
         $query = $this->db->get('clientes');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = array('label'=>$row['nomeCliente'].' | Telefone: '.$row['telefone'],'id'=>$row['idClientes']);
+                $row_set[] = array('label'=>$row['nomeCliente'].' | Telefone: '.$row['telefone'],'id'=>$row['id_clientes']);
             }
             echo json_encode($row_set);
         }

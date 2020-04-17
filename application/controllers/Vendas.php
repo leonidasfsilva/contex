@@ -33,7 +33,7 @@ class Vendas extends CI_Controller
         $this->load->library('pagination');
         
         
-        $config['base_url'] = base_url().'index.php/vendas/gerenciar/';
+        $config['base_url'] = base_url().'vendas/gerenciar/';
         $config['total_rows'] = $this->vendas_model->count('vendas');
         $config['per_page'] = 10;
         $config['next_link'] = 'Próxima';

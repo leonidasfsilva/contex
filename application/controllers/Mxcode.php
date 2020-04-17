@@ -557,4 +557,20 @@ class Mxcode extends CI_Controller
 
     }
 
+    public function error_general() {
+        $data = array(
+            'heading' => 'Oops...',
+            'message' => 'Um erro desconhecido ocorreu.'
+        );
+        $this->load->view('errors/html/error_general', $data);
+    }
+
+    public function error_404() {
+        $data = array(
+            'heading' => 'Erro 404: Página não encontrada',
+            'message' => 'A página que você solicitou não foi encontrada.<br><a href="'.base_url().'"> << Voltar à página inicial.</a>'
+        );
+        $this->load->view('errors/html/error_404', $data);
+    }
+
 }
