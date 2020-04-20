@@ -572,5 +572,4 @@ class Mxcode extends CI_Controller
         );
         $this->load->view('errors/html/error_404', $data);
     }
-
 }

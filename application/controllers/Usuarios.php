@@ -33,7 +33,7 @@ class Usuarios extends CI_Controller
 
         $this->load->library('pagination');
 
-        $config['base_url'] = base_url() . 'usuarios/gerenciar/';
+        $config['base_url'] = base_url() . 'usuarios/gerenciar';
         $config['total_rows'] = $this->usuarios_model->count('usuarios');
         $config['per_page'] = 10;
         $config['next_link'] = 'Próxima';
@@ -212,7 +212,7 @@ class Usuarios extends CI_Controller
 
         if ($id == 1) {
             $this->session->set_flashdata('erro', 'A conta de administrador do sistema não pode ser desativada.');
-            redirect(base_url() . 'usuarios/gerenciar/');
+            redirect(base_url() . 'usuarios/gerenciar');
         }
 
         $data = array(
@@ -221,11 +221,11 @@ class Usuarios extends CI_Controller
 
         if ($this->usuarios_model->delete('usuarios', $data, 'id_usuarios', $id) == true) {
             $this->session->set_flashdata('sucesso', 'Conta de usuário desativada com sucesso!');
-            redirect(base_url() . 'usuarios/gerenciar/');
+            redirect(base_url() . 'usuarios');
 
         } else {
             $this->session->set_flashdata('erro', 'Erro ao tentar desativar conta de usuário.');
-            redirect(base_url() . 'usuarios/gerenciar/');
+            redirect(base_url() . 'usuarios');
         }
     }
 
@@ -235,7 +235,7 @@ class Usuarios extends CI_Controller
 
         if ($id == 1) {
             $this->session->set_flashdata('erro', 'A conta de administrador do sistema não pode ser excluída.');
-            redirect(base_url() . 'usuarios/gerenciar/');
+            redirect(base_url() . 'usuarios');
         }
 
         $data = array(
@@ -262,11 +262,11 @@ class Usuarios extends CI_Controller
 
         if ($this->usuarios_model->delete('usuarios', $data, 'id_usuarios', $id) == true) {
             $this->session->set_flashdata('sucesso', 'Conta de usuário ativada com sucesso!');
-            redirect(base_url() . 'usuarios/gerenciar/');
+            redirect(base_url() . 'usuarios');
 
         } else {
             $this->session->set_flashdata('erro', 'Erro ao tentar ativar conta de usuário.');
-            redirect(base_url() . 'usuarios/gerenciar/');
+            redirect(base_url() . 'usuarios');
         }
     }
 
@@ -282,7 +282,7 @@ class Usuarios extends CI_Controller
 
         if ($verificacao == 0) {
             $this->session->set_flashdata('erro', 'Usuário solicitado não encontrado');
-            redirect(base_url() . 'usuarios/');
+            redirect(base_url() . 'usuarios');
         }
 
         $this->data['custom_error'] = '';
