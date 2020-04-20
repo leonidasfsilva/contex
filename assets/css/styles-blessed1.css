@@ -1331,7 +1331,7 @@ body.nooverflow {
   margin-top: 5px;
 }
 .panel-group .panel-heading a:after {
-  font-family: 'FontAwesome';
+  font-family: 'Font Awesome 5 Free 900';
   content: "\f107";
   float: right;
   color: grey;
@@ -4678,7 +4678,7 @@ ul.mailbox-msg-list li a.mailbox-msg-list-item div .msg {
   opacity: 0.5;
   filter: alpha(opacity=50);
   content: "\f107";
-  font-family: FontAwesome;
+  font-family: 'Font Awesome 5 Free 900';
   font-style: normal;
   font-weight: normal;
   float: right;
@@ -6919,7 +6919,7 @@ label.icheck.checkbox {
 .dd3-handle:before {
   content: '\f142' !important;
   color: #90a4ae !important;
-  font-family: 'FontAwesome' !important;
+  font-family: 'Font Awesome 5 Free 900' !important;
   top: 7px !important;
   font-size: 14px !important;
 }
