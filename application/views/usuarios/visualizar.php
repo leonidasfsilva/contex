@@ -2,8 +2,9 @@
     <div class="panel-heading">
         <h2>
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#tab-11-1" data-toggle="tab">Dados do Usuário</a></li>
-                <li><a href="#tab-11-3" data-toggle="tab">Em breve</a></li>
+                <li class="active"><a href="#dados" data-toggle="tab">Dados do Usuário</a></li>
+                <li><a href="#logs" data-toggle="tab">Logs</a></li>
+                <li><a href="#dev" data-toggle="tab">Em breve</a></li>
             </ul>
         </h2>
         <div class="panel-ctrls">
@@ -17,7 +18,7 @@
     <div class="panel-body">
         <div class="tab-content">
             <!--            TAB DADOS DO USUARIO-->
-            <div class="tab-pane active" id="tab-11-1">
+            <div class="tab-pane active" id="dados">
                 <div class="accordion-group" id="accordionB">
                     <div class="panel accordion-item">
                         <a class="accordion-title" data-toggle="collapse" data-parent="#accordionB"
@@ -141,9 +142,9 @@
                     </div>
                 </div>
             </div>
-            <!--            TAB DESENVOLVIMENTO DO USUARIO-->
-            <div class="tab-pane" id="tab-11-3">
-                <?php if (!$pendencias) { ?>
+            <!--            TAB LOGS DO USUARIO-->
+            <div class="tab-pane" id="logs">
+                <?php if (!$logs) { ?>
                     <div class="panel panel-midnightblue" data-widget="{&quot;id&quot; : &quot;wiget9&quot;}">
                         <div class="panel-heading">
                             <div class="panel-ctrls button-icon-bg" data-actions-container=""
@@ -161,39 +162,11 @@
                         <div class="panel-editbox" data-widget-controls=""></div>
                         <div class="panel-body">
                             <p>
-                                Esta aba encontra-se em desenvolvimento.
+                                Este usuário não possui registros de log.
                             </p>
                         </div>
                     </div>
                 <?php } else { ?>
-                    <div class="panel panel-midnightblue">
-                        <div class="panel-heading"></div>
-                        <div class="panel-body panel-no-padding">
-                            <table class="table table-striped">
-                                <thead>
-                                <tr class="bg-inverse">
-                                    <th colspan="2" style="text-align: left !important;">Descrição</th>
-                                    <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
-                                </tr>
-                                </thead>
-                                <tr>
-                                    <td colspan="2" style="text-align: left; color: green">(+) SALDO TOTAL DE PENDÊNCIAS
-                                        CRÉDITO
-                                    </td>
-                                    <td colspan="1" style="text-align: right; color: green">
-                                        <?php echo number_format($total_credito->total, 2, ',', '.') ?></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2" style="text-align: left; color: red">(-) SALDO TOTAL DE PENDÊNCIAS
-                                        DÉBITO
-                                    </td>
-                                    <td colspan="1" style="text-align: right; color: red">
-                                        <?php echo number_format($total_debito->total, 2, ',', '.') ?></td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-
                     <div class="panel panel-midnightblue">
                         <div class="panel-heading"></div>
                         <div class="panel-body panel-no-padding">
@@ -202,54 +175,24 @@
                                     <thead>
                                     <tr class="bg-inverse">
                                         <th>#</th>
-                                        <th>Data Pendência</th>
-                                        <th>Descrição</th>
-                                        <th>Tipo</th>
-                                        <th>Status</th>
-                                        <th>Data Pagamento</th>
-                                        <th>Valor</th>
+                                        <th>Registro</th>
+                                        <th>IP Origem</th>
+                                        <th>Data Ocorrência</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <?php
-                                    foreach ($pendencias as $r) {
-                                        $dataInicial = date(('d/m/Y'), strtotime($r->data_pendencia));
-                                        if ($r->data_pagamento != null) {
-                                            $dataFinal = date(('d/m/Y'), strtotime($r->data_pagamento));
-                                        } else {
-                                            $dataFinal = null;
-                                        }
-                                        if ($r->tipo == 1) {
-                                            $tipo = 'Credito';
-                                            $colorTipo = 'primary';
-                                        } else {
-                                            $tipo = 'Debito';
-                                            $colorTipo = 'warning';
-                                        }
-                                        if ($r->quitado == 0) {
-                                            $status = 'Pendente';
-                                            $color = 'red';
-                                            $label = 'danger';
-                                            $icon = 'fa fa-check-square-o';
-                                        } else {
-                                            $status = 'Pago';
-                                            $color = 'green';
-                                            $label = 'success';
-                                            $icon = 'fa fa-check-square';
-                                        }
+                                    foreach ($logs as $r) {
+                                        $data = date(('d/m/Y'), strtotime($r->data_registro));
 
                                         echo '<tr>';
-                                        echo '<td>' . $r->id_pendencia . '</td>';
-                                        echo '<td>' . $dataInicial . '</td>';
-                                        echo '<td>' . $r->descricao . '</td>';
-                                        echo '<td><span class="label label-' . $colorTipo . '">' . strtoupper($tipo) . '</span></td>';
-                                        echo '<td><span class="label label-' . $label . '">' . strtoupper($status) . '</span></td>';
-                                        echo '<td>' . $dataFinal . '</td>';
-                                        echo '<td>' . number_format($r->valor, 2, ',', '.') . '</td>';
+                                        echo '<td>' . $r->id_log . '</td>';
+                                        echo '<td>' . $r->acao . '</td>';
+                                        echo '<td>' . $r->ip . '</td>';
+                                        echo '<td>' . $data . '</td>';
                                         echo '</tr>';
                                     } ?>
                                     <tr>
-
                                     </tr>
                                     </tbody>
                                 </table>
@@ -257,6 +200,19 @@
                         </div>
                     </div>
                 <?php } ?>
+            </div>
+            <!--            TAB EM BREVE-->
+            <div class="tab-pane" id="dev">
+                <div class="panel panel-midnightblue">
+                    <div class="panel-heading">
+                        <h2>Panel</h2>
+                    </div>
+                    <div class="panel-body">
+                        <p>
+                            Esta aba encontra-se em desenvolvimento.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

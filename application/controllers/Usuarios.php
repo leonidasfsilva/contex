@@ -15,6 +15,7 @@ class Usuarios extends CI_Controller
             redirect(base_url());
         }
 
+        $this->load->library('pagination');
         $this->load->helper(array('form', 'codegen_helper'));
         $this->load->model('usuarios_model', '', true);
         $this->load->model('configs_model', '', true);
@@ -30,9 +31,6 @@ class Usuarios extends CI_Controller
 
     function gerenciar()
     {
-
-        $this->load->library('pagination');
-
         $config['base_url'] = base_url() . 'usuarios/gerenciar';
         $config['total_rows'] = $this->usuarios_model->count('usuarios');
         $config['per_page'] = 10;
@@ -61,8 +59,6 @@ class Usuarios extends CI_Controller
 
         $this->data['view'] = 'usuarios/usuarios';
         $this->load->view('tema/topo', $this->data);
-
-
     }
 
     function adicionar()
@@ -287,7 +283,7 @@ class Usuarios extends CI_Controller
 
         $this->data['custom_error'] = '';
         $this->data['result'] = $this->usuarios_model->getById($id);
-//        $this->data['os'] = $this->usuarios_model->getOsByCliente($id);
+        $this->data['logs'] = $this->usuarios_model->getLogsUsuario($id);
 //        $this->data['total_credito'] = $this->clientes_model->getPendenciasCreditoCliente(id_usuario(), $id);
 //        $this->data['total_debito'] = $this->clientes_model->getPendenciasDebitoCliente(id_usuario(), $id);
 //        $this->data['pendencias'] = $this->clientes_model->getPendenciasByCliente($id);

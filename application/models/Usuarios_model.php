@@ -111,4 +111,12 @@ class Usuarios_model extends CI_Model
             ->result();
     }
 
+    public function getLogsUsuario($id_usuario)
+    {
+        return $this->db
+            ->where('id_usuario', $id_usuario)
+            ->get('logs')
+            ->result();
+    }
+
 }
