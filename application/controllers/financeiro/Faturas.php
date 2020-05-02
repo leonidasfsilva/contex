@@ -71,6 +71,12 @@ class Faturas extends CI_Controller
 
         if ($_GET['id_cartao']) {
             $id_cartao = $_GET['id_cartao'];
+            $cartao_usuario = $this->cartoes_model->cartaoPertenceUsuario(id_usuario(), $id_cartao);
+
+            if(!$cartao_usuario) {
+                $this->session->set_flashdata('erro', 'Cartão solicitado não pertence ao usuário.');
+                redirect('financeiro/faturas');
+            }
         } else {
             $id_cartao = $primeiro_cartao->id_cartao;
         }

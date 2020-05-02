@@ -104,12 +104,28 @@ class Cartoes_model extends CI_Model
             ->row();
     }
 
-    function consultaFaturasCartao($id_cartao){
+    function consultaFaturasCartao($id_cartao)
+    {
         return $this->db
             ->where('status', 1)
             ->where('id_cartao', $id_cartao)
             ->get('faturas')
             ->row();
+    }
+
+    function cartaoPertenceUsuario($id_usuario, $id_cartao)
+    {
+        $result = $this->db
+            ->where('id_usuario', $id_usuario)
+            ->where('id_cartao', $id_cartao)
+            ->where('status', 1)
+            ->get('cartoes')
+            ->num_rows();
+        if($result){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     function getById($id)
