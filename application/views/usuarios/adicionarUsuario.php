@@ -97,7 +97,7 @@
                 <div class="row pull-right">
                     <div class="col-md-12 ">
                         <a href="<?php echo base_url() ?>usuarios" id="" class="btn btn-default btn-sm"><i
-                                    class="fas fa-arrow-left fa-fw"></i> Voltar</a>
+                                    class="fas fa-times fa-fw"></i> Cancelar</a>
                         <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-check fa-fw"></i> Salvar
                         </button>
                     </div>

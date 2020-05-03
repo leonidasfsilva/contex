@@ -9,7 +9,7 @@
         </h2>
         <div class="panel-ctrls">
             <a href="<?php echo base_url() ?>usuarios" class="btn btn-default btn-sm "><i
-                        class="fas fa-arrow-left fa-fw"></i> Voltar</a>
+                        class="fas fa-arrow-left fa-fw"></i> Usuários</a>
             <a title="Editar dados do usuário" class="btn btn-primary btn-sm "
                href=" <?= base_url() . 'usuarios/editar/' . $result->id_usuarios ?>"><i class="fas fa-edit fa-fw"></i>
                 Editar</a>
@@ -146,16 +146,24 @@
             <div class="tab-pane" id="logs">
                 <?php if (!$logs) { ?>
                     <div class="panel panel-midnightblue">
-                        <div class="panel-heading">
-                            <h2>Panel</h2>
-                        </div>
-                        <div class="panel-body">
-                            <p>
-                                Este usuário não possui registros de log.
-                            </p>
+                        <div class="panel-body panel-no-padding">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr class="bg-inverse">
+                                    <th>#</th>
+                                    <th>Registro</th>
+                                    <th>IP Origem</th>
+                                    <th>Data Ocorrência</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td colspan="6">Este usuário não possui registros de logs</td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-
                 <?php } else { ?>
                     <div class="panel panel-midnightblue">
                         <div class="panel-heading"></div>
@@ -193,15 +201,8 @@
             </div>
             <!--            TAB EM BREVE-->
             <div class="tab-pane" id="dev">
-                <div class="panel panel-midnightblue">
-                    <div class="panel-heading">
-                        <h2>Panel</h2>
-                    </div>
-                    <div class="panel-body">
-                        <p>
-                            Esta aba encontra-se em desenvolvimento.
-                        </p>
-                    </div>
+                <div class="alert alert-danger">
+                    Esta aba encontra-se em desenvolvimento
                 </div>
             </div>
         </div>

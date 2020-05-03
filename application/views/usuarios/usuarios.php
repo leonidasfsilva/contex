@@ -2,12 +2,12 @@
     <div class="panel-heading">
         <h3>
             <i class="fas fa-users-cog fa-lg fa-fw"></i>
-            Gestão de Usuários do Sistema
+            Usuários do Sistema
         </h3>
         <div class="panel-ctrls">
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
                 <a href="<?php echo base_url(); ?>usuarios/adicionar" class="btn btn-primary btn-sm"><i
-                            class="fas fa-plus-square fa-fw"></i> Adicionar Usuário</a>
+                            class="fas fa-plus fa-fw"></i> Novo Usuário</a>
             <?php } ?>
         </div>
     </div>
