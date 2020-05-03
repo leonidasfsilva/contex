@@ -145,27 +145,17 @@
             <!--            TAB LOGS DO USUARIO-->
             <div class="tab-pane" id="logs">
                 <?php if (!$logs) { ?>
-                    <div class="panel panel-midnightblue" data-widget="{&quot;id&quot; : &quot;wiget9&quot;}">
+                    <div class="panel panel-midnightblue">
                         <div class="panel-heading">
-                            <div class="panel-ctrls button-icon-bg" data-actions-container=""
-                                 data-action-collapse="{&quot;target&quot;: &quot;.panel-body&quot;}"
-                                 data-action-expand="" data-action-colorpicker="" data-action-edit=""
-                                 data-action-refresh="" data-action-close="">
-                                <span class="button-icon has-bg"><i class="fa fa-minus"></i></span><span
-                                        class="button-icon has-bg"><i class="fa fa-expand"></i></span><span
-                                        class="button-icon"><i class="fa fa-tint"></i></span><span
-                                        class="button-icon"><i class="fa fa-pencil"></i></span><span
-                                        class="button-icon"><i class="fa fa-refresh"></i></span><span
-                                        class="button-icon"><i class="fa fa-times"></i></span></div>
                             <h2>Panel</h2>
                         </div>
-                        <div class="panel-editbox" data-widget-controls=""></div>
                         <div class="panel-body">
                             <p>
                                 Este usuário não possui registros de log.
                             </p>
                         </div>
                     </div>
+
                 <?php } else { ?>
                     <div class="panel panel-midnightblue">
                         <div class="panel-heading"></div>
@@ -183,7 +173,7 @@
                                     <tbody>
                                     <?php
                                     foreach ($logs as $r) {
-                                        $data = date(('d/m/Y'), strtotime($r->data_registro));
+                                        $data = date(('d/m/Y - H:i:s'), strtotime($r->data_registro));
 
                                         echo '<tr>';
                                         echo '<td>' . $r->id_log . '</td>';
