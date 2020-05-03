@@ -130,7 +130,7 @@ class Lancamentos extends CI_Controller
             'lancamentos',
             $where,
             id_usuario());
-        $config['per_page'] = null;
+        $config['per_page'] = 10;
         $config['page_query_string'] = true;
         $config['next_link'] = 'Próxima';
         $config['prev_link'] = 'Anterior';

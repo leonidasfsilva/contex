@@ -281,9 +281,41 @@ class Usuarios extends CI_Controller
             redirect(base_url() . 'usuarios');
         }
 
+        $this->load->library('pagination');
+
+        $config['base_url'] = base_url() . 'usuarios/visualizar/' . $id;
+        $config['suffix'] = '#logs';
+        $config['first_url'] = $config['base_url'].'#logs';
+        $config['total_rows'] = $this->usuarios_model->countLogs($id);
+        $config['per_page'] = 20;
+        $config['page_query_string'] = true;
+        $config['next_link'] = false;
+        $config['prev_link'] = false;
+        $config['full_tag_open'] = '<ul class="pagination pagination-sm">';
+        $config['full_tag_close'] = '</ul>';
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $config['cur_tag_open'] = '<li class="disabled"><a style="background-color:#337ab7; color: white" class="js:"><b>';
+        $config['cur_tag_close'] = '</b></a></li>';
+        $config['prev_tag_open'] = '<li>';
+        $config['prev_tag_close'] = '</li>';
+        $config['next_tag_open'] = '<li>';
+        $config['next_tag_close'] = '</li>';
+        $config['first_link'] = 'Primeira';
+        $config['last_link'] = 'Última';
+        $config['first_tag_open'] = '<li>';
+        $config['first_tag_close'] = '</li>';
+        $config['last_tag_open'] = '<li>';
+        $config['last_tag_close'] = '</li>';
+
+        $this->pagination->initialize($config);
+
         $this->data['custom_error'] = '';
         $this->data['result'] = $this->usuarios_model->getById($id);
-        $this->data['logs'] = $this->usuarios_model->getLogsUsuario($id);
+        $this->data['logs'] = $this->usuarios_model->getLogsUsuario(
+            $id,
+            $config['per_page'],
+            $this->input->get('per_page'));
 //        $this->data['total_credito'] = $this->clientes_model->getPendenciasCreditoCliente(id_usuario(), $id);
 //        $this->data['total_debito'] = $this->clientes_model->getPendenciasDebitoCliente(id_usuario(), $id);
 //        $this->data['pendencias'] = $this->clientes_model->getPendenciasByCliente($id);

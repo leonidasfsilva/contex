@@ -1,7 +1,7 @@
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h2>
-            <ul class="nav nav-tabs">
+            <ul class="nav nav-tabs" id="tabUsuario">
                 <li class="active"><a href="#dados" data-toggle="tab">Dados do Usuário</a></li>
                 <li><a href="#logs" data-toggle="tab">Logs</a></li>
                 <li><a href="#dev" data-toggle="tab">Em breve</a></li>
@@ -166,7 +166,6 @@
                     </div>
                 <?php } else { ?>
                     <div class="panel panel-midnightblue">
-                        <div class="panel-heading"></div>
                         <div class="panel-body panel-no-padding">
                             <div class="table-responsive">
                                 <table class="table table-striped">
@@ -195,6 +194,9 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <div class="panel-footer">
+                                <?php echo $this->pagination->create_links(); ?>
+                            </div>
                         </div>
                     </div>
                 <?php } ?>
@@ -208,3 +210,21 @@
         </div>
     </div>
 </div>
+
+<script>
+    $('#tabUsuario a').click(function(e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
+
+    // store the currently selected tab in the hash value
+    $("ul.nav-tabs > li > a").on("shown.bs.tab", function(e) {
+        var id = $(e.target).attr("href").substr(1);
+        window.location.hash = id;
+    });
+
+    // on load of the page: switch to the currently selected tab
+    var hash = window.location.hash;
+    $('#tabUsuario a[href="' + hash + '"]').tab('show');
+
+</script>

@@ -76,6 +76,13 @@ class Usuarios_model extends CI_Model
         return $this->db->count_all($table);
     }
 
+    function countLogs($id_usuario)
+    {
+        return $this->db
+            ->where('id_usuario', $id_usuario)
+            ->count_all_results('logs');
+    }
+
     public function verificaExisteUsuario($id)
     {
         $this->db->where('id_usuarios', $id);
@@ -111,10 +118,12 @@ class Usuarios_model extends CI_Model
             ->result();
     }
 
-    public function getLogsUsuario($id_usuario)
+    public function getLogsUsuario($id_usuario, $perpage, $start)
     {
         return $this->db
             ->where('id_usuario', $id_usuario)
+            ->limit($perpage, $start)
+            ->order_by('data_registro', 'desc')
             ->get('logs')
             ->result();
     }
