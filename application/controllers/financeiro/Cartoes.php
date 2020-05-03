@@ -60,7 +60,6 @@ class Cartoes extends CI_Controller
                 redirect('financeiro/cartoes');
             }
         } else {
-
             $data['menuFinanceiro'] = true;
             $data['view'] = 'cartoes/adicionar';
             $this->load->view('tema/topo', $data);
