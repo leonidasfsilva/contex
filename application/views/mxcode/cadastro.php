@@ -244,7 +244,7 @@
                 $(function () {
                     $.ajax({
                         type: "POST",
-                        url: "<?= site_url('cadastro/reenviarverificacao'); ?>",
+                        url: "<?= site_url('cadastro/reenviarVerificacao'); ?>",
                         data: {
                             'email': result.value
                         }, // <--- THIS IS THE CHANGE

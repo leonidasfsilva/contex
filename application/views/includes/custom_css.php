@@ -174,6 +174,8 @@
         margin-bottom: 16px;
     }
 
+    /*NOTES*/
+
     .note {
         margin-top: 10px;
         margin-bottom: 10px;
@@ -195,10 +197,14 @@
         border-left: 6px solid #2196F3;
     }
 
-    /*NOTES*/
     .note-warning {
         background-color: #ffffcc;
         border-left: 6px solid #ffeb3b;
+    }
+
+    .note-inverse {
+        background-color: #e8e8e8;
+        border-left: 6px solid #4a4a4a;
     }
 
     .visiblemodal {
@@ -210,5 +216,24 @@
         z-index: 1;
         display: block;
         overflow: hidden;
+    }
+
+    .modal-middle {
+        text-align: center;
+        padding: 0!important;
+    }
+
+    .modal-middle:before {
+        content: '';
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+        margin-right: -4px;
+    }
+
+    .modal-middle .modal-dialog {
+        display: inline-block;
+        text-align: left;
+        vertical-align: middle;
     }
 </style>

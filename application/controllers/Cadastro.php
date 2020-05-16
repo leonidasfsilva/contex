@@ -44,7 +44,7 @@ class Cadastro extends CI_Controller
             $confirmarSenha = $this->input->post('confirmarSenha');
 
             if ($this->cadastro_model->verificaEmailExistente($email) == true) {
-                gravaLog(null, 'Usuário desconhecido', $email, 'Tentativa de cadastro recusada: conta já existente', getenv("REMOTE_ADDR"));
+                gravaLog(null, 'Usuário desconhecido', $email, 'Tentativa de cadastro recusada: email já existente', getenv("REMOTE_ADDR"));
                 $this->session->set_flashdata('erro', 'O email informado já se encontra em uso, por favor informe um email diferente.');
                 redirect('cadastro');
             }
@@ -206,50 +206,48 @@ td {
 
     public function reenviarVerificacao()
     {
-        if ($this->session->userdata('logado') == true) {
-            redirect('mxcode/login');
-        } else {
-            if (!$_POST) {
-                redirect('cadastro');
-            }
 
-            $email = $this->input->post('email');
-            if ($email != null) {
-                $query = $this->cadastro_model->getValidacaoByEmail($email);
-                if ($query->num_rows() > 0) {
-                    $result = $query->row();
+        if (!$_POST) {
+            redirect('cadastro');
+        }
 
-                    $qr = $this->cadastro_model->getPreCadastrobyId($result->id_pre_cadastro)->row();
+        $email = $this->input->post('email');
+        if ($email != null) {
+            $query = $this->cadastro_model->getValidacaoByEmail($email);
+            if ($query->num_rows() > 0) {
+                $result = $query->row();
 
-                    if($qr->validado == 1) {
-                        $data = array(
-                            'validacao' => 'ja_validado',
-                            'email' => $email
-                        );
-                        echo json_encode($data, JSON_PRETTY_PRINT);
-                        return;
-                    }
+                $qr = $this->cadastro_model->getPreCadastrobyId($result->id_pre_cadastro)->row();
 
-                    $ajax = array(
-                        'email' => $result->email,
-                        'validacao' => 'ok'
+                if ($qr->validado == 1) {
+                    $data = array(
+                        'validacao' => 'ja_validado',
+                        'email' => $email
                     );
+                    echo json_encode($data, JSON_PRETTY_PRINT);
+                    return;
+                }
 
-                    //aqui entra o MAIL() para enviar o link de verificação de conta com o token e id de validação gerado para o usuário
-                    $link = base_url('cadastro/validacao?token=' . $result->token . '&id=' . $result->id_validacao);
-                    $date = date("d/m/Y h:i");
-                    $ip = getenv("REMOTE_ADDR");
-                    $navegador = $_SERVER['HTTP_USER_AGENT'];
-                    $nomedestinatario = $qr->nome;
-                    $emaildestinatario = $email;
+                $ajax = array(
+                    'email' => $result->email,
+                    'validacao' => 'ok'
+                );
 
-                    //AUTO RESPOSTA
-                    $headers_ = "MIME-Version: 1.0\r\n";
-                    $headers_ .= "Content-type: text/html; charset=utf-8\r\n";
-                    $headers_ .= "From: nao-responda@mxcode.net\r\n";
-                    $assunto_resposta = "CONTEX - Validação de sua conta";
+                //aqui entra o MAIL() para enviar o link de verificação de conta com o token e id de validação gerado para o usuário
+                $link = base_url('cadastro/validacao?token=' . $result->token . '&id=' . $result->id_validacao);
+                $date = date("d/m/Y h:i");
+                $ip = getenv("REMOTE_ADDR");
+                $navegador = $_SERVER['HTTP_USER_AGENT'];
+                $nomedestinatario = $qr->nome;
+                $emaildestinatario = $email;
 
-                    $msg_resposta = '
+                //AUTO RESPOSTA
+                $headers_ = "MIME-Version: 1.0\r\n";
+                $headers_ .= "Content-type: text/html; charset=utf-8\r\n";
+                $headers_ .= "From: nao-responda@mxcode.net\r\n";
+                $assunto_resposta = "CONTEX - Validação de sua conta";
+
+                $msg_resposta = '
 <html>
 <head>
 <style>
@@ -336,81 +334,69 @@ td {
 </body>
 </html>
                 ';
-                    mail($emaildestinatario, $assunto_resposta, $msg_resposta, $headers_);
-                    echo json_encode($ajax, JSON_PRETTY_PRINT);
-                } else {
-                    $data = array(
-                        'validacao' => 'email_nao_registrado',
-                        'email' => $email
-                    );
-                    echo json_encode($data, JSON_PRETTY_PRINT);
-                }
+                mail($emaildestinatario, $assunto_resposta, $msg_resposta, $headers_);
+                echo json_encode($ajax, JSON_PRETTY_PRINT);
+            } else {
+                $data = array(
+                    'validacao' => 'email_nao_registrado',
+                    'email' => $email
+                );
+                echo json_encode($data, JSON_PRETTY_PRINT);
             }
         }
     }
 
     public function validacao()
     {
-        if ($this->session->userdata('logado') == true) {
-            redirect('mxcode/login');
+        $tokenUsuario = $this->input->get('token');
+        $id = $this->input->get('id');
 
-        } else {
-            $tokenUsuario = $this->input->get('token');
-            $id = $this->input->get('id');
+        if ($id != null) {
+            $query = $this->cadastro_model->getValidacaoById($id);
 
-            if ($id != null) {
-                $query = $this->cadastro_model->getValidacaoById($id);
+            if ($query->num_rows() > 0) {
+                $result = $query->row();
+                $tokenReal = $result->token;
 
-                if ($query->num_rows() > 0) {
-                    $result = $query->row();
-                    $tokenReal = $result->token;
+                if ($tokenUsuario != null && $tokenUsuario == $tokenReal) {
 
-                    if ($tokenUsuario != null && $tokenUsuario == $tokenReal) {
+                    $query = $this->cadastro_model->verificaValidadeToken($id);
+                    $rs = $query->row();
 
-                        $query = $this->cadastro_model->verificaValidadeToken($id);
-                        $rs = $query->row();
+                    //tempo de validade do link (em minutos)
+                    $validade = 30;
 
-                        //tempo de validade do link (em minutos)
-                        $validade = 30;
+                    if (isset($rs->validade) && $rs->validade < $validade) {
 
-                        if (isset($rs->validade) && $rs->validade < $validade) {
+                        $this->cadastro_model->validaPreCadastro($result->id_pre_cadastro);
 
-                            $this->cadastro_model->validaPreCadastro($result->id_pre_cadastro);
+                        $qr = $this->cadastro_model->getPreCadastroById($result->id_pre_cadastro);
+                        if ($qr->num_rows() > 0) {
+                            $result = $qr->row();
 
-                            $qr = $this->cadastro_model->getPreCadastroById($result->id_pre_cadastro);
-                            if ($qr->num_rows() > 0) {
-                                $result = $qr->row();
+                            $data = array(
+                                'nome' => $result->nome,
+                                'email' => $result->email,
+                                'senha' => $result->senha,
+                                'permissoes_id' => 6,
+                                'ativo' => 1,
+                            );
 
-                                $data = array(
-                                    'nome' => $result->nome,
-                                    'email' => $result->email,
-                                    'senha' => $result->senha,
-                                    'permissoes_id' => 6,
-                                    'ativo' => 1,
-                                );
-
-                                if ($this->cadastro_model->registraUsuario($data) == true) {
-                                    $this->cadastro_model->invalidaToken($id);
-                                    $this->session->set_flashdata(
-                                        'sucesso',
-                                        'Conta verificada com sucesso!<br>Obrigado por validar sua conta, agora você já pode acessar o sistema utilizando seu email e senha.');
-                                    redirect('mxcode/login');
-                                } else {
-                                    $this->session->set_flashdata(
-                                        'erro',
-                                        'Erro ao tentar registrar nova conta de usuário.<br>ERRO: registraUsuario()');
-                                    redirect('cadastro');
-                                }
+                            if ($this->cadastro_model->registraUsuario($data) == true) {
+                                $this->cadastro_model->invalidaToken($id);
+                                $this->session->set_flashdata(
+                                    'sucesso',
+                                    'Conta verificada com sucesso!<br>Obrigado por validar sua conta, agora você já pode acessar o sistema utilizando seu email e senha.');
+                                redirect('mxcode/login');
+                            } else {
+                                $this->session->set_flashdata(
+                                    'erro',
+                                    'Erro ao tentar registrar nova conta de usuário.<br>ERRO: registraUsuario()');
+                                redirect('cadastro');
                             }
-
-                        } else {
-                            $this->cadastro_model->invalidaToken($id);
-                            $this->session->set_flashdata(
-                                'erro',
-                                'Link de validação de conta expirado. Solicite um novo link clicando no botão <a href="javascript:" onclick="verificar_conta()">Não recebi o email de verificação</a>.');
-                            redirect('cadastro');
                         }
                     } else {
+                        $this->cadastro_model->invalidaToken($id);
                         $this->session->set_flashdata(
                             'erro',
                             'Link de validação de conta expirado. Solicite um novo link clicando no botão <a href="javascript:" onclick="verificar_conta()">Não recebi o email de verificação</a>.');
@@ -428,82 +414,83 @@ td {
                     'Link de validação de conta expirado. Solicite um novo link clicando no botão <a href="javascript:" onclick="verificar_conta()">Não recebi o email de verificação</a>.');
                 redirect('cadastro');
             }
+        } else {
+            $this->session->set_flashdata(
+                'erro',
+                'Link de validação de conta expirado. Solicite um novo link clicando no botão <a href="javascript:" onclick="verificar_conta()">Não recebi o email de verificação</a>.');
+            redirect('cadastro');
         }
     }
 
     public function alterarSenha()
     {
-        if ($this->session->userdata('logado') == true) {
-            redirect('mxcode/login');
+        $id = (int)$this->input->post('id');
+        $token = $this->input->post('token');
+        $novasenha = $this->input->post('novaSenha');
+        $repitasenha = $this->input->post('confirmarSenha');
 
-        } else {
-            $id = (int)$this->input->post('id');
-            $token = $this->input->post('token');
-            $novasenha = $this->input->post('novaSenha');
-            $repitasenha = $this->input->post('confirmarSenha');
+        if (($token != null) && ($id != null)) {
 
-            if (($token != null) && ($id != null)) {
+            $queryToken = $this->cadastro_model->validaTokenById($id);
+            $resultToken = $queryToken->row();
+            $tokenReal = $resultToken->token;
 
-                $queryToken = $this->cadastro_model->validaTokenById($id);
-                $resultToken = $queryToken->row();
-                $tokenReal = $resultToken->token;
+            if ($tokenReal == $token) {
 
-                if ($tokenReal == $token) {
+                $query = $this->cadastro_model->verificaValidadeToken($id);
+                $result = $query->row();
 
-                    $query = $this->cadastro_model->verificaValidadeToken($id);
+                //tempo de validade do link (em minutos)
+                $validade = 30;
+
+                if (isset($result->validade) && $result->validade < $validade) {
+
+                    $query = $this->cadastro_model->getDadosUsuarioById($resultToken->id_usuario);
                     $result = $query->row();
 
-                    //tempo de validade do link (em minutos)
-                    $validade = 30;
+                    if (($novasenha != null) && ($repitasenha != null) && ($novasenha == $repitasenha)) {
+                        $data = array(
+                            'senha' => password_hash($repitasenha, PASSWORD_DEFAULT)
+                        );
 
-                    if (isset($result->validade) && $result->validade < $validade) {
+                        $this->cadastro_model->atualizaAdmin($resultToken->id_usuario, $data);
+                        $this->cadastro_model->invalidaToken($id);
+                        $this->session->set_flashdata('sucesso', 'Senha alterada com sucesso!');
+                        redirect('mxcode/login');
 
-                        $query = $this->cadastro_model->getDadosUsuarioById($resultToken->id_usuario);
-                        $result = $query->row();
-
-                        if (($novasenha != null) && ($repitasenha != null) && ($novasenha == $repitasenha)) {
-                            $data = array(
-                                'senha' => password_hash($repitasenha, PASSWORD_DEFAULT)
-                            );
-
-                            $this->cadastro_model->atualizaAdmin($resultToken->id_usuario, $data);
-                            $this->cadastro_model->invalidaToken($id);
-                            $this->session->set_flashdata('sucesso', 'Senha alterada com sucesso!');
-                            redirect('mxcode/login');
-
-                        } elseif (($novasenha != null) && ($repitasenha != null) && ($novasenha != $repitasenha)) {
-                            $data3 = array(
-                                'id' => $id,
-                                'nome' => $result->nome,
-                                'token' => $token,
-                                'senhaAlterada' => false
-                            );
-                            $this->session->set_flashdata('erro', 'As senhas não correspondem.');
-                            $this->load->view('mxcode/redefinir_senha', $data3);
-
-                        } else {
-                            $this->session->set_flashdata(
-                                'erro',
-                                'Link de redefinição de senha expirado. Solicite um novo link clicando no botão <a href="javascript:" onclick="recuperar_senha()">Esqueci minha senha</a>.');
-                            redirect('mxcode/login');
-
-                        }
+                    } elseif (($novasenha != null) && ($repitasenha != null) && ($novasenha != $repitasenha)) {
+                        $data3 = array(
+                            'id' => $id,
+                            'nome' => $result->nome,
+                            'token' => $token,
+                            'senhaAlterada' => false
+                        );
+                        $this->session->set_flashdata('erro', 'As senhas não correspondem.');
+                        $this->load->view('mxcode/redefinir_senha', $data3);
 
                     } else {
                         $this->session->set_flashdata(
                             'erro',
                             'Link de redefinição de senha expirado. Solicite um novo link clicando no botão <a href="javascript:" onclick="recuperar_senha()">Esqueci minha senha</a>.');
                         redirect('mxcode/login');
+
                     }
 
+                } else {
+                    $this->session->set_flashdata(
+                        'erro',
+                        'Link de redefinição de senha expirado. Solicite um novo link clicando no botão <a href="javascript:" onclick="recuperar_senha()">Esqueci minha senha</a>.');
+                    redirect('mxcode/login');
                 }
-            } else {
-                $this->session->set_flashdata(
-                    'erro',
-                    'Link de redefinição de senha expirado. Solicite um novo link clicando no botão <a href="javascript:" onclick="recuperar_senha()">Esqueci minha senha</a>.');
-                redirect('mxcode/login');
+
             }
+        } else {
+            $this->session->set_flashdata(
+                'erro',
+                'Link de redefinição de senha expirado. Solicite um novo link clicando no botão <a href="javascript:" onclick="recuperar_senha()">Esqueci minha senha</a>.');
+            redirect('mxcode/login');
         }
+
     }
 
     public function invalidaToken()
