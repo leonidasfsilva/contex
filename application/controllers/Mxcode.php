@@ -531,6 +531,13 @@ class Mxcode extends CI_Controller
 
     public function atualizarPerfil()
     {
+        $cpfExistente = $this->mxcode_model->verificaCPF($this->input->post('cpf'));
+
+        if ($cpfExistente) {
+            $this->session->set_flashdata('erro', 'O CPF informado já está cadastrado.');
+            redirect(base_url() . 'mxcode/minhaConta');
+        }
+
         $data = array(
             'nome' => $this->input->post('nome'),
             'rg' => $this->input->post('rg'),
@@ -549,15 +556,16 @@ class Mxcode extends CI_Controller
 
         if ($this->mxcode_model->edit('usuarios', $data, 'id_usuarios', $this->input->post('id_usuarios')) == true) {
             $this->session->set_flashdata('sucesso', 'Conta de usuário atualizada com sucesso!');
-            redirect(base_url() . 'mxcode/minhaConta/');
+            redirect(base_url() . 'mxcode/minhaConta');
         } else {
-            $this->session->set_flashdata('sucesso', 'Ocorreu um erro ao atualizar conta de usuário.');
-            redirect(base_url() . 'mxcode/minhaConta/');
+            $this->session->set_flashdata('erro', 'Ocorreu um erro ao atualizar conta de usuário.');
+            redirect(base_url() . 'mxcode/minhaConta');
         }
 
     }
 
-    public function error_general() {
+    public function error_general()
+    {
         $data = array(
             'heading' => 'Oops...',
             'message' => 'Um erro desconhecido ocorreu.'
@@ -565,10 +573,11 @@ class Mxcode extends CI_Controller
         $this->load->view('errors/html/error_general', $data);
     }
 
-    public function error_404() {
+    public function error_404()
+    {
         $data = array(
             'heading' => 'Erro 404: Página não encontrada',
-            'message' => 'A página que você solicitou não foi encontrada.<br><a href="'.base_url().'"> << Voltar à página inicial.</a>'
+            'message' => 'A página que você solicitou não foi encontrada.<br><a href="' . base_url() . '"> << Voltar à página inicial.</a>'
         );
         $this->load->view('errors/html/error_404', $data);
     }

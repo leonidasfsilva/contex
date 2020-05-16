@@ -1,4 +1,4 @@
-<?php if (! defined('BASEPATH')) {
+<?php if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -83,8 +83,6 @@ class Mxcode_model extends CI_Model
         $data['servicos'] = $this->db->get('servicos')->result();
 
         return $data;
-
-
     }
 
     function add($table, $data)
@@ -219,6 +217,19 @@ class Mxcode_model extends CI_Model
         $this->db->set('avatar', null);
         $this->db->where('id_usuarios', $id);
         return $this->db->update('usuarios');
+    }
+
+    public function verificaCPF($cpf)
+    {
+        $result = $this->db
+            ->where('cpf', $cpf)
+            ->get('usuarios')
+            ->row();
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
