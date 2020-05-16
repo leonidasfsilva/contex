@@ -35,20 +35,17 @@
                             <strong>Email:</strong> <?php echo $usuario->email ?>
                         </li>
                         <li>
-                            <strong>Telefone:</strong> <?php echo $usuario->telefone ?>
-                        </li>
-                        <li>
                             <strong>CPF:</strong> <?php echo $usuario->cpf ?>
                         </li>
                         <li>
-                            <strong>RG:</strong> <?php echo $usuario->rg ?>
+                            <strong>Telefone:</strong> <?php echo $usuario->telefone ?>
                         </li>
                         <li>
                             <strong>Logradouro:</strong> <?php echo $usuario->logradouro ?>,
                             <?php if ($usuario->s_n) {
                                 echo 'S/N';
                             } else {
-                                echo 'nº '.$usuario->numero;
+                                echo 'nº ' . $usuario->numero;
                             }
                             ?>
                         </li>
@@ -90,7 +87,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Alterar dados de usuário</h4>
             </div>
-            <form id="formAlterar" action="<?php echo base_url() ?>mxcode/atualizarPerfil" method="post" autocomplete="off">
+            <form id="formAlterar" action="<?php echo base_url('mxcode/atualizarPerfil') ?>" method="post" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-md-12">
@@ -101,7 +98,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-md-5">
-                            <label for="cpf" class="font-weight-bold">CPF</label>
+                            <label for="cpf" class="font-weight-bold">CPF *</label>
                             <input class="form-control" type="text" id="cpf" name="cpf" value="<?php echo $dados->cpf; ?>"/>
                         </div>
                         <div class="form-group col-md-4">
@@ -152,9 +149,9 @@
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label for="email" class="font-weight-bold">Email *</label>
-                            <div class="input-group" title="Para alterar seu email de cadastro, contate o administrador do sistema">
+                            <div class="input-group">
                                 <input type="text" class="form-control" id="email" name="email" value="<?php echo $dados->email; ?>" disabled/>
-                                <span class="input-group-addon"><i class="fas fa-info-circle fa-lg fa-fw"></i></span>
+                                <span class="input-group-addon" style="cursor: pointer" id="ajuda" title="Ajuda"><i class="fas fa-question-circle fa-lg fa-fw"></i></span>
                             </div>
                         </div>
                         <div class="form-group col-md-6">
@@ -374,16 +371,28 @@
     </div>
 </div>
 
+<!--Modal de ajuda sobre email do usuario-->
+<div class="modal modal-middle fade" id="modalAjuda" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-default">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Email do Usuário</h4>
+            </div>
+            <div class="modal-body">
+                <p class="note note-danger font-weight-bold"><i style="color: #f44336" class="fas fa-exclamation-circle fa-lg fa-fw"></i>
+                    Por questões de segurança, não é permitido que usuários alterem seu próprio email de cadastro, porém é possível solicitar esta alteração ao administrador do sistema.
+                    Para solicitar a alteração de seu email de cadastro, abra um novo chamado de suporte, <a href="<?= base_url('chamados') ?>">clicando aqui.</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
 
-    // $('#modalAlterarFoto').on('hidden.bs.modal', function () {
-    //     cropBoxData = $image.cropper('getCropBoxData');
-    //     canvasData = $image.cropper('getCanvasData');
-    //     $image.cropper('destroy');
-    // });
-
-    $(document).ready(function () {
-
+    $('#ajuda').click(function () {
+        $('#modalAjuda').modal('show')
     });
 
     $('input[type=file]').change(function () {
@@ -416,9 +425,17 @@
         $('#formAlterar').validate({
             rules: {
                 nome: {required: true},
+                cpf: {
+                    required: true,
+                    minlength: 14
+                },
             },
             messages: {
                 nome: {required: 'Informe seu nome'},
+                cpf: {
+                    required: 'Informe seu CPF',
+                    minlength: 'O CPF deve conter 11 dígitos',
+                },
             },
 
             errorClass: "help-block",
