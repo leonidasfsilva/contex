@@ -340,7 +340,7 @@ $this->load->view('includes/custom_js');
                     <a href="<?php echo base_url(); ?>mxcode/minhaConta"><span class="pull-left">Minha Conta</span> <i class="pull-right fas fa-user fa-lg"></i></a>
                 </li>
                 <li title="Configurações da conta">
-                    <a href="<?php echo base_url(); ?>configuracoes"><span class="pull-left">Configurações</span> <i class="pull-right fas fa-cog fa-lg"></i></a>
+                    <a href="<?php echo base_url(); ?>configuracoes/usuario"><span class="pull-left">Configurações</span> <i class="pull-right fas fa-cog fa-lg"></i></a>
                 </li>
                 <!--                <li><a href="javascript:"><span class="pull-left">Configurações</span> <i class="pull-right fa fa-cog fa-lg"></i></a></li>-->
                 <!--                <li class="divider"></li>-->
@@ -499,6 +499,9 @@ $this->load->view('includes/custom_js');
                                         <ul class="acc-menu">
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) { ?>
                                                 <li><a href="<?php echo base_url() ?>anuncios">Anúncios</a></li>
+                                            <?php } ?>
+                                            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) { ?>
+                                                <li><a href="<?php echo base_url() ?>configuracoes/sistema">Configurações</a></li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) { ?>
                                                 <li><a href="<?php echo base_url() ?>usuarios">Usuários</a></li>
