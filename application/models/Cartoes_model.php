@@ -84,13 +84,24 @@ class Cartoes_model extends CI_Model
             ->row();
     }
 
-    function getCartoesUsuario($id_usuario)
+    function getCartoesUsuario($id_usuario, $id_cartao = null)
     {
-        return $this->db
-            ->where('status', 1)
-            ->where('id_usuario', $id_usuario)
-            ->get('cartoes')
-            ->result();
+        if ($id_cartao) {
+            return $this->db
+                ->where('status', 1)
+                ->where('id_usuario', $id_usuario)
+                ->where('id_cartao', $id_cartao)
+                ->get('cartoes')
+                ->result();
+        } else {
+            return $this->db
+                ->where('status', 1)
+                ->where('id_usuario', $id_usuario)
+                ->or_where('id_usuario_titular', $id_usuario)
+                ->order_by('id_cartao', 'asc')
+                ->get('cartoes')
+                ->result();
+        }
     }
 
     function getPrimeiroCartaoUsuario($id_usuario)
@@ -115,17 +126,23 @@ class Cartoes_model extends CI_Model
 
     function cartaoPertenceUsuario($id_usuario, $id_cartao)
     {
-        $result = $this->db
+        return $this->db
+            ->where('id_cartao', $id_cartao)
             ->where('id_usuario', $id_usuario)
+            ->or_where('id_usuario_titular', $id_usuario)
+            ->where('status', 1)
+            ->get('cartoes')
+            ->row();
+    }
+
+    function cartaoPertenceTitular($id_usuario, $id_cartao)
+    {
+        return $this->db
+            ->where('id_usuario_titular', $id_usuario)
             ->where('id_cartao', $id_cartao)
             ->where('status', 1)
             ->get('cartoes')
-            ->num_rows();
-        if($result){
-            return true;
-        } else {
-            return false;
-        }
+            ->row();
     }
 
     function getById($id)
@@ -135,25 +152,13 @@ class Cartoes_model extends CI_Model
         return $this->db->get('faturas')->row();
     }
 
-    function getLancamentoEditavel($mes, $ano)
+    function consultarUsuario($cpf)
     {
-        $this->db->select('id_lancamento');
-        $this->db->from('lancamentos_faturas_assoc');
-        $this->db->where('n_parcela', 1);
-        $this->db->where('status', 1);
-        $this->db->where('mes_referencia', $mes);
-        $this->db->where('ano_referencia', $ano);
-
-        $rows = $this->db->count_all_results('', false);
-
-        if ($rows > 0) {
-            foreach ($this->db->get()->result() as $row) {
-                $data[] = $row->id_lancamento;
-            }
-            return $data;
-        } else {
-            return $this->db->get()->result();
-        }
+        return $this->db
+            ->where('status', 1)
+            ->where('cpf', $cpf)
+            ->get('usuarios')
+            ->row();
     }
 
     function add($table, $data)
@@ -213,53 +218,6 @@ class Cartoes_model extends CI_Model
             $this->db->where($where);
         }
         return $this->db->count_all_results();
-    }
-
-    function getTotalQuitadas($id_usuario, $id_cliente = null)
-    {
-        if (!$id_cliente == null) {
-            $this->db
-                ->select('SUM(valor) AS total')
-                ->from('pendencias')
-                ->where('status = 1 AND quitado = 1 AND id_usuario  = ' . $id_usuario . ' AND id_cliente = ' . $id_cliente);
-        } else {
-            $this->db
-                ->select('SUM(valor) AS total')
-                ->from('pendencias')
-                ->where('status = 1 AND quitado = 1 AND id_usuario  = ' . $id_usuario);
-        }
-
-        return $this->db->get()->row();
-
-    }
-
-    function getTotalPendencias($id_usuario, $id_cliente = null)
-    {
-        if (!$id_cliente == null) {
-            $this->db
-                ->select('SUM(valor) AS total')
-                ->from('pendencias')
-                ->where('status = 1 AND quitado = 0 AND id_usuario = ' . $id_usuario . ' AND id_cliente = ' . $id_cliente);
-
-        } else {
-            $this->db
-                ->select('SUM(valor) AS total')
-                ->from('pendencias')
-                ->where('status = 1 AND quitado = 0 AND id_usuario = ' . $id_usuario);
-
-        }
-        return $this->db->get()->row();
-
-    }
-
-    function getTotal($id_usuario)
-    {
-        $this->db
-            ->select('SUM(valor) AS total')
-            ->from('pendencias')
-            ->where('status = 1 AND id_usuario = ' . $id_usuario);
-        return $this->db->get()->row();
-
     }
 
 }

@@ -2,7 +2,7 @@
     <div class="panel-heading">
         <h3>
             <i class="fas fa-credit-card fa-lg fa-fw"></i>
-            Adicionar Novo Cartão
+            Novo Cartão de Crédito
         </h3>
         <div class="panel-ctrls">
             <a href="<?= base_url('financeiro/cartoes') ?>" class="btn btn-sm btn-default"><i class="fas fa-arrow-left fa-fw"></i> Cartões</a>
@@ -13,7 +13,7 @@
         </div>
     </div>
     <div class="panel-body">
-        <div class="alert alert-info text-justify">
+        <div class="note note-warning mb40">
             Todos os dados inseridos neste formulário são armazenados em nosso banco de dados de forma segura.
             Caso não se sinta à vontade para fornecer todos os dados do seu cartão, apenas o número do cartão é obrigatório.
         </div>

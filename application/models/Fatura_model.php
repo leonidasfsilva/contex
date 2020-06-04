@@ -27,7 +27,8 @@ class Fatura_model extends CI_Model
             $this->db->where($where);
         }
         $this->db->where('status', 1);
-        $this->db->where('id_usuario', $id_usuario);
+//        este trecho do codigo foi retirado para tornar visivel aos titulares as faturas do cartoes adicionais
+//        $this->db->where('id_usuario', $id_usuario);
         $this->db->where('id_cartao', $id_cartao);
         $query = $this->db->get();
 
@@ -88,16 +89,22 @@ class Fatura_model extends CI_Model
         return $result;
     }
 
-    function getFaturaUsuario($id_fatura, $id_usuario)
+    function getFatura($id_fatura)
     {
-        $this->db->select('*');
-        $this->db->from('faturas');
-        $this->db->where('status', 1);
-        $this->db->where('id_fatura', $id_fatura);
-        $this->db->where('id_usuario', $id_usuario);
+        return $this->db
+            ->where('status', 1)
+            ->where('id_fatura', $id_fatura)
+            ->get('faturas')
+            ->row();
+    }
 
-        return $this->db->count_all_results();
-
+    function getFaturaUsuario($id_fatura)
+    {
+        return $this->db
+            ->where('status', 1)
+            ->where('id_fatura', $id_fatura)
+            ->get('faturas')
+            ->row();
     }
 
     function getById($id)
@@ -131,7 +138,7 @@ class Fatura_model extends CI_Model
     function add($table, $data)
     {
         $this->db->insert($table, $data);
-        if ($this->db->affected_rows() == '1') {
+        if ($this->db->affected_rows() == 1) {
             return true;
         }
         return false;
@@ -281,28 +288,21 @@ class Fatura_model extends CI_Model
         return $this->db->count_all_results();
     }
 
-    function getUltimaFaturaAberta($id_usuario)
+    function getFaturaAtual($id_fatura)
     {
-        $one = false;
-        $this->db->select('*');
-        $this->db->from('faturas');
-        $this->db->where(
-            'fatura_aberta = 1 AND status = 1 AND id_usuario = ' . $id_usuario);
-        $this->db->order_by('vencimento', 'desc');
-        $this->db->limit(1);
-        $query = $this->db->get();
-        $result = $query->row();
-
-        return $result;
+        return $this->db
+            ->where('id_fatura', $id_fatura)
+            ->get('faturas')
+            ->row();
     }
 
-    function getUltimaFatura($id_usuario)
+    function getUltimaFatura($id_cartao)
     {
         $one = false;
         $this->db->select('*');
         $this->db->from('faturas');
-        $this->db->where(
-            'status = 1 AND id_usuario = ' . $id_usuario);
+        $this->db->where('status', 1);
+        $this->db->where('id_cartao', $id_cartao);
         $this->db->order_by('vencimento', 'desc');
         $this->db->limit(1);
         $query = $this->db->get();
@@ -320,17 +320,15 @@ class Fatura_model extends CI_Model
         return false;
     }
 
-    function getFaturaReferencia($id_usuario, $mes, $ano)
+    function getFaturaReferencia($id_cartao, $mes, $ano)
     {
-        $this->db->select('*');
-        $this->db->from('faturas');
-        $this->db->where(
-            'status = 1 AND id_usuario = ' . $id_usuario .
-            ' AND mes_referencia = ' . $mes . ' AND ano_referencia = ' . $ano);
-        $query = $this->db->get();
-        $result = $query->row();
-
-        return $query;
+        return $this->db
+            ->where('status', 1)
+            ->where('id_cartao', $id_cartao)
+            ->where('mes_referencia', $mes)
+            ->where('ano_referencia', $ano)
+            ->get('faturas')
+            ->row();
     }
 
     function getValorTotalFatura($id_fatura)

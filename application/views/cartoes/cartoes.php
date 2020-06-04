@@ -2,7 +2,7 @@
     <div class="panel-heading">
         <h3>
             <i class="fas fa-credit-card fa-lg fa-fw"></i>
-            Controle de Cartões
+            Lista de Cartões
         </h3>
         <div class="panel-ctrls">
             <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar faturas">
@@ -22,7 +22,8 @@
                 <th style="text-align: left !important;">Bandeira</th>
                 <th style="text-align: left !important;">Final Cartão</th>
                 <th style="text-align: left !important;">Nome</th>
-                <th style="text-align: left !important; width: 140px">Ações</th>
+                <th style="text-align: left !important;">Tipo Cartão</th>
+                <th style="text-align: left !important; width: 180px">Ações</th>
             </tr>
             </thead>
             <tbody>
@@ -35,17 +36,36 @@
                     $n_cartao = explode(" ", trim(base64_decode($r->numero)));
                     $final = $n_cartao[3];
                     $mascara = preg_replace('/\d/', '*', $n_cartao);
+
+                    if ($r->adicional) {
+                        if ($r->id_usuario == id_usuario()) {
+                            $disabled_editar = 'disabled="disabled"';
+                            $disabled_excluir = 'disabled="disabled"';
+                        } else {
+                            $disabled_editar = null;
+                            $disabled_excluir = null;
+                        }
+                        $disabled_adicional = 'disabled="disabled"';
+                        $tipo_cartao = 'ADICIONAL';
+                        $label_cartao = 'warning';
+                    } else {
+                        $disabled_adicional = null;
+                        $tipo_cartao = 'TITULAR';
+                        $label_cartao = 'primary';
+                    }
                     ?>
                     <tr>
                         <td><?= $r->bandeira ?></td>
-                        <td><?= '**** **** *** ' . $final ?></td>
+                        <td><?= '**** **** **** ' . $final ?></td>
                         <td><?= $r->nome ?></td>
+                        <td><span class="label label-<?= $label_cartao ?>"><?= $tipo_cartao ?></span></td>
                         <?=
                         '<td>
                             <button href="#modalVisualizarCartao" role="button" data-toggle="modal" numero="' . base64_decode($r->numero) . '" validade="' . $r->validade . '" bandeira="' . $r->bandeira . '" cvc="' . base64_decode($r->cvc) .
-                        '" nome="' . $r->nome . '" style="margin-right: 1%" class="btn btn-info btn-sm visualizar" title="Visualizar cartão"><i class="fas fa-eye fa-lg fa-fw"></i></button>
-                            <a href="' . base_url('financeiro/cartoes/editar/') . $r->id_cartao . '" style="margin-right: 1%" class="btn btn-primary btn-sm" title="Editar"><i class="fas fa-edit fa-lg fa-fw"></i></a>
-                            <button href="#modalExcluir" role="button" data-toggle="modal" id_cartao="' . $r->id_cartao . '" style="margin-right: 1%" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw" ></i></button>
+                        '" nome="' . $r->nome . '" class="btn btn-info btn-sm visualizar" title="Visualizar cartão"><i class="fas fa-eye fa-lg fa-fw"></i></button>
+                            <a href="' . base_url('financeiro/cartoes/editar/') . $r->id_cartao . '" class="btn btn-primary btn-sm" title="Editar" ' . $disabled_editar . '><i class="fas fa-edit fa-lg fa-fw"></i></a>
+                            <a href="' . base_url('financeiro/cartoes/adicional/') . $r->id_cartao . '" class="btn btn-inverse btn-sm" title="Gerar cartão adicional" ' . $disabled_adicional . '><i class="fas fa-credit-card fa-lg fa-fw"></i></a>
+                            <button href="#modalExcluir" role="button" data-toggle="modal" id_cartao="' . $r->id_cartao . '" class="btn btn-danger btn-sm excluir" title="Excluir" ' . $disabled_excluir . '><i class="fas fa-trash-alt fa-lg fa-fw" ></i></button>
                         </td>'; ?>
                     </tr>
                 <?php }
@@ -191,77 +211,6 @@
     </div>
 </div>
 
-<!-- Modal FECHAR FATURA-->
-<div class="modal fade" id="modalFechar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-inverse">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white">Fechar fatura</h4>
-            </div>
-            <form id="formFechar" action="<?php echo base_url() ?>financeiro/faturas/fechar" method="post">
-                <div class="modal-body">
-                    <p>Confirma o fechamento desta fatura?</p>
-                    <input id="id_fatura" type="hidden" name="id_fatura" value=""/>
-                    <input id="urlFecharFatura" type="hidden" name="urlAtual" value=""/>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
-                        <i class="fa fa-times fa-fw"></i> Cancelar
-                    </button>
-                    <button class="btn btn-inverse btn-sm" id="btnFechar">
-                        <i class="fa fa-check fa-fw"></i> Confirmar
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Modal PAGAR FATURA-->
-<div class="modal fade" id="modalPagar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-success">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white">Pagar fatura</h4>
-            </div>
-            <form id="formPagar" action="<?php echo base_url() ?>financeiro/faturas/pagar" method="post" autocomplete="off">
-                <div class="modal-body">
-                    <p>Confirma o pagamento desta fatura?</p>
-                    <input id="id_fatura_pagar" type="hidden" name="id_fatura" value=""/>
-                    <input id="urlPagarFatura" type="hidden" name="urlAtual" value=""/>
-                    <div class="row">
-                        <div class="form-group col-lg-6">
-                            <label class="font-weight-bold" for="data_pagamento">Data do pagamento</label>
-                            <input class="datepicker form-control" id="data_pagamento" type="text" name="data_pagamento"/>
-                        </div>
-                        <div class="form-group col-lg-6">
-                            <label class="font-weight-bold" for="forma_pagamento">Forma de pagamento *</label>
-                            <select name="forma_pagamento" id="forma_pagamento" class="form-control">
-                                <option value="">-- Selecione --</option>
-                                <?php if ($formasPagamento) {
-                                    foreach ($formasPagamento as $f) { ?>
-                                        <option value="<?= $f->id_forma ?>"><?= $f->nome ?></option>
-                                    <?php }
-                                } ?>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true" id="btnCancelPagar">
-                        <i class="fa fa-times fa-fw"></i> Cancelar
-                    </button>
-                    <button class="btn btn-success btn-sm" id="btnPagar">
-                        <i class="fa fa-check fa-fw"></i> Pagar
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <script type="text/javascript">
     $(document).ready(function () {
         mountCard('#formVerCartao', '.card-wrapper');
@@ -272,7 +221,7 @@
 
         let flipped;
         $('#ver_cvc').click(function () {
-            if(flipped == null) {
+            if (flipped == null) {
                 $(this).html('<i class="fa fa-eye-slash fa-fw"></i> Ocultar CVC');
                 $('.jp-card').toggleClass('jp-card-flipped');
                 flipped = true;
@@ -457,7 +406,6 @@
                             bgColor: '#5bb75b',
                             icon: 'success'
                         });
-
                     } else {
                         $("#btnCancelPagar").trigger('click');
                         alert('Ocorreu um erro ao tentar pagar a pendência.');

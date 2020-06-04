@@ -98,7 +98,7 @@
             messages: {
                 number: {
                     required: 'Informe o número do cartão',
-                    minlength: 'O número do cartão deve conter 12 dígitos',
+                    minlength: 'O número do cartão deve conter 16 dígitos',
                 },
             },
             errorClass: "help-block",

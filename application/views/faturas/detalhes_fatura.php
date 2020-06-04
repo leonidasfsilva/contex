@@ -1,10 +1,15 @@
-<?php $situacao = $this->input->get('situacao');
+<?php
+$situacao = $this->input->get('situacao');
 $periodo = $this->input->get('periodo');
 $cliente = $this->input->get('cliente');
 
 if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
     if ($status_fatura == 1) {
-        $disabled_lancamento_1 = '';
+        if($id_usuario != id_usuario()) {
+            $disabled_lancamento_1 = 'disabled';
+        } else {
+            $disabled_lancamento_1 = '';
+        }
         $statusFatura = 'ABERTA';
         $label_status = 'default';
     } else if ($status_fatura == 2) {
@@ -47,7 +52,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             Detalhes da Fatura: # <?= $id_fatura ?>
         </h3>
         <div class="panel-ctrls">
-            <a href="<?php echo base_url('financeiro/faturas') ?>" class="btn btn-sm btn-default"><i class="fas fa-arrow-left fa-fw"></i> Faturas</a>
+            <a href="<?= base_url('financeiro/faturas?id_cartao=') . $id_cartao ?>" class="btn btn-sm btn-default"><i class="fas fa-arrow-left fa-fw"></i> Faturas</a>
             <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar faturas">
                 <i class="fas fa-filter fa-fw"></i>
                 Filtrar
@@ -301,7 +306,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title">Filtrar lançamentos</h4>
             </div>
-            <form action="<?php echo current_url(); ?>" method="get" id="form_filtro">
+            <form action="<?= current_url(); ?>" method="get" id="form_filtro">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-6" style="margin-left: 0">
@@ -358,7 +363,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                         <i class="fas fa-times fa-fw"></i> Cancelar
                     </button>
                     <button class="btn btn-primary btn-sm"><i class="fas fa-check fa-fw"></i> Filtrar</button>
@@ -376,7 +381,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Novo lançamento na fatura</h4>
             </div>
-            <form id="formNovoLancamento" action="<?php echo base_url('financeiro/faturas/novoLancamento') ?>" method="post" autocomplete="off">
+            <form id="formNovoLancamento" action="<?= base_url('financeiro/faturas/novoLancamento/') . $id_fatura ?>" method="post" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
@@ -465,7 +470,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Detalhes do lançamento</h4>
             </div>
-            <form id="formEditarLancamento" action="<?php echo base_url() ?>financeiro/faturas/editarLancamento" method="post" autocomplete="off">
+            <form id="formEditarLancamento" action="<?php echo base_url('financeiro/faturas/editarLancamento') ?>" method="post" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
@@ -473,6 +478,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             <input class="form-control" id="descricaoEditar" type="text" name="descricao"/>
                             <input id="urlLancamentoEditar" type="hidden" name="urlAtual" value=""/>
                             <input id="id_lancamentoEditar" type="hidden" name="id_lancamento" value=""/>
+                            <input type="hidden" name="id_fatura" value="<?= $id_fatura ?>"/>
                         </div>
                     </div>
                     <div class="row">
@@ -534,9 +540,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </div>
                             <label for="estornoEditar" class="font-weight-bold">Estorno</label>
                         </div>
-
                         <div class="col-xs-8">
-                            <button id="btnCancelLancamento" class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                            <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                                 <i class="fa fa-times fa-fw"></i> Cancelar
                             </button>
                             <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
@@ -556,7 +561,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Excluir lançamento</h4>
             </div>
-            <form id="formNovaFatura" action="<?php echo base_url() ?>financeiro/faturas/excluirLancamento" method="post">
+            <form id="formNovaFatura" action="<?php echo base_url('financeiro/faturas/excluirLancamento') ?>" method="post">
                 <div class="modal-body">
                     <p>Deseja realmente excluir este lançamento?</p>
                     <input name="id_lancamento" id="idExcluir" type="hidden" value=""/>

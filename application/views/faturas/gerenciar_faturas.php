@@ -42,7 +42,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         $n_cartao = explode(" ", trim(base64_decode($c->numero)));
                         $final = $n_cartao[3]; ?>
                         <!--                <option value=""><< Selecione um Cartão >></option>-->
-                        <option value="<?= $c->id_cartao ?>" <?= $cartao_selecionado == $c->id_cartao ? 'selected' : ''?>><?= $c->bandeira . ' - FINAL ' . $final ?></option>
+                        <option value="<?= $c->id_cartao ?>" <?= $cartao_selecionado == $c->id_cartao ? 'selected' : '' ?>><?= $c->bandeira . ' - FINAL ' . $final ?></option>
                     <?php } ?>
                 </select>
             <?php } else { ?>
@@ -186,7 +186,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         echo '<button ' . $disabled . ' href="#modalFechar" style="margin-right: 1%"  class="btn btn-inverse btn-sm fechar" data-toggle="modal" title="Fechar Fatura" id_fatura="' . $r->id_fatura . '">
                                 <i class="' . $iconFechar . ' fa-lg fa-fw"></i></button>';
 
-                        echo '<a href="' . base_url() . 'financeiro/faturas/detalhes/' . $r->id_fatura . '" type="button" id="btn_detalhes" style="margin-right: 1%" class="btn btn-primary btn-sm detalhes" title="Detalhes da Fatura" id_fatura="' . $r->id_fatura . '">
+                        echo '<a href="' . base_url() . 'financeiro/faturas/detalhes/' . $r->id_fatura . '/' . $cartao_selecionado . '" type="button" id="btn_detalhes" style="margin-right: 1%" class="btn btn-primary btn-sm detalhes" title="Detalhes da Fatura" id_fatura="' . $r->id_fatura . '">
                                 <i class="fas fa-search-plus fa-lg fa-fw"></i></a>';
                     }
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dFaturas')) {
@@ -304,7 +304,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                         <i class="fa fa-times fa-fw"></i> Cancelar
                     </button>
                     <button class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Filtrar</button>
@@ -355,7 +355,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Excluir fatura</h4>
             </div>
-            <form id="formNovaFatura" action="<?php echo base_url() ?>financeiro/faturas/excluir" method="post">
+            <form action="<?php echo base_url() ?>financeiro/faturas/excluir" method="post">
                 <div class="modal-body">
                     <p>Deseja realmente excluir esta fatura?</p>
                     <input name="id_fatura" id="idExcluir" type="hidden" value=""/>
