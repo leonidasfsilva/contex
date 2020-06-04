@@ -373,7 +373,7 @@ $fim = $this->input->get('dataFinal');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Registrar nova entrada</h4>
             </div>
-            <form id="formReceita" action="<?php echo base_url() ?>financeiro/lancamentos/entrada" method="post" autocomplete="off">
+            <form id="formReceita" action="<?php echo base_url('financeiro/lancamentos/entrada') ?>" method="post" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
@@ -414,7 +414,7 @@ $fim = $this->input->get('dataFinal');
                             <div class="form-group col-lg-4">
                                 <label for="formaPgto" class="font-weight-bold">Forma Pagamento *</label>
                                 <select name="formaPgto" id="formaPgto" class="form-control">
-                                    <option value="">-- Selecione --</option>
+                                    <option value=""><< Selecione >></option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
                                             <option value="<?= $f->id_forma ?>"><?= $f->nome ?></option>
@@ -444,7 +444,7 @@ $fim = $this->input->get('dataFinal');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Registrar nova saída</h4>
             </div>
-            <form id="formDespesa" action="<?php echo base_url() ?>financeiro/lancamentos/saida" method="post" autocomplete="off">
+            <form id="formDespesa" action="<?php echo base_url('financeiro/lancamentos/saida') ?>" method="post" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
@@ -484,7 +484,7 @@ $fim = $this->input->get('dataFinal');
                             <div class="form-group col-lg-4">
                                 <label for="formaPgto" class="font-weight-bold">Forma Pagamento *</label>
                                 <select name="formaPgto" id="formaPgto" class="form-control">
-                                    <option value="">-- Selecione --</option>
+                                    <option value=""><< Selecione >></option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
                                             <option value="<?= $f->id_forma ?>"><?= $f->nome ?></option>
@@ -514,7 +514,7 @@ $fim = $this->input->get('dataFinal');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Detalhes do lançamento</h4>
             </div>
-            <form id="formEditar" action="<?php echo base_url() ?>financeiro/lancamentos/editar" method="post">
+            <form id="formEditar" action="<?php echo base_url('financeiro/lancamentos/editar') ?>" method="post">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
@@ -562,7 +562,7 @@ $fim = $this->input->get('dataFinal');
                             <div class="form-group col-lg-4">
                                 <label for="formaPgtoEditar" class="font-weight-bold">Forma Pagamento *</label>
                                 <select name="formaPgto" id="formaPgtoEditar" class="form-control">
-                                    <option value="">-- Selecione --</option>
+                                    <option value=""><< Selecione >></option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
                                             <option value="<?= $f->id_forma ?>"><?= $f->nome ?></option>

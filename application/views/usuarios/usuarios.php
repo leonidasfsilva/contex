@@ -11,9 +11,9 @@
             <?php } ?>
         </div>
     </div>
+
     <div class="panel-body panel-no-padding table-responsive">
-        <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer"
-               role="grid" style="width: 100%;">
+        <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
             <thead>
             <tr role="row">
                 <th style="width: 30px">ID</th>
@@ -30,38 +30,38 @@
                     <td colspan="5">Nenhum usuário cadastrado</td>
                 </tr>
             <?php } else {
-            foreach ($results as $r) {
+                foreach ($results as $r) {
 
-                if ($r->ativo == 1) {
-                    $status = 'Ativo';
-                    $label_status = 'success';
-                    $btn_status = '<a href="#modalDesativar" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-warning btn-sm" title="Desativar"><i class="fas fa-minus-circle fa-lg fa-fw" ></i></a>';
-                } else {
-                    $status = 'Inativo';
-                    $label_status = 'warning';
-                    $btn_status = '<a href="#modalAtivar" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-success btn-sm" title="Ativar"><i class="fas fa-check-circle fa-lg fa-fw" ></i></a>';
+                    if ($r->ativo == 1) {
+                        $status = 'Ativo';
+                        $label_status = 'success';
+                        $btn_status = '<a href="#modalDesativar" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-warning btn-sm" title="Desativar"><i class="fas fa-minus-circle fa-lg fa-fw" ></i></a>';
+                    } else {
+                        $status = 'Inativo';
+                        $label_status = 'warning';
+                        $btn_status = '<a href="#modalAtivar" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-success btn-sm" title="Ativar"><i class="fas fa-check-circle fa-lg fa-fw" ></i></a>';
+                    }
+
+                    echo '<tr>';
+                    echo '<td>' . $r->id_usuarios . '</td>';
+                    echo '<td>' . $r->nome . '</td>';
+                    echo '<td>' . $r->email . '</td>';
+                    echo '<td>' . $r->permissao . '</td>';
+                    echo '<td><span class="label label-' . $label_status . '">' . strtoupper($status) . '</span></td>';
+                    echo '<td style="text-align: center">';
+                    echo '<a href="' . base_url() . 'usuarios/visualizar/' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-info btn-sm" title="Detalhes"><i class="fas fa-search-plus fa-lg fa-fw"></i></a>';
+                    echo '<a href="' . base_url() . 'usuarios/editar/' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-primary btn-sm" title="Editar"><i class="fas fa-edit fa-lg fa-fw"></i></a>';
+                    echo $btn_status;
+                    echo '<a href="#modalExcluir" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-danger btn-sm" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw" ></i></a>';
+                    echo '</td>';
+                    echo '</tr>';
                 }
-
-                echo '<tr>';
-                echo '<td>' . $r->id_usuarios . '</td>';
-                echo '<td>' . $r->nome . '</td>';
-                echo '<td>' . $r->email . '</td>';
-                echo '<td>' . $r->permissao . '</td>';
-                echo '<td><span class="label label-' . $label_status . '">' . strtoupper($status) . '</span></td>';
-                echo '<td style="text-align: center">';
-                echo '<a href="' . base_url() . 'usuarios/visualizar/' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-info btn-sm" title="Detalhes"><i class="fas fa-search-plus fa-lg fa-fw"></i></a>';
-                echo '<a href="' . base_url() . 'usuarios/editar/' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-primary btn-sm" title="Editar"><i class="fas fa-edit fa-lg fa-fw"></i></a>';
-                echo $btn_status;
-                echo '<a href="#modalExcluir" role="button" data-toggle="modal" usuario="' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-danger btn-sm" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw" ></i></a>';                echo '</td>';
-                echo '</tr>';
             } ?>
             </tbody>
         </table>
     </div>
 </div>
 <?php
-}
-
 //echo $this->pagination->create_links();
 ?>
 

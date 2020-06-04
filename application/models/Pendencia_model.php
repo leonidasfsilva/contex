@@ -186,11 +186,10 @@ class Pendencia_model extends CI_Model
 
     function getClientes($id_usuario)
     {
-        $one = false;
-        $this->db->where('id_usuario = ' . $id_usuario);
-        $query = $this->db->get('clientes');
-
-        $result = !$one ? $query->result() : $query->row();
-        return $result;
+        return $this->db
+            ->where('id_usuario', $id_usuario)
+            ->where('status', 1)
+            ->get('clientes')
+            ->result();
     }
 }

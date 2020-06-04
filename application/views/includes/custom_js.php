@@ -1,5 +1,10 @@
 <script>
+
     $(document).on('ready', function (event) {
+        $('[disabled="disabled"]').click(function (e) {
+            e.preventDefault();
+        });
+
         $(".preloader").show();
         setTimeout(function () {
             hidePreLoader();
@@ -57,6 +62,7 @@
     });
 
     $(document).on('click', 'a:not([href="javascript:"],' +
+        '[disabled="disabled"], ' +
         '[class="js:"], ' +
         '[class="ui-corner-all"], ' +
         '[href="#"], ' +
@@ -272,7 +278,7 @@
         Swal.fire({
             position: 'top',
             type: 'error',
-            timer: 3000,
+            // timer: 3000,
             title: 'Erro!',
             html: '<?= $this->session->flashdata('erro') ?>',
             showConfirmButton: false,
