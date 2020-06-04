@@ -44,14 +44,6 @@ class Configs_model extends CI_Model
             ->result();
     }
 
-    public function alterarSenha($id, $newSenha)
-    {
-        $this->db->set('senha', password_hash($newSenha, PASSWORD_DEFAULT));
-        $this->db->where('id_usuarios', $id);
-        return $this->db->update('usuarios');
-
-    }
-
     function pesquisar($termo, $id)
     {
         $data = array();
@@ -122,79 +114,6 @@ class Configs_model extends CI_Model
         return $this->db->count_all($table);
     }
 
-    function getOsAbertas()
-    {
-        $this->db->select('os.*, clientes.nomeCliente');
-        $this->db->from('os');
-        $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
-        $this->db->where('os.status', 'Aberto');
-        $this->db->limit(10);
-        return $this->db->get()->result();
-    }
-
-    function getProdutosMinimo()
-    {
-
-        $sql = "SELECT * FROM produtos WHERE estoque <= estoqueMinimo LIMIT 10";
-        return $this->db->query($sql)->result();
-
-    }
-
-    function getOsEstatisticas()
-    {
-        $sql = "SELECT status, COUNT(status) as total FROM os GROUP BY status ORDER BY status";
-        return $this->db->query($sql)->result();
-    }
-
-    public function getEstatisticasFinanceiro()
-    {
-        $sql = "SELECT SUM(CASE WHEN baixado = 1 AND tipo = 'receita' THEN valor END) as total_receita, 
-                       SUM(CASE WHEN baixado = 1 AND tipo = 'despesa' THEN valor END) as total_despesa,
-                       SUM(CASE WHEN baixado = 0 AND tipo = 'receita' THEN valor END) as total_receita_pendente,
-                       SUM(CASE WHEN baixado = 0 AND tipo = 'despesa' THEN valor END) as total_despesa_pendente FROM lancamentos";
-        return $this->db->query($sql)->row();
-    }
-
-    public function getEmitente($id_usuario)
-    {
-        $this->db->where('id_usuario = ' . $id_usuario . ' AND status = ' . 1);
-        $this->db->limit(1);
-        return $this->db->get('emitente')->row();
-    }
-
-    public function getLogoEmitente($id_usuario)
-    {
-        $this->db->select('logomarca');
-        $this->db->from('emitente');
-        $this->db->where('id_usuario = ' . $id_usuario . ' AND status = ' . 1);
-        $this->db->limit(1);
-        return $this->db->get()->row();
-    }
-
-    public function editLogo($id, $logo)
-    {
-        $this->db->set('logomarca', $logo);
-        $this->db->where('id_emitente', $id);
-        return $this->db->update('emitente');
-    }
-
-    public function check_credentials($email)
-    {
-        $this->db->where('email', $email);
-        $this->db->where('status', 1);
-        $this->db->limit(1);
-        return $this->db->get('usuarios')->row();
-    }
-
-    function gravaLog($data)
-    {
-        $this->db->insert('logs', $data);
-        if ($this->db->affected_rows() == 1) {
-            return true;
-        }
-        return false;
-    }
-
     public function getAvatarUsuario($id_usuario)
     {
         $this->db->select('avatar');
@@ -218,10 +137,10 @@ class Configs_model extends CI_Model
         return $this->db->update('usuarios');
     }
 
-    public function getDadosConfigs()
+    public function getConfigs()
     {
         return $this->db
-            ->get('configs_usuario')
+            ->get('configs_opcoes')
             ->result();
     }
 

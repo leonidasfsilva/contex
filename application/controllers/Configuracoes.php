@@ -22,20 +22,141 @@ class Configuracoes extends CI_Controller
 
     public function index()
     {
+        $this->sistema();
+    }
+
+    public function sistema()
+    {
+        if ((!session_id()) || (!$this->session->userdata('logado'))) {
+            redirect('mxcode/login');
+        }
+
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {
+            $this->session->set_flashdata('erro', 'Você não tem permissão para gerenciar configurações do sistema.');
+            redirect(base_url());
+        }
+
+        $data['setores'] = array(
+            'ARQUIVOS',
+            'ANÚNCIOS',
+            'CARTÕES',
+            'CONFIGURAÇÕES',
+            'CLIENTES',
+            'EMITENTE',
+            'FATURAS',
+            'INVESTIMENTOS',
+            'LANÇAMENTOS',
+            'ORDENS DE SERVIÇO',
+            'PAINEL INICIAL',
+            'PENDÊNCIAS',
+            'PERMISSÕES',
+            'PRODUTOS',
+            'RELATÓRIOS',
+            'SERVIÇOS',
+            'USUÁRIOS',
+            'VENDAS',
+        );
+
+        $data['menuConfiguracoes'] = true;
+        $data['results'] = $this->configs_model->getConfigs();
+        $data['view'] = 'configuracoes/sistema';
+        $this->load->view('tema/topo', $data);
+    }
+
+    public function usuario()
+    {
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
             redirect('mxcode/login');
         }
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
+            $this->session->set_flashdata('erro', 'Você não tem permissão para gerenciar configurações de usuário0.');
             redirect(base_url());
         }
 
         $data['menuConfiguracoes'] = true;
         $data['dados'] = $this->configs_model->getConfigsUsuario(id_usuario());
-        $data['view'] = 'configuracoes/configuracoes';
+        $data['view'] = 'configuracoes/usuario';
         $this->load->view('tema/topo', $data);
     }
+
+    public function adicionar()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {
+            $this->session->set_flashdata('erro', 'Você não tem permissão para editar configurações do sistema.');
+            redirect(base_url());
+        }
+
+        if (!$_POST) {
+            $this->session->set_flashdata('erro', 'Método não permitido.');
+            redirect(base_url('configuracoes/sistema'));
+        }
+
+        $descricao = padronizarString($_POST['descricao']);
+
+        $data = array(
+            'descricao' => $descricao,
+            'setor' => $_POST['setor'],
+        );
+
+        if ($this->configs_model->add('configs_opcoes', $data)) {
+            $this->session->set_flashdata('sucesso', 'Opção cadastrada com sucesso!');
+            redirect(base_url() . 'configuracoes/sistema');
+        } else {
+            $this->session->set_flashdata('erro', 'Erro ao tentar cadastrar opção!');
+            redirect(base_url() . 'configuracoes/sistema');
+        }
+    }
+
+    public function editar()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {
+            $this->session->set_flashdata('erro', 'Você não tem permissão para editar configurações do sistema.');
+            redirect(base_url());
+        }
+
+        if (!$_POST) {
+            $this->session->set_flashdata('erro', 'Método não permitido.');
+            redirect(base_url('configuracoes/sistema'));
+        }
+
+        $descricao = padronizarString($_POST['descricao']);
+
+        $data = array(
+            'descricao' => $descricao,
+            'setor' => $_POST['setor'],
+        );
+
+        if ($this->configs_model->edit('configs_opcoes', $data, 'id_opcao', $_POST['id_opcao'])) {
+            $this->session->set_flashdata('sucesso', 'Opção alterada com sucesso!');
+            redirect(base_url() . 'configuracoes/sistema');
+        } else {
+            $this->session->set_flashdata('erro', 'Erro ao tentar alterar opção!');
+            redirect(base_url() . 'configuracoes/sistema');
+        }
+    }
+
+    public function excluir()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {
+            $this->session->set_flashdata('erro', 'Você não tem permissão para excluir configurações do sistema.');
+            redirect(base_url());
+        }
+
+        if (!$_POST) {
+            $this->session->set_flashdata('erro', 'Método não permitido.');
+            redirect(base_url('configuracoes/sistema'));
+        }
+
+        if ($this->configs_model->delete('configs_opcoes', 'id_opcao', $_POST['id_opcao'])) {
+            $this->session->set_flashdata('sucesso', 'Opção excluída com sucesso!');
+            redirect(base_url() . 'configuracoes/sistema');
+        } else {
+            $this->session->set_flashdata('erro', 'Erro ao tentar excluir opção!');
+            redirect(base_url() . 'configuracoes/sistema');
+        }
+    }
+
 
     public function minhaConta()
     {
@@ -551,30 +672,36 @@ class Configuracoes extends CI_Controller
     }
 
 
-    public function setWidgetLancamentos(){
-        if($_POST['value'] == 1){
+    public function setWidgetLancamentos()
+    {
+        if ($_POST['value'] == 1) {
             $this->configs_model->setWidgetLancamentos(id_usuario());
         } else {
             $this->configs_model->unsetWidgetLancamentos(id_usuario());
         }
     }
 
-    public function setWidgetCartaoCredito(){
-        if($_POST['value'] == 1){
+    public function setWidgetCartaoCredito()
+    {
+        if ($_POST['value'] == 1) {
             $this->configs_model->setWidgetCartaoCredito(id_usuario());
         } else {
             $this->configs_model->unsetWidgetCartaoCredito(id_usuario());
         }
     }
-    public function setWidgetInvestimentos(){
-        if($_POST['value'] == 1){
+
+    public function setWidgetInvestimentos()
+    {
+        if ($_POST['value'] == 1) {
             $this->configs_model->setWidgetInvestimentos(id_usuario());
         } else {
             $this->configs_model->unsetWidgetInvestimentos(id_usuario());
         }
     }
-    public function setWidgetPendencias(){
-        if($_POST['value'] == 1){
+
+    public function setWidgetPendencias()
+    {
+        if ($_POST['value'] == 1) {
             $this->configs_model->setWidgetPendencias(id_usuario());
         } else {
             $this->configs_model->unsetWidgetPendencias(id_usuario());
