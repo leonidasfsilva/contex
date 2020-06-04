@@ -124,13 +124,13 @@ class Cartoes_model extends CI_Model
             ->row();
     }
 
-    function cartaoPertenceUsuario($id_usuario, $id_cartao)
+    function cartaoPertenceUsuario($id_cartao)
     {
         return $this->db
             ->where('id_cartao', $id_cartao)
-            ->where('id_usuario', $id_usuario)
-            ->or_where('id_usuario_titular', $id_usuario)
             ->where('status', 1)
+//            ->where('id_usuario', $id_usuario)
+//            ->or_where('id_usuario_titular', $id_usuario)
             ->get('cartoes')
             ->row();
     }

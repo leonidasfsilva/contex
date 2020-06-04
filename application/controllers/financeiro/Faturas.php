@@ -71,11 +71,13 @@ class Faturas extends CI_Controller
 
         if ($_GET['id_cartao']) {
             $id_cartao = $_GET['id_cartao'];
-            $cartao_usuario = $this->cartoes_model->cartaoPertenceUsuario(id_usuario(), $id_cartao);
+            $cartao_usuario = $this->cartoes_model->cartaoPertenceUsuario($id_cartao);
 
-            if (!$cartao_usuario) {
-                $this->session->set_flashdata('erro', 'Cartão solicitado não pertence ao usuário.');
-                redirect('financeiro/faturas');
+            if ($cartao_usuario->id_usuario != id_usuario()) {
+                if ($cartao_usuario->id_usuario_titular != id_usuario()) {
+                    $this->session->set_flashdata('erro', 'Cartão solicitado não pertence ao usuário.');
+                    redirect('financeiro/faturas');
+                }
             }
         } else {
             $id_cartao = $primeiro_cartao->id_cartao;
@@ -212,7 +214,7 @@ class Faturas extends CI_Controller
             redirect(base_url());
         }
 
-        if(!$_POST || $id_fatura == null) {
+        if (!$_POST || $id_fatura == null) {
             $this->session->set_flashdata('erro', 'Método não permitido.');
             redirect('financeiro/faturas');
         }
@@ -465,17 +467,17 @@ class Faturas extends CI_Controller
             redirect(base_url());
         }
 
-        if(!$_POST) {
+        if (!$_POST) {
             $this->session->set_flashdata('erro', 'Método não permitido.');
             redirect('financeiro/faturas');
         }
 
-        if($_POST['id_fatura']) {
+        if ($_POST['id_fatura']) {
             $id_fatura = $_POST['id_fatura'];
         } else {
             $id_fatura = $id;
         }
-        
+
         $urlAtual = $this->input->post('urlAtual');
         $valor = $this->input->post('valor');
         $valor_parcela = $this->input->post('valor_parcela');
