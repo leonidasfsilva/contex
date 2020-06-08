@@ -91,7 +91,6 @@ class Faturas extends CI_Controller
         $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
         $this->data['faturaAberta'] = $this->fatura_model->getFaturaAbertaUsuario(id_usuario(), $id_cartao);
         $this->data['results'] = $this->fatura_model->get('faturas', '*', $where, id_usuario(), $id_cartao, $config['per_page'], $this->input->get('per_page'));
-
         $this->data['menuFinanceiro'] = true;
         $this->data['view'] = 'faturas/gerenciar_faturas';
         $this->load->view('tema/topo', $this->data);
@@ -887,7 +886,22 @@ class Faturas extends CI_Controller
             'data_pagamento' => $data_pagamento,
         );
 
-        if ($this->fatura_model->edit('faturas', $data, 'id_fatura', $this->input->post('id_fatura')) == true) {
+        if ($this->fatura_model->edit('faturas', $data, 'id_fatura', $_POST['id_fatura']) == true) {
+
+            $valor_total = $this->fatura_model->getValorTotalFatura($_POST['id_fatura']);
+            $data = array(
+                'id_usuario' => id_usuario(),
+                'descricao' => 'FATURA CARTAO DE CREDITO',
+                'valor' => $valor_total,
+                'data_lancamento' => $data_pagamento,
+                'data_pagamento' => $data_pagamento,
+                'cliente_fornecedor' => 'CARTAO DE CREDITO',
+                'forma_pgto' => $_POST['forma_pagamento'],
+                'baixado' => 1,
+                'tipo' => 2,
+            );
+            $this->financeiro_model->add('lancamentos', $data);
+
             $this->session->set_flashdata('sucesso', 'Fatura paga com sucesso!');
             redirect($urlAtual);
         } else {

@@ -168,7 +168,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         $iconPagar = 'far fa-check-square';
                     }
 
-                    $valor_total = $this->fatura_model->getValorTotalFatura($r->id_fatura)->valor_total;
+                    $valor_total = $this->fatura_model->getValorTotalFatura($r->id_fatura);
 
                     echo '<tr>';
                     echo '<td>' . $mes . ' / ' . $ano . '</td>';
