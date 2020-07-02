@@ -71,10 +71,10 @@ class Faturas extends CI_Controller
 
         if ($_GET['id_cartao']) {
             $id_cartao = $_GET['id_cartao'];
-            $cartao_usuario = $this->cartoes_model->cartaoPertenceUsuario($id_cartao);
+            $cartao = $this->cartoes_model->cartaoExistente($id_cartao);
 
-            if ($cartao_usuario->id_usuario != id_usuario()) {
-                if ($cartao_usuario->id_usuario_titular != id_usuario()) {
+            if ($cartao->id_usuario != id_usuario()) {
+                if ($cartao->id_usuario_titular != id_usuario()) {
                     $this->session->set_flashdata('erro', 'Cartão solicitado não pertence ao usuário.');
                     redirect('financeiro/faturas');
                 }
@@ -892,7 +892,7 @@ class Faturas extends CI_Controller
             $data = array(
                 'id_usuario' => id_usuario(),
                 'descricao' => 'FATURA CARTAO DE CREDITO',
-                'valor' => $valor_total,
+                'valor' => '-' . $valor_total,
                 'data_lancamento' => $data_pagamento,
                 'data_pagamento' => $data_pagamento,
                 'cliente_fornecedor' => 'CARTAO DE CREDITO',
