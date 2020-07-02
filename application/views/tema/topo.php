@@ -395,6 +395,14 @@ $this->load->view('includes/custom_js');
                                     </li>
                                 <?php } ?>
 
+                                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vConsumo')) { ?>
+                                    <li class="<?= (isset($menuClientes)) ? 'active' : ''; ?>">
+                                        <a href="<?php echo base_url('consumo') ?>"><i class="fas fa-lightbulb fa-fw"></i>
+                                            <span>Consumo de Energia</span>
+                                        </a>
+                                    </li>
+                                <?php } ?>
+
                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) { ?>
                                     <li class="<?= (isset($menuProdutos)) ? 'active' : ''; ?>">
                                         <a href="<?php echo base_url('produtos') ?>"><i class="fas fa-barcode fa-fw"></i>
