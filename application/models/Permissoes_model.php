@@ -50,7 +50,7 @@ class Permissoes_model extends CI_Model
 
     function getById($id)
     {
-        $this->db->where('id', $id);
+        $this->db->where('id_permissao', $id);
         $this->db->limit(1);
         return $this->db->get('permissoes')->row();
     }

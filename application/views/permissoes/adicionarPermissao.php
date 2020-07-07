@@ -1,582 +1,547 @@
-<div class="span12" style="margin-left: 0">
-    <form action="<?php echo base_url(); ?>permissoes/adicionar" id="formPermissao" method="post">
-        <div class="span12" style="margin-left: 0">
-            <div class="widget-box">
-                <div class="widget-title">
-                <span class="icon">
-                    <i class="icon-lock"></i>
-                </span>
-                    <h5>Cadastro de Permissão</h5>
+<div class="panel panel-midnightblue">
+    <div class="panel-heading">
+        <h3>
+            <i class="fas fa-key fa-lg fa-fw"></i>
+            Editar Permissão
+        </h3>
+        <div class="panel-ctrls">
+            <a href="<?= base_url('permissoes') ?>" class="btn btn-sm btn-default"><i class="fas fa-arrow-left fa-fw"></i> Permissões</a>
+            <button class="btn btn-default btn-sm marcar_todos" id="marcar_todos" title="Marcar todas as opções">
+                <i class="fas fa-check-square fa-fw"></i>
+                Marcar Todos
+            </button>
+            <button class="btn btn-default btn-sm marcar_todos hidden" id="desmarcar_todos" title="Desmarcar todas as opções">
+                <i class="far fa-square fa-fw"></i>
+                Desmarcar Todos
+            </button>
+            <button type="button" id="submit" class="btn btn-primary btn-sm" title="Salvar">
+                <i class="fas fa-check fa-fw"></i>
+                Salvar
+            </button>
+        </div>
+    </div>
+    <div class="panel-body">
+        <form id="formNovaPermissao" action="<?= base_url('permissoes/adicionar') ?>" method="post">
+            <div class="row">
+                <div class="col-lg-6 mb30">
+                    <div class="input-group">
+                        <span class="input-group-addon font-weight-bold">Permissão:</span>
+                        <input class="form-control" placeholder="Informe o nome da permissão" type="text" name="nome">
+                    </div>
                 </div>
-                <div class="widget-content">
-
-                    <div class="span6">
-                        <label>Nome da Permissão</label>
-                        <input name="nome" type="text" id="nome" class="span12"/>
-
-                    </div>
-                    <div class="span6">
-                        <br/>
-                        <label>
-                            <input name="marcarTodos" type="checkbox" value="1" id="marcarTodos"/>
-                            <span class="lbl"> Marcar Todos</span>
-
-                        </label>
-                        <br/>
-                    </div>
-
-                    <div class="control-group">
-                        <label for="documento" class="control-label"></label>
-                        <div class="controls">
-                            <table class="table table-bordered">
-                                <tbody>
-                                <tr>
-                                    <td>
-                                        <label>
-                                            <input name="vCliente" class="marcar" type="checkbox" checked="checked" value="1"/>
-                                            <span class="lbl"> Visualizar Cliente</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input name="aCliente" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Adicionar Cliente</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input name="eCliente" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Editar Cliente</span>
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <label>
-                                            <input name="dCliente" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Excluir Cliente</span>
-                                        </label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>
-                                            <input name="vProduto" class="marcar" type="checkbox" checked="checked" value="1"/>
-                                            <span class="lbl"> Visualizar Produto</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input name="aProduto" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Adicionar Produto</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input name="eProduto" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Editar Produto</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input name="dProduto" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Excluir Produto</span>
-                                        </label>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-
-                                <tr>
-
-                                    <td>
-                                        <label>
-                                            <input name="vServico" class="marcar" type="checkbox" checked="checked" value="1"/>
-                                            <span class="lbl"> Visualizar Serviço</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input name="aServico" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Adicionar Serviço</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input name="eServico" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Editar Serviço</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input name="dServico" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Excluir Serviço</span>
-                                        </label>
-                                    </td>
-
-                                </tr>
-
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-                                <tr>
-
-                                    <td>
-                                        <label>
-                                            <input name="vOs" class="marcar" type="checkbox" checked="checked" value="1"/>
-                                            <span class="lbl"> Visualizar OS</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input name="aOs" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Adicionar OS</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input name="eOs" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Editar OS</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input name="dOs" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Excluir OS</span>
-                                        </label>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-
-                                <tr>
-
-                                    <td>
-                                        <label>
-                                            <input name="vVenda" class="marcar" type="checkbox" checked="checked" value="1"/>
-                                            <span class="lbl"> Visualizar Venda</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input name="aVenda" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Adicionar Venda</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input name="eVenda" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Editar Venda</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input name="dVenda" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Excluir Venda</span>
-                                        </label>
-                                    </td>
-
-                                </tr>
-
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-
-                                <tr>
-
-                                    <td>
-                                        <label>
-                                            <input name="vArquivo" class="marcar" type="checkbox" checked="checked" value="1"/>
-                                            <span class="lbl"> Visualizar Arquivo</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input name="aArquivo" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Adicionar Arquivo</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input name="eArquivo" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Editar Arquivo</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input name="dArquivo" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Excluir Arquivo</span>
-                                        </label>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-                                <!--                                LANÇAMENTOS-->
-                                <tr>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['vLancamento'])) {
-                                                    if ($permissoes['vLancamento'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="vLancamento" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Visualizar Lançamento</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['aLancamento'])) {
-                                                    if ($permissoes['aLancamento'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="aLancamento" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Adicionar Lançamento</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['eLancamento'])) {
-                                                    if ($permissoes['eLancamento'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="eLancamento" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Editar Lançamento</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['dLancamento'])) {
-                                                    if ($permissoes['dLancamento'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="dLancamento" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Excluir Lançamento</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <!--                                fim LANÇAMENTOS-->
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-                                <!--                                FATURAS-->
-                                <tr>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['vFaturas'])) {
-                                                    if ($permissoes['vFaturas'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="vFaturas" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Visualizar Faturas</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['aFaturas'])) {
-                                                    if ($permissoes['aFaturas'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="aFaturas" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Adicionar Faturas</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['eFaturas'])) {
-                                                    if ($permissoes['eFaturas'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="eFaturas" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Editar Faturas</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['dFaturas'])) {
-                                                    if ($permissoes['dFaturas'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="dFaturas" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Excluir Faturas</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <!--                                fim FATURAS-->
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-                                <!--                                PENDENCIAS-->
-                                <tr>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['vPendencias'])) {
-                                                    if ($permissoes['vPendencias'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="vPendencias" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Visualizar Pendências</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['aPendencias'])) {
-                                                    if ($permissoes['aPendencias'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="aPendencias" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Adicionar Pendências</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['ePendencias'])) {
-                                                    if ($permissoes['ePendencias'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="ePendencias" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Editar Pendências</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['dPendencias'])) {
-                                                    if ($permissoes['dPendencias'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="dPendencias" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Excluir Pendências</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <!--                                fim PENDENCIAS-->
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-                                <!--                                INVESTIMENTOS-->
-                                <tr>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['vInvestimentos'])) {
-                                                    if ($permissoes['vInvestimentos'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="vInvestimentos" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Visualizar Investimentos</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['aInvestimentos'])) {
-                                                    if ($permissoes['aInvestimentos'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="aInvestimentos" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Adicionar Investimentos</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['eInvestimentos'])) {
-                                                    if ($permissoes['eInvestimentos'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="eInvestimentos" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Editar Investimentos</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['dInvestimentos'])) {
-                                                    if ($permissoes['dInvestimentos'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="dInvestimentos" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Excluir Investimentos</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <!--                                fim INVESTIMENTOS-->
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>
-                                            <input name="rCliente" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Relatório Cliente</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input name="rServico" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Relatório Serviço</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input name="rOs" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Relatório OS</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input name="rProduto" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Relatório Produto</span>
-                                        </label>
-                                    </td>
-
-                                </tr>
-
-                                <tr>
-
-                                    <td>
-                                        <label>
-                                            <input name="rVenda" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Relatório Venda</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input name="rFinanceiro" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Relatório Financeiro</span>
-                                        </label>
-                                    </td>
-                                    <td colspan="2"></td>
-
-                                </tr>
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-
-                                <tr>
-
-                                    <td>
-                                        <label>
-                                            <input name="cUsuario" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Configurar Usuário</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input name="cEmitente" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Configurar Emitente</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input name="cPermissao" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Configurar Permissão</span>
-                                        </label>
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            <input name="cBackup" class="marcar" type="checkbox" value="1"/>
-                                            <span class="lbl"> Backup</span>
-                                        </label>
-                                    </td>
-
-                                </tr>
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="form-actions">
-                        <div class="span12">
-                            <div class="span6 offset3">
-                                <button type="submit" class="btn btn-success"><i class="icon-plus icon-white"></i> Adicionar</button>
-                                <a href="<?php echo base_url() ?>permissoes" id="" class="btn"><i class="icon-arrow-left"></i> Voltar</a>
-                            </div>
-                        </div>
+                <div class="col-lg-6 mb30">
+                    <div class="input-group">
+                        <span class="input-group-addon font-weight-bold">Situação:</span>
+                        <select class="form-control" name="status">
+                            <option value=""><< Selecione >></option>
+                            <option value="1">ATIVO</option>
+                            <option value="0">INATIVO</option>
+                        </select>
                     </div>
                 </div>
             </div>
-        </div>
-    </form>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="vCliente">
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Visualizar Cliente</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="aCliente">
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Adicionar Cliente</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="eCliente">
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Editar Cliente</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="dCliente">
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Excluir Cliente</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="vProduto">
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Visualizar Produto</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="aProduto">
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Adicionar Produto</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="eProduto">
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Editar Produto</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="dProduto">
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Excluir Produto</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="vServico">
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Visualizar Serviço</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="aServico">
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Adicionar Serviço</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="eServico">
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Editar Serviço</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="dServico">
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Excluir Serviço</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="vOs">
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Visualizar OS</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="aOs">
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Adicionar OS</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="eOs">
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Editar OS</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="dOs">
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Excluir OS</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="vVenda">
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Visualizar Vendas</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="aVenda">
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Adicionar Vendas</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="eVenda">
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Editar Vendas</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="dVenda">
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Excluir Vendas</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="vArquivo">
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Visualizar Arquivos</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="aArquivo">
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Adicionar Arquivos</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="eArquivo">
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Editar Arquivos</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="dArquivo">
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Excluir Arquivos</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="vLancamentos">
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Visualizar Lançamentos</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="aLancamentos">
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Adicionar Lançamentos</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="eLancamentos">
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Editar Lançamentos</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="dLancamentos">
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Excluir Lançamentos</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="vFaturas">
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Visualizar Faturas</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="aFaturas">
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Adicionar Faturas</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="eFaturas">
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Editar Faturas</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="dFaturas">
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Excluir Faturas</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="vPendencias">
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Visualizar Pendências</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="aPendencias">
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Adicionar Pendências</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="ePendencias">
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Editar Pendências</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="dPendencias">
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Excluir Pendências</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="vInvestimentos">
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Visualizar Investimentos</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="aInvestimentos">
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Adicionar Investimentos</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="eInvestimentos">
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Editar Investimentos</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="dInvestimentos">
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Excluir Investimentos</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="rCliente">
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Relatório Cliente</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="rServico">
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Relatório Serviço</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="rOs">
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Relatório OS</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="rProduto">
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Relatório Produto</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="rVenda">
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Relatório Venda</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="rLancamentos">
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Relatório Lançamentos</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="rInvestimentos">
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Relatório Investimentos</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="rFaturas">
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Relatório Faturas</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="cUsuario">
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Configurar Usuários</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="cEmitente">
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Configurar Emitente</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="cPermissao">
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Configurar Permissões</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="cBackup">
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Backup</label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
-
-<script type="text/javascript" src="<?php echo base_url() ?>assets/js/validate.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+        let marcado = false;
+        var checkboxes = $('input[name="atividades[]"]');
+
 
         $("#marcarTodos").change(function () {
             $("input:checkbox").prop('checked', $(this).prop("checked"));
         });
 
-
-        $("#formPermissao").validate({
-            rules: {
-                nome: {required: true}
-            },
-            messages: {
-                nome: {required: 'Campo obrigatório'}
+        $('#marcar_todos, #desmarcar_todos').click(function () {
+            $('#marcar_todos').toggleClass('hidden');
+            $('#desmarcar_todos').toggleClass('hidden');
+            if (marcado == false) {
+                marcado = true;
+                checkboxes.iCheck('check');
+                checkAll.prop('checked', 'checked');
+            } else {
+                marcado = false;
+                checkboxes.iCheck('uncheck');
+                checkAll.prop('checked', false);
             }
+            checkAll.iCheck('update');
         });
 
+
+        $('#submit').click(function () {
+            $('#formNovaPermissao').submit();
+        });
+
+        $("#formNovaPermissao").validate({
+            rules: {
+                nome: {required: true},
+                status: {required: true}
+            },
+            messages: {
+                nome: {required: 'Informe o nome da permissão'},
+                status: {required: 'Selecione o status da permissão'}
+            },
+            errorClass: "help-block",
+            errorElement: "p",
+
+            highlight: function (element, errorClass, validClass) {
+                console.log(element)
+                $(element).parents('.col-lg-6').addClass('has-error');
+                $('.validate-error').removeClass('hidden');
+                $('.validate-success').addClass('hidden');
+                $(element).parents('.col-lg-6').removeClass('has-success');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.col-lg-6').removeClass('has-error');
+                $('.validate-error').addClass('hidden');
+                $('.validate-success').removeClass('hidden');
+                $(element).parents('.col-lg-6').addClass('has-success');
+            }
+        });
 
     });
 </script>

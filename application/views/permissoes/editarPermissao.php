@@ -21,22 +21,22 @@
         </div>
     </div>
     <div class="panel-body">
-        <form id="formEditarPermissao" action="<?= base_url('permissoes/editar/' . $permissao->id) ?>" method="post">
+        <form id="formEditarPermissao" action="<?= base_url('permissoes/editar/' . $permissao->id_permissao) ?>" method="post">
             <div class="row">
                 <div class="col-lg-6 mb30">
                     <div class="input-group">
                         <span class="input-group-addon font-weight-bold">Permissão:</span>
-                        <input class="form-control" placeholder="Informe o nome da permissão" type="text" name="permissao" value="<?= $permissao->nome ?>">
+                        <input class="form-control" placeholder="Informe o nome da permissão" type="text" name="nome" value="<?= $permissao->nome ?>">
                     </div>
                 </div>
                 <div class="col-lg-6 mb30">
                     <div class="input-group">
                         <span class="input-group-addon font-weight-bold">Situação:</span>
-                        <input class="form-control" placeholder="Username" type="text" name="situacao" value="<?= $permissao->ativo == 1 ? 'ATIVO' : 'INATIVO' ?>" disabled>
+                        <input class="form-control font-weight-bold" style="<?= $permissao->ativo == 1 ? 'color: green' : 'color: red' ?>" type="text" name="situacao" value="<?= $permissao->ativo == 1 ? 'ATIVO' : 'INATIVO' ?>" disabled>
                     </div>
                 </div>
             </div>
-            <input type="hidden" name="id" value="<?= $permissao->id ?>">
+            <input type="hidden" name="id" value="<?= $permissao->id_permissao ?>">
             <div class="row">
                 <div class="col-lg-3">
                     <div class="panel pl20">
@@ -498,12 +498,10 @@
             $('#desmarcar_todos').toggleClass('hidden');
             if (marcado == false) {
                 marcado = true;
-                console.log('entrou')
                 checkboxes.iCheck('check');
                 checkAll.prop('checked', 'checked');
             } else {
                 marcado = false;
-                console.log('saiu')
                 checkboxes.iCheck('uncheck');
                 checkAll.prop('checked', false);
             }
@@ -514,5 +512,31 @@
         $('#submit').click(function () {
             $('#formEditarPermissao').submit();
         });
+
+        $("#formEditarPermissao").validate({
+            rules: {
+                nome: {required: true},
+            },
+            messages: {
+                nome: {required: 'Informe o nome da permissão'},
+            },
+            errorClass: "help-block",
+            errorElement: "p",
+
+            highlight: function (element, errorClass, validClass) {
+                console.log(element)
+                $(element).parents('.col-lg-6').addClass('has-error');
+                $('.validate-error').removeClass('hidden');
+                $('.validate-success').addClass('hidden');
+                $(element).parents('.col-lg-6').removeClass('has-success');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.col-lg-6').removeClass('has-error');
+                $('.validate-error').addClass('hidden');
+                $('.validate-success').removeClass('hidden');
+                $(element).parents('.col-lg-6').addClass('has-success');
+            }
+        });
+
     });
 </script>

@@ -129,7 +129,7 @@ class Usuarios extends CI_Controller
 
             if (!$this->input->post('email')) {
                 $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar editar usuário: email não informado.');
-                redirect(base_url() . 'usuarios/editar/' . $this->input->post('id_usuarios'));
+                redirect(base_url('usuarios/editar/') . $this->input->post('id_usuarios'));
             }
 
             $verificacao = $this->usuarios_model->verificaEmailUsuario($this->input->post('email'), $this->input->post('id_usuarios'));
@@ -193,7 +193,7 @@ class Usuarios extends CI_Controller
 
         $this->data['result'] = $this->usuarios_model->getById($this->uri->segment(3));
         $this->load->model('permissoes_model');
-        $this->data['permissoes'] = $this->permissoes_model->getActive('permissoes', 'permissoes.idPermissao,permissoes.nome');
+        $this->data['permissoes'] = $this->permissoes_model->getActive('permissoes', 'permissoes.id_permissao,permissoes.nome');
 
         $this->data['view'] = 'usuarios/editarUsuario';
         $this->load->view('tema/topo', $this->data);

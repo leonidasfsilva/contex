@@ -32,25 +32,25 @@
                     if ($r->ativo == 1) {
                         $status = 'ATIVO';
                         $label_status = 'success';
-                        $btn_status = '<button href="#modalDesativar" role="button" data-toggle="modal" id_permissao="' . $r->id . '" style="margin-right: 1%" class="btn btn-success action btn-sm" title="Desativar"><i class="fas fa-power-off fa-lg fa-fw" ></i></a>';
+                        $btn_status = '<button href="#modalDesativar" role="button" data-toggle="modal" id_permissao="' . $r->id_permissao . '" style="margin-right: 1%" class="btn btn-success action btn-sm" title="Desativar"><i class="fas fa-power-off fa-lg fa-fw" ></i></a>';
                         $title = 'Desativar';
                     } else {
                         $status = 'INATIVO';
                         $label_status = 'warning';
-                        $btn_status = '<button href="#modalAtivar" role="button" data-toggle="modal" id_permissao="' . $r->id . '" style="margin-right: 1%" class="btn btn-warning action btn-sm" title="Ativar"><i class="fas fa-power-off fa-lg fa-fw" ></i></a>';
+                        $btn_status = '<button href="#modalAtivar" role="button" data-toggle="modal" id_permissao="' . $r->id_permissao . '" style="margin-right: 1%" class="btn btn-warning action btn-sm" title="Ativar"><i class="fas fa-power-off fa-lg fa-fw" ></i></a>';
                         $title = 'Ativar';
                     }
                     ?>
                     <tr>
-                        <td><?= $r->id ?></td>
+                        <td><?= $r->id_permissao ?></td>
                         <td><?= $r->nome ?></td>
                         <td><?= date('d/m/Y', strtotime($r->criado_em)) ?></td>
                         <td><span class="label label-<?= $label_status ?>"><?= $status ?></span></td>
                         <?=
                         '<td>
-                            <a href="' . base_url('permissoes/editar/') . $r->id . '" class="btn btn-primary btn-sm" title="Editar"><i class="fas fa-edit fa-lg fa-fw"></i></a>
+                            <a href="' . base_url('permissoes/editar/') . $r->id_permissao . '" class="btn btn-primary btn-sm" title="Editar"><i class="fas fa-edit fa-lg fa-fw"></i></a>
                             '.$btn_status.'
-                            <button href="#modalExcluir" role="button" data-toggle="modal" id_permissao="' . $r->id . '" class="btn btn-danger btn-sm action" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw" ></i></button>
+                            <button href="#modalExcluir" role="button" data-toggle="modal" id_permissao="' . $r->id_permissao . '" class="btn btn-danger btn-sm action" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw" ></i></button>
                         </td>'; ?>
                     </tr>
                 <?php }
