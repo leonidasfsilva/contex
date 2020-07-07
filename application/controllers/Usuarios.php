@@ -17,8 +17,6 @@ class Usuarios extends CI_Controller
 
         $this->load->library('pagination');
         $this->load->helper(array('form', 'codegen_helper'));
-        $this->load->model('usuarios_model', '', true);
-        $this->load->model('configs_model', '', true);
         $this->data['menuUsuarios'] = 'Usuários';
         $this->data['menuConfiguracoes'] = 'Configurações';
 

@@ -30,12 +30,11 @@ class Mxcode_model extends CI_Model
 
     function getById($id)
     {
-        $this->db->from('usuarios');
         $this->db->select('usuarios.*, permissoes.nome as permissao');
-        $this->db->join('permissoes', 'permissoes.idPermissao = usuarios.permissoes_id', 'left');
+        $this->db->join('permissoes', 'permissoes.id = usuarios.permissoes_id', 'left');
         $this->db->where('id_usuarios', $id);
         $this->db->limit(1);
-        return $this->db->get()->row();
+        return $this->db->get('usuarios')->row();
     }
 
     public function getUsuario($id)

@@ -13,7 +13,7 @@
  * v... Visualizar
  * e... Editar
  * d... Deletar ou Desabilitar
- * c... Cadastrar
+ * a... Adicionar ou Cadastrar
  */
 
 
@@ -21,9 +21,9 @@
 class Permission
 {
     var $Permission = array();
-    var $table = 'permissoes';//Nome tabela onde ficam armazenadas as permissões
-    var $pk = 'idPermissao';// Nome da chave primaria da tabela
-    var $select = 'permissoes';// Campo onde fica o array de permissoes.
+    var $table = 'permissoes_assoc';//Nome tabela onde ficam armazenadas as permissões
+    var $pk = 'id_permissao';// Nome da chave primaria da tabela
+    var $select = 'atividade';// Campo onde fica o array de permissoes.
 
     public function __construct()
     {
@@ -45,14 +45,12 @@ class Permission
             }
         }
 
-        if (is_array($this->Permission[0])) {
-
-            if (array_key_exists($atividade, $this->Permission[0])) {
+        if (is_array($this->Permission)) {
+            foreach ($this->Permission as $p) {
                 // compara a atividade requisitada com a permissão.
-                if ($this->Permission[0][$atividade] == 1) {
+                if ($p == $atividade) {
                     return true;
                 }
-                return false;
             }
             return false;
         }
@@ -62,16 +60,17 @@ class Permission
     private function loadPermission($id = null)
     {
         if ($id != null) {
-            $this->CI->db->select($this->table.'.'.$this->select);
+            $this->CI->db->select($this->select);
             $this->CI->db->where($this->pk, $id);
-            $this->CI->db->limit(1);
-            $array = $this->CI->db->get($this->table)->row_array();
-            
-            if (count($array) > 0) {
+//            $this->CI->db->limit(1);
+            $array = $this->CI->db->get($this->table)->result();
 
-                $array = unserialize($array[$this->select]);
-                //Atribui as permissoes ao atributo permission
-                $this->Permission = array($array);
+            if ($array) {
+                foreach ($array as $a) {
+                    //Atribui as permissoes ao atributo permission
+                    $this->Permission[] = $a->atividade;
+                }
+//                $array = unserialize($array[$this->select]);
                 return true;
             }
             return false;

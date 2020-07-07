@@ -1,792 +1,518 @@
-<?php $permissoes = unserialize($result->permissoes); ?>
-<div class="span12" style="margin-left: 0">
-    <form action="<?php echo base_url(); ?>index.php/permissoes/editar" id="formPermissao" method="post">
-        <div class="span12" style="margin-left: 0">
-            <div class="widget-box">
-                <div class="widget-title">
-                <span class="icon">
-                <i class="fa fa-lock fa-lg fa-fw"></i>
-                </span>
-                    <h5>Editar Permissão</h5>
+<div class="panel panel-midnightblue">
+    <div class="panel-heading">
+        <h3>
+            <i class="fas fa-key fa-lg fa-fw"></i>
+            Editar Permissão
+        </h3>
+        <div class="panel-ctrls">
+            <a href="<?= base_url('permissoes') ?>" class="btn btn-sm btn-default"><i class="fas fa-arrow-left fa-fw"></i> Permissões</a>
+            <button class="btn btn-default btn-sm marcar_todos" id="marcar_todos" title="Marcar todas as opções">
+                <i class="fas fa-check-square fa-fw"></i>
+                Marcar Todos
+            </button>
+            <button class="btn btn-default btn-sm marcar_todos hidden" id="desmarcar_todos" title="Desmarcar todas as opções">
+                <i class="far fa-square fa-fw"></i>
+                Desmarcar Todos
+            </button>
+            <button type="button" id="submit" class="btn btn-primary btn-sm" title="Salvar">
+                <i class="fas fa-check fa-fw"></i>
+                Salvar
+            </button>
+        </div>
+    </div>
+    <div class="panel-body">
+        <form id="formEditarPermissao" action="<?= base_url('permissoes/editar/' . $permissao->id) ?>" method="post">
+            <div class="row">
+                <div class="col-lg-6 mb30">
+                    <div class="input-group">
+                        <span class="input-group-addon font-weight-bold">Permissão:</span>
+                        <input class="form-control" placeholder="Informe o nome da permissão" type="text" name="permissao" value="<?= $permissao->nome ?>">
+                    </div>
                 </div>
-                <div class="widget-content">
-                    <div class="span4">
-                        <label>Nome da Permissão</label>
-                        <input name="nome" type="text" id="nome" class="span12" value="<?php echo $result->nome; ?>"/>
-                        <input type="hidden" name="idPermissao" value="<?php echo $result->idPermissao; ?>">
-                    </div>
-                    <div class="span3">
-                        <label>Situação</label>
-                        <select name="situacao" id="situacao" class="span12">
-                            <?php if ($result->situacao == 1) {
-                                $sim = 'selected';
-                                $nao = '';
-
-                            } else {
-                                $sim = '';
-                                $nao = 'selected';
-                            } ?>
-                            <option value="1" <?php echo $sim; ?>>Ativo</option>
-                            <option value="0" <?php echo $nao; ?>>Inativo</option>
-                        </select>
-
-                    </div>
-                    <div class="span4">
-                        <br/>
-                        <div class="checkbox">
-                            <label>
-                                <input name="" type="checkbox" value="1" id="marcarTodos"/>
-                                <span class="lbl"> Marcar Todos</span>
-
-                            </label>
-                        </div>
-                        <br/>
-                    </div>
-                    <div class="control-group">
-                        <label for="documento" class="control-label"></label>
-                        <div class="controls">
-                            <table class="table table-bordered table-condensed">
-                                <tbody>
-                                <tr>
-
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['vCliente'])) {
-                                                    if ($permissoes['vCliente'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="vCliente" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Visualizar Cliente</span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['aCliente'])) {
-                                                    if ($permissoes['aCliente'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="aCliente" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Adicionar Cliente</span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['eCliente'])) {
-                                                    if ($permissoes['eCliente'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="eCliente" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Editar Cliente</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['dCliente'])) {
-                                                    if ($permissoes['dCliente'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="dCliente" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Excluir Cliente</span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                </tr>
-
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-                                <tr>
-
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['vProduto'])) {
-                                                    if ($permissoes['vProduto'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="vProduto" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Visualizar Produto</span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['aProduto'])) {
-                                                    if ($permissoes['aProduto'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="aProduto" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Adicionar Produto</span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['eProduto'])) {
-                                                    if ($permissoes['eProduto'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="eProduto" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Editar Produto</span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['dProduto'])) {
-                                                    if ($permissoes['dProduto'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="dProduto" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Excluir Produto</span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-
-                                <tr>
-
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['vServico'])) {
-                                                    if ($permissoes['vServico'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="vServico" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Visualizar Serviço</span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['aServico'])) {
-                                                    if ($permissoes['aServico'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="aServico" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Adicionar Serviço</span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['eServico'])) {
-                                                    if ($permissoes['eServico'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="eServico" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Editar Serviço</span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['dServico'])) {
-                                                    if ($permissoes['dServico'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="dServico" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Excluir Serviço</span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                </tr>
-
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-                                <tr>
-
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['vOs'])) {
-                                                    if ($permissoes['vOs'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="vOs" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Visualizar OS</span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['aOs'])) {
-                                                    if ($permissoes['aOs'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="aOs" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Adicionar OS</span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['eOs'])) {
-                                                    if ($permissoes['eOs'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="eOs" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Editar OS</span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['dOs'])) {
-                                                    if ($permissoes['dOs'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="dOs" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Excluir OS</span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-
-                                <tr>
-
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['vVenda'])) {
-                                                    if ($permissoes['vVenda'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="vVenda" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Visualizar Venda</span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['aVenda'])) {
-                                                    if ($permissoes['aVenda'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="aVenda" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Adicionar Venda</span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['eVenda'])) {
-                                                    if ($permissoes['eVenda'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="eVenda" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Editar Venda</span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['dVenda'])) {
-                                                    if ($permissoes['dVenda'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="dVenda" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Excluir Venda</span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                </tr>
-
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-
-                                <tr>
-
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['vArquivo'])) {
-                                                    if ($permissoes['vArquivo'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="vArquivo" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Visualizar Arquivo</span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['aArquivo'])) {
-                                                    if ($permissoes['aArquivo'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="aArquivo" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Adicionar Arquivo</span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['eArquivo'])) {
-                                                    if ($permissoes['eArquivo'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="eArquivo" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Editar Arquivo</span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['dArquivo'])) {
-                                                    if ($permissoes['dArquivo'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="dArquivo" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Excluir Arquivo</span>
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                </tr>
-
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-<!--                                LANÇAMENTOS-->
-                                <tr>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['vLancamento'])) {
-                                                    if ($permissoes['vLancamento'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="vLancamento" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Visualizar Lançamento</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['aLancamento'])) {
-                                                    if ($permissoes['aLancamento'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="aLancamento" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Adicionar Lançamento</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['eLancamento'])) {
-                                                    if ($permissoes['eLancamento'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="eLancamento" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Editar Lançamento</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['dLancamento'])) {
-                                                    if ($permissoes['dLancamento'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="dLancamento" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Excluir Lançamento</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-<!--                                fim LANÇAMENTOS-->
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-<!--                                FATURAS-->
-                                <tr>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['vFaturas'])) {
-                                                    if ($permissoes['vFaturas'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="vFaturas" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Visualizar Faturas</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['aFaturas'])) {
-                                                    if ($permissoes['aFaturas'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="aFaturas" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Adicionar Faturas</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['eFaturas'])) {
-                                                    if ($permissoes['eFaturas'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="eFaturas" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Editar Faturas</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['dFaturas'])) {
-                                                    if ($permissoes['dFaturas'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="dFaturas" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Excluir Faturas</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-<!--                                fim FATURAS-->
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-<!--                                PENDENCIAS-->
-                                <tr>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['vPendencias'])) {
-                                                    if ($permissoes['vPendencias'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="vPendencias" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Visualizar Pendências</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['aPendencias'])) {
-                                                    if ($permissoes['aPendencias'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="aPendencias" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Adicionar Pendências</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['ePendencias'])) {
-                                                    if ($permissoes['ePendencias'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="ePendencias" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Editar Pendências</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['dPendencias'])) {
-                                                    if ($permissoes['dPendencias'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="dPendencias" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Excluir Pendências</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-<!--                                fim PENDENCIAS-->
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-<!--                                INVESTIMENTOS-->
-                                <tr>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['vInvestimentos'])) {
-                                                    if ($permissoes['vInvestimentos'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="vInvestimentos" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Visualizar Investimentos</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['aInvestimentos'])) {
-                                                    if ($permissoes['aInvestimentos'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="aInvestimentos" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Adicionar Investimentos</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['eInvestimentos'])) {
-                                                    if ($permissoes['eInvestimentos'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="eInvestimentos" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Editar Investimentos</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['dInvestimentos'])) {
-                                                    if ($permissoes['dInvestimentos'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="dInvestimentos" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Excluir Investimentos</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-<!--                                fim INVESTIMENTOS-->
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['rCliente'])) {
-                                                    if ($permissoes['rCliente'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="rCliente" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Relatório Cliente</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['rServico'])) {
-                                                    if ($permissoes['rServico'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="rServico" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Relatório Serviço</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['rOs'])) {
-                                                    if ($permissoes['rOs'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="rOs" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Relatório OS</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['rProduto'])) {
-                                                    if ($permissoes['rProduto'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="rProduto" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Relatório Produto</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['rVenda'])) {
-                                                    if ($permissoes['rVenda'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="rVenda" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Relatório Venda</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['rFinanceiro'])) {
-                                                    if ($permissoes['rFinanceiro'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="rFinanceiro" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Relatório Financeiro</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td colspan="2"></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['cUsuario'])) {
-                                                    if ($permissoes['cUsuario'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="cUsuario" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Configurar Usuário</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['cEmitente'])) {
-                                                    if ($permissoes['cEmitente'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="cEmitente" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Configurar Emitente</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['cPermissao'])) {
-                                                    if ($permissoes['cPermissao'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="cPermissao" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Configurar Permissão</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input <?php if (isset($permissoes['cBackup'])) {
-                                                    if ($permissoes['cBackup'] == '1') {
-                                                        echo 'checked';
-                                                    }
-                                                } ?> name="cBackup" class="marcar" type="checkbox" value="1"/>
-                                                <span class="lbl"> Backup</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="form-actions">
-                        <div class="span12">
-                            <div class="span6 offset3">
-                                <a href="<?php echo base_url() ?>index.php/permissoes" id="" class="btn btn-default btn-sm">
-                                    <i class="fa fa-arrow-left fa-fw"></i> Voltar</a>
-                                <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Alterar</button>
-                            </div>
-                        </div>
+                <div class="col-lg-6 mb30">
+                    <div class="input-group">
+                        <span class="input-group-addon font-weight-bold">Situação:</span>
+                        <input class="form-control" placeholder="Username" type="text" name="situacao" value="<?= $permissao->ativo == 1 ? 'ATIVO' : 'INATIVO' ?>" disabled>
                     </div>
                 </div>
             </div>
-        </div>
-    </form>
+            <input type="hidden" name="id" value="<?= $permissao->id ?>">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="vCliente" <?= in_array('vCliente', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Visualizar Cliente</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="aCliente" <?= in_array('aCliente', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Adicionar Cliente</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="eCliente" <?= in_array('eCliente', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Editar Cliente</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="dCliente" <?= in_array('dCliente', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Excluir Cliente</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="vProduto" <?= in_array('vProduto', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Visualizar Produto</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="aProduto" <?= in_array('aProduto', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Adicionar Produto</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="eProduto" <?= in_array('eProduto', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Editar Produto</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="dProduto" <?= in_array('dProduto', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Excluir Produto</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="vServico" <?= in_array('vServico', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Visualizar Serviço</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="aServico" <?= in_array('aServico', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Adicionar Serviço</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="eServico" <?= in_array('eServico', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Editar Serviço</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="dServico" <?= in_array('dServico', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Excluir Serviço</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="vOs" <?= in_array('vOs', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Visualizar OS</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="aOs" <?= in_array('aOs', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Adicionar OS</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="eOs" <?= in_array('eOs', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Editar OS</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="dOs" <?= in_array('dOs', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Excluir OS</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="vVenda" <?= in_array('vVenda', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Visualizar Venda</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="aVenda" <?= in_array('aVenda', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Adicionar Venda</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="eVenda" <?= in_array('eVenda', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Editar Venda</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="dVenda" <?= in_array('dVenda', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Excluir Venda</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="vArquivo" <?= in_array('vArquivo', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Visualizar Arquivos</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="aArquivo" <?= in_array('aArquivo', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Adicionar Arquivos</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="eArquivo" <?= in_array('eArquivo', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Editar Arquivos</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="dArquivo" <?= in_array('dArquivo', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Excluir Arquivos</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="vLancamento" <?= in_array('vLancamento', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Visualizar Lançamentos</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="aLancamento" <?= in_array('aLancamento', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Adicionar Lançamentos</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="eLancamento" <?= in_array('eLancamento', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Editar Lançamentos</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="dLancamento" <?= in_array('dLancamento', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Excluir Lançamentos</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="vFaturas" <?= in_array('vFaturas', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Visualizar Faturas</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="aFaturas" <?= in_array('aFaturas', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Adicionar Faturas</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="eFaturas" <?= in_array('eFaturas', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Editar Faturas</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="dFaturas" <?= in_array('dFaturas', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Excluir Faturas</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="vPendencias" <?= in_array('vPendencias', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Visualizar Pendências</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="aPendencias" <?= in_array('aPendencias', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Adicionar Pendências</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="ePendencias" <?= in_array('ePendencias', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Editar Pendências</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="dPendencias" <?= in_array('dPendencias', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Excluir Pendências</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="vInvestimentos" <?= in_array('vInvestimentos', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Visualizar Investimentos</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="aInvestimentos" <?= in_array('aInvestimentos', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Adicionar Investimentos</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="eInvestimentos" <?= in_array('eInvestimentos', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Editar Investimentos</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="dInvestimentos" <?= in_array('dInvestimentos', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Excluir Investimentos</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="rCliente" <?= in_array('rCliente', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Relatório Cliente</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="rServico" <?= in_array('rServico', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Relatório Serviço</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="rOs" <?= in_array('rOs', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Relatório OS</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="rProduto" <?= in_array('rProduto', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Relatório Produto</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="rVenda" <?= in_array('rVenda', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Relatório Venda</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="rLancamentos" <?= in_array('rLancamentos', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Relatório Lançamentos</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="rInvestimentos" <?= in_array('rInvestimentos', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Relatório Investimentos</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="rFaturas" <?= in_array('rFaturas', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Relatório Faturas</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="cUsuario" <?= in_array('cUsuario', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Configurar Usuários</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="cEmitente" <?= in_array('cEmitente', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Configurar Emitente</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="cPermissao" <?= in_array('cPermissao', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Configurar Permissões</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="cBackup" <?= in_array('cBackup', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Backup</label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
 <script type="text/javascript">
     $(document).ready(function () {
+        let marcado = false;
+        var checkboxes = $('input[name="atividades[]"]');
+
 
         $("#marcarTodos").change(function () {
             $("input:checkbox").prop('checked', $(this).prop("checked"));
         });
 
-
-        $("#formPermissao").validate({
-            rules: {
-                nome: {required: true}
-            },
-            messages: {
-                nome: {required: 'Campo obrigatório'}
+        $('#marcar_todos, #desmarcar_todos').click(function () {
+            $('#marcar_todos').toggleClass('hidden');
+            $('#desmarcar_todos').toggleClass('hidden');
+            if (marcado == false) {
+                marcado = true;
+                console.log('entrou')
+                checkboxes.iCheck('check');
+                checkAll.prop('checked', 'checked');
+            } else {
+                marcado = false;
+                console.log('saiu')
+                checkboxes.iCheck('uncheck');
+                checkAll.prop('checked', false);
             }
+            checkAll.iCheck('update');
         });
 
 
+        $('#submit').click(function () {
+            $('#formEditarPermissao').submit();
+        });
     });
 </script>

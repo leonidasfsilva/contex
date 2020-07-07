@@ -132,6 +132,7 @@ $autoload['model'] = array(
     'pendencia_model',
     'usuarios_model',
     'redefinicao_model',
+    'permissoes_model',
 );
 
 //$autoload['model'] = array('autoload_model');

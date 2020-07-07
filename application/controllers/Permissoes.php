@@ -10,13 +10,12 @@ class Permissoes extends CI_Controller
             redirect('mxcode/login');
         }
 
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para configurar as permissões no sistema.');
-            redirect(base_url());
-        }
+//        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {
+//            $this->session->set_flashdata('error', 'Você não tem permissão para configurar as permissões no sistema.');
+//            redirect(base_url());
+//        }
 
         $this->load->helper(array('form', 'codegen_helper'));
-        $this->load->model('permissoes_model', '', true);
         $this->data['menuConfiguracoes'] = 'Permissões';
     }
 
@@ -31,7 +30,7 @@ class Permissoes extends CI_Controller
         $this->load->library('pagination');
 
 
-        $config['base_url'] = base_url() . 'index.php/permissoes/gerenciar/';
+        $config['base_url'] = base_url() . 'permissoes/gerenciar/';
         $config['total_rows'] = $this->permissoes_model->count('permissoes');
         $config['per_page'] = 10;
         $config['next_link'] = 'Próxima';
@@ -55,7 +54,7 @@ class Permissoes extends CI_Controller
 
         $this->pagination->initialize($config);
 
-        $this->data['results'] = $this->permissoes_model->get('permissoes', 'idPermissao,nome,data,situacao', '', $config['per_page'], $this->uri->segment(3));
+        $this->data['results'] = $this->permissoes_model->get('permissoes', '*', '', $config['per_page'], $this->uri->segment(3));
 
         $this->data['view'] = 'permissoes/permissoes';
         $this->load->view('tema/topo', $this->data);
@@ -166,127 +165,85 @@ class Permissoes extends CI_Controller
 
     }
 
-    function editar()
+    function editar($id = null)
     {
+        if ($_POST) {
+            $this->permissoes_model->delete_real('permissoes_assoc', 'id_permissao', $id);
 
-
-        $this->load->library('form_validation');
-        $this->data['custom_error'] = '';
-
-        $this->form_validation->set_rules('nome', 'Nome', 'trim|required');
-        if ($this->form_validation->run() == false) {
-            $this->data['custom_error'] = (validation_errors() ? '<div class="form_error">' . validation_errors() . '</div>' : false);
-        } else {
-
-            $nomePermissao = $this->input->post('nome');
-            $situacao = $this->input->post('situacao');
-            $permissoes = array(
-
-                'aCliente' => $this->input->post('aCliente'),
-                'eCliente' => $this->input->post('eCliente'),
-                'dCliente' => $this->input->post('dCliente'),
-                'vCliente' => $this->input->post('vCliente'),
-
-                'aProduto' => $this->input->post('aProduto'),
-                'eProduto' => $this->input->post('eProduto'),
-                'dProduto' => $this->input->post('dProduto'),
-                'vProduto' => $this->input->post('vProduto'),
-
-                'aServico' => $this->input->post('aServico'),
-                'eServico' => $this->input->post('eServico'),
-                'dServico' => $this->input->post('dServico'),
-                'vServico' => $this->input->post('vServico'),
-
-                'aOs' => $this->input->post('aOs'),
-                'eOs' => $this->input->post('eOs'),
-                'dOs' => $this->input->post('dOs'),
-                'vOs' => $this->input->post('vOs'),
-
-                'aVenda' => $this->input->post('aVenda'),
-                'eVenda' => $this->input->post('eVenda'),
-                'dVenda' => $this->input->post('dVenda'),
-                'vVenda' => $this->input->post('vVenda'),
-
-                'aArquivo' => $this->input->post('aArquivo'),
-                'eArquivo' => $this->input->post('eArquivo'),
-                'dArquivo' => $this->input->post('dArquivo'),
-                'vArquivo' => $this->input->post('vArquivo'),
-
-                'aInvestimentos' => $this->input->post('aInvestimentos'),
-                'eInvestimentos' => $this->input->post('eInvestimentos'),
-                'dInvestimentos' => $this->input->post('dInvestimentos'),
-                'vInvestimentos' => $this->input->post('vInvestimentos'),
-
-                'aPendencias' => $this->input->post('aPendencias'),
-                'ePendencias' => $this->input->post('ePendencias'),
-                'dPendencias' => $this->input->post('dPendencias'),
-                'vPendencias' => $this->input->post('vPendencias'),
-
-                'aFaturas' => $this->input->post('aFaturas'),
-                'eFaturas' => $this->input->post('eFaturas'),
-                'dFaturas' => $this->input->post('dFaturas'),
-                'vFaturas' => $this->input->post('vFaturas'),
-
-                'aLancamento' => $this->input->post('aLancamento'),
-                'eLancamento' => $this->input->post('eLancamento'),
-                'dLancamento' => $this->input->post('dLancamento'),
-                'vLancamento' => $this->input->post('vLancamento'),
-
-                'cUsuario' => $this->input->post('cUsuario'),
-                'cEmitente' => $this->input->post('cEmitente'),
-                'cPermissao' => $this->input->post('cPermissao'),
-                'cBackup' => $this->input->post('cBackup'),
-
-                'rCliente' => $this->input->post('rCliente'),
-                'rProduto' => $this->input->post('rProduto'),
-                'rServico' => $this->input->post('rServico'),
-                'rOs' => $this->input->post('rOs'),
-                'rVenda' => $this->input->post('rVenda'),
-                'rFinanceiro' => $this->input->post('rFinanceiro'),
-
-            );
-            $permissoes = serialize($permissoes);
-
-            $data = array(
-                'nome' => $nomePermissao,
-                'permissoes' => $permissoes,
-                'situacao' => $situacao
-            );
-
-            if ($this->permissoes_model->edit('permissoes', $data, 'idPermissao', $this->input->post('idPermissao')) == true) {
-                $this->session->set_flashdata('success', 'Permissão editada com sucesso!');
-                redirect(base_url() . 'index.php/permissoes/editar/' . $this->input->post('idPermissao'));
-            } else {
-                $this->data['custom_error'] = '<div class="form_error"><p>Ocorreu um errro.</p></div>';
+            if ($_POST['permissao']) {
+                $data = array(
+                    'nome' => padronizarString($_POST['permissao'])
+                );
+                $this->permissoes_model->edit('permissoes', $data, 'id', $id);
             }
+
+            if ($_POST['atividades']) {
+                foreach ($_POST['atividades'] as $atividade) {
+                    $data = array(
+                        'id_permissao' => $id,
+                        'atividade' => $atividade
+                    );
+                    $this->permissoes_model->add('permissoes_assoc', $data);
+                }
+            }
+            $this->session->set_flashdata('sucesso', 'Permissão alterada com sucesso!');
+            redirect(base_url('permissoes/editar/') . $id);
         }
 
-        $this->data['result'] = $this->permissoes_model->getById($this->uri->segment(3));
+        $this->data['permissao'] = $this->permissoes_model->getById($id);
+        $atividades = $this->permissoes_model->getAtividades($id);
 
+        if ($atividades != null) {
+            foreach ($atividades as $ativs) {
+                $this->data['atividades'][] = $ativs->atividade;
+            }
+        } else {
+            $this->data['atividades'][] = null;
+        }
         $this->data['view'] = 'permissoes/editarPermissao';
         $this->load->view('tema/topo', $this->data);
-
     }
 
     function desativar()
     {
 
-        $id = $this->input->post('id');
+        $id = $_POST['id'];
         if ($id == null) {
-            $this->session->set_flashdata('error', 'Erro ao tentar desativar permissão.');
-            redirect(base_url() . 'index.php/permissoes/gerenciar/');
+            $this->session->set_flashdata('erro', 'Erro ao tentar desativar permissão');
+            redirect(base_url('permissoes'));
         }
+
         $data = array(
-            'situacao' => false
+            'ativo' => 0
         );
-        if ($this->permissoes_model->edit('permissoes', $data, 'idPermissao', $id)) {
-            $this->session->set_flashdata('success', 'Permissão desativada com sucesso!');
+
+        if ($this->permissoes_model->edit('permissoes', $data, 'id', $id)) {
+            $this->session->set_flashdata('sucesso', 'Permissão desativada com sucesso!');
         } else {
-            $this->session->set_flashdata('error', 'Erro ao desativar permissão!');
+            $this->session->set_flashdata('erro', 'Erro ao tentar desativar permissão');
+        }
+        redirect(base_url('permissoes'));
+    }
+
+    function ativar()
+    {
+
+        $id = $_POST['id'];
+        if ($id == null) {
+            $this->session->set_flashdata('erro', 'Erro ao tentar ativar permissão');
+            redirect(base_url('permissoes'));
         }
 
+        $data = array(
+            'ativo' => 1
+        );
 
-        redirect(base_url() . 'index.php/permissoes/gerenciar/');
+        if ($this->permissoes_model->edit('permissoes', $data, 'id', $id)) {
+            $this->session->set_flashdata('sucesso', 'Permissão ativada com sucesso!');
+        } else {
+            $this->session->set_flashdata('erro', 'Erro ao tentar desativar permissão');
+        }
+        redirect(base_url('permissoes'));
     }
 
     function excluir()
@@ -295,7 +252,7 @@ class Permissoes extends CI_Controller
         $id = $this->input->post('id');
         if ($id == null) {
             $this->session->set_flashdata('error', 'Erro ao tentar desativar permissão.');
-            redirect(base_url() . 'index.php/permissoes/gerenciar/');
+            redirect(base_url('permissoes/'));
         }
         $data = array(
             'status' => 0
@@ -305,9 +262,7 @@ class Permissoes extends CI_Controller
         } else {
             $this->session->set_flashdata('error', 'Erro ao tentar excluir permissão!');
         }
-
-
-        redirect(base_url() . 'index.php/permissoes/gerenciar/');
+        redirect(base_url('permissoes/gerenciar/'));
     }
 
 }

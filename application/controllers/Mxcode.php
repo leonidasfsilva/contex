@@ -581,4 +581,14 @@ class Mxcode extends CI_Controller
         );
         $this->load->view('errors/html/error_404', $data);
     }
+
+    public function exibirPermissoes()
+    {
+        print_array_exit($this->session->userdata('permissao'));
+    }
+
+    public function checarPermissoes()
+    {
+        print_array_exit($this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente'));
+    }
 }

@@ -23,12 +23,12 @@ class Permissoes_model extends CI_Model
         
         $this->db->select($fields);
         $this->db->from($table);
-        $this->db->order_by('idPermissao', 'desc');
         $this->db->limit($perpage, $start);
         if ($where) {
-            $this->db->where($where . ' AND status = 1');
+            $this->db->where($where);
+            $this->db->where('status', 1);
         } else {
-            $this->db->where('status = 1');
+            $this->db->where('status', 1);
         }
         
         $query = $this->db->get();
@@ -42,7 +42,7 @@ class Permissoes_model extends CI_Model
         
         $this->db->select($fields);
         $this->db->from($table);
-        $this->db->where('situacao', 1);
+        $this->db->where('status', 1);
         $query = $this->db->get();
         return $query->result();
         ;
@@ -50,7 +50,7 @@ class Permissoes_model extends CI_Model
 
     function getById($id)
     {
-        $this->db->where('idPermissao', $id);
+        $this->db->where('id', $id);
         $this->db->limit(1);
         return $this->db->get('permissoes')->row();
     }
@@ -87,11 +87,29 @@ class Permissoes_model extends CI_Model
         
         return false;
     }
-    
+
+    function delete_real($table, $fieldID, $ID)
+    {
+        $this->db->where($fieldID, $ID);
+        $this->db->delete($table);
+        if ($this->db->affected_rows() == '1') {
+            return true;
+        }
+        return false;
+    }
+
     function count($table)
     {
         return $this->db->count_all($table);
     }
+
+    function getAtividades($id)
+    {
+        $this->db->select('atividade');
+        $this->db->where('id_permissao', $id);
+        return $this->db->get('permissoes_assoc')->result();
+    }
+
 }
 
 /* End of file permissoes_model.php */

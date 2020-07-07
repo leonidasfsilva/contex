@@ -8,13 +8,6 @@ class Configuracoes extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('configs_model', '', true);
-        $this->load->model('mxcode_model', '', true);
-        $this->load->model('usuarios_model', '', true);
-        $this->load->model('financeiro_model', '', true);
-        $this->load->model('investimentos_model', '', true);
-        $this->load->model('fatura_model', '', true);
-        $this->load->model('pendencia_model', '', true);
         $this->load->helper('file');
         $this->load->library('upload');
         $this->load->library('image_lib');
@@ -70,7 +63,7 @@ class Configuracoes extends CI_Controller
         }
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
-            $this->session->set_flashdata('erro', 'Você não tem permissão para gerenciar configurações de usuário0.');
+            $this->session->set_flashdata('erro', 'Você não tem permissão para gerenciar configurações de usuário.');
             redirect(base_url());
         }
 
