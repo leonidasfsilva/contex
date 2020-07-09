@@ -39,11 +39,10 @@ class Mxcode_model extends CI_Model
 
     public function getUsuario($id)
     {
-        $this->db->where('id_usuarios', $id);
-        $this->db->limit(1);
-        $usuario = $this->db->get('usuarios')->row();
-
-        return $usuario;
+        return $this->db
+            ->where('id_usuarios', $id)
+            ->get('usuarios')
+            ->row();
     }
 
     public function alterarSenha($id, $newSenha)

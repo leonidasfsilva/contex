@@ -112,11 +112,11 @@ class Usuarios extends CI_Controller
 
     }
 
-    function editar()
+    function editar($id = null)
     {
 
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para editar usuários.');
+            $this->session->set_flashdata('erro', 'Você não tem permissão para editar usuários');
             redirect(base_url());
         }
 
@@ -128,7 +128,7 @@ class Usuarios extends CI_Controller
         if ($_POST) {
 
             if (!$this->input->post('email')) {
-                $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar editar usuário: email não informado.');
+                $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar editar usuário: email não informado');
                 redirect(base_url('usuarios/editar/') . $this->input->post('id_usuarios'));
             }
 
@@ -143,13 +143,34 @@ class Usuarios extends CI_Controller
                 }
             }
 
+            if(!$_POST['cpf']) {
+                $cpf = null;
+            } else {
+                $cpf = $_POST['cpf'];
+            }
+
+            $dados_usuario = $this->mxcode_model->getUsuario($this->input->post('id_usuarios'));
+            if (!$dados_usuario->cpf) {
+                if ($this->mxcode_model->verificaCPF($_POST['cpf']) && $_POST['cpf']) {
+                    $this->session->set_flashdata('erro', 'O CPF informado pertence a outro usuário');
+                    redirect(base_url('usuarios/editar/') . $id);
+                }
+            } else {
+                if ($dados_usuario->cpf != $_POST['cpf']) {
+                    if ($this->mxcode_model->verificaCPF($_POST['cpf'])) {
+                        $this->session->set_flashdata('erro', 'O CPF informado pertence a outro usuário');
+                        redirect(base_url('usuarios/editar/') . $id);
+                    }
+                }
+            }
+
             $senha = $this->input->post('senha');
-            if ($senha != null) {
+            if ($senha) {
 
                 $senha = password_hash($senha, PASSWORD_DEFAULT);
                 $data = array(
                     'nome' => $this->input->post('nome'),
-                    'cpf' => $this->input->post('cpf'),
+                    'cpf' => $cpf,
                     'cep' => $this->input->post('cep'),
                     'logradouro' => $this->input->post('logradouro'),
                     'complemento' => $this->input->post('complemento'),
@@ -181,20 +202,17 @@ class Usuarios extends CI_Controller
                 );
             }
 
-            if ($this->usuarios_model->edit('usuarios', $data, 'id_usuarios', $this->input->post('id_usuarios')) == true) {
-                $this->session->set_flashdata('sucesso', 'Usuário editado com sucesso!');
+            if ($this->usuarios_model->edit('usuarios', $data, 'id_usuarios', $this->input->post('id_usuarios'))) {
+                $this->session->set_flashdata('sucesso', 'Cadastro de usuário alterado com sucesso!');
                 redirect(base_url() . 'usuarios/editar/' . $this->input->post('id_usuarios'));
             } else {
-                $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar editar usuário.');
-                redirect(base_url() . 'usuarios/editar/' . $this->input->post('id_usuarios'));
+                $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar alterar cadastro de usuário');
+                redirect(base_url('usuarios/editar/') . $id);
             }
-
         }
 
-        $this->data['result'] = $this->usuarios_model->getById($this->uri->segment(3));
-        $this->load->model('permissoes_model');
+        $this->data['result'] = $this->usuarios_model->getById($id);
         $this->data['permissoes'] = $this->permissoes_model->getActive('permissoes', 'permissoes.id_permissao,permissoes.nome');
-
         $this->data['view'] = 'usuarios/editarUsuario';
         $this->load->view('tema/topo', $this->data);
 

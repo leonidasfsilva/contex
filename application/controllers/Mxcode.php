@@ -531,11 +531,19 @@ class Mxcode extends CI_Controller
 
     public function atualizarPerfil()
     {
-        $cpfExistente = $this->mxcode_model->verificaCPF($this->input->post('cpf'));
-
-        if ($cpfExistente) {
-            $this->session->set_flashdata('erro', 'O CPF informado já está cadastrado.');
-            redirect(base_url() . 'mxcode/minhaConta');
+        $dados_usuario = $this->mxcode_model->getUsuario(id_usuario());
+        if (!$dados_usuario->cpf) {
+            if ($this->mxcode_model->verificaCPF($_POST['cpf'])) {
+                $this->session->set_flashdata('erro', 'O CPF informado pertence a outro usuário');
+                redirect(base_url() . 'mxcode/minhaConta');
+            }
+        } else {
+            if ($dados_usuario->cpf != $_POST['cpf']) {
+                if ($this->mxcode_model->verificaCPF($_POST['cpf'])) {
+                    $this->session->set_flashdata('erro', 'O CPF informado pertence a outro usuário');
+                    redirect(base_url() . 'mxcode/minhaConta');
+                }
+            }
         }
 
         $data = array(
@@ -554,14 +562,9 @@ class Mxcode extends CI_Controller
             'telefone' => $this->input->post('telefone'),
         );
 
-        if ($this->mxcode_model->edit('usuarios', $data, 'id_usuarios', $this->input->post('id_usuarios')) == true) {
-            $this->session->set_flashdata('sucesso', 'Conta de usuário atualizada com sucesso!');
-            redirect(base_url() . 'mxcode/minhaConta');
-        } else {
-            $this->session->set_flashdata('erro', 'Ocorreu um erro ao atualizar conta de usuário.');
-            redirect(base_url() . 'mxcode/minhaConta');
-        }
-
+        $this->mxcode_model->edit('usuarios', $data, 'id_usuarios', $this->input->post('id_usuarios'));
+        $this->session->set_flashdata('sucesso', 'Conta de usuário atualizada com sucesso!');
+        redirect(base_url() . 'mxcode/minhaConta');
     }
 
     public function error_general()
