@@ -121,6 +121,11 @@ class Permissoes extends CI_Controller
             redirect(base_url('permissoes'));
         }
 
+        if (!$this->permissoes_model->getById($id)) {
+            $this->session->set_flashdata('erro', 'Permissão não encontrada');
+            redirect(base_url('permissoes'));
+        }
+
         $this->data['permissao'] = $this->permissoes_model->getById($id);
         $atividades = $this->permissoes_model->getAtividades($id);
 
