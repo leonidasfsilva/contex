@@ -3,11 +3,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<link href="././assets/font-awesome5/css/all.css" rel="stylesheet">
-<link href="././assets/css/styles-blessed3.css" type="text/css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
-<link href="././assets/css/styles-blessed2.css" type="text/css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
-<link href="././assets/css/styles-blessed1.css" type="text/css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
-<link href="././assets/css/styles.css" type="text/css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
+<link href="<?php echo config_item('base_url'); ?>/assets/font-awesome5/css/all.css" rel="stylesheet">
+<link href="<?php echo config_item('base_url'); ?>/assets/css/styles-blessed3.css" type="text/css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
+<link href="<?php echo config_item('base_url'); ?>/assets/css/styles-blessed2.css" type="text/css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
+<link href="<?php echo config_item('base_url'); ?>/assets/css/styles-blessed1.css" type="text/css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
+<link href="<?php echo config_item('base_url'); ?>/assets/css/styles.css" type="text/css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
 
 <head>
     <meta charset="utf-8">
@@ -73,14 +73,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <div class="row">
     <div class="panel panel-midnightblue">
         <div class="panel-heading">
-            <h2><?php echo $heading; ?></h2>
+            <h2>ERRO 404 - Página não encontrada</h2>
         </div>
         <div class="panel-body">
-            <div class="alert alert-danger font-weight-bold">A página requistada não foi encontrada em nosso servidor, clique no botão abaixo para retornar à página inicial.</div>
+            <div class="alert alert-danger font-weight-bold">A página requistada não foi encontrada em nosso servidor, clique no botão abaixo para retornar à página anterior.</div>
             <p>
-                <a class="btn btn-primary" style="text-decoration: none" href="<?php echo config_item('base_url'); ?>"><i class="fas fa-arrow-left fa-fw"></i>
+                <button class="btn btn-primary" style="text-decoration: none" onclick="javascript:history.back()"><i class="fas fa-arrow-left fa-fw"></i>
                     Clique aqui para voltar
-                </a>
+                </button>
             </p>
         </div>
     </div>
