@@ -26,7 +26,7 @@
                 <div class="col-lg-6 mb30">
                     <div class="input-group">
                         <span class="input-group-addon font-weight-bold">Permissão:</span>
-                        <input class="form-control" placeholder="Informe o nome da permissão" type="text" name="nome" value="<?= $permissao->nome ?>">
+                        <input class="form-control" placeholder="Informe o nome da permissão" type="text" name="permissao" value="<?= $permissao->nome ?>">
                     </div>
                 </div>
                 <div class="col-lg-6 mb30">
@@ -68,6 +68,40 @@
                             <input type="checkbox" class="form-control" name="atividades[]" value="dCliente" <?= in_array('dCliente', $atividades) ? 'checked' : '' ?>>
                         </div>
                         <label for="dCliente" class="font-weight-bold">Excluir Cliente</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="vConsumo" <?= in_array('vConsumo', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Visualizar Consumo</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="aConsumo" <?= in_array('aConsumo', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Adicionar Consumo</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="eConsumo" <?= in_array('eConsumo', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Editar Consumo</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="dConsumo" <?= in_array('dConsumo', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Excluir Consumo</label>
                     </div>
                 </div>
             </div>
