@@ -39,11 +39,11 @@ class Consumo extends CI_Controller
     public function configuracoes()
     {
         if ($_POST) {
-            if ($_POST['data_medicao']) {
-                $data_medicao = explode('/', $_POST['data_medicao']);
-                $data_medicao = $data_medicao[2] . '-' . $data_medicao[1] . '-' . $data_medicao[0];
+            if ($_POST['data_leitura']) {
+                $data_leitura = explode('/', $_POST['data_leitura']);
+                $data_leitura = $data_leitura[2] . '-' . $data_leitura[1] . '-' . $data_leitura[0];
             } else {
-                $data_medicao = date('Y-m-d');
+                $data_leitura = date('Y-m-d');
             }
 
             if ($_POST['valor_kwh']) {
@@ -54,8 +54,8 @@ class Consumo extends CI_Controller
 
             $data = array(
                 'valor_kwh' => $valor,
-                'medicao_inicial' => $_POST['medicao_inicial'],
-                'inicio_medicao' => $data_medicao,
+                'leitura_inicial' => $_POST['leitura_inicial'],
+                'data_leitura' => $data_leitura,
                 'id_usuario' => id_usuario(),
             );
             // verifica se o usuário já possui configurações de consumo cadastradas
