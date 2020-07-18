@@ -68,9 +68,9 @@
             </div>
             <form id="formRegistrarConsumo" action="<?php echo base_url('consumo/registrar') ?>" method="post" autocomplete="off">
                 <div class="modal-body">
-                    <div class="note note-info">
-                        <strong>Referência: </strong><span><?= $referencia ?></span>
-                    </div>
+<!--                    <div class="note note-info">-->
+<!--                        <strong>Referência: </strong><span>--><?//= $referencia ?><!--</span>-->
+<!--                    </div>-->
                     <div class="row">
                         <div class="form-group col-sm-6">
                             <div class="input-icon right">
@@ -109,9 +109,9 @@
             <form id="formEditarConsumo" action="<?php echo base_url('consumo/editar') ?>" method="post" autocomplete="off">
                 <input id="id_editar" name="id" type="hidden">
                 <div class="modal-body">
-                    <div class="note note-info">
-                        <strong>Referência: </strong><span><?= $referencia ?></span>
-                    </div>
+<!--                    <div class="note note-info">-->
+<!--                        <strong>Referência: </strong><span>--><?//= $referencia ?><!--</span>-->
+<!--                    </div>-->
                     <div class="row">
                         <div class="form-group col-sm-6">
                             <div class="input-icon right">
