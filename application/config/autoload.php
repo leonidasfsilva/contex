@@ -119,6 +119,7 @@ $autoload['model'] = array(
     'anuncios_model',
     'arquivos_model',
     'cadastro_model',
+    'consumo_model',
     'cartoes_model',
     'chamados_model',
     'conecte_model',

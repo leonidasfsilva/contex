@@ -58,6 +58,9 @@
     });
 
     $(function () {
+        $(".money").maskMoney();
+    });
+    $(function () {
         $('.popover-btn').popover()
     });
 

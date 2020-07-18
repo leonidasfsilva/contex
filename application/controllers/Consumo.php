@@ -15,23 +15,170 @@ class Consumo extends CI_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar consumo de energia.');
             redirect(base_url());
         }
-
-        $this->load->helper('file');
-        $this->load->library('upload');
-        $this->load->library('image_lib');
     }
 
     public function index()
     {
-        $data['menuChamados'] = true;
-        if ($this->session->userdata('permissao') == 1) {
-            $data['chamados'] = $this->chamados_model->getChamados();
-        } else {
-            $data['chamados'] = $this->chamados_model->getChamadosUsuario(id_usuario());
-        }
-        $data['assuntos'] = $this->chamados_model->getAssuntos();
+        setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
+        date_default_timezone_set('America/Sao_Paulo');
+
+        $configs = $this->consumo_model->getConfigsConsumo(id_usuario());
+        $inicio_medicao = explode('-', $configs->inicio_medicao);
+        $ano = $inicio_medicao[0];
+        $mes = $inicio_medicao[1] + 1;
+        $dia = $inicio_medicao[2];
+
+        $data['referencia'] = padronizarString(strftime('%B / %Y', strtotime($dia . '-' . $mes . '-' . $ano)));
+        $data['configs'] = $configs;
+        $data['results'] = $this->consumo_model->getConsumosUsuario(id_usuario());
+        $data['menuConsumo'] = true;
         $data['view'] = 'consumo/consumo';
         $this->load->view('tema/topo', $data);
+    }
+
+    public function configuracoes()
+    {
+        if ($_POST) {
+            if ($_POST['data_medicao']) {
+                $data_medicao = explode('/', $_POST['data_medicao']);
+                $data_medicao = $data_medicao[2] . '-' . $data_medicao[1] . '-' . $data_medicao[0];
+            } else {
+                $data_medicao = date('Y-m-d');
+            }
+
+            if ($_POST['valor_kwh']) {
+                $valor = str_replace(array('.', ','), array('', '.'), $_POST['valor_kwh']);
+            } else {
+                $valor = '0.8961';
+            }
+
+            $data = array(
+                'valor_kwh' => $valor,
+                'medicao_inicial' => $_POST['medicao_inicial'],
+                'inicio_medicao' => $data_medicao,
+                'id_usuario' => id_usuario(),
+            );
+            // verifica se o usuário já possui configurações de consumo cadastradas
+            if (!$this->consumo_model->getConfigsConsumo(id_usuario())) {
+                if ($this->consumo_model->add('configs_consumo_assoc', $data)) {
+                    $this->session->set_flashdata('sucesso', 'Configurações de consumo cadastradas com sucesso!');
+                    redirect('consumo');
+                } else {
+                    $this->session->set_flashdata('erro', 'Erro ao tentar cadastrar configurações de consumo');
+                    redirect('consumo/configuracoes');
+                }
+            } else {
+                if ($this->consumo_model->edit('configs_consumo_assoc', $data, 'id_usuario', id_usuario())) {
+                    $this->session->set_flashdata('sucesso', 'Configurações de consumo atualizadas com sucesso!');
+                    redirect('consumo');
+                } else {
+                    $this->session->set_flashdata('erro', 'Erro ao atualizar configurações de consumo');
+                    redirect('consumo/configuracoes');
+                }
+            }
+        }
+        $data['configs'] = $this->consumo_model->getConfigsConsumo(id_usuario());
+        $data['view'] = 'consumo/configuracoes';
+        $data['menuConsumo'] = true;
+        $this->load->view('tema/topo', $data);
+    }
+
+    public function registrar()
+    {
+        $leitura = $_POST['leitura'];
+        $data_leitura = $_POST['data_leitura'];
+        $configs = $this->consumo_model->getConfigsConsumo(id_usuario());
+
+        if ($consumo_usuario = $this->consumo_model->getConsumoUsuario(id_usuario())) {
+            $ultima_leitura = $consumo_usuario->leitura_atual;
+        } else {
+            $ultima_leitura = $configs->leitura_inicial;
+        }
+
+        if ($_POST['data_leitura']) {
+            $data_leitura = explode('/', $_POST['data_leitura']);
+            $ano = $data_leitura[2];
+            $mes = $data_leitura[1];
+            $dia = $data_leitura[0];
+            $data_leitura = $data_leitura[2] . '-' . $data_leitura[1] . '-' . $data_leitura[0];
+        } else {
+            $data_leitura = date('Y-m-d');
+            $data_leitura = explode('-', $data_leitura);
+            $ano = $data_leitura[0];
+            $mes = $data_leitura[1];
+            $dia = $data_leitura[2];
+            $data_leitura = $data_leitura[0] . '-' . $data_leitura[1] . '-' . $data_leitura[2];
+        }
+
+        //formula de calculo para obter o valor da conta de luz
+        $consumo = $leitura - $ultima_leitura;
+        $valor = $configs->valor_kwh * $consumo;
+
+        $data = array(
+            'valor' => $valor,
+            'leitura_atual' => $leitura,
+            'leitura_anterior' => $ultima_leitura,
+            'id_usuario' => id_usuario(),
+            'consumo' => $consumo,
+            'data_leitura' => $data_leitura,
+            'mes_referencia' => $mes,
+            'ano_referencia' => $ano,
+        );
+
+        if ($this->consumo_model->add('consumo', $data)) {
+            $this->session->set_flashdata('sucesso', 'Consumo registrado com sucesso!');
+            redirect('consumo');
+        } else {
+            $this->session->set_flashdata('erro', 'Erro ao tentar registrar consumo');
+            redirect('consumo');
+        }
+    }
+
+    public function editar()
+    {
+        $id = $_POST['id'];
+        $leitura = $_POST['leitura'];
+        $data_leitura = $_POST['data_leitura'];
+        $configs = $this->consumo_model->getConfigsConsumo(id_usuario());
+        $consumo_atual = $this->consumo_model->getConsumoByID($id);
+
+        if ($_POST['data_leitura']) {
+            $data_leitura = explode('/', $_POST['data_leitura']);
+            $ano = $data_leitura[2];
+            $mes = $data_leitura[1];
+            $dia = $data_leitura[0];
+            $data_leitura = $data_leitura[2] . '-' . $data_leitura[1] . '-' . $data_leitura[0];
+        } else {
+            $data_leitura = date('Y-m-d');
+            $data_leitura = explode('-', $data_leitura);
+            $ano = $data_leitura[0];
+            $mes = $data_leitura[1];
+            $dia = $data_leitura[2];
+            $data_leitura = $data_leitura[0] . '-' . $data_leitura[1] . '-' . $data_leitura[2];
+        }
+
+        //formula de calculo para obter o valor da conta de luz
+        $consumo = $leitura - $consumo_atual->leitura_anterior;
+        $valor = $configs->valor_kwh * $consumo;
+
+        $data = array(
+            'valor' => $valor,
+            'leitura_atual' => $leitura,
+            'leitura_anterior' => $consumo_atual->leitura_anterior,
+            'id_usuario' => id_usuario(),
+            'consumo' => $consumo,
+            'data_leitura' => $data_leitura,
+            'mes_referencia' => $mes,
+            'ano_referencia' => $ano,
+        );
+
+        if ($this->consumo_model->edit('consumo', $data, 'id', $id)) {
+            $this->session->set_flashdata('sucesso', 'Consumo atualizado com sucesso!');
+            redirect('consumo');
+        } else {
+            $this->session->set_flashdata('erro', 'Erro ao tentar atualizar consumo');
+            redirect('consumo');
+        }
     }
 
     public function pesquisar()
@@ -50,32 +197,6 @@ class Consumo extends CI_Controller
         $this->data['view'] = 'mxcode/pesquisa';
         $this->load->view('tema/topo', $this->data);
 
-    }
-
-    public function abrirChamado()
-    {
-        $assunto = $_POST['assunto'];
-        $descricao = $_POST['descricao'];
-
-        if ($assunto || $descricao == null) {
-            $this->session->set_flashdata('erro', 'Preencha os dados do chamado corretamente.');
-        }
-
-        $data = array(
-            'assunto' => $assunto,
-            'descricao' => $descricao,
-            'id_usuario' => id_usuario(),
-            'status_chamado' => 1,
-            'notifica_admin' => 1,
-        );
-
-        if ($this->chamados_model->add('chamados', $data) == true) {
-            $this->session->set_flashdata('sucesso', 'Chamado aberto com sucesso!');
-            redirect('chamados');
-        } else {
-            $this->session->set_flashdata('erro', 'Erro ao tentar abrir chamado.');
-            redirect('chamados');
-        }
     }
 
     public function detalhes($id_chamado = null)
@@ -193,24 +314,23 @@ class Consumo extends CI_Controller
         }
     }
 
-    public function finalizar()
+    public function excluir()
     {
         if (!$_POST) {
-            $this->session->set_flashdata('erro', 'Método não permitido.');
-            redirect('chamados');
+            $this->session->set_flashdata('erro', 'Método não permitido');
+            redirect('consumo');
         }
 
         $data = array(
-            'status_chamado' => 3,
-            'id_chamado' => $_POST['id_chamado'],
+            'status' => 0,
         );
 
-        if ($this->chamados_model->edit('chamados', $data, 'id_chamado', $_POST['id_chamado']) == true) {
-            $this->session->set_flashdata('sucesso', 'Chamado finalizado com sucesso!');
-            redirect('chamados/detalhes/' . $_POST['id_chamado']);
+        if ($this->chamados_model->edit('consumo', $data, 'id', $_POST['id']) == true) {
+            $this->session->set_flashdata('sucesso', 'Consumo excluído com sucesso!');
+            redirect('consumo' . $_POST['id_chamado']);
         } else {
-            $this->session->set_flashdata('erro', 'Erro ao tentar finalizar chamado.');
-            redirect('chamados/detalhes/' . $_POST['id_chamado']);
+            $this->session->set_flashdata('erro', 'Erro ao tentar excluir consumo');
+            redirect('consumo');
         }
     }
 
