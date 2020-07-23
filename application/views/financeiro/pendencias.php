@@ -559,8 +559,6 @@ $periodo_pendencia = $this->input->get('periodo');
             }
         });
 
-        $(".money").maskMoney();
-
         $("#formPagar").validate({
             rules: {
                 forma_pagamento: {required: true}

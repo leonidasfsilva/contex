@@ -485,8 +485,6 @@ $periodo = $this->input->get('periodo');
 
     jQuery(document).ready(function ($) {
 
-        $(".money").maskMoney();
-
         $('#modalAplicacao, #modalResgate').on('hidden.bs.modal', function () {
             $('#formAplicacao, #formResgate').trigger("reset");
         });

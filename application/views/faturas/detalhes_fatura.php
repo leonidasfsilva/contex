@@ -704,8 +704,6 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
         }
 
-        $(".money").maskMoney();
-
         $('#modalLancamento').on('hidden.bs.modal', function () {
             $('#formNovoLancamento').trigger("reset");
         });

@@ -644,8 +644,6 @@ $fim = $this->input->get('dataFinal');
             }
         });
 
-        $(".money").maskMoney();
-
         $('#modalReceita, #modalDespesa').on('hidden.bs.modal', function () {
             $('#formReceita, #formDespesa').trigger("reset");
         });
