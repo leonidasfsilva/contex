@@ -19,13 +19,12 @@
             caso tenha alguma dúvida, clique no ícone <i class="fas fa-question-circle fa-fw"></i> de cada campo para obter ajuda.
         </div>
         <form id="formConfig" action="<?php echo base_url('consumo/configuracoes') ?>" method="post">
-            <div class="row">
+            <div class="row">ta
                 <div class="form-group col-sm-4">
                     <div class="input-icon right">
                         <label class="font-weight-bold" for="leitura_inicial">Leitura Inicial *</label>
                         <i class="fas fa-fw fa-question-circle" style="cursor: pointer" title="Ajuda" id="ajuda1"></i>
-                        <input class="form-control" id="leitura_inicial" name="leitura_inicial" placeholder="Valor inicial da medição" type="text" value="<?= $configs->leitura_inicial ? $configs->leitura_inicial : '' ?>">
-                        <p for="medicao_inicial" generated="true" id="help-block-cpf" class="help-block"></p>
+                        <input class="form-control" id="leitura_inicial" name="leitura_inicial" placeholder="Leitura inicial do medidor" type="text" value="<?= $configs->leitura_inicial ? $configs->leitura_inicial : '' ?>">
                     </div>
                 </div>
                 <div class="form-group col-sm-4">
@@ -33,7 +32,6 @@
                         <label class="font-weight-bold" for="data_leitura">Data da Leitura Inicial</label>
                         <i class="fas fa-fw fa-question-circle" style="cursor: pointer" title="Ajuda" id="ajuda2"></i>
                         <input class="form-control datepicker" id="data_leitura" name="data_leitura" placeholder="Data da leitura inicial" type="text" value="<?= $configs->data_leitura ? date('d/m/Y', strtotime($configs->data_leitura)) : '' ?>">
-                        <p for="inicio_medicaocpf" generated="true" id="help-block-cpf" class="help-block"></p>
                     </div>
                 </div>
                 <div class="form-group col-sm-4">
@@ -41,7 +39,6 @@
                         <label class="font-weight-bold" for="valor_kwh">Custo do kWh (R$)</label>
                         <i class="fas fa-fw fa-question-circle" style="cursor: pointer" title="Ajuda" id="ajuda3"></i>
                         <input class="form-control precision" id="valor_kwh" name="valor_kwh" placeholder="Custo do kWh em R$" type="text" value="<?= $configs->valor_kwh ? number_format(abs($configs->valor_kwh), 4, ',', '.') : '' ?>">
-                        <p for="valor_kwh" generated="true" id="help-block-cpf" class="help-block"></p>
                     </div>
                 </div>
             </div>
