@@ -337,7 +337,7 @@ $this->load->view('includes/custom_js');
             <ul class="dropdown-menu userinfo arrow">
                 <!--                <li><a href="javascript:" id="btn_teste"><span class="pull-left">Perfil</span> <span class="badge badge-info">80%</span></a></li>-->
                 <li title="Dados da conta">
-                    <a href="<?php echo base_url(); ?>mxcode/minhaConta"><span class="pull-left">Minha Conta</span> <i class="pull-right fas fa-user fa-lg"></i></a>
+                    <a href="<?php echo base_url(); ?>mxcode/minha-conta"><span class="pull-left">Minha Conta</span> <i class="pull-right fas fa-user fa-lg"></i></a>
                 </li>
                 <li title="Configurações da conta">
                     <a href="<?php echo base_url(); ?>configuracoes/usuario"><span class="pull-left">Configurações</span> <i class="pull-right fas fa-cog fa-lg"></i></a>

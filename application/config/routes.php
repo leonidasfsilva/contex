@@ -43,6 +43,7 @@
 $route['default_controller'] = "mxcode";
 $route['404_override'] = '';
 $route['financeiro'] = 'financeiro/index';
+$route['mxcode/minha-conta'] = 'mxcode/minhaConta';
 //$route['financeiro/faturas/detalhes'] = 'faturas/detalhes';
 //$route['financeiro/faturas/detalhes/(:any)'] = 'faturas/detalhes/$1';
 $route['editarFotoUsuario'] = "mxcode/editarFotoUsuario";
