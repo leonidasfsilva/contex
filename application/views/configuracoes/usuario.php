@@ -9,6 +9,42 @@
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h3>
+            <i class="fas fa-palette fa-lg fa-fw"></i>
+            Cores do Sistema
+        </h3>
+        <div class="panel-ctrls">
+            <!--            <a href="#" class="button-icon close-panel">-->
+            <!--                <i class="fas fa-times"></i>-->
+            <!--            </a>-->
+            <a href="#" class="button-icon expand">
+                <i class="fas fa-expand-arrows-alt expand-icon"></i>
+            </a>
+            <a href="#" class="button-icon panel-collapse">
+                <i class="fas fa-minus"></i>
+            </a>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="demo-body">
+            <div class="option-title">Header Colors</div>
+            <ul id="demo-header-color" class="demo-color-list">
+                <li><span class="demo-white"></span></li>
+                <li><span class="demo-black"></span></li>
+                <li><span class="demo-midnightblue"></span></li>
+                <li><span class="demo-primary"></span></li>
+                <li><span class="demo-info"></span></li>
+                <li><span class="demo-alizarin"></span></li>
+                <li><span class="demo-green"></span></li>
+                <li><span class="demo-violet"></span></li>
+                <li><span class="demo-indigo"></span></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-midnightblue">
+    <div class="panel-heading">
+        <h3>
             <i class="fas fa-file-invoice-dollar fa-lg fa-fw"></i>
             Faturas
         </h3>

@@ -19,7 +19,7 @@
             caso tenha alguma dúvida, clique no ícone <i class="fas fa-question-circle fa-fw"></i> de cada campo para obter ajuda.
         </div>
         <form id="formConfig" action="<?php echo base_url('consumo/configuracoes') ?>" method="post">
-            <div class="row">ta
+            <div class="row">
                 <div class="form-group col-sm-4">
                     <div class="input-icon right">
                         <label class="font-weight-bold" for="leitura_inicial">Leitura Inicial *</label>
