@@ -87,6 +87,7 @@ class Consumo_model extends CI_Model
         return $this->db
             ->where('id_usuario', $id_usuario)
             ->where('status', 1)
+            ->order_by('id', 'asc')
             ->order_by('data_leitura', 'desc')
             ->get('consumo')
             ->result();
