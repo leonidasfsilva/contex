@@ -70,9 +70,7 @@ class Fatura_model extends CI_Model
             $this->db->where('status', 1);
             $this->db->where('id_usuario', $id_usuario);
         }
-
         $query = $this->db->get();
-
         $result = !$one ? $query->result() : $query->row();
         return $result;
     }

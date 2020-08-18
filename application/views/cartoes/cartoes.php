@@ -49,6 +49,8 @@
                         $tipo_cartao = 'ADICIONAL';
                         $label_cartao = 'warning';
                     } else {
+                        $disabled_editar = null;
+                        $disabled_excluir = null;
                         $disabled_adicional = null;
                         $tipo_cartao = 'TITULAR';
                         $label_cartao = 'primary';
