@@ -30,7 +30,7 @@ class Faturas extends CI_Controller
         $periodo = $this->input->get('periodo');
         $cliente = $this->input->get('id_cliente');
 
-        $config['base_url'] = site_url() . '/faturas/?periodo=' . $periodo;
+        $config['base_url'] = site_url() . 'financeiro/faturas/?periodo=' . $periodo;
         $config['total_rows'] = $this->fatura_model->count('faturas', 'status = 1 AND id_usuario = ' . id_usuario());
         $config['per_page'] = 100;
         $config['page_query_string'] = true;
@@ -75,7 +75,7 @@ class Faturas extends CI_Controller
 
             if ($cartao->id_usuario != id_usuario()) {
                 if ($cartao->id_usuario_titular != id_usuario()) {
-                    $this->session->set_flashdata('erro', 'Cartão solicitado não pertence ao usuário.');
+                    $this->session->set_flashdata('erro', 'Cartão solicitado não encontrado');
                     redirect('financeiro/faturas');
                 }
             }

@@ -14,6 +14,16 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
     }
     if (!$cartoes) {
         $disabledFatura = 'disabled';
+    } else {
+        foreach ($cartoes as $c) {
+            if ($c->id_usuario != id_usuario()) {
+                if ($c->adicional) {
+                    if ($cartao_selecionado == $c->id_cartao) {
+                        $disabledFatura = 'disabled';
+                    }
+                }
+            }
+        }
     }
     ?>
 <?php } ?>
@@ -25,11 +35,13 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             Controle de Faturas
         </h3>
         <div class="panel-ctrls">
-            <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar faturas">
+            <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal"
+                    title="Filtrar faturas">
                 <i class="fas fa-filter fa-fw"></i>
                 Filtrar
             </button>
-            <button href="#modalNovaFatura" id="novaFatura" data-toggle="modal" role="button" class="btn btn-primary btn-sm tip-bottom"
+            <button href="#modalNovaFatura" id="novaFatura" data-toggle="modal" role="button"
+                    class="btn btn-primary btn-sm tip-bottom"
                     title="Abrir nova fatura" <?= $disabledFatura ?>>
                 <i class="fas fa-plus fa-fw"></i>
                 Nova Fatura
@@ -46,13 +58,15 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     <?php } ?>
                 </select>
             <?php } else { ?>
-                <input type="text" name="cartoes" id="cartoes" class="form-control" placeholder="Não há cartões cadastrados" disabled/>
+                <input type="text" name="cartoes" id="cartoes" class="form-control"
+                       placeholder="Não há cartões cadastrados" disabled/>
             <?php }
             ?>
         </div>
     </div>
     <div class="panel-body panel-no-padding">
-        <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
+        <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer"
+               role="grid" style="width: 100%;">
             <thead>
             <tr>
                 <th colspan="2" style="text-align: left !important;">Descrição</th>
@@ -100,7 +114,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             </div>
         </div>
         <div class="panel-body panel-no-padding table-responsive">
-            <table class="table table-condensed table-striped table-bordeless table-hover" role="grid" style="width: 100%;">
+            <table class="table table-condensed table-striped table-bordeless table-hover" role="grid"
+                   style="width: 100%;">
                 <thead>
                 <tr role="row">
                     <th>Referência</th>
@@ -208,7 +223,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             </h2>
         </div>
         <div class="panel-body panel-no-padding table-responsive">
-            <table class="table table-condensed table-striped table-bordeless table-hover" role="grid" style="width: 100%;">
+            <table class="table table-condensed table-striped table-bordeless table-hover" role="grid"
+                   style="width: 100%;">
                 <thead>
                 <tr role="row">
                     <th style="text-align: left !important;">Referência</th>
@@ -246,7 +262,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-6" style="margin-left: 0">
-                            <label class="tip-top" title="Filtrar faturas por período específico">Período <i class="fa fa-info-circle fa-fw"></i></label>
+                            <label class="tip-top" title="Filtrar faturas por período específico">Período <i
+                                        class="fa fa-info-circle fa-fw"></i></label>
                             <select name="periodo" id="select_periodos" class="form-control">
                                 <option value="">Selecione o período</option>
                                 <option value="3dias"<?php if ($periodo == '3dias') {
@@ -284,7 +301,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </select>
                         </div>
                         <div class="col-lg-6">
-                            <label class="tip-top" title="Filtrar faturas por status">Status <i class="fa fa-info-circle fa-fw"></i></label>
+                            <label class="tip-top" title="Filtrar faturas por status">Status <i
+                                        class="fa fa-info-circle fa-fw"></i></label>
                             <select class="form-control" id="select_status" name="status">
                                 <option value="">Selecione o status</option>
                                 <option value="aberta"<?php if ($periodo == 'aberta') {
@@ -315,20 +333,24 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 </div>
 
 <!-- Modal ABRIR NOVA FATURA-->
-<div class="modal fade" id="modalNovaFatura" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalNovaFatura" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Abrir nova fatura</h4>
             </div>
-            <form id="formNovaFatura" action="<?php echo base_url() ?>financeiro/faturas/abrir" method="post" autocomplete="off">
+            <form id="formNovaFatura" action="<?php echo base_url() ?>financeiro/faturas/abrir" method="post"
+                  autocomplete="off">
                 <div class="modal-body">
                     <p>Defina a data de vencimento padrão para suas faturas.</p>
                     <div class="row">
                         <div class="col-lg-6 form-group">
-                            <label class="control-label font-weight-bold" for="vencimento_fatura">Data de vencimento</label>
-                            <input class="form-control datepicker" id="vencimento_fatura" type="text" name="vencimento_fatura"/>
+                            <label class="control-label font-weight-bold" for="vencimento_fatura">Data de
+                                vencimento</label>
+                            <input class="form-control datepicker" id="vencimento_fatura" type="text"
+                                   name="vencimento_fatura"/>
                         </div>
                         <input id="id_cartao_nova_fatura" type="hidden" name="id_cartao"/>
                         <input id="urlFatura" type="hidden" name="urlAtual"/>
@@ -362,10 +384,12 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     <input id="urlExcluirFatura" type="hidden" name="urlAtual" value=""/>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true"
+                            id="btnCancelExcluir">
                         <i class="fa fa-times fa-fw"></i> Cancelar
                     </button>
-                    <button class="btn btn-danger btn-sm" id="btnExcluir"><i class="fa fa-check fa-fw"></i> Excluir</button>
+                    <button class="btn btn-danger btn-sm" id="btnExcluir"><i class="fa fa-check fa-fw"></i> Excluir
+                    </button>
                 </div>
             </form>
         </div>
@@ -407,7 +431,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white">Pagar fatura</h4>
             </div>
-            <form id="formPagar" action="<?php echo base_url() ?>financeiro/faturas/pagar" method="post" autocomplete="off">
+            <form id="formPagar" action="<?php echo base_url() ?>financeiro/faturas/pagar" method="post"
+                  autocomplete="off">
                 <div class="modal-body">
                     <p>Confirma o pagamento desta fatura?</p>
                     <input id="id_fatura_pagar" type="hidden" name="id_fatura" value=""/>
@@ -415,7 +440,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     <div class="row">
                         <div class="form-group col-lg-6">
                             <label class="font-weight-bold" for="data_pagamento">Data do pagamento</label>
-                            <input class="datepicker form-control" id="data_pagamento" type="text" name="data_pagamento"/>
+                            <input class="datepicker form-control" id="data_pagamento" type="text"
+                                   name="data_pagamento"/>
                         </div>
                         <div class="form-group col-lg-6">
                             <label class="font-weight-bold" for="forma_pagamento">Forma de pagamento *</label>

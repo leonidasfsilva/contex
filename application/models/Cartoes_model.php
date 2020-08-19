@@ -88,9 +88,9 @@ class Cartoes_model extends CI_Model
     {
         if ($id_cartao) {
             return $this->db
-                ->where('status', 1)
                 ->where('id_usuario', $id_usuario)
                 ->where('id_cartao', $id_cartao)
+                ->where('status', 1)
                 ->get('cartoes')
                 ->result();
         } else {
@@ -98,6 +98,7 @@ class Cartoes_model extends CI_Model
                 ->where('status', 1)
                 ->where('id_usuario', $id_usuario)
                 ->or_where('id_usuario_titular', $id_usuario)
+                ->where('status', 1)
                 ->order_by('id_cartao', 'asc')
                 ->get('cartoes')
                 ->result();

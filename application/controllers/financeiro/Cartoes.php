@@ -194,8 +194,7 @@ class Cartoes extends CI_Controller
             redirect('financeiro/cartoes');
         }
 
-        $cartao = $this->cartoes_model->cartaoPertenceUsuario(id_usuario(), $id_cartao);
-
+        $cartao = $this->cartoes_model->cartaoExistente($id_cartao);
         if ($cartao) {
             if ($cartao->adicional == 1) {
                 if ($cartao->id_usuario_titular != id_usuario()) {
