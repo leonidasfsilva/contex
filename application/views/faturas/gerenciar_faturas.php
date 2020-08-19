@@ -361,7 +361,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         <i class="fa fa-times fa-fw"></i> Cancelar
                     </button>
                     <button class="btn btn-primary btn-sm">
-                        <i class="fa fa-check fa-fw"></i> Abrir Fatura
+                        <i class="fa fa-check fa-fw"></i> Salvar
                     </button>
                 </div>
             </form>
@@ -446,13 +446,21 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         <div class="form-group col-lg-6">
                             <label class="font-weight-bold" for="forma_pagamento">Forma de pagamento *</label>
                             <select name="forma_pagamento" id="forma_pagamento" class="form-control">
-                                <option value="">-- Selecione --</option>
+                                <option value=""><< Selecione >></option>
                                 <?php if ($formasPagamento) {
                                     foreach ($formasPagamento as $c) { ?>
                                         <option value="<?= $c->id_forma ?>"><?= $c->nome ?></option>
                                     <?php }
                                 } ?>
                             </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <div class="checkbox icheck">
+                                <input type="checkbox" class="form-control" id="registrar" name="registrar" value="1">
+                            </div>
+                            <label for="registrar" class="font-weight-bold">Registrar este pagamento em Lançamentos</label>
                         </div>
                     </div>
                 </div>
