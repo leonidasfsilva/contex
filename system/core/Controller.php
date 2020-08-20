@@ -78,6 +78,8 @@ class CI_Controller {
 		$this->load =& load_class('Loader', 'core');
 		$this->load->initialize();
 		log_message('info', 'Controller Class Initialized');
+        setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
+        date_default_timezone_set('America/Sao_Paulo');
         returnURL();
     }
 
