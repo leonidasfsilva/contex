@@ -40,8 +40,9 @@ class Mxcode extends CI_Controller
         $data['widgetCartaoCredito'] = $this->configs_model->getWidgetCartaoCredito(id_usuario());
         $data['widgetInvestimentos'] = $this->configs_model->getWidgetInvestimentos(id_usuario());
         $data['widgetPendencias'] = $this->configs_model->getWidgetPendencias(id_usuario());
+        $data['anuncios'] = $this->anuncios_model->getAnuncios('habilitado = 1 AND direcionado != 1');
+        $data['direcionados'] = $this->anuncios_model->getAnuncios('habilitado = 1 AND direcionado = 1 AND id_usuario = '. id_usuario());
         $data['view'] = 'mxcode/painel';
-
         $this->load->view('tema/topo', $data);
 
     }

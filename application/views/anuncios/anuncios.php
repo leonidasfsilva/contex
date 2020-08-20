@@ -25,6 +25,7 @@
                 <th style="width: 30px">ID</th>
                 <th>Cabeçalho</th>
                 <th>Título</th>
+                <th>Usuário</th>
                 <th>Status</th>
                 <th style="width: 180px">Ações</th>
             </tr>
@@ -59,6 +60,7 @@
                     echo '<td>' . $r->id_anuncio . '</td>';
                     echo '<td>' . $r->cabecalho . '</td>';
                     echo '<td>' . $r->titulo . '</td>';
+                    echo '<td>' . $r->nome_usuario . '</td>';
                     echo '<td><span class="label label-' . $label_tipo . '">' . strtoupper($habilitado) . '</span></td>';
                     echo '<td style="text-align: center">';
                     echo '<button href="#modalConfigurar" role="button" data-toggle="modal" id_anuncio="' . $r->id_anuncio . '" validade="' . $validade . '" data_expiracao="' . $data_expiracao . '" habilitado="' . $r->habilitado . '" nome_usuario="' . $r->nome_usuario . '" direcionado="' .

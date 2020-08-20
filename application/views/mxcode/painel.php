@@ -1,7 +1,4 @@
-<?php
-$anuncios = $this->anuncios_model->getAnuncios('habilitado = 1 AND direcionado != 1');
-$direcionados = $this->anuncios_model->getAnuncios('habilitado = 1 AND direcionado = 1 AND id_usuario = '. id_usuario());
-if ($anuncios) {
+<?php if ($anuncios) {
     foreach ($anuncios as $a) {
         $format = "d-m-Y";
         $hoje = DateTime::createFromFormat($format, date('d-m-Y'));
