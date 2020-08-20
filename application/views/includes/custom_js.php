@@ -1,6 +1,9 @@
 <script>
-
     $(document).on('ready', function (event) {
+        $('.modal_anuncio').each(function (key, value) {
+            $('.modal_anuncio').modal('show');
+        });
+
         $('[disabled="disabled"]').click(function (e) {
             e.preventDefault();
         });
@@ -360,5 +363,4 @@
             return false;
         });
     });
-
 </script>
