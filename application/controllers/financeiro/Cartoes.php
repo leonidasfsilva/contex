@@ -161,11 +161,16 @@ class Cartoes extends CI_Controller
                 $this->session->set_flashdata('sucesso', 'Dados do cartão alterados com sucesso!');
                 redirect('financeiro/cartoes');
             } else {
-                $this->session->set_flashdata('erro', 'Erro ao tentar alterar dados do cartão.');
+                $this->session->set_flashdata('erro', 'Erro ao tentar alterar dados do cartão');
                 redirect('financeiro/cartoes');
             }
         } else {
             $cartao = $this->cartoes_model->getDetalhesCartao($id_cartao);
+
+            if (!$this->cartoes_model->verificaCartaoAtivo($id_cartao)) {
+                $this->session->set_flashdata('erro', 'Cartão não encontrado');
+                redirect('financeiro/cartoes');
+            }
 
             if ($cartao->adicional) {
                 if ($cartao->id_usuario_titular != id_usuario()) {

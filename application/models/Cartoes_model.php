@@ -134,6 +134,19 @@ class Cartoes_model extends CI_Model
             ->row();
     }
 
+    function verificaCartaoAtivo($id_cartao)
+    {
+        if ($this->db
+            ->where('id_cartao', $id_cartao)
+            ->where('status', 1)
+            ->get('cartoes')
+            ->row()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     function cartaoPertenceUsuario($id_usuario, $id_cartao)
     {
         return $this->db
