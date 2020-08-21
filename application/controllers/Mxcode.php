@@ -30,7 +30,7 @@ class Mxcode extends CI_Controller
 //        $this->data['produtos'] = $this->mxcode_model->getProdutosMinimo();
 //        $this->data['os'] = $this->mxcode_model->getOsEstatisticas();
 //        $this->data['estatisticas_financeiro'] = $this->mxcode_model->getEstatisticasFinanceiro();
-        $data['menuPainel'] = 'Index';
+        $data['menuPainel'] = true;
         $data['usuario'] = $this->mxcode_model->getById(id_usuario());
         $data['lancamentos'] = $this->financeiro_model->getTotal(id_usuario());
         $data['investimentos'] = $this->investimentos_model->getTotal(id_usuario());
@@ -42,6 +42,7 @@ class Mxcode extends CI_Controller
         $data['widgetPendencias'] = $this->configs_model->getWidgetPendencias(id_usuario());
         $data['anuncios'] = $this->anuncios_model->getAnuncios('habilitado = 1 AND direcionado != 1');
         $data['direcionados'] = $this->anuncios_model->getAnuncios('habilitado = 1 AND direcionado = 1 AND id_usuario = '. id_usuario());
+
         $data['view'] = 'mxcode/painel';
         $this->load->view('tema/topo', $data);
 

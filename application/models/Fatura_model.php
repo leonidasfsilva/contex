@@ -340,19 +340,37 @@ class Fatura_model extends CI_Model
 
     function getValorTotalFaturaAtual($id_usuario)
     {
-        $this->db
-            ->select('id_fatura')
-            ->from('faturas')
-            ->where('status = 1 AND fatura_aberta = 1 AND id_usuario = ' . $id_usuario);
-        $result = $this->db->get()->row();
+        $cartoes = $this->db
+            ->where('status', 1)
+            ->where('id_usuario', $id_usuario)
+            ->or_where('id_usuario_titular', $id_usuario)
+            ->where('status', 1)
+            ->get('cartoes')
+            ->result();
 
-        $this->db
-            ->select('SUM(valor_parcela) AS total')
-            ->from('lancamentos_faturas_assoc')
-            ->where('status = 1 AND id_fatura = ' . $result->id_fatura);
+        foreach ($cartoes as $c) {
+            $this->db
+                ->where('status', 1)
+                ->where('fatura_aberta', 1)
+                ->where('id_cartao', $c->id_cartao);
+            $faturas[] = $this->db->get('faturas')->row();
+        }
 
-        $result = $this->db->get()->row();
-        return $result;
+        foreach ($faturas as $f) {
+            $this->db
+                ->select('SUM(valor_parcela) AS total')
+                ->where('status', 1)
+                ->where('id_fatura', $f->id_fatura)
+                ->where('mes_referencia', $f->mes_referencia)
+                ->where('ano_referencia', $f->ano_referencia);
+            $results[] = $this->db->get('lancamentos_faturas_assoc')->row();
+            $valor = null;
+            foreach ($results as $r) {
+                $valor += $r->total;
+            }
+        }
+//        print_array_exit($results);
+        return ($valor);
 
     }
 

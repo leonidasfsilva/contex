@@ -117,8 +117,8 @@ if ($direcionados) {
                     <div class="pull-left">
                         <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Cartão de Crédito</span>
                         <div class="conteudo-widget " style="<?= ($widgetCartaoCredito == 1 ? '' : 'display: none;') ?>e">
-                            <span class="tile-sparkline-subheading block mb10">Valor da fatura atual</span>
-                            <h2 class="block">R$ <?= number_format($fatura->total, 2, ',', '.') ?></h2>
+                            <span class="tile-sparkline-subheading block mb10">Saldo de faturas em aberto</span>
+                            <h2 class="block">R$ <?= number_format($fatura, 2, ',', '.') ?></h2>
                         </div>
                     </div>
                     <div class="pull-right">
