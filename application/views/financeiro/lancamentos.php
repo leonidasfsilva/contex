@@ -304,7 +304,7 @@ $fim = $this->input->get('dataFinal');
                         <div class="form-group col-lg-6" style="margin-left: 0">
                             <label class="tooltips font-weight-bold" title="Filtrar lançamentos por período específico">Período <i class="fa fa-info-circle fa-fw"></i></label>
                             <select name="periodo" id="select_periodo" class="form-control">
-                                <option value="">== Selecione ==</option>
+                                <option value=""><< Selecione >></option>
                                 <option value="todos" <?php if ($periodo_lancamentos == 'todos') {
                                     echo 'selected';
                                 } ?>>Todos
