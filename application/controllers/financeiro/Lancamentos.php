@@ -72,7 +72,7 @@ class Lancamentos extends CI_Controller
                 $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
                 break;
             default:
-                $limit = 10;
+                $limit = 20;
                 break;
         }
 
