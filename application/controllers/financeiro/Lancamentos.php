@@ -129,7 +129,6 @@ class Lancamentos extends CI_Controller
             }
         }
 
-
         $query_string = null;
         foreach ($_GET as $key => $value) {
             if($key != 'per_page') {
