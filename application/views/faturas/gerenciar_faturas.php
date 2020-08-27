@@ -35,33 +35,22 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             Controle de Faturas
         </h3>
         <div class="panel-ctrls">
-            <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal"
-                    title="Filtrar faturas">
-                <i class="fas fa-filter fa-fw"></i>
-                Filtrar
-            </button>
-            <button href="#modalNovaFatura" id="novaFatura" data-toggle="modal" role="button"
-                    class="btn btn-primary btn-sm tip-bottom"
-                    title="Abrir nova fatura" <?= $disabledFatura ?>>
-                <i class="fas fa-plus fa-fw"></i>
-                Nova Fatura
-            </button>
-        </div>
-        <div class="col-md-3 mt10 pull-right">
-            <?php if ($cartoes) { ?>
-                <select name="cartoes" id="cartoes" class="form-control">
-                    <?php foreach ($cartoes as $c) {
-                        $n_cartao = explode(" ", trim(base64_decode($c->numero)));
-                        $final = $n_cartao[3]; ?>
-                        <!--                <option value=""><< Selecione um Cartão >></option>-->
-                        <option value="<?= $c->id_cartao ?>" <?= $cartao_selecionado == $c->id_cartao ? 'selected' : '' ?>><?= $c->bandeira . ' - FINAL ' . $final ?></option>
-                    <?php } ?>
-                </select>
-            <?php } else { ?>
-                <input type="text" name="cartoes" id="cartoes" class="form-control"
-                       placeholder="Não há cartões cadastrados" disabled/>
-            <?php }
-            ?>
+            <div class=" mt10 pull-right">
+                <?php if ($cartoes) { ?>
+                    <select name="cartoes" id="cartoes" class="form-control">
+                        <?php foreach ($cartoes as $c) {
+                            $n_cartao = explode(" ", trim(base64_decode($c->numero)));
+                            $final = $n_cartao[3]; ?>
+                            <!--                <option value=""><< Selecione um Cartão >></option>-->
+                            <option value="<?= $c->id_cartao ?>" <?= $cartao_selecionado == $c->id_cartao ? 'selected' : '' ?>><?= $c->bandeira . ' - FINAL ' . $final ?></option>
+                        <?php } ?>
+                    </select>
+                <?php } else { ?>
+                    <input type="text" name="cartoes" id="cartoes" class="form-control"
+                           placeholder="Não há cartões cadastrados" disabled/>
+                <?php }
+                ?>
+            </div>
         </div>
     </div>
     <div class="panel-body panel-no-padding">
@@ -94,40 +83,40 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         </table>
     </div>
 </div>
-<?php if ($results) { ?>
-
-    <div class="panel panel-midnightblue">
-        <div class="panel-heading">
-            <h2>
-                Registro de Faturas
-            </h2>
-            <div class="panel-ctrls">
-                <a href="#" class="button-icon close-panel">
-                    <i class="fas fa-times"></i>
-                </a>
-                <a href="#" class="button-icon expand">
-                    <i class="fas fa-expand-arrows-alt expand-icon"></i>
-                </a>
-                <a href="#" class="button-icon panel-collapse">
-                    <i class="fas fa-minus"></i>
-                </a>
-            </div>
+<div class="panel panel-midnightblue">
+    <div class="panel-heading">
+        <h2>
+            Registro de Faturas
+        </h2>
+        <div class="panel-ctrls">
+            <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal"
+                    title="Filtrar faturas">
+                <i class="fas fa-filter fa-fw"></i>
+                Filtrar
+            </button>
+            <button href="#modalNovaFatura" id="novaFatura" data-toggle="modal" role="button"
+                    class="btn btn-primary btn-sm tip-bottom"
+                    title="Abrir nova fatura" <?= $disabledFatura ?>>
+                <i class="fas fa-plus fa-fw"></i>
+                Nova Fatura
+            </button>
         </div>
-        <div class="panel-body panel-no-padding table-responsive">
-            <table class="table table-condensed table-striped table-bordeless table-hover" role="grid"
-                   style="width: 100%;">
-                <thead>
-                <tr role="row">
-                    <th>Referência</th>
-                    <th>Vencimento</th>
-                    <th>Valor (R$)</th>
-                    <th>Status</th>
-                    <th>Pagamento</th>
-                    <th style="width: 180px !important;">Ações</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php
+    </div>
+    <div class="panel-body panel-no-padding table-responsive">
+        <table class="table table-condensed table-striped table-bordeless table-hover" role="grid"
+               style="width: 100%;">
+            <thead>
+            <tr role="row">
+                <th>Referência</th>
+                <th>Vencimento</th>
+                <th>Valor (R$)</th>
+                <th>Status</th>
+                <th>Pagamento</th>
+                <th style="width: 180px !important;">Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php if ($results) {
                 $totalReceita = 0;
                 $totalDespesa = 0;
                 $saldo = 0;
@@ -209,42 +198,17 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     }
                     echo '</td>';
                     echo '</tr>';
-                } ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-<?php } else { ?>
-    <div class="panel panel-midnightblue">
-        <div class="panel-heading">
-            <h2>
-                Registro de Faturas
-            </h2>
-        </div>
-        <div class="panel-body panel-no-padding table-responsive">
-            <table class="table table-condensed table-striped table-bordeless table-hover" role="grid"
-                   style="width: 100%;">
-                <thead>
-                <tr role="row">
-                    <th style="text-align: left !important;">Referência</th>
-                    <th style="text-align: left !important;">Vencimento</th>
-                    <th style="text-align: left !important;">Valor (R$)</th>
-                    <th style="text-align: left !important;">Status Fatura</th>
-                    <th style="text-align: left !important;">Status Pagamento</th>
-                    <th style="text-align: left !important; width: 150px">Ações</th>
-                </tr>
-                </thead>
-                <tbody>
+                }
+            } else { ?>
                 <tr>
                     <td colspan="6">Nenhuma fatura encontrada</td>
                 </tr>
-                </tbody>
-            </table>
-        </div>
+            <?php } ?>
+            </tbody>
+        </table>
     </div>
-    <?php echo $this->pagination->create_links();
-} ?>
+</div>
+<?= $this->pagination->create_links(); ?>
 
 <form id="form_cartao" action="<?php echo base_url(); ?>financeiro/faturas" method="get">
     <input type="hidden" id="id_cartao" name="id_cartao">
@@ -341,16 +305,16 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Abrir nova fatura</h4>
             </div>
-            <form id="formNovaFatura" action="<?php echo base_url() ?>financeiro/faturas/abrir" method="post"
+            <form id="formNovaFatura" action="<?= base_url('financeiro/faturas/abrir') ?>" method="post"
                   autocomplete="off">
                 <div class="modal-body">
                     <p>Defina a data de vencimento padrão para suas faturas.</p>
                     <div class="row">
                         <div class="col-lg-6 form-group">
-                            <label class="control-label font-weight-bold" for="vencimento_fatura">Data de
-                                vencimento</label>
-                            <input class="form-control datepicker" id="vencimento_fatura" type="text"
-                                   name="vencimento_fatura"/>
+                            <label class="control-label font-weight-bold" for="vencimento_fatura">
+                                Data de vencimento
+                            </label>
+                            <input class="form-control datepicker" id="vencimento_fatura" type="text" name="vencimento_fatura"/>
                         </div>
                         <input id="id_cartao_nova_fatura" type="hidden" name="id_cartao"/>
                         <input id="urlFatura" type="hidden" name="urlAtual"/>
@@ -460,7 +424,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             <div class="checkbox icheck">
                                 <input type="checkbox" class="form-control" id="registrar" name="registrar" value="1">
                             </div>
-                            <label for="registrar" class="font-weight-bold">Registrar este pagamento em Lançamentos</label>
+                            <label for="registrar" class="font-weight-bold">Registrar este pagamento em
+                                Lançamentos</label>
                         </div>
                     </div>
                 </div>
