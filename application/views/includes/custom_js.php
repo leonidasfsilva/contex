@@ -63,7 +63,7 @@
     });
 
     $(function () {
-        $(".money").maskMoney({thousands:'.', decimal:',', allowZero:true, prefix: 'R$ '});
+        $(".money").maskMoney({thousands: '.', decimal: ',', allowZero: true});
         $('.money').prop('type', 'tel');
     });
     $(function () {
