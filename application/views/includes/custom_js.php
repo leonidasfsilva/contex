@@ -1,5 +1,7 @@
 <script>
     $(document).on('ready', function (event) {
+        $("#urlAtual").val($(location).attr('href'));
+
         $('.modal_anuncio').each(function (key, value) {
             $('.modal_anuncio').modal('show');
         });

@@ -272,9 +272,9 @@ $fim = $this->input->get('dataFinal');
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-6">
-                            <label class="tip-top font-weight-bold" title="Filtrar lançamentos por tipo">Tipo <i class="fa fa-info-circle fa-fw"></i></label>
+                            <label class="tooltips font-weight-bold" title="Filtrar lançamentos por tipo">Tipo <i class="fa fa-info-circle fa-fw"></i></label>
                             <select class="form-control" id="select_tipo" name="tipo">
-                                <option value="todos">Todos</option>
+                                <option value="todos"><< Todos >></option>
                                 <option value="entrada" <?php if ($tipo_lancamentos == 'entrada') {
                                     echo 'selected';
                                 } ?>>ENTRADA
@@ -286,9 +286,9 @@ $fim = $this->input->get('dataFinal');
                             </select>
                         </div>
                         <div class="form-group col-lg-6">
-                            <label class="tip-top font-weight-bold" title="Filtrar lançamentos por status">Status <i class="fa fa-info-circle fa-fw"></i></label>
+                            <label class="tooltips font-weight-bold" title="Filtrar lançamentos por status">Status <i class="fa fa-info-circle fa-fw"></i></label>
                             <select class="form-control" id="select_status" name="status">
-                                <option value="todos">Todos</option>
+                                <option value="todos"><< Todos >></option>
                                 <option value="efetivado" <?php if ($status_lancamentos == 'efetivado') {
                                     echo 'selected';
                                 } ?>>EFETIVADO
@@ -515,12 +515,12 @@ $fim = $this->input->get('dataFinal');
                 <h4 class="modal-title text-white ">Detalhes do lançamento</h4>
             </div>
             <form id="formEditar" action="<?php echo base_url('financeiro/lancamentos/editar') ?>" method="post">
+                <input id="urlAtual" type="hidden" name="urlAtual" value=""/>
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricaoEditar">Descrição *</label>
                             <input class="form-control" id="descricaoEditar" type="text" name="descricao"/>
-                            <input id="urlAtualEditar" type="hidden" name="urlAtual" value=""/>
                             <input type="hidden" id="idEditar" name="id" value=""/>
                         </div>
                     </div>

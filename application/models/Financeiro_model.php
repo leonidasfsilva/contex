@@ -9,25 +9,26 @@ class Financeiro_model extends CI_Model
         parent::__construct();
     }
 
-    function get($table, $fields, $where = '', $id_usuario, $limit = null, $rows = null, $perpage = 0, $start = 0, $one = false, $array = 'array')
+    function get($table, $fields, $where = '', $id_usuario, $perpage = 0, $start = 0, $limit = null, $order_by = null, $rows = null, $one = false, $array = 'array')
     {
         $this->db->select($fields);
         $this->db->from($table);
-        $this->db->limit($perpage, $start);
 
         if ($where) {
             $this->db->where($where . ' AND status = 1 AND id_usuario = ' . $id_usuario);
         } else {
             $this->db->where('status = 1 AND id_usuario = ' . $id_usuario);
         }
-
-        if ($limit) {
-            if ($rows > $limit) {
-                $this->db->limit($limit, ($rows - $limit));
-            }
+        if ($order_by) {
+            $this->db->order_by('data_lancamento', $order_by);
         }
-
-        $this->db->order_by('data_lancamento', 'asc');
+//        if ($limit) {
+//            if ($rows > $limit) {
+//                $this->db->limit($limit, ($rows - $limit));
+//            }
+//        }
+//        exit;
+        $this->db->limit($perpage, $start);
         $query = $this->db->get();
         $result = !$one ? $query->result() : $query->row();
 
@@ -75,7 +76,7 @@ class Financeiro_model extends CI_Model
         return false;
     }
 
-    function count($table, $where, $id_usuario)
+    function count($table, $id_usuario, $where = null, $limit = null)
     {
         $this->db->from($table);
         if ($where) {
@@ -84,6 +85,19 @@ class Financeiro_model extends CI_Model
             $this->db->where('status = 1 AND id_usuario = ' . $id_usuario);
         }
         return $this->db->count_all_results();
+    }
+
+    function countLancamentos($id_usuario, $where = null, $limit = null, $start = null)
+    {
+        if ($where) {
+            $this->db->where($where);
+        }
+        $this->db->where('id_usuario', $id_usuario);
+        $this->db->where('status', 1);
+        if ($limit) {
+            $this->db->limit($limit, $start);
+        }
+        return $this->db->count_all_results('lancamentos');
     }
 
     function getSaidasPendentes($id_usuario)

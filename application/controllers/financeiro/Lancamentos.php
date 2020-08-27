@@ -17,7 +17,7 @@ class Lancamentos extends CI_Controller
         $this->load->model('fatura_model', '', true);
         $this->load->model('clientes_model', '', true);
         $this->data['menuFinanceiro'] = 'Lancamentos';
-        $this->global_url = site_url() . 'financeiro/lancamentos';
+        $this->global_url = base_url('financeiro/lancamentos');
 
     }
 
@@ -33,11 +33,14 @@ class Lancamentos extends CI_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar lançamentos.');
             redirect(base_url());
         }
-        $status = $this->input->get('status');
-        $tipo = $this->input->get('tipo');
-        $periodo = $this->input->get('periodo');
-        $inicio = $this->input->get('dataInicial');
-        $fim = $this->input->get('dataFinal');
+        $status = $_GET['status'];
+        $tipo = $_GET['tipo'];
+        $periodo = $_GET['periodo'];
+        $inicio = $_GET['dataInicial'];
+        $fim = $_GET['dataFinal'];
+        $start = $_GET['per_page'];
+
+        $this->load->library('pagination');
 
         switch ($periodo) {
             case 'todos':
@@ -73,6 +76,9 @@ class Lancamentos extends CI_Controller
                 break;
             default:
                 $limit = 20;
+                $start = $this->financeiro_model->countLancamentos(id_usuario()) - $limit;
+                $order_by = 'asc';
+                $limitado = true;
                 break;
         }
 
@@ -123,22 +129,27 @@ class Lancamentos extends CI_Controller
             }
         }
 
-        $this->load->library('pagination');
 
-        $config['base_url'] = site_url() . 'financeiro/lancamentos';
-        $config['total_rows'] = $this->financeiro_model->count(
-            'lancamentos',
-            $where,
-            id_usuario());
-        $config['per_page'] = 30;
+        $query_string = null;
+        foreach ($_GET as $key => $value) {
+            if($key != 'per_page') {
+                $query_string .= $key.'='.$value.'&';
+            }
+        }
+
+        $config['base_url'] = base_url('financeiro/lancamentos');
+        $config['suffix'] = '&' . $query_string;
+        $config['first_url'] = $config['base_url'] . '?' . $query_string;
+        $config['total_rows'] = $this->financeiro_model->countLancamentos(id_usuario(), $where, $limit, $start);
+        $config['per_page'] = 20;
         $config['page_query_string'] = true;
-        $config['next_link'] = 'Próxima';
-        $config['prev_link'] = 'Anterior';
+        $config['next_link'] = false;
+        $config['prev_link'] = false;
         $config['full_tag_open'] = '<ul class="pagination pagination-sm">';
         $config['full_tag_close'] = '</ul>';
         $config['num_tag_open'] = '<li>';
         $config['num_tag_close'] = '</li>';
-        $config['cur_tag_open'] = '<li><a style="background-color: #337ab7; color: white"><b>';
+        $config['cur_tag_open'] = '<li class="disabled"><a style="background-color:#337ab7; color: white" class="js:"><b>';
         $config['cur_tag_close'] = '</b></a></li>';
         $config['prev_tag_open'] = '<li>';
         $config['prev_tag_close'] = '</li>';
@@ -163,14 +174,13 @@ class Lancamentos extends CI_Controller
             '*',
             $where,
             id_usuario(),
-            $limit,
-            $config['total_rows'],
             $config['per_page'],
-            $this->input->get('per_page'));
+            $start,
+            $limit,
+            $order_by);
 
         $this->data['view'] = 'financeiro/lancamentos';
         $this->load->view('tema/topo', $this->data);
-
     }
 
     public function entrada()
@@ -287,7 +297,7 @@ class Lancamentos extends CI_Controller
             redirect(base_url());
         }
 
-        if ($this->input->post('id')) {
+        if ($_POST) {
 
             $urlAtual = $this->input->post('urlAtual');
             $vencimento = $this->input->post('vencimento');
@@ -325,23 +335,14 @@ class Lancamentos extends CI_Controller
                 'tipo' => $tipo
             );
 
-            if ($this->financeiro_model->edit('lancamentos', $data, 'id_lancamento', $this->input->post('id')) == true) {
-                $this->session->set_flashdata('sucesso', 'Lançamento alterado com sucesso!');
-                redirect($this->global_url);
-            } else {
-                $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar editar este lançamento.');
-                redirect($this->global_url);
-            }
-
-            $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar editar este lançamento.');
-            redirect($this->global_url);
+            $this->financeiro_model->edit('lancamentos', $data, 'id_lancamento', $this->input->post('id'));
+            $this->session->set_flashdata('sucesso', 'Lançamento alterado com sucesso!');
+            redirect($urlAtual);
 
         } else {
             $this->session->set_flashdata('erro', 'Método não permitido.');
             redirect($this->global_url);
-
         }
-
     }
 
     public function excluir()
@@ -391,7 +392,6 @@ class Lancamentos extends CI_Controller
         $this->data['view'] = 'financeiro/lancamentos';
         $this->load->view('tema/topo', $this->data);
     }
-
 
 
     //MODULO DE TESTES
