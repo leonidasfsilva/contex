@@ -63,7 +63,8 @@
     });
 
     $(function () {
-        $(".money").maskMoney();
+        $(".money").maskMoney({thousands:'.', decimal:',', allowZero:true, prefix: 'R$ '});
+        $('.money').prop('type', 'tel');
     });
     $(function () {
         $('.popover-btn').popover()
