@@ -83,7 +83,9 @@ class Faturas extends CI_Controller
             $id_cartao = $primeiro_cartao->id_cartao;
         }
 
-        $this->data['cartao_selecionado'] = $id_cartao;
+        $this->data['existe_configuracao'] = $this->fatura_model->existeConfiguracao($id_cartao);
+        $this->data['dia_vencimento'] = $this->fatura_model->getDiaVencimentoFatura($id_cartao);
+        $this->data['cartao_selecionado'] = $this->cartoes_model->getDetalhesCartao($id_cartao);
         $this->data['cartoes'] = $this->cartoes_model->getCartoesUsuario(id_usuario());
         $this->data['saldoVencidas'] = $this->fatura_model->getSaldoFaturasVencidas(id_usuario(), $id_cartao);
         $this->data['saldoPendente'] = $this->fatura_model->getSaldoFaturasPendentes(id_usuario(), $id_cartao);
@@ -906,6 +908,53 @@ class Faturas extends CI_Controller
             redirect($urlAtual);
         } else {
             $this->session->set_flashdata('erro', 'Erro ao tentar pagar a fatura.');
+            redirect($urlAtual);
+        }
+    }
+
+    public function configurar()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eFaturas')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para configurar faturas.');
+            redirect(base_url());
+        }
+        $urlAtual = $_POST['urlAtual'];
+        $id_cartao = $_POST['id_cartao'];
+        $dia = $_POST['dia_vencimento'];
+
+        $data = array(
+            'id_usuario' => id_usuario(),
+            'id_cartao' => $id_cartao,
+            'dia_vencimento' => $dia
+        );
+
+        if ($this->fatura_model->existeConfiguracao($id_cartao)) {
+            $this->fatura_model->edit('configs_faturas', $data, 'id_cartao', $id_cartao);
+            $adicionais = $this->cartoes_model->getCartoesAdicionais($id_cartao);
+            foreach ($adicionais as $adicional) {
+                $data_adicional = array(
+                    'id_usuario' => $adicional->id_usuario,
+                    'id_cartao' => $adicional->id_cartao,
+                    'dia_vencimento' => $dia,
+                    'adicional' => 1
+                );
+                $this->fatura_model->edit('configs_faturas', $data_adicional, 'id_cartao', $adicional->id_cartao);
+            }
+            $this->session->set_flashdata('sucesso', 'Configurações alteradas com sucesso!');
+            redirect($urlAtual);
+        } else {
+            $this->fatura_model->add('configs_faturas', $data);
+            $adicionais = $this->cartoes_model->getCartoesAdicionais($id_cartao);
+            foreach ($adicionais as $adicional) {
+                $data_adicional = array(
+                    'id_usuario' => $adicional->id_usuario,
+                    'id_cartao' => $adicional->id_cartao,
+                    'dia_vencimento' => $dia,
+                    'adicional' => 1
+                );
+                $this->fatura_model->add('configs_faturas', $data_adicional);
+            }
+            $this->session->set_flashdata('sucesso', 'Configurações salvas com sucesso!');
             redirect($urlAtual);
         }
     }

@@ -14,16 +14,25 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
     }
     if (!$cartoes) {
         $disabledFatura = 'disabled';
+        $disabledConfig = 'disabled';
     } else {
         foreach ($cartoes as $c) {
             if ($c->id_usuario != id_usuario()) {
                 if ($c->adicional) {
-                    if ($cartao_selecionado == $c->id_cartao) {
+                    if ($cartao_selecionado->id_cartao == $c->id_cartao) {
                         $disabledFatura = 'disabled';
+                        $disabledConfig = 'disabled';
                     }
+                }
+            } else {
+                if ($c->adicional) {
+                    $disabledConfig = 'disabled';
                 }
             }
         }
+    }
+    if (!$existe_configuracao) {
+        $disabledFatura = 'disabled';
     }
     ?>
 <?php } ?>
@@ -42,7 +51,12 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             $n_cartao = explode(" ", trim(base64_decode($c->numero)));
                             $final = $n_cartao[3]; ?>
                             <!--                <option value=""><< Selecione um Cartão >></option>-->
-                            <option value="<?= $c->id_cartao ?>" <?= $cartao_selecionado == $c->id_cartao ? 'selected' : '' ?>><?= $c->bandeira . ' - FINAL ' . $final ?></option>
+                            <option value="<?= $c->id_cartao ?>" <?php if ($cartao_selecionado->id_cartao == $c->id_cartao) {
+                                echo 'selected';
+                                $cartao_config = $c->bandeira . ' - FINAL ' . $final;
+                            } else {
+                                echo '';
+                            } ?>><?= $c->bandeira . ' - FINAL ' . $final ?></option>
                         <?php } ?>
                     </select>
                 <?php } else { ?>
@@ -93,6 +107,10 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     title="Filtrar faturas">
                 <i class="fas fa-filter fa-fw"></i>
                 Filtrar
+            </button>
+            <button href="#modalConfiguracoes" class="btn btn-default btn-sm" id="configurar_fatura" data-toggle="modal"
+                    title="Configurações de faturas" <?= $disabledConfig ?>>
+                <i class="fas fa-cog fa-fw"></i>
             </button>
             <button href="#modalNovaFatura" id="novaFatura" data-toggle="modal" role="button"
                     class="btn btn-primary btn-sm tip-bottom"
@@ -190,7 +208,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         echo '<button ' . $disabled . ' href="#modalFechar" style="margin-right: 1%"  class="btn btn-inverse btn-sm fechar" data-toggle="modal" title="Fechar Fatura" id_fatura="' . $r->id_fatura . '">
                                 <i class="' . $iconFechar . ' fa-lg fa-fw"></i></button>';
 
-                        echo '<a href="' . base_url() . 'financeiro/faturas/detalhes/' . $r->id_fatura . '/' . $cartao_selecionado . '" type="button" id="btn_detalhes" style="margin-right: 1%" class="btn btn-primary btn-sm detalhes" title="Detalhes da Fatura" id_fatura="' . $r->id_fatura . '">
+                        echo '<a href="' . base_url() . 'financeiro/faturas/detalhes/' . $r->id_fatura . '/' . $cartao_selecionado->id_cartao . '" type="button" id="btn_detalhes" style="margin-right: 1%" class="btn btn-primary btn-sm detalhes" title="Detalhes da Fatura" id_fatura="' .
+                            $r->id_fatura . '">
                                 <i class="fas fa-search-plus fa-lg fa-fw"></i></a>';
                     }
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dFaturas')) {
@@ -296,9 +315,53 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
     </div>
 </div>
 
+<!-- Modal CONFIGURACOES DA FATURA -->
+<div class="modal fade" id="modalConfiguracoes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-default">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Configurações da fatura</h4>
+            </div>
+            <form id="formConfigurarFatura" action="<?= base_url('financeiro/faturas/configurar') ?>" method="post" autocomplete="off">
+                <div class="modal-body">
+                    <p>Defina o dia de vencimento padrão para as faturas do cartão selecionado:</p>
+                    <p class="note note-info font-weight-bold"><?= $cartao_config ?></p>
+                    <div class="row">
+                        <div class="col-lg-4 form-group">
+                            <label class="control-label font-weight-bold" for="vencimento_fatura">
+                                Dia de vencimento *
+                            </label>
+                            <select class="form-control" id="select_dia" name="dia_vencimento">
+                                <option value=""><< Selecione >></option>
+                                <option value="5"<?= $dia_vencimento == 5 ? 'selected' : '' ?>>Todo dia 05</option>
+                                <option value="9"<?= $dia_vencimento == 9 ? 'selected' : '' ?>>Todo dia 09</option>
+                                <option value="10"<?= $dia_vencimento == 10 ? 'selected' : '' ?>>Todo dia 10</option>
+                                <option value="15"<?= $dia_vencimento == 15 ? 'selected' : '' ?>>Todo dia 15</option>
+                                <option value="20"<?= $dia_vencimento == 20 ? 'selected' : '' ?>>Todo dia 20</option>
+                                <option value="25"<?= $dia_vencimento == 25 ? 'selected' : '' ?>>Todo dia 25</option>
+                                <option value="28"<?= $dia_vencimento == 28 ? 'selected' : '' ?>>Todo dia 28</option>
+                            </select>
+                        </div>
+                        <input class="id_cartao" type="hidden" name="id_cartao"/>
+                        <input class="urlAtual" type="hidden" name="urlAtual"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                        <i class="fa fa-times fa-fw"></i> Cancelar
+                    </button>
+                    <button class="btn btn-primary btn-sm">
+                        <i class="fa fa-check fa-fw"></i> Salvar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Modal ABRIR NOVA FATURA-->
-<div class="modal fade" id="modalNovaFatura" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true">
+<div class="modal fade" id="modalNovaFatura" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-primary">
@@ -360,6 +423,28 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
     </div>
 </div>
 
+<!-- Modal ALERTA CONFIGURACAO -->
+<?php if (!$existe_configuracao) { ?>
+    <div class="modal fade alerta-usuario" id="modalAlerta" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title text-white ">Configuração pendente</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Não é possível abrir novas faturas porque este cartão não possui parâmetros configurados.</p>
+                    <p>Configure os parâmetros da fatura clicando no botão: <i class="fas fa-cog fa-fw"></i></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                        <i class="fa fa-times fa-fw"></i> Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php } ?>
 <!-- Modal FECHAR FATURA-->
 <div class="modal fade" id="modalFechar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -444,6 +529,9 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
 <script type="text/javascript">
     $(document).ready(function () {
+        $('.alerta-usuario').each(function (key, value) {
+            $('.alerta-usuario').modal('show');
+        });
 
         $(document).on('change', '#select_periodos, #select_status', function () {
             $("#_form_filtro").submit();
@@ -496,6 +584,27 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             }
         });
 
+        $("#formConfigurarFatura").validate({
+            rules: {
+                dia_vencimento: {required: true}
+            },
+            messages: {
+                dia_vencimento: {required: 'Selecione o dia de vencimento'}
+            },
+
+            errorClass: "help-block",
+            errorElement: "p",
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
+            }
+
+        });
+
         $("#formNovaFatura").validate({
             rules: {
                 vencimento_fatura: {required: true}
@@ -536,6 +645,11 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 $(element).parents('.form-group').addClass('has-success');
             }
 
+        });
+
+        $(document).on('click', '#configurar_fatura', function () {
+            let id_cartao = $('#cartoes').val();
+            $('.id_cartao').val(id_cartao);
         });
 
         $(document).on('click', '#novaFatura', function () {

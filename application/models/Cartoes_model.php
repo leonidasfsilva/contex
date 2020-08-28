@@ -105,6 +105,15 @@ class Cartoes_model extends CI_Model
         }
     }
 
+    function getCartoesAdicionais($id_cartao)
+    {
+        return $this->db
+            ->where('id_cartao_titular', $id_cartao)
+            ->where('status', 1)
+            ->get('cartoes')
+            ->result();
+    }
+
     function getPrimeiroCartaoUsuario($id_usuario)
     {
         return $this->db

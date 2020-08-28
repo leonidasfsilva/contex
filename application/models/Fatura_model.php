@@ -374,6 +374,26 @@ class Fatura_model extends CI_Model
 
     }
 
+    function existeConfiguracao($id_cartao)
+    {
+        $this->db->from('configs_faturas');
+        $this->db->where('id_cartao', $id_cartao);
+
+        if ($this->db->count_all_results()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function getDiaVencimentoFatura($id_cartao)
+    {
+        return $this->db
+            ->where('id_cartao', $id_cartao)
+            ->get('configs_faturas')
+            ->row('dia_vencimento');
+    }
+
     function getSaldoFaturasPendentes($id_usuario, $id_cartao)
     {
         $this->db
