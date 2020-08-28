@@ -19,7 +19,7 @@
         </div>
         <div class="note note-info mb40">
             <p class="font-weight-bold" style="font-size: 16px">
-                Dados do Cartão Titular
+                DADOS DO CARTÃO TITULAR
             </p>
             <p>
                 <span class="font-weight-bold">Número do Cartão:</span> <?= decriptar($cartao->numero) ?>
