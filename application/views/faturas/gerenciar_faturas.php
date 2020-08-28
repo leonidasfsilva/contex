@@ -25,17 +25,17 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     }
                 }
             } else {
-                if ($c->adicional) {
-                    $disabledConfig = 'disabled';
+                if ($cartao_selecionado->id_cartao == $c->id_cartao) {
+                    if ($c->adicional) {
+                        $disabledConfig = 'disabled';
+                    } else {
+                        $disabledConfig = '';
+                    }
                 }
             }
         }
     }
-    if (!$existe_configuracao) {
-        $disabledFatura = 'disabled';
-    }
-    ?>
-<?php } ?>
+} ?>
 
 <div class="panel panel-midnightblue">
     <div class="panel-heading">

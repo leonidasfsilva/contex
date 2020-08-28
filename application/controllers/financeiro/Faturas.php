@@ -935,6 +935,7 @@ class Faturas extends CI_Controller
                 $data_adicional = array(
                     'id_usuario' => $adicional->id_usuario,
                     'id_cartao' => $adicional->id_cartao,
+                    'id_cartao_titular' => $id_cartao,
                     'dia_vencimento' => $dia,
                     'adicional' => 1
                 );
@@ -949,6 +950,7 @@ class Faturas extends CI_Controller
                 $data_adicional = array(
                     'id_usuario' => $adicional->id_usuario,
                     'id_cartao' => $adicional->id_cartao,
+                    'id_cartao_titular' => $id_cartao,
                     'dia_vencimento' => $dia,
                     'adicional' => 1
                 );
