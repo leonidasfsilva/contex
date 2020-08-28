@@ -79,10 +79,10 @@ class Cartoes extends CI_Controller
             $final = $n_cartao[3];
 
             $data = array(
-                'numero' => base64_encode($_POST['number']),
+                'numero' => encriptar($_POST['number']),
                 'nome' => padronizarString($_POST['name']),
                 'validade' => $validade,
-                'cvc' => base64_encode($_POST['cvc']),
+                'cvc' => encriptar($_POST['cvc']),
                 'bandeira' => padronizarString($_POST['bandeira']),
                 'id_usuario_titular' => id_usuario(),
                 'id_usuario' => $_POST['id_usuario'],
@@ -150,10 +150,10 @@ class Cartoes extends CI_Controller
 //            print_array_exit($_POST);
 
             $data = array(
-                'numero' => base64_encode($_POST['number']),
+                'numero' => encriptar($_POST['number']),
                 'nome' => padronizarString($_POST['name']),
                 'validade' => $validade,
-                'cvc' => base64_encode($_POST['cvc']),
+                'cvc' => encriptar($_POST['cvc']),
                 'bandeira' => padronizarString($_POST['bandeira']),
             );
 
