@@ -33,7 +33,7 @@
                 </tr>
             <?php } else {
                 foreach ($results as $r) {
-                    $n_cartao = explode(" ", trim(base64_decode($r->numero)));
+                    $n_cartao = explode(" ", trim(decriptar($r->numero)));
                     $final = $n_cartao[3];
                     $mascara = preg_replace('/\d/', '*', $n_cartao);
 
@@ -63,7 +63,7 @@
                         <td><span class="label label-<?= $label_cartao ?>"><?= $tipo_cartao ?></span></td>
                         <?=
                         '<td>
-                            <button href="#modalVisualizarCartao" role="button" data-toggle="modal" numero="' . base64_decode($r->numero) . '" validade="' . $r->validade . '" bandeira="' . $r->bandeira . '" cvc="' . base64_decode($r->cvc) .
+                            <button href="#modalVisualizarCartao" role="button" data-toggle="modal" numero="' . decriptar($r->numero) . '" validade="' . $r->validade . '" bandeira="' . $r->bandeira . '" cvc="' . decriptar($r->cvc) .
                         '" nome="' . $r->nome . '" class="btn btn-info btn-sm visualizar" title="Visualizar cartão"><i class="fas fa-eye fa-lg fa-fw"></i></button>
                             <a href="' . base_url('financeiro/cartoes/editar/') . $r->id_cartao . '" class="btn btn-primary btn-sm" title="Editar" ' . $disabled_editar . '><i class="fas fa-edit fa-lg fa-fw"></i></a>
                             <a href="' . base_url('financeiro/cartoes/adicional/') . $r->id_cartao . '" class="btn btn-inverse btn-sm" title="Gerar cartão adicional" ' . $disabled_adicional . '><i class="fas fa-credit-card fa-lg fa-fw"></i></a>

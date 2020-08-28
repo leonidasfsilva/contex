@@ -22,7 +22,7 @@
                 Dados do Cartão Titular
             </p>
             <p>
-                <span class="font-weight-bold">Número do Cartão:</span> <?= base64_decode($cartao->numero) ?>
+                <span class="font-weight-bold">Número do Cartão:</span> <?= decriptar($cartao->numero) ?>
             </p>
             <p>
                 <span class="font-weight-bold">Bandeira do Cartão:</span> <?= $cartao->bandeira ?>

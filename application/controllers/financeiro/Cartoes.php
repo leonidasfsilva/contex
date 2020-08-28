@@ -41,10 +41,10 @@ class Cartoes extends CI_Controller
 //            print_array_exit($_POST);
 
             $data = array(
-                'numero' => base64_encode($_POST['number']),
+                'numero' => encriptar($_POST['number']),
                 'nome' => padronizarString($_POST['name']),
                 'validade' => $validade,
-                'cvc' => base64_encode($_POST['cvc']),
+                'cvc' => encriptar($_POST['cvc']),
                 'bandeira' => padronizarString($_POST['bandeira']),
                 'id_usuario' => id_usuario()
             );
@@ -288,75 +288,54 @@ class Cartoes extends CI_Controller
         }
     }
 
-
-    //MODULO DE RETORNO DE FILTROS POR PERIODO
-    protected function getThisYear()
+    public function detalhes($id = null)
     {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para configurar os usuários.');
+            redirect(base_url());
+        }
 
-        $dias = date("z");
-        $primeiro = date("Y-m-d", strtotime("-" . ($dias) . " day"));
-        $ultimo = date("Y-m-d", strtotime("+" . (364 - $dias) . " day"));
-        return array($primeiro, $ultimo);
+        if ($id) {
+            $cartao = $this->cartoes_model->getDetalhesCartao($id);
+            $data = array(
+//                'id_cartao' => $cartao->id_cartao,
+                'numero' => base64_decode($cartao->numero),
+//                'nome' => $cartao->nome,
+//                'validade' => $cartao->validade,
+                'cvc' => base64_decode($cartao->cvc),
+//                'bandeira' => $cartao->bandeira,
+            );
+            print_array($data);
 
-    }
+            $numero = $data['numero'];
+            $cvc = $data['cvc'];
+            $enc_numero = encriptar($numero);
+            $enc_cvc = encriptar($cvc);
 
-    protected function getThisWeek()
-    {
+            print_array($enc_numero);
+            print_array($enc_cvc);
+        } else {
+            $cartoes = $this->cartoes_model->getTodos();
+            foreach ($cartoes as $c) {
+                $numero = $c->numero;
+                $cvc = $c->cvc;
+                $dec_numero = base64_decode($numero);
+                $dec_cvc = base64_decode($cvc);
+                $enc_numero = encriptar($dec_numero);
+                $enc_cvc = encriptar($dec_cvc);
 
-        return array(date("Y/m/d", strtotime("last sunday", strtotime("now"))), date("Y/m/d", strtotime("next saturday", strtotime("now"))));
-    }
+                $data = array(
+                    'numero' => $enc_numero,
+                    'cvc' => $enc_cvc
+                );
 
-    protected function getLastThreeDays()
-    {
-
-        return array(date("Y-m-d", strtotime("-3 day", strtotime("now"))), date("Y-m-d", strtotime("now")));
-    }
-
-    protected function getLastFiveDays()
-    {
-
-        return array(date("Y-m-d", strtotime("-5 day", strtotime("now"))), date("Y-m-d", strtotime("now")));
-    }
-
-    protected function getLastSevenDays()
-    {
-
-        return array(date("Y-m-d", strtotime("-7 day", strtotime("now"))), date("Y-m-d", strtotime("now")));
-    }
-
-    protected function getLastFifteenDays()
-    {
-
-        return array(date("Y-m-d", strtotime("-15 day", strtotime("now"))), date("Y-m-d", strtotime("now")));
-    }
-
-    protected function getLastTirthyDays()
-    {
-
-        return array(date("Y-m-d", strtotime("-30 day", strtotime("now"))), date("Y-m-d", strtotime("now")));
-    }
-
-    protected function getLastSixtyDays()
-    {
-
-        return array(date("Y-m-d", strtotime("-60 day", strtotime("now"))), date("Y-m-d", strtotime("now")));
-    }
-
-    protected function getLastNinetyDays()
-    {
-
-        return array(date("Y-m-d", strtotime("-90 day", strtotime("now"))), date("Y-m-d", strtotime("now")));
-    }
-
-    protected function getThisMonth()
-    {
-
-        $mes = date('m');
-        $ano = date('Y');
-        $qtdDiasMes = date('t');
-        $inicia = $ano . "-" . $mes . "-01";
-
-        $ate = $ano . "-" . $mes . "-" . $qtdDiasMes;
-        return array($inicia, $ate);
+//                print_array('----------');
+//                print_array($enc_numero);
+//                print_array($enc_cvc);
+                $this->cartoes_model->edit('cartoes', $data, 'id_cartao', $c->id_cartao);
+            }
+            print_array('Cartões recriptografados com sucesso!');
+            print_array('Verifique seu banco de dados');
+        }
     }
 }

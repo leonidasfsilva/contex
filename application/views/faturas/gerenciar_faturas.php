@@ -51,7 +51,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 <?php if ($cartoes) { ?>
                     <select name="cartoes" id="cartoes" class="form-control">
                         <?php foreach ($cartoes as $c) {
-                            $n_cartao = explode(" ", trim(base64_decode($c->numero)));
+                            $n_cartao = explode(" ", trim(decriptar($c->numero)));
                             $final = $n_cartao[3]; ?>
                             <!--                <option value=""><< Selecione um Cartão >></option>-->
                             <option value="<?= $c->id_cartao ?>" <?php if ($cartao_selecionado->id_cartao == $c->id_cartao) {

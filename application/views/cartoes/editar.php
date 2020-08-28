@@ -22,7 +22,7 @@
                 <form id="formEditarCartao" action="<?php echo base_url('financeiro/cartoes/editar/'. $cartao->id_cartao) ?>" method="post" class="card">
                     <div class="row">
                         <div class="form-group col-sm-12">
-                            <input class="form-control" id="number" name="number" placeholder="Número do cartão *" type="text" value="<?= trim(base64_decode($cartao->numero)) ?>">
+                            <input class="form-control" id="number" name="number" placeholder="Número do cartão *" type="text" value="<?= trim(decriptar($cartao->numero)) ?>">
                         </div>
                     </div>
                     <div class="row">
@@ -35,7 +35,7 @@
                             <input class="form-control" id="expiry" name="expiry" placeholder="Validade" type="text" value="<?= $cartao->validade ?>">
                         </div>
                         <div class="form-group col-sm-6">
-                            <input class="form-control" id="cvc" name="cvc" placeholder="Código de segurança" type="text" value="<?= trim(base64_decode($cartao->cvc)) ?>">
+                            <input class="form-control" id="cvc" name="cvc" placeholder="Código de segurança" type="text" value="<?= trim(decriptar($cartao->cvc)) ?>">
                         </div>
                     </div>
                     <input type="hidden" name="id_cartao" id="id_cartao" value="<?= $cartao->id_cartao ?>">

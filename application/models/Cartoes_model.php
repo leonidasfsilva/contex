@@ -252,4 +252,17 @@ class Cartoes_model extends CI_Model
         return $this->db->count_all_results();
     }
 
+    function getTodos(){
+        return $this->db
+            ->get('cartoes')
+            ->result();
+    }
+
+    function getCartao($id_cartao){
+        return $this->db
+            ->where('id_cartao', $id_cartao)
+            ->get('cartoes')
+            ->result();
+    }
+
 }
