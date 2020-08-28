@@ -153,3 +153,11 @@ function returnURL($get = null)
         }
     }
 }
+
+function encriptar($value) {
+    return base64_encode(base64_encode($value));
+}
+
+function decriptar($value) {
+    return base64_decode(base64_decode($value));
+}
