@@ -35,6 +35,9 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             }
         }
     }
+    if(!$existe_configuracao) {
+        $disabledFatura = 'disabled';
+    }
 } ?>
 
 <div class="panel panel-midnightblue">
