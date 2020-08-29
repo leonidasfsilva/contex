@@ -212,7 +212,7 @@ $fim = $this->input->get('dataFinal');
             </table>
             <?php if ($this->pagination->create_links()) { ?>
                 <div class="panel-footer">
-                    <?php echo $this->pagination->create_links(); ?>
+                    <?= $this->pagination->create_links() ?>
                 </div>
             <?php } ?>
         </div>
