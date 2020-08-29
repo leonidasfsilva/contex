@@ -1024,6 +1024,11 @@ class Faturas extends CI_Controller
         }
     }
 
+    public function ajaxDiaVencimentoFatura(){
+        $id_cartao = $_POST['id_cartao'];
+        echo json_encode($this->fatura_model->getDiaVencimentoFatura($id_cartao));
+    }
+
 
     //MODULO DE RETORNO DE FILTROS POR PERIODO
     protected function getThisYear()

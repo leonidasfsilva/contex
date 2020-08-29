@@ -35,7 +35,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             }
         }
     }
-    if(!$existe_configuracao) {
+    if (!$existe_configuracao) {
         $disabledFatura = 'disabled';
     }
 } ?>
@@ -217,7 +217,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 }
             } else { ?>
                 <tr>
-                    <td colspan="6">Nenhuma fatura encontrada</td>
+                    <td colspan="6">Nenhuma fatura encontrada para <?= $cartao_config ?></td>
                 </tr>
             <?php } ?>
             </tbody>
@@ -331,13 +331,13 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </label>
                             <select class="form-control" id="select_dia" name="dia_vencimento">
                                 <option value=""><< Selecione >></option>
-                                <option value="05"<?= $dia_vencimento == 5 ? 'selected' : '' ?>>Todo dia 05</option>
-                                <option value="09"<?= $dia_vencimento == 9 ? 'selected' : '' ?>>Todo dia 09</option>
-                                <option value="10"<?= $dia_vencimento == 10 ? 'selected' : '' ?>>Todo dia 10</option>
-                                <option value="15"<?= $dia_vencimento == 15 ? 'selected' : '' ?>>Todo dia 15</option>
-                                <option value="20"<?= $dia_vencimento == 20 ? 'selected' : '' ?>>Todo dia 20</option>
-                                <option value="25"<?= $dia_vencimento == 25 ? 'selected' : '' ?>>Todo dia 25</option>
-                                <option value="28"<?= $dia_vencimento == 28 ? 'selected' : '' ?>>Todo dia 28</option>
+                                <option value="05"<?= $dia_vencimento == 5 ? 'selected' : '' ?>>TODO DIA 05</option>
+                                <option value="09"<?= $dia_vencimento == 9 ? 'selected' : '' ?>>TODO DIA 09</option>
+                                <option value="10"<?= $dia_vencimento == 10 ? 'selected' : '' ?>>TODO DIA 10</option>
+                                <option value="15"<?= $dia_vencimento == 15 ? 'selected' : '' ?>>TODO DIA 15</option>
+                                <option value="20"<?= $dia_vencimento == 20 ? 'selected' : '' ?>>TODO DIA 20</option>
+                                <option value="25"<?= $dia_vencimento == 25 ? 'selected' : '' ?>>TODO DIA 25</option>
+                                <option value="28"<?= $dia_vencimento == 28 ? 'selected' : '' ?>>TODO DIA 28</option>
                             </select>
                         </div>
                         <input class="id_cartao" type="hidden" name="id_cartao"/>
@@ -368,13 +368,13 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             <form id="formNovaFatura" action="<?= base_url('financeiro/faturas/abrir') ?>" method="post"
                   autocomplete="off">
                 <div class="modal-body">
-                    <p>Defina o mês de referência para a nova fatura.</p>
+                    <p>Defina o mês de referência para a nova fatura:</p>
                     <div class="row">
-                        <div class="col-lg-4 form-group">
+                        <div class="col-lg-6 form-group">
                             <label class="control-label font-weight-bold" for="select_mes">
                                 Mês de referência *
                             </label>
-                            <select class="form-control" id="select_mes" name="mes_referencia">
+                            <select class="form-control" id="mes_referencia" name="mes_referencia">
                                 <option value=""><< Selecione >></option>
                                 <option value="01"<?= $mes_referencia == 1 ? 'selected' : '' ?>>01 - JANEIRO</option>
                                 <option value="02"<?= $mes_referencia == 2 ? 'selected' : '' ?>>02 - FEVEREIRO</option>
@@ -392,6 +392,19 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         </div>
                         <input id="id_cartao_nova_fatura" type="hidden" name="id_cartao"/>
                         <input class="urlAtual" type="hidden" name="urlAtual"/>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 form-group">
+                            <label for="vencimento" class="control-label font-weight-bold">Data de vencimento da nova fatura:</label>
+                            <input class="form-control font-weight-bold" id="vencimento" type="text" value="" placeholder="Selecione o mês de referência para exibir" disabled>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="note note-info">
+                                <i class="fas fa-info-circle fa-fw"></i> O mês de vencimento da fatura será sempre no mês subsequente ao mês de referência.
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -540,6 +553,45 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
 <script type="text/javascript">
     $(document).ready(function () {
+        let ajax = $.ajax({
+            url: 'faturas/ajaxDiaVencimentoFatura',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id_cartao: 25
+            },
+            success: function (result) {
+                return result;
+            },
+            error: function () {
+                console.log('ERRO na função: ajaxDiaVencimentoFatura')
+            }
+        });
+
+
+        $('#mes_referencia').change(function () {
+            let input = $(this).val();
+            let ano = new Date().getFullYear();
+            let dia = ajax.responseJSON;
+
+            if (input == '') {
+                $('#vencimento').val('');
+                $('#vencimento').attr('placeholder', 'Selecione o mês de referência para exibir');
+                return;
+            }
+            let mes = input;
+            mes++
+            if (mes == 13) {
+                mes = '01'
+                ano++
+            } else {
+                if (mes <= 9) {
+                    mes = '0' + mes
+                }
+            }
+            $('#vencimento').val(dia + '/' + mes + '/' + ano);
+        });
+
         $('.alerta-usuario').each(function (key, value) {
             $('.alerta-usuario').modal('show');
         });
@@ -618,10 +670,10 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
         $("#formNovaFatura").validate({
             rules: {
-                mes_referencia: {required: true}
+                mes_referencia: {required: true},
             },
             messages: {
-                mes_referencia: {required: 'Selecione o mês de referência'}
+                mes_referencia: {required: 'Selecione o mês de referência'},
             },
 
             errorClass: "help-block",
