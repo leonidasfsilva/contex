@@ -37,8 +37,6 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         $label_pgto = '';
     }
 
-    setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
-    date_default_timezone_set('America/Sao_Paulo');
     $dateObj = DateTime::createFromFormat('!m', $mes_referencia);
     $month = $dateObj->format('M'); // March
     $nome_mes = padronizarString(strftime('%b', strtotime($month)));

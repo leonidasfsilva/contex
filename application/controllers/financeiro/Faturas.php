@@ -749,6 +749,7 @@ class Faturas extends CI_Controller
 
     public function abrir()
     {
+        print_array_exit($_POST);
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para abrir novas faturas.');
             redirect(base_url());
@@ -931,7 +932,30 @@ class Faturas extends CI_Controller
         if ($this->fatura_model->existeConfiguracao($id_cartao)) {
             $this->fatura_model->edit('configs_faturas', $data, 'id_cartao', $id_cartao);
             $adicionais = $this->cartoes_model->getCartoesAdicionais($id_cartao);
+
+            $faturas = $this->fatura_model->getFaturasAbertasCartao($id_cartao);
+            foreach ($faturas as $fatura) {
+                $vencimento = explode('-', $fatura->vencimento);
+                $vencimento = $vencimento[0] . '-' . $vencimento[1] . '-' . $dia;
+
+                $data = array(
+                    'vencimento' => $vencimento
+                );
+                $this->fatura_model->edit('faturas', $data, 'id_fatura', $fatura->id_fatura);
+            }
+
             foreach ($adicionais as $adicional) {
+                $faturas = $this->fatura_model->getFaturasAbertasCartao($adicional->id_cartao);
+                foreach ($faturas as $fatura) {
+                    $vencimento = explode('-', $fatura->vencimento);
+                    $vencimento = $vencimento[0] . '-' . $vencimento[1] . '-' . $dia;
+
+                    $data = array(
+                        'vencimento' => $vencimento
+                    );
+                    $this->fatura_model->edit('faturas', $data, 'id_fatura', $fatura->id_fatura);
+                }
+
                 $data_adicional = array(
                     'id_usuario' => $adicional->id_usuario,
                     'id_cartao' => $adicional->id_cartao,
@@ -946,7 +970,30 @@ class Faturas extends CI_Controller
         } else {
             $this->fatura_model->add('configs_faturas', $data);
             $adicionais = $this->cartoes_model->getCartoesAdicionais($id_cartao);
+
+            $faturas = $this->fatura_model->getFaturasAbertasCartao($id_cartao);
+            foreach ($faturas as $fatura) {
+                $vencimento = explode('-', $fatura->vencimento);
+                $vencimento = $vencimento[0] . '-' . $vencimento[1] . '-' . $dia;
+
+                $data = array(
+                    'vencimento' => $vencimento
+                );
+                $this->fatura_model->edit('faturas', $data, 'id_fatura', $fatura->id_fatura);
+            }
+
             foreach ($adicionais as $adicional) {
+                $faturas = $this->fatura_model->getFaturasAbertasCartao($adicional->id_cartao);
+                foreach ($faturas as $fatura) {
+                    $vencimento = explode('-', $fatura->vencimento);
+                    $vencimento = $vencimento[0] . '-' . $vencimento[1] . '-' . $dia;
+
+                    $data = array(
+                        'vencimento' => $vencimento
+                    );
+                    $this->fatura_model->edit('faturas', $data, 'id_fatura', $fatura->id_fatura);
+                }
+
                 $data_adicional = array(
                     'id_usuario' => $adicional->id_usuario,
                     'id_cartao' => $adicional->id_cartao,

@@ -105,6 +105,16 @@ class Fatura_model extends CI_Model
             ->row();
     }
 
+    function getFaturasAbertasCartao($id_cartao)
+    {
+        return $this->db
+            ->where('status', 1)
+            ->where('id_cartao', $id_cartao)
+            ->where_not_in('fatura_aberta', 0)
+            ->get('faturas')
+            ->result();
+    }
+
     function getById($id)
     {
         $this->db->where('id_fatura', $id);

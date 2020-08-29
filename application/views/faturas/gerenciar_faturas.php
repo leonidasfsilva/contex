@@ -133,7 +133,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 <th>Valor (R$)</th>
                 <th>Status</th>
                 <th>Pagamento</th>
-                <th style="width: 180px !important;">Ações</th>
+                <th style="width: 170px !important;">Ações</th>
             </tr>
             </thead>
             <tbody>
@@ -142,8 +142,6 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 $totalDespesa = 0;
                 $saldo = 0;
                 foreach ($results as $r) {
-                    setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
-                    date_default_timezone_set('America/Sao_Paulo');
                     $dateObj = DateTime::createFromFormat('!m', $r->mes_referencia);
                     $month = $dateObj->format('M'); // March
 //                        echo strftime('%A, %d de %B de %Y', strtotime('today'));
@@ -157,20 +155,17 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         $label = 'inverse';
                         $disabled = 'disabled';
                         $iconFechar = 'fas fa-lock';
-
                     } else if ($r->fatura_aberta == 2) {
                         $status = '';
                         $label = '';
                         $disabledPagar = 'disabled';
                         $disabled = 'disabled';
                         $iconFechar = 'fas fa-unlock';
-
                     } else {
                         $status = 'ABERTA';
                         $label = 'default';
                         $disabledPagar = 'disabled';
                         $iconFechar = 'fas fa-unlock';
-
                     }
 
                     if ($r->fatura_paga == 2) {
@@ -232,7 +227,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 </div>
 <?= $this->pagination->create_links(); ?>
 
-<form id="form_cartao" action="<?php echo base_url(); ?>financeiro/faturas" method="get">
+<form id="form_cartao" action="<?php echo base_url('financeiro/faturas'); ?>" method="get">
     <input type="hidden" id="id_cartao" name="id_cartao">
 </form>
 
@@ -337,8 +332,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </label>
                             <select class="form-control" id="select_dia" name="dia_vencimento">
                                 <option value=""><< Selecione >></option>
-                                <option value="5"<?= $dia_vencimento == 5 ? 'selected' : '' ?>>Todo dia 05</option>
-                                <option value="9"<?= $dia_vencimento == 9 ? 'selected' : '' ?>>Todo dia 09</option>
+                                <option value="05"<?= $dia_vencimento == 5 ? 'selected' : '' ?>>Todo dia 05</option>
+                                <option value="09"<?= $dia_vencimento == 9 ? 'selected' : '' ?>>Todo dia 09</option>
                                 <option value="10"<?= $dia_vencimento == 10 ? 'selected' : '' ?>>Todo dia 10</option>
                                 <option value="15"<?= $dia_vencimento == 15 ? 'selected' : '' ?>>Todo dia 15</option>
                                 <option value="20"<?= $dia_vencimento == 20 ? 'selected' : '' ?>>Todo dia 20</option>
@@ -374,16 +369,30 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             <form id="formNovaFatura" action="<?= base_url('financeiro/faturas/abrir') ?>" method="post"
                   autocomplete="off">
                 <div class="modal-body">
-                    <p>Defina a data de vencimento padrão para suas faturas.</p>
+                    <p>Defina o mês de referência para a nova fatura.</p>
                     <div class="row">
-                        <div class="col-lg-6 form-group">
-                            <label class="control-label font-weight-bold" for="vencimento_fatura">
-                                Data de vencimento
+                        <div class="col-lg-4 form-group">
+                            <label class="control-label font-weight-bold" for="select_mes">
+                                Mês de referência *
                             </label>
-                            <input class="form-control datepicker" id="vencimento_fatura" type="text" name="vencimento_fatura"/>
+                            <select class="form-control" id="select_mes" name="mes_referencia">
+                                <option value=""><< Selecione >></option>
+                                <option value="01"<?= $mes_referencia == 1 ? 'selected' : '' ?>>01 - JANEIRO</option>
+                                <option value="02"<?= $mes_referencia == 2 ? 'selected' : '' ?>>02 - FEVEREIRO</option>
+                                <option value="03"<?= $mes_referencia == 3 ? 'selected' : '' ?>>03 - MARÇO</option>
+                                <option value="04"<?= $mes_referencia == 4 ? 'selected' : '' ?>>04 - ABRIL</option>
+                                <option value="05"<?= $mes_referencia == 5 ? 'selected' : '' ?>>05 - MAIO</option>
+                                <option value="06"<?= $mes_referencia == 6 ? 'selected' : '' ?>>06 - JUNHO</option>
+                                <option value="07"<?= $mes_referencia == 7 ? 'selected' : '' ?>>07 - JULHO</option>
+                                <option value="08"<?= $mes_referencia == 8 ? 'selected' : '' ?>>08 - AGOSTO</option>
+                                <option value="09"<?= $mes_referencia == 9 ? 'selected' : '' ?>>09 - SETEMBRO</option>
+                                <option value="10"<?= $mes_referencia == 10 ? 'selected' : '' ?>>10 - OUTUBRO</option>
+                                <option value="11"<?= $mes_referencia == 11 ? 'selected' : '' ?>>11 - NOVEMBRO</option>
+                                <option value="12"<?= $mes_referencia == 12 ? 'selected' : '' ?>>12 - DEZEMBRO</option>
+                            </select>
                         </div>
                         <input id="id_cartao_nova_fatura" type="hidden" name="id_cartao"/>
-                        <input id="urlFatura" type="hidden" name="urlAtual"/>
+                        <input class="urlAtual" type="hidden" name="urlAtual"/>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -610,10 +619,10 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
         $("#formNovaFatura").validate({
             rules: {
-                vencimento_fatura: {required: true}
+                mes_referencia: {required: true}
             },
             messages: {
-                vencimento_fatura: {required: 'Informe a data de vencimento da fatura'}
+                mes_referencia: {required: 'Selecione o mês de referência'}
             },
 
             errorClass: "help-block",
@@ -626,7 +635,6 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 $(element).parents('.form-group').removeClass('has-error');
                 $(element).parents('.form-group').addClass('has-success');
             }
-
         });
 
         $("#formPagar").validate({
