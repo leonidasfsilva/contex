@@ -19,9 +19,6 @@ class Consumo extends CI_Controller
 
     public function index()
     {
-        setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
-        date_default_timezone_set('America/Sao_Paulo');
-
         $configs = $this->consumo_model->getConfigsConsumo(id_usuario());
         $inicio_medicao = explode('-', $configs->inicio_medicao);
         $ano = $inicio_medicao[0];

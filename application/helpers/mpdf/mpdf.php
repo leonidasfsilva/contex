@@ -92,7 +92,7 @@ $errorlevel = error_reporting($errorlevel & ~E_NOTICE);
 
 if (function_exists("date_default_timezone_set")) {
 	if (ini_get("date.timezone") == "") {
-		date_default_timezone_set("Europe/London");
+        date_default_timezone_set('America/Sao_Paulo');
 	}
 }
 
