@@ -210,9 +210,11 @@ $fim = $this->input->get('dataFinal');
                 } ?>
                 </tbody>
             </table>
-            <div class="panel-footer">
-                <?php echo $this->pagination->create_links(); ?>
-            </div>
+            <?php if ($this->pagination->create_links()) { ?>
+                <div class="panel-footer">
+                    <?php echo $this->pagination->create_links(); ?>
+                </div>
+            <?php } ?>
         </div>
     </div>
 <?php } ?>
