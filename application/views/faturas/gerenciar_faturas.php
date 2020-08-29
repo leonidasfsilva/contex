@@ -96,7 +96,6 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 <td colspan="1" style="text-align: right">
                     <?php echo number_format($saldoPendente->total, 2, ',', '.') ?></td>
             </tr>
-
         </table>
     </div>
 </div>

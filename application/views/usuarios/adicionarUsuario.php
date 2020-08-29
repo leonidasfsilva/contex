@@ -2,8 +2,13 @@
     <div class="panel-heading">
         <h3>
             <i class="fas fa-user-plus fa-lg fa-fw"></i>
-            Adicionar Dados do Usuário
+            Adicionar Novo Usuário
         </h3>
+        <div class="panel-ctrls">
+            <a href="<?= base_url('usuarios') ?>" class="btn btn-default btn-sm">
+                <i class="fas fa-arrow-left fa-fw"></i> Usuários</a>
+            <button class="btn btn-primary btn-sm submit"><i class="fas fa-check fa-fw"></i> Salvar</button>
+        </div>
     </div>
     <div class="panel-body">
         <?php if ($custom_error != '') {
@@ -78,7 +83,7 @@
                 <div class="form-group col-md-6">
                     <label for="permissoes_id" class="control-label font-weight-bold">Permissão *</label>
                     <select class="form-control" name="permissoes_id" id="permissoes_id">
-                        <option value="">-- Selecione --</option>
+                        <option value=""><< Selecione >></option>
                         <?php foreach ($permissoes as $p) {
                             echo '<option value="' . $p->idPermissao . '">' . $p->nome . '</option>';
                         } ?>
@@ -87,20 +92,10 @@
                 <div class="form-group col-md-6">
                     <label for="situacao" class="control-label font-weight-bold">Status *</label>
                     <select class="form-control" name="situacao" id="situacao">
-                        <option value="">-- Selecione --</option>
-                        <option value="1">Ativo</option>
-                        <option value="0">Inativo</option>
+                        <option value=""><< Selecione >></option>
+                        <option value="1">ATIVO</option>
+                        <option value="0">INATIVO</option>
                     </select>
-                </div>
-            </div>
-            <div class="panel-footer">
-                <div class="row pull-right">
-                    <div class="col-md-12 ">
-                        <a href="<?php echo base_url() ?>usuarios" id="" class="btn btn-default btn-sm"><i
-                                    class="fas fa-times fa-fw"></i> Cancelar</a>
-                        <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-check fa-fw"></i> Salvar
-                        </button>
-                    </div>
                 </div>
             </div>
         </form>
@@ -109,6 +104,9 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        $('.submit').click(function () {
+            $('#formUsuario').submit();
+        });
 
         $('#s_n').on('ifChanged', function (event) {
             const checked = event.target.checked;

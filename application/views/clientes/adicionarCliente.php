@@ -4,6 +4,10 @@
             <i class="fas fa-user-plus fa-lg fa-fw"></i>
             Cadastrar Novo Cliente
         </h3>
+        <div class="panel-ctrls">
+            <a href="<?= base_url('clientes') ?>" id="" class="btn btn-default btn-sm"><i class="fa fa-arrow-left fa-fw"></i> Clientes</a>
+            <button class="btn btn-primary btn-sm submit"><i class="fa fa-check fa-fw"></i> Salvar</button>
+        </div>
     </div>
     <div class="panel-body">
         <?php if ($custom_error != '') {
@@ -73,8 +77,6 @@
             <div class="panel-footer">
                 <div class="row pull-right">
                     <div class="col-md-12 ">
-                        <a href="<?php echo base_url() ?>clientes" id="" class="btn btn-default btn-sm"><i class="fa fa-arrow-left fa-fw"></i> Voltar</a>
-                        <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
                     </div>
                 </div>
             </div>
@@ -84,6 +86,10 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        $('.submit').click(function () {
+            $('#formCliente').submit();
+        });
+
         $('#s_n').on('ifChanged', function (event) {
             const checked = event.target.checked;
             if (checked == true) {

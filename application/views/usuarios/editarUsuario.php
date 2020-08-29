@@ -4,6 +4,11 @@
             <i class="fas fa-user-edit fa-lg fa-fw"></i>
             Editar Dados do Usuário
         </h3>
+        <div class="panel-ctrls">
+            <a href="<?= base_url('usuarios') ?>" class="btn btn-default btn-sm"><i class="fas fa-arrow-left fa-fw"></i> Usuários</a>
+            <button class="btn btn-primary btn-sm submit"><i class="fas fa-check fa-fw"></i> Salvar
+            </button>
+        </div>
     </div>
     <div class="panel-body">
         <?php if ($custom_error != '') {
@@ -113,16 +118,6 @@
                     <input type="text" style="color: <?= $color; ?>" class="form-control font-weight-bold" id="situacao"
                            value="<?php echo $status; ?>"
                            title="Para alterar o status, utilize a página de Gestão de Usuários" disabled>
-                </div>
-            </div>
-            <div class="panel-footer">
-                <div class="row pull-right">
-                    <div class="col-md-12 ">
-                        <a href="<?php echo base_url() ?>usuarios" id="" class="btn btn-default btn-sm"><i
-                                    class="fas fa-times fa-fw"></i> Cancelar</a>
-                        <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-check fa-fw"></i> Salvar
-                        </button>
-                    </div>
                 </div>
             </div>
         </form>

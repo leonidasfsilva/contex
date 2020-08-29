@@ -7,7 +7,7 @@
             </ul>
         </h2>
         <div class="panel-ctrls">
-            <a href="<?php echo base_url() ?>clientes" class="btn btn-default btn-sm "><i class="fas fa-arrow-left fa-fw"></i> Voltar</a>
+            <a href="<?= base_url('clientes') ?>" class="btn btn-default btn-sm "><i class="fas fa-arrow-left fa-fw"></i> Clientes</a>
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
                 echo '<a title="Editar dados do cliente" class="btn btn-primary btn-sm " href="' . base_url() . 'clientes/editar/' . $result->id_clientes . '"><i class="fas fa-edit fa-fw"></i> Editar</a>';
             } ?>
@@ -237,9 +237,6 @@
                                         echo '<td>' . number_format($r->valor, 2, ',', '.') . '</td>';
                                         echo '</tr>';
                                     } ?>
-                                    <tr>
-
-                                    </tr>
                                     </tbody>
                                 </table>
                             </div>

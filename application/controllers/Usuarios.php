@@ -106,7 +106,7 @@ class Usuarios extends CI_Controller
         }
 
         $this->load->model('permissoes_model');
-        $this->data['permissoes'] = $this->permissoes_model->getActive('permissoes', 'permissoes.idPermissao,permissoes.nome');
+        $this->data['permissoes'] = $this->permissoes_model->getActive('permissoes', 'permissoes.id_permissao,permissoes.nome');
         $this->data['view'] = 'usuarios/adicionarUsuario';
         $this->load->view('tema/topo', $this->data);
 

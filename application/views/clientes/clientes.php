@@ -1,12 +1,12 @@
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h3>
-            <i class="fas fa-group fa-lg fa-fw"></i>
+            <i class="fas fa-users fa-lg fa-fw"></i>
             Cadastro de Clientes
         </h3>
         <div class="panel-ctrls">
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
-                <a href="<?php echo base_url(); ?>clientes/adicionar" class="btn btn-primary btn-sm">
+                <a href="<?= base_url('clientes/adicionar'); ?>" class="btn btn-primary btn-sm">
                     <i class="fas fa-plus fa-fw"></i> Adicionar Cliente
                 </a>
             <?php } ?>
@@ -77,14 +77,10 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-
         $('a').click(function (event) {
 
             var cliente = $(this).attr('cliente');
             $('#idCliente').val(cliente);
-
         });
-
     });
-
 </script>
