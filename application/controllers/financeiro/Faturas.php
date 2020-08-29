@@ -749,33 +749,31 @@ class Faturas extends CI_Controller
 
     public function abrir()
     {
-        print_array_exit($_POST);
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para abrir novas faturas.');
             redirect(base_url());
         }
-        $urlAtual = $this->input->post('urlAtual');
-        $vencimento = $this->input->post('vencimento_fatura');
+        $urlAtual = $_POST['urlAtual'];
+        $mes_referencia = $_POST['mes_referencia'];
 
-        try {
-            $vencimento = explode('/', $vencimento);
-            $vencimentoFormatado = $vencimento[2] . '-' . $vencimento[1] . '-' . $vencimento[0];
+        $mes = $mes_referencia + 1;
+        $ano = date('Y');
 
-            $mes = ($vencimento[1] - 1);
-            $ano = $vencimento[2];
-
-            if ($mes == 0) {
-                $mes = 12;
-                $ano--;
+        if ($mes == 13) {
+            $mes = '01';
+            $ano++;
+        } else {
+            if ($mes < 10) {
+                $mes = '0' . $mes;
             }
-        } catch (Exception $e) {
-            $vencimento = date('Y/m/d');
         }
+        $dia = $this->fatura_model->getDiaVencimentoFatura($_POST['id_cartao']);
+        $vencimentoFormatado = $ano . '-' . $mes . '-' . $dia;
 
         $data = array(
             'id_usuario' => id_usuario(),
             'id_cartao' => $_POST['id_cartao'],
-            'mes_referencia' => $mes,
+            'mes_referencia' => $mes_referencia,
             'ano_referencia' => $ano,
             'vencimento' => $vencimentoFormatado,
         );
