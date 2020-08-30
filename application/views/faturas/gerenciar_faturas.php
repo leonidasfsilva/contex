@@ -392,8 +392,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         </div>
                         <input id="id_cartao_nova_fatura" type="hidden" name="id_cartao"/>
                         <input class="urlAtual" type="hidden" name="urlAtual"/>
-                    </div>
-                    <div class="row">
+
                         <div class="col-lg-6 form-group">
                             <label for="vencimento" class="control-label font-weight-bold">Data de vencimento da nova fatura:</label>
                             <input class="form-control font-weight-bold" id="vencimento" type="text" value="" placeholder="Selecione o mês de referência para exibir" disabled>
@@ -402,7 +401,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="note note-info">
-                                <i class="fas fa-info-circle fa-fw"></i> O mês de vencimento da fatura será sempre no mês subsequente ao mês de referência.
+                                <i class="fas fa-info-circle fa-fw"></i> O mês de vencimento da fatura será sempre subsequente ao mês de referência.
                             </div>
                         </div>
                     </div>
