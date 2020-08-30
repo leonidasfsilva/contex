@@ -322,10 +322,9 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             </div>
             <form id="formConfigurarFatura" action="<?= base_url('financeiro/faturas/configurar') ?>" method="post" autocomplete="off">
                 <div class="modal-body">
-                    <p>Defina o dia de vencimento padrão para as faturas do cartão selecionado:</p>
-                    <p class="note note-info font-weight-bold"><?= $cartao_config ?></p>
+                    <p class="font-weight-bold">Defina o dia de vencimento padrão para as faturas do cartão selecionado:</p>
                     <div class="row">
-                        <div class="col-lg-4 form-group">
+                        <div class="col-lg-6 form-group">
                             <label class="control-label font-weight-bold" for="vencimento_fatura">
                                 Dia de vencimento *
                             </label>
@@ -339,6 +338,9 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                 <option value="25"<?= $dia_vencimento == 25 ? 'selected' : '' ?>>TODO DIA 25</option>
                                 <option value="28"<?= $dia_vencimento == 28 ? 'selected' : '' ?>>TODO DIA 28</option>
                             </select>
+                        </div>
+                        <div class="col-lg-6 form-group">
+                            <p class="note note-info font-weight-bold"><?= $cartao_config ?></p>
                         </div>
                         <input class="id_cartao" type="hidden" name="id_cartao"/>
                         <input class="urlAtual" type="hidden" name="urlAtual"/>
@@ -368,7 +370,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             <form id="formNovaFatura" action="<?= base_url('financeiro/faturas/abrir') ?>" method="post"
                   autocomplete="off">
                 <div class="modal-body">
-                    <p>Defina o mês de referência para a nova fatura:</p>
+                    <p class="font-weight-bold">Defina o mês de referência para a nova fatura:</p>
                     <div class="row">
                         <div class="col-lg-6 form-group">
                             <label class="control-label font-weight-bold" for="select_mes">
@@ -456,8 +458,11 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     <h4 class="modal-title text-white ">Configuração pendente</h4>
                 </div>
                 <div class="modal-body">
-                    <p>Não é possível abrir novas faturas porque este cartão não possui parâmetros configurados.</p>
-                    <p>Configure os parâmetros da fatura clicando no botão: <i class="fas fa-cog fa-fw"></i></p>
+                    <div class="note note-danger font-weight-bold">
+                        <span>Este cartão não possui configurações da fatura, não é possível abrir novas faturas.</span>
+                        <br>
+                        <span>Configure o dia de vencimento padrão da fatura clicando no botão: <i class="fas fa-cog fa-fw"></i></span>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
