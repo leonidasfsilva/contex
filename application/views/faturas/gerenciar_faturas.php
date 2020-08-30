@@ -111,7 +111,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 Filtrar
             </button>
             <button href="#modalConfiguracoes" class="btn btn-default btn-sm" id="configurar_fatura" data-toggle="modal"
-                    title="Configurações de faturas" <?= $disabledConfig ?>>
+                    title="Configurações de fatura" <?= $disabledConfig ?>>
                 <i class="fas fa-cog fa-fw"></i>
             </button>
             <button href="#modalNovaFatura" id="novaFatura" data-toggle="modal" role="button"
@@ -312,13 +312,13 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
     </div>
 </div>
 
-<!-- Modal CONFIGURACOES DA FATURA -->
+<!-- Modal CONFIGURACOES DE FATURA -->
 <div class="modal fade" id="modalConfiguracoes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-default">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title">Configurações da fatura</h4>
+                <h4 class="modal-title">Configurações de fatura</h4>
             </div>
             <form id="formConfigurarFatura" action="<?= base_url('financeiro/faturas/configurar') ?>" method="post" autocomplete="off">
                 <div class="modal-body">
@@ -459,7 +459,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 </div>
                 <div class="modal-body">
                     <div class="note note-danger font-weight-bold">
-                        <span>Este cartão não possui configurações da fatura, não é possível abrir novas faturas.</span>
+                        <span>Este cartão não possui configurações de fatura, não é possível abrir novas faturas.</span>
                         <br>
                         <span>Configure o dia de vencimento padrão da fatura clicando no botão: <i class="fas fa-cog fa-fw"></i></span>
                     </div>
@@ -473,6 +473,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         </div>
     </div>
 <?php } ?>
+
 <!-- Modal FECHAR FATURA-->
 <div class="modal fade" id="modalFechar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
