@@ -75,8 +75,10 @@ class Lancamentos extends CI_Controller
                 $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
                 break;
             default:
-                $limit = 20;
-                $start = $this->financeiro_model->countLancamentos(id_usuario()) - $limit;
+                if ($this->financeiro_model->countLancamentos(id_usuario()) > 20) {
+                    $limit = 20;
+                    $start = $this->financeiro_model->countLancamentos(id_usuario()) - $limit;
+                }
                 $order_by = 'asc';
                 $limitado = true;
                 break;
@@ -131,8 +133,8 @@ class Lancamentos extends CI_Controller
 
         $query_string = null;
         foreach ($_GET as $key => $value) {
-            if($key != 'per_page') {
-                $query_string .= $key.'='.$value.'&';
+            if ($key != 'per_page') {
+                $query_string .= $key . '=' . $value . '&';
             }
         }
 
