@@ -126,6 +126,9 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        $('.submit').click(function () {
+            $('#formUsuario').submit();
+        });
 
         $('#s_n').on('ifChanged', function (event) {
             const checked = event.target.checked;
