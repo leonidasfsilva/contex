@@ -95,13 +95,13 @@
                     <label for="permissoes_id" class="control-label font-weight-bold">Permissão</label>
                     <select class="form-control" name="permissoes_id" id="permissoes_id">
                         <?php foreach ($permissoes as $p) {
-                            if ($p->idPermissao == $result->permissoes_id) {
+                            if ($p->id_permissao == $result->permissoes_id) {
                                 $selected = 'selected';
 
                             } else {
                                 $selected = '';
                             }
-                            echo '<option value="' . $p->idPermissao . '"' . $selected . '>' . $p->nome . '</option>';
+                            echo '<option value="' . $p->id_permissao . '"' . $selected . '>' . $p->nome . '</option>';
                         } ?>
                     </select>
                 </div>

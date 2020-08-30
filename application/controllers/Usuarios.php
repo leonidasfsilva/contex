@@ -143,7 +143,7 @@ class Usuarios extends CI_Controller
                 }
             }
 
-            if(!$_POST['cpf']) {
+            if (!$_POST['cpf']) {
                 $cpf = null;
             } else {
                 $cpf = $_POST['cpf'];
@@ -201,14 +201,9 @@ class Usuarios extends CI_Controller
                     'permissoes_id' => $this->input->post('permissoes_id')
                 );
             }
-
-            if ($this->usuarios_model->edit('usuarios', $data, 'id_usuarios', $this->input->post('id_usuarios'))) {
-                $this->session->set_flashdata('sucesso', 'Cadastro de usuário alterado com sucesso!');
-                redirect(base_url() . 'usuarios/editar/' . $this->input->post('id_usuarios'));
-            } else {
-                $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar alterar cadastro de usuário');
-                redirect(base_url('usuarios/editar/') . $id);
-            }
+            $this->usuarios_model->edit('usuarios', $data, 'id_usuarios', $this->input->post('id_usuarios'));
+            $this->session->set_flashdata('sucesso', 'Cadastro de usuário alterado com sucesso!');
+            redirect(base_url() . 'usuarios/editar/' . $this->input->post('id_usuarios'));
         }
 
         $this->data['result'] = $this->usuarios_model->getById($id);
@@ -301,7 +296,7 @@ class Usuarios extends CI_Controller
 
         $config['base_url'] = base_url() . 'usuarios/visualizar/' . $id;
         $config['suffix'] = '#logs';
-        $config['first_url'] = $config['base_url'].'#logs';
+        $config['first_url'] = $config['base_url'] . '#logs';
         $config['total_rows'] = $this->usuarios_model->countLogs($id);
         $config['per_page'] = 20;
         $config['page_query_string'] = true;
