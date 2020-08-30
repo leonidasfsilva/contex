@@ -553,26 +553,26 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
 <script type="text/javascript">
     $(document).ready(function () {
-        let ajax = $.ajax({
+        let dia;
+        $.ajax({
             url: 'faturas/ajaxDiaVencimentoFatura',
             type: 'POST',
             dataType: 'json',
             data: {
-                id_cartao: 25
+                id_cartao: $('#cartoes').val()
             },
-            success: function (result) {
-                return result;
+            success: function (response) {
+                dia = response;
             },
             error: function () {
                 console.log('ERRO na função: ajaxDiaVencimentoFatura')
             }
         });
 
-
-        $('#mes_referencia').change(function () {
+        $('#mes_referencia').change(function (e) {
             let input = $(this).val();
+            let cartao = $('#id_cartao_nova_fatura').val();
             let ano = new Date().getFullYear();
-            let dia = ajax.responseJSON;
 
             if (input == '') {
                 $('#vencimento').val('');
