@@ -400,8 +400,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="note note-info">
-                                <i class="fas fa-info-circle fa-fw"></i> O mês de vencimento da fatura será sempre subsequente ao mês de referência.
+                            <div class="note note-info font-weight-bold">
+                                <i class="fas fa-info-circle fa-lg fa-fw"></i> O mês de vencimento da fatura será sempre subsequente ao mês de referência.
                             </div>
                         </div>
                     </div>
