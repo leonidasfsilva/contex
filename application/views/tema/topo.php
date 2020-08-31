@@ -609,7 +609,7 @@ $this->load->view('includes/custom_js');
                     <div class="clearfix">
                         <ul class="list-unstyled list-inline pull-left pl-sm">
                             <a href="https://mxcode.net" target="_blank">
-                                <li><h6 style="margin: 0;">CONTEX - Sistema de Gestão &copy; <?= date('Y'); ?> MXCODE Sistemas Web</h6></li>
+                                <li><h6 style="margin: 0; text-transform: none">&copy; <?= date('Y'); ?> CONTEX - Sistema de Gestão | Powered by MXCODE</h6></li>
                             </a>
                         </ul>
                         <button class="pull-right btn btn-link btn-xs hidden-print" id="back-to-top"><i class="fa fa-arrow-up"></i></button>

@@ -71,6 +71,7 @@
     });
 
     $(document).on('click', 'a:not([href="javascript:"],' +
+        '[target="_blank"], ' +
         '[disabled="disabled"], ' +
         '[class="js:"], ' +
         '[class="ui-corner-all"], ' +
