@@ -81,7 +81,6 @@
         '[data-toggle="tab"])', function () {
         $(".subconteudo-principal").hide();
         $(".preloader").show();
-
     });
 
     $(document).on('submit', 'form', function (event) {
