@@ -217,7 +217,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 }
             } else { ?>
                 <tr>
-                    <td colspan="6">Nenhuma fatura encontrada para <?= $cartao_config ?></td>
+                    <td colspan="6">Nenhuma fatura encontrada para o cartão <span class="font-weight-bold"><?= $cartao_config ?></span></td>
                 </tr>
             <?php } ?>
             </tbody>

@@ -187,7 +187,7 @@ $periodo_pendencia = $this->input->get('periodo');
                 </thead>
                 <tbody>
                 <tr>
-                    <td colspan="5">Nenhuma pendência encontrada</td>
+                    <td colspan="5">Nenhum registro encontrado</td>
                 </tr>
                 </tbody>
             </table>

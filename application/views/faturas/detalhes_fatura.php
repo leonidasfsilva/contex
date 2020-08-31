@@ -110,7 +110,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 </thead>
                 <tbody>
                 <tr>
-                    <td colspan="5">Nenhum lançamento encontrado</td>
+                    <td colspan="5">Nenhum registro encontrado</td>
                 </tr>
                 </tbody>
             </table>
