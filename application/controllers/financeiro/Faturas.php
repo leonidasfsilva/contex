@@ -384,7 +384,8 @@ class Faturas extends CI_Controller
                                 'valor' => $valor_parcela,
                                 'data_vencimento' => $vencimentoFormatado,
                             );
-                            $this->pendencia_model->add('pendencias', $data2);
+                            //removendo adicao de compras parceladas de terceiros em Pendencias
+//                            $this->pendencia_model->add('pendencias', $data2);
                         }
 
                         $mes++;
@@ -440,10 +441,11 @@ class Faturas extends CI_Controller
                             'valor' => $valor,
                             'data_vencimento' => $vencimentoFormatado,
                         );
-                        $this->pendencia_model->add('pendencias', $data2);
+                        //removendo adicao de compras a vista de terceiros em Pendencias
+//                        $this->pendencia_model->add('pendencias', $data2);
                     }
 
-                    if ($this->fatura_model->add('lancamentos_faturas_assoc', $data1) == true) {
+                    if ($this->fatura_model->add('lancamentos_faturas_assoc', $data1)) {
                         $this->session->set_flashdata('sucesso', 'Lançamento adicionado com sucesso!');
                     } else {
                         $this->session->set_flashdata('erro', 'Erro ao tentar adicionar lançamentos_assoc!');
@@ -638,7 +640,8 @@ class Faturas extends CI_Controller
                                 'valor' => $valor_parcela,
                                 'data_vencimento' => $vencimentoFormatado,
                             );
-                            $this->pendencia_model->add('pendencias', $data2);
+                            //removendo edicao de compras parceladas de terceiros em Pendencias
+//                            $this->pendencia_model->add('pendencias', $data2);
                         }
 
                         $mes++;
@@ -694,10 +697,11 @@ class Faturas extends CI_Controller
                             'valor' => $valor,
                             'data_vencimento' => $vencimentoFormatado,
                         );
-                        $this->pendencia_model->add('pendencias', $data2);
+                        //removendo edicao de compras a vista de terceiros em Pendencias
+//                        $this->pendencia_model->add('pendencias', $data2);
                     }
 
-                    if ($this->fatura_model->add('lancamentos_faturas_assoc', $data1) == true) {
+                    if ($this->fatura_model->add('lancamentos_faturas_assoc', $data1)) {
                         $this->session->set_flashdata('sucesso', 'Lançamento alterado com sucesso!');
                     } else {
                         $this->session->set_flashdata('erro', 'Erro ao tentar alterar lançamentos_assoc!');
