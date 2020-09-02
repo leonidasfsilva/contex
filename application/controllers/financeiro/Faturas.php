@@ -198,14 +198,13 @@ class Faturas extends CI_Controller
                 $data['view'] = 'faturas/detalhes_fatura';
                 $this->load->view('tema/topo', $data);
             } else {
-                $this->session->set_flashdata('erro', 'Fatura solicitada não encontrada para este usuário.');
+                $this->session->set_flashdata('erro', 'Fatura solicitada não encontrada para este usuário');
                 redirect('financeiro/faturas');
             }
         } else {
-            $this->session->set_flashdata('erro', 'Fatura solicitada não encontrada.');
+            $this->session->set_flashdata('erro', 'Fatura solicitada não encontrada');
             redirect('financeiro/faturas');
         }
-
     }
 
     public function novoLancamento($id_fatura = null)
