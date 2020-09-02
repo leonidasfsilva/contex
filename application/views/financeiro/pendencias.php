@@ -282,7 +282,7 @@ $periodo_pendencia = $this->input->get('periodo');
                         <div class="form-group col-lg-6" style="margin-left: 0">
                             <label for="select_periodo" class="tooltips font-weight-bold" title="Filtrar pendências por período">Período <i class="fa fa-info-circle fa-fw"></i></label>
                             <select name="periodo" id="select_periodo" class="form-control">
-                                <option value="">== Selecione ==</option>
+                                <option value=""><< Selecione >></option>
                                 <option value="todos" <?php if ($periodo_pendencia == 'todos') {
                                     echo 'selected';
                                 } ?>>Todos
