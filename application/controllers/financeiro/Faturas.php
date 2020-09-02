@@ -158,7 +158,7 @@ class Faturas extends CI_Controller
         );
 
         if ($id_fatura == null) {
-            $this->session->set_flashdata('erro', 'Método não permitido.');
+            $this->session->set_flashdata('erro', 'Método não permitido');
             redirect('financeiro/faturas');
         }
 
