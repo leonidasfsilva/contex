@@ -66,6 +66,7 @@
         $(".money").maskMoney({thousands: '.', decimal: ',', allowZero: true});
         $('.money').prop('type', 'tel');
     });
+
     $(function () {
         $('.popover-btn').popover()
     });
