@@ -110,8 +110,9 @@
 <script>
     $(document).ready(function () {
 
-        $(".precision").maskMoney({
-            precision: 4
+        $(function () {
+            $(".precision").maskMoney({precision: 4, thousands: '.', decimal: ',', allowZero: true});
+            $('.precision').prop('type', 'tel');
         });
 
         $('#ajuda1').click(function () {
