@@ -286,7 +286,7 @@ $periodo = $this->input->get('periodo');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Registrar nova aplicação</h4>
             </div>
-            <form id="formAplicacao" action="<?php echo base_url() ?>financeiro/investimentos/aplicacao" method="post" autocomplete="off">
+            <form id="formAplicacao" action="<?php echo base_url('financeiro/investimentos/aplicacao') ?>" method="post" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
@@ -315,7 +315,7 @@ $periodo = $this->input->get('periodo');
                         <div class="form-group col-lg-6">
                             <label for="formaPgto" class="font-weight-bold">Forma Aplicação *</label>
                             <select name="formaPgto" id="formaPgto" class="form-control">
-                                <option value="">-- Selecione --</option>
+                                <option value=""><< Selecione >></option>
                                 <?php if ($formasPagamento) {
                                     foreach ($formasPagamento as $f) { ?>
                                         <option value="<?= $f->id_forma ?>"><?= $f->nome ?></option>
@@ -344,7 +344,7 @@ $periodo = $this->input->get('periodo');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Registrar novo resgate</h4>
             </div>
-            <form id="formResgate" action="<?php echo base_url() ?>financeiro/investimentos/resgate" method="post" autocomplete="off">
+            <form id="formResgate" action="<?php echo base_url('financeiro/investimentos/resgate') ?>" method="post" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
@@ -373,7 +373,7 @@ $periodo = $this->input->get('periodo');
                         <div class="form-group col-lg-6">
                             <label for="formaPgto" class="font-weight-bold">Forma Resgate *</label>
                             <select name="formaPgto" id="formaPgto" class="form-control">
-                                <option value="">-- Selecione --</option>
+                                <option value=""><< Selecione >></option>
                                 <?php if ($formasPagamento) {
                                     foreach ($formasPagamento as $f) { ?>
                                         <option value="<?= $f->id_forma ?>"><?= $f->nome ?></option>
@@ -402,7 +402,7 @@ $periodo = $this->input->get('periodo');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Detalhes do lançamento</h4>
             </div>
-            <form id="formEditar" action="<?php echo base_url() ?>financeiro/investimentos/editar" method="post">
+            <form id="formEditar" action="<?php echo base_url('financeiro/investimentos/editar') ?>" method="post">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
@@ -433,7 +433,7 @@ $periodo = $this->input->get('periodo');
                         <div class="form-group col-lg-6">
                             <label for="formaPgto" class="font-weight-bold">Forma Transação *</label>
                             <select name="formaPgto" id="formaPgtoEditar" class="form-control">
-                                <option value="">-- Selecione --</option>
+                                <option value=""><< Selecione >></option>
                                 <?php if ($formasPagamento) {
                                     foreach ($formasPagamento as $f) { ?>
                                         <option value="<?= $f->id_forma ?>"><?= $f->nome ?></option>
@@ -462,7 +462,7 @@ $periodo = $this->input->get('periodo');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Excluir lançamento</h4>
             </div>
-            <form id="formExcluir" action="<?php echo base_url(); ?>financeiro/investimentos/excluir" method="post">
+            <form id="formExcluir" action="<?php echo base_url('financeiro/investimentos/excluir'); ?>" method="post">
                 <div class="modal-body">
                     <p>Deseja realmente excluir este lançamento?</p>
                     <input id="idExcluir" type="hidden" name="id" value=""/>
