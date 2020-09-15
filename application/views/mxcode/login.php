@@ -81,7 +81,7 @@
                     <?php } ?>
 
                     <div class="form-group">
-                        <h3 class="font-bold m-b-40">Efetue seu login::</h3>
+                        <h3 class="font-bold m-b-40">Efetue seu login:::</h3>
                     </div>
                     <div class="form-group">
                         <input type="text" class="form-control" id="email" name="email" required/>
