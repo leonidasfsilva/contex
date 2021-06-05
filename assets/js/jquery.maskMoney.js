@@ -256,6 +256,19 @@
                         }
                     }
 
+                    $input.on('keyup', function (e) {
+                        e = e || window.event;
+                        var key = e.which || e.charCode || e.keyCode,
+                            keyPressedChar,
+                            selection,
+                            startPos,
+                            endPos,
+                            value;
+                        selection = getInputSelection();
+                        startPos = selection.start;
+                        maskAndPosition(startPos + 1);
+                    });
+
                     function keypressEvent(e) {
                         e = e || window.event;
                         var key = e.which || e.charCode || e.keyCode,
