@@ -117,12 +117,32 @@ $fim = $this->input->get('dataFinal');
                     <i class="fas fa-minus"></i>
                 </a>
             </div>
+            <div class="panel-ctrls">
+                <span class="hidden" id="div_btn_marcar">
+                    <button class="btn btn-default btn-sm marcar_desmarcar" id="marcar_todos" title="Marcar todos os lançamentos da fatura">
+                        <i class="fas fa-check-square fa-fw"></i>
+                        Marcar Todos
+                    </button>
+                    <button class="btn btn-default marcar_desmarcar btn-sm hidden" id="desmarcar_todos" title="Desmarcar todos os lançamentos da fatura">
+                        <i class="far fa-square fa-fw"></i>
+                        Desmarcar Todos
+                    </button>
+                </span>
+                <button class="btn btn-default btn-sm habilita_desabilita_soma" id="exibir_soma" title="Habilitar soma de lançamentos individuais">
+                    <i class="fas fa-toggle-on fa-fw"></i>
+                    Habilitar Soma
+                </button>
+                <button class="btn btn-default btn-sm habilita_desabilita_soma hidden" id="esconder_soma" title="Desabilitar soma de lançamentos individuais">
+                    <i class="fas fa-toggle-off fa-fw"></i>
+                    Desabilitar Soma
+                </button>
+            </div>
         </div>
-
         <div class="panel-body panel-no-padding table-responsive">
             <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
                 <thead>
                 <tr role="row">
+                    <th class="th_soma hidden" style="width: 10px !important;">Soma</th>
                     <th>Data</th>
                     <th>Descrição</th>
                     <th>Status</th>
@@ -181,11 +201,12 @@ $fim = $this->input->get('dataFinal');
 
 
                     echo '<tr>';
+                    echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
                     echo '<td>' . $vencimento . '</td>';
 //                    echo '<td><span class="badge badge-' . $label . '">' . ucfirst($r->tipo) . '</span></td>';
                     echo '<td>' . strtoupper($r->descricao) . '<br><span class="small">' . ($fornecedor) . '</span></td>';
                     echo '<td><span class="label label-' . $label_tipo . '">' . strtoupper($tipo) . '</span><br><span class="label label-' . $label_status . '">' . strtoupper($status) . '</span></td>';
-                    echo '<td><span style=" color: ' . $color . '"> ' . number_format($r->valor, 2, ',', '.') . '</span><br><span class="small">' . ($forma_pgto) . '</td>';
+                    echo '<td><span class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small">' . ($forma_pgto) . '</td>';
 
                     if ($r->valor < 0) {
                         $valor = number_format(abs($r->valor), 2, ',', '.');
@@ -210,6 +231,22 @@ $fim = $this->input->get('dataFinal');
                 } ?>
                 </tbody>
             </table>
+            <div id="somatorio_lancamentos" class="panel-footer hidden">
+                <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
+                    <thead>
+                    <tr>
+                        <th colspan="2" style="text-align: left !important;">Descrição</th>
+                        <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
+                    </tr>
+                    </thead>
+                    <tr>
+                        <td colspan="2" style="text-align: left; font-weight: bold">(=) LANÇAMENTOS SELECIONADOS</td>
+                        <td colspan="1" style="text-align: right; font-weight: bold" id="valor_soma_parcelas">
+                            0,00
+                        </td>
+                    </tr>
+                </table>
+            </div>
             <?php if ($this->pagination->create_links()) { ?>
                 <div class="panel-footer">
                     <?= $this->pagination->create_links() ?>
@@ -623,7 +660,71 @@ $fim = $this->input->get('dataFinal');
         // $("#form_filtro").submit();
     });
 
+
     jQuery(document).ready(function ($) {
+
+        var marcados = false;
+
+        somaValorParcelas();
+
+        $('#marcar_todos, #desmarcar_todos').click(function () {
+            marcarTodosiCheck();
+            $('#marcar_todos').toggleClass('hidden');
+            $('#desmarcar_todos').toggleClass('hidden');
+        });
+
+        $('.habilita_desabilita_soma').click(function () {
+            $('.th_soma').toggleClass('hidden');
+            $('.td_soma').toggleClass('hidden');
+            $('#div_btn_marcar').toggleClass('hidden');
+            $('#somatorio_lancamentos').toggleClass('hidden');
+            $('#exibir_soma').toggleClass('hidden');
+            $('#esconder_soma').toggleClass('hidden');
+        });
+
+        $('.soma_parcelas').on('ifChanged', function (event) {
+            const icheck = event.target.checked;
+            somaValorParcelas();
+        });
+
+        // Calculate the total invoice amount from selected items only
+        function somaValorParcelas() {
+            var Soma = 0;
+            // iterate through each td based on class and add the values
+            $(".valor_parcela").each(function () {
+                //Check if the checkbox is checked
+                if ($(this).closest('tr').find('.soma_parcelas').is(':checked')) {
+                    var value = $('span', this).text();
+                    value = jquery_format(value);
+                    // console.log('valor do elemento: ' + value);
+                    // add only if the value is number
+                    if (!isNaN(value) && value.length != 0) {
+                        Soma += parseFloat(value);
+                        console.log('valor do elemento: ' + value);
+                    } else {
+                        console.log('erro no método somaValorParcelas()');
+                    }
+                }
+            });
+            var Sum = br_format(Soma);
+
+            $('#valor_soma_parcelas').text(Sum);
+        }
+
+        function marcarTodosiCheck() {
+            if (marcados == false) {
+                $(".soma_parcelas").each(function () {
+                    $('.soma_parcelas').iCheck('check');
+                    marcados = true;
+                });
+            } else {
+                $(".soma_parcelas").each(function () {
+                    $('.soma_parcelas').iCheck('uncheck');
+                    marcados = false;
+                });
+            }
+        }
+
 
         $('#select_periodo').change(function () {
             const value = $(this).val();
@@ -670,6 +771,37 @@ $fim = $this->input->get('dataFinal');
             } else {
                 $('#divRecebimento, #divPagamentoEditar, #divPagamento').addClass('hidden');
             }
+        }
+
+        function calculaValorParcela(parcela, valor) {
+            var parcelas = parcela;
+            var valor = valor;
+
+            valor = jquery_format(valor);
+
+            var valor_parcela = valor / parcelas;
+
+            valor_parcela = br_format(valor_parcela);
+
+            return (valor_parcela);
+        }
+
+        function jquery_format(valor) {
+            // Remove todos os .
+            valor = valor.replace(/\./g, "");
+
+            // Troca todas as , por .
+            valor = valor.replace(",", ".");
+
+            // Converte para float
+            valor = parseFloat(valor);
+            valor = parseFloat(valor) || 0.0;
+
+            return valor;
+        }
+
+        function br_format(n) {
+            return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
         }
 
 

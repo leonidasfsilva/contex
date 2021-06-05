@@ -133,7 +133,6 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     <i class="fas fa-minus"></i>
                 </a>
             </div>
-
             <div class="panel-ctrls">
                 <span class="hidden" id="div_btn_marcar">
                     <button class="btn btn-default btn-sm marcar_desmarcar" id="marcar_todos" title="Marcar todos os lançamentos da fatura">
@@ -619,7 +618,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 if ($(this).closest('tr').find('.soma_parcelas').is(':checked')) {
                     var value = $('span', this).text();
                     value = jquery_format(value);
-                    // console.log('valor do elemento: ' + value);
+                     console.log('valor do elemento: ' + value);
                     // add only if the value is number
                     if (!isNaN(value) && value.length != 0) {
                         Soma += parseFloat(value);
