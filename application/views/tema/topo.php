@@ -608,9 +608,7 @@ $this->load->view('includes/custom_js');
                 <footer role="contentinfo">
                     <div class="clearfix">
                         <ul class="list-unstyled list-inline pull-left pl-sm">
-                            <a href="https://mxcode.net" target="_blank">
-                                <li><h6 style="margin: 0; text-transform: none">&copy; <?= date('Y'); ?> CONTEX - Sistema de Gestão | Powered by MX CODE</h6></li>
-                            </a>
+                            <li><h6 style="margin: 0; text-transform: none">&copy; <?= date('Y'); ?> CONTEX - Sistema de Gestão | Powered by MX CODE</h6></li>
                         </ul>
                         <button class="pull-right btn btn-link btn-xs hidden-print" id="back-to-top"><i class="fa fa-arrow-up"></i></button>
                     </div>
