@@ -423,18 +423,18 @@ $fim = $this->input->get('dataFinal');
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
-                            <label class="font-weight-bold" for="descricao">Fornecedor</label>
-                            <input class="form-control" id="fornecedor" type="text" name="fornecedor"/>
+                            <label class="font-weight-bold" for="fornecedor">Fornecedor</label>
+                            <input class="form-control" type="text" name="fornecedor"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-6">
                             <label for="valor" class="font-weight-bold">Valor *</label>
-                            <input class="form-control money" id="valor" type="text" name="valor"/>
+                            <input class="form-control money" type="text" name="valor"/>
                         </div>
                         <div class="form-group col-lg-6">
                             <label for="vencimento" class="font-weight-bold">Data de Lançamento</label>
-                            <input class="form-control datepicker" id="vencimento" type="text" name="vencimento"/>
+                            <input class="form-control datepicker" type="text" name="vencimento"/>
                         </div>
                     </div>
                     <div class="row">
@@ -452,7 +452,7 @@ $fim = $this->input->get('dataFinal');
                             </div>
                             <div class="form-group col-lg-4">
                                 <label for="formaPgto" class="font-weight-bold">Forma Pagamento *</label>
-                                <select name="formaPgto" id="formaPgto" class="form-control">
+                                <select name="formaPgto" class="form-control">
                                     <option value=""><< Selecione >></option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
@@ -465,7 +465,7 @@ $fim = $this->input->get('dataFinal');
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="btnCancelLancamento" class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                         <i class="fa fa-times fa-fw"></i> Cancelar
                     </button>
                     <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
@@ -488,24 +488,24 @@ $fim = $this->input->get('dataFinal');
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricao">Descrição *</label>
-                            <input class="form-control" id="descricao" type="text" name="descricao"/>
+                            <input class="form-control" type="text" name="descricao"/>
                             <input id="urlSaida" type="hidden" name="urlAtual" value=""/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
-                            <label class="font-weight-bold" for="descricao">Fornecedor</label>
-                            <input class="form-control" id="fornecedor" type="text" name="fornecedor"/>
+                            <label class="font-weight-bold" for="fornecedor">Fornecedor</label>
+                            <input class="form-control" type="text" name="fornecedor"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-6">
                             <label for="valor" class="font-weight-bold">Valor *</label>
-                            <input class="form-control money" id="valor" type="text" name="valor"/>
+                            <input class="form-control money" type="text" name="valor"/>
                         </div>
                         <div class="form-group col-lg-6">
                             <label for="vencimento" class="font-weight-bold">Data de Lançamento</label>
-                            <input class="form-control datepicker" id="vencimento" type="text" name="vencimento"/>
+                            <input class="form-control datepicker" type="text" name="vencimento"/>
                         </div>
                     </div>
                     <div class="row">
@@ -522,7 +522,7 @@ $fim = $this->input->get('dataFinal');
                             </div>
                             <div class="form-group col-lg-4">
                                 <label for="formaPgto" class="font-weight-bold">Forma Pagamento *</label>
-                                <select name="formaPgto" id="formaPgto" class="form-control">
+                                <select name="formaPgto" class="form-control">
                                     <option value=""><< Selecione >></option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
@@ -535,7 +535,7 @@ $fim = $this->input->get('dataFinal');
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="btnCancelLancamento" class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                         <i class="fa fa-times fa-fw"></i> Cancelar
                     </button>
                     <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
@@ -565,7 +565,7 @@ $fim = $this->input->get('dataFinal');
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
-                            <label class="font-weight-bold" for="descricao">Fornecedor</label>
+                            <label class="font-weight-bold" for="fornecedorEditar">Fornecedor</label>
                             <input class="form-control" id="fornecedorEditar" type="text" name="fornecedor"/>
                         </div>
                     </div>
@@ -613,7 +613,7 @@ $fim = $this->input->get('dataFinal');
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="btnCancelLancamento" class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                    <button  class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                         <i class="fa fa-times fa-fw"></i> Cancelar
                     </button>
                     <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
@@ -700,9 +700,9 @@ $fim = $this->input->get('dataFinal');
                     // add only if the value is number
                     if (!isNaN(value) && value.length != 0) {
                         Soma += parseFloat(value);
-                        console.log('valor do elemento: ' + value);
+                        // console.log('valor do elemento: ' + value);
                     } else {
-                        console.log('erro no método somaValorParcelas()');
+                        // console.log('erro no método somaValorParcelas()');
                     }
                 }
             });
