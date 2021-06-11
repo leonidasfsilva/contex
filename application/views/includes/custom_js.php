@@ -1,5 +1,140 @@
 <script>
+    let conectado = false;
+
+    function lerTodasNotificacoes() {
+        $.ajax({
+            type: "POST",
+            url: "<?= base_url('notificacoes/lerTodasNotificacoes'); ?>",
+            data: {
+                post: true
+            },
+            dataType: 'html',
+            success: function () {
+                atualizaNotificacoesUsuario()
+            }
+        });
+    }
+
+    function lerNotificacao(id) {
+        $.ajax({
+            type: "POST",
+            url: "<?= base_url('notificacoes/lerNotificacao'); ?>",
+            data: {
+                id: id
+            },
+            dataType: 'html',
+            success: function () {
+                atualizaNotificacoesUsuario()
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        setInterval(function () {
+            if (conectado === true) {
+                atualizaNotificacoesUsuario();
+            }
+        }, 10000);
+    });
+
+    function atualizaNotificacoesUsuario() {
+        $.ajax({
+            type: "POST",
+            url: "<?= base_url('notificacoes/atualizaNotificacoesUsuario'); ?>",
+            dataType: 'json',
+            data: {
+                request: true
+            },
+            success: function (data) {
+                if (data.result === true) {
+                    let link;
+                    let icone;
+                    let height = 0;
+                    $('#notifications-panel').html('');
+                    $('#qnt_notificacoes').html('');
+                    if (data.qnt === 0) {
+                        $('#qnt_notificacoes').html('');
+                    } else {
+                        $('#qnt_notificacoes').html(data.qnt);
+                    }
+
+                    if (data.logado == true) {
+                        conectado = true;
+                        // console.log('usuario logado: ' + data.logado)
+                    } else {
+                        conectado = false;
+                        Swal.fire({
+                            position: 'top',
+                            type: 'error',
+                            // timer: 3000,
+                            title: 'Sessão Expirada',
+                            html: 'Por favor, efetue seu login novamente para continuar.',
+                            showConfirmButton: true,
+                            showCancelButton: false,
+                            showCloseButton: false,
+                            reverseButtons: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: '<i class="fas fa-user-lock"></i> Efetuar Login ',
+                            cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
+                        }).then((result) => {
+                            if (result.value) {
+                                window.location.reload(true);
+                            } else {
+
+                            }
+                        });
+                    }
+
+                    if (data.retorno !== null) {
+                        console.log('atualizaNotificacoesUsuario(): usuario possui novas notificacoes')
+                        $('#notifications-panel-footer').removeClass('hidden')
+                        $(data.retorno).each(function (index, item) {
+                            if (height < 210) {
+                                height = height + 70;
+                            }
+
+                            if (item.link) {
+                                base_url = '<?= base_url() ?>'
+                                link = base_url + item.link
+                            } else {
+                                link = '#'
+                            }
+                            if (item.icone) {
+                                icone = item.icone
+                            } else {
+                                icone = 'fas fa-bell fa-fw'
+                            }
+                            $('#notifications-panel').append(
+                                '<li>' +
+                                '<a href="' + link + '" onclick="lerNotificacao(' + item.id_notificacao + ')" class="notification-info">' +
+                                '<div class="notification-icon"><i class="' + icone + '"></i></div>' +
+                                '<div class="notification-content ajax-notification">' + item.descricao + '</div>' +
+                                '</a>' +
+                                '</li>'
+                            )
+                        })
+                    } else {
+                        console.log('atualizaNotificacoesUsuario(): usuario nao possui novas notificacoes')
+                        height = 70
+                        $('#notifications-panel-footer').addClass('hidden')
+                        $('#notifications-panel').append(
+                            '<li class="text-center note note-info font-weight-bold" style="border: 0">' +
+                            '    Usuário não possui notificações' +
+                            '</li>'
+                        )
+                    }
+                    $('#scroll-panel').css('height', height)
+                } else {
+                    console.error('ERRO: atualizaNotificacoesUsuario()')
+                }
+            }
+        });
+    }
+
+
     $(document).on('ready', function (event) {
+        atualizaNotificacoesUsuario();
+
         $("#urlAtual, .urlAtual").val($(location).attr('href'));
 
         $('.modal_anuncio').each(function (key, value) {

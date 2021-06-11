@@ -245,66 +245,28 @@ $this->load->view('includes/custom_js');
         <!--        TELA CHEIA-->
 
         <!--        NOTIFICAÇOES-->
-        <li class="dropdown toolbar-icon-bg hidden-xs">
+        <li class="dropdown toolbar-icon-bg">
             <a href="#" class="hasnotifications dropdown-toggle" data-toggle="dropdown" data-placement="bottom" title="Notificações">
                 <span class="icon-bg">
                     <i class="fas fa-fw fa-bell"></i>
                 </span>
-                <!--                <span class="badge badge-info">5</span>-->
+                <!--    NUMERO DE NOTIFICACOES-->
+                <span class="badge badge-danger" id="qnt_notificacoes"></span>
             </a>
-            <div class="dropdown-menu dropdown-alternate messages arrow">
+            <div class="dropdown-menu dropdown-alternate notifications arrow">
                 <div class="dd-header">
-                    <span>Notifications</span>
-                    <span><a href="#">Settings</a></span>
+                    <span>Notificações</span>
+                    <span class="hidden"><a href="#">Settings</a></span>
                 </div>
-                <div class="scrollthis scroll-pane">
-                    <ul class="scroll-content">
-                        <li class="">
-                            <a href="#" class="notification-info">
-                                <div class="notification-icon"><i class="fa fa-user fa-fw"></i></div>
-                                <div class="notification-content">Profile Page has been updated</div>
-                                <div class="notification-time">2m</div>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a href="#" class="notification-success">
-                                <div class="notification-icon"><i class="fa fa-check fa-fw"></i></div>
-                                <div class="notification-content">Updates pushed successfully</div>
-                                <div class="notification-time">12m</div>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a href="#" class="notification-primary">
-                                <div class="notification-icon"><i class="fa fa-users fa-fw"></i></div>
-                                <div class="notification-content">New users request to join</div>
-                                <div class="notification-time">35m</div>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a href="#" class="notification-danger">
-                                <div class="notification-icon"><i class="fa fa-shopping-cart fa-fw"></i></div>
-                                <div class="notification-content">More orders are pending</div>
-                                <div class="notification-time">11h</div>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a href="#" class="notification-primary">
-                                <div class="notification-icon"><i class="fa fa-arrow-up fa-fw"></i></div>
-                                <div class="notification-content">Pending Membership approval</div>
-                                <div class="notification-time">2d</div>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a href="#" class="notification-info">
-                                <div class="notification-icon"><i class="fa fa-check fa-fw"></i></div>
-                                <div class="notification-content">Succesfully updated to version 1.0.1</div>
-                                <div class="notification-time">40m</div>
-                            </a>
+                <div class="scrollthis scroll-pane" id="scroll-panel">
+                    <ul class="scroll-content" id="notifications-panel">
+                        <li class="text-center note note-info font-weight-bold" style="border: 0">
+                            Usuário não possui notificações
                         </li>
                     </ul>
                 </div>
-                <div class="dd-footer">
-                    <a href="#">View all notifications</a>
+                <div class="dd-footer hidden" id="notifications-panel-footer">
+                    <a href="#" onclick="lerTodasNotificacoes()">Marcar todas como lidas</a>
                 </div>
             </div>
         </li>
