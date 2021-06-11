@@ -134,6 +134,7 @@ $autoload['model'] = array(
     'usuarios_model',
     'redefinicao_model',
     'permissoes_model',
+    'notificacoes_model',
 );
 
 //$autoload['model'] = array('autoload_model');
