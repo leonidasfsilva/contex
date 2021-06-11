@@ -11,19 +11,21 @@ class Notificacoes extends CI_Controller
 
     public function lerTodasNotificacoes()
     {
-        $this->notificacoes_model->lerTodasNotificacoes(id_usuario());
+        $this->notificacoes_model->lerTodasNotificacoes(getUserId());
     }
 
     public function lerNotificacao()
     {
-        $this->notificacoes_model->lerNotificacao($_POST['id']);
+        if (!$this->input->is_ajax_request()) {
+            exit('No direct script access allowed');
+        }
+
+        $this->notificacoes_model->lerNotificacao($this->input->post('id'));
     }
 
     //Funcao para atualizar lista de notificacoes do usuario.
     public function atualizaNotificacoesUsuario()
     {
-        $this->load->model('notificacoes_model', '', true);
-
         if (!$this->input->is_ajax_request()) {
             exit('No direct script access allowed');
         } else {
@@ -35,8 +37,8 @@ class Notificacoes extends CI_Controller
                 $logado = false;
             }
 
-            $notificacoes = $this->notificacoes_model->atualizaNotificacoesUsuario(id_usuario());
-            $qnt = $this->notificacoes_model->usuarioTemNotificacoes(id_usuario());
+            $notificacoes = $this->notificacoes_model->atualizaNotificacoesUsuario(getUserId());
+            $qnt = $this->notificacoes_model->usuarioTemNotificacoes(getUserId());
 
             if ($notificacoes) {
                 $data = array(

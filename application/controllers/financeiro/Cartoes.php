@@ -21,7 +21,7 @@ class Cartoes extends CI_Controller
     //MODULO DE CARTOES
     public function cartoes()
     {
-        $cartoes = $this->cartoes_model->getCartoesUsuario(id_usuario());
+        $cartoes = $this->cartoes_model->getCartoesUsuario(getUserId());
 
         $data['results'] = $cartoes;
         $data['menuFinanceiro'] = true;
@@ -46,7 +46,7 @@ class Cartoes extends CI_Controller
                 'validade' => $validade,
                 'cvc' => encriptar($_POST['cvc']),
                 'bandeira' => padronizarString($_POST['bandeira']),
-                'id_usuario' => id_usuario()
+                'id_usuario' => getUserId()
             );
             $existe_cartao = $this->consultaCartoesUsuario();
 
@@ -84,7 +84,7 @@ class Cartoes extends CI_Controller
                 'validade' => $validade,
                 'cvc' => encriptar($_POST['cvc']),
                 'bandeira' => padronizarString($_POST['bandeira']),
-                'id_usuario_titular' => id_usuario(),
+                'id_usuario_titular' => getUserId(),
                 'id_usuario' => $_POST['id_usuario'],
                 'id_cartao_titular' => $_POST['id_cartao'],
                 'adicional' => 1,
@@ -115,7 +115,7 @@ class Cartoes extends CI_Controller
                 $this->session->set_flashdata('erro', 'Método não permitido.');
                 redirect('financeiro/cartoes');
             }
-            $cartao_titular = $this->cartoes_model->cartaoPertenceUsuario(id_usuario(), $id_cartao);
+            $cartao_titular = $this->cartoes_model->cartaoPertenceUsuario(getUserId(), $id_cartao);
 
             if ($cartao_titular) {
                 if ($cartao_titular->adicional == 1) {
@@ -173,7 +173,7 @@ class Cartoes extends CI_Controller
             }
 
             if ($cartao->adicional) {
-                if ($cartao->id_usuario_titular != id_usuario()) {
+                if ($cartao->id_usuario_titular != getUserId()) {
                     $this->session->set_flashdata('erro', 'Você não tem permissão para editar os dados deste cartão, solicite a alteração dos dados ao titular.');
                     redirect('financeiro/cartoes');
                 }
@@ -202,7 +202,7 @@ class Cartoes extends CI_Controller
         $cartao = $this->cartoes_model->cartaoExistente($id_cartao);
         if ($cartao) {
             if ($cartao->adicional == 1) {
-                if ($cartao->id_usuario_titular != id_usuario()) {
+                if ($cartao->id_usuario_titular != getUserId()) {
                     $this->session->set_flashdata('erro', 'Você não pode excluir este cartão, apenas o titular emissor pode exclui-lo.');
                     redirect('financeiro/cartoes');
                 }
@@ -243,7 +243,7 @@ class Cartoes extends CI_Controller
     //se não existir, retorna FALSE
     public function consultaCartoesUsuario($id_cartao = null)
     {
-        $existe_cartao = $this->cartoes_model->getCartoesUsuario(id_usuario(), $id_cartao);
+        $existe_cartao = $this->cartoes_model->getCartoesUsuario(getUserId(), $id_cartao);
         if ($existe_cartao) {
             return true;
         } else {
@@ -260,7 +260,7 @@ class Cartoes extends CI_Controller
         $data = array(
             'id_cartao' => $id_cartao
         );
-        $this->fatura_model->edit('faturas', $data, 'id_usuario', id_usuario());
+        $this->fatura_model->edit('faturas', $data, 'id_usuario', getUserId());
     }
 
     //Funcao para consultar se existe algum usuario no sistema com o CPF informado.

@@ -45,7 +45,7 @@
 							scaleY= -1;
 
 						} else if (lon < -140) { // hawaii
-							// Lat: 18°?55' N to 28°?27' N, Lng:154°?48' W to 178°?22' W
+							// Lat: 18ï¿½?55' N to 28ï¿½?27' N, Lng:154ï¿½?48' W to 178ï¿½?22' W
 							// (225, 504) to (356, 588) on map
 
 							// these are guesses

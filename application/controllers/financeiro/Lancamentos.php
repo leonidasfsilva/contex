@@ -75,9 +75,9 @@ class Lancamentos extends CI_Controller
                 $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
                 break;
             default:
-                if ($this->financeiro_model->countLancamentos(id_usuario()) > 20) {
+                if ($this->financeiro_model->countLancamentos(getUserId()) > 20) {
                     $limit = 20;
-                    $start = $this->financeiro_model->countLancamentos(id_usuario()) - $limit;
+                    $start = $this->financeiro_model->countLancamentos(getUserId()) - $limit;
                 }
                 $order_by = 'asc';
                 $limitado = true;
@@ -141,7 +141,7 @@ class Lancamentos extends CI_Controller
         $config['base_url'] = base_url('financeiro/lancamentos');
         $config['suffix'] = '&' . $query_string;
         $config['first_url'] = $config['base_url'] . '?' . $query_string;
-        $config['total_rows'] = $this->financeiro_model->countLancamentos(id_usuario(), $where, $limit, $start);
+        $config['total_rows'] = $this->financeiro_model->countLancamentos(getUserId(), $where, $limit, $start);
         $config['per_page'] = 20;
         $config['page_query_string'] = true;
         $config['next_link'] = false;
@@ -165,16 +165,16 @@ class Lancamentos extends CI_Controller
 
         $this->pagination->initialize($config);
 
-        $this->data['total_provisorio'] = $this->financeiro_model->getTotalProvisorio(id_usuario());
-        $this->data['saidas_pendentes'] = $this->financeiro_model->getSaidasPendentes(id_usuario());
-        $this->data['entradas_pendentes'] = $this->financeiro_model->getEntradasPendentes(id_usuario());
-        $this->data['total'] = $this->financeiro_model->getTotal(id_usuario());
+        $this->data['total_provisorio'] = $this->financeiro_model->getTotalProvisorio(getUserId());
+        $this->data['saidas_pendentes'] = $this->financeiro_model->getSaidasPendentes(getUserId());
+        $this->data['entradas_pendentes'] = $this->financeiro_model->getEntradasPendentes(getUserId());
+        $this->data['total'] = $this->financeiro_model->getTotal(getUserId());
         $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
         $this->data['results'] = $this->financeiro_model->get(
             'lancamentos',
             '*',
             $where,
-            id_usuario(),
+            getUserId(),
             $config['per_page'],
             $start,
             $limit,
@@ -216,7 +216,7 @@ class Lancamentos extends CI_Controller
         $data = array(
             'descricao' => padronizarString($this->input->post('descricao')),
             'valor' => $valor,
-            'id_usuario' => id_usuario(),
+            'id_usuario' => getUserId(),
             'data_lancamento' => $vencimento,
             'data_pagamento' => $recebimento != null ? $recebimento : $vencimento,
             'baixado' => $this->input->post('recebido') ?: 0,
@@ -270,7 +270,7 @@ class Lancamentos extends CI_Controller
         $data = array(
             'descricao' => padronizarString($this->input->post('descricao')),
             'valor' => $valor,
-            'id_usuario' => id_usuario(),
+            'id_usuario' => getUserId(),
             'data_lancamento' => $vencimento,
             'data_pagamento' => $pagamento != null ? $pagamento : $vencimento,
             'baixado' => $this->input->post('pago') ?: 0,
@@ -387,9 +387,9 @@ class Lancamentos extends CI_Controller
         $urlAtual = $this->input->post('urlAtual');
         $termo = $this->input->post('termo');
         $this->load->library('pagination');
-        $this->data['total'] = $this->financeiro_model->getTotal(id_usuario());
+        $this->data['total'] = $this->financeiro_model->getTotal(getUserId());
         $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
-        $this->data['results'] = $this->financeiro_model->pesquisa($termo, id_usuario());
+        $this->data['results'] = $this->financeiro_model->pesquisa($termo, getUserId());
         $this->data['view'] = 'financeiro/lancamentos';
         $this->load->view('tema/topo', $this->data);
     }

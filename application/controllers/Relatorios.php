@@ -83,7 +83,7 @@ class Relatorios extends CI_Controller
 
         $data['title'] = 'Relatório de Clientes';
         $data['clientes'] = $this->Relatorios_model->clientesRapid();
-        $data['emitente'] = $this->Mxcode_model->getEmitente(id_usuario());
+        $data['emitente'] = $this->Mxcode_model->getEmitente(getUserId());
         $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
         $data['css'] = file_get_contents(base_url() . 'assets/css/styles.css'); // external css
 
@@ -102,7 +102,7 @@ class Relatorios extends CI_Controller
 
         $data['title'] = 'Relatório de Clientes';
         $data['clientes'] = $this->Relatorios_model->clientesRapid();
-        $data['emitente'] = $this->Mxcode_model->getEmitente(id_usuario());
+        $data['emitente'] = $this->Mxcode_model->getEmitente(getUserId());
         $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
 
 //        $this->load->helper('mpdf');

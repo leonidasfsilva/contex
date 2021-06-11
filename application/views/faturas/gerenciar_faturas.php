@@ -17,7 +17,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         $disabledConfig = 'disabled';
     } else {
         foreach ($cartoes as $c) {
-            if ($c->id_usuario != id_usuario()) {
+            if ($c->id_usuario != getUserId()) {
                 if ($c->adicional) {
                     if ($cartao_selecionado->id_cartao == $c->id_cartao) {
                         $disabledFatura = 'disabled';

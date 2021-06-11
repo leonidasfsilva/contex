@@ -68,7 +68,7 @@ class Configuracoes extends CI_Controller
         }
 
         $data['menuConfiguracoes'] = true;
-        $data['dados'] = $this->configs_model->getConfigsUsuario(id_usuario());
+        $data['dados'] = $this->configs_model->getConfigsUsuario(getUserId());
         $data['view'] = 'configuracoes/usuario';
         $this->load->view('tema/topo', $data);
     }
@@ -157,8 +157,8 @@ class Configuracoes extends CI_Controller
             redirect('mxcode/login');
         }
 
-        $data['dados'] = $this->mxcode_model->getUsuario(id_usuario());
-        $data['usuario'] = $this->mxcode_model->getById(id_usuario());
+        $data['dados'] = $this->mxcode_model->getUsuario(getUserId());
+        $data['usuario'] = $this->mxcode_model->getById(getUserId());
         $data['view'] = 'mxcode/minhaConta';
         $data['minhaConta'] = 'Conta';
         $this->load->view('tema/topo', $data);
@@ -201,7 +201,7 @@ class Configuracoes extends CI_Controller
 
         $termo = $this->input->get('termo');
 
-        $data['results'] = $this->mxcode_model->pesquisar($termo, id_usuario());
+        $data['results'] = $this->mxcode_model->pesquisar($termo, getUserId());
         $this->data['produtos'] = $data['results']['produtos'];
         $this->data['servicos'] = $data['results']['servicos'];
         $this->data['os'] = $data['results']['os'];
@@ -222,7 +222,7 @@ class Configuracoes extends CI_Controller
     public function sair()
     {
         if ((session_id()) && ($this->session->userdata('logado'))) {
-            gravaLog(id_usuario(), nome_usuario(), email_usuario(), 'Logoff no sistema', getenv("REMOTE_ADDR"));
+            gravaLog(getUserId(), getUserName(), getUserEmail(), 'Logoff no sistema', getenv("REMOTE_ADDR"));
             $this->session->sess_destroy();
             redirect('mxcode/login');
         } else {
@@ -270,7 +270,7 @@ class Configuracoes extends CI_Controller
                     );
 
                     $this->session->set_userdata($session_data);
-                    gravaLog(id_usuario(), nome_usuario(), email_usuario(), 'Login no sistema', getenv("REMOTE_ADDR"));
+                    gravaLog(getUserId(), getUserName(), getUserEmail(), 'Login no sistema', getenv("REMOTE_ADDR"));
                     redirect('/');
                 } else {
                     gravaLog($usuario->id_usuarios, $usuario->nome, $usuario->email, 'Tentativa de login recusada: senha incorreta', getenv("REMOTE_ADDR"));
@@ -327,7 +327,7 @@ class Configuracoes extends CI_Controller
         }
 
         $data['menuConfiguracoes'] = 'Configuracoes';
-        $data['dados'] = $this->mxcode_model->getEmitente(id_usuario());
+        $data['dados'] = $this->mxcode_model->getEmitente(getUserId());
         $data['view'] = 'mxcode/emitente';
         $this->load->view('tema/topo', $data);
     }
@@ -366,7 +366,7 @@ class Configuracoes extends CI_Controller
             'cep' => $this->input->post('cep'),
             'telefone' => $this->input->post('telefone'),
             'email' => $this->input->post('email'),
-            'id_usuario' => id_usuario(),
+            'id_usuario' => getUserId(),
         );
 
         $retorno = $this->mxcode_model->add('emitente', $data);
@@ -484,7 +484,7 @@ class Configuracoes extends CI_Controller
             redirect(base_url() . 'mxcode/emitente');
         }
 
-        $logo_atual = $this->mxcode_model->getLogoEmitente(id_usuario());
+        $logo_atual = $this->mxcode_model->getLogoEmitente(getUserId());
 
         if ($logo_atual->logomarca) {
             unlink('assets/uploads/logomarcas/' . $logo_atual->logomarca);
@@ -522,7 +522,7 @@ class Configuracoes extends CI_Controller
             redirect(base_url() . 'mxcode/emitente');
         }
 
-        $logo_atual = $this->mxcode_model->getLogoEmitente(id_usuario());
+        $logo_atual = $this->mxcode_model->getLogoEmitente(getUserId());
         if ($logo_atual) {
             unlink('assets/uploads/logomarcas/' . $logo_atual->logomarca);
         }
@@ -548,7 +548,7 @@ class Configuracoes extends CI_Controller
         if ($_FILES['userfile']['size'] > 0) {
 
             $dir = 'assets/uploads/avatars';
-            $avatar_atual = $this->mxcode_model->getAvatarUsuario(id_usuario());
+            $avatar_atual = $this->mxcode_model->getAvatarUsuario(getUserId());
 
             if ($avatar_atual->avatar) {
                 unlink($dir . '/' . $avatar_atual->avatar);
@@ -573,9 +573,9 @@ class Configuracoes extends CI_Controller
 //                redirect(base_url() . 'mxcode/minhaConta');
             }
 
-            $retorno = $this->mxcode_model->editAvatarUsuario(id_usuario(), $image);
+            $retorno = $this->mxcode_model->editAvatarUsuario(getUserId(), $image);
             if ($retorno) {
-                $usuario = $this->mxcode_model->getUsuario(id_usuario());
+                $usuario = $this->mxcode_model->getUsuario(getUserId());
                 $session_data = array(
                     'nome' => $usuario->nome,
                     'avatar' => $usuario->avatar,
@@ -608,15 +608,15 @@ class Configuracoes extends CI_Controller
         }
 
         $dir = 'assets/uploads/avatars';
-        $avatar_atual = $this->mxcode_model->getAvatarUsuario(id_usuario());
+        $avatar_atual = $this->mxcode_model->getAvatarUsuario(getUserId());
 
         if ($avatar_atual->avatar) {
             unlink($dir . '/' . $avatar_atual->avatar);
         }
 
-        $retorno = $this->mxcode_model->excluirAvatarUsuario(id_usuario());
+        $retorno = $this->mxcode_model->excluirAvatarUsuario(getUserId());
         if ($retorno) {
-            $usuario = $this->mxcode_model->getUsuario(id_usuario());
+            $usuario = $this->mxcode_model->getUsuario(getUserId());
             $session_data = array(
                 'nome' => $usuario->nome,
                 'avatar' => $usuario->avatar,
@@ -668,36 +668,36 @@ class Configuracoes extends CI_Controller
     public function setWidgetLancamentos()
     {
         if ($_POST['value'] == 1) {
-            $this->configs_model->setWidgetLancamentos(id_usuario());
+            $this->configs_model->setWidgetLancamentos(getUserId());
         } else {
-            $this->configs_model->unsetWidgetLancamentos(id_usuario());
+            $this->configs_model->unsetWidgetLancamentos(getUserId());
         }
     }
 
     public function setWidgetCartaoCredito()
     {
         if ($_POST['value'] == 1) {
-            $this->configs_model->setWidgetCartaoCredito(id_usuario());
+            $this->configs_model->setWidgetCartaoCredito(getUserId());
         } else {
-            $this->configs_model->unsetWidgetCartaoCredito(id_usuario());
+            $this->configs_model->unsetWidgetCartaoCredito(getUserId());
         }
     }
 
     public function setWidgetInvestimentos()
     {
         if ($_POST['value'] == 1) {
-            $this->configs_model->setWidgetInvestimentos(id_usuario());
+            $this->configs_model->setWidgetInvestimentos(getUserId());
         } else {
-            $this->configs_model->unsetWidgetInvestimentos(id_usuario());
+            $this->configs_model->unsetWidgetInvestimentos(getUserId());
         }
     }
 
     public function setWidgetPendencias()
     {
         if ($_POST['value'] == 1) {
-            $this->configs_model->setWidgetPendencias(id_usuario());
+            $this->configs_model->setWidgetPendencias(getUserId());
         } else {
-            $this->configs_model->unsetWidgetPendencias(id_usuario());
+            $this->configs_model->unsetWidgetPendencias(getUserId());
         }
     }
 }

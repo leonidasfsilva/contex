@@ -19,7 +19,7 @@ class Consumo extends CI_Controller
 
     public function index()
     {
-        $configs = $this->consumo_model->getConfigsConsumo(id_usuario());
+        $configs = $this->consumo_model->getConfigsConsumo(getUserId());
         $inicio_medicao = explode('-', $configs->inicio_medicao);
         $ano = $inicio_medicao[0];
         $mes = $inicio_medicao[1] + 1;
@@ -27,7 +27,7 @@ class Consumo extends CI_Controller
 
         $data['referencia'] = padronizarString(strftime('%B / %Y', strtotime($dia . '-' . $mes . '-' . $ano)));
         $data['configs'] = $configs;
-        $data['results'] = $this->consumo_model->getConsumosUsuario(id_usuario());
+        $data['results'] = $this->consumo_model->getConsumosUsuario(getUserId());
         $data['menuConsumo'] = true;
         $data['view'] = 'consumo/consumo';
         $this->load->view('tema/topo', $data);
@@ -53,10 +53,10 @@ class Consumo extends CI_Controller
                 'valor_kwh' => $valor,
                 'leitura_inicial' => $_POST['leitura_inicial'],
                 'data_leitura' => $data_leitura,
-                'id_usuario' => id_usuario(),
+                'id_usuario' => getUserId(),
             );
             // verifica se o usuário já possui configurações de consumo cadastradas
-            if (!$this->consumo_model->getConfigsConsumo(id_usuario())) {
+            if (!$this->consumo_model->getConfigsConsumo(getUserId())) {
                 if ($this->consumo_model->add('configs_consumo_assoc', $data)) {
                     $this->session->set_flashdata('sucesso', 'Configurações de consumo cadastradas com sucesso!');
                     redirect('consumo');
@@ -65,7 +65,7 @@ class Consumo extends CI_Controller
                     redirect('consumo/configuracoes');
                 }
             } else {
-                if ($this->consumo_model->edit('configs_consumo_assoc', $data, 'id_usuario', id_usuario())) {
+                if ($this->consumo_model->edit('configs_consumo_assoc', $data, 'id_usuario', getUserId())) {
                     $this->session->set_flashdata('sucesso', 'Configurações de consumo atualizadas com sucesso!');
                     redirect('consumo');
                 } else {
@@ -74,7 +74,7 @@ class Consumo extends CI_Controller
                 }
             }
         }
-        $data['configs'] = $this->consumo_model->getConfigsConsumo(id_usuario());
+        $data['configs'] = $this->consumo_model->getConfigsConsumo(getUserId());
         $data['view'] = 'consumo/configuracoes';
         $data['menuConsumo'] = true;
         $this->load->view('tema/topo', $data);
@@ -84,9 +84,9 @@ class Consumo extends CI_Controller
     {
         $leitura = $_POST['leitura'];
         $data_leitura = $_POST['data_leitura'];
-        $configs = $this->consumo_model->getConfigsConsumo(id_usuario());
+        $configs = $this->consumo_model->getConfigsConsumo(getUserId());
 
-        if ($consumo_usuario = $this->consumo_model->getConsumoUsuario(id_usuario())) {
+        if ($consumo_usuario = $this->consumo_model->getConsumoUsuario(getUserId())) {
             $ultima_leitura = $consumo_usuario->leitura_atual;
         } else {
             $ultima_leitura = $configs->leitura_inicial;
@@ -115,7 +115,7 @@ class Consumo extends CI_Controller
             'valor' => $valor,
             'leitura_atual' => $leitura,
             'leitura_anterior' => $ultima_leitura,
-            'id_usuario' => id_usuario(),
+            'id_usuario' => getUserId(),
             'consumo' => $consumo,
             'data_leitura' => $data_leitura,
             'mes_referencia' => $mes,
@@ -136,7 +136,7 @@ class Consumo extends CI_Controller
         $id = $_POST['id'];
         $leitura = $_POST['leitura'];
         $data_leitura = $_POST['data_leitura'];
-        $configs = $this->consumo_model->getConfigsConsumo(id_usuario());
+        $configs = $this->consumo_model->getConfigsConsumo(getUserId());
         $consumo_atual = $this->consumo_model->getConsumoByID($id);
 
         if ($_POST['data_leitura']) {
@@ -162,7 +162,7 @@ class Consumo extends CI_Controller
             'valor' => $valor,
             'leitura_atual' => $leitura,
             'leitura_anterior' => $consumo_atual->leitura_anterior,
-            'id_usuario' => id_usuario(),
+            'id_usuario' => getUserId(),
             'consumo' => $consumo,
             'data_leitura' => $data_leitura,
             'mes_referencia' => $mes,
@@ -186,7 +186,7 @@ class Consumo extends CI_Controller
 
         $termo = $this->input->get('termo');
 
-        $data['results'] = $this->mxcode_model->pesquisar($termo, id_usuario());
+        $data['results'] = $this->mxcode_model->pesquisar($termo, getUserId());
         $this->data['produtos'] = $data['results']['produtos'];
         $this->data['servicos'] = $data['results']['servicos'];
         $this->data['os'] = $data['results']['os'];
@@ -237,7 +237,7 @@ class Consumo extends CI_Controller
             }
 
         } else {
-            $chamadoUsuario = $this->chamados_model->verificaChamadoPertenceUsuario(id_usuario());
+            $chamadoUsuario = $this->chamados_model->verificaChamadoPertenceUsuario(getUserId());
             if ($chamadoUsuario) {
                 $data2 = array(
                     'notifica_usuario' => 0
@@ -283,7 +283,7 @@ class Consumo extends CI_Controller
         if ($this->session->userdata('permissao') == 1) {
             $data = array(
                 'resposta' => $_POST['resposta'],
-                'id_usuario' => id_usuario(),
+                'id_usuario' => getUserId(),
                 'id_chamado' => $_POST['id_chamado'],
             );
             $data2 = array(
@@ -293,7 +293,7 @@ class Consumo extends CI_Controller
         } else {
             $data = array(
                 'resposta' => $_POST['resposta'],
-                'id_usuario' => id_usuario(),
+                'id_usuario' => getUserId(),
                 'id_chamado' => $_POST['id_chamado'],
             );
             $data2 = array(
@@ -333,7 +333,7 @@ class Consumo extends CI_Controller
 
     public function getNotificacoesUsuario()
     {
-        $this->chamados_model->usuarioTemNotificacoes(id_usuario());
+        $this->chamados_model->usuarioTemNotificacoes(getUserId());
     }
 
 }

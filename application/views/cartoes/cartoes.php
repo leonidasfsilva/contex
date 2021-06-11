@@ -38,7 +38,7 @@
                     $mascara = preg_replace('/\d/', '*', $n_cartao);
 
                     if ($r->adicional) {
-                        if ($r->id_usuario == id_usuario()) {
+                        if ($r->id_usuario == getUserId()) {
                             $disabled_editar = 'disabled="disabled"';
                             $disabled_excluir = 'disabled="disabled"';
                         } else {

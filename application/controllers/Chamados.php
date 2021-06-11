@@ -27,7 +27,7 @@ class Chamados extends CI_Controller
         if ($this->session->userdata('permissao') == 1) {
             $data['chamados'] = $this->chamados_model->getChamados();
         } else {
-            $data['chamados'] = $this->chamados_model->getChamadosUsuario(id_usuario());
+            $data['chamados'] = $this->chamados_model->getChamadosUsuario(getUserId());
         }
         $data['assuntos'] = $this->chamados_model->getAssuntos();
         $data['view'] = 'chamados/chamados';
@@ -42,7 +42,7 @@ class Chamados extends CI_Controller
 
         $termo = $this->input->get('termo');
 
-        $data['results'] = $this->mxcode_model->pesquisar($termo, id_usuario());
+        $data['results'] = $this->mxcode_model->pesquisar($termo, getUserId());
         $this->data['produtos'] = $data['results']['produtos'];
         $this->data['servicos'] = $data['results']['servicos'];
         $this->data['os'] = $data['results']['os'];
@@ -64,7 +64,7 @@ class Chamados extends CI_Controller
         $data = array(
             'assunto' => $assunto,
             'descricao' => $descricao,
-            'id_usuario' => id_usuario(),
+            'id_usuario' => getUserId(),
             'status_chamado' => 1,
             'notifica_admin' => 1,
         );
@@ -119,7 +119,7 @@ class Chamados extends CI_Controller
             }
 
         } else {
-            $chamadoUsuario = $this->chamados_model->verificaChamadoPertenceUsuario(id_usuario());
+            $chamadoUsuario = $this->chamados_model->verificaChamadoPertenceUsuario(getUserId());
             if ($chamadoUsuario) {
                 $data2 = array(
                     'notifica_usuario' => 0
@@ -165,7 +165,7 @@ class Chamados extends CI_Controller
         if ($this->session->userdata('permissao') == 1) {
             $data = array(
                 'resposta' => $_POST['resposta'],
-                'id_usuario' => id_usuario(),
+                'id_usuario' => getUserId(),
                 'id_chamado' => $_POST['id_chamado'],
             );
             $data2 = array(
@@ -175,7 +175,7 @@ class Chamados extends CI_Controller
         } else {
             $data = array(
                 'resposta' => $_POST['resposta'],
-                'id_usuario' => id_usuario(),
+                'id_usuario' => getUserId(),
                 'id_chamado' => $_POST['id_chamado'],
             );
             $data2 = array(
@@ -216,7 +216,7 @@ class Chamados extends CI_Controller
 
     public function getNotificacoesUsuario()
     {
-        $this->chamados_model->usuarioTemNotificacoes(id_usuario());
+        $this->chamados_model->usuarioTemNotificacoes(getUserId());
     }
 
 }

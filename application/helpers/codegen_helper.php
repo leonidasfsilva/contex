@@ -61,12 +61,10 @@ function clean_header($array)
 
 function validate_money($valor)
 {
-
     if (preg_match("/^([0-9]*)\.(\d{2})$/", $valor)) {
         return true;
     }
     return false;
-
 }
 
 function padronizarString($str)
@@ -97,44 +95,28 @@ function gravaLog($id_usuario = null, $nome = null, $email = null, $acao = null,
     $CI->mxcode_model->gravaLog($data);
 }
 
-function id_usuario()
+function getUserId()
 {
     $CI = get_instance();
     return $CI->session->userdata('id');
 }
 
-function permissao_usuario()
+function getUserPermission()
 {
     $CI = get_instance();
     return $CI->session->userdata('permissao');
 }
 
-function nome_usuario()
+function getUserName()
 {
     $CI = get_instance();
     return $CI->session->userdata('nome');
 }
 
-function email_usuario()
+function getUserEmail()
 {
     $CI = get_instance();
     return $CI->session->userdata('email');
-}
-
-function usuarioTemNotificacoes()
-{
-    $CI = get_instance();
-    $CI->load->model('chamados_model');
-
-    return $CI->chamados_model->usuarioTemNotificacoes(id_usuario());
-}
-
-function adminTemNotificacoes()
-{
-    $CI = get_instance();
-    $CI->load->model('chamados_model');
-
-    return $CI->chamados_model->adminTemNotificacoes(id_usuario());
 }
 
 function returnURL($get = null)
@@ -154,10 +136,28 @@ function returnURL($get = null)
     }
 }
 
-function encriptar($value) {
+function encriptar($value)
+{
     return base64_encode(base64_encode($value));
 }
 
-function decriptar($value) {
+function decriptar($value)
+{
     return base64_decode(base64_decode($value));
+}
+
+function getUserNotifications()
+{
+    $CI = get_instance();
+    $CI->load->model('chamados_model');
+
+    return $CI->chamados_model->usuarioTemNotificacoes(getUserId());
+}
+
+function getAdminNotifications()
+{
+    $CI = get_instance();
+    $CI->load->model('chamados_model');
+
+    return $CI->chamados_model->adminTemNotificacoes(getUserId());
 }

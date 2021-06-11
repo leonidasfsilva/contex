@@ -287,7 +287,7 @@ class Investimentos extends CI_Controller
         $this->load->library('pagination');
 
         $config['base_url'] = site_url() . 'financeiro/investimentos/?periodo=' . $periodo . '&situacao=' . $situacao;
-        $config['total_rows'] = $this->investimentos_model->count('investimentos', 'status = 1 AND id_usuario = ' . id_usuario());
+        $config['total_rows'] = $this->investimentos_model->count('investimentos', 'status = 1 AND id_usuario = ' . getUserId());
         $config['per_page'] = 100;
         $config['page_query_string'] = true;
         $config['next_link'] = 'Próxima';
@@ -311,16 +311,16 @@ class Investimentos extends CI_Controller
 
         $this->pagination->initialize($config);
 
-        $this->data['total_entradas'] = $this->investimentos_model->getTotalEntradas(id_usuario());
-        $this->data['saidas_pendentes'] = $this->investimentos_model->getSaidasPendentes(id_usuario());
-        $this->data['entradas_pendentes'] = $this->investimentos_model->getEntradasPendentes(id_usuario());
-        $this->data['total'] = $this->investimentos_model->getTotal(id_usuario());
+        $this->data['total_entradas'] = $this->investimentos_model->getTotalEntradas(getUserId());
+        $this->data['saidas_pendentes'] = $this->investimentos_model->getSaidasPendentes(getUserId());
+        $this->data['entradas_pendentes'] = $this->investimentos_model->getEntradasPendentes(getUserId());
+        $this->data['total'] = $this->investimentos_model->getTotal(getUserId());
         $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
         $this->data['results'] = $this->investimentos_model->get(
             'investimentos',
             '*',
             $where,
-            id_usuario(),
+            getUserId(),
             $limit,
             $config['total_rows'],
             $config['per_page'],
@@ -362,7 +362,7 @@ class Investimentos extends CI_Controller
         $data = array(
             'descricao' => $descricao,
             'valor' => $valor,
-            'id_usuario' => id_usuario(),
+            'id_usuario' => getUserId(),
             'data_lancamento' => $vencimento,
             'forma_pgto' => ($this->input->post('formaPgto')),
             'tipo' => 1
@@ -374,7 +374,7 @@ class Investimentos extends CI_Controller
                     'descricao' => $descricao,
                     'cliente_fornecedor' => padronizarString($this->session->userdata('nome')),
                     'valor' => $valor_corrente,
-                    'id_usuario' => id_usuario(),
+                    'id_usuario' => getUserId(),
                     'data_lancamento' => $vencimento,
                     'data_pagamento' => $vencimento,
                     'baixado' => 1,
@@ -426,7 +426,7 @@ class Investimentos extends CI_Controller
         $data = array(
             'descricao' => $descricao,
             'valor' => $valor_investimentos,
-            'id_usuario' => id_usuario(),
+            'id_usuario' => getUserId(),
             'data_lancamento' => $vencimento,
             'forma_pgto' => ($this->input->post('formaPgto')),
             'tipo' => 2
@@ -438,7 +438,7 @@ class Investimentos extends CI_Controller
                     'descricao' => $descricao,
                     'cliente_fornecedor' => padronizarString($this->session->userdata('nome')),
                     'valor' => $valor,
-                    'id_usuario' => id_usuario(),
+                    'id_usuario' => getUserId(),
                     'data_lancamento' => $vencimento,
                     'data_pagamento' => $vencimento,
                     'baixado' => 1,

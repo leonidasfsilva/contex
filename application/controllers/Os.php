@@ -275,7 +275,7 @@ class Os extends CI_Controller
         $this->data['result'] = $this->os_model->getById($this->uri->segment(3));
         $this->data['produtos'] = $this->os_model->getProdutos($this->uri->segment(3));
         $this->data['servicos'] = $this->os_model->getServicos($this->uri->segment(3));
-        $this->data['emitente'] = $this->mxcode_model->getEmitente(id_usuario());
+        $this->data['emitente'] = $this->mxcode_model->getEmitente(getUserId());
 
         $this->data['view'] = 'os/visualizarOs';
         $this->load->view('tema/topo', $this->data);

@@ -94,7 +94,7 @@ class Vendas extends CI_Controller
 
             $data = array(
                 'dataVenda' => $dataVenda,
-                'id_usuario' => id_usuario(),
+                'id_usuario' => getUserId(),
                 'clientes_id' => $this->input->post('clientes_id'),
                 'usuarios_id' => $this->input->post('usuarios_id'),
                 'faturado' => 0
@@ -110,7 +110,7 @@ class Vendas extends CI_Controller
             }
         }
 
-        $this->data['usuario'] = $this->usuarios_model->getById(id_usuario());
+        $this->data['usuario'] = $this->usuarios_model->getById(getUserId());
         $this->data['view'] = 'vendas/adicionarVenda';
         $this->load->view('tema/topo', $this->data);
     }
@@ -257,7 +257,7 @@ class Vendas extends CI_Controller
 
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
-            $this->vendas_model->autoCompleteCliente($q, id_usuario());
+            $this->vendas_model->autoCompleteCliente($q, getUserId());
         }
 
     }
@@ -373,7 +373,7 @@ class Vendas extends CI_Controller
             }
 
             $data = array(
-                'id_usuario' => id_usuario(),
+                'id_usuario' => getUserId(),
                 'vendas_id' => $venda_id,
                 'descricao' => padronizarString(set_value('descricao')),
                 'valor' => $this->input->post('valor'),

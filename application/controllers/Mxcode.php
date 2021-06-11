@@ -31,17 +31,17 @@ class Mxcode extends CI_Controller
 //        $this->data['os'] = $this->mxcode_model->getOsEstatisticas();
 //        $this->data['estatisticas_financeiro'] = $this->mxcode_model->getEstatisticasFinanceiro();
         $data['menuPainel'] = true;
-        $data['usuario'] = $this->mxcode_model->getById(id_usuario());
-        $data['lancamentos'] = $this->financeiro_model->getTotal(id_usuario());
-        $data['investimentos'] = $this->investimentos_model->getTotal(id_usuario());
-        $data['pendencias'] = $this->pendencia_model->getTotalDebito(id_usuario());
-        $data['fatura'] = $this->fatura_model->getValorTotalFaturaAtual(id_usuario());
-        $data['widgetLancamentos'] = $this->configs_model->getWidgetLancamentos(id_usuario());
-        $data['widgetCartaoCredito'] = $this->configs_model->getWidgetCartaoCredito(id_usuario());
-        $data['widgetInvestimentos'] = $this->configs_model->getWidgetInvestimentos(id_usuario());
-        $data['widgetPendencias'] = $this->configs_model->getWidgetPendencias(id_usuario());
+        $data['usuario'] = $this->mxcode_model->getById(getUserId());
+        $data['lancamentos'] = $this->financeiro_model->getTotal(getUserId());
+        $data['investimentos'] = $this->investimentos_model->getTotal(getUserId());
+        $data['pendencias'] = $this->pendencia_model->getTotalDebito(getUserId());
+        $data['fatura'] = $this->fatura_model->getValorTotalFaturaAtual(getUserId());
+        $data['widgetLancamentos'] = $this->configs_model->getWidgetLancamentos(getUserId());
+        $data['widgetCartaoCredito'] = $this->configs_model->getWidgetCartaoCredito(getUserId());
+        $data['widgetInvestimentos'] = $this->configs_model->getWidgetInvestimentos(getUserId());
+        $data['widgetPendencias'] = $this->configs_model->getWidgetPendencias(getUserId());
         $data['anuncios'] = $this->anuncios_model->getAnuncios('habilitado = 1 AND direcionado != 1');
-        $data['direcionados'] = $this->anuncios_model->getAnuncios('habilitado = 1 AND direcionado = 1 AND id_usuario = '. id_usuario());
+        $data['direcionados'] = $this->anuncios_model->getAnuncios('habilitado = 1 AND direcionado = 1 AND id_usuario = '. getUserId());
 
         $data['view'] = 'mxcode/painel';
         $this->load->view('tema/topo', $data);
@@ -54,8 +54,8 @@ class Mxcode extends CI_Controller
             redirect('mxcode/login');
         }
 
-        $data['dados'] = $this->mxcode_model->getUsuario(id_usuario());
-        $data['usuario'] = $this->mxcode_model->getById(id_usuario());
+        $data['dados'] = $this->mxcode_model->getUsuario(getUserId());
+        $data['usuario'] = $this->mxcode_model->getById(getUserId());
         $data['view'] = 'mxcode/minhaConta';
         $data['minhaConta'] = 'Conta';
         $this->load->view('tema/topo', $data);
@@ -98,7 +98,7 @@ class Mxcode extends CI_Controller
 
         $termo = $this->input->get('termo');
 
-        $data['results'] = $this->mxcode_model->pesquisar($termo, id_usuario());
+        $data['results'] = $this->mxcode_model->pesquisar($termo, getUserId());
         $this->data['produtos'] = $data['results']['produtos'];
         $this->data['servicos'] = $data['results']['servicos'];
         $this->data['os'] = $data['results']['os'];
@@ -122,7 +122,7 @@ class Mxcode extends CI_Controller
     public function sair()
     {
         if ((session_id()) && ($this->session->userdata('logado'))) {
-            gravaLog(id_usuario(), nome_usuario(), email_usuario(), 'Logoff no sistema', getenv("REMOTE_ADDR"));
+            gravaLog(getUserId(), getUserName(), getUserEmail(), 'Logoff no sistema', getenv("REMOTE_ADDR"));
             $this->session->sess_destroy();
             redirect('mxcode/login');
         } else {
@@ -170,7 +170,7 @@ class Mxcode extends CI_Controller
                     );
 
                     $this->session->set_userdata($session_data);
-                    gravaLog(id_usuario(), nome_usuario(), email_usuario(), 'Login no sistema', getenv("REMOTE_ADDR"));
+                    gravaLog(getUserId(), getUserName(), getUserEmail(), 'Login no sistema', getenv("REMOTE_ADDR"));
                     if ($this->session->userdata('last_url')) {
                         header('location:' . $this->session->userdata('last_url'));
                     } else {
@@ -231,7 +231,7 @@ class Mxcode extends CI_Controller
         }
 
         $data['menuConfiguracoes'] = 'Configuracoes';
-        $data['dados'] = $this->mxcode_model->getEmitente(id_usuario());
+        $data['dados'] = $this->mxcode_model->getEmitente(getUserId());
         $data['view'] = 'mxcode/emitente';
         $this->load->view('tema/topo', $data);
     }
@@ -270,7 +270,7 @@ class Mxcode extends CI_Controller
             'cep' => $this->input->post('cep'),
             'telefone' => $this->input->post('telefone'),
             'email' => $this->input->post('email'),
-            'id_usuario' => id_usuario(),
+            'id_usuario' => getUserId(),
         );
 
         $retorno = $this->mxcode_model->add('emitente', $data);
@@ -388,7 +388,7 @@ class Mxcode extends CI_Controller
             redirect(base_url() . 'mxcode/emitente');
         }
 
-        $logo_atual = $this->mxcode_model->getLogoEmitente(id_usuario());
+        $logo_atual = $this->mxcode_model->getLogoEmitente(getUserId());
 
         if ($logo_atual->logomarca) {
             unlink('assets/uploads/logomarcas/' . $logo_atual->logomarca);
@@ -426,7 +426,7 @@ class Mxcode extends CI_Controller
             redirect(base_url() . 'mxcode/emitente');
         }
 
-        $logo_atual = $this->mxcode_model->getLogoEmitente(id_usuario());
+        $logo_atual = $this->mxcode_model->getLogoEmitente(getUserId());
         if ($logo_atual) {
             unlink('assets/uploads/logomarcas/' . $logo_atual->logomarca);
         }
@@ -452,7 +452,7 @@ class Mxcode extends CI_Controller
         if ($_FILES['userfile']['size'] > 0) {
 
             $dir = 'assets/uploads/avatars';
-            $avatar_atual = $this->mxcode_model->getAvatarUsuario(id_usuario());
+            $avatar_atual = $this->mxcode_model->getAvatarUsuario(getUserId());
 
             if ($avatar_atual->avatar) {
                 unlink($dir . '/' . $avatar_atual->avatar);
@@ -477,7 +477,7 @@ class Mxcode extends CI_Controller
 //                redirect(base_url() . 'mxcode/minhaConta');
             }
 
-            $retorno = $this->mxcode_model->editAvatarUsuario(id_usuario(), $image);
+            $retorno = $this->mxcode_model->editAvatarUsuario(getUserId(), $image);
 
             if ($retorno) {
                 $session_data = array(
@@ -507,16 +507,16 @@ class Mxcode extends CI_Controller
         }
 
         $dir = 'assets/uploads/avatars';
-        $avatar_atual = $this->mxcode_model->getAvatarUsuario(id_usuario());
+        $avatar_atual = $this->mxcode_model->getAvatarUsuario(getUserId());
 
         if ($avatar_atual->avatar) {
             unlink($dir . '/' . $avatar_atual->avatar);
         }
 
-        $retorno = $this->mxcode_model->excluirAvatarUsuario(id_usuario());
+        $retorno = $this->mxcode_model->excluirAvatarUsuario(getUserId());
 
         if ($retorno) {
-            $usuario = $this->mxcode_model->getUsuario(id_usuario());
+            $usuario = $this->mxcode_model->getUsuario(getUserId());
             $session_data = array(
                 'avatar' => $usuario->avatar,
             );
@@ -533,7 +533,7 @@ class Mxcode extends CI_Controller
 
     public function atualizarPerfil()
     {
-        $dados_usuario = $this->mxcode_model->getUsuario(id_usuario());
+        $dados_usuario = $this->mxcode_model->getUsuario(getUserId());
         if (!$dados_usuario->cpf) {
             if ($this->mxcode_model->verificaCPF($_POST['cpf'])) {
                 $this->session->set_flashdata('erro', 'O CPF informado pertence a outro usuário');

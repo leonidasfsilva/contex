@@ -5,7 +5,7 @@ $cliente = $this->input->get('cliente');
 
 if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
     if ($status_fatura == 1) {
-        if($id_usuario != id_usuario()) {
+        if($id_usuario != getUserId()) {
             $disabled_lancamento_1 = 'disabled';
         } else {
             $disabled_lancamento_1 = '';

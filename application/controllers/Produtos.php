@@ -56,7 +56,7 @@ class Produtos extends CI_Controller
         
         $this->pagination->initialize($config);
 
-        $this->data['results'] = $this->produtos_model->get('produtos', 'idProdutos,descricao,unidade,precoCompra,precoVenda,estoque,estoqueMinimo', '', id_usuario(), $config['per_page'], $this->uri->segment(3));
+        $this->data['results'] = $this->produtos_model->get('produtos', 'idProdutos,descricao,unidade,precoCompra,precoVenda,estoque,estoqueMinimo', '', getUserId(), $config['per_page'], $this->uri->segment(3));
        
         $this->data['view'] = 'produtos/produtos';
         $this->load->view('tema/topo', $this->data);
@@ -97,7 +97,7 @@ class Produtos extends CI_Controller
                 'estoqueMinimo' => set_value('estoqueMinimo'),
                 'saida' => set_value('saida'),
                 'entrada' => set_value('entrada'),
-                'id_usuario' => id_usuario()
+                'id_usuario' => getUserId()
             );
 
             if ($this->produtos_model->add('produtos', $data) == true) {

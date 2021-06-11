@@ -31,7 +31,7 @@ class Faturas extends CI_Controller
         $cliente = $this->input->get('id_cliente');
 
         $config['base_url'] = site_url() . 'financeiro/faturas/?periodo=' . $periodo;
-        $config['total_rows'] = $this->fatura_model->count('faturas', 'status = 1 AND id_usuario = ' . id_usuario());
+        $config['total_rows'] = $this->fatura_model->count('faturas', 'status = 1 AND id_usuario = ' . getUserId());
         $config['per_page'] = 100;
         $config['page_query_string'] = true;
         $config['next_link'] = 'Próxima';
@@ -67,14 +67,14 @@ class Faturas extends CI_Controller
             12 => '12 x',
         );
 
-        $primeiro_cartao = $this->cartoes_model->getPrimeiroCartaoUsuario(id_usuario());
+        $primeiro_cartao = $this->cartoes_model->getPrimeiroCartaoUsuario(getUserId());
 
         if ($_GET['id_cartao']) {
             $id_cartao = $_GET['id_cartao'];
             $cartao = $this->cartoes_model->cartaoExistente($id_cartao);
 
-            if ($cartao->id_usuario != id_usuario()) {
-                if ($cartao->id_usuario_titular != id_usuario()) {
+            if ($cartao->id_usuario != getUserId()) {
+                if ($cartao->id_usuario_titular != getUserId()) {
                     $this->session->set_flashdata('erro', 'Cartão solicitado não encontrado');
                     redirect('financeiro/faturas');
                 }
@@ -86,13 +86,13 @@ class Faturas extends CI_Controller
         $this->data['existe_configuracao'] = $this->fatura_model->existeConfiguracao($id_cartao);
         $this->data['dia_vencimento'] = $this->fatura_model->getDiaVencimentoFatura($id_cartao);
         $this->data['cartao_selecionado'] = $this->cartoes_model->getDetalhesCartao($id_cartao);
-        $this->data['cartoes'] = $this->cartoes_model->getCartoesUsuario(id_usuario());
-        $this->data['saldoVencidas'] = $this->fatura_model->getSaldoFaturasVencidas(id_usuario(), $id_cartao);
-        $this->data['saldoPendente'] = $this->fatura_model->getSaldoFaturasPendentes(id_usuario(), $id_cartao);
-        $this->data['saldoQuitado'] = $this->fatura_model->getSaldoFaturasPagas(id_usuario(), $id_cartao);
+        $this->data['cartoes'] = $this->cartoes_model->getCartoesUsuario(getUserId());
+        $this->data['saldoVencidas'] = $this->fatura_model->getSaldoFaturasVencidas(getUserId(), $id_cartao);
+        $this->data['saldoPendente'] = $this->fatura_model->getSaldoFaturasPendentes(getUserId(), $id_cartao);
+        $this->data['saldoQuitado'] = $this->fatura_model->getSaldoFaturasPagas(getUserId(), $id_cartao);
         $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
-        $this->data['faturaAberta'] = $this->fatura_model->getFaturaAbertaUsuario(id_usuario(), $id_cartao);
-        $this->data['results'] = $this->fatura_model->get('faturas', '*', $where, id_usuario(), $id_cartao, $config['per_page'], $this->input->get('per_page'));
+        $this->data['faturaAberta'] = $this->fatura_model->getFaturaAbertaUsuario(getUserId(), $id_cartao);
+        $this->data['results'] = $this->fatura_model->get('faturas', '*', $where, getUserId(), $id_cartao, $config['per_page'], $this->input->get('per_page'));
         $this->data['menuFinanceiro'] = true;
         $this->data['view'] = 'faturas/gerenciar_faturas';
         $this->load->view('tema/topo', $this->data);
@@ -121,7 +121,7 @@ class Faturas extends CI_Controller
         $this->load->library('pagination');
 
         $config['base_url'] = site_url() . 'faturas/';
-        $config['total_rows'] = $this->fatura_model->count('faturas', 'status = 1 AND id_usuario = ' . id_usuario());
+        $config['total_rows'] = $this->fatura_model->count('faturas', 'status = 1 AND id_usuario = ' . getUserId());
         $config['per_page'] = 0;
         $config['page_query_string'] = true;
         $config['next_link'] = 'Próxima';
@@ -177,8 +177,8 @@ class Faturas extends CI_Controller
             $fatura_selecionada = $this->fatura_model->getFatura($id_fatura);
             $cartao = $this->cartoes_model->getDetalhesCartao($id_cartao);
 
-            if (($fatura_selecionada->id_usuario == id_usuario() && $cartao->id_usuario == id_usuario()) || ($fatura_selecionada->id_cartao == $id_cartao && $cartao->id_usuario_titular == id_usuario())) {
-                $data['clientes'] = $this->pendencia_model->getClientes(id_usuario());
+            if (($fatura_selecionada->id_usuario == getUserId() && $cartao->id_usuario == getUserId()) || ($fatura_selecionada->id_cartao == $id_cartao && $cartao->id_usuario_titular == getUserId())) {
+                $data['clientes'] = $this->pendencia_model->getClientes(getUserId());
                 $data['selected_cliente'] = $cliente;
                 $data['fatura'] = $this->fatura_model->getDetalhesFatura($id_fatura);
                 $data['id_fatura'] = $id_fatura;
@@ -376,7 +376,7 @@ class Faturas extends CI_Controller
                             $data2 = array(
                                 'id_lancamento_fatura' => $last_id,
                                 // VERIFICAR O FUNCIONAMENTO DESTA REGRA DE NEGOCIO: id_usuario()
-                                'id_usuario' => id_usuario(),
+                                'id_usuario' => getUserId(),
                                 'id_cliente' => $this->input->post('id_cliente'),
                                 'descricao' => padronizarString($this->input->post('descricao')) . ' - ' . $parcela_atual . '/' . $total_parcelas,
                                 'tipo' => 1,
@@ -433,7 +433,7 @@ class Faturas extends CI_Controller
 
                         $data2 = array(
                             'id_lancamento_fatura' => $last_id,
-                            'id_usuario' => id_usuario(),
+                            'id_usuario' => getUserId(),
                             'id_cliente' => $this->input->post('id_cliente'),
                             'descricao' => padronizarString($this->input->post('descricao')),
                             'tipo' => 1,
@@ -530,7 +530,7 @@ class Faturas extends CI_Controller
             //ARRAY LANCAMENTOS_FATURAS
             $data = array(
                 'id_fatura' => $faturaAtual->id_fatura,
-                'id_usuario' => id_usuario(),
+                'id_usuario' => getUserId(),
                 'descricao' => padronizarString($this->input->post('descricao')),
                 'valor_total' => $valor,
                 'total_parcelas' => $qnt_parcelas,
@@ -632,7 +632,7 @@ class Faturas extends CI_Controller
 
                             $data2 = array(
                                 'id_lancamento_fatura' => $id_lancamento,
-                                'id_usuario' => id_usuario(),
+                                'id_usuario' => getUserId(),
                                 'id_cliente' => $this->input->post('id_cliente'),
                                 'descricao' => padronizarString($this->input->post('descricao')) . ' - ' . $parcela_atual . '/' . $total_parcelas,
                                 'tipo' => 1,
@@ -689,7 +689,7 @@ class Faturas extends CI_Controller
 
                         $data2 = array(
                             'id_lancamento_fatura' => $id_lancamento,
-                            'id_usuario' => id_usuario(),
+                            'id_usuario' => getUserId(),
                             'id_cliente' => $this->input->post('id_cliente'),
                             'descricao' => padronizarString($this->input->post('descricao')),
                             'tipo' => 1,
@@ -774,7 +774,7 @@ class Faturas extends CI_Controller
         $vencimentoFormatado = $ano . '-' . $mes . '-' . $dia;
 
         $data = array(
-            'id_usuario' => id_usuario(),
+            'id_usuario' => getUserId(),
             'id_cartao' => $_POST['id_cartao'],
             'mes_referencia' => $mes_referencia,
             'ano_referencia' => $ano,
@@ -894,7 +894,7 @@ class Faturas extends CI_Controller
             if ($_POST['registrar']) {
                 $valor_total = $this->fatura_model->getValorTotalFatura($_POST['id_fatura']);
                 $data = array(
-                    'id_usuario' => id_usuario(),
+                    'id_usuario' => getUserId(),
                     'descricao' => 'FATURA CARTAO DE CREDITO',
                     'valor' => '-' . $valor_total,
                     'data_lancamento' => $data_pagamento,
@@ -925,7 +925,7 @@ class Faturas extends CI_Controller
         $dia = $_POST['dia_vencimento'];
 
         $data = array(
-            'id_usuario' => id_usuario(),
+            'id_usuario' => getUserId(),
             'id_cartao' => $id_cartao,
             'dia_vencimento' => $dia
         );
@@ -1012,9 +1012,9 @@ class Faturas extends CI_Controller
     public function pesquisaLancamentos()
     {
         $termo = $this->input->post('termo');
-        $data['total'] = $this->faturas_model->getTotal(id_usuario());
+        $data['total'] = $this->faturas_model->getTotal(getUserId());
         $data['formasPagamento'] = $this->faturas_model->getFormasPagamento();
-        $data['results'] = $this->faturas_model->pesquisa($termo, id_usuario());
+        $data['results'] = $this->faturas_model->pesquisa($termo, getUserId());
         $data['view'] = 'financeiro/lancamentos';
         $this->load->view('tema/topo', $data);
     }
@@ -1023,7 +1023,7 @@ class Faturas extends CI_Controller
     {
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
-            $this->fatura_model->autoCompleteCliente($q, id_usuario());
+            $this->fatura_model->autoCompleteCliente($q, getUserId());
         }
     }
 

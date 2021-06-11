@@ -280,12 +280,12 @@ $this->load->view('includes/custom_js');
                 </span>
                 <!--                numero de notificações-->
                 <?php if ($this->session->userdata('permissao') == 1) {
-                    if (adminTemNotificacoes() > 0) { ?>
-                        <span class="badge badge-danger"><?= adminTemNotificacoes() ?></span>
+                    if (getAdminNotifications() > 0) { ?>
+                        <span class="badge badge-danger"><?= getAdminNotifications() ?></span>
                     <?php }
                 } else {
-                    if (usuarioTemNotificacoes() > 0) { ?>
-                        <span class="badge badge-danger"><?= usuarioTemNotificacoes() ?></span>
+                    if (getUserNotifications() > 0) { ?>
+                        <span class="badge badge-danger"><?= getUserNotifications() ?></span>
                     <?php }
                 } ?>
             </a>
