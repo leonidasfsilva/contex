@@ -86,7 +86,7 @@
                     }
 
                     if (data.retorno !== null) {
-                        console.log('atualizaNotificacoesUsuario(): usuario possui novas notificacoes')
+                        // console.log('atualizaNotificacoesUsuario(): usuario possui novas notificacoes')
                         $('#notifications-panel-footer').removeClass('hidden')
                         $(data.retorno).each(function (index, item) {
                             if (height < 210) {
@@ -114,8 +114,8 @@
                             )
                         })
                     } else {
-                        console.log('atualizaNotificacoesUsuario(): usuario não possui novas notificacoes')
-                        height = 70
+                        // console.log('atualizaNotificacoesUsuario(): usuario não possui novas notificacoes')
+                        height = 73
                         $('#notifications-panel-footer').addClass('hidden')
                         $('#notifications-panel').append(
                             '<li class="text-center note note-info font-weight-bold" style="border: 0">' +
@@ -125,7 +125,7 @@
                     }
                     $('#scroll-panel').css('height', height)
                 } else {
-                    console.error('ERRO: atualizaNotificacoesUsuario()')
+                    // console.error('ERRO: atualizaNotificacoesUsuario()')
                 }
             }
         });
