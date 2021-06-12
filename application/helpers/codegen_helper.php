@@ -16,7 +16,7 @@ function differenceInHours($startdate, $enddate)
 
 function versionApp()
 {
-    return '17.07.2020';
+    return '2021.06.12';
 }
 
 function print_array($a)
@@ -31,22 +31,22 @@ function print_array_exit($a)
     echo '<pre>';
     print_r($a);
     echo '</pre>';
-    exit;
+    exit();
 }
 
-function print_var($a)
+function varDump($a)
 {
     echo '<pre>';
     var_dump($a);
     echo '</pre>';
 }
 
-function print_var_exit($a)
+function varDumpExit($a)
 {
     echo '<pre>';
     var_dump($a);
     echo '</pre>';
-    exit;
+    exit();
 }
 
 function clean_header($array)
@@ -146,7 +146,7 @@ function decriptar($value)
     return base64_decode(base64_decode($value));
 }
 
-function getUserNotifications()
+function getUserTickets()
 {
     $CI = get_instance();
     $CI->load->model('chamados_model');
@@ -154,10 +154,31 @@ function getUserNotifications()
     return $CI->chamados_model->usuarioTemNotificacoes(getUserId());
 }
 
-function getAdminNotifications()
+function getAdminTickets()
 {
     $CI = get_instance();
     $CI->load->model('chamados_model');
 
     return $CI->chamados_model->adminTemNotificacoes(getUserId());
 }
+
+function setNotification($idUsuario = null, $descricao = null, $icone = null, $link = null, $prioridade = null)
+{
+    $CI = get_instance();
+    $CI->load->model('notificacoes_model');
+
+    if ($idUsuario == null) {
+        $idUsuario = getUserId();
+    }
+
+    $data = array(
+        'id_usuario' => $idUsuario != null ? $idUsuario : getUserId(),
+        'descricao' => $descricao != null ? $descricao : '',
+        'icone' => $icone != null ? $icone : '',
+        'link' => $link != null ? $link : '',
+        'prioridade' => $prioridade != null ? $prioridade : '',
+    );
+
+    return $CI->notificacoes_model->setNotification($data);
+}
+
