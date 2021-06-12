@@ -4,6 +4,14 @@
             <i class="fas fa-cogs fa-lg fa-fw"></i>
             Configurações do Sistema
         </h3>
+        <div class="panel-ctrls">
+            <button onclick="getVersion()" role="button" class="btn btn-primary btn-sm" type="button">
+                <i class="fas fa-info-circle fa-fw"></i> Versão do Sistema
+            </button>
+            <!--            <a href="#" class="button-icon close-panel">-->
+            <!--                <i class="fas fa-times"></i>-->
+            <!--            </a>-->
+        </div>
     </div>
 </div>
 <div class="panel panel-midnightblue">
@@ -13,7 +21,9 @@
             Lista de Opções
         </h3>
         <div class="panel-ctrls">
-            <button href="#modalNova" role="button" data-toggle="modal" class="btn btn-primary btn-sm" type="button"><i class="fas fa-plus fa-fw"></i> Nova Opção</button>
+            <button href="#modalNova" role="button" data-toggle="modal" class="btn btn-primary btn-sm" type="button">
+                <i class="fas fa-plus fa-fw"></i> Nova Opção
+            </button>
             <!--            <a href="#" class="button-icon close-panel">-->
             <!--                <i class="fas fa-times"></i>-->
             <!--            </a>-->
@@ -232,11 +242,25 @@
     </div>
 </div>
 
-
 <script type="text/javascript">
+    function getVersion() {
+        const Toast = Swal.fire({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            showCloseButton: true,
+            timer: 5000,
+            timerProgressBar: true,
+            icon: 'info',
+            title: 'Versão do Sistema: <?= versionApp() ?>',
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+    }
 
     $(document).ready(function () {
-
         $('.excluir').click(function () {
             let id_opcao = $(this).attr('id_opcao');
 

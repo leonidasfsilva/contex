@@ -57,18 +57,18 @@ $this->load->view('includes/custom_js');
             </div>
 
             <div class="col-xs-6 col-sm-2">
-                <a href="#" class="shortcut-tile tile-orange">
+                <a href="<?= base_url('notificacoes') ?>" class="shortcut-tile tile-toyo">
                     <div class="tile-body">
-                        <div class="pull-left"><i class="fas fa-tools fa-fw"></i></div>
+                        <div class="pull-left"><i class="fas fa-bell fa-fw"></i></div>
                     </div>
                     <div class="tile-footer">
-                        Plugins
+                        Notificações
                     </div>
                 </a>
             </div>
 
             <div class="col-xs-6 col-sm-2">
-                <a href="#" class="shortcut-tile tile-midnightblue">
+                <a href="<?= base_url('configuracoes/sistema') ?>" class="shortcut-tile tile-midnightblue">
                     <div class="tile-body">
                         <div class="pull-left"><i class="fas fa-cog fa-fw"></i></div>
                     </div>
@@ -256,7 +256,7 @@ $this->load->view('includes/custom_js');
             <div class="dropdown-menu dropdown-alternate notifications arrow">
                 <div class="dd-header">
                     <span>Notificações</span>
-                    <span class="hidden"><a href="#">Settings</a></span>
+                    <span class=""><a href="<?= base_url('notificacoes') ?>">Acessar Notificações</a></span>
                 </div>
                 <div class="scrollthis scroll-pane" id="scroll-panel">
                     <ul class="scroll-content" id="notifications-panel">
@@ -280,12 +280,12 @@ $this->load->view('includes/custom_js');
                 </span>
                 <!--                numero de notificações-->
                 <?php if ($this->session->userdata('permissao') == 1) {
-                    if (getAdminNotifications() > 0) { ?>
-                        <span class="badge badge-danger"><?= getAdminNotifications() ?></span>
+                    if (getAdminTickets() > 0) { ?>
+                        <span class="badge badge-danger"><?= getAdminTickets() ?></span>
                     <?php }
                 } else {
-                    if (getUserNotifications() > 0) { ?>
-                        <span class="badge badge-danger"><?= getUserNotifications() ?></span>
+                    if (getUserTickets() > 0) { ?>
+                        <span class="badge badge-danger"><?= getUserTickets() ?></span>
                     <?php }
                 } ?>
             </a>
