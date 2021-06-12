@@ -422,7 +422,7 @@
         <?php if ($this->session->flashdata('erro') != null) { ?>
         Swal.fire({
             position: 'top',
-            type: 'error',
+            icon: 'error',
             // timer: 3000,
             title: 'Erro!',
             html: '<?= $this->session->flashdata('erro') ?>',
@@ -444,7 +444,7 @@
         <?php if ($this->session->flashdata('sucesso') != null) { ?>
         Swal.fire({
             position: 'top',
-            type: 'success',
+            icon: 'success',
             title: 'Feito!',
             timer: 3000,
             html: '<?= $this->session->flashdata('sucesso') ?>',
