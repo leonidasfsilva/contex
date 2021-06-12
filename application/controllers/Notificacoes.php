@@ -9,7 +9,8 @@ class Notificacoes extends CI_Controller
         parent::__construct();
     }
 
-    public function index() {
+    public function index()
+    {
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
             redirect('mxcode/login');
         }
@@ -52,7 +53,7 @@ class Notificacoes extends CI_Controller
         $this->notificacoes_model->lerNotificacao($this->input->post('id'));
     }
 
-    //Método para atualizar lista de notificacoes do usuario.
+    // Método para atualizar lista de notificacoes do usuario.
     public function atualizaNotificacoesUsuario()
     {
         if (!$this->input->is_ajax_request()) {

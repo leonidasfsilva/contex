@@ -65,7 +65,7 @@
                         conectado = false;
                         Swal.fire({
                             position: 'top',
-                            type: 'error',
+                            icon: 'error',
                             // timer: 3000,
                             title: 'Sessão Expirada',
                             html: 'Por favor, efetue seu login novamente para continuar.',
@@ -90,7 +90,7 @@
                         $('#notifications-panel-footer').removeClass('hidden')
                         $(data.retorno).each(function (index, item) {
                             if (height < 210) {
-                                height = height + 70;
+                                height = height + 73;
                             }
 
                             if (item.link) {
@@ -114,7 +114,7 @@
                             )
                         })
                     } else {
-                        console.log('atualizaNotificacoesUsuario(): usuario nao possui novas notificacoes')
+                        console.log('atualizaNotificacoesUsuario(): usuario não possui novas notificacoes')
                         height = 70
                         $('#notifications-panel-footer').addClass('hidden')
                         $('#notifications-panel').append(
@@ -130,7 +130,6 @@
             }
         });
     }
-
 
     $(document).on('ready', function (event) {
         atualizaNotificacoesUsuario();
