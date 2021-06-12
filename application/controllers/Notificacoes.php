@@ -28,7 +28,7 @@ class Notificacoes extends CI_Controller
             $descricao = $data['descricao'],
             $icone = $data['icone'],
             $link = $data['link'],
-            $prioridade = $data['prioridade'],
+            $prioridade = $data['prioridade']
         );
         if ($return) {
             $this->session->set_flashdata('sucesso', 'Notificação registrada com sucesso!');
