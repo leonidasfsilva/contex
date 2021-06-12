@@ -9,6 +9,35 @@ class Notificacoes extends CI_Controller
         parent::__construct();
     }
 
+    public function index() {
+        if ((!session_id()) || (!$this->session->userdata('logado'))) {
+            redirect('mxcode/login');
+        }
+
+        $data['notificacoes'] = $this->notificacoes_model->getNotificacoesUsuario();
+        $data['view'] = 'notificacoes/notificacoes';
+        $this->load->view('tema/topo', $data);
+    }
+
+    public function adicionar()
+    {
+        $data = $this->input->post();
+        $return = setNotification(
+            $idUsuario = $data['id_usuario'],
+            $descricao = $data['descricao'],
+            $icone = $data['icone'],
+            $link = $data['link'],
+            $prioridade = $data['prioridade'],
+        );
+        if ($return) {
+            $this->session->set_flashdata('sucesso', 'Notificação registrada com sucesso!');
+            redirect(base_url() . 'notificacoes');
+        } else {
+            $this->session->set_flashdata('erro', 'Erro ao tentar registrar notificação.');
+            redirect(base_url() . 'notificacoes');
+        }
+    }
+
     public function lerTodasNotificacoes()
     {
         $this->notificacoes_model->lerTodasNotificacoes(getUserId());
@@ -23,7 +52,7 @@ class Notificacoes extends CI_Controller
         $this->notificacoes_model->lerNotificacao($this->input->post('id'));
     }
 
-    //Funcao para atualizar lista de notificacoes do usuario.
+    //Método para atualizar lista de notificacoes do usuario.
     public function atualizaNotificacoesUsuario()
     {
         if (!$this->input->is_ajax_request()) {

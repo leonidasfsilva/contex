@@ -1,4 +1,4 @@
-<?php if (! defined('BASEPATH')) {
+<?php if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -203,10 +203,11 @@ class Notificacoes_model extends CI_Model
             ->count_all_results('notificacoes');
     }
 
-    function getNotificacoesUsuario($id_usuario)
+    function getNotificacoesUsuario($id_usuario = null)
     {
+
         return $this->db
-            ->where('id_usuario', $id_usuario)
+            ->where('id_usuario', $id_usuario != null ? $id_usuario : getUserId())
             ->where('lida', 0)
             ->get('notificacoes')
             ->result();
@@ -241,6 +242,15 @@ class Notificacoes_model extends CI_Model
             ->where('id_usuario', $id)
             ->get('notificacoes')
             ->result();
+    }
+
+    function setNotification($data)
+    {
+        $this->db->insert('notificacoes', $data);
+        if ($this->db->affected_rows() == 1) {
+            return true;
+        }
+        return false;
     }
 
 }
