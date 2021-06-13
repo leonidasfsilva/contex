@@ -17,25 +17,27 @@
             <div class="panel-body panel-no-padding">
                 <?php if ($notificacoes != null) {
                     foreach ($notificacoes as $notificacao) {
-
-                        $status_chamado = $this->chamados_model->getStatusChamado($notificacao->id_chamado);
-                        switch ($status_chamado) {
-                            case 1:
-                                $status = 'aberto';
-                                $cor_status = 'danger';
-                                break;
+                        switch ($notificacao->prioridade) {
                             case 2:
-                                $status = 'fechado';
-                                $cor_status = 'inverse';
+                                $prioridade = 'MÉDIA';
+                                $corPrioridade = 'primary';
                                 break;
                             case 3:
-                                $status = 'finalizado';
-                                $cor_status = 'success';
+                                $prioridade = 'ALTA';
+                                $corPrioridade = 'warning';
+                                break;
+                            case 4:
+                                $prioridade = 'URGENTE';
+                                $corPrioridade = 'danger';
+                                break;
+                            default:
+                                $prioridade = 'NORMAL';
+                                $corPrioridade = 'info';
                                 break;
                         }
 
-                        if ($this->chamados_model->notificacaoChamado($notificacao->id_chamado) > 0) {
-                            $cor = 'background-color: #00c5de2e;';
+                        if ($notificacao->lida == 0) {
+//                            $cor = 'background-color: #00c5de2e;';
                         } else {
                             $cor = '';
                         }
@@ -64,16 +66,14 @@
                         } ?>
                         <ul class="mailbox-msg-list">
                             <li style="<?= $cor ?>">
-                                <a href="<?= base_url('chamados/detalhes/' . $notificacao->id_chamado) ?>" class="mailbox-msg-list-item">
+                                <a href="<?= base_url($notificacao->link) ?>" onclick="lerNotificacao(<?= $notificacao->id ?>)" class="mailbox-msg-list-item">
                                     <span class="time"><?= ($intervalo) ?>
-                                    <small style="display: block;" class="label label-<?= ($cor_status) ?>"><?= ($status) ?></small>
+                                    <small style="display: block;" class="label label-<?= ($corPrioridade) ?>"><?= ($prioridade) ?></small>
                                     </span>
-                                    <img src="<?php echo $this->chamados_model->getAvatarUsuario($notificacao->id_usuario) != null ? base_url('assets/uploads/avatars/') .
-                                        $this->chamados_model->getAvatarUsuario($notificacao->id_usuario) : base_url('assets/img/avatars/padrao.png'); ?>"
-                                         alt="avatar" title="" style="">
+                                    <span class="icon"><i class="<?= $notificacao->icone ?>"></i></span>
                                     <div>
-                                        <span class="name"><?= $this->chamados_model->getNomeUsuario($notificacao->id_usuario) ?></span>
-                                        <span class="msg"><strong><?= '# ' . $notificacao->id_chamado . ' - ' . $notificacao->assunto ?>:</strong> <?= $notificacao->descricao ?></span>
+                                        <span class="name"><?= capsLock($notificacao->titulo) ?></span>
+                                        <span class="msg"><?= $notificacao->descricao ?></span>
                                     </div>
                                 </a>
                             </li>
@@ -100,141 +100,6 @@
     </div>
 </div>
 
-
-<!-- Modal DESATIVAR-->
-<div class="modal fade" id="modalDesativar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-warning">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white ">Desativar opção de configuração</h4>
-            </div>
-            <form action="<?php echo base_url('configuracoes/desativar') ?>" method="post">
-                <div class="modal-body">
-                    <p>Deseja realmente desativar esta opção de configuração?</p>
-                    <input type="hidden" id="id_desativar" name="id" value=""/>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
-                        Cancelar
-                    </button>
-                    <button class="btn btn-warning btn-sm"><i class="fa fa-check fa-fw"></i> Desativar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Modal ATIVAR-->
-<div class="modal fade" id="modalAtivar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-success">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white ">Ativar opção de configuração</h4>
-            </div>
-            <form action="<?php echo base_url('configuracoes/ativar') ?>" method="post">
-                <div class="modal-body">
-                    <p>Deseja realmente ativar esta opção de configuração?</p>
-                    <input type="hidden" id="id_ativar" name="id" value=""/>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
-                        Cancelar
-                    </button>
-                    <button class="btn btn-success btn-sm"><i class="fa fa-check fa-fw"></i> Ativar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Modal EDITAR-->
-<div class="modal fade" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white ">Editar opção de configuração</h4>
-            </div>
-            <form id="formEditar" action="<?php echo base_url('configuracoes/editar') ?>" method="post">
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label class="font-weight-bold" for="descricao">Descrição *</label>
-                            <input class="form-control" id="descricao" type="text" name="descricao" value=""/>
-                            <input type="hidden" name="id_opcao" id="id_opcao">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label for="setor" class="font-weight-bold">Setor *</label>
-                            <select name="setor" id="setor" class="form-control">
-                                <option value=""><< Selecione >></option>
-                                <?php if ($setores) {
-                                    foreach ($setores as $k => $v) { ?>
-                                        <option value="<?= $v ?>"><?= $v ?></option>
-                                    <?php }
-                                } ?>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button id="btnCancelLancamento" class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
-                        <i class="fa fa-times fa-fw"></i> Cancelar
-                    </button>
-                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Modal NOVA OPÇAO-->
-<div class="modal fade" id="modalNova" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white ">Adicionar nova opção de configuração</h4>
-            </div>
-            <form id="formNova" action="<?php echo base_url('configuracoes/adicionar') ?>" method="post">
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label class="font-weight-bold" for="descricao">Descrição *</label>
-                            <input class="form-control" id="descricao" type="text" name="descricao" value=""/>
-                            <input type="hidden" name="id_opcao" id="id_opcao">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label for="setor" class="font-weight-bold">Setor *</label>
-                            <select name="setor" id="setor" class="form-control">
-                                <option value=""><< Selecione >></option>
-                                <?php if ($setores) {
-                                    foreach ($setores as $k => $v) { ?>
-                                        <option value="<?= $v ?>"><?= $v ?></option>
-                                    <?php }
-                                } ?>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button id="btnCancelLancamento" class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
-                        <i class="fa fa-times fa-fw"></i> Cancelar
-                    </button>
-                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <!-- Modal NOVA NOTIFICAÇÃO-->
 <div class="modal fade" id="modalNovaNotificacao" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -247,14 +112,29 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
+                            <label class="font-weight-bold" for="titulo">Título *</label>
+                            <input class="form-control" id="titulo" type="text" name="titulo" value=""/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricao">Descrição *</label>
                             <input class="form-control" id="descricao" type="text" name="descricao" value=""/>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-lg-12">
+                        <div class="form-group col-lg-6">
                             <label class="font-weight-bold" for="link">Link</label>
                             <input class="form-control" id="link" type="text" name="link" value=""/>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label class="font-weight-bold" for="prioridade">Prioridade</label>
+                            <select class="form-control" name="prioridade">
+                                <option value="1">NORMAL</option>
+                                <option value="2">MÉDIA</option>
+                                <option value="3">ALTA</option>
+                                <option value="4">URGENTE</option>
+                            </select>
                         </div>
                     </div>
                     <div class="row">
@@ -375,11 +255,11 @@
         $("#formNova").validate({
             rules: {
                 descricao: {required: true},
-                setor: {required: true},
+                titulo: {required: true},
             },
             messages: {
-                descricao: {required: 'Informe a descrição da opção'},
-                setor: {required: 'Selecione o setor'},
+                titulo: {required: 'Informe o título da notificação'},
+                descricao: {required: 'Informe a descrição da notificação'},
             },
 
             errorClass: "help-block",

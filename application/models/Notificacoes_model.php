@@ -227,7 +227,7 @@ class Notificacoes_model extends CI_Model
     function lerNotificacao($id)
     {
         $this->db
-            ->where('id_notificacao', $id)
+            ->where('id', $id)
             ->update('notificacoes',
                 array(
                     'lida' => 1

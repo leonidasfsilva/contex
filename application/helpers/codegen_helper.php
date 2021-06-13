@@ -81,6 +81,11 @@ function padronizarString($str)
     return strtoupper($str);
 }
 
+function capsLock($str)
+{
+    return mb_convert_case($str, MB_CASE_UPPER, 'UTF-8');
+}
+
 function gravaLog($id_usuario = null, $nome = null, $email = null, $acao = null, $ip = null)
 {
     $CI = get_instance();
@@ -162,7 +167,7 @@ function getAdminTickets()
     return $CI->chamados_model->adminTemNotificacoes(getUserId());
 }
 
-function setNotification($idUsuario = null, $descricao = null, $icone = null, $link = null, $prioridade = null)
+function setNotification($idUsuario = null, $titulo = null, $descricao = null, $icone = null, $link = null, $prioridade = null)
 {
     $CI = get_instance();
     $CI->load->model('notificacoes_model');
@@ -173,6 +178,7 @@ function setNotification($idUsuario = null, $descricao = null, $icone = null, $l
 
     $data = array(
         'id_usuario' => $idUsuario != null ? $idUsuario : getUserId(),
+        'titulo' => $titulo != null ? $titulo : '',
         'descricao' => $descricao != null ? $descricao : '',
         'icone' => $icone != null ? $icone : '',
         'link' => $link != null ? $link : '',

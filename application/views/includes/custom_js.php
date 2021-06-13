@@ -106,9 +106,9 @@
                             }
                             $('#notifications-panel').append(
                                 '<li>' +
-                                '<a href="' + link + '" onclick="lerNotificacao(' + item.id_notificacao + ')" class="notification-info">' +
+                                '<a href="' + link + '" class="notification-info">' +
                                 '<div class="notification-icon"><i class="' + icone + '"></i></div>' +
-                                '<div class="notification-content ajax-notification">' + item.descricao + '</div>' +
+                                '<div class="notification-content ajax-notification font-weight-bold">' + (item.titulo) + '</div>' +
                                 '</a>' +
                                 '</li>'
                             )

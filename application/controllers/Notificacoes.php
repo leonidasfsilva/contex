@@ -25,6 +25,7 @@ class Notificacoes extends CI_Controller
         $data = $this->input->post();
         $return = setNotification(
             $idUsuario = $data['id_usuario'],
+            $titulo = $data['titulo'],
             $descricao = $data['descricao'],
             $icone = $data['icone'],
             $link = $data['link'],
