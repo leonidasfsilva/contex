@@ -90,7 +90,7 @@
                         $('#notifications-panel-footer').removeClass('hidden')
                         $(data.retorno).each(function (index, item) {
                             if (height < 210) {
-                                height = height + 73;
+                                height = height + 72;
                             }
 
                             if (item.link) {
@@ -119,7 +119,7 @@
                         $('#notifications-panel-footer').addClass('hidden')
                         $('#notifications-panel').append(
                             '<li class="text-center note note-info font-weight-bold" style="border: 0">' +
-                            '    Usuário não possui notificações' +
+                            '    Sem novas notificações' +
                             '</li>'
                         )
                     }

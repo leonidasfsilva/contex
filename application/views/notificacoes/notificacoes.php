@@ -86,9 +86,9 @@
                                 <!--                                <span class="time">30s</span>-->
                                 <!--                                <img src="assets/demo/avatar/avatar_09.png" alt="avatar" title="" style="">-->
                                 <div>
-                                    <span class="name ml20">Nenhuma notificação encontrada.</span>
+                                    <span class="name ml20">Nenhuma notificação encontrada</span>
                                     <?php if (getUserPermission() == 1) { ?>
-                                        <span class="msg ml20">Clique no botão acima para registrar uma nova notificação.</span>
+                                        <span class="msg ml20">Clique no botão acima para registrar uma nova notificação</span>
                                     <?php } ?>
                                 </div>
                             </a>
