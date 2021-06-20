@@ -26,7 +26,7 @@ class Lancamentos extends CI_Controller
         $this->lancamentos();
     }
 
-    //MODULO DE LANCAMENTOS
+    // MODULO DE LANCAMENTOS
     public function lancamentos()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) {
@@ -79,7 +79,7 @@ class Lancamentos extends CI_Controller
                     $limit = 20;
                     $start = $this->financeiro_model->countLancamentos(getUserId()) - $limit;
                 }
-                $order_by = 'asc';
+                $order_by = 'data_lancamento asc';
                 $limitado = true;
                 break;
         }
@@ -178,7 +178,7 @@ class Lancamentos extends CI_Controller
             $config['per_page'],
             $start,
             $limit,
-            $order_by);
+            $order_by = 'data_lancamento asc');
 
         $this->data['view'] = 'financeiro/lancamentos';
         $this->load->view('tema/topo', $this->data);
@@ -395,7 +395,7 @@ class Lancamentos extends CI_Controller
     }
 
 
-    //MODULO DE TESTES
+    // MODULO DE TESTES
     public function getTeste($id = null)
     {
 
@@ -408,7 +408,7 @@ class Lancamentos extends CI_Controller
 
     }
 
-    //MODULO DE RETORNO DE FILTROS POR PERIODO
+    // MODULO DE RETORNO DE FILTROS POR PERIODO
     protected function getThisYear()
     {
 
