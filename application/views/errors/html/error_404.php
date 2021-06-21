@@ -76,7 +76,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <h2>ERRO 404 - Página não encontrada</h2>
         </div>
         <div class="panel-body">
-            <div class="alert alert-danger font-weight-bold">A página requistada não foi encontrada em nosso servidor, clique no botão abaixo para retornar à página anterior.</div>
+            <div class="alert alert-danger font-weight-bold">A página solicitada não foi encontrada em nosso servidor, clique no botão abaixo para retornar à página anterior.</div>
             <p>
                 <button class="btn btn-primary" style="text-decoration: none" onclick="javascript:history.back()"><i class="fas fa-arrow-left fa-fw"></i>
                     Clique aqui para voltar
