@@ -5,6 +5,8 @@
 class Lancamentos extends CI_Controller
 {
 
+    protected $global_url;
+
     public function __construct()
     {
         parent::__construct();
@@ -18,7 +20,6 @@ class Lancamentos extends CI_Controller
         $this->load->model('clientes_model', '', true);
         $this->data['menuFinanceiro'] = 'Lancamentos';
         $this->global_url = base_url('financeiro/lancamentos');
-
     }
 
     public function index()
@@ -190,7 +191,12 @@ class Lancamentos extends CI_Controller
             $this->session->set_flashdata('erro', 'Você não tem permissão para adicionar lançamentos.');
             redirect(base_url());
         }
-        $urlAtual = $this->input->post('urlAtual');
+
+        if ($this->input->post('urlAtual') != null) {
+            $urlAtual = $this->input->post('urlAtual');
+        } else {
+            $urlAtual = $this->global_url;
+        }
 
         $vencimento = $this->input->post('vencimento');
         $recebimento = $this->input->post('recebimento');
@@ -227,14 +233,14 @@ class Lancamentos extends CI_Controller
 
         if ($this->financeiro_model->add('lancamentos', $data) == true) {
             $this->session->set_flashdata('sucesso', 'Entrada registrada com sucesso!');
-            redirect($this->global_url);
+            redirect($urlAtual);
         } else {
             $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar registrar entrada.');
-            redirect($this->global_url);
+            redirect($urlAtual);
         }
 
         $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar registrar entrada.');
-        redirect($this->global_url);
+        redirect($urlAtual);
     }
 
     public function saida()
@@ -243,7 +249,12 @@ class Lancamentos extends CI_Controller
             $this->session->set_flashdata('erro', 'Você não tem permissão para adicionar lançamentos.');
             redirect(base_url());
         }
-        $urlAtual = $this->input->post('urlAtual');
+
+        if ($this->input->post('urlAtual') != null) {
+            $urlAtual = $this->input->post('urlAtual');
+        } else {
+            $urlAtual = $this->global_url;
+        }
 
         $vencimento = $this->input->post('vencimento');
         $pagamento = $this->input->post('pagamento');
@@ -281,14 +292,13 @@ class Lancamentos extends CI_Controller
 
         if ($this->financeiro_model->add('lancamentos', $data) == true) {
             $this->session->set_flashdata('sucesso', 'Saída registrada com sucesso!');
-            redirect($this->global_url);
+            redirect($urlAtual);
         } else {
             $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar registrar saída.');
-            redirect($this->global_url);
+            redirect($urlAtual);
         }
-
         $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar registrar saída.');
-        redirect($this->global_url);
+        redirect($urlAtual);
     }
 
     public function editar()
@@ -298,83 +308,92 @@ class Lancamentos extends CI_Controller
             redirect(base_url());
         }
 
-        if ($_POST) {
-
-            $urlAtual = $this->input->post('urlAtual');
-            $vencimento = $this->input->post('vencimento');
-            $pagamento = $this->input->post('pagamento');
-
-            if ($vencimento != null) {
-                $vencimento = explode('/', $vencimento);
-                $vencimento = $vencimento[2] . '-' . $vencimento[1] . '-' . $vencimento[0];
-            } else {
-                $vencimento = date('Y-m-d');
-            }
-
-            if ($pagamento != null) {
-                $pagamento = explode('/', $pagamento);
-                $pagamento = $pagamento[2] . '-' . $pagamento[1] . '-' . $pagamento[0];
-            }
-
-            $tipo = ($this->input->post('tipo'));
-            $valor = $this->input->post('valor');
-
-            if ($tipo == 2) {
-                $valor = '-' . $valor;
-            }
-
-            $valor = str_replace(array('.', ','), array('', '.'), $valor);
-
-            $data = array(
-                'descricao' => padronizarString($this->input->post('descricao')),
-                'valor' => $valor,
-                'data_lancamento' => $vencimento,
-                'data_pagamento' => $pagamento != null ? $pagamento : $vencimento,
-                'baixado' => $this->input->post('pago') ?: 0,
-                'cliente_fornecedor' => padronizarString($this->input->post('fornecedor')),
-                'forma_pgto' => ($this->input->post('formaPgto')),
-                'tipo' => $tipo
-            );
-
-            $this->financeiro_model->edit('lancamentos', $data, 'id_lancamento', $this->input->post('id'));
-            $this->session->set_flashdata('sucesso', 'Lançamento alterado com sucesso!');
-            redirect($urlAtual);
-
-        } else {
+        if (!$this->input->post()) {
             $this->session->set_flashdata('erro', 'Método não permitido.');
             redirect($this->global_url);
+        }
+
+        if ($this->input->post('urlAtual') != null) {
+            $urlAtual = $this->input->post('urlAtual');
+        } else {
+            $urlAtual = $this->global_url;
+        }
+
+        $vencimento = $this->input->post('vencimento');
+        $pagamento = $this->input->post('pagamento');
+
+        if ($vencimento != null) {
+            $vencimento = explode('/', $vencimento);
+            $vencimento = $vencimento[2] . '-' . $vencimento[1] . '-' . $vencimento[0];
+        } else {
+            $vencimento = date('Y-m-d');
+        }
+
+        if ($pagamento != null) {
+            $pagamento = explode('/', $pagamento);
+            $pagamento = $pagamento[2] . '-' . $pagamento[1] . '-' . $pagamento[0];
+        }
+
+        $tipo = ($this->input->post('tipo'));
+        $valor = $this->input->post('valor');
+
+        if ($tipo == 2) {
+            $valor = '-' . $valor;
+        }
+
+        $valor = str_replace(array('.', ','), array('', '.'), $valor);
+
+        $data = array(
+            'descricao' => padronizarString($this->input->post('descricao')),
+            'valor' => $valor,
+            'data_lancamento' => $vencimento,
+            'data_pagamento' => $pagamento != null ? $pagamento : $vencimento,
+            'baixado' => $this->input->post('pago') ?: 0,
+            'cliente_fornecedor' => padronizarString($this->input->post('fornecedor')),
+            'forma_pgto' => ($this->input->post('formaPgto')),
+            'tipo' => $tipo
+        );
+
+        if ($this->financeiro_model->edit('lancamentos', $data, 'id_lancamento', $this->input->post('id'))) {
+            $this->session->set_flashdata('sucesso', 'Lançamento alterado com sucesso!');
+            redirect($urlAtual);
+        } else {
+            $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar alterar o registro.');
+            redirect($urlAtual);
         }
     }
 
     public function excluir()
     {
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
             $this->session->set_flashdata('erro', 'Você não tem permissão para excluir lançamentos.');
             redirect($this->global_url);
         }
 
         $id = $this->input->post('id');
-        $urlAtual = $this->input->post('urlAtual');
+
+        if ($this->input->post('urlAtual') != null) {
+            $urlAtual = $this->input->post('urlAtual');
+        } else {
+            $urlAtual = $this->global_url;
+        }
 
         if ($id == null || !is_numeric($id)) {
             $this->session->set_flashdata('erro', 'Método não permitido.');
             redirect($this->global_url);
         } else {
-
             $data = array(
                 'status' => 0
             );
 
             if ($this->financeiro_model->delete('lancamentos', $data, 'id_lancamento', $id) == true) {
                 $this->session->set_flashdata('sucesso', 'Lançamento excluído com sucesso!');
-                redirect($this->global_url);
+                redirect($urlAtual);
 
             } else {
                 $this->session->set_flashdata('erro', 'Erro ao tentar excluir lançamento.');
-                redirect($this->global_url);
+                redirect($urlAtual);
             }
-
         }
     }
 
@@ -384,8 +403,7 @@ class Lancamentos extends CI_Controller
             redirect('mxcode/login');
         }
 
-        $urlAtual = $this->input->post('urlAtual');
-        $termo = $this->input->post('termo');
+        $termo = $this->input->get('search');
         $this->load->library('pagination');
         $this->data['total'] = $this->financeiro_model->getTotal(getUserId());
         $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();

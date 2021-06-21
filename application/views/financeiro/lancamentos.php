@@ -32,13 +32,12 @@ $fim = $this->input->get('dataFinal');
                         Pesquisar
                     </button>
                     <ul class="dropdown-menu">
-                        <form action="<?php echo base_url() ?>financeiro/lancamentos/pesquisa" style="margin: 0 15px 0 15px" method="post" autocomplete="off">
-                            <input type="hidden" id="urlPesquisa" name="urlAtual">
+                        <form action="<?php echo base_url('financeiro/lancamentos/pesquisa') ?>" style="margin: 0 15px 0 15px" method="get" autocomplete="off">
                             <div class="input-group">
-                                <input type="text" class="form-control" id="input_pesquisa" name="termo" placeholder="Pesquisar" style="margin-top: 6px;" required>
+                                <input type="text" class="form-control" id="input_pesquisa" name="search" placeholder="Pesquisar" style="margin-top: 6px;" required>
                                 <span class="input-group-btn">
-						                    <button type="submit" class="btn btn-primary"><i class="fas fa-search fa-fw"></i></button>
-                                    </span>
+                                    <button type="submit" class="btn btn-primary"><i class="fas fa-search fa-fw"></i></button>
+                                </span>
                             </div>
                         </form>
                     </ul>
@@ -418,7 +417,7 @@ $fim = $this->input->get('dataFinal');
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricao">Descrição *</label>
                             <input class="form-control" id="descricao" type="text" name="descricao"/>
-                            <input id="urlEntrada" type="hidden" name="urlAtual" value=""/>
+                            <input id="urlEntrada" type="hidden" class="urlAtual" name="urlAtual" value=""/>
                         </div>
                     </div>
                     <div class="row">
@@ -489,7 +488,7 @@ $fim = $this->input->get('dataFinal');
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricao">Descrição *</label>
                             <input class="form-control" type="text" name="descricao"/>
-                            <input id="urlSaida" type="hidden" name="urlAtual" value=""/>
+                            <input class="urlAtual" type="hidden" name="urlAtual" value=""/>
                         </div>
                     </div>
                     <div class="row">
@@ -554,7 +553,7 @@ $fim = $this->input->get('dataFinal');
                 <h4 class="modal-title text-white ">Detalhes do lançamento</h4>
             </div>
             <form id="formEditar" action="<?= base_url('financeiro/lancamentos/editar') ?>" method="post" autocomplete="off">
-                <input id="urlAtual" type="hidden" name="urlAtual" value=""/>
+                <input class="urlAtual" type="hidden" name="urlAtual" value=""/>
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
@@ -613,7 +612,7 @@ $fim = $this->input->get('dataFinal');
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button  class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                         <i class="fa fa-times fa-fw"></i> Cancelar
                     </button>
                     <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
@@ -635,7 +634,7 @@ $fim = $this->input->get('dataFinal');
                 <div class="modal-body">
                     <p>Deseja realmente excluir este lançamento?</p>
                     <input id="idExcluir" type="hidden" name="id" value=""/>
-                    <input id="urlExcluir" type="hidden" name="urlAtual" value=""/>
+                    <input class="urlAtual" type="hidden" name="urlAtual" value=""/>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i> Cancelar</button>
@@ -895,22 +894,8 @@ $fim = $this->input->get('dataFinal');
 
         });
 
-
         $(document).on('click', '.excluir', function (event) {
             $("#idExcluir").val($(this).attr('idLancamento'));
-            $("#urlExcluir").val($(location).attr('href'));
-        });
-
-        $(document).on('click', '#entrada', function () {
-            $("#urlEntrada").val($(location).attr('href'));
-        });
-
-        $(document).on('click', '#saida', function () {
-            $("#urlSaida").val($(location).attr('href'));
-        });
-
-        $('#pesquisa').submit(function (event) {
-            $("#urlPesquisa").val($(location).attr('href'));
         });
 
         $(document).on('click', '.editar', function (event) {
@@ -922,7 +907,6 @@ $fim = $this->input->get('dataFinal');
             $("#pagamentoEditar").val($(this).attr('pagamento'));
             $("#formaPgtoEditar").val($(this).attr('formaPgto'));
             $("#tipoEditar").val($(this).attr('tipo'));
-            $("#urlAtualEditar").val($(location).attr('href'));
             var baixado = $(this).attr('baixado');
             if (baixado == 1) {
                 $("#pagoEditar").iCheck('check');

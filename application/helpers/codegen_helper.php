@@ -188,3 +188,14 @@ function setNotification($idUsuario = null, $titulo = null, $descricao = null, $
     return $CI->notificacoes_model->setNotification($data);
 }
 
+function getCurrentFullUrl()
+{
+    $currentURL = current_url();
+    if (isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] != null) {
+        $params = $_SERVER['QUERY_STRING'];
+        $fullUrl = $currentURL . '?' . $params;
+    } else {
+        $fullUrl = $currentURL;
+    }
+    return $fullUrl;
+}
