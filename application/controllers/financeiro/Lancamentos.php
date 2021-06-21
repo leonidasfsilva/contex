@@ -403,7 +403,7 @@ class Lancamentos extends CI_Controller
             redirect('mxcode/login');
         }
 
-        if(!$this->input->get()) {
+        if ($this->input->get('search') == null) {
             $this->session->set_flashdata('erro', 'Método não permitido.');
             redirect($this->global_url);
         }
