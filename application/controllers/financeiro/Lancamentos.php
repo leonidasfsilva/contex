@@ -403,6 +403,11 @@ class Lancamentos extends CI_Controller
             redirect('mxcode/login');
         }
 
+        if(!$this->input->get()) {
+            $this->session->set_flashdata('erro', 'Método não permitido.');
+            redirect($this->global_url);
+        }
+
         $termo = $this->input->get('search');
         $this->load->library('pagination');
         $this->data['total'] = $this->financeiro_model->getTotal(getUserId());
