@@ -333,6 +333,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                 <option value="05"<?= $dia_vencimento == 5 ? 'selected' : '' ?>>TODO DIA 05</option>
                                 <option value="09"<?= $dia_vencimento == 9 ? 'selected' : '' ?>>TODO DIA 09</option>
                                 <option value="10"<?= $dia_vencimento == 10 ? 'selected' : '' ?>>TODO DIA 10</option>
+                                <option value="15"<?= $dia_vencimento == 12 ? 'selected' : '' ?>>TODO DIA 12</option>
                                 <option value="15"<?= $dia_vencimento == 15 ? 'selected' : '' ?>>TODO DIA 15</option>
                                 <option value="20"<?= $dia_vencimento == 20 ? 'selected' : '' ?>>TODO DIA 20</option>
                                 <option value="25"<?= $dia_vencimento == 25 ? 'selected' : '' ?>>TODO DIA 25</option>
