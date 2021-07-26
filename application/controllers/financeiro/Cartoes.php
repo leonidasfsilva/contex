@@ -29,7 +29,7 @@ class Cartoes extends CI_Controller
         $this->load->view('tema/topo', $data);
     }
 
-    public function adicionar()
+    public function cadastrar()
     {
         if ($_POST) {
 //            $n_cartao = explode(" ", trim($_POST['number']));
@@ -63,7 +63,7 @@ class Cartoes extends CI_Controller
             }
         } else {
             $data['menuFinanceiro'] = true;
-            $data['view'] = 'cartoes/adicionar';
+            $data['view'] = 'cartoes/cadastrar';
             $this->load->view('tema/topo', $data);
         }
     }
@@ -141,13 +141,15 @@ class Cartoes extends CI_Controller
         }
 
         if ($_POST) {
-//            $n_cartao = explode(" ", trim($_POST['number']));
             $n_cartao = str_replace(' ', '', $_POST['number']);
             $validade = str_replace(' ', '', $_POST['expiry']);
 
             $bandeira = padronizarString($_POST['bandeira']);
             $final = $n_cartao[3];
-//            print_array_exit($_POST);
+
+            if ($_POST['principal'] == 1) {
+                $this->cartoes_model->removerCartaoPrincipal(getUserId());
+            }
 
             $data = array(
                 'numero' => encriptar($_POST['number']),
@@ -155,6 +157,7 @@ class Cartoes extends CI_Controller
                 'validade' => $validade,
                 'cvc' => encriptar($_POST['cvc']),
                 'bandeira' => padronizarString($_POST['bandeira']),
+                'principal' => $_POST['principal'] == 1 ? 1 : null
             );
 
             if ($this->cartoes_model->edit('cartoes', $data, 'id_cartao', $_POST['id_cartao'])) {

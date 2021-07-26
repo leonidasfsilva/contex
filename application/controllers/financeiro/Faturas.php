@@ -67,7 +67,7 @@ class Faturas extends CI_Controller
             12 => '12 x',
         );
 
-        $primeiro_cartao = $this->cartoes_model->getPrimeiroCartaoUsuario(getUserId());
+        $cartaoPrincipal = $this->cartoes_model->getCartaoPrincipalUsuario(getUserId());
 
         if ($_GET['id_cartao']) {
             $id_cartao = $_GET['id_cartao'];
@@ -80,7 +80,7 @@ class Faturas extends CI_Controller
                 }
             }
         } else {
-            $id_cartao = $primeiro_cartao->id_cartao;
+            $id_cartao = $cartaoPrincipal->id_cartao;
         }
 
         $this->data['existe_configuracao'] = $this->fatura_model->existeConfiguracao($id_cartao);

@@ -114,15 +114,25 @@ class Cartoes_model extends CI_Model
             ->result();
     }
 
-    function getPrimeiroCartaoUsuario($id_usuario)
+    function getCartaoPrincipalUsuario($id_usuario)
     {
-        return $this->db
+        $cartao = $this->db
             ->where('status', 1)
+            ->where('principal', 1)
             ->where('id_usuario', $id_usuario)
-            ->order_by('id_cartao')
-            ->limit(1)
             ->get('cartoes')
             ->row();
+
+        if ($cartao->id_cartao) {
+            return $cartao;
+        } else {
+            return $this->db
+                ->where('status', 1)
+                ->where('id_usuario', $id_usuario)
+                ->order_by('id_cartao', 'asc')
+                ->get('cartoes')
+                ->row();
+        }
     }
 
     function consultaFaturasCartao($id_cartao)
@@ -252,17 +262,28 @@ class Cartoes_model extends CI_Model
         return $this->db->count_all_results();
     }
 
-    function getTodos(){
+    function getTodos()
+    {
         return $this->db
             ->get('cartoes')
             ->result();
     }
 
-    function getCartao($id_cartao){
+    function getCartao($id_cartao)
+    {
         return $this->db
             ->where('id_cartao', $id_cartao)
             ->get('cartoes')
             ->result();
     }
 
+    function removerCartaoPrincipal($idUsuario)
+    {
+        $data = [
+            'principal' => null
+        ];
+        $this->db
+            ->where('id_usuario', $idUsuario)
+            ->update('cartoes', $data);
+    }
 }

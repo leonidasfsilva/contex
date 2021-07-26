@@ -9,7 +9,7 @@
                 <i class="fas fa-filter fa-fw"></i>
                 Filtrar
             </button>
-            <a href="<?= base_url('financeiro/cartoes/adicionar') ?>" class="btn btn-primary btn-sm tip-bottom" title="Cadastrar novo cartão">
+            <a href="<?= base_url('financeiro/cartoes/cadastrar') ?>" class="btn btn-primary btn-sm tip-bottom" title="Cadastrar novo cartão">
                 <i class="fas fa-plus fa-fw"></i>
                 Novo Cartão
             </a>
@@ -37,6 +37,13 @@
                     $final = $n_cartao[3];
                     $mascara = preg_replace('/\d/', '*', $n_cartao);
 
+                    if ($r->principal) {
+                        $cartaoPrincipal = 'PRINCIPAL';
+                        $labelPrincipal = 'success';
+                    } else {
+                        $cartaoPrincipal = '';
+                    }
+
                     if ($r->adicional) {
                         if ($r->id_usuario == getUserId()) {
                             $disabled_editar = 'disabled="disabled"';
@@ -58,7 +65,7 @@
                     ?>
                     <tr>
                         <td><?= $r->bandeira ?></td>
-                        <td><?= '**** **** **** ' . $final ?></td>
+                        <td><?= '**** **** **** ' . $final ?> <span class="label label-<?= $labelPrincipal ?>"><?= $cartaoPrincipal ?></span></td>
                         <td><?= $r->nome ?></td>
                         <td><span class="label label-<?= $label_cartao ?>"><?= $tipo_cartao ?></span></td>
                         <?=

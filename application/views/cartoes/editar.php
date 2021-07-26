@@ -13,7 +13,7 @@
         </div>
     </div>
     <div class="panel-body">
-        <div class="alert alert-info text-justify">
+        <div class="note note-warning mb40">
             Todos os dados inseridos neste formulário são armazenados em nosso banco de dados de forma segura.
             Caso não se sinta à vontade para fornecer todos os dados do seu cartão, apenas o número do cartão é obrigatório.
         </div>
@@ -31,11 +31,19 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-sm-6">
+                        <div class="form-group col-xs-6">
                             <input class="form-control" id="expiry" name="expiry" placeholder="Validade" type="text" value="<?= $cartao->validade ?>">
                         </div>
-                        <div class="form-group col-sm-6">
+                        <div class="form-group col-xs-6">
                             <input class="form-control" id="cvc" name="cvc" placeholder="Código de segurança" type="text" value="<?= trim(decriptar($cartao->cvc)) ?>">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <div class="checkbox icheck">
+                                <input type="checkbox" class="form-control" id="principal" name="principal" value="1" <?php echo $cartao->principal == 1 ? 'checked' : ''?>>
+                            </div>
+                            <label for="principal" class="font-weight-bold">Cartão Principal</label>
                         </div>
                     </div>
                     <input type="hidden" name="id_cartao" id="id_cartao" value="<?= $cartao->id_cartao ?>">
