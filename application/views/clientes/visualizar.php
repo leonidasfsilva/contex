@@ -209,14 +209,14 @@
                                             $dataFinal = null;
                                         }
                                         if ($r->tipo == 1) {
-                                            $tipo = 'Credito';
+                                            $tipo = 'Entrada';
                                             $colorTipo = 'primary';
                                         } else {
-                                            $tipo = 'Debito';
+                                            $tipo = 'Saída';
                                             $colorTipo = 'warning';
                                         }
                                         if ($r->quitado == 0) {
-                                            $status = 'Pendente';
+                                            $status = 'A pagar';
                                             $color = 'red';
                                             $label = 'danger';
                                             $icon = 'fa fa-check-square-o';
