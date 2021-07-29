@@ -44,12 +44,12 @@ $periodo_pendencia = $this->input->get('periodo');
                 </tr>
                 </thead>
                 <tr>
-                    <td colspan="2" style="text-align: left; color: green">(+) SALDO PARCIAL DE PENDÊNCIAS CRÉDITO</td>
+                    <td colspan="2" style="text-align: left; color: green">(+) SALDO PARCIAL DE PENDÊNCIAS ENTRADA</td>
                     <td colspan="1" style="text-align: right; color: green">
                         <?php echo number_format($pendencias_credito->total, 2, ',', '.') ?></td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="text-align: left; color: red">(-) SALDO PARCIAL DE PENDÊNCIAS DÉBITO</td>
+                    <td colspan="2" style="text-align: left; color: red">(-) SALDO PARCIAL DE PENDÊNCIAS SAÍDA</td>
                     <td colspan="1" style="text-align: right; color: red">
                         <?php echo number_format($pendencias_debito->total, 2, ',', '.') ?></td>
                 </tr>
@@ -211,12 +211,12 @@ $periodo_pendencia = $this->input->get('periodo');
             </tr>
             </thead>
             <tr>
-                <td colspan="2" style="text-align: left; color: green">(+) SALDO TOTAL DE PENDÊNCIAS CRÉDITO</td>
+                <td colspan="2" style="text-align: left; color: green">(+) SALDO TOTAL DE PENDÊNCIAS ENTRADA</td>
                 <td colspan="1" style="text-align: right; color: green">
                     <?php echo number_format($total_credito->total, 2, ',', '.') ?></td>
             </tr>
             <tr>
-                <td colspan="2" style="text-align: left; color: red">(-) SALDO TOTAL DE PENDÊNCIAS DÉBITO</td>
+                <td colspan="2" style="text-align: left; color: red">(-) SALDO TOTAL DE PENDÊNCIAS SAÍDA</td>
                 <td colspan="1" style="text-align: right; color: red">
                     <?php echo number_format($total_debito->total, 2, ',', '.') ?></td>
             </tr>
@@ -256,11 +256,11 @@ $periodo_pendencia = $this->input->get('periodo');
                                 <option value="todos">Todos</option>
                                 <option value="credito" <?php if ($tipo_pendencia == 'credito') {
                                     echo 'selected';
-                                } ?>>CRÉDITO
+                                } ?>>ENTRADA
                                 </option>
                                 <option value="debito" <?php if ($tipo_pendencia == 'debito') {
                                     echo 'selected';
-                                } ?>>DÉBITO
+                                } ?>>SAÍDA
                                 </option>
                             </select>
                         </div>
@@ -383,7 +383,7 @@ $periodo_pendencia = $this->input->get('periodo');
                             <input class="form-control datepicker" id="data_vencimento" type="text" name="data_vencimento"/>
                         </div>
                         <div class="form-group col-lg-4">
-                            <label for="tipo" class="font-weight-bold" title="CRÉDITO: entrada nos lançamentos / DÉBITO: saída nos lançamentos">Tipo de Pendência *<i
+                            <label for="tipo" class="font-weight-bold" title="ENTRADA: entrada nos lançamentos / SAÍDA: saída nos lançamentos">Tipo de Pendência *<i
                                         class="fa fa-info-circle fa-fw"></i></label>
                             <select class="form-control" name="tipo" id="tipo">
                                 <option value="">-- Selecione --</option>
@@ -445,12 +445,12 @@ $periodo_pendencia = $this->input->get('periodo');
                             <input class="form-control datepicker" id="data_vencimentoEditar" type="text" name="data_vencimento"/>
                         </div>
                         <div class="form-group col-lg-4">
-                            <label for="tipoEditar" class="font-weight-bold" title="CRÉDITO: entrada nos lançamentos / DÉBITO: saída nos lançamentos">Tipo de Pendência *<i
+                            <label for="tipoEditar" class="font-weight-bold" title="ENTRADA: entrada nos lançamentos / SAÍDA: saída nos lançamentos">Tipo de Pendência *<i
                                         class="fa fa-info-circle fa-fw"></i></label>
                             <select class="form-control" name="tipo" id="tipoEditar">
                                 <option value="">-- Selecione --</option>
-                                <option value="1">CREDITO</option>
-                                <option value="2">DEBITO</option>
+                                <option value="1">ENTRADA</option>
+                                <option value="2">SAIDA</option>
                             </select>
                         </div>
                     </div>
