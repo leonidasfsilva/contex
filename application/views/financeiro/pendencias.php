@@ -98,10 +98,10 @@ $periodo_pendencia = $this->input->get('periodo');
                     $data_pendencia = date(('d/m/Y'), strtotime($r->data_vencimento));
 
                     if ($r->tipo == 1) {
-                        $tipo = 'Credito';
+                        $tipo = 'ENTRADA';
                         $colorTipo = 'primary';
                     } else {
-                        $tipo = 'Debito';
+                        $tipo = 'SAÍDA';
                         $colorTipo = 'warning';
                     }
 
