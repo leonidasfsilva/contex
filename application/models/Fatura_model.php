@@ -366,22 +366,24 @@ class Fatura_model extends CI_Model
             $faturas[] = $this->db->get('faturas')->row();
         }
 
-        foreach ($faturas as $f) {
-            $this->db
-                ->select('SUM(valor_parcela) AS total')
-                ->where('status', 1)
-                ->where('id_fatura', $f->id_fatura)
-                ->where('mes_referencia', $f->mes_referencia)
-                ->where('ano_referencia', $f->ano_referencia);
-            $results[] = $this->db->get('lancamentos_faturas_assoc')->row();
-            $valor = null;
-            foreach ($results as $r) {
-                $valor += $r->total;
+        if(isset($faturas)){
+            foreach ($faturas as $f) {
+                $this->db
+                    ->select('SUM(valor_parcela) AS total')
+                    ->where('status', 1)
+                    ->where('id_fatura', $f->id_fatura)
+                    ->where('mes_referencia', $f->mes_referencia)
+                    ->where('ano_referencia', $f->ano_referencia);
+                $results[] = $this->db->get('lancamentos_faturas_assoc')->row();
+                $valor = null;
+                foreach ($results as $r) {
+                    $valor += $r->total;
+                }
             }
+            return ($valor);
         }
 //        print_array_exit($results);
-        return ($valor);
-
+        return null;
     }
 
     function existeConfiguracao($id_cartao)
