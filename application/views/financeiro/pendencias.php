@@ -364,7 +364,7 @@ $periodo_pendencia = $this->input->get('periodo');
                         <div class="form-group col-lg-12">
                             <label for="id_cliente" class="font-weight-bold">Cliente *</label>
                             <select class="form-control" id="id_cliente" name="id_cliente">
-                                <option value="">-- Selecione --</option>
+                                <option value=""><< Selecione >></option>
                                 <?php if ($clientes) {
                                     foreach ($clientes as $d) { ?>
                                         <option value="<?= $d->id_clientes ?>"><?= $d->nome ?></option>
@@ -386,7 +386,7 @@ $periodo_pendencia = $this->input->get('periodo');
                             <label for="tipo" class="font-weight-bold" title="ENTRADA: entrada nos lançamentos / SAÍDA: saída nos lançamentos">Tipo de Pendência *<i
                                         class="fa fa-info-circle fa-fw"></i></label>
                             <select class="form-control" name="tipo" id="tipo">
-                                <option value="">-- Selecione --</option>
+                                <option value=""><< Selecione >></option>
                                 <option value="1">ENTRADA</option>
                                 <option value="2">SAÍDA</option>
                             </select>
