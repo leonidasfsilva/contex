@@ -216,7 +216,7 @@
                                             $colorTipo = 'warning';
                                         }
                                         if ($r->quitado == 0) {
-                                            $status = 'A pagar';
+                                            $status = 'Pendente';
                                             $color = 'red';
                                             $label = 'danger';
                                             $icon = 'fa fa-check-square-o';
