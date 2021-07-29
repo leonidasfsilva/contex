@@ -44,12 +44,12 @@ $periodo_pendencia = $this->input->get('periodo');
                 </tr>
                 </thead>
                 <tr>
-                    <td colspan="2" style="text-align: left; color: green">(+) SALDO PARCIAL DE PENDÊNCIAS ENTRADA</td>
+                    <td colspan="2" style="text-align: left; color: green">(+) SALDO PARCIAL A RECEBER</td>
                     <td colspan="1" style="text-align: right; color: green">
                         <?php echo number_format($pendencias_credito->total, 2, ',', '.') ?></td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="text-align: left; color: red">(-) SALDO PARCIAL DE PENDÊNCIAS SAÍDA</td>
+                    <td colspan="2" style="text-align: left; color: red">(-) SALDO PARCIAL A PAGAR</td>
                     <td colspan="1" style="text-align: right; color: red">
                         <?php echo number_format($pendencias_debito->total, 2, ',', '.') ?></td>
                 </tr>
@@ -211,12 +211,12 @@ $periodo_pendencia = $this->input->get('periodo');
             </tr>
             </thead>
             <tr>
-                <td colspan="2" style="text-align: left; color: green">(+) SALDO TOTAL DE PENDÊNCIAS ENTRADA</td>
+                <td colspan="2" style="text-align: left; color: green">(+) SALDO TOTAL A RECEBER</td>
                 <td colspan="1" style="text-align: right; color: green">
                     <?php echo number_format($total_credito->total, 2, ',', '.') ?></td>
             </tr>
             <tr>
-                <td colspan="2" style="text-align: left; color: red">(-) SALDO TOTAL DE PENDÊNCIAS SAÍDA</td>
+                <td colspan="2" style="text-align: left; color: red">(-) SALDO TOTAL A PAGAR</td>
                 <td colspan="1" style="text-align: right; color: red">
                     <?php echo number_format($total_debito->total, 2, ',', '.') ?></td>
             </tr>
@@ -387,8 +387,8 @@ $periodo_pendencia = $this->input->get('periodo');
                                         class="fa fa-info-circle fa-fw"></i></label>
                             <select class="form-control" name="tipo" id="tipo">
                                 <option value="">-- Selecione --</option>
-                                <option value="1">CREDITO</option>
-                                <option value="2">DEBITO</option>
+                                <option value="1">ENTRADA</option>
+                                <option value="2">SAÍDA</option>
                             </select>
                         </div>
                     </div>
@@ -426,7 +426,7 @@ $periodo_pendencia = $this->input->get('periodo');
                         <div class="form-group col-lg-12">
                             <label for="id_clienteEditar" class="font-weight-bold">Cliente *</label>
                             <select class="form-control" id="id_clienteEditar" name="id_cliente">
-                                <option value="">-- Selecione --</option>
+                                <option value=""><< Selecione >></option>
                                 <?php if ($clientes) {
                                     foreach ($clientes as $d) { ?>
                                         <option value="<?= $d->id_clientes ?>"><?= $d->nome ?></option>
@@ -448,7 +448,7 @@ $periodo_pendencia = $this->input->get('periodo');
                             <label for="tipoEditar" class="font-weight-bold" title="ENTRADA: entrada nos lançamentos / SAÍDA: saída nos lançamentos">Tipo de Pendência *<i
                                         class="fa fa-info-circle fa-fw"></i></label>
                             <select class="form-control" name="tipo" id="tipoEditar">
-                                <option value="">-- Selecione --</option>
+                                <option value=""><< Selecione >></option>
                                 <option value="1">ENTRADA</option>
                                 <option value="2">SAIDA</option>
                             </select>
@@ -510,7 +510,7 @@ $periodo_pendencia = $this->input->get('periodo');
                         <div class="form-group col-lg-6">
                             <label class="font-weight-bold" for="forma_pagamento">Forma de pagamento *</label>
                             <select name="forma_pagamento" id="forma_pagamento" class="form-control">
-                                <option value="">-- Selecione --</option>
+                                <option value=""><< Selecione >></option>
                                 <?php if ($formasPagamento) {
                                     foreach ($formasPagamento as $f) { ?>
                                         <option value="<?= $f->id_forma ?>"><?= $f->nome ?></option>
