@@ -405,38 +405,38 @@ class Fatura_model extends CI_Model
             ->row('dia_vencimento');
     }
 
-    function getSaldoFaturasPendentes($id_usuario, $id_cartao)
+    function getSaldoFaturasPendentes($id_cartao)
     {
         $this->db
             ->select('SUM(a.valor_parcela) AS total')
             ->from('lancamentos_faturas_assoc AS a')
             ->join('faturas AS b', 'b.id_fatura = a.id_fatura AND b.status = a.status')
-            ->where('b.id_usuario = ' . $id_usuario . ' AND b.fatura_paga != 1 AND a.status = 1')
+            ->where('b.fatura_paga != 1 AND a.status = 1')
             ->where('id_cartao', $id_cartao)
             ->where('date(b.vencimento) > date(now())');
         return $this->db->get()->row();
     }
 
-    function getSaldoFaturasVencidas($id_usuario, $id_cartao)
+    function getSaldoFaturasVencidas($id_cartao)
     {
         $this->db
             ->select('SUM(a.valor_parcela) AS total')
             ->from('lancamentos_faturas_assoc AS a')
             ->join('faturas AS b', 'b.id_fatura = a.id_fatura AND b.status = a.status')
-            ->where('b.id_usuario = ' . $id_usuario . ' AND b.fatura_paga != 1 AND a.status = 1')
+            ->where('b.fatura_paga != 1 AND a.status = 1')
             ->where('id_cartao', $id_cartao)
             ->where('date(b.vencimento) < date(now())');
         return $this->db->get()->row();
     }
 
-    function getSaldoFaturasPagas($id_usuario, $id_cartao)
+    function getSaldoFaturasPagas($id_cartao)
     {
         $this->db
             ->select('SUM(a.valor_parcela) AS total')
             ->from('lancamentos_faturas_assoc AS a')
             ->join('faturas AS b', 'b.id_fatura = a.id_fatura AND b.status = a.status')
             ->where('id_cartao', $id_cartao)
-            ->where('b.id_usuario = ' . $id_usuario . ' AND b.fatura_paga = 1 AND a.status = 1');
+            ->where('b.fatura_paga = 1 AND a.status = 1');
         return $this->db->get()->row();
     }
 

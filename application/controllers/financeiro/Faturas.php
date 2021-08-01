@@ -87,9 +87,9 @@ class Faturas extends CI_Controller
         $this->data['dia_vencimento'] = $this->fatura_model->getDiaVencimentoFatura($id_cartao);
         $this->data['cartao_selecionado'] = $this->cartoes_model->getDetalhesCartao($id_cartao);
         $this->data['cartoes'] = $this->cartoes_model->getCartoesUsuario(getUserId());
-        $this->data['saldoVencidas'] = $this->fatura_model->getSaldoFaturasVencidas(getUserId(), $id_cartao);
-        $this->data['saldoPendente'] = $this->fatura_model->getSaldoFaturasPendentes(getUserId(), $id_cartao);
-        $this->data['saldoQuitado'] = $this->fatura_model->getSaldoFaturasPagas(getUserId(), $id_cartao);
+        $this->data['saldoVencidas'] = $this->fatura_model->getSaldoFaturasVencidas($id_cartao);
+        $this->data['saldoPendente'] = $this->fatura_model->getSaldoFaturasPendentes($id_cartao);
+        $this->data['saldoQuitado'] = $this->fatura_model->getSaldoFaturasPagas($id_cartao);
         $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
         $this->data['faturaAberta'] = $this->fatura_model->getFaturaAbertaUsuario(getUserId(), $id_cartao);
         $this->data['results'] = $this->fatura_model->get('faturas', '*', $where, getUserId(), $id_cartao, $config['per_page'], $this->input->get('per_page'));
