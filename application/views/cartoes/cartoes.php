@@ -44,6 +44,8 @@
                         } else {
                             $cartaoPrincipal = '';
                         }
+                    } else {
+                        $cartaoPrincipal = '';
                     }
 
                     if ($r->adicional) {

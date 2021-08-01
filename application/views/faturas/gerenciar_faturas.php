@@ -16,17 +16,17 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         $disabledFatura = 'disabled';
         $disabledConfig = 'disabled';
     } else {
-        foreach ($cartoes as $c) {
-            if ($c->id_usuario != getUserId()) {
-                if ($c->adicional) {
-                    if ($cartao_selecionado->id_cartao == $c->id_cartao) {
+        foreach ($cartoes as $cartao) {
+            if ($cartao->id_usuario != getUserId()) {
+                if ($cartao->adicional) {
+                    if ($cartao_selecionado->id_cartao == $cartao->id_cartao) {
                         $disabledFatura = 'disabled';
-                        $disabledConfig = 'disabled';
+                        $disabledConfig = '';
                     }
                 }
             } else {
-                if ($cartao_selecionado->id_cartao == $c->id_cartao) {
-                    if ($c->adicional) {
+                if ($cartao_selecionado->id_cartao == $cartao->id_cartao) {
+                    if ($cartao->adicional) {
                         $disabledConfig = 'disabled';
                     } else {
                         $disabledConfig = '';
@@ -50,16 +50,16 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             <div class=" mt10 pull-right">
                 <?php if ($cartoes) { ?>
                     <select name="cartoes" id="cartoes" class="form-control">
-                        <?php foreach ($cartoes as $c) {
-                            $n_cartao = explode(" ", trim(decriptar($c->numero)));
+                        <?php foreach ($cartoes as $cartao) {
+                            $n_cartao = explode(" ", trim(decriptar($cartao->numero)));
                             $final = $n_cartao[3]; ?>
                             <!--                <option value=""><< Selecione um Cartão >></option>-->
-                            <option value="<?= $c->id_cartao ?>" <?php if ($cartao_selecionado->id_cartao == $c->id_cartao) {
+                            <option value="<?= $cartao->id_cartao ?>" <?php if ($cartao_selecionado->id_cartao == $cartao->id_cartao) {
                                 echo 'selected';
-                                $cartao_config = $c->bandeira . ' - FINAL ' . $final;
+                                $cartao_config = $cartao->bandeira . ' - FINAL ' . $final;
                             } else {
                                 echo '';
-                            } ?>><?= $c->bandeira . ' - FINAL ' . $final ?></option>
+                            } ?>><?= $cartao->bandeira . ' - FINAL ' . $final ?></option>
                         <?php } ?>
                     </select>
                 <?php } else { ?>
@@ -398,7 +398,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
                         <div class="col-lg-6 form-group">
                             <label for="vencimento" class="control-label font-weight-bold">Data de vencimento da nova fatura:</label>
-                            <input class="form-control font-weight-bold" id="vencimento" type="text" value="" placeholder="Selecione o mês de referência para exibir" disabled>
+                            <input class="form-control font-weight-bold" id="vencimento" type="text" value="" placeholder="Selecione o mês de referência" disabled>
                         </div>
                     </div>
                     <div class="row">
@@ -527,8 +527,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             <select name="forma_pagamento" id="forma_pagamento" class="form-control">
                                 <option value=""><< Selecione >></option>
                                 <?php if ($formasPagamento) {
-                                    foreach ($formasPagamento as $c) { ?>
-                                        <option value="<?= $c->id_forma ?>"><?= $c->nome ?></option>
+                                    foreach ($formasPagamento as $cartao) { ?>
+                                        <option value="<?= $cartao->id_forma ?>"><?= $cartao->nome ?></option>
                                     <?php }
                                 } ?>
                             </select>

@@ -19,7 +19,7 @@
         </div>
         <div class="row">
             <div class="col-md-6">
-                <form id="formAdicionarCartao" action="<?php echo base_url('financeiro/cartoes/adicionar') ?>" method="post" class="card">
+                <form id="formAdicionarCartao" action="<?php echo base_url('financeiro/cartoes/cadastrar') ?>" method="post" class="card">
                     <div class="row">
                         <div class="form-group col-sm-12">
                             <input class="form-control" id="number" name="number" placeholder="Número do cartão *" type="text">

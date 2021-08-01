@@ -967,7 +967,6 @@ class Faturas extends CI_Controller
                 $this->fatura_model->edit('configs_faturas', $data_adicional, 'id_cartao', $adicional->id_cartao);
             }
             $this->session->set_flashdata('sucesso', 'Configurações alteradas com sucesso!');
-            redirect($urlAtual);
         } else {
             $this->fatura_model->add('configs_faturas', $data);
             $adicionais = $this->cartoes_model->getCartoesAdicionais($id_cartao);
@@ -1005,8 +1004,8 @@ class Faturas extends CI_Controller
                 $this->fatura_model->add('configs_faturas', $data_adicional);
             }
             $this->session->set_flashdata('sucesso', 'Configurações salvas com sucesso!');
-            redirect($urlAtual);
         }
+        redirect($urlAtual);
     }
 
     public function pesquisaLancamentos()
