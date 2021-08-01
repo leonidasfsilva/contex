@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-touch-fullscreen" content="yes">
     <meta name="description" content="Contex Sistema de Gestão">
-    <meta name="author" content="Leônidas Ferreira">
+    <meta name="author" content="">
     <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/contex_logo.png" type="image/x-icon"/>
 
     <!--    CSS CORE-->
@@ -17,7 +17,7 @@
     <!--    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">-->
     <link href="<?php echo base_url(); ?>assets/fonts/mark/stylesheet.css" rel="stylesheet" type="text/css">
     <link href="<?php echo base_url(); ?>assets/font-awesome5/css/all.css" rel="stylesheet">
-<!--    <link href="--><?php //echo base_url(); ?><!--assets/font-awesome/css/font-awesome.css" rel="stylesheet">-->
+    <!--    <link href="--><?php //echo base_url(); ?><!--assets/font-awesome/css/font-awesome.css" rel="stylesheet">-->
     <link href="<?php echo base_url(); ?>assets/css/fullcalendar.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.css" type="text/css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/jquery-cropper/css/cropper.css" type="text/css" rel="stylesheet">
