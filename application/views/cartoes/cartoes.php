@@ -37,11 +37,13 @@
                     $final = $n_cartao[3];
                     $mascara = preg_replace('/\d/', '*', $n_cartao);
 
-                    if ($r->principal) {
-                        $cartaoPrincipal = 'PRINCIPAL';
-                        $labelPrincipal = 'success';
-                    } else {
-                        $cartaoPrincipal = '';
+                    if ($r->id_usuario == getUserId()) {
+                        if ($r->principal) {
+                            $cartaoPrincipal = 'PRINCIPAL';
+                            $labelPrincipal = 'success';
+                        } else {
+                            $cartaoPrincipal = '';
+                        }
                     }
 
                     if ($r->adicional) {

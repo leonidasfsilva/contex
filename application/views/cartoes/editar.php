@@ -17,9 +17,21 @@
             Todos os dados inseridos neste formulário são armazenados em nosso banco de dados de forma segura.
             Caso não se sinta à vontade para fornecer todos os dados do seu cartão, apenas o número do cartão é obrigatório.
         </div>
+        <?php if ($cartao->adicional) { ?>
+            <div class="note note-info mb40">
+                <p class="font-weight-bold" style="font-size: 16px">
+                    USUÁRIO ASSOCIADO AO CARTÃO
+                </p>
+                <p>
+                    <span class="font-weight-bold">Nome do Usuário:</span> <?= $usuario ?>
+                </p>
+            </div>
+        <?php } ?>
         <div class="row">
             <div class="col-md-6">
-                <form id="formEditarCartao" action="<?php echo base_url('financeiro/cartoes/editar/'. $cartao->id_cartao) ?>" method="post" class="card">
+                <form id="formEditarCartao" action="<?php echo base_url('financeiro/cartoes/editar/' . $cartao->id_cartao) ?>" method="post" class="card">
+                    <input type="hidden" name="adicional" value="<?php echo $cartao->adicional ?>">
+                    <input type="hidden" name="id_usuario" value="<?php echo $cartao->id_usuario ?>">
                     <div class="row">
                         <div class="form-group col-sm-12">
                             <input class="form-control" id="number" name="number" placeholder="Número do cartão *" type="text" value="<?= trim(decriptar($cartao->numero)) ?>">
@@ -41,7 +53,7 @@
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control" id="principal" name="principal" value="1" <?php echo $cartao->principal == 1 ? 'checked' : ''?>>
+                                <input type="checkbox" class="form-control" id="principal" name="principal" value="1" <?php echo $cartao->principal == 1 ? 'checked' : '' ?>>
                             </div>
                             <label for="principal" class="font-weight-bold">Cartão Principal</label>
                         </div>

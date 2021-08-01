@@ -382,7 +382,6 @@ class Fatura_model extends CI_Model
             }
             return ($valor);
         }
-//        print_array_exit($results);
         return null;
     }
 

@@ -148,7 +148,7 @@ class Cartoes extends CI_Controller
             $final = $n_cartao[3];
 
             if ($_POST['principal'] == 1) {
-                $this->cartoes_model->removerCartaoPrincipal(getUserId());
+                $this->cartoes_model->removerCartaoPrincipal($_POST['id_usuario']);
             }
 
             $data = array(
@@ -180,7 +180,9 @@ class Cartoes extends CI_Controller
                     $this->session->set_flashdata('erro', 'Você não tem permissão para editar os dados deste cartão, solicite a alteração dos dados ao titular.');
                     redirect('financeiro/cartoes');
                 }
+                $usuario = $this->usuarios_model->getById($cartao->id_usuario)->nome;
             }
+            $data['usuario'] = $usuario;
             $data['cartao'] = $cartao;
             $data['menuFinanceiro'] = true;
             $data['view'] = 'cartoes/editar';
