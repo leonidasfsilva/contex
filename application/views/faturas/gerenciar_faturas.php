@@ -20,7 +20,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             if ($cartao->id_usuario != getUserId()) {
                 if ($cartao->adicional) {
                     if ($cartao_selecionado->id_cartao == $cartao->id_cartao) {
-                        $disabledFatura = 'disabled';
+                        $disabledFatura = '';
                         $disabledConfig = '';
                     }
                 }
