@@ -366,7 +366,7 @@ class Fatura_model extends CI_Model
             $faturas[] = $this->db->get('faturas')->row();
         }
 
-        if(isset($faturas)){
+        if (isset($faturas)) {
             foreach ($faturas as $f) {
                 $this->db
                     ->select('SUM(valor_parcela) AS total')
@@ -454,5 +454,21 @@ class Fatura_model extends CI_Model
             }
             echo json_encode($row_set);
         }
+    }
+
+    function getClientesPorFatura($idUsuario, $idFatura)
+    {
+        return $this->db
+            ->select('c.id_clientes, c.nome')
+            ->join('lancamentos_faturas AS lf', 'lf.id_cliente = c.id_clientes', 'inner')
+            ->join('lancamentos_faturas_assoc AS lfa', 'lfa.id_lancamento = lf.id_lancamento', 'inner')
+            ->join('faturas AS f', 'f.id_fatura = lfa.id_fatura', 'inner')
+            ->where('lf.id_usuario', $idUsuario)
+            ->where('lfa.status', 1)
+            ->where('f.id_fatura', $idFatura)
+            ->group_by('c.id_clientes')
+            ->order_by('c.nome')
+            ->get('clientes AS c')
+            ->result();
     }
 }
