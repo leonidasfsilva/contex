@@ -42,7 +42,7 @@
                                             </tr>
                                             <tr>
                                                 <td style="text-align: right"><strong>Data de Cadastro</strong></td>
-                                                <td><?php echo date('d/m/Y', strtotime($result->data_cadastro)) ?></td>
+                                                <td><?php echo date('d/m/Y H:i:s', strtotime($result->data_cadastro)) ?></td>
                                             </tr>
                                             </tbody>
                                         </table>
