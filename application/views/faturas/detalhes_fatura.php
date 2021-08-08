@@ -5,7 +5,7 @@ $cliente = $this->input->get('cliente');
 
 if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
     if ($status_fatura == 1) {
-        if($id_usuario != getUserId()) {
+        if ($id_usuario != getUserId()) {
             $disabled_lancamento_1 = 'disabled';
         } else {
             $disabled_lancamento_1 = '';
@@ -213,7 +213,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
                             echo '<td>' . $data_compra . '</td>';
                             echo '<td>' . strtoupper($s->descricao) . '</td>';
-                            echo '<td>' . strtoupper($s->nome_cliente) . '</td>';
+                            echo '<td><a href="' . base_url('clientes/visualizar/') . $s->id_cliente . '">' . strtoupper($s->nome_cliente) . '</a></td>';
                             echo '<td>' . $n_parcela . '/' . $total_parcelas . '</td>';
                             echo '<td class="valor_parcela" style=" color: ' . $color .
                                 '"><span>' . number_format($r->valor_parcela, 2, ',', '.') .
@@ -618,7 +618,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 if ($(this).closest('tr').find('.soma_parcelas').is(':checked')) {
                     var value = $('span', this).text();
                     value = jquery_format(value);
-                     console.log('valor do elemento: ' + value);
+                    console.log('valor do elemento: ' + value);
                     // add only if the value is number
                     if (!isNaN(value) && value.length != 0) {
                         Soma += parseFloat(value);
