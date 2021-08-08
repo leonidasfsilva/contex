@@ -178,7 +178,7 @@ class Faturas extends CI_Controller
             $cartao = $this->cartoes_model->getDetalhesCartao($id_cartao);
 
             if (($fatura_selecionada->id_usuario == getUserId() && $cartao->id_usuario == getUserId()) || ($fatura_selecionada->id_cartao == $id_cartao && $cartao->id_usuario_titular == getUserId())) {
-                $data['clientes'] = $this->fatura_model->getClientesPorFatura(getUserId(), $id_fatura);
+                $data['clientes'] = $this->fatura_model->getClientesPorFatura($id_fatura);
                 $data['selected_cliente'] = $cliente;
                 $data['fatura'] = $this->fatura_model->getDetalhesFatura($id_fatura);
                 $data['id_fatura'] = $id_fatura;

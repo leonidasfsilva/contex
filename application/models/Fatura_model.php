@@ -456,14 +456,13 @@ class Fatura_model extends CI_Model
         }
     }
 
-    function getClientesPorFatura($idUsuario, $idFatura)
+    function getClientesPorFatura($idFatura)
     {
         return $this->db
             ->select('c.id_clientes, c.nome')
             ->join('lancamentos_faturas AS lf', 'lf.id_cliente = c.id_clientes', 'inner')
             ->join('lancamentos_faturas_assoc AS lfa', 'lfa.id_lancamento = lf.id_lancamento', 'inner')
             ->join('faturas AS f', 'f.id_fatura = lfa.id_fatura', 'inner')
-            ->where('lf.id_usuario', $idUsuario)
             ->where('lfa.status', 1)
             ->where('f.id_fatura', $idFatura)
             ->group_by('c.id_clientes')
