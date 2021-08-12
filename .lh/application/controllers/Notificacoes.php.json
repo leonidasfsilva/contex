@@ -1,0 +1,26 @@
+{
+    "sourceFile": "application/controllers/Notificacoes.php",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 2,
+            "patches": [
+                {
+                    "date": 1628800171298,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1628800176609,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,9 +27,9 @@\n             $idUsuario = $data['id_usuario'],\n             $titulo = $data['titulo'],\n             $descricao = $data['descricao'],\n             $icone = $data['icone'],\n-            $link = $data['link'] ,\n+            $link = $data['link'] != null ? ,\n             $prioridade = $data['prioridade']\n         );\n         if ($return) {\n             $this->session->set_flashdata('sucesso', 'Notificação registrada com sucesso!');\n"
+                },
+                {
+                    "date": 1628800190559,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,9 +27,9 @@\n             $idUsuario = $data['id_usuario'],\n             $titulo = $data['titulo'],\n             $descricao = $data['descricao'],\n             $icone = $data['icone'],\n-            $link = $data['link'] != null ? ,\n+            $link = $data['link'] != null ? $data['link'] : 'notificacoes',\n             $prioridade = $data['prioridade']\n         );\n         if ($return) {\n             $this->session->set_flashdata('sucesso', 'Notificação registrada com sucesso!');\n"
+                }
+            ],
+            "date": 1628800171298,
+            "name": "Commit-0",
+            "content": "<?php if (!defined('BASEPATH')) {\n    exit('No direct script access allowed');\n}\n\nclass Notificacoes extends CI_Controller\n{\n    public function __construct()\n    {\n        parent::__construct();\n    }\n\n    public function index()\n    {\n        if ((!session_id()) || (!$this->session->userdata('logado'))) {\n            redirect('mxcode/login');\n        }\n\n        $data['notificacoes'] = $this->notificacoes_model->getNotificacoesUsuario();\n        $data['view'] = 'notificacoes/notificacoes';\n        $this->load->view('tema/topo', $data);\n    }\n\n    public function adicionar()\n    {\n        $data = $this->input->post();\n        $return = setNotification(\n            $idUsuario = $data['id_usuario'],\n            $titulo = $data['titulo'],\n            $descricao = $data['descricao'],\n            $icone = $data['icone'],\n            $link = $data['link'] ,\n            $prioridade = $data['prioridade']\n        );\n        if ($return) {\n            $this->session->set_flashdata('sucesso', 'Notificação registrada com sucesso!');\n            redirect(base_url() . 'notificacoes');\n        } else {\n            $this->session->set_flashdata('erro', 'Erro ao tentar registrar notificação.');\n            redirect(base_url() . 'notificacoes');\n        }\n    }\n\n    public function lerTodasNotificacoes()\n    {\n        $this->notificacoes_model->lerTodasNotificacoes(getUserId());\n    }\n\n    public function lerNotificacao()\n    {\n        if (!$this->input->is_ajax_request()) {\n            exit('No direct script access allowed');\n        }\n\n        $this->notificacoes_model->lerNotificacao($this->input->post('id'));\n    }\n\n    // Método para atualizar lista de notificacoes do usuario.\n    public function atualizaNotificacoesUsuario()\n    {\n        if (!$this->input->is_ajax_request()) {\n            exit('No direct script access allowed');\n        } else {\n            $user_id = $this->session->userdata('id');\n\n            if ($user_id) {\n                $logado = true;\n            } else {\n                $logado = false;\n            }\n\n            $notificacoes = $this->notificacoes_model->atualizaNotificacoesUsuario(getUserId());\n            $qnt = $this->notificacoes_model->usuarioTemNotificacoes(getUserId());\n\n            if ($notificacoes) {\n                $data = array(\n                    'result' => true,\n                    'retorno' => $notificacoes,\n                    'qnt' => $qnt,\n                    'logado' => $logado\n                );\n                echo json_encode($data);\n            } else {\n                $data = array(\n                    'result' => true,\n                    'retorno' => null,\n                    'qnt' => $qnt,\n                    'logado' => $logado,\n                    'userdata' => $this->session->userdata()\n                );\n                echo json_encode($data);\n            }\n        }\n    }\n\n}\n"
+        }
+    ]
+}

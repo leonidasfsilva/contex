@@ -25,6 +25,7 @@
             dataType: 'html',
             success: function () {
                 atualizaNotificacoesUsuario()
+                window.location.replace('<?= base_url('notificacoes'); ?>')
             }
         });
     }
@@ -78,7 +79,7 @@
                             cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
                         }).then((result) => {
                             if (result.value) {
-                                window.location.reload(true);
+                                window.location.reload(true)
                             } else {
 
                             }
@@ -97,7 +98,7 @@
                                 base_url = '<?= base_url() ?>'
                                 link = base_url + item.link
                             } else {
-                                link = '#'
+                                link = 'notificacoes'
                             }
                             if (item.icone) {
                                 icone = item.icone

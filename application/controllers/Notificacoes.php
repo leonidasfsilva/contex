@@ -28,7 +28,7 @@ class Notificacoes extends CI_Controller
             $titulo = $data['titulo'],
             $descricao = $data['descricao'],
             $icone = $data['icone'],
-            $link = $data['link'],
+            $link = $data['link'] != null ? $data['link'] : 'notificacoes',
             $prioridade = $data['prioridade']
         );
         if ($return) {
