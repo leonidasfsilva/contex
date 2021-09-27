@@ -35,7 +35,7 @@ class Lancamentos extends CI_Controller
             redirect(base_url());
         }
         $status = $_GET['status'];
-        $tipo = $_GET['tipo'];
+        $tipo = $_GET['tipo'] ?? null;
         $periodo = $_GET['periodo'];
         $inicio = $_GET['dataInicial'];
         $fim = $_GET['dataFinal'];
@@ -101,7 +101,7 @@ class Lancamentos extends CI_Controller
             }
         }
 
-        if (isset($tipo) && $tipo != null) {
+        if ($tipo) {
             if ($tipo == 'entrada') {
                 if (!isset($where)) {
                     $where = 'tipo = 1';
@@ -142,7 +142,7 @@ class Lancamentos extends CI_Controller
         $config['base_url'] = base_url('financeiro/lancamentos');
         $config['suffix'] = '&' . $query_string;
         $config['first_url'] = $config['base_url'] . '?' . $query_string;
-        $config['total_rows'] = $this->financeiro_model->countLancamentos(getUserId(), $where, $limit, $start);
+        $config['total_rows'] = $this->financeiro_model->countLancamentos(getUserId(), $where);
         $config['per_page'] = 20;
         $config['page_query_string'] = true;
         $config['next_link'] = false;
@@ -164,6 +164,8 @@ class Lancamentos extends CI_Controller
         $config['last_tag_open'] = '<li>';
         $config['last_tag_close'] = '</li>';
 
+        // varDumpExit($where);
+
         $this->pagination->initialize($config);
 
         $this->data['total_provisorio'] = $this->financeiro_model->getTotalProvisorio(getUserId());
@@ -179,7 +181,8 @@ class Lancamentos extends CI_Controller
             $config['per_page'],
             $start,
             $limit,
-            $order_by = 'data_lancamento asc');
+            $order_by = 'data_lancamento asc',
+            $config['total_rows']);
 
         $this->data['view'] = 'financeiro/lancamentos';
         $this->load->view('tema/topo', $this->data);

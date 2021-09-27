@@ -19,16 +19,18 @@ class Financeiro_model extends CI_Model
         } else {
             $this->db->where('status = 1 AND id_usuario = ' . $id_usuario);
         }
+
         if ($order_by) {
             $this->db->order_by('data_lancamento', $order_by);
         }
-//        if ($limit) {
-//            if ($rows > $limit) {
-//                $this->db->limit($limit, ($rows - $limit));
-//            }
-//        }
-//        exit;
-        $this->db->limit($perpage, $start);
+
+        if ($limit) {
+            if ($rows > $limit) {
+                $this->db->limit($limit, ($rows - $limit));
+            }
+        }
+
+        // $this->db->limit($limit, $start);
         $query = $this->db->get();
         $result = !$one ? $query->result() : $query->row();
 
@@ -108,7 +110,6 @@ class Financeiro_model extends CI_Model
             ->where('status = 1 AND tipo = 2 AND baixado = 0 AND id_usuario = ' . $id_usuario);
 
         return $this->db->get()->row();
-
     }
 
     function getEntradasPendentes($id_usuario)
@@ -119,7 +120,6 @@ class Financeiro_model extends CI_Model
             ->where('status = 1 AND tipo = 1 AND baixado = 0 AND id_usuario = ' . $id_usuario);
 
         return $this->db->get()->row();
-
     }
 
     function getTotal($id_usuario)
@@ -159,8 +159,7 @@ class Financeiro_model extends CI_Model
         $this->db->where("(descricao LIKE '%$value%' || cliente_fornecedor LIKE '%$value%')");
         $this->db->where('status', 1);
         $this->db->where('id_usuario', $id);
-//        $this->db->limit(5);
+        //        $this->db->limit(5);
         return $this->db->get('lancamentos')->result();
     }
-
 }
