@@ -1022,7 +1022,7 @@ class Faturas extends CI_Controller
     {
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
-            $this->fatura_model->autoCompleteCliente($q, getUserId());
+            $this->clientes_model->autoCompleteCliente($q, getUserId());
         }
     }
 
