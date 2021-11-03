@@ -349,7 +349,7 @@ class Pendencias extends CI_Controller
                 'quitado' => 1,
                 'data_pagamento' => $data_pagamento,
             );
-            $this->pendencia_model->edit('pendencias', $data, 'id_pendencia', $id);
+            $result = $this->pendencia_model->edit('pendencias', $data, 'id_pendencia', $id);
 
             $pendencia = $this->pendencia_model->getById($id);
             $cliente = $this->clientes_model->getById($pendencia->id_cliente);
@@ -366,7 +366,11 @@ class Pendencias extends CI_Controller
                 'baixado' => 1,
             );
 
-            if ($this->financeiro_model->add('lancamentos', $consulta) == true) {
+            if ($_POST['registrar']) {
+                $this->financeiro_model->add('lancamentos', $consulta);
+            }
+
+            if ($result) {
                 $this->session->set_flashdata('sucesso', 'Pendência paga com sucesso!');
                 redirect($urlAtual);
             } else {

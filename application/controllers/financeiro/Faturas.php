@@ -384,7 +384,7 @@ class Faturas extends CI_Controller
                                 'data_vencimento' => $vencimentoFormatado,
                             );
                             //removendo adicao de compras parceladas de terceiros em Pendencias
-//                            $this->pendencia_model->add('pendencias', $data2);
+                            //                            $this->pendencia_model->add('pendencias', $data2);
                         }
 
                         $mes++;
@@ -441,7 +441,7 @@ class Faturas extends CI_Controller
                             'data_vencimento' => $vencimentoFormatado,
                         );
                         //removendo adicao de compras a vista de terceiros em Pendencias
-//                        $this->pendencia_model->add('pendencias', $data2);
+                        //                        $this->pendencia_model->add('pendencias', $data2);
                     }
 
                     if ($this->fatura_model->add('lancamentos_faturas_assoc', $data1)) {
@@ -640,7 +640,7 @@ class Faturas extends CI_Controller
                                 'data_vencimento' => $vencimentoFormatado,
                             );
                             //removendo edicao de compras parceladas de terceiros em Pendencias
-//                            $this->pendencia_model->add('pendencias', $data2);
+                            //                            $this->pendencia_model->add('pendencias', $data2);
                         }
 
                         $mes++;
@@ -697,7 +697,7 @@ class Faturas extends CI_Controller
                             'data_vencimento' => $vencimentoFormatado,
                         );
                         //removendo edicao de compras a vista de terceiros em Pendencias
-//                        $this->pendencia_model->add('pendencias', $data2);
+                        //                        $this->pendencia_model->add('pendencias', $data2);
                     }
 
                     if ($this->fatura_model->add('lancamentos_faturas_assoc', $data1)) {
@@ -713,7 +713,6 @@ class Faturas extends CI_Controller
                 redirect($urlAtual);
             }
             redirect($urlAtual);
-
         } else {
             $this->session->set_flashdata('erro', 'Não existem faturas abertas, não é possível lançar esta compra.');
             redirect($urlAtual);
@@ -742,12 +741,10 @@ class Faturas extends CI_Controller
 
             $this->session->set_flashdata('sucesso', 'Lançamento excluído com sucesso!');
             redirect($urlAtual);
-
         } else {
             $this->session->set_flashdata('erro', 'Erro ao tentar excluir lançamento de fatura.');
             redirect($urlAtual);
         }
-
     }
 
     public function abrir()
@@ -833,7 +830,6 @@ class Faturas extends CI_Controller
             $this->session->set_flashdata('erro', 'Erro ao tentar abrir a próxima fatura.');
             redirect($urlAtual);
         }
-
     }
 
     public function excluir()
@@ -867,7 +863,7 @@ class Faturas extends CI_Controller
     public function pagar()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eFaturas')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para fechar faturas.');
+            $this->session->set_flashdata('error', 'Você não tem permissão para pagar faturas.');
             redirect(base_url());
         }
         $urlAtual = $this->input->post('urlAtual');
@@ -1026,7 +1022,8 @@ class Faturas extends CI_Controller
         }
     }
 
-    public function ajaxDiaVencimentoFatura(){
+    public function ajaxDiaVencimentoFatura()
+    {
         $id_cartao = $_POST['id_cartao'];
         echo json_encode($this->fatura_model->getDiaVencimentoFatura($id_cartao));
     }

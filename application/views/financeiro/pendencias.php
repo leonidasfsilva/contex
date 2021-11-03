@@ -510,6 +510,15 @@ $periodo_pendencia = $this->input->get('periodo');
                             </select>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <div class="checkbox icheck">
+                                <input type="checkbox" class="form-control" id="registrar" name="registrar" value="1">
+                            </div>
+                            <label for="registrar" class="font-weight-bold">Registrar este pagamento em
+                                Lançamentos</label>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal">
