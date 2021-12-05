@@ -18,7 +18,6 @@ class Pendencias extends CI_Controller
         $this->load->model('clientes_model', '', true);
         $this->data['menuFinanceiro'] = 'Lancamentos';
         $this->global_url = site_url() . '/financeiro/pendencias/';
-
     }
 
     public function index()
@@ -174,7 +173,8 @@ class Pendencias extends CI_Controller
             $limit,
             $config['total_rows'],
             $config['per_page'],
-            $this->input->get('per_page'));
+            $this->input->get('per_page')
+        );
 
         $this->data['clientes'] = $this->pendencia_model->getClientes(getUserId());
         $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
@@ -184,12 +184,11 @@ class Pendencias extends CI_Controller
         $this->data['pendencias_debito'] = $this->pendencia_model->getPendenciasParcialDebito(getUserId(), $cliente, $where);
         $this->data['total_credito'] = $this->pendencia_model->getPendenciasTotalCredito(getUserId());
         $this->data['total_debito'] = $this->pendencia_model->getPendenciasTotalDebito(getUserId());
-//        $this->data['total'] = $this->pendencia_model->getTotal(id_usuario());
+        // $this->data['total'] = $this->pendencia_model->getTotal(getUserId());
 
 
         $this->data['view'] = 'financeiro/pendencias';
         $this->load->view('tema/topo', $this->data);
-
     }
 
     public function adicionar()
@@ -217,7 +216,6 @@ class Pendencias extends CI_Controller
 
             $data_pendencia = explode('/', $data_pendencia);
             $data_pendencia = $data_pendencia[2] . '-' . $data_pendencia[1] . '-' . $data_pendencia[0];
-
         } catch (Exception $e) {
             $data_pendencia = date('Y/m/d');
         }
@@ -242,7 +240,6 @@ class Pendencias extends CI_Controller
             $this->session->set_flashdata('erro', 'Erro ao tentar adicionar pendência');
             redirect($urlAtual);
         }
-
     }
 
     public function editar()
@@ -290,13 +287,10 @@ class Pendencias extends CI_Controller
                 $this->session->set_flashdata('erro', 'Erro ao tentar editar pendência');
                 redirect($urlAtual);
             }
-
         } else {
             $this->session->set_flashdata('erro', 'Método não permitido.');
             redirect($this->global_url);
-
         }
-
     }
 
     public function excluir()
@@ -312,7 +306,6 @@ class Pendencias extends CI_Controller
         if ($id == null || !is_numeric($id)) {
             $this->session->set_flashdata('erro', 'Método não permitido.');
             redirect($this->global_url);
-
         } else {
 
             $data = array(
@@ -322,12 +315,10 @@ class Pendencias extends CI_Controller
             if ($this->pendencia_model->delete('pendencias', $data, 'id_pendencia', $id) == true) {
                 $this->session->set_flashdata('sucesso', 'Pendência excluída com sucesso!');
                 redirect($urlAtual);
-
             } else {
                 $this->session->set_flashdata('erro', 'Erro ao tentar excluir pendência.');
                 redirect($urlAtual);
             }
-
         }
     }
 
@@ -350,7 +341,6 @@ class Pendencias extends CI_Controller
                 $data_pagamento = $_REQUEST['data_pagamento'];
                 $data_pagamento = explode('/', $data_pagamento);
                 $data_pagamento = $data_pagamento[2] . '-' . $data_pagamento[1] . '-' . $data_pagamento[0];
-
             } else {
                 $data_pagamento = date('Y/m/d');
             }
@@ -359,7 +349,7 @@ class Pendencias extends CI_Controller
                 'quitado' => 1,
                 'data_pagamento' => $data_pagamento,
             );
-            $this->pendencia_model->edit('pendencias', $data, 'id_pendencia', $id);
+            $result = $this->pendencia_model->edit('pendencias', $data, 'id_pendencia', $id);
 
             $pendencia = $this->pendencia_model->getById($id);
             $cliente = $this->clientes_model->getById($pendencia->id_cliente);
@@ -376,14 +366,17 @@ class Pendencias extends CI_Controller
                 'baixado' => 1,
             );
 
-            if ($this->financeiro_model->add('lancamentos', $consulta) == true) {
+            if ($_POST['registrar']) {
+                $this->financeiro_model->add('lancamentos', $consulta);
+            }
+
+            if ($result) {
                 $this->session->set_flashdata('sucesso', 'Pendência paga com sucesso!');
                 redirect($urlAtual);
             } else {
                 $this->session->set_flashdata('erro', 'Erro ao tentar pagar pendência');
                 redirect($urlAtual);
             }
-
         }
     }
 
@@ -397,7 +390,6 @@ class Pendencias extends CI_Controller
         print_array($pendencia);
         print_array($cliente);
         echo 'TESTE OK!';
-
     }
 
     //MODULO DE RETORNO DE FILTROS POR PERIODO
@@ -408,7 +400,6 @@ class Pendencias extends CI_Controller
         $primeiro = date("Y-m-d", strtotime("-" . ($dias) . " day"));
         $ultimo = date("Y-m-d", strtotime("+" . (364 - $dias) . " day"));
         return array($primeiro, $ultimo);
-
     }
 
     protected function getThisWeek()
@@ -469,5 +460,31 @@ class Pendencias extends CI_Controller
 
         $ate = $ano . "-" . $mes . "-" . $qtdDiasMes;
         return array($inicia, $ate);
+    }
+
+    public function autoCompleteCliente()
+    {
+        if (isset($_GET['term'])) {
+            $q = strtolower($_GET['term']);
+            $this->clientes_model->autoCompleteCliente($q, getUserId());
+        }
+    }
+
+    public function getClientName() {
+        $clientId = $_POST['clientId'] ?? null;
+        $json = [
+            'success' => false
+        ];
+        
+        if ($clientId) {
+            $result = $this->clientes_model->getClientName($clientId);
+            if ($result) {
+                $json = [
+                    'success' => true,
+                    'data' => $result
+                ];
+            }
+        }
+        echo json_encode($json, JSON_PRETTY_PRINT);
     }
 }

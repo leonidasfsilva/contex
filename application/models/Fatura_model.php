@@ -440,22 +440,6 @@ class Fatura_model extends CI_Model
         return $this->db->get()->row();
     }
 
-    function autoCompleteCliente($q, $id_usuario)
-    {
-        $query = $this->db->select('*')
-            ->limit(5)
-            ->like('nome', $q)
-            ->where('id_usuario', $id_usuario)
-            ->where('status', 1)
-            ->get('clientes');
-        if ($query->num_rows() > 0) {
-            foreach ($query->result_array() as $row) {
-                $row_set[] = array('label' => $row['nome'], 'id' => $row['id_clientes']);
-            }
-            echo json_encode($row_set);
-        }
-    }
-
     function getClientesPorFatura($idFatura)
     {
         return $this->db

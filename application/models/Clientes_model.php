@@ -1,4 +1,4 @@
-<?php if (! defined('BASEPATH')) {
+<?php if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -10,14 +10,13 @@ class Clientes_model extends CI_Model
         parent::__construct();
     }
 
-
     function get($table, $fields, $where = '', $id_usuario, $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
 
         $this->db->select($fields);
         $this->db->from($table);
         $this->db->order_by('nome', 'asc');
-//        $this->db->order_by('id_clientes', 'asc');
+        //        $this->db->order_by('id_clientes', 'asc');
         $this->db->limit($perpage, $start);
         if ($where) {
             $this->db->where($where . ' AND status = 1 AND id_usuario = ' . $id_usuario);
@@ -119,4 +118,31 @@ class Clientes_model extends CI_Model
         return $this->db->get()->row();
     }
 
+    function autoCompleteCliente($q, $id_usuario)
+    {
+        $query = $this->db->select('*')
+            ->limit(5)
+            ->like('nome', $q)
+            ->where('id_usuario', $id_usuario)
+            ->where('status', 1)
+            ->get('clientes');
+        if ($query->num_rows() > 0) {
+            foreach ($query->result_array() as $row) {
+                $row_set[] = array('label' => $row['nome'], 'id' => $row['id_clientes']);
+            }
+            echo json_encode($row_set);
+        }
+    }
+
+    public function getClientName($clientId)
+    {
+        $query = $this->db->select('nome')
+            ->where('id_clientes', $clientId)
+            ->get('clientes');
+
+        if ($query->num_rows() > 0) {
+            return $query->row();
+        }
+        return false;
+    }
 }
