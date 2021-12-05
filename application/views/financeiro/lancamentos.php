@@ -14,8 +14,7 @@ $fim = $this->input->get('dataFinal');
         <div class="row mr5 ml5">
             <div class="panel-ctrls ml5">
                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
-                    <a href="#modalEntrada" id="entrada" data-toggle="modal" role="button" class="btn btn-success btn-sm tip-bottom"
-                       title="Registrar nova entrada">
+                    <a href="#modalEntrada" id="entrada" data-toggle="modal" role="button" class="btn btn-success btn-sm tip-bottom" title="Registrar nova entrada">
                         <i class="fas fa-plus fa-fw"></i>
                         Nova Entrada
                     </a>
@@ -58,10 +57,10 @@ $fim = $this->input->get('dataFinal');
     <div class="panel-body panel-no-padding">
         <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
             <thead>
-            <tr role="row">
-                <th colspan="2" style="text-align: left !important;">Descrição</th>
-                <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
-            </tr>
+                <tr role="row">
+                    <th colspan="2" style="text-align: left !important;">Descrição</th>
+                    <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
+                </tr>
             </thead>
             <tr>
                 <td colspan="2" style="text-align: left; font-weight: bold">(=) SALDO DISPONÍVEL</td>
@@ -83,18 +82,18 @@ $fim = $this->input->get('dataFinal');
         <div class="panel-body panel-no-padding ">
             <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
                 <thead>
-                <tr role="row">
-                    <th>Data</th>
-                    <th>Descrição</th>
-                    <th>Status</th>
-                    <th>Valor (R$)</th>
-                    <th style="width: 100px !important;">Ações</th>
-                </tr>
+                    <tr role="row">
+                        <th>Data</th>
+                        <th>Descrição</th>
+                        <th>Status</th>
+                        <th>Valor (R$)</th>
+                        <th style="width: 100px !important;">Ações</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td colspan="5">Nenhum registro encontrado</td>
-                </tr>
+                    <tr>
+                        <td colspan="5">Nenhum registro encontrado</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -140,103 +139,103 @@ $fim = $this->input->get('dataFinal');
         <div class="panel-body panel-no-padding table-responsive">
             <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
                 <thead>
-                <tr role="row">
-                    <th class="th_soma hidden" style="width: 10px !important;">Soma</th>
-                    <th>Data</th>
-                    <th>Descrição</th>
-                    <th>Status</th>
-                    <th>Valor (R$)</th>
-                    <th style="width: 100px">Ações</th>
-                </tr>
+                    <tr role="row">
+                        <th class="th_soma hidden" style="width: 10px !important;">Soma</th>
+                        <th>Data</th>
+                        <th>Descrição</th>
+                        <th>Status</th>
+                        <th>Valor (R$)</th>
+                        <th style="width: 130px">Ações</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <?php
-                $totalReceita = 0;
-                $totalDespesa = 0;
-                $saldo = 0;
-                foreach ($results as $r) {
-                    $vencimento = date(('d/m'), strtotime($r->data_lancamento));
+                    <?php
+                    $totalReceita = 0;
+                    $totalDespesa = 0;
+                    $saldo = 0;
+                    foreach ($results as $r) {
+                        $vencimento = date(('d/m'), strtotime($r->data_lancamento));
 
-                    if ($r->baixado == 0) {
-                        $status = 'Pendente';
-                        $label_status = 'warning';
+                        if ($r->baixado == 0) {
+                            $status = 'Pendente';
+                            $label_status = 'warning';
+                        } else {
+                            $status = 'Efetivado';
+                            $label_status = 'primary';
+                        };
 
-                    } else {
-                        $status = 'Efetivado';
-                        $label_status = 'primary';
-
-                    };
-
-                    if ($r->tipo == 1) {
-                        $color = 'green';
-                        $label_tipo = 'success';
-                        $tipo = 'ENTRADA';
-
-
-                    } else {
-                        $color = 'red';
-                        $label_tipo = 'danger';
-                        $tipo = 'SAÍDA';
-
-                    }
-
-                    if ($r->cliente_fornecedor) {
-                        $fornecedor = $r->cliente_fornecedor;
-                    } else {
-                        $fornecedor = "&nbsp;";
-                    }
-
-                    if ($r->tipo == 1) {
-                        $tipo = 'ENTRADA';
-                    } else {
-                        $tipo = 'SAÍDA';
-                    }
-
-                    foreach ($formasPagamento as $f) {
-                        if ($f->id_forma == $r->forma_pgto) {
-                            $forma_pgto = $f->nome;
+                        if ($r->tipo == 1) {
+                            $color = 'green';
+                            $label_tipo = 'success';
+                            $tipo = 'ENTRADA';
+                        } else {
+                            $color = 'red';
+                            $label_tipo = 'danger';
+                            $tipo = 'SAÍDA';
                         }
-                    }
+
+                        if ($r->cliente_fornecedor) {
+                            $fornecedor = $r->cliente_fornecedor;
+                        } else {
+                            $fornecedor = "&nbsp;";
+                        }
+
+                        if ($r->tipo == 1) {
+                            $tipo = 'ENTRADA';
+                        } else {
+                            $tipo = 'SAÍDA';
+                        }
+
+                        foreach ($formasPagamento as $f) {
+                            if ($f->id_forma == $r->forma_pgto) {
+                                $forma_pgto = $f->nome;
+                            }
+                        }
 
 
-                    echo '<tr>';
-                    echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
-                    echo '<td>' . $vencimento . '</td>';
-//                    echo '<td><span class="badge badge-' . $label . '">' . ucfirst($r->tipo) . '</span></td>';
-                    echo '<td>' . strtoupper($r->descricao) . '<br><span class="small">' . ($fornecedor) . '</span></td>';
-                    echo '<td><span class="label label-' . $label_tipo . '">' . strtoupper($tipo) . '</span><br><span class="label label-' . $label_status . '">' . strtoupper($status) . '</span></td>';
-                    echo '<td><span class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small">' . ($forma_pgto) . '</td>';
+                        echo '<tr>';
+                        echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
+                        echo '<td>' . $vencimento . '</td>';
+                        //                    echo '<td><span class="badge badge-' . $label . '">' . ucfirst($r->tipo) . '</span></td>';
+                        echo '<td>' . strtoupper($r->descricao) . '<br><span class="small">' . ($fornecedor) . '</span></td>';
+                        echo '<td><span class="label label-' . $label_tipo . '">' . strtoupper($tipo) . '</span><br><span class="label label-' . $label_status . '">' . strtoupper($status) . '</span></td>';
+                        echo '<td><span class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small">' . ($forma_pgto) . '</td>';
 
-                    if ($r->valor < 0) {
-                        $valor = number_format(abs($r->valor), 2, ',', '.');
-                    } else {
-                        $valor = number_format($r->valor, 2, ',', '.');
-                    }
+                        if ($r->valor < 0) {
+                            $valor = number_format(abs($r->valor), 2, ',', '.');
+                        } else {
+                            $valor = number_format($r->valor, 2, ',', '.');
+                        }
 
-                    echo '<td>';
-                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
-                        echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Detalhes" idLancamento="' .
-                            $r->id_lancamento . '" descricao="' . $r->descricao . '" valor="' . $valor . '" vencimento="' .
-                            date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
-                            $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '">
+                        echo '<td>';
+                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
+                            echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Detalhes" idLancamento="' .
+                                $r->id_lancamento . '" descricao="' . $r->descricao . '" valor="' . $valor . '" vencimento="' .
+                                date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
+                                $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '">
                                 <i class="fas fa-search-plus fa-lg fa-fw"></i></a>';
-                    }
-                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
-                        echo '<a href="#modalExcluir" data-toggle="modal" idLancamento="' . $r->id_lancamento . '" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw"></i></a>';
-                    }
+                            echo '<a href="#modalCopiar" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm copiar" title="Copiar" idLancamento="' .
+                                $r->id_lancamento . '" descricao="' . $r->descricao . '" valor="' . $valor . '" vencimento="' .
+                                date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
+                                $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '">
+                                <i class="fas fa-copy fa-lg fa-fw"></i></a>';
+                        }
+                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
+                            echo '<a href="#modalExcluir" data-toggle="modal" idLancamento="' . $r->id_lancamento . '" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw"></i></a>';
+                        }
 
-                    echo '</td>';
-                    echo '</tr>';
-                } ?>
+                        echo '</td>';
+                        echo '</tr>';
+                    } ?>
                 </tbody>
             </table>
             <div id="somatorio_lancamentos" class="panel-footer hidden">
                 <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
                     <thead>
-                    <tr>
-                        <th colspan="2" style="text-align: left !important;">Descrição</th>
-                        <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
-                    </tr>
+                        <tr>
+                            <th colspan="2" style="text-align: left !important;">Descrição</th>
+                            <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
+                        </tr>
                     </thead>
                     <tr>
                         <td colspan="2" style="text-align: left; font-weight: bold">(=) LANÇAMENTOS SELECIONADOS</td>
@@ -264,10 +263,10 @@ $fim = $this->input->get('dataFinal');
     <div class="panel-body panel-no-padding">
         <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
             <thead>
-            <tr role="row">
-                <th colspan="2" style="text-align: left !important;">Descrição</th>
-                <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
-            </tr>
+                <tr role="row">
+                    <th colspan="2" style="text-align: left !important;">Descrição</th>
+                    <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
+                </tr>
             </thead>
             <tr>
                 <td colspan="2" style="text-align: left;">(+) SALDO PROVISÓRIO EM CONTA</td>
@@ -312,28 +311,32 @@ $fim = $this->input->get('dataFinal');
                         <div class="form-group col-lg-6">
                             <label class="tooltips font-weight-bold" title="Filtrar lançamentos por tipo">Tipo <i class="fa fa-info-circle fa-fw"></i></label>
                             <select class="form-control" id="select_tipo" name="tipo">
-                                <option value="todos"><< Todos >></option>
+                                <option value="todos">
+                                    << Todos>>
+                                </option>
                                 <option value="entrada" <?php if ($tipo_lancamentos == 'entrada') {
-                                    echo 'selected';
-                                } ?>>ENTRADA
+                                                            echo 'selected';
+                                                        } ?>>ENTRADA
                                 </option>
                                 <option value="saida" <?php if ($tipo_lancamentos == 'saida') {
-                                    echo 'selected';
-                                } ?>>SAÍDA
+                                                            echo 'selected';
+                                                        } ?>>SAÍDA
                                 </option>
                             </select>
                         </div>
                         <div class="form-group col-lg-6">
                             <label class="tooltips font-weight-bold" title="Filtrar lançamentos por status">Status <i class="fa fa-info-circle fa-fw"></i></label>
                             <select class="form-control" id="select_status" name="status">
-                                <option value="todos"><< Todos >></option>
+                                <option value="todos">
+                                    << Todos>>
+                                </option>
                                 <option value="efetivado" <?php if ($status_lancamentos == 'efetivado') {
-                                    echo 'selected';
-                                } ?>>EFETIVADO
+                                                                echo 'selected';
+                                                            } ?>>EFETIVADO
                                 </option>
                                 <option value="pendente" <?php if ($status_lancamentos == 'pendente') {
-                                    echo 'selected';
-                                } ?>>PENDENTE
+                                                                echo 'selected';
+                                                            } ?>>PENDENTE
                                 </option>
                             </select>
                         </div>
@@ -342,42 +345,44 @@ $fim = $this->input->get('dataFinal');
                         <div class="form-group col-lg-6" style="margin-left: 0">
                             <label class="tooltips font-weight-bold" title="Filtrar lançamentos por período específico">Período <i class="fa fa-info-circle fa-fw"></i></label>
                             <select name="periodo" id="select_periodo" class="form-control">
-                                <option value=""><< Selecione >></option>
-                                <option value="todos" <?php if ($periodo_lancamentos == 'todos') {
-                                    echo 'selected';
-                                } ?>>Todos
+                                <option value="">
+                                    << Selecione>>
                                 </option>
-                                <option value="3dias"<?php if ($periodo_lancamentos == '3dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 3 dias
+                                <option value="todos" <?php if ($periodo_lancamentos == 'todos') {
+                                                            echo 'selected';
+                                                        } ?>>Todos
+                                </option>
+                                <option value="3dias" <?php if ($periodo_lancamentos == '3dias') {
+                                                            echo 'selected';
+                                                        } ?>>Últimos 3 dias
                                 </option>
                                 <option value="5dias" <?php if ($periodo_lancamentos == '5dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 5 dias
+                                                            echo 'selected';
+                                                        } ?>>Últimos 5 dias
                                 </option>
                                 <option value="7dias" <?php if ($periodo_lancamentos == '7dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 7 dias
+                                                            echo 'selected';
+                                                        } ?>>Últimos 7 dias
                                 </option>
                                 <option value="15dias" <?php if ($periodo_lancamentos == '15dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 15 dias
+                                                            echo 'selected';
+                                                        } ?>>Últimos 15 dias
                                 </option>
                                 <option value="30dias" <?php if ($periodo_lancamentos == '30dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 30 dias
+                                                            echo 'selected';
+                                                        } ?>>Últimos 30 dias
                                 </option>
                                 <option value="60dias" <?php if ($periodo_lancamentos == '60dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 60 dias
+                                                            echo 'selected';
+                                                        } ?>>Últimos 60 dias
                                 </option>
                                 <option value="90dias" <?php if ($periodo_lancamentos == '90dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 90 dias
+                                                            echo 'selected';
+                                                        } ?>>Últimos 90 dias
                                 </option>
-                                <option value="especifico"<?php if ($periodo_lancamentos == 'especifico') {
-                                    echo 'selected';
-                                } ?>>PERÍODO ESPECÍFICO
+                                <option value="especifico" <?php if ($periodo_lancamentos == 'especifico') {
+                                                                echo 'selected';
+                                                            } ?>>PERÍODO ESPECÍFICO
                                 </option>
                             </select>
                         </div>
@@ -416,24 +421,24 @@ $fim = $this->input->get('dataFinal');
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricao">Descrição *</label>
-                            <input class="form-control" id="descricao" type="text" name="descricao"/>
-                            <input id="urlEntrada" type="hidden" class="urlAtual" name="urlAtual" value=""/>
+                            <input class="form-control" id="descricao" type="text" name="descricao" />
+                            <input id="urlEntrada" type="hidden" class="urlAtual" name="urlAtual" value="" />
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="fornecedor">Fornecedor</label>
-                            <input class="form-control" type="text" name="fornecedor"/>
+                            <input class="form-control" type="text" name="fornecedor" />
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-6">
                             <label for="valor" class="font-weight-bold">Valor *</label>
-                            <input class="form-control money" type="text" name="valor"/>
+                            <input class="form-control money" type="text" name="valor" />
                         </div>
                         <div class="form-group col-lg-6">
                             <label for="vencimento" class="font-weight-bold">Data de Lançamento</label>
-                            <input class="form-control datepicker" type="text" name="vencimento"/>
+                            <input class="form-control datepicker" type="text" name="vencimento" />
                         </div>
                     </div>
                     <div class="row">
@@ -447,16 +452,18 @@ $fim = $this->input->get('dataFinal');
                         <div id="divRecebimento" class="hidden">
                             <div class="form-group col-lg-4">
                                 <label for="recebimento" class="font-weight-bold">Data de Pagamento</label>
-                                <input class="form-control datepicker" id="recebimento" type="text" name="recebimento"/>
+                                <input class="form-control datepicker" id="recebimento" type="text" name="recebimento" />
                             </div>
                             <div class="form-group col-lg-4">
                                 <label for="formaPgto" class="font-weight-bold">Forma Pagamento *</label>
                                 <select name="formaPgto" class="form-control">
-                                    <option value=""><< Selecione >></option>
+                                    <option value="">
+                                        << Selecione>>
+                                    </option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
                                             <option value="<?= $f->id_forma ?>"><?= $f->nome ?></option>
-                                        <?php }
+                                    <?php }
                                     } ?>
                                 </select>
                             </div>
@@ -487,24 +494,24 @@ $fim = $this->input->get('dataFinal');
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricao">Descrição *</label>
-                            <input class="form-control" type="text" name="descricao"/>
-                            <input class="urlAtual" type="hidden" name="urlAtual" value=""/>
+                            <input class="form-control" type="text" name="descricao" />
+                            <input class="urlAtual" type="hidden" name="urlAtual" value="" />
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="fornecedor">Fornecedor</label>
-                            <input class="form-control" type="text" name="fornecedor"/>
+                            <input class="form-control" type="text" name="fornecedor" />
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-6">
                             <label for="valor" class="font-weight-bold">Valor *</label>
-                            <input class="form-control money" type="text" name="valor"/>
+                            <input class="form-control money" type="text" name="valor" />
                         </div>
                         <div class="form-group col-lg-6">
                             <label for="vencimento" class="font-weight-bold">Data de Lançamento</label>
-                            <input class="form-control datepicker" type="text" name="vencimento"/>
+                            <input class="form-control datepicker" type="text" name="vencimento" />
                         </div>
                     </div>
                     <div class="row">
@@ -517,16 +524,18 @@ $fim = $this->input->get('dataFinal');
                         <div id="divRecebimento" class="hidden">
                             <div class="form-group col-lg-4">
                                 <label for="pagamento" class="font-weight-bold">Data de Pagamento</label>
-                                <input class="form-control datepicker" id="pagamento" type="text" name="pagamento"/>
+                                <input class="form-control datepicker" id="pagamento" type="text" name="pagamento" />
                             </div>
                             <div class="form-group col-lg-4">
                                 <label for="formaPgto" class="font-weight-bold">Forma Pagamento *</label>
                                 <select name="formaPgto" class="form-control">
-                                    <option value=""><< Selecione >></option>
+                                    <option value="">
+                                        << Selecione>>
+                                    </option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
                                             <option value="<?= $f->id_forma ?>"><?= $f->nome ?></option>
-                                        <?php }
+                                    <?php }
                                     } ?>
                                 </select>
                             </div>
@@ -553,29 +562,29 @@ $fim = $this->input->get('dataFinal');
                 <h4 class="modal-title text-white ">Detalhes do lançamento</h4>
             </div>
             <form id="formEditar" action="<?= base_url('financeiro/lancamentos/editar') ?>" method="post" autocomplete="off">
-                <input class="urlAtual" type="hidden" name="urlAtual" value=""/>
+                <input class="urlAtual" type="hidden" name="urlAtual" value="" />
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricaoEditar">Descrição *</label>
-                            <input class="form-control" id="descricaoEditar" type="text" name="descricao"/>
-                            <input type="hidden" id="idEditar" name="id" value=""/>
+                            <input class="form-control" id="descricaoEditar" type="text" name="descricao" />
+                            <input type="hidden" id="idEditar" name="id" value="" />
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="fornecedorEditar">Fornecedor</label>
-                            <input class="form-control" id="fornecedorEditar" type="text" name="fornecedor"/>
+                            <input class="form-control" id="fornecedorEditar" type="text" name="fornecedor" />
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-4">
                             <label for="valorEditar" class="font-weight-bold">Valor *</label>
-                            <input class="form-control money" id="valorEditar" type="text" name="valor"/>
+                            <input class="form-control money" id="valorEditar" type="text" name="valor" />
                         </div>
                         <div class="form-group col-lg-4">
                             <label for="vencimentoEditar" class="font-weight-bold">Data de Lançamento</label>
-                            <input class="form-control datepicker" id="vencimentoEditar" type="text" name="vencimento"/>
+                            <input class="form-control datepicker" id="vencimentoEditar" type="text" name="vencimento" />
                         </div>
                         <div class="form-group col-lg-4">
                             <label for="tipoEditar" class="font-weight-bold">Tipo</label>
@@ -595,16 +604,18 @@ $fim = $this->input->get('dataFinal');
                         <div id="divPagamentoEditar" class="hidden">
                             <div class="form-group col-lg-4">
                                 <label for="pagamentoEditar" class="font-weight-bold">Data Pagamento</label>
-                                <input class="form-control datepicker" id="pagamentoEditar" type="text" name="pagamento"/>
+                                <input class="form-control datepicker" id="pagamentoEditar" type="text" name="pagamento" />
                             </div>
                             <div class="form-group col-lg-4">
                                 <label for="formaPgtoEditar" class="font-weight-bold">Forma Pagamento *</label>
                                 <select name="formaPgto" id="formaPgtoEditar" class="form-control">
-                                    <option value=""><< Selecione >></option>
+                                    <option value="">
+                                        << Selecione>>
+                                    </option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
                                             <option value="<?= $f->id_forma ?>"><?= $f->nome ?></option>
-                                        <?php }
+                                    <?php }
                                     } ?>
                                 </select>
                             </div>
@@ -622,6 +633,86 @@ $fim = $this->input->get('dataFinal');
     </div>
 </div>
 
+<!-- Modal COPIAR -->
+<div class="modal fade" id="modalCopiar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-white ">Copiar lançamento</h4>
+            </div>
+            <form id="formCopiar" action="<?= base_url('financeiro/lancamentos/copiar') ?>" method="post" autocomplete="off">
+                <input class="urlAtual" type="hidden" name="urlAtual" value="" />
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label class="font-weight-bold" for="descricaoCopiar">Descrição *</label>
+                            <input class="form-control" id="descricaoCopiar" type="text" name="descricao" />
+                            <input type="hidden" id="idCopiar" name="id" value="" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label class="font-weight-bold" for="fornecedorCopiar">Fornecedor</label>
+                            <input class="form-control" id="fornecedorCopiar" type="text" name="fornecedor" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-4">
+                            <label for="valorCopiar" class="font-weight-bold">Valor *</label>
+                            <input class="form-control money" id="valorCopiar" type="text" name="valor" />
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label for="vencimentoCopiar" class="font-weight-bold">Data de Lançamento</label>
+                            <input class="form-control datepicker" id="vencimentoCopiar" type="text" name="vencimento" />
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label for="tipoCopiar" class="font-weight-bold">Tipo</label>
+                            <select class="form-control" name="tipo" id="tipoCopiar">
+                                <option value="1">ENTRADA</option>
+                                <option value="2">SAÍDA</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-4">
+                            <div class="checkbox icheck">
+                                <input type="checkbox" class="form-control" id="pagoCopiar" name="pago" value="1">
+                            </div>
+                            <label for="pagoCopiar" class="font-weight-bold">Pago?</label>
+                        </div>
+                        <div id="divPagamentoCopiar" class="hidden">
+                            <div class="form-group col-lg-4">
+                                <label for="pagamentoCopiar" class="font-weight-bold">Data Pagamento</label>
+                                <input class="form-control datepicker" id="pagamentoCopiar" type="text" name="pagamento" />
+                            </div>
+                            <div class="form-group col-lg-4">
+                                <label for="formaPgtoCopiar" class="font-weight-bold">Forma Pagamento *</label>
+                                <select name="formaPgto" id="formaPgtoCopiar" class="form-control">
+                                    <option value="">
+                                        << Selecione>>
+                                    </option>
+                                    <?php if ($formasPagamento) {
+                                        foreach ($formasPagamento as $f) { ?>
+                                            <option value="<?= $f->id_forma ?>"><?= $f->nome ?></option>
+                                    <?php }
+                                    } ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                        <i class="fa fa-times fa-fw"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Copiar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Modal EXCLUIR-->
 <div class="modal fade" id="modalExcluir" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -633,8 +724,8 @@ $fim = $this->input->get('dataFinal');
             <form id="formExcluir" action="<?= base_url('financeiro/lancamentos/excluir'); ?>" method="post">
                 <div class="modal-body">
                     <p>Deseja realmente excluir este lançamento?</p>
-                    <input id="idExcluir" type="hidden" name="id" value=""/>
-                    <input class="urlAtual" type="hidden" name="urlAtual" value=""/>
+                    <input id="idExcluir" type="hidden" name="id" value="" />
+                    <input class="urlAtual" type="hidden" name="urlAtual" value="" />
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i> Cancelar</button>
@@ -646,33 +737,32 @@ $fim = $this->input->get('dataFinal');
 </div>
 
 <script type="text/javascript">
-
-    $('#div_pesquisa').on('shown.bs.dropdown', function (e) {
+    $('#div_pesquisa').on('shown.bs.dropdown', function(e) {
         $('#input_pesquisa').focus();
     });
 
-    $('.dropdown-menu>form').click(function (e) {
+    $('.dropdown-menu>form').click(function(e) {
         e.stopPropagation();
     });
 
-    $(document).on('change', '#select_periodo, #select_situacao', function () {
+    $(document).on('change', '#select_periodo, #select_situacao', function() {
         // $("#form_filtro").submit();
     });
 
 
-    jQuery(document).ready(function ($) {
+    jQuery(document).ready(function($) {
 
         var marcados = false;
 
         somaValorParcelas();
 
-        $('#marcar_todos, #desmarcar_todos').click(function () {
+        $('#marcar_todos, #desmarcar_todos').click(function() {
             marcarTodosiCheck();
             $('#marcar_todos').toggleClass('hidden');
             $('#desmarcar_todos').toggleClass('hidden');
         });
 
-        $('.habilita_desabilita_soma').click(function () {
+        $('.habilita_desabilita_soma').click(function() {
             $('.th_soma').toggleClass('hidden');
             $('.td_soma').toggleClass('hidden');
             $('#div_btn_marcar').toggleClass('hidden');
@@ -681,7 +771,7 @@ $fim = $this->input->get('dataFinal');
             $('#esconder_soma').toggleClass('hidden');
         });
 
-        $('.soma_parcelas').on('ifChanged', function (event) {
+        $('.soma_parcelas').on('ifChanged', function(event) {
             const icheck = event.target.checked;
             somaValorParcelas();
         });
@@ -690,7 +780,7 @@ $fim = $this->input->get('dataFinal');
         function somaValorParcelas() {
             var Soma = 0;
             // iterate through each td based on class and add the values
-            $(".valor_parcela").each(function () {
+            $(".valor_parcela").each(function() {
                 //Check if the checkbox is checked
                 if ($(this).closest('tr').find('.soma_parcelas').is(':checked')) {
                     var value = $('span', this).text();
@@ -712,12 +802,12 @@ $fim = $this->input->get('dataFinal');
 
         function marcarTodosiCheck() {
             if (marcados == false) {
-                $(".soma_parcelas").each(function () {
+                $(".soma_parcelas").each(function() {
                     $('.soma_parcelas').iCheck('check');
                     marcados = true;
                 });
             } else {
-                $(".soma_parcelas").each(function () {
+                $(".soma_parcelas").each(function() {
                     $('.soma_parcelas').iCheck('uncheck');
                     marcados = false;
                 });
@@ -725,7 +815,7 @@ $fim = $this->input->get('dataFinal');
         }
 
 
-        $('#select_periodo').change(function () {
+        $('#select_periodo').change(function() {
             const value = $(this).val();
             if (value === 'especifico') {
                 $('#div_intervalo_data').show();
@@ -736,7 +826,7 @@ $fim = $this->input->get('dataFinal');
             }
         });
 
-        $('#select_periodo option:selected').each(function (index, element) {
+        $('#select_periodo option:selected').each(function(index, element) {
             if ($(this).val() == 'especifico') {
                 $('#div_intervalo_data').show();
             } else {
@@ -746,12 +836,12 @@ $fim = $this->input->get('dataFinal');
             }
         });
 
-        $('#modalReceita, #modalDespesa').on('hidden.bs.modal', function () {
+        $('#modalReceita, #modalDespesa').on('hidden.bs.modal', function() {
             $('#formReceita, #formDespesa').trigger("reset");
         });
 
         var recebido = $('#recebido').iCheck('update')[0].checked;
-        $.each($(recebido), function (key, value) {
+        $.each($(recebido), function(key, value) {
             if (recebido == true) {
                 $('#divRecebimento').removeClass('hidden');
             } else {
@@ -759,16 +849,16 @@ $fim = $this->input->get('dataFinal');
             }
         });
 
-        $('#pago, #recebido, #pagoEditar').on('ifChanged', function (event) {
+        $('#pago, #recebido, #pagoEditar, #pagoCopiar').on('ifChanged', function(event) {
             mudaICheck(event);
         });
 
         function mudaICheck(event) {
             const checked = event.target.checked;
             if (checked == true) {
-                $('#divRecebimento, #divPagamentoEditar, #divPagamento').removeClass('hidden');
+                $('#divRecebimento, #divPagamentoEditar, #divPagamentoCopiar, #divPagamento').removeClass('hidden');
             } else {
-                $('#divRecebimento, #divPagamentoEditar, #divPagamento').addClass('hidden');
+                $('#divRecebimento, #divPagamentoEditar, #divPagamentoCopiar, #divPagamento').addClass('hidden');
             }
         }
 
@@ -806,28 +896,48 @@ $fim = $this->input->get('dataFinal');
 
         $("#formReceita").validate({
             rules: {
-                descricao: {required: true},
-                cliente: {required: false},
-                valor: {required: true},
-                vencimento: {required: false},
-                formaPgto: {required: true}
+                descricao: {
+                    required: true
+                },
+                cliente: {
+                    required: false
+                },
+                valor: {
+                    required: true
+                },
+                vencimento: {
+                    required: false
+                },
+                formaPgto: {
+                    required: true
+                }
 
             },
             messages: {
-                descricao: {required: 'Informe a descrição'},
-                cliente: {required: 'Campo obrigatório'},
-                valor: {required: 'Informe o valor'},
-                vencimento: {required: 'Campo obrigatório'},
-                formaPgto: {required: 'Selecione a forma de pagamento'}
+                descricao: {
+                    required: 'Informe a descrição'
+                },
+                cliente: {
+                    required: 'Campo obrigatório'
+                },
+                valor: {
+                    required: 'Informe o valor'
+                },
+                vencimento: {
+                    required: 'Campo obrigatório'
+                },
+                formaPgto: {
+                    required: 'Selecione a forma de pagamento'
+                }
             },
 
             errorClass: "help-block",
             errorElement: "p",
-            highlight: function (element, errorClass, validClass) {
+            highlight: function(element, errorClass, validClass) {
                 $(element).parents('.form-group').addClass('has-error');
                 $(element).parents('.form-group').removeClass('has-success');
             },
-            unhighlight: function (element, errorClass, validClass) {
+            unhighlight: function(element, errorClass, validClass) {
                 $(element).parents('.form-group').removeClass('has-error');
                 $(element).parents('.form-group').addClass('has-success');
             }
@@ -836,28 +946,48 @@ $fim = $this->input->get('dataFinal');
 
         $("#formDespesa").validate({
             rules: {
-                descricao: {required: true},
-                cliente: {required: false},
-                valor: {required: true},
-                vencimento: {required: false},
-                formaPgto: {required: true}
+                descricao: {
+                    required: true
+                },
+                cliente: {
+                    required: false
+                },
+                valor: {
+                    required: true
+                },
+                vencimento: {
+                    required: false
+                },
+                formaPgto: {
+                    required: true
+                }
 
             },
             messages: {
-                descricao: {required: 'Informe a descrição'},
-                cliente: {required: 'Campo obrigatório'},
-                valor: {required: 'Informe o valor'},
-                vencimento: {required: 'Campo obrigatório'},
-                formaPgto: {required: 'Selecione a forma de pagamento'}
+                descricao: {
+                    required: 'Informe a descrição'
+                },
+                cliente: {
+                    required: 'Campo obrigatório'
+                },
+                valor: {
+                    required: 'Informe o valor'
+                },
+                vencimento: {
+                    required: 'Campo obrigatório'
+                },
+                formaPgto: {
+                    required: 'Selecione a forma de pagamento'
+                }
             },
 
             errorClass: "help-block",
             errorElement: "p",
-            highlight: function (element, errorClass, validClass) {
+            highlight: function(element, errorClass, validClass) {
                 $(element).parents('.form-group').addClass('has-error');
                 $(element).parents('.form-group').removeClass('has-success');
             },
-            unhighlight: function (element, errorClass, validClass) {
+            unhighlight: function(element, errorClass, validClass) {
                 $(element).parents('.form-group').removeClass('has-error');
                 $(element).parents('.form-group').addClass('has-success');
             }
@@ -866,54 +996,123 @@ $fim = $this->input->get('dataFinal');
 
         $("#formEditar").validate({
             rules: {
-                descricao: {required: true},
-                cliente: {required: false},
-                valor: {required: true},
-                vencimento: {required: false},
-                formaPgto: {required: true}
+                descricao: {
+                    required: true
+                },
+                cliente: {
+                    required: false
+                },
+                valor: {
+                    required: true
+                },
+                vencimento: {
+                    required: false
+                },
+                formaPgto: {
+                    required: true
+                }
 
             },
             messages: {
-                descricao: {required: 'Campo obrigatório'},
-                cliente: {required: 'Campo obrigatório'},
-                valor: {required: 'Campo obrigatório'},
-                vencimento: {required: 'Campo obrigatório'},
-                formaPgto: {required: 'Selecione a forma de pagamento'}
+                descricao: {
+                    required: 'Campo obrigatório'
+                },
+                cliente: {
+                    required: 'Campo obrigatório'
+                },
+                valor: {
+                    required: 'Campo obrigatório'
+                },
+                vencimento: {
+                    required: 'Campo obrigatório'
+                },
+                formaPgto: {
+                    required: 'Selecione a forma de pagamento'
+                }
             },
 
             errorClass: "help-block",
             errorElement: "p",
-            highlight: function (element, errorClass, validClass) {
+            highlight: function(element, errorClass, validClass) {
                 $(element).parents('.form-group').addClass('has-error');
                 $(element).parents('.form-group').removeClass('has-success');
             },
-            unhighlight: function (element, errorClass, validClass) {
+            unhighlight: function(element, errorClass, validClass) {
                 $(element).parents('.form-group').removeClass('has-error');
                 $(element).parents('.form-group').addClass('has-success');
             }
 
         });
 
-        $(document).on('click', '.excluir', function (event) {
+        $("#formCopiar").validate({
+            rules: {
+                descricao: {
+                    required: true
+                },
+                cliente: {
+                    required: false
+                },
+                valor: {
+                    required: true
+                },
+                vencimento: {
+                    required: false
+                },
+                formaPgto: {
+                    required: true
+                }
+
+            },
+            messages: {
+                descricao: {
+                    required: 'Campo obrigatório'
+                },
+                cliente: {
+                    required: 'Campo obrigatório'
+                },
+                valor: {
+                    required: 'Campo obrigatório'
+                },
+                vencimento: {
+                    required: 'Campo obrigatório'
+                },
+                formaPgto: {
+                    required: 'Selecione a forma de pagamento'
+                }
+            },
+
+            errorClass: "help-block",
+            errorElement: "p",
+            highlight: function(element, errorClass, validClass) {
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
+            }
+        });
+
+        $(document).on('click', '.excluir', function(event) {
             $("#idExcluir").val($(this).attr('idLancamento'));
         });
 
-        $(document).on('click', '.editar', function (event) {
-            $("#idEditar").val($(this).attr('idLancamento'));
-            $("#descricaoEditar").val($(this).attr('descricao'));
-            $("#fornecedorEditar").val($(this).attr('fornecedor'));
-            $("#valorEditar").val($(this).attr('valor'));
-            $("#vencimentoEditar").val($(this).attr('vencimento'));
-            $("#pagamentoEditar").val($(this).attr('pagamento'));
-            $("#formaPgtoEditar").val($(this).attr('formaPgto'));
-            $("#tipoEditar").val($(this).attr('tipo'));
+        $(document).on('click', '.editar, .copiar', function(event) {
+            $("#idEditar, #idCopiar").val($(this).attr('idLancamento'));
+            $("#descricaoEditar, #descricaoCopiar").val($(this).attr('descricao'));
+            $("#fornecedorEditar, #fornecedorCopiar").val($(this).attr('fornecedor'));
+            $("#valorEditar, #valorCopiar").val($(this).attr('valor'));
+            $("#vencimentoEditar, #vencimentoCopiar").val($(this).attr('vencimento'));
+            $("#pagamentoEditar, #pagamentoCopiar").val($(this).attr('pagamento'));
+            $("#formaPgtoEditar, #formaPgtoCopiar").val($(this).attr('formaPgto'));
+            $("#tipoEditar, #tipoCopiar").val($(this).attr('tipo'));
             var baixado = $(this).attr('baixado');
             if (baixado == 1) {
-                $("#pagoEditar").iCheck('check');
-                $("#divPagamentoEditar").removeClass('hidden');
+                $("#pagoEditar, #pagoCopiar").iCheck('check');
+                $("#divPagamentoEditar, #divPagamentoCopiar").removeClass('hidden');
             } else {
-                $("#pagoEditar").iCheck('uncheck');
-                $("#divPagamentoEditar").addClass('hidden');
+                $("#pagoEditar, #pagoCopiar").iCheck('uncheck');
+                $("#divPagamentoEditar, #divPagamentoCopiar").addClass('hidden');
             }
         });
     });

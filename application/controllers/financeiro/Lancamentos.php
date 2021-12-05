@@ -366,6 +366,69 @@ class Lancamentos extends CI_Controller
         }
     }
 
+    public function copiar()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
+            $this->session->set_flashdata('erro', 'Você não tem permissão para copiar lançamentos.');
+            redirect(base_url());
+        }
+
+        if (!$this->input->post()) {
+            $this->session->set_flashdata('erro', 'Método não permitido.');
+            redirect($this->global_url);
+        }
+
+        if ($this->input->post('urlAtual') != null) {
+            $urlAtual = $this->input->post('urlAtual');
+        } else {
+            $urlAtual = $this->global_url;
+        }
+
+        $vencimento = $this->input->post('vencimento');
+        $pagamento = $this->input->post('pagamento');
+
+        if ($vencimento != null) {
+            $vencimento = explode('/', $vencimento);
+            $vencimento = $vencimento[2] . '-' . $vencimento[1] . '-' . $vencimento[0];
+        } else {
+            $vencimento = date('Y-m-d');
+        }
+
+        if ($pagamento != null) {
+            $pagamento = explode('/', $pagamento);
+            $pagamento = $pagamento[2] . '-' . $pagamento[1] . '-' . $pagamento[0];
+        }
+
+        $tipo = ($this->input->post('tipo'));
+        $valor = $this->input->post('valor');
+
+        if ($tipo == 2) {
+            $valor = '-' . $valor;
+        }
+
+        $valor = str_replace(array('.', ','), array('', '.'), $valor);
+
+        $data = array(
+            'descricao' => padronizarString($this->input->post('descricao')),
+            'valor' => $valor,
+            'data_lancamento' => $vencimento,
+            'data_pagamento' => $pagamento != null ? $pagamento : $vencimento,
+            'baixado' => $this->input->post('pago') ?: 0,
+            'cliente_fornecedor' => padronizarString($this->input->post('fornecedor')),
+            'forma_pgto' => ($this->input->post('formaPgto')),
+            'tipo' => $tipo,
+            'id_usuario' => getUserId()
+        );
+
+        if ($this->financeiro_model->add('lancamentos', $data)) {
+            $this->session->set_flashdata('sucesso', 'Lançamento copiado com sucesso!');
+            redirect($urlAtual);
+        } else {
+            $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar copiar o registro.');
+            redirect($urlAtual);
+        }
+    }
+
     public function excluir()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
