@@ -163,12 +163,7 @@ class Faturas extends CI_Controller
         }
 
         if (isset($cliente) && $cliente != null) {
-            $limit = null;
-            if (!isset($where)) {
-                $where = 'id_cliente = ' . $cliente;
-            } else {
-                $where .= ' AND id_cliente = ' . $cliente;
-            }
+            $where = 'id_cliente = ' . $cliente;
         }
 
         $faturaExistente = $this->fatura_model->getById($id_fatura);

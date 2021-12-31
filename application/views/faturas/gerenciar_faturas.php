@@ -141,10 +141,16 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 $totalDespesa = 0;
                 $saldo = 0;
                 foreach ($results as $r) {
-                    $dateObj = DateTime::createFromFormat('!m', $r->mes_referencia);
-                    $month = $dateObj->format('M'); // March
-//                        echo strftime('%A, %d de %B de %Y', strtotime('today'));
-                    $mes = padronizarString(strftime('%b', strtotime($month)));
+                    $dateFormatter = new \IntlDateFormatter(
+                        'pt_BR',
+                        \IntlDateFormatter::FULL,
+                        \IntlDateFormatter::NONE,
+                        'America/Sao_Paulo',
+                        \IntlDateFormatter::GREGORIAN,
+                        "MMM"
+                    );
+                    $dateObj = DateTime::createFromFormat('!m', ($r->mes_referencia));
+                    $mes = str_replace('.', '', strtoupper($dateFormatter->format($dateObj)));
                     $ano = ($r->ano_referencia);
                     $disabled = '';
                     $disabledPagar = '';
