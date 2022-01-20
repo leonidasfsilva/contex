@@ -9,10 +9,11 @@ class Financeiro_model extends CI_Model
         parent::__construct();
     }
 
-    function get($table, $fields, $where = '', $id_usuario, $perpage = 0, $start = 0, $limit = null, $order_by = null, $rows = null, $one = false, $array = 'array')
+    function get($table, $fields, $where = null, $id_usuario, $limit = null, $rows, $perpage = 0, $start = 0, $order_by = null, $one = false, $array = 'array')
     {
         $this->db->select($fields);
         $this->db->from($table);
+        $this->db->limit($perpage, $start);
 
         if ($where) {
             $this->db->where($where . ' AND status = 1 AND id_usuario = ' . $id_usuario);
@@ -21,16 +22,23 @@ class Financeiro_model extends CI_Model
         }
 
         if ($order_by) {
-            $this->db->order_by('data_lancamento', $order_by);
+            if (is_array($order_by)) {
+                foreach ($order_by as $key => $value) {
+                    $this->db->order_by($key, $value);
+                }
+            } else {
+                $this->db->order_by('data_lancamento', $order_by);
+            }
         }
 
         if ($limit) {
             if ($rows > $limit) {
                 $this->db->limit($limit, ($rows - $limit));
+            } else {
+                $this->db->limit($limit, $start);
             }
         }
 
-        // $this->db->limit($limit, $start);
         $query = $this->db->get();
         $result = !$one ? $query->result() : $query->row();
 

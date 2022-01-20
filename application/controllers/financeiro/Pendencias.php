@@ -101,7 +101,6 @@ class Pendencias extends CI_Controller
                 break;
         }
 
-
         if (isset($status) && $status != null) {
             $limit = null;
             if ($status == 'pendente') {
