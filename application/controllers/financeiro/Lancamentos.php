@@ -80,7 +80,10 @@ class Lancamentos extends CI_Controller
                     $limit = 20;
                     $start = $this->financeiro_model->countLancamentos(getUserId()) - $limit;
                 }
-                $order_by = 'data_lancamento asc';
+                $order_by = [
+                    'data_lancamento' => 'desc',
+                    'id_lancamento' => 'desc',
+                ];
                 $limitado = true;
                 break;
         }
@@ -164,8 +167,6 @@ class Lancamentos extends CI_Controller
         $config['last_tag_open'] = '<li>';
         $config['last_tag_close'] = '</li>';
 
-        // varDumpExit($where);
-
         $this->pagination->initialize($config);
 
         $this->data['total_provisorio'] = $this->financeiro_model->getTotalProvisorio(getUserId());
@@ -178,11 +179,11 @@ class Lancamentos extends CI_Controller
             '*',
             $where,
             getUserId(),
-            $config['per_page'],
-            $start,
             $limit,
-            $order_by = 'data_lancamento asc',
-            $config['total_rows']);
+            $config['per_page'],
+            $config['total_rows'],
+            $this->input->get('per_page'),
+            $order_by ? $order_by : 'desc');
 
         $this->data['view'] = 'financeiro/lancamentos';
         $this->load->view('tema/topo', $this->data);
