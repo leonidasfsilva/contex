@@ -34,6 +34,7 @@
         setInterval(function () {
             if (conectado === true) {
                 // atualizaNotificacoesUsuario();
+                
             }
         }, 10000);
     });
