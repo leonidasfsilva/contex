@@ -55,29 +55,27 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             $final = $n_cartao[3]; ?>
                             <!--                <option value=""><< Selecione um Cartão >></option>-->
                             <option value="<?= $cartao->id_cartao ?>" <?php if ($cartao_selecionado->id_cartao == $cartao->id_cartao) {
-                                echo 'selected';
-                                $cartao_config = $cartao->bandeira . ' - FINAL ' . $final;
-                            } else {
-                                echo '';
-                            } ?>><?= $cartao->bandeira . ' - FINAL ' . $final ?></option>
+                                                                            echo 'selected';
+                                                                            $cartao_config = $cartao->bandeira . ' - FINAL ' . $final;
+                                                                        } else {
+                                                                            echo '';
+                                                                        } ?>><?= $cartao->bandeira . ' - FINAL ' . $final ?></option>
                         <?php } ?>
                     </select>
                 <?php } else { ?>
-                    <input type="text" name="cartoes" id="cartoes" class="form-control"
-                           placeholder="Não há cartões cadastrados" disabled/>
+                    <input type="text" name="cartoes" id="cartoes" class="form-control" placeholder="Não há cartões cadastrados" disabled />
                 <?php }
                 ?>
             </div>
         </div>
     </div>
     <div class="panel-body panel-no-padding">
-        <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer"
-               role="grid" style="width: 100%;">
+        <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
             <thead>
-            <tr>
-                <th colspan="2" style="text-align: left !important;">Descrição</th>
-                <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
-            </tr>
+                <tr>
+                    <th colspan="2" style="text-align: left !important;">Descrição</th>
+                    <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
+                </tr>
             </thead>
             <tr>
                 <td colspan="2" style="text-align: left; color: green">SALDO DE FATURAS QUITADAS</td>
@@ -105,127 +103,120 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             Registro de Faturas
         </h2>
         <div class="panel-ctrls">
-            <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal"
-                    title="Filtrar faturas">
+            <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar faturas">
                 <i class="fas fa-filter fa-fw"></i>
                 Filtrar
             </button>
-            <button href="#modalConfiguracoes" class="btn btn-default btn-sm" id="configurar_fatura" data-toggle="modal"
-                    title="Configurações de fatura" <?= $disabledConfig ?>>
+            <button href="#modalConfiguracoes" class="btn btn-default btn-sm" id="configurar_fatura" data-toggle="modal" title="Configurações de fatura" <?= $disabledConfig ?>>
                 <i class="fas fa-cog fa-fw"></i>
             </button>
-            <button href="#modalNovaFatura" id="novaFatura" data-toggle="modal" role="button"
-                    class="btn btn-primary btn-sm tip-bottom"
-                    title="Abrir nova fatura" <?= $disabledFatura ?>>
+            <button href="#modalNovaFatura" id="novaFatura" data-toggle="modal" role="button" class="btn btn-primary btn-sm tip-bottom" title="Abrir nova fatura" <?= $disabledFatura ?>>
                 <i class="fas fa-plus fa-fw"></i>
                 Nova Fatura
             </button>
         </div>
     </div>
     <div class="panel-body panel-no-padding table-responsive">
-        <table class="table table-condensed table-striped table-bordeless table-hover" role="grid"
-               style="width: 100%;">
+        <table class="table table-condensed table-striped table-bordeless table-hover" role="grid" style="width: 100%;">
             <thead>
-            <tr role="row">
-                <th>Referência</th>
-                <th>Vencimento</th>
-                <th>Valor (R$)</th>
-                <th>Status</th>
-                <th>Pagamento</th>
-                <th style="width: 170px !important;">Ações</th>
-            </tr>
+                <tr role="row">
+                    <th>Referência</th>
+                    <th>Vencimento</th>
+                    <th>Valor (R$)</th>
+                    <th>Status</th>
+                    <th>Pagamento</th>
+                    <th style="width: 170px !important;">Ações</th>
+                </tr>
             </thead>
             <tbody>
-            <?php if ($results) {
-                $totalReceita = 0;
-                $totalDespesa = 0;
-                $saldo = 0;
-                foreach ($results as $r) {
-                    $dateFormatter = new \IntlDateFormatter(
-                        'pt_BR',
-                        \IntlDateFormatter::FULL,
-                        \IntlDateFormatter::NONE,
-                        'America/Sao_Paulo',
-                        \IntlDateFormatter::GREGORIAN,
-                        "MMM"
-                    );
-                    $dateObj = DateTime::createFromFormat('!m', ($r->mes_referencia));
-                    $mes = str_replace('.', '', strtoupper($dateFormatter->format($dateObj)));
-                    $ano = ($r->ano_referencia);
-                    $disabled = '';
-                    $disabledPagar = '';
+                <?php if ($results) {
+                    $totalReceita = 0;
+                    $totalDespesa = 0;
+                    $saldo = 0;
+                    foreach ($results as $r) {
+                        $dateFormatter = new \IntlDateFormatter(
+                            'pt_BR',
+                            \IntlDateFormatter::FULL,
+                            \IntlDateFormatter::NONE,
+                            'America/Sao_Paulo',
+                            \IntlDateFormatter::GREGORIAN,
+                            "MMM"
+                        );
+                        $dateObj = DateTime::createFromFormat('!m', ($r->mes_referencia));
+                        $mes = str_replace('.', '', strtoupper($dateFormatter->format($dateObj)));
+                        $ano = ($r->ano_referencia);
+                        $disabled = '';
+                        $disabledPagar = '';
 
-                    if ($r->fatura_aberta == 0) {
-                        $status = 'FECHADA';
-                        $label = 'inverse';
-                        $disabled = 'disabled';
-                        $iconFechar = 'fas fa-lock';
-                    } else if ($r->fatura_aberta == 2) {
-                        $status = '';
-                        $label = '';
-                        $disabledPagar = 'disabled';
-                        $disabled = 'disabled';
-                        $iconFechar = 'fas fa-unlock';
-                    } else {
-                        $status = 'ABERTA';
-                        $label = 'default';
-                        $disabledPagar = 'disabled';
-                        $iconFechar = 'fas fa-unlock';
-                    }
+                        if ($r->fatura_aberta == 0) {
+                            $status = 'FECHADA';
+                            $label = 'inverse';
+                            $disabled = 'disabled';
+                            $iconFechar = 'fas fa-lock';
+                        } else if ($r->fatura_aberta == 2) {
+                            $status = '';
+                            $label = '';
+                            $disabledPagar = 'disabled';
+                            $disabled = 'disabled';
+                            $iconFechar = 'fas fa-unlock';
+                        } else {
+                            $status = 'ABERTA';
+                            $label = 'default';
+                            $disabledPagar = 'disabled';
+                            $iconFechar = 'fas fa-unlock';
+                        }
 
-                    if ($r->fatura_paga == 2) {
-                        $pagamento = 'PENDENTE';
-                        $labelPgto = 'danger';
-                        $color = 'red';
-                        $iconPagar = 'far fa-check-square';
+                        if ($r->fatura_paga == 2) {
+                            $pagamento = 'PENDENTE';
+                            $labelPgto = 'danger';
+                            $color = 'red';
+                            $iconPagar = 'far fa-check-square';
+                        } else if ($r->fatura_paga == 1) {
+                            $pagamento = 'PAGA';
+                            $labelPgto = 'success';
+                            $color = 'green';
+                            $iconPagar = 'fas fa-check-square';
+                            $disabledPagar = 'disabled';
+                        } else {
+                            $pagamento = '';
+                            $labelPgto = '';
+                            $color = 'red';
+                            $iconPagar = 'far fa-check-square';
+                        }
 
-                    } else if ($r->fatura_paga == 1) {
-                        $pagamento = 'PAGA';
-                        $labelPgto = 'success';
-                        $color = 'green';
-                        $iconPagar = 'fas fa-check-square';
-                        $disabledPagar = 'disabled';
+                        $valor_total = $this->fatura_model->getValorTotalFatura($r->id_fatura);
 
-                    } else {
-                        $pagamento = '';
-                        $labelPgto = '';
-                        $color = 'red';
-                        $iconPagar = 'far fa-check-square';
-                    }
+                        echo '<tr>';
+                        echo '<td>' . $mes . ' / ' . $ano . '</td>';
+                        echo '<td>' . date(('d/m/Y'), strtotime($r->vencimento)) . '</td>';
 
-                    $valor_total = $this->fatura_model->getValorTotalFatura($r->id_fatura);
+                        echo '<td style="cursor: pointer; color: ' . $color . '" class="i-copy-total"><i class="fas fa-copy fa-fw hidden icon-total"></i> ' . number_format($valor_total, 2, ',', '.') . '</td>';
+                        echo '<td><span class="label label-' . $label . '">' . strtoupper($status) . '</span></td>';
+                        echo '<td><span class="label label-' . $labelPgto . '">' . strtoupper($pagamento) . '</span></td>';
 
-                    echo '<tr>';
-                    echo '<td>' . $mes . ' / ' . $ano . '</td>';
-                    echo '<td>' . date(('d/m/Y'), strtotime($r->vencimento)) . '</td>';
-
-                    echo '<td style=" color: ' . $color . '"> ' . number_format($valor_total, 2, ',', '.') . '</td>';
-                    echo '<td><span class="label label-' . $label . '">' . strtoupper($status) . '</span></td>';
-                    echo '<td><span class="label label-' . $labelPgto . '">' . strtoupper($pagamento) . '</span></td>';
-
-                    echo '<td>';
-                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eFaturas')) {
-                        echo '<button ' . $disabledPagar . ' href="#modalPagar" style="margin-right: 1%"  class="btn btn-success btn-sm pagar" data-toggle="modal" title="Pagar Fatura" id_fatura="' . $r->id_fatura . '">
+                        echo '<td>';
+                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eFaturas')) {
+                            echo '<button ' . $disabledPagar . ' href="#modalPagar" style="margin-right: 1%"  class="btn btn-success btn-sm pagar" data-toggle="modal" title="Pagar Fatura" id_fatura="' . $r->id_fatura . '">
                                 <i class="' . $iconPagar . ' fa-lg fa-fw"></i></button>';
 
-                        echo '<button ' . $disabled . ' href="#modalFechar" style="margin-right: 1%"  class="btn btn-inverse btn-sm fechar" data-toggle="modal" title="Fechar Fatura" id_fatura="' . $r->id_fatura . '">
+                            echo '<button ' . $disabled . ' href="#modalFechar" style="margin-right: 1%"  class="btn btn-inverse btn-sm fechar" data-toggle="modal" title="Fechar Fatura" id_fatura="' . $r->id_fatura . '">
                                 <i class="' . $iconFechar . ' fa-lg fa-fw"></i></button>';
 
-                        echo '<a href="' . base_url() . 'financeiro/faturas/detalhes/' . $r->id_fatura . '/' . $cartao_selecionado->id_cartao . '" type="button" id="btn_detalhes" style="margin-right: 1%" class="btn btn-primary btn-sm detalhes" title="Detalhes da Fatura" id_fatura="' .
-                            $r->id_fatura . '">
+                            echo '<a href="' . base_url() . 'financeiro/faturas/detalhes/' . $r->id_fatura . '/' . $cartao_selecionado->id_cartao . '" type="button" id="btn_detalhes" style="margin-right: 1%" class="btn btn-primary btn-sm detalhes" title="Detalhes da Fatura" id_fatura="' .
+                                $r->id_fatura . '">
                                 <i class="fas fa-search-plus fa-lg fa-fw"></i></a>';
+                        }
+                        if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dFaturas')) {
+                            echo '<a href="#modalExcluir" data-toggle="modal" id_fatura="' . $r->id_fatura . '" class="btn btn-danger btn-sm excluir" title="Excluir Fatura"><i class="fas fa-trash-alt fa-lg fa-fw"></i></a>';
+                        }
+                        echo '</td>';
+                        echo '</tr>';
                     }
-                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dFaturas')) {
-                        echo '<a href="#modalExcluir" data-toggle="modal" id_fatura="' . $r->id_fatura . '" class="btn btn-danger btn-sm excluir" title="Excluir Fatura"><i class="fas fa-trash-alt fa-lg fa-fw"></i></a>';
-                    }
-                    echo '</td>';
-                    echo '</tr>';
-                }
-            } else { ?>
-                <tr>
-                    <td colspan="6">Nenhuma fatura encontrada para o cartão <span class="font-weight-bold"><?= $cartao_config ?></span></td>
-                </tr>
-            <?php } ?>
+                } else { ?>
+                    <tr>
+                        <td colspan="6">Nenhuma fatura encontrada para o cartão <span class="font-weight-bold"><?= $cartao_config ?></span></td>
+                    </tr>
+                <?php } ?>
             </tbody>
         </table>
     </div>
@@ -248,60 +239,58 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-6" style="margin-left: 0">
-                            <label class="tip-top" title="Filtrar faturas por período específico">Período <i
-                                        class="fa fa-info-circle fa-fw"></i></label>
+                            <label class="tip-top" title="Filtrar faturas por período específico">Período <i class="fa fa-info-circle fa-fw"></i></label>
                             <select name="periodo" id="select_periodos" class="form-control">
                                 <option value="">Selecione o período</option>
-                                <option value="3dias"<?php if ($periodo == '3dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 3 dias
+                                <option value="3dias" <?php if ($periodo == '3dias') {
+                                                            echo 'selected';
+                                                        } ?>>Últimos 3 dias
                                 </option>
                                 <option value="5dias" <?php if ($periodo == '5dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 5 dias
+                                                            echo 'selected';
+                                                        } ?>>Últimos 5 dias
                                 </option>
                                 <option value="7dias" <?php if ($periodo == '7dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 7 dias
+                                                            echo 'selected';
+                                                        } ?>>Últimos 7 dias
                                 </option>
                                 <option value="15dias" <?php if ($periodo == '15dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 15 dias
+                                                            echo 'selected';
+                                                        } ?>>Últimos 15 dias
                                 </option>
                                 <option value="30dias" <?php if ($periodo == '30dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 30 dias
+                                                            echo 'selected';
+                                                        } ?>>Últimos 30 dias
                                 </option>
                                 <option value="60dias" <?php if ($periodo == '60dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 60 dias
+                                                            echo 'selected';
+                                                        } ?>>Últimos 60 dias
                                 </option>
                                 <option value="90dias" <?php if ($periodo == '90dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 90 dias
+                                                            echo 'selected';
+                                                        } ?>>Últimos 90 dias
                                 </option>
                                 <option value="todos" <?php if ($periodo == 'todos') {
-                                    echo 'selected';
-                                } ?>>Todos
+                                                            echo 'selected';
+                                                        } ?>>Todos
                                 </option>
                             </select>
                         </div>
                         <div class="col-lg-6">
-                            <label class="tip-top" title="Filtrar faturas por status">Status <i
-                                        class="fa fa-info-circle fa-fw"></i></label>
+                            <label class="tip-top" title="Filtrar faturas por status">Status <i class="fa fa-info-circle fa-fw"></i></label>
                             <select class="form-control" id="select_status" name="status">
                                 <option value="">Selecione o status</option>
-                                <option value="aberta"<?php if ($periodo == 'aberta') {
-                                    echo 'selected';
-                                } ?>>Aberta
+                                <option value="aberta" <?php if ($periodo == 'aberta') {
+                                                            echo 'selected';
+                                                        } ?>>Aberta
                                 </option>
                                 <option value="fechada" <?php if ($periodo == 'fechada') {
-                                    echo 'selected';
-                                } ?>>Fechada
+                                                            echo 'selected';
+                                                        } ?>>Fechada
                                 </option>
                                 <option value="futura" <?php if ($periodo == 'futura') {
-                                    echo 'selected';
-                                } ?>>Futura
+                                                            echo 'selected';
+                                                        } ?>>Futura
                                 </option>
                             </select>
                         </div>
@@ -335,22 +324,24 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                 Dia de vencimento *
                             </label>
                             <select class="form-control" id="select_dia" name="dia_vencimento">
-                                <option value=""><< Selecione >></option>
-                                <option value="05"<?= $dia_vencimento == 5 ? 'selected' : '' ?>>TODO DIA 05</option>
-                                <option value="09"<?= $dia_vencimento == 9 ? 'selected' : '' ?>>TODO DIA 09</option>
-                                <option value="10"<?= $dia_vencimento == 10 ? 'selected' : '' ?>>TODO DIA 10</option>
-                                <option value="12"<?= $dia_vencimento == 12 ? 'selected' : '' ?>>TODO DIA 12</option>
-                                <option value="15"<?= $dia_vencimento == 15 ? 'selected' : '' ?>>TODO DIA 15</option>
-                                <option value="20"<?= $dia_vencimento == 20 ? 'selected' : '' ?>>TODO DIA 20</option>
-                                <option value="25"<?= $dia_vencimento == 25 ? 'selected' : '' ?>>TODO DIA 25</option>
-                                <option value="28"<?= $dia_vencimento == 28 ? 'selected' : '' ?>>TODO DIA 28</option>
+                                <option value="">
+                                    << Selecione>>
+                                </option>
+                                <option value="05" <?= $dia_vencimento == 5 ? 'selected' : '' ?>>TODO DIA 05</option>
+                                <option value="09" <?= $dia_vencimento == 9 ? 'selected' : '' ?>>TODO DIA 09</option>
+                                <option value="10" <?= $dia_vencimento == 10 ? 'selected' : '' ?>>TODO DIA 10</option>
+                                <option value="12" <?= $dia_vencimento == 12 ? 'selected' : '' ?>>TODO DIA 12</option>
+                                <option value="15" <?= $dia_vencimento == 15 ? 'selected' : '' ?>>TODO DIA 15</option>
+                                <option value="20" <?= $dia_vencimento == 20 ? 'selected' : '' ?>>TODO DIA 20</option>
+                                <option value="25" <?= $dia_vencimento == 25 ? 'selected' : '' ?>>TODO DIA 25</option>
+                                <option value="28" <?= $dia_vencimento == 28 ? 'selected' : '' ?>>TODO DIA 28</option>
                             </select>
                         </div>
                         <div class="col-lg-6 form-group">
                             <p class="note note-info font-weight-bold"><?= $cartao_config ?></p>
                         </div>
-                        <input class="id_cartao" type="hidden" name="id_cartao"/>
-                        <input class="urlAtual" type="hidden" name="urlAtual"/>
+                        <input class="id_cartao" type="hidden" name="id_cartao" />
+                        <input class="urlAtual" type="hidden" name="urlAtual" />
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -374,8 +365,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Abrir nova fatura</h4>
             </div>
-            <form id="formNovaFatura" action="<?= base_url('financeiro/faturas/abrir') ?>" method="post"
-                  autocomplete="off">
+            <form id="formNovaFatura" action="<?= base_url('financeiro/faturas/abrir') ?>" method="post" autocomplete="off">
                 <div class="modal-body">
                     <p class="font-weight-bold">Defina o mês de referência para a nova fatura:</p>
                     <div class="row">
@@ -384,23 +374,25 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                 Mês de referência *
                             </label>
                             <select class="form-control" id="mes_referencia" name="mes_referencia">
-                                <option value=""><< Selecione >></option>
-                                <option value="01"<?= $mes_referencia == 1 ? 'selected' : '' ?>>01 - JANEIRO</option>
-                                <option value="02"<?= $mes_referencia == 2 ? 'selected' : '' ?>>02 - FEVEREIRO</option>
-                                <option value="03"<?= $mes_referencia == 3 ? 'selected' : '' ?>>03 - MARÇO</option>
-                                <option value="04"<?= $mes_referencia == 4 ? 'selected' : '' ?>>04 - ABRIL</option>
-                                <option value="05"<?= $mes_referencia == 5 ? 'selected' : '' ?>>05 - MAIO</option>
-                                <option value="06"<?= $mes_referencia == 6 ? 'selected' : '' ?>>06 - JUNHO</option>
-                                <option value="07"<?= $mes_referencia == 7 ? 'selected' : '' ?>>07 - JULHO</option>
-                                <option value="08"<?= $mes_referencia == 8 ? 'selected' : '' ?>>08 - AGOSTO</option>
-                                <option value="09"<?= $mes_referencia == 9 ? 'selected' : '' ?>>09 - SETEMBRO</option>
-                                <option value="10"<?= $mes_referencia == 10 ? 'selected' : '' ?>>10 - OUTUBRO</option>
-                                <option value="11"<?= $mes_referencia == 11 ? 'selected' : '' ?>>11 - NOVEMBRO</option>
-                                <option value="12"<?= $mes_referencia == 12 ? 'selected' : '' ?>>12 - DEZEMBRO</option>
+                                <option value="">
+                                    << Selecione>>
+                                </option>
+                                <option value="01" <?= $mes_referencia == 1 ? 'selected' : '' ?>>01 - JANEIRO</option>
+                                <option value="02" <?= $mes_referencia == 2 ? 'selected' : '' ?>>02 - FEVEREIRO</option>
+                                <option value="03" <?= $mes_referencia == 3 ? 'selected' : '' ?>>03 - MARÇO</option>
+                                <option value="04" <?= $mes_referencia == 4 ? 'selected' : '' ?>>04 - ABRIL</option>
+                                <option value="05" <?= $mes_referencia == 5 ? 'selected' : '' ?>>05 - MAIO</option>
+                                <option value="06" <?= $mes_referencia == 6 ? 'selected' : '' ?>>06 - JUNHO</option>
+                                <option value="07" <?= $mes_referencia == 7 ? 'selected' : '' ?>>07 - JULHO</option>
+                                <option value="08" <?= $mes_referencia == 8 ? 'selected' : '' ?>>08 - AGOSTO</option>
+                                <option value="09" <?= $mes_referencia == 9 ? 'selected' : '' ?>>09 - SETEMBRO</option>
+                                <option value="10" <?= $mes_referencia == 10 ? 'selected' : '' ?>>10 - OUTUBRO</option>
+                                <option value="11" <?= $mes_referencia == 11 ? 'selected' : '' ?>>11 - NOVEMBRO</option>
+                                <option value="12" <?= $mes_referencia == 12 ? 'selected' : '' ?>>12 - DEZEMBRO</option>
                             </select>
                         </div>
-                        <input id="id_cartao_nova_fatura" type="hidden" name="id_cartao"/>
-                        <input class="urlAtual" type="hidden" name="urlAtual"/>
+                        <input id="id_cartao_nova_fatura" type="hidden" name="id_cartao" />
+                        <input class="urlAtual" type="hidden" name="urlAtual" />
 
                         <div class="col-lg-6 form-group">
                             <label for="vencimento" class="control-label font-weight-bold">Data de vencimento da nova fatura:</label>
@@ -439,12 +431,11 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             <form action="<?php echo base_url() ?>financeiro/faturas/excluir" method="post">
                 <div class="modal-body">
                     <p>Deseja realmente excluir esta fatura?</p>
-                    <input name="id_fatura" id="idExcluir" type="hidden" value=""/>
-                    <input id="urlExcluirFatura" type="hidden" name="urlAtual" value=""/>
+                    <input name="id_fatura" id="idExcluir" type="hidden" value="" />
+                    <input id="urlExcluirFatura" type="hidden" name="urlAtual" value="" />
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true"
-                            id="btnCancelExcluir">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir">
                         <i class="fa fa-times fa-fw"></i> Cancelar
                     </button>
                     <button class="btn btn-danger btn-sm" id="btnExcluir"><i class="fa fa-check fa-fw"></i> Excluir
@@ -492,8 +483,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             <form id="formFechar" action="<?php echo base_url() ?>financeiro/faturas/fechar" method="post">
                 <div class="modal-body">
                     <p>Confirma o fechamento desta fatura?</p>
-                    <input id="id_fatura" type="hidden" name="id_fatura" value=""/>
-                    <input id="urlFecharFatura" type="hidden" name="urlAtual" value=""/>
+                    <input id="id_fatura" type="hidden" name="id_fatura" value="" />
+                    <input id="urlFecharFatura" type="hidden" name="urlAtual" value="" />
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
@@ -516,26 +507,26 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white">Pagar fatura</h4>
             </div>
-            <form id="formPagar" action="<?php echo base_url() ?>financeiro/faturas/pagar" method="post"
-                  autocomplete="off">
+            <form id="formPagar" action="<?php echo base_url() ?>financeiro/faturas/pagar" method="post" autocomplete="off">
                 <div class="modal-body">
                     <p>Confirma o pagamento desta fatura?</p>
-                    <input id="id_fatura_pagar" type="hidden" name="id_fatura" value=""/>
-                    <input id="urlPagarFatura" type="hidden" name="urlAtual" value=""/>
+                    <input id="id_fatura_pagar" type="hidden" name="id_fatura" value="" />
+                    <input id="urlPagarFatura" type="hidden" name="urlAtual" value="" />
                     <div class="row">
                         <div class="form-group col-lg-6">
                             <label class="font-weight-bold" for="data_pagamento">Data do pagamento</label>
-                            <input class="datepicker form-control" id="data_pagamento" type="text"
-                                   name="data_pagamento"/>
+                            <input class="datepicker form-control" id="data_pagamento" type="text" name="data_pagamento" />
                         </div>
                         <div class="form-group col-lg-6">
                             <label class="font-weight-bold" for="forma_pagamento">Forma de pagamento *</label>
                             <select name="forma_pagamento" id="forma_pagamento" class="form-control">
-                                <option value=""><< Selecione >></option>
+                                <option value="">
+                                    << Selecione>>
+                                </option>
                                 <?php if ($formasPagamento) {
                                     foreach ($formasPagamento as $cartao) { ?>
                                         <option value="<?= $cartao->id_forma ?>"><?= $cartao->nome ?></option>
-                                    <?php }
+                                <?php }
                                 } ?>
                             </select>
                         </div>
@@ -564,7 +555,42 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(function() {
+        $(".i-copy-total").hover(function(e) {
+            $(e.target).toggleClass('font-weight-bold')
+        });
+
+        $(".i-copy-total").click(function(e) {
+            e = e || window.event;
+            var target = e.target || e.srcElement,
+                text = target.textContent.trim() || target.innerText.trim();
+
+            var copyText = document.getElementById(this);
+            var textArea = document.createElement("textarea");
+            textArea.value = target.textContent.trim();
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("Copy");
+            textArea.remove();
+            console.log('text: ' + text)
+            console.log('textArea: ' + textArea.value)
+
+            Swal.fire({
+                toast: true,
+                position: "top-right",
+                showConfirmButton: false,
+                showCloseButton: true,
+                timer: 2000,
+                timerProgressBar: true,
+                icon: 'success',
+                title: 'Valor copiado!',
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+        })
+
         let dia;
         $.ajax({
             url: 'faturas/ajaxDiaVencimentoFatura',
@@ -573,15 +599,15 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             data: {
                 id_cartao: $('#cartoes').val()
             },
-            success: function (response) {
+            success: function(response) {
                 dia = response;
             },
-            error: function () {
+            error: function() {
                 console.log('ERRO na função: ajaxDiaVencimentoFatura')
             }
         });
 
-        $('#mes_referencia').change(function (e) {
+        $('#mes_referencia').change(function(e) {
             let input = $(this).val();
             let cartao = $('#id_cartao_nova_fatura').val();
             let ano = new Date().getFullYear();
@@ -604,35 +630,35 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             $('#vencimento').val(dia + '/' + mes + '/' + ano);
         });
 
-        $('.alerta-usuario').each(function (key, value) {
+        $('.alerta-usuario').each(function(key, value) {
             $('.alerta-usuario').modal('show');
         });
 
-        $(document).on('change', '#select_periodos, #select_status', function () {
+        $(document).on('change', '#select_periodos, #select_status', function() {
             $("#_form_filtro").submit();
         });
 
-        $('#cartoes').change(function () {
+        $('#cartoes').change(function() {
             let id_cartao = $(this).val();
             $('#id_cartao').val(id_cartao);
             $('#form_cartao').submit();
         });
 
-        $(document).on('click', '#_btn_detalhes', function () {
+        $(document).on('click', '#_btn_detalhes', function() {
             var id = $(this).attr('id_fatura');
             $("#urlDetalhesFatura").val($(location).attr('href'));
             $('#id_fatura_detalhes').val(id);
             $('#form_detalhes').submit();
         });
 
-        $(document).on('click', '.fechar', function (event) {
+        $(document).on('click', '.fechar', function(event) {
             $("#id_fatura").val($(this).attr('id_fatura'));
             $("#urlFecharFatura").val($(location).attr('href'));
         });
 
         $(".money").maskMoney();
 
-        $('#pago').click(function (event) {
+        $('#pago').click(function(event) {
             var flag = $(this).is(':checked');
             if (flag == true) {
                 $('#divPagamento').show();
@@ -641,7 +667,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             }
         });
 
-        $('#recebido').click(function (event) {
+        $('#recebido').click(function(event) {
             var flag = $(this).is(':checked');
             if (flag == true) {
                 $('#divRecebimento').show();
@@ -650,7 +676,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             }
         });
 
-        $('#pagoEditar').click(function (event) {
+        $('#pagoEditar').click(function(event) {
             var flag = $(this).is(':checked');
             if (flag == true) {
                 $('#divPagamentoEditar').show();
@@ -661,19 +687,23 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
         $("#formConfigurarFatura").validate({
             rules: {
-                dia_vencimento: {required: true}
+                dia_vencimento: {
+                    required: true
+                }
             },
             messages: {
-                dia_vencimento: {required: 'Selecione o dia de vencimento'}
+                dia_vencimento: {
+                    required: 'Selecione o dia de vencimento'
+                }
             },
 
             errorClass: "help-block",
             errorElement: "p",
-            highlight: function (element, errorClass, validClass) {
+            highlight: function(element, errorClass, validClass) {
                 $(element).parents('.form-group').addClass('has-error');
                 $(element).parents('.form-group').removeClass('has-success');
             },
-            unhighlight: function (element, errorClass, validClass) {
+            unhighlight: function(element, errorClass, validClass) {
                 $(element).parents('.form-group').removeClass('has-error');
                 $(element).parents('.form-group').addClass('has-success');
             }
@@ -682,19 +712,23 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
         $("#formNovaFatura").validate({
             rules: {
-                mes_referencia: {required: true},
+                mes_referencia: {
+                    required: true
+                },
             },
             messages: {
-                mes_referencia: {required: 'Selecione o mês de referência'},
+                mes_referencia: {
+                    required: 'Selecione o mês de referência'
+                },
             },
 
             errorClass: "help-block",
             errorElement: "p",
-            highlight: function (element, errorClass, validClass) {
+            highlight: function(element, errorClass, validClass) {
                 $(element).parents('.form-group').addClass('has-error');
                 $(element).parents('.form-group').removeClass('has-success');
             },
-            unhighlight: function (element, errorClass, validClass) {
+            unhighlight: function(element, errorClass, validClass) {
                 $(element).parents('.form-group').removeClass('has-error');
                 $(element).parents('.form-group').addClass('has-success');
             }
@@ -702,54 +736,58 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
         $("#formPagar").validate({
             rules: {
-                forma_pagamento: {required: true}
+                forma_pagamento: {
+                    required: true
+                }
             },
             messages: {
-                forma_pagamento: {required: 'Selecione a forma de pagamento'},
+                forma_pagamento: {
+                    required: 'Selecione a forma de pagamento'
+                },
             },
 
             errorClass: "help-block",
             errorElement: "p",
-            highlight: function (element, errorClass, validClass) {
+            highlight: function(element, errorClass, validClass) {
                 $(element).parents('.form-group').addClass('has-error');
                 $(element).parents('.form-group').removeClass('has-success');
             },
-            unhighlight: function (element, errorClass, validClass) {
+            unhighlight: function(element, errorClass, validClass) {
                 $(element).parents('.form-group').removeClass('has-error');
                 $(element).parents('.form-group').addClass('has-success');
             }
 
         });
 
-        $(document).on('click', '#configurar_fatura', function () {
+        $(document).on('click', '#configurar_fatura', function() {
             let id_cartao = $('#cartoes').val();
             $('.id_cartao').val(id_cartao);
         });
 
-        $(document).on('click', '#novaFatura', function () {
+        $(document).on('click', '#novaFatura', function() {
             $("#id_cartao_nova_fatura").val($('#cartoes').val());
             $("#urlFatura").val($(location).attr('href'));
         });
 
-        $(document).on('click', '.excluir', function (event) {
+        $(document).on('click', '.excluir', function(event) {
             $("#idExcluir").val($(this).attr('id_fatura'));
             $("#urlExcluirFatura").val($(location).attr('href'));
         });
 
-        $(document).on('click', '.pagar', function (event) {
+        $(document).on('click', '.pagar', function(event) {
             $("#id_fatura_pagar").val($(this).attr('id_fatura'));
             $("#urlPagarFatura").val($(location).attr('href'));
         });
 
-        $(document).on('click', '#pendencia', function () {
+        $(document).on('click', '#pendencia', function() {
             $("#urlPendencia").val($(location).attr('href'));
         });
 
-        $(document).on('click', '#devedor', function () {
+        $(document).on('click', '#devedor', function() {
             $("#url").val($(location).attr('href'));
         });
 
-        $(document).on('click', '.editar', function (event) {
+        $(document).on('click', '.editar', function(event) {
             $("#id_pendencia").val($(this).attr('id_pendencia'));
             $("#descricaoEditar").val($(this).attr('descricao'));
             $("#id_clienteEditar").val($(this).attr('id_cliente'));
