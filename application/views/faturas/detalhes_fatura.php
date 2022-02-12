@@ -586,6 +586,10 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
 <script type="text/javascript">
     $(document).ready(function($) {
+        $('#modalLancamento').on('shown.bs.modal', function() {
+            $('#descricao').focus();
+        })
+
         $("#i-copy-total").hover(function() {
             $('#icon-total').toggleClass('hidden')
         });
