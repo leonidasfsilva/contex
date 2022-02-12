@@ -9,7 +9,7 @@ class Financeiro_model extends CI_Model
         parent::__construct();
     }
 
-    function get($table, $fields, $where = null, $id_usuario, $limit = null, $rows, $perpage = 0, $start = 0, $order_by = null, $one = false, $array = 'array')
+    function get($table, $fields, $where = null, $id_usuario, $limit = null, $rows, $perpage = 0, $start = 0, $order_by = null, $one = false)
     {
         $this->db->select($fields);
         $this->db->from($table);

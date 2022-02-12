@@ -173,6 +173,14 @@ class Faturas extends CI_Controller
             $cartao = $this->cartoes_model->getDetalhesCartao($id_cartao);
 
             if (($fatura_selecionada->id_usuario == getUserId() && $cartao->id_usuario == getUserId()) || ($fatura_selecionada->id_cartao == $id_cartao && $cartao->id_usuario_titular == getUserId())) {
+                $orderByLancamentosAssoc = [
+                    'data_compra' => 'desc',
+                    'id_assoc' => 'desc',
+                ];
+                $orderByLancamentos = [
+                    'id_lancamento' => 'desc',
+                ];
+
                 $data['clientes'] = $this->fatura_model->getClientesPorFatura($id_fatura);
                 $data['selected_cliente'] = $cliente;
                 $data['fatura'] = $this->fatura_model->getDetalhesFatura($id_fatura);
@@ -185,8 +193,8 @@ class Faturas extends CI_Controller
                 $data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
                 $data['fatura_paga'] = ($data['fatura']->fatura_paga);
                 $data['lancamentoEditavel'] = $this->fatura_model->getLancamentoEditavel($data['mes_referencia'], $data['ano_referencia']);
-                $data['subresults'] = $this->fatura_model->getLancamentos('lancamentos_faturas', '*', $fatura_selecionada->id_usuario, $where, $config['per_page'], $this->input->get('per_page'));
-                $data['results'] = $this->fatura_model->getLancamentosAssoc('lancamentos_faturas_assoc', '*', $id_fatura, $where = null, $config['per_page'], $this->input->get('per_page'));
+                $data['subresults'] = $this->fatura_model->getLancamentos('lancamentos_faturas', '*', $fatura_selecionada->id_usuario, $where, $config['per_page'], $this->input->get('per_page'), $orderByLancamentos);
+                $data['results'] = $this->fatura_model->getLancamentosAssoc('lancamentos_faturas_assoc', '*', $id_fatura, $where = null, $config['per_page'], $this->input->get('per_page'), $orderByLancamentosAssoc);
                 $data['menuFinanceiro'] = true;
                 $data['menuFaturas'] = true;
 

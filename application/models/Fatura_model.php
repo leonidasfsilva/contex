@@ -36,12 +36,12 @@ class Fatura_model extends CI_Model
         return $result;
     }
 
-    function getLancamentosAssoc($table, $fields, $id_fatura, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
+    function getLancamentosAssoc($table, $fields, $id_fatura, $where = '', $perpage = 0, $start = 0, $order_by = null, $one = false)
     {
         $this->db->select($fields);
         $this->db->from($table);
-        $this->db->order_by('data_compra', 'id_assoc', 'asc');
         $this->db->limit($perpage, $start);
+
         if ($where) {
             $this->db->where($where);
             $this->db->where('status', 1);
@@ -50,18 +50,30 @@ class Fatura_model extends CI_Model
             $this->db->where('status', 1);
             $this->db->where('id_fatura', $id_fatura);
         }
+
+        if ($order_by) {
+            if (is_array($order_by)) {
+                foreach ($order_by as $key => $value) {
+                    $this->db->order_by($key, $value);
+                }
+            } else {
+                $this->db->order_by('data_compra', $order_by);
+                $this->db->order_by('id_assoc', $order_by);
+            }
+        }
+
         $query = $this->db->get();
         $result = !$one ? $query->result() : $query->row();
         return $result;
     }
 
-    function getLancamentos($table, $fields, $id_usuario, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
+    function getLancamentos($table, $fields, $id_usuario, $where = '', $perpage = 0, $start = 0, $order_by = null, $one = false)
     {
 
         $this->db->select($fields);
         $this->db->from($table);
-        $this->db->order_by('id_lancamento', 'asc');
         $this->db->limit($perpage, $start);
+        
         if ($where) {
             $this->db->where($where);
             $this->db->where('status', 1);
@@ -70,6 +82,17 @@ class Fatura_model extends CI_Model
             $this->db->where('status', 1);
             $this->db->where('id_usuario', $id_usuario);
         }
+
+        if ($order_by) {
+            if (is_array($order_by)) {
+                foreach ($order_by as $key => $value) {
+                    $this->db->order_by($key, $value);
+                }
+            } else {
+                $this->db->order_by('id_lancamento', $order_by);
+            }
+        }
+
         $query = $this->db->get();
         $result = !$one ? $query->result() : $query->row();
         return $result;
