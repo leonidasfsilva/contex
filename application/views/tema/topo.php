@@ -501,10 +501,18 @@ $this->load->view('includes/custom_js');
                 <!--                DIV PRINCIPAL-->
                 <div class="page-content">
                     <!--                    BREADCRUMB-->
-                    <ol class="breadcrumb">
+                    <?php if ($_SERVER['ENVIROMENT'] == 'dev') {
+                        $color = '#740404';
+                        $dev = '[ DEVELOPMENT ]';
+                    } else {
+                        $color = '';
+                        $dev = '';
+                    } ?>
+
+                    <ol class="breadcrumb" style="background: <?= $color ?>;">
                         <li class="">
                             <a href="<?= base_url() ?>" title="Painel Inicial">
-                                Painel Inicial
+                                Painel Inicial <?= $dev ?>
                             </a>
                         </li>
                         <?php if ($this->uri->segment(1)) { ?>
