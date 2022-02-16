@@ -11678,7 +11678,7 @@ ul.demo-btns > li {
 .datepicker {
     padding: 4px;
     direction: ltr;
-    max-width: 300px;
+    /* max-width: 300px; */
 }
 
 .datepicker-inline {
@@ -11696,6 +11696,7 @@ ul.demo-btns > li {
 .datepicker-dropdown {
     top: 0;
     left: 0;
+    max-width: 300px;
 }
 
 .datepicker-dropdown:before {
