@@ -501,7 +501,7 @@ $this->load->view('includes/custom_js');
                 <!--                DIV PRINCIPAL-->
                 <div class="page-content">
                     <!--                    BREADCRUMB-->
-                    <?php if ($_SERVER['ENVIROMENT'] == 'dev') {
+                    <?php if ($_SERVER['ENVIRONMENT'] == 'dev') {
                         $color = '#740404';
                         $dev = '[ DEVELOPMENT ]';
                     } else {
