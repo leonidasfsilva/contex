@@ -34,12 +34,12 @@ class Lancamentos extends CI_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar lançamentos.');
             redirect(base_url());
         }
-        $status = $_GET['status'];
+        $status = $_GET['status'] ?? null;
         $tipo = $_GET['tipo'] ?? null;
-        $periodo = $_GET['periodo'];
-        $inicio = $_GET['dataInicial'];
-        $fim = $_GET['dataFinal'];
-        $start = $_GET['per_page'];
+        $periodo = $_GET['periodo'] ?? null;
+        $inicio = $_GET['dataInicial'] ?? null;
+        $fim = $_GET['dataFinal'] ?? null;
+        $start = $_GET['per_page'] ?? null;
 
         $this->load->library('pagination');
 
@@ -145,7 +145,7 @@ class Lancamentos extends CI_Controller
         $config['base_url'] = base_url('financeiro/lancamentos');
         $config['suffix'] = '&' . $query_string;
         $config['first_url'] = $config['base_url'] . '?' . $query_string;
-        $config['total_rows'] = $this->financeiro_model->countLancamentos(getUserId(), $where);
+        $config['total_rows'] = $this->financeiro_model->countLancamentos(getUserId(), $where ?? null);
         $config['per_page'] = 20;
         $config['page_query_string'] = true;
         $config['next_link'] = false;
@@ -177,13 +177,14 @@ class Lancamentos extends CI_Controller
         $this->data['results'] = $this->financeiro_model->get(
             'lancamentos',
             '*',
-            $where,
+            $where ?? null,
             getUserId(),
             $limit,
             $config['per_page'],
             $config['total_rows'],
             $this->input->get('per_page'),
-            $order_by ? $order_by : 'desc');
+            $order_by ? $order_by : 'desc'
+        );
 
         $this->data['view'] = 'financeiro/lancamentos';
         $this->load->view('tema/topo', $this->data);
@@ -456,7 +457,6 @@ class Lancamentos extends CI_Controller
             if ($this->financeiro_model->delete('lancamentos', $data, 'id_lancamento', $id) == true) {
                 $this->session->set_flashdata('sucesso', 'Lançamento excluído com sucesso!');
                 redirect($urlAtual);
-
             } else {
                 $this->session->set_flashdata('erro', 'Erro ao tentar excluir lançamento.');
                 redirect($urlAtual);
@@ -495,7 +495,6 @@ class Lancamentos extends CI_Controller
         print_array($pendencia);
         print_array($cliente);
         echo 'TESTE OK!';
-
     }
 
     // MODULO DE RETORNO DE FILTROS POR PERIODO
@@ -506,7 +505,6 @@ class Lancamentos extends CI_Controller
         $primeiro = date("Y-m-d", strtotime("-" . ($dias) . " day"));
         $ultimo = date("Y-m-d", strtotime("+" . (364 - $dias) . " day"));
         return array($primeiro, $ultimo);
-
     }
 
     protected function getThisWeek()
