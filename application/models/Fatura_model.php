@@ -27,8 +27,8 @@ class Fatura_model extends CI_Model
             $this->db->where($where);
         }
         $this->db->where('status', 1);
-//        este trecho do codigo foi retirado para tornar visivel aos titulares as faturas do cartoes adicionais
-//        $this->db->where('id_usuario', $id_usuario);
+        //        este trecho do codigo foi retirado para tornar visivel aos titulares as faturas do cartoes adicionais
+        //        $this->db->where('id_usuario', $id_usuario);
         $this->db->where('id_cartao', $id_cartao);
         $query = $this->db->get();
 
@@ -73,7 +73,7 @@ class Fatura_model extends CI_Model
         $this->db->select($fields);
         $this->db->from($table);
         $this->db->limit($perpage, $start);
-        
+
         if ($where) {
             $this->db->where($where);
             $this->db->where('status', 1);
@@ -103,7 +103,8 @@ class Fatura_model extends CI_Model
         $this->db->select('*');
         $this->db->from('faturas');
         $this->db->where(
-            'id_fatura = ' . $id_fatura);
+            'id_fatura = ' . $id_fatura
+        );
         $query = $this->db->get();
         $result = $query->row();
 
@@ -190,7 +191,6 @@ class Fatura_model extends CI_Model
         } else {
             return true;
         }
-
     }
 
     function delete($table, $data, $fieldID, $ID)
@@ -254,7 +254,6 @@ class Fatura_model extends CI_Model
         }
 
         return $this->db->get()->row();
-
     }
 
     function getTotalPendencias($id_usuario, $id_cliente = null)
@@ -264,16 +263,13 @@ class Fatura_model extends CI_Model
                 ->select('SUM(valor) AS total')
                 ->from('pendencias')
                 ->where('status = 1 AND quitado = 0 AND id_usuario = ' . $id_usuario . ' AND id_cliente = ' . $id_cliente);
-
         } else {
             $this->db
                 ->select('SUM(valor) AS total')
                 ->from('pendencias')
                 ->where('status = 1 AND quitado = 0 AND id_usuario = ' . $id_usuario);
-
         }
         return $this->db->get()->row();
-
     }
 
     function getTotal($id_usuario)
@@ -283,7 +279,6 @@ class Fatura_model extends CI_Model
             ->from('pendencias')
             ->where('status = 1 AND id_usuario = ' . $id_usuario);
         return $this->db->get()->row();
-
     }
 
     function getFaturaAbertaUsuario($id_usuario, $id_cartao)
@@ -303,7 +298,8 @@ class Fatura_model extends CI_Model
         $this->db->select('*');
         $this->db->from('faturas');
         $this->db->where(
-            'status = 1 AND fatura_aberta = 1 AND id_usuario = ' . $id);
+            'status = 1 AND fatura_aberta = 1 AND id_usuario = ' . $id
+        );
 
         return $this->db->count_all_results();
     }
@@ -314,7 +310,8 @@ class Fatura_model extends CI_Model
         $this->db->select('*');
         $this->db->from('faturas');
         $this->db->where(
-            'fatura_paga = 1 AND id_fatura = ' . $id);
+            'fatura_paga = 1 AND id_fatura = ' . $id
+        );
 
         return $this->db->count_all_results();
     }
@@ -389,16 +386,20 @@ class Fatura_model extends CI_Model
             $faturas[] = $this->db->get('faturas')->row();
         }
 
-        if (isset($faturas)) {
+        if (isset($faturas) && $faturas) {
+            $results = [];
             foreach ($faturas as $f) {
-                $this->db
-                    ->select('SUM(valor_parcela) AS total')
-                    ->where('status', 1)
-                    ->where('id_fatura', $f->id_fatura)
-                    ->where('mes_referencia', $f->mes_referencia)
-                    ->where('ano_referencia', $f->ano_referencia);
-                $results[] = $this->db->get('lancamentos_faturas_assoc')->row();
-                $valor = null;
+                if ($f != null) {
+                    $this->db
+                        ->select('SUM(valor_parcela) AS total')
+                        ->where('status', 1)
+                        ->where('id_fatura', $f->id_fatura)
+                        ->where('mes_referencia', $f->mes_referencia)
+                        ->where('ano_referencia', $f->ano_referencia);
+                    $results[] = $this->db->get('lancamentos_faturas_assoc')->row();
+                    $valor = null;
+                }
+
                 foreach ($results as $r) {
                     $valor += $r->total;
                 }
