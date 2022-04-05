@@ -12,8 +12,10 @@
     <div class="panel-body">
         <?php if (isset($custom_error)) {
             echo '<div class="alert alert-danger alert-dismissible"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' . $custom_error . '</div>';
-        } 
-        $dob = date(('d/m/Y'), strtotime($result->dob));
+        }
+        if ($result->dob) {
+            $dob = date(('d/m/Y'), strtotime($result->dob));
+        }
         ?>
         <form action="<?php echo current_url(); ?>" id="formCliente" method="post" autocomplete="off">
             <div class="row">
@@ -39,7 +41,7 @@
 
                 <div class="form-group col-md-4">
                     <label for="dob" class="control-label font-weight-bold">Data Nascimento</label>
-                    <input type="text" class="form-control datepicker" id="dob" name="dob" value="<?php echo $dob; ?>">
+                    <input type="text" class="form-control datepicker" id="dob" name="dob" value="<?php echo $dob ?? null; ?>">
                 </div>
             </div>
             <div class="row">
