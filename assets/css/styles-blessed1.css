@@ -11697,6 +11697,7 @@ ul.demo-btns > li {
     top: 0;
     left: 0;
     max-width: 300px;
+    z-index: 2000 !important;
 }
 
 .datepicker-dropdown:before {
