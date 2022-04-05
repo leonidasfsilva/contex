@@ -10,29 +10,36 @@
         </div>
     </div>
     <div class="panel-body">
-        <?php if ($custom_error != '') {
+        <?php if (isset($custom_error)) {
             echo '<div class="alert alert-danger alert-dismissible"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' . $custom_error . '</div>';
-        } ?>
+        } 
+        $dob = date(('d/m/Y'), strtotime($result->dob));
+        ?>
         <form action="<?php echo current_url(); ?>" id="formCliente" method="post" autocomplete="off">
             <div class="row">
-                <div class="form-group col-md-12">
+                <div class="form-group col-md-8">
                     <label for="nome" class="control-label font-weight-bold">Nome *</label>
                     <input type="text" class="form-control" id="nome" name="nome" value="<?php echo $result->nome; ?>">
                     <input type="hidden" name="id_clientes" value="<?php echo $result->id_clientes; ?>">
                 </div>
-            </div>
-            <div class="row">
                 <div class="form-group col-md-4">
                     <label for="cpf" class="control-label font-weight-bold">CPF</label>
                     <input type="text" class="form-control" id="cpf" name="cpf" value="<?php echo $result->cpf; ?>">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label for="email" class="control-label font-weight-bold">Email</label>
+                    <input type="text" class="form-control" id="email" name="email" value="<?php echo $result->email; ?>">
                 </div>
                 <div class="form-group col-md-4">
                     <label for="telefone" class="control-label font-weight-bold">Telefone *</label>
                     <input type="text" class="form-control" id="telefone" name="telefone" value="<?php echo $result->telefone; ?>">
                 </div>
+
                 <div class="form-group col-md-4">
-                    <label for="email" class="control-label font-weight-bold">Email</label>
-                    <input type="text" class="form-control" id="email" name="email" value="<?php echo $result->email; ?>">
+                    <label for="dob" class="control-label font-weight-bold">Data Nascimento</label>
+                    <input type="text" class="form-control datepicker" id="dob" name="dob" value="<?php echo $dob; ?>">
                 </div>
             </div>
             <div class="row">
@@ -46,13 +53,11 @@
                 </div>
                 <div class="form-group col-md-2">
                     <label for="numero" class="control-label font-weight-bold">Número</label>
-                    <input type="text" class="form-control" id="numero" name="numero"
-                           value="<?php echo $result->numero; ?>">
+                    <input type="text" class="form-control" id="numero" name="numero" value="<?php echo $result->numero; ?>">
                 </div>
                 <div class="form-group col-md-1 mt30">
                     <div class="checkbox icheck">
-                        <input type="checkbox" class="form-control" id="s_n" name="s_n"
-                               value="1" <?= $result->s_n == 1 ? 'checked' : '' ?>>
+                        <input type="checkbox" class="form-control" id="s_n" name="s_n" value="1" <?= isset($result->s_n) ? 'checked' : '' ?>>
                     </div>
                     <label for="s_n" class="font-weight-bold">S/N</label>
                 </div>
@@ -60,8 +65,7 @@
             <div class="row">
                 <div class="form-group col-md-12">
                     <label for="complemento" class="control-label font-weight-bold">Complemento</label>
-                    <input type="text" class="form-control" id="complemento" name="complemento"
-                           value="<?php echo $result->complemento; ?>">
+                    <input type="text" class="form-control" id="complemento" name="complemento" value="<?php echo $result->complemento; ?>">
                 </div>
             </div>
             <div class="row">
@@ -83,12 +87,12 @@
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        $('.submit').click(function () {
+    $(document).ready(function() {
+        $('.submit').click(function() {
             $('#formCliente').submit();
         });
 
-        $('#s_n').on('ifChanged', function (event) {
+        $('#s_n').on('ifChanged', function(event) {
             const checked = event.target.checked;
             if (checked == true) {
                 $('#numero').val('');
@@ -99,7 +103,7 @@
         });
 
         var s_n = $('#s_n').iCheck('update')[0].checked;
-        $.each($(s_n), function (key, value) {
+        $.each($(s_n), function(key, value) {
             if (s_n == true) {
                 $('#numero').val('');
                 $('#numero').attr('disabled', true);
@@ -110,38 +114,78 @@
 
         $('#formCliente').validate({
             rules: {
-                nome: {required: true},
-                cpf: {required: false},
-                telefone: {required: true},
-                email: {required: false},
-                logradouro: {required: false},
-                numero: {required: false},
-                bairro: {required: false},
-                cidade: {required: false},
-                uf: {required: false},
-                cep: {required: false}
+                nome: {
+                    required: true
+                },
+                cpf: {
+                    required: false
+                },
+                telefone: {
+                    required: true
+                },
+                email: {
+                    required: false
+                },
+                logradouro: {
+                    required: false
+                },
+                numero: {
+                    required: false
+                },
+                bairro: {
+                    required: false
+                },
+                cidade: {
+                    required: false
+                },
+                uf: {
+                    required: false
+                },
+                cep: {
+                    required: false
+                }
             },
             messages: {
-                nome: {required: 'Informe o nome'},
-                cpf: {required: 'Campo Requerido.'},
-                telefone: {required: 'Informe o telefone'},
-                email: {required: 'Campo Requerido.'},
-                logradouro: {required: 'Campo Requerido.'},
-                numero: {required: 'Campo Requerido.'},
-                bairro: {required: 'Campo Requerido.'},
-                cidade: {required: 'Campo Requerido.'},
-                uf: {required: 'Campo Requerido.'},
-                cep: {required: 'Campo Requerido.'}
+                nome: {
+                    required: 'Informe o nome'
+                },
+                cpf: {
+                    required: 'Campo Requerido.'
+                },
+                telefone: {
+                    required: 'Informe o telefone'
+                },
+                email: {
+                    required: 'Campo Requerido.'
+                },
+                logradouro: {
+                    required: 'Campo Requerido.'
+                },
+                numero: {
+                    required: 'Campo Requerido.'
+                },
+                bairro: {
+                    required: 'Campo Requerido.'
+                },
+                cidade: {
+                    required: 'Campo Requerido.'
+                },
+                uf: {
+                    required: 'Campo Requerido.'
+                },
+                cep: {
+                    required: 'Campo Requerido.'
+                }
 
             },
 
             errorClass: "help-block",
             errorElement: "p",
-            highlight: function (element, errorClass, validClass) {
+            highlight: function(element, errorClass, validClass) {
                 $(element).parents('.form-group').addClass('has-error');
                 $(element).parents('.form-group').removeClass('has-success');
             },
-            unhighlight: function (element, errorClass, validClass) {
+            unhighlight: function(element, errorClass, validClass) {
                 $(element).parents('.form-group').removeClass('has-error');
                 $(element).parents('.form-group').addClass('has-success');
             }

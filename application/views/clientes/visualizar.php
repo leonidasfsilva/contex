@@ -10,7 +10,9 @@
             <a href="<?= base_url('clientes') ?>" class="btn btn-default btn-sm "><i class="fas fa-arrow-left fa-fw"></i> Clientes</a>
             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
                 echo '<a title="Editar dados do cliente" class="btn btn-primary btn-sm " href="' . base_url() . 'clientes/editar/' . $result->id_clientes . '"><i class="fas fa-edit fa-fw"></i> Editar</a>';
-            } ?>
+            } 
+            $dob = date(('d/m/Y'), strtotime($result->dob));
+            ?>
         </div>
     </div>
     <div class="panel-body">
@@ -39,6 +41,10 @@
                                                 <tr>
                                                     <td style="text-align: right"><strong>CPF</strong></td>
                                                     <td style="cursor: pointer;" id="copy-cpf"><?php echo $result->cpf ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align: right"><strong>Data Nascimento</strong></td>
+                                                    <td><?php echo $dob ?></td>
                                                 </tr>
                                                 <tr>
                                                     <td style="text-align: right"><strong>Data de Cadastro</strong></td>
