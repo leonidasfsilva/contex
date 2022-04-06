@@ -2409,8 +2409,8 @@ a.amazo-tile {
     padding: 12px;
     font-size: 30px;
     line-height: 30px;
-    border-top-right-radius: 2px;
-    border-top-left-radius: 2px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
 }
 
 .shortcut-tile .tile-body i {
@@ -2441,8 +2441,8 @@ a.amazo-tile {
     letter-spacing: 2px;
     font-size: 11px;
     text-transform: uppercase;
-    border-bottom-right-radius: 2px;
-    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
 }
 
 .shortcut-tile:hover {
