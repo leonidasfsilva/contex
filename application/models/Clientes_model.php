@@ -75,6 +75,14 @@ class Clientes_model extends CI_Model
         return $this->db->count_all($table);
     }
 
+    function countClientesUsuario()
+    {
+        $this->db->from('clientes');
+        $this->db->where('id_usuario', getUserId());
+        $this->db->where('status', 1);
+        return $this->db->count_all_results();
+    }
+
     public function getOsByCliente($id)
     {
         $this->db->where('id_cliente', $id);

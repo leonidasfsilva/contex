@@ -241,6 +241,14 @@ class Cartoes_model extends CI_Model
         return $this->db->count_all_results();
     }
 
+    function countCartoesUsuario()
+    {
+        $this->db->from('cartoes');
+        $this->db->where('id_usuario', getUserId());
+        $this->db->where('status', 1);
+        return $this->db->count_all_results();
+    }
+
     function getTodos()
     {
         return $this->db
