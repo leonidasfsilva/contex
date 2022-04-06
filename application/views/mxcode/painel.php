@@ -245,7 +245,7 @@ if ($direcionados) {
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vConsumo')) : ?>
         <div class="col-md-6">
-            <a href="<?= base_url('/financeiro/lancamentos') ?>" class="shortcut-tile tile-info">
+            <a href="<?= base_url('/consumo') ?>" class="shortcut-tile tile-info">
                 <div class="tile-body">
                     <div class="pull-left"><i class="fas fa-lightbulb fa-fw"></i></div>
                     <!--                            <div class="pull-right"><span class="badge">16</span></div>-->
@@ -259,7 +259,7 @@ if ($direcionados) {
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) : ?>
         <div class="col-md-6">
-            <a href="<?= base_url() ?>vendas" class="shortcut-tile tile-inverse">
+            <a href="<?= base_url('/usuarios') ?>" class="shortcut-tile tile-inverse">
                 <div class="tile-body">
                     <div class="pull-left"><i class="fas fa-users-cog fa-fw"></i></div>
                     <!--                            <div class="pull-right"><span class="badge">10</span></div>-->
