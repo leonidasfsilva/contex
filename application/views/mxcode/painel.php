@@ -115,7 +115,7 @@ if ($direcionados) {
             <div class="tile-sparkline">
                 <div class="tile-sparkline-heading clearfix">
                     <div class="pull-left">
-                        <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Cartão de Crédito</span>
+                        <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Faturas</span>
                         <div class="conteudo-widget " style="<?= ($widgetCartaoCredito == 1 ? '' : 'display: none;') ?>e">
                             <span class="tile-sparkline-subheading block mb10">Saldo de faturas em aberto</span>
                             <h2 class="block">R$ <?= number_format($fatura, 2, ',', '.') ?></h2>
@@ -126,7 +126,7 @@ if ($direcionados) {
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
-                    <a href="<?= base_url() ?>financeiro/faturas" class="font-weight-bold">ver detalhes </a>
+                    <a href="<?= base_url('financeiro/faturas') ?>" class="font-weight-bold">ver detalhes </a>
                     <a href="#" style="color: #607d8b" class="pull-right widget-collapse" id="widget_credito">
                         <span class="chevron-label">ocultar</span>
                         <i class="fas fa-chevron-up fa-fw collapse-icon"></i>

@@ -448,7 +448,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
 <!-- Modal ALERTA CONFIGURACAO -->
 <?php if (!$existe_configuracao) { ?>
-    <div class="modal fade alerta-usuario" id="modalAlerta" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal fade alerta-usuario" id="modalAlerta" tabindex="-10" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-danger">
@@ -457,14 +457,19 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 </div>
                 <div class="modal-body">
                     <div class="note note-danger font-weight-bold">
-                        <span>Este cartão não possui configurações de fatura, não é possível abrir novas faturas.</span>
+                        <span>Este cartão não possui uma data de vencimento padrão para fatura configurada.</span>
                         <br>
-                        <span>Configure o dia de vencimento padrão da fatura clicando no botão: <i class="fas fa-cog fa-fw"></i></span>
+                        <span>Sem este parâmentro configurado não é possível abrir novas faturas.</span>
+                        <br>
+                        <span>Configure a data de vencimento padrão da fatura clicando no botão: <span class="label label-primary"> <i class="fas fa-cog fa-fw"></i> Configurar Fatura</span></span>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                         <i class="fa fa-times fa-fw"></i> Fechar
+                    </button>
+                    <button href="#modalConfiguracoes" class="btn btn-primary btn-sm" id="configurar_fatura" data-dismiss="modal" data-toggle="modal" title="Configurações de fatura" <?= $disabledConfig ?>>
+                        <i class="fas fa-cog fa-fw"></i> Configurar Fatura
                     </button>
                 </div>
             </div>

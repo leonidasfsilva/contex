@@ -27,7 +27,7 @@ class Investimentos extends CI_Controller
         $this->investimentos();
     }
 
-    //MODULO DE LANCAMENTOS
+    // MODULO DE INVESTIMENTOS
     public function investimentos()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vInvestimentos')) {
@@ -67,7 +67,6 @@ class Investimentos extends CI_Controller
             } else if ($periodo == null) {
                 $limit = 5;
             } else {
-
                 // busca lançamentos da semana
                 if ($periodo == '5dias') {
                     $semana = $this->getLastFiveDays();

@@ -182,7 +182,7 @@ class Cartoes extends CI_Controller
                 }
                 $usuario = $this->usuarios_model->getById($cartao->id_usuario)->nome;
             }
-            $data['usuario'] = $usuario;
+            $data['usuario'] = $usuario ?? null;
             $data['cartao'] = $cartao;
             $data['menuFinanceiro'] = true;
             $data['view'] = 'cartoes/editar';

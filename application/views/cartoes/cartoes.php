@@ -69,7 +69,7 @@
                     ?>
                     <tr>
                         <td><?= $r->bandeira ?></td>
-                        <td><?= '**** **** **** ' . $final ?> <span class="label label-<?= $labelPrincipal ?>"><?= $cartaoPrincipal ?></span></td>
+                        <td><?= '**** **** **** ' . $final ?> <span class="label label-<?= $labelPrincipal ?? null ?>"><?= $cartaoPrincipal ?></span></td>
                         <td><?= $r->nome ?></td>
                         <td><span class="label label-<?= $label_cartao ?>"><?= $tipo_cartao ?></span></td>
                         <?=

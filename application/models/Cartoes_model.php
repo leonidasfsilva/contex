@@ -273,7 +273,7 @@ class Cartoes_model extends CI_Model
             ->get('cartoes')
             ->row();
 
-        if ($cartao->id_cartao) {
+        if ($cartao) {
             return $cartao;
         } else {
             return $this->db

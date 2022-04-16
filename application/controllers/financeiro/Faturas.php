@@ -54,22 +54,22 @@ class Faturas extends CI_Controller
         $config['last_tag_close'] = '</li>';
 
         $this->data['parcelas'] = array(
-            2 => '2 x',
-            3 => '3 x',
-            4 => '4 x',
-            5 => '5 x',
-            6 => '6 x',
-            7 => '7 x',
-            8 => '8 x',
-            9 => '9 x',
-            10 => '10 x',
-            11 => '11 x',
-            12 => '12 x',
+            2   => '2 x',
+            3   => '3 x',
+            4   => '4 x',
+            5   => '5 x',
+            6   => '6 x',
+            7   => '7 x',
+            8   => '8 x',
+            9   => '9 x',
+            10  => '10 x',
+            11  => '11 x',
+            12  => '12 x',
         );
 
         $cartaoPrincipal = $this->cartoes_model->getCartaoPrincipalUsuario(getUserId());
 
-        if ($_GET['id_cartao']) {
+        if (isset($_GET['id_cartao'])) {
             $id_cartao = $_GET['id_cartao'];
             $cartao = $this->cartoes_model->cartaoExistente($id_cartao);
 
