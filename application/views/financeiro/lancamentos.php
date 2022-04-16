@@ -458,7 +458,7 @@ $fim = $this->input->get('dataFinal');
                                 <label for="formaPgto" class="font-weight-bold">Forma Pagamento *</label>
                                 <select name="formaPgto" class="form-control">
                                     <option value="">
-                                        << Selecione >>
+                                        << Selecion >>
                                     </option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
