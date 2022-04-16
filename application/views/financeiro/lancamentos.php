@@ -346,7 +346,7 @@ $fim = $this->input->get('dataFinal');
                             <label class="tooltips font-weight-bold" title="Filtrar lançamentos por período específico">Período <i class="fa fa-info-circle fa-fw"></i></label>
                             <select name="periodo" id="select_periodo" class="form-control">
                                 <option value="">
-                                    << Selecione>>
+                                    << Selecione >>
                                 </option>
                                 <option value="todos" <?php if ($periodo_lancamentos == 'todos') {
                                                             echo 'selected';
@@ -458,7 +458,7 @@ $fim = $this->input->get('dataFinal');
                                 <label for="formaPgto" class="font-weight-bold">Forma Pagamento *</label>
                                 <select name="formaPgto" class="form-control">
                                     <option value="">
-                                        << Selecione>>
+                                        << Selecione >>
                                     </option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
@@ -530,7 +530,7 @@ $fim = $this->input->get('dataFinal');
                                 <label for="formaPgto" class="font-weight-bold">Forma Pagamento *</label>
                                 <select name="formaPgto" class="form-control">
                                     <option value="">
-                                        << Selecione>>
+                                        << Selecione >>
                                     </option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
@@ -610,7 +610,7 @@ $fim = $this->input->get('dataFinal');
                                 <label for="formaPgtoEditar" class="font-weight-bold">Forma Pagamento *</label>
                                 <select name="formaPgto" id="formaPgtoEditar" class="form-control">
                                     <option value="">
-                                        << Selecione>>
+                                        << Selecione >>
                                     </option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
@@ -690,7 +690,7 @@ $fim = $this->input->get('dataFinal');
                                 <label for="formaPgtoCopiar" class="font-weight-bold">Forma Pagamento *</label>
                                 <select name="formaPgto" id="formaPgtoCopiar" class="form-control">
                                     <option value="">
-                                        << Selecione>>
+                                        << Selecione >>
                                     </option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>

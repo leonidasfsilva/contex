@@ -325,7 +325,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </label>
                             <select class="form-control" id="select_dia" name="dia_vencimento">
                                 <option value="">
-                                    << Selecione>>
+                                    << Selecione >>
                                 </option>
                                 <option value="05" <?= $dia_vencimento == 5 ? 'selected' : '' ?>>TODO DIA 05</option>
                                 <option value="09" <?= $dia_vencimento == 9 ? 'selected' : '' ?>>TODO DIA 09</option>
@@ -375,7 +375,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </label>
                             <select class="form-control" id="mes_referencia" name="mes_referencia">
                                 <option value="">
-                                    << Selecione>>
+                                    << Selecione >>
                                 </option>
                                 <option value="01" <?= $mes_referencia == 1 ? 'selected' : '' ?>>01 - JANEIRO</option>
                                 <option value="02" <?= $mes_referencia == 2 ? 'selected' : '' ?>>02 - FEVEREIRO</option>
@@ -526,7 +526,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             <label class="font-weight-bold" for="forma_pagamento">Forma de pagamento *</label>
                             <select name="forma_pagamento" id="forma_pagamento" class="form-control">
                                 <option value="">
-                                    << Selecione>>
+                                    << Selecione >>
                                 </option>
                                 <?php if ($formasPagamento) {
                                     foreach ($formasPagamento as $cartao) { ?>

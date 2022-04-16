@@ -304,7 +304,7 @@ $periodo = $this->input->get('periodo');
                             <label for="formaPgto" class="font-weight-bold">Forma Aplicação *</label>
                             <select name="formaPgto" id="formaPgto" class="form-control">
                                 <option value="">
-                                    << Selecione>>
+                                    << Selecione >>
                                 </option>
                                 <?php if ($formasPagamento) {
                                     foreach ($formasPagamento as $f) { ?>
@@ -364,7 +364,7 @@ $periodo = $this->input->get('periodo');
                             <label for="formaPgto" class="font-weight-bold">Forma Resgate *</label>
                             <select name="formaPgto" id="formaPgto" class="form-control">
                                 <option value="">
-                                    << Selecione>>
+                                    << Selecione >>
                                 </option>
                                 <?php if ($formasPagamento) {
                                     foreach ($formasPagamento as $f) { ?>
@@ -426,7 +426,7 @@ $periodo = $this->input->get('periodo');
                             <label for="formaPgto" class="font-weight-bold">Forma Transação *</label>
                             <select name="formaPgto" id="formaPgtoEditar" class="form-control">
                                 <option value="">
-                                    << Selecione>>
+                                    << Selecione >>
                                 </option>
                                 <?php if ($formasPagamento) {
                                     foreach ($formasPagamento as $f) { ?>

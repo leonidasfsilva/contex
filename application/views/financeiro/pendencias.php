@@ -280,7 +280,7 @@ $periodo_pendencia = $this->input->get('periodo');
                             <label for="select_periodo" class="tooltips font-weight-bold" title="Filtrar pendências por período">Período <i class="fa fa-info-circle fa-fw"></i></label>
                             <select name="periodo" id="select_periodo" class="form-control">
                                 <option value="">
-                                    << Selecione>>
+                                    << Selecione >>
                                 </option>
                                 <option value="todos" <?php if ($periodo_pendencia == 'todos') {
                                                             echo 'selected';
@@ -379,7 +379,7 @@ $periodo_pendencia = $this->input->get('periodo');
                             <label for="tipo" class="font-weight-bold" title="ENTRADA: entrada nos lançamentos / SAÍDA: saída nos lançamentos">Tipo de Pendência *<i class="fa fa-info-circle fa-fw"></i></label>
                             <select class="form-control" name="tipo" id="tipo">
                                 <option value="">
-                                    << Selecione>>
+                                    << Selecione >>
                                 </option>
                                 <option value="1">ENTRADA</option>
                                 <option value="2">SAÍDA</option>
@@ -436,7 +436,7 @@ $periodo_pendencia = $this->input->get('periodo');
                             <label for="tipoEditar" class="font-weight-bold" title="ENTRADA: entrada nos lançamentos / SAÍDA: saída nos lançamentos">Tipo de Pendência *<i class="fa fa-info-circle fa-fw"></i></label>
                             <select class="form-control" name="tipo" id="tipoEditar">
                                 <option value="">
-                                    << Selecione>>
+                                    << Selecione >>
                                 </option>
                                 <option value="1">ENTRADA</option>
                                 <option value="2">SAIDA</option>
@@ -500,7 +500,7 @@ $periodo_pendencia = $this->input->get('periodo');
                             <label class="font-weight-bold" for="forma_pagamento">Forma de pagamento *</label>
                             <select name="forma_pagamento" id="forma_pagamento" class="form-control">
                                 <option value="">
-                                    << Selecione>>
+                                    << Selecione >>
                                 </option>
                                 <?php if ($formasPagamento) {
                                     foreach ($formasPagamento as $f) { ?>

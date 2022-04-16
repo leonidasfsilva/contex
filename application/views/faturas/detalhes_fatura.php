@@ -414,7 +414,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                 <label for="qnt_parcelas" class="font-weight-bold">Nº Parcelas</label>
                                 <select name="qnt_parcelas" id="qnt_parcelas" class="form-control qnt_parcelas">
                                     <option value="">
-                                        << Selecione>>
+                                        << Selecione >>
                                     </option>
                                     <?php if ($parcelas) {
                                         foreach ($parcelas as $k => $v) { ?>
@@ -507,7 +507,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                 <label for="qnt_parcelasEditar" class="font-weight-bold">Nº Parcelas *</label>
                                 <select name="qnt_parcelas" id="qnt_parcelasEditar" class="form-control qnt_parcelas">
                                     <option value="">
-                                        << Selecione>>
+                                        << Selecione >>
                                     </option>
                                     <?php if ($parcelas) {
                                         foreach ($parcelas as $k => $v) { ?>
