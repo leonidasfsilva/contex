@@ -455,10 +455,10 @@ $fim = $this->input->get('dataFinal');
                                 <input class="form-control datepicker" id="recebimento" type="text" name="recebimento" />
                             </div>
                             <div class="form-group col-lg-4">
-                                <label for="formaPgto" class="font-weight-bold">Forma Pagament *</label>
+                                <label for="formaPgto" class="font-weight-bold">Forma Pagamento *</label>
                                 <select name="formaPgto" class="form-control">
                                     <option value="">
-                                        << Selecion >>
+                                        << Selecione >>
                                     </option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
