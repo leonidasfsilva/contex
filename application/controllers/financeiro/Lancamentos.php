@@ -40,6 +40,8 @@ class Lancamentos extends CI_Controller
         $inicio = $_GET['dataInicial'] ?? null;
         $fim = $_GET['dataFinal'] ?? null;
         $start = $_GET['per_page'] ?? null;
+        $where = null;
+        $limit = null;
 
         $this->load->library('pagination');
 
@@ -177,7 +179,7 @@ class Lancamentos extends CI_Controller
         $this->data['results'] = $this->financeiro_model->get(
             'lancamentos',
             '*',
-            $where ?? null,
+            $where,
             getUserId(),
             $limit,
             $config['per_page'],
