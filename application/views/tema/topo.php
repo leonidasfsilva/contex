@@ -85,7 +85,7 @@ $this->load->view('includes/custom_js');
         $topbar_class = 'navbar-development';
         $dev = '[ DEVELOPMENT ]';
     } else {
-        $topbar_class = '';
+        $topbar_class = null;
         $dev = '';
     } ?>
 
