@@ -455,7 +455,7 @@ $fim = $this->input->get('dataFinal');
                                 <input class="form-control datepicker" id="recebimento" type="text" name="recebimento" />
                             </div>
                             <div class="form-group col-lg-4">
-                                <label for="formaPgto" class="font-weight-bold">Forma Pagamento *</label>
+                                <label for="formaPgto" class="font-weight-bold">Forma Pagament *</label>
                                 <select name="formaPgto" class="form-control">
                                     <option value="">
                                         << Selecion >>
