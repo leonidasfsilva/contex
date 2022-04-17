@@ -860,8 +860,8 @@ class Faturas extends CI_Controller
         );
 
         if ($this->fatura_model->edit('faturas', $data, 'id_fatura', $id_fatura) == true) {
-            $this->session->set_flashdata('sucesso', 'Fatura excluída com sucesso!');
             $this->desvincular($id_fatura);
+            $this->session->set_flashdata('sucesso', 'Fatura excluída com sucesso!');
             redirect($urlAtual);
         } else {
             $this->session->set_flashdata('erro', 'Erro ao tentar excluir a fatura.');
