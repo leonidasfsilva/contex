@@ -10,28 +10,32 @@
         </div>
     </div>
     <div class="panel-body">
-        <?php if ($custom_error != '') {
+        <?php if (isset($custom_error) && $custom_error != '') {
             echo '<div class="alert alert-danger alert-dismissible"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' . $custom_error . '</div>';
         } ?>
         <form action="<?php echo current_url(); ?>" id="formCliente" method="post" autocomplete="off">
             <div class="row">
-                <div class="form-group col-md-12">
+                <div class="form-group col-md-8">
                     <label for="nome" class="control-label font-weight-bold">Nome *</label>
                     <input type="text" class="form-control" id="nome" name="nome" value="<?php echo set_value('nome'); ?>">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="cpf" class="control-label font-weight-bold">CPF</label>
+                    <input type="text" class="form-control" id="cpf" name="cpf" value="<?php echo set_value('cpf'); ?>">
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-4">
-                    <label for="cpf" class="control-label font-weight-bold">CPF</label>
-                    <input type="text" class="form-control" id="cpf" name="cpf" value="<?php echo set_value('cpf'); ?>">
+                    <label for="email" class="control-label font-weight-bold">Email</label>
+                    <input type="text" class="form-control" id="email" name="email" value="<?php echo set_value('email'); ?>">
                 </div>
                 <div class="form-group col-md-4">
                     <label for="telefone" class="control-label font-weight-bold">Telefone *</label>
                     <input type="text" class="form-control" id="telefone" name="telefone" value="<?php echo set_value('telefone'); ?>">
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="email" class="control-label font-weight-bold">Email</label>
-                    <input type="text" class="form-control" id="email" name="email" value="<?php echo set_value('email'); ?>">
+                    <label for="cpf" class="control-label font-weight-bold">Data Nascimento</label>
+                    <input type="text" class="form-control datepicker" id="dob" name="dob" value="<?php echo set_value('dob'); ?>">
                 </div>
             </div>
             <div class="row">
@@ -85,12 +89,12 @@
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        $('.submit').click(function () {
+    $(document).ready(function() {
+        $('.submit').click(function() {
             $('#formCliente').submit();
         });
 
-        $('#s_n').on('ifChanged', function (event) {
+        $('#s_n').on('ifChanged', function(event) {
             const checked = event.target.checked;
             if (checked == true) {
                 $('#numero').val('');
@@ -101,7 +105,7 @@
         });
 
         var s_n = $('#s_n').iCheck('update')[0].checked;
-        $.each($(s_n), function (key, value) {
+        $.each($(s_n), function(key, value) {
             if (s_n == true) {
                 $('#numero').val('');
                 $('#numero').attr('disabled', true);
@@ -112,38 +116,78 @@
 
         $('#formCliente').validate({
             rules: {
-                nome: {required: true},
-                cpf: {required: false},
-                telefone: {required: true},
-                email: {required: false},
-                logradouro: {required: false},
-                numero: {required: false},
-                bairro: {required: false},
-                cidade: {required: false},
-                uf: {required: false},
-                cep: {required: false}
+                nome: {
+                    required: true
+                },
+                cpf: {
+                    required: false
+                },
+                telefone: {
+                    required: true
+                },
+                email: {
+                    required: false
+                },
+                logradouro: {
+                    required: false
+                },
+                numero: {
+                    required: false
+                },
+                bairro: {
+                    required: false
+                },
+                cidade: {
+                    required: false
+                },
+                uf: {
+                    required: false
+                },
+                cep: {
+                    required: false
+                }
             },
             messages: {
-                nome: {required: 'Informe o nome'},
-                cpf: {required: 'Campo Requerido.'},
-                telefone: {required: 'Informe o telefone'},
-                email: {required: 'Campo Requerido.'},
-                logradouro: {required: 'Campo Requerido.'},
-                numero: {required: 'Campo Requerido.'},
-                bairro: {required: 'Campo Requerido.'},
-                cidade: {required: 'Campo Requerido.'},
-                uf: {required: 'Campo Requerido.'},
-                cep: {required: 'Campo Requerido.'}
+                nome: {
+                    required: 'Informe o nome'
+                },
+                cpf: {
+                    required: 'Campo Requerido.'
+                },
+                telefone: {
+                    required: 'Informe o telefone'
+                },
+                email: {
+                    required: 'Campo Requerido.'
+                },
+                logradouro: {
+                    required: 'Campo Requerido.'
+                },
+                numero: {
+                    required: 'Campo Requerido.'
+                },
+                bairro: {
+                    required: 'Campo Requerido.'
+                },
+                cidade: {
+                    required: 'Campo Requerido.'
+                },
+                uf: {
+                    required: 'Campo Requerido.'
+                },
+                cep: {
+                    required: 'Campo Requerido.'
+                }
 
             },
 
             errorClass: "help-block",
             errorElement: "p",
-            highlight: function (element, errorClass, validClass) {
+            highlight: function(element, errorClass, validClass) {
                 $(element).parents('.form-group').addClass('has-error');
                 $(element).parents('.form-group').removeClass('has-success');
             },
-            unhighlight: function (element, errorClass, validClass) {
+            unhighlight: function(element, errorClass, validClass) {
                 $(element).parents('.form-group').removeClass('has-error');
                 $(element).parents('.form-group').addClass('has-success');
             }

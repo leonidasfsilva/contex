@@ -31,7 +31,7 @@ class Pendencia_model extends CI_Model
         if ($limit) {
             if ($rows > $limit) {
                 $this->db->limit($limit, ($rows - $limit));
-//                $this->db->order_by('id_pendencia', 'asc');
+                // $this->db->order_by('id_pendencia', 'asc');
             }
         }
         $this->db->order_by('quitado', 'desc');
@@ -107,7 +107,6 @@ class Pendencia_model extends CI_Model
                     ->from('pendencias')
                     ->where('status = 1 AND tipo = 1 AND quitado = 0 AND id_usuario  = ' . $id_usuario);
             }
-
         } else {
             if (!$id_cliente == null) {
                 $this->db
@@ -181,7 +180,6 @@ class Pendencia_model extends CI_Model
             ->from('pendencias')
             ->where('status = 1 AND tipo = 2 AND quitado = 0 AND id_usuario  = ' . $id_usuario);
         return $this->db->get()->row();
-
     }
 
     function getClientes($id_usuario)

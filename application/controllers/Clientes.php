@@ -76,11 +76,18 @@ class Clientes extends CI_Controller
         if ($this->input->post('nome')) {
             $nome = padronizarString($this->input->post('nome'));
 
+            if ($this->input->post('dob')) {
+                $dob = $this->input->post('dob');
+                $dob = explode('/', $dob);
+                $dob = $dob[2] . '-' . $dob[1] . '-' . $dob[0];
+            }
+
             $data = array(
                 'nome' => $nome,
                 'cpf' => $this->input->post('cpf'),
                 'telefone' => $this->input->post('telefone'),
                 'email' => $this->input->post('email'),
+                'dob' => $dob ?? null,
                 'logradouro' => $this->input->post('logradouro'),
                 'complemento' => $this->input->post('complemento'),
                 'numero' => $this->input->post('numero'),
@@ -125,12 +132,20 @@ class Clientes extends CI_Controller
         }
 
         $nome = padronizarString($this->input->post('nome'));
+
+        if ($this->input->post('dob')) {
+            $dob = $this->input->post('dob');
+            $dob = explode('/', $dob);
+            $dob = $dob[2] . '-' . $dob[1] . '-' . $dob[0];
+        }
+
         if ($this->input->post('nome')) {
             $data = array(
                 'nome' => $nome,
                 'cpf' => $this->input->post('cpf'),
                 'telefone' => $this->input->post('telefone'),
                 'email' => $this->input->post('email'),
+                'dob' => $dob ?? null,
                 'logradouro' => $this->input->post('logradouro'),
                 'complemento' => $this->input->post('complemento'),
                 'numero' => $this->input->post('numero'),

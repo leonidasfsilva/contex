@@ -241,6 +241,14 @@ class Cartoes_model extends CI_Model
         return $this->db->count_all_results();
     }
 
+    function countCartoesUsuario()
+    {
+        $this->db->from('cartoes');
+        $this->db->where('id_usuario', getUserId());
+        $this->db->where('status', 1);
+        return $this->db->count_all_results();
+    }
+
     function getTodos()
     {
         return $this->db
@@ -253,7 +261,7 @@ class Cartoes_model extends CI_Model
         return $this->db
             ->where('id_cartao', $id_cartao)
             ->get('cartoes')
-            ->result();
+            ->row();
     }
 
     function getCartaoPrincipalUsuario($idUsuario)
@@ -265,7 +273,7 @@ class Cartoes_model extends CI_Model
             ->get('cartoes')
             ->row();
 
-        if ($cartao->id_cartao) {
+        if ($cartao) {
             return $cartao;
         } else {
             return $this->db

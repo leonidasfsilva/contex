@@ -34,12 +34,14 @@ class Lancamentos extends CI_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar lançamentos.');
             redirect(base_url());
         }
-        $status = $_GET['status'];
+        $status = $_GET['status'] ?? null;
         $tipo = $_GET['tipo'] ?? null;
-        $periodo = $_GET['periodo'];
-        $inicio = $_GET['dataInicial'];
-        $fim = $_GET['dataFinal'];
-        $start = $_GET['per_page'];
+        $periodo = $_GET['periodo'] ?? null;
+        $inicio = $_GET['dataInicial'] ?? null;
+        $fim = $_GET['dataFinal'] ?? null;
+        $start = $_GET['per_page'] ?? null;
+        $where = null;
+        $limit = null;
 
         $this->load->library('pagination');
 
@@ -80,7 +82,10 @@ class Lancamentos extends CI_Controller
                     $limit = 20;
                     $start = $this->financeiro_model->countLancamentos(getUserId()) - $limit;
                 }
-                $order_by = 'data_lancamento asc';
+                $order_by = [
+                    'data_lancamento' => 'desc',
+                    'id_lancamento' => 'desc',
+                ];
                 $limitado = true;
                 break;
         }
@@ -142,7 +147,7 @@ class Lancamentos extends CI_Controller
         $config['base_url'] = base_url('financeiro/lancamentos');
         $config['suffix'] = '&' . $query_string;
         $config['first_url'] = $config['base_url'] . '?' . $query_string;
-        $config['total_rows'] = $this->financeiro_model->countLancamentos(getUserId(), $where);
+        $config['total_rows'] = $this->financeiro_model->countLancamentos(getUserId(), $where ?? null);
         $config['per_page'] = 20;
         $config['page_query_string'] = true;
         $config['next_link'] = false;
@@ -164,8 +169,6 @@ class Lancamentos extends CI_Controller
         $config['last_tag_open'] = '<li>';
         $config['last_tag_close'] = '</li>';
 
-        // varDumpExit($where);
-
         $this->pagination->initialize($config);
 
         $this->data['total_provisorio'] = $this->financeiro_model->getTotalProvisorio(getUserId());
@@ -178,11 +181,12 @@ class Lancamentos extends CI_Controller
             '*',
             $where,
             getUserId(),
-            $config['per_page'],
-            $start,
             $limit,
-            $order_by = 'data_lancamento asc',
-            $config['total_rows']);
+            $config['per_page'],
+            $config['total_rows'],
+            $this->input->get('per_page'),
+            $order_by ? $order_by : 'desc'
+        );
 
         $this->data['view'] = 'financeiro/lancamentos';
         $this->load->view('tema/topo', $this->data);
@@ -366,6 +370,69 @@ class Lancamentos extends CI_Controller
         }
     }
 
+    public function copiar()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
+            $this->session->set_flashdata('erro', 'Você não tem permissão para copiar lançamentos.');
+            redirect(base_url());
+        }
+
+        if (!$this->input->post()) {
+            $this->session->set_flashdata('erro', 'Método não permitido.');
+            redirect($this->global_url);
+        }
+
+        if ($this->input->post('urlAtual') != null) {
+            $urlAtual = $this->input->post('urlAtual');
+        } else {
+            $urlAtual = $this->global_url;
+        }
+
+        $vencimento = $this->input->post('vencimento');
+        $pagamento = $this->input->post('pagamento');
+
+        if ($vencimento != null) {
+            $vencimento = explode('/', $vencimento);
+            $vencimento = $vencimento[2] . '-' . $vencimento[1] . '-' . $vencimento[0];
+        } else {
+            $vencimento = date('Y-m-d');
+        }
+
+        if ($pagamento != null) {
+            $pagamento = explode('/', $pagamento);
+            $pagamento = $pagamento[2] . '-' . $pagamento[1] . '-' . $pagamento[0];
+        }
+
+        $tipo = ($this->input->post('tipo'));
+        $valor = $this->input->post('valor');
+
+        if ($tipo == 2) {
+            $valor = '-' . $valor;
+        }
+
+        $valor = str_replace(array('.', ','), array('', '.'), $valor);
+
+        $data = array(
+            'descricao' => padronizarString($this->input->post('descricao')),
+            'valor' => $valor,
+            'data_lancamento' => $vencimento,
+            'data_pagamento' => $pagamento != null ? $pagamento : $vencimento,
+            'baixado' => $this->input->post('pago') ?: 0,
+            'cliente_fornecedor' => padronizarString($this->input->post('fornecedor')),
+            'forma_pgto' => ($this->input->post('formaPgto')),
+            'tipo' => $tipo,
+            'id_usuario' => getUserId()
+        );
+
+        if ($this->financeiro_model->add('lancamentos', $data)) {
+            $this->session->set_flashdata('sucesso', 'Lançamento copiado com sucesso!');
+            redirect($urlAtual);
+        } else {
+            $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar copiar o registro.');
+            redirect($urlAtual);
+        }
+    }
+
     public function excluir()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
@@ -392,7 +459,6 @@ class Lancamentos extends CI_Controller
             if ($this->financeiro_model->delete('lancamentos', $data, 'id_lancamento', $id) == true) {
                 $this->session->set_flashdata('sucesso', 'Lançamento excluído com sucesso!');
                 redirect($urlAtual);
-
             } else {
                 $this->session->set_flashdata('erro', 'Erro ao tentar excluir lançamento.');
                 redirect($urlAtual);
@@ -431,7 +497,6 @@ class Lancamentos extends CI_Controller
         print_array($pendencia);
         print_array($cliente);
         echo 'TESTE OK!';
-
     }
 
     // MODULO DE RETORNO DE FILTROS POR PERIODO
@@ -442,7 +507,6 @@ class Lancamentos extends CI_Controller
         $primeiro = date("Y-m-d", strtotime("-" . ($dias) . " day"));
         $ultimo = date("Y-m-d", strtotime("+" . (364 - $dias) . " day"));
         return array($primeiro, $ultimo);
-
     }
 
     protected function getThisWeek()

@@ -20,10 +20,11 @@ class Consumo extends CI_Controller
     public function index()
     {
         $configs = $this->consumo_model->getConfigsConsumo(getUserId());
-        $inicio_medicao = explode('-', $configs->inicio_medicao);
+        $inicio_medicao = explode('-', $configs->data_leitura);
         $ano = $inicio_medicao[0];
         $mes = $inicio_medicao[1] + 1;
         $dia = $inicio_medicao[2];
+
 
         $data['referencia'] = padronizarString(strftime('%B / %Y', strtotime($dia . '-' . $mes . '-' . $ano)));
         $data['configs'] = $configs;
@@ -193,7 +194,6 @@ class Consumo extends CI_Controller
         $this->data['clientes'] = $data['results']['clientes'];
         $this->data['view'] = 'mxcode/pesquisa';
         $this->load->view('tema/topo', $this->data);
-
     }
 
     public function detalhes($id_chamado = null)
@@ -235,7 +235,6 @@ class Consumo extends CI_Controller
             } else {
                 $data['intervalo'] = $dataformatada;
             }
-
         } else {
             $chamadoUsuario = $this->chamados_model->verificaChamadoPertenceUsuario(getUserId());
             if ($chamadoUsuario) {
@@ -270,7 +269,6 @@ class Consumo extends CI_Controller
         $data['chamado'] = $chamado;
         $data['view'] = 'chamados/detalhes';
         $this->load->view('tema/topo', $data);
-
     }
 
     public function responder()
@@ -335,5 +333,4 @@ class Consumo extends CI_Controller
     {
         $this->chamados_model->usuarioTemNotificacoes(getUserId());
     }
-
 }

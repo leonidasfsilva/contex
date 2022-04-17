@@ -32,17 +32,18 @@ class Cartoes extends CI_Controller
     public function cadastrar()
     {
         if ($_POST) {
-//            $n_cartao = explode(" ", trim($_POST['number']));
+            //            $n_cartao = explode(" ", trim($_POST['number']));
             $n_cartao = str_replace(' ', '', $_POST['number']);
             $validade = str_replace(' ', '', $_POST['expiry']);
 
             $bandeira = padronizarString($_POST['bandeira']);
             $final = $n_cartao[3];
-//            print_array_exit($_POST);
+            //            print_array_exit($_POST);
 
             $data = array(
                 'numero' => encriptar($_POST['number']),
                 'nome' => padronizarString($_POST['name']),
+                'apelido' => padronizarString($_POST['apelido']),
                 'validade' => $validade,
                 'cvc' => encriptar($_POST['cvc']),
                 'bandeira' => padronizarString($_POST['bandeira']),
@@ -71,7 +72,6 @@ class Cartoes extends CI_Controller
     public function adicional($id_cartao = null)
     {
         if ($_POST) {
-//            $n_cartao = explode(" ", trim($_POST['number']));
             $n_cartao = str_replace(' ', '', $_POST['number']);
             $validade = str_replace(' ', '', $_POST['expiry']);
 
@@ -154,6 +154,7 @@ class Cartoes extends CI_Controller
             $data = array(
                 'numero' => encriptar($_POST['number']),
                 'nome' => padronizarString($_POST['name']),
+                'apelido' => padronizarString($_POST['apelido']),
                 'validade' => $validade,
                 'cvc' => encriptar($_POST['cvc']),
                 'bandeira' => padronizarString($_POST['bandeira']),
@@ -182,7 +183,7 @@ class Cartoes extends CI_Controller
                 }
                 $usuario = $this->usuarios_model->getById($cartao->id_usuario)->nome;
             }
-            $data['usuario'] = $usuario;
+            $data['usuario'] = $usuario ?? null;
             $data['cartao'] = $cartao;
             $data['menuFinanceiro'] = true;
             $data['view'] = 'cartoes/editar';
@@ -292,5 +293,4 @@ class Cartoes extends CI_Controller
             echo json_encode($data);
         }
     }
-
 }

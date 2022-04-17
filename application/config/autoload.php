@@ -1,4 +1,4 @@
-<?php  if (! defined('BASEPATH')) {
+<?php if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 /*
@@ -70,7 +70,12 @@ $autoload['libraries'] = array(
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('url', 'codegen_helper', 'mpdf_helper');
+$autoload['helper'] = [
+    'url',
+    'codegen_helper',
+    'fatura_helper',
+    'mpdf_helper'
+];
 
 
 /*

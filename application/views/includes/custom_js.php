@@ -33,7 +33,7 @@
     $(document).ready(function () {
         setInterval(function () {
             if (conectado === true) {
-                atualizaNotificacoesUsuario();
+                // atualizaNotificacoesUsuario();
             }
         }, 10000);
     });

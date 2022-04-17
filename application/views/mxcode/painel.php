@@ -13,7 +13,7 @@
                 $estilo = $a->estilo;
                 $text_white = '';
             }
-            ?>
+?>
             <div class="modal fade modal_anuncio" id="anuncio_<?= $a->id_anuncio ?>">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -55,7 +55,7 @@ if ($direcionados) {
                 $estilo = $d->estilo;
                 $text_white = '';
             }
-            ?>
+        ?>
             <div class="modal fade modal_anuncio" id="anuncio_<?= $d->id_anuncio ?>">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -78,7 +78,7 @@ if ($direcionados) {
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
-        <?php }
+<?php }
     }
 } ?>
 
@@ -115,7 +115,7 @@ if ($direcionados) {
             <div class="tile-sparkline">
                 <div class="tile-sparkline-heading clearfix">
                     <div class="pull-left">
-                        <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Cartão de Crédito</span>
+                        <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Faturas</span>
                         <div class="conteudo-widget " style="<?= ($widgetCartaoCredito == 1 ? '' : 'display: none;') ?>e">
                             <span class="tile-sparkline-subheading block mb10">Saldo de faturas em aberto</span>
                             <h2 class="block">R$ <?= number_format($fatura, 2, ',', '.') ?></h2>
@@ -126,7 +126,7 @@ if ($direcionados) {
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
-                    <a href="<?= base_url() ?>financeiro/faturas" class="font-weight-bold">ver detalhes </a>
+                    <a href="<?= base_url('financeiro/faturas') ?>" class="font-weight-bold">ver detalhes </a>
                     <a href="#" style="color: #607d8b" class="pull-right widget-collapse" id="widget_credito">
                         <span class="chevron-label">ocultar</span>
                         <i class="fas fa-chevron-up fa-fw collapse-icon"></i>
@@ -192,26 +192,26 @@ if ($direcionados) {
 
 <!--PAINEL DE LINKS-->
 <div class="row">
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) : ?>
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) : ?>
         <div class="col-md-6">
-            <a href="<?= base_url() ?>financeiro" class="shortcut-tile tile-sky">
+            <a href="<?= base_url('/financeiro/cartoes') ?>" class="shortcut-tile tile-midnightblue">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fas fa-dollar-sign fa-fw"></i></div>
-                    <!--                            <div class="pull-right"><span class="badge">16</span></div>-->
+                    <div class="pull-left"><i class="fas fa-credit-card fa-fw"></i></div>
+                    <div class="pull-right"><span class="badge"><?= $this->cartoes_model->countCartoesUsuario(); ?></span></div>
                 </div>
                 <div class="tile-footer">
-                    Financeiro
+                    Cartões
                 </div>
             </a>
         </div>
     <?php endif ?>
 
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')): ?>
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) : ?>
         <div class="col-md-6">
-            <a href="<?= base_url() ?>clientes" class="shortcut-tile tile-indigo">
+            <a href="<?= base_url('/clientes') ?>" class="shortcut-tile tile-green">
                 <div class="tile-body">
                     <div class="pull-left"><i class="fas fa-users fa-fw"></i></div>
-                    <!--                            <div class="pull-right"><span class="badge">2</span></div>-->
+                    <div class="pull-right"><span class="badge"><?= $this->clientes_model->countClientesUsuario(); ?></span></div>
                 </div>
                 <div class="tile-footer">
                     Clientes
@@ -220,42 +220,38 @@ if ($direcionados) {
         </div>
     <?php endif ?>
 
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')): ?>
-        <div class="col-md-6">
-            <a href="<?= base_url() ?>produtos" class="shortcut-tile tile-green">
-                <div class="tile-body">
-                    <div class="pull-left"><i class="fas fa-barcode fa-fw"></i></div>
-                    <!--                            <div class="pull-right"><span class="badge">5</span></div>-->
-                </div>
-                <div class="tile-footer">
-                    Produtos
-                </div>
-            </a>
-        </div>
-    <?php endif ?>
+    <div class="col-md-6">
+        <a href="<?= base_url('/notificacoes') ?>" class="shortcut-tile tile-danger">
+            <div class="tile-body">
+                <div class="pull-left"><i class="fas fa-bell fa-fw"></i></div>
+                <!--                            <div class="pull-right"><span class="badge">3</span></div>-->
+            </div>
+            <div class="tile-footer">
+                Notificações
+            </div>
+        </a>
+    </div>
 
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vServico')) : ?>
-        <div class="col-md-6">
-            <a href="<?= base_url() ?>servicos" class="shortcut-tile tile-blue">
-                <div class="tile-body">
-                    <div class="pull-left"><i class="fas fa-wrench fa-fw"></i></div>
-                </div>
-                <div class="tile-footer">
-                    Serviços
-                </div>
-            </a>
-        </div>
-    <?php endif ?>
+    <div class="col-md-6">
+        <a href="<?= base_url('/chamados') ?>" class="shortcut-tile tile-alizarin">
+            <div class="tile-body">
+                <div class="pull-left"><i class="fas fa-headset fa-fw"></i></div>
+            </div>
+            <div class="tile-footer">
+                Chamados de Suporte
+            </div>
+        </a>
+    </div>
 
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) : ?>
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vConsumo')) : ?>
         <div class="col-md-6">
-            <a href="<?= base_url() ?>os" class="shortcut-tile tile-grape">
+            <a href="<?= base_url('/consumo') ?>" class="shortcut-tile tile-info">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fas fa-tags fa-fw"></i></div>
-                    <!--                            <div class="pull-right"><span class="badge">3</span></div>-->
+                    <div class="pull-left"><i class="fas fa-lightbulb fa-fw"></i></div>
+                    <!--                            <div class="pull-right"><span class="badge">16</span></div>-->
                 </div>
                 <div class="tile-footer">
-                    Ordens de Serviço
+                    Consumo de Energia
                 </div>
             </a>
         </div>
@@ -263,13 +259,13 @@ if ($direcionados) {
 
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) : ?>
         <div class="col-md-6">
-            <a href="<?= base_url() ?>vendas" class="shortcut-tile tile-info">
+            <a href="<?= base_url('/usuarios') ?>" class="shortcut-tile tile-inverse">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fas fa-shopping-cart fa-fw"></i></div>
+                    <div class="pull-left"><i class="fas fa-users-cog fa-fw"></i></div>
                     <!--                            <div class="pull-right"><span class="badge">10</span></div>-->
                 </div>
                 <div class="tile-footer">
-                    Vendas
+                    Usuários
                 </div>
             </a>
         </div>
@@ -277,7 +273,7 @@ if ($direcionados) {
 </div>
 
 <script>
-    $.each($('.conteudo-widget'), function (key, value) {
+    $.each($('.conteudo-widget'), function(key, value) {
         if ($(this).css('display') == 'none') {
             $(this).parents().eq(3).find('.collapse-icon').attr('class', 'fas fa-chevron-down fa-fw collapse-icon');
             $(this).parents().eq(3).find(".chevron-label").text('exibir');
@@ -287,7 +283,7 @@ if ($direcionados) {
         }
     });
 
-    $('a.widget-collapse').click(function () {
+    $('a.widget-collapse').click(function() {
         let n = $(this).parents().eq(2).find(".conteudo-widget");
 
         if (n.css('display') == 'none') {
@@ -297,7 +293,7 @@ if ($direcionados) {
             if ($(this).attr('id') == 'widget_lancamentos') {
                 $.ajax({
                     type: "POST",
-                    url: "<?=base_url();?>configuracoes/setWidgetLancamentos",
+                    url: "<?= base_url(); ?>configuracoes/setWidgetLancamentos",
                     data: "value=" + 1,
                     dataType: 'html',
                 });
@@ -305,7 +301,7 @@ if ($direcionados) {
             if ($(this).attr('id') == 'widget_credito') {
                 $.ajax({
                     type: "POST",
-                    url: "<?=base_url();?>configuracoes/setWidgetCartaoCredito",
+                    url: "<?= base_url(); ?>configuracoes/setWidgetCartaoCredito",
                     data: "value=" + 1,
                     dataType: 'html',
                 });
@@ -313,7 +309,7 @@ if ($direcionados) {
             if ($(this).attr('id') == 'widget_investimentos') {
                 $.ajax({
                     type: "POST",
-                    url: "<?=base_url();?>configuracoes/setWidgetInvestimentos",
+                    url: "<?= base_url(); ?>configuracoes/setWidgetInvestimentos",
                     data: "value=" + 1,
                     dataType: 'html',
                 });
@@ -321,7 +317,7 @@ if ($direcionados) {
             if ($(this).attr('id') == 'widget_pendencias') {
                 $.ajax({
                     type: "POST",
-                    url: "<?=base_url();?>configuracoes/setWidgetPendencias",
+                    url: "<?= base_url(); ?>configuracoes/setWidgetPendencias",
                     data: "value=" + 1,
                     dataType: 'html',
                 });
@@ -333,7 +329,7 @@ if ($direcionados) {
             if ($(this).attr('id') == 'widget_lancamentos') {
                 $.ajax({
                     type: "POST",
-                    url: "<?=base_url();?>configuracoes/setWidgetLancamentos",
+                    url: "<?= base_url(); ?>configuracoes/setWidgetLancamentos",
                     data: "value=" + 0,
                     dataType: 'html',
                 });
@@ -341,7 +337,7 @@ if ($direcionados) {
             if ($(this).attr('id') == 'widget_credito') {
                 $.ajax({
                     type: "POST",
-                    url: "<?=base_url();?>configuracoes/setWidgetCartaoCredito",
+                    url: "<?= base_url(); ?>configuracoes/setWidgetCartaoCredito",
                     data: "value=" + 0,
                     dataType: 'html',
                 });
@@ -349,7 +345,7 @@ if ($direcionados) {
             if ($(this).attr('id') == 'widget_investimentos') {
                 $.ajax({
                     type: "POST",
-                    url: "<?=base_url();?>configuracoes/setWidgetInvestimentos",
+                    url: "<?= base_url(); ?>configuracoes/setWidgetInvestimentos",
                     data: "value=" + 0,
                     dataType: 'html',
                 });
@@ -357,13 +353,15 @@ if ($direcionados) {
             if ($(this).attr('id') == 'widget_pendencias') {
                 $.ajax({
                     type: "POST",
-                    url: "<?=base_url();?>configuracoes/setWidgetPendencias",
+                    url: "<?= base_url(); ?>configuracoes/setWidgetPendencias",
                     data: "value=" + 0,
                     dataType: 'html',
                 });
             }
         }
-        n.slideToggle({duration: 200});
+        n.slideToggle({
+            duration: 200
+        });
         return false;
     });
 </script>

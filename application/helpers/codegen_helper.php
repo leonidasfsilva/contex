@@ -16,7 +16,7 @@ function differenceInHours($startdate, $enddate)
 
 function versionApp()
 {
-    return '2021.06.12';
+    return '2021.12.30';
 }
 
 function print_array($a)

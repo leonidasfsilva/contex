@@ -51,7 +51,10 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-lg-12">
+                        <div class="form-group col-xs-6">
+                            <input class="form-control" id="apelido" name="apelido" placeholder="Apelido do cartão" type="text" value="<?= $cartao->apelido ?>">
+                        </div>
+                        <div class="form-group col-lg-6">
                             <div class="checkbox icheck">
                                 <input type="checkbox" class="form-control" id="principal" name="principal" value="1" <?php echo $cartao->principal == 1 ? 'checked' : '' ?>>
                             </div>
@@ -69,8 +72,8 @@
     </div>
 </div>
 <script>
-    $(document).ready(function () {
-        setTimeout(function () {
+    $(document).ready(function() {
+        setTimeout(function() {
             var evt = document.createEvent('HTMLEvents');
             evt.initEvent('keyup', false, true);
             document.getElementById('number').dispatchEvent(evt);
@@ -82,17 +85,17 @@
 
         let bandeira;
         //Credit Card
-        setTimeout(function () {
+        setTimeout(function() {
             bandeira = mountCard('#formEditarCartao', '.card-wrapper', 1000);
         }, 1000);
 
-        $('#number').keyup(function () {
+        $('#number').keyup(function() {
             if ($(this).val().length >= 4) {
                 $('#bandeira').val(bandeira.cardType);
             }
         });
 
-        $('#name').keyup(function () {
+        $('#name').keyup(function() {
             if ($(this).val().length >= 1) {
                 $(this).css({
                     'text-transform': 'uppercase'
@@ -104,7 +107,7 @@
             }
         });
 
-        $('#submit').click(function () {
+        $('#submit').click(function() {
             $('#formEditarCartao').submit();
         });
 
@@ -123,11 +126,11 @@
             },
             errorClass: "help-block",
             errorElement: "p",
-            highlight: function (element, errorClass, validClass) {
+            highlight: function(element, errorClass, validClass) {
                 $(element).parents('.form-group').addClass('has-error');
                 $(element).parents('.form-group').removeClass('has-success');
             },
-            unhighlight: function (element, errorClass, validClass) {
+            unhighlight: function(element, errorClass, validClass) {
                 $(element).parents('.form-group').removeClass('has-error');
                 $(element).parents('.form-group').addClass('has-success');
             }

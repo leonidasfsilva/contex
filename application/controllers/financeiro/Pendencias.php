@@ -38,7 +38,7 @@ class Pendencias extends CI_Controller
         $cliente = $this->input->get('cliente');
         $inicio = $this->input->get('dataInicial');
         $fim = $this->input->get('dataFinal');
-
+        $where = null;
 
         $this->load->library('pagination');
 
@@ -100,7 +100,6 @@ class Pendencias extends CI_Controller
                 $where = 'data_vencimento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
                 break;
         }
-
 
         if (isset($status) && $status != null) {
             $limit = null;

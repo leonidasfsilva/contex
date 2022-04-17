@@ -54,22 +54,22 @@ class Faturas extends CI_Controller
         $config['last_tag_close'] = '</li>';
 
         $this->data['parcelas'] = array(
-            2 => '2 x',
-            3 => '3 x',
-            4 => '4 x',
-            5 => '5 x',
-            6 => '6 x',
-            7 => '7 x',
-            8 => '8 x',
-            9 => '9 x',
-            10 => '10 x',
-            11 => '11 x',
-            12 => '12 x',
+            2   => '2 x',
+            3   => '3 x',
+            4   => '4 x',
+            5   => '5 x',
+            6   => '6 x',
+            7   => '7 x',
+            8   => '8 x',
+            9   => '9 x',
+            10  => '10 x',
+            11  => '11 x',
+            12  => '12 x',
         );
 
         $cartaoPrincipal = $this->cartoes_model->getCartaoPrincipalUsuario(getUserId());
 
-        if ($_GET['id_cartao']) {
+        if (isset($_GET['id_cartao'])) {
             $id_cartao = $_GET['id_cartao'];
             $cartao = $this->cartoes_model->cartaoExistente($id_cartao);
 
@@ -114,9 +114,9 @@ class Faturas extends CI_Controller
         }
 
         $urlAtual = $this->input->post('urlAtual');
-
         $periodo = $this->input->get('periodo');
         $cliente = $this->input->get('cliente');
+        $where = null;
 
         $this->load->library('pagination');
 
@@ -163,12 +163,7 @@ class Faturas extends CI_Controller
         }
 
         if (isset($cliente) && $cliente != null) {
-            $limit = null;
-            if (!isset($where)) {
-                $where = 'id_cliente = ' . $cliente;
-            } else {
-                $where .= ' AND id_cliente = ' . $cliente;
-            }
+            $where = 'id_cliente = ' . $cliente;
         }
 
         $faturaExistente = $this->fatura_model->getById($id_fatura);
@@ -178,6 +173,14 @@ class Faturas extends CI_Controller
             $cartao = $this->cartoes_model->getDetalhesCartao($id_cartao);
 
             if (($fatura_selecionada->id_usuario == getUserId() && $cartao->id_usuario == getUserId()) || ($fatura_selecionada->id_cartao == $id_cartao && $cartao->id_usuario_titular == getUserId())) {
+                $orderByLancamentosAssoc = [
+                    'data_compra' => 'desc',
+                    'id_assoc' => 'desc',
+                ];
+                $orderByLancamentos = [
+                    'id_lancamento' => 'desc',
+                ];
+
                 $data['clientes'] = $this->fatura_model->getClientesPorFatura($id_fatura);
                 $data['selected_cliente'] = $cliente;
                 $data['fatura'] = $this->fatura_model->getDetalhesFatura($id_fatura);
@@ -190,8 +193,8 @@ class Faturas extends CI_Controller
                 $data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
                 $data['fatura_paga'] = ($data['fatura']->fatura_paga);
                 $data['lancamentoEditavel'] = $this->fatura_model->getLancamentoEditavel($data['mes_referencia'], $data['ano_referencia']);
-                $data['subresults'] = $this->fatura_model->getLancamentos('lancamentos_faturas', '*', $fatura_selecionada->id_usuario, $where, $config['per_page'], $this->input->get('per_page'));
-                $data['results'] = $this->fatura_model->getLancamentosAssoc('lancamentos_faturas_assoc', '*', $id_fatura, $where = null, $config['per_page'], $this->input->get('per_page'));
+                $data['subresults'] = $this->fatura_model->getLancamentos('lancamentos_faturas', '*', $fatura_selecionada->id_usuario, $where, $config['per_page'], $this->input->get('per_page'), $orderByLancamentos);
+                $data['results'] = $this->fatura_model->getLancamentosAssoc('lancamentos_faturas_assoc', '*', $id_fatura, $where = null, $config['per_page'], $this->input->get('per_page'), $orderByLancamentosAssoc);
                 $data['menuFinanceiro'] = true;
                 $data['menuFaturas'] = true;
 
@@ -394,6 +397,7 @@ class Faturas extends CI_Controller
                         }
 
                         if ($this->fatura_model->add('lancamentos_faturas_assoc', $data1)) {
+                            atualizaValorVinculoFatura($id_fatura);
                             $this->session->set_flashdata('sucesso', 'Lançamento adicionado com sucesso!');
                         } else {
                             $this->session->set_flashdata('erro', 'Erro ao tentar adicionar lançamentos_assoc!');
@@ -445,6 +449,7 @@ class Faturas extends CI_Controller
                     }
 
                     if ($this->fatura_model->add('lancamentos_faturas_assoc', $data1)) {
+                        atualizaValorVinculoFatura($id_fatura);
                         $this->session->set_flashdata('sucesso', 'Lançamento adicionado com sucesso!');
                     } else {
                         $this->session->set_flashdata('erro', 'Erro ao tentar adicionar lançamentos_assoc!');
@@ -591,7 +596,7 @@ class Faturas extends CI_Controller
                         $faturaReferencia = $this->fatura_model->getFaturaReferencia($faturaAtual->id_cartao, $mes, $ano);
 
                         //ARRAY LANCAMENTOS_FATURA_ASSOC
-                        $data1 = array(
+                        $dataLancFaturaAssoc = array(
                             'id_lancamento' => $id_lancamento,
                             'id_fatura' => $faturaReferencia->id_fatura,
                             'valor_parcela' => $valor_parcela,
@@ -649,7 +654,8 @@ class Faturas extends CI_Controller
                             $ano++;
                         }
 
-                        if ($this->fatura_model->add('lancamentos_faturas_assoc', $data1)) {
+                        if ($this->fatura_model->add('lancamentos_faturas_assoc', $dataLancFaturaAssoc)) {
+                            atualizaValorVinculoFatura($id_fatura);
                             $this->session->set_flashdata('sucesso', 'Lançamento alterado com sucesso!');
                         } else {
                             $this->session->set_flashdata('erro', 'Erro ao tentar adicionar lançamentos_assoc!');
@@ -701,6 +707,7 @@ class Faturas extends CI_Controller
                     }
 
                     if ($this->fatura_model->add('lancamentos_faturas_assoc', $data1)) {
+                        atualizaValorVinculoFatura($id_fatura);
                         $this->session->set_flashdata('sucesso', 'Lançamento alterado com sucesso!');
                     } else {
                         $this->session->set_flashdata('erro', 'Erro ao tentar alterar lançamentos_assoc!');
@@ -734,12 +741,13 @@ class Faturas extends CI_Controller
             'status' => 0,
         );
 
-        if ($this->fatura_model->delete('lancamentos_faturas', $data, 'id_lancamento', $id_lancamento) == true) {
+        $idFatura = $this->fatura_model->getFaturaByLancamento($id_lancamento);
 
+        if ($this->fatura_model->delete('lancamentos_faturas', $data, 'id_lancamento', $id_lancamento) == true) {
             $this->fatura_model->delete('lancamentos_faturas_assoc', $data, 'id_lancamento', $id_lancamento);
             $this->pendencia_model->delete('pendencias', $data, 'id_lancamento_fatura', $id_lancamento);
-
             $this->session->set_flashdata('sucesso', 'Lançamento excluído com sucesso!');
+            atualizaValorVinculoFatura($idFatura);
             redirect($urlAtual);
         } else {
             $this->session->set_flashdata('erro', 'Erro ao tentar excluir lançamento de fatura.');
@@ -853,6 +861,7 @@ class Faturas extends CI_Controller
 
         if ($this->fatura_model->edit('faturas', $data, 'id_fatura', $id_fatura) == true) {
             $this->session->set_flashdata('sucesso', 'Fatura excluída com sucesso!');
+            desvinculaFatura($id_fatura);
             redirect($urlAtual);
         } else {
             $this->session->set_flashdata('erro', 'Erro ao tentar excluir a fatura.');
@@ -867,45 +876,124 @@ class Faturas extends CI_Controller
             redirect(base_url());
         }
         $urlAtual = $this->input->post('urlAtual');
+        $data_pagamento = date('d/m/Y');
 
         if ($_REQUEST['data_pagamento']) {
             $data_pagamento = $_REQUEST['data_pagamento'];
-        } else {
-            $data_pagamento = date('d/m/Y');
         }
 
-        try {
-            $data_pagamento = explode('/', $data_pagamento);
-            $data_pagamento = $data_pagamento[2] . '-' . $data_pagamento[1] . '-' . $data_pagamento[0];
-        } catch (Exception $e) {
-            $data_pagamento = date('Y/m/d');
-        }
+        $data_pagamento = explode('/', $data_pagamento);
+        $data_pagamento = $data_pagamento[2] . '-' . $data_pagamento[1] . '-' . $data_pagamento[0];
 
         $data = array(
             'fatura_paga' => 1,
             'data_pagamento' => $data_pagamento,
+            'forma_pgto' => $_POST['forma_pagamento']
         );
 
         if ($this->fatura_model->edit('faturas', $data, 'id_fatura', $_POST['id_fatura'])) {
-            if ($_POST['registrar']) {
-                $valor_total = $this->fatura_model->getValorTotalFatura($_POST['id_fatura']);
+            $vinculoFatura = $this->fatura_model->getVinculoFatura($_POST['id_fatura']);
+            if ($vinculoFatura) {
+                $detalhesFatura = $this->fatura_model->getDetalhesFatura($_POST['id_fatura']);
+                $valorTotalFatura = $this->fatura_model->getValorTotalFatura($_POST['id_fatura']);
+                $detalhesCartaoFatura = $this->cartoes_model->getCartao($detalhesFatura->id_cartao);
+                $n_cartao = explode(" ", trim(decriptar($detalhesCartaoFatura->numero)));
+                $final = $n_cartao[3];
+                $apelido = $detalhesCartaoFatura->apelido ? ' - ' . $detalhesCartaoFatura->apelido : null;
+
                 $data = array(
-                    'id_usuario' => getUserId(),
-                    'descricao' => 'FATURA CARTAO DE CREDITO',
-                    'valor' => '-' . $valor_total,
-                    'data_lancamento' => $data_pagamento,
-                    'data_pagamento' => $data_pagamento,
-                    'cliente_fornecedor' => 'CARTAO DE CREDITO',
-                    'forma_pgto' => $_POST['forma_pagamento'],
+                    'descricao' => 'FATURA CARTAO DE CREDITO' . $apelido,
+                    'valor' => '-' . $valorTotalFatura,
+                    'data_lancamento' => $detalhesFatura->data_pagamento ?? $detalhesFatura->vencimento,
+                    'data_pagamento' => $detalhesFatura->data_pagamento,
+                    'cliente_fornecedor' => $detalhesCartaoFatura->bandeira ? $detalhesCartaoFatura->bandeira . ' - FINAL ' . $final : null,
+                    'forma_pgto' => $detalhesFatura->forma_pgto ?? 5,
                     'baixado' => 1,
                     'tipo' => 2,
                 );
-                $this->financeiro_model->add('lancamentos', $data);
+                $this->fatura_model->edit('lancamentos', $data, 'id_fatura', $_POST['id_fatura']);
             }
             $this->session->set_flashdata('sucesso', 'Fatura paga com sucesso!');
             redirect($urlAtual);
         } else {
             $this->session->set_flashdata('erro', 'Erro ao tentar pagar a fatura.');
+            redirect($urlAtual);
+        }
+    }
+
+    public function vincular()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eFaturas')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para vincular faturas.');
+            redirect(base_url());
+        }
+        $urlAtual = $this->input->post('urlAtual');
+        $idFatura = $this->input->post('idFatura');
+
+        $data = array(
+            'fatura_vinculada' => 1
+        );
+
+        if ($this->fatura_model->edit('faturas', $data, 'id_fatura', $idFatura)) {
+            $vinculoFatura = $this->fatura_model->getVinculoFatura($idFatura);
+            if ($vinculoFatura) {
+                $this->session->set_flashdata('erro', 'A fatura solicitada já possui vínculo ativo ao módulo de Lançamentos');
+                redirect($urlAtual);
+            }
+
+            $detalhesFatura = $this->fatura_model->getDetalhesFatura($idFatura);
+            $valorTotalFatura = $this->fatura_model->getValorTotalFatura($idFatura);
+            $detalhesCartaoFatura = $this->cartoes_model->getCartao($detalhesFatura->id_cartao);
+            $n_cartao = explode(" ", trim(decriptar($detalhesCartaoFatura->numero)));
+            $final = $n_cartao[3];
+            $apelido = $detalhesCartaoFatura->apelido ? ' - ' . $detalhesCartaoFatura->apelido : null;
+
+            $data = array(
+                'id_usuario' => getUserId(),
+                'id_fatura' => $idFatura,
+                'descricao' => 'FATURA CARTAO DE CREDITO' . $apelido,
+                'cliente_fornecedor' => $detalhesCartaoFatura->bandeira ? $detalhesCartaoFatura->bandeira . ' - FINAL ' . $final : null,
+                'valor' => '-' . $valorTotalFatura,
+                'data_lancamento' => $detalhesFatura->data_pagamento ?? $detalhesFatura->vencimento,
+                'data_pagamento' => $detalhesFatura->data_pagamento,
+                'forma_pgto' => $detalhesFatura->forma_pgto ?? 5,
+                'baixado' => $detalhesFatura->fatura_paga,
+                'tipo' => 2
+            );
+            $this->financeiro_model->add('lancamentos', $data);
+            $this->session->set_flashdata('sucesso', 'Fatura vinculada com sucesso');
+            redirect($urlAtual);
+        } else {
+            $this->session->set_flashdata('erro', 'Erro ao tentar vincular a fatura');
+            redirect($urlAtual);
+        }
+    }
+
+    public function desvincular()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eFaturas')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para desvincular faturas.');
+            redirect(base_url());
+        }
+        $urlAtual = $this->input->post('urlAtual');
+        $idFatura = $this->input->post('idFatura');
+
+        $data = array(
+            'fatura_vinculada' => 0
+        );
+
+        if ($this->fatura_model->edit('faturas', $data, 'id_fatura', $idFatura)) {
+            $vinculoFatura = $this->fatura_model->getVinculoFatura($idFatura);
+            if (!$vinculoFatura) {
+                $this->session->set_flashdata('erro', 'A fatura solicitada não possui vínculo ativo ao módulo de Lançamentos');
+                redirect($urlAtual);
+            }
+
+            $this->fatura_model->delete_real('lancamentos', 'id_fatura', $idFatura);
+            $this->session->set_flashdata('sucesso', 'Fatura desvinculada com sucesso');
+            redirect($urlAtual);
+        } else {
+            $this->session->set_flashdata('erro', 'Erro ao tentar desvincular a fatura');
             redirect($urlAtual);
         }
     }
