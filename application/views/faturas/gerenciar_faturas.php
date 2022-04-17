@@ -446,6 +446,9 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             <form action="<?php echo base_url() ?>financeiro/faturas/excluir" method="post">
                 <div class="modal-body">
                     <p class="font-weight-bold">Deseja realmente excluir esta fatura?</p>
+                    <?php ?>
+                    <p class="note note-danger"><i class="text-danger fa fa-exclamation-triangle fa-fw fa-lg"></i> Caso esta fatura possua um vínculo ativo em Lançamento, o mesmo será excluído</p>
+                    <?php ?>
                     <input name="id_fatura" id="idExcluir" type="hidden" value="" />
                     <input id="urlExcluirFatura" type="hidden" name="urlAtual" value="" />
                 </div>
@@ -530,7 +533,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             <form id="formFechar" action="<?php echo base_url('financeiro/faturas/vincular') ?>" method="post">
                 <div class="modal-body">
                     <p class="font-weight-bold">Confirma o vínculo desta fatura ao módulo de Lançamentos?</p>
-                    <p class="note note-info"><i class="fa fa-info-circle fa-fw fa-lg"></i> Todas as atualizações de valores desta fatura serão refletidas automaticamente no módulo de Lançamentos</p>
+                    <p class="note note-info"><i class="text-info fa fa-info-circle fa-fw fa-lg"></i> Todas as atualizações de valores desta fatura serão refletidas automaticamente no módulo de Lançamentos</p>
                     <input class="idFatura" type="hidden" name="idFatura" />
                     <input class="urlAtual" type="hidden" name="urlAtual" />
                 </div>
@@ -558,7 +561,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             <form id="formFechar" action="<?php echo base_url('financeiro/faturas/desvincular') ?>" method="post">
                 <div class="modal-body">
                     <p class="font-weight-bold">Confirma o desvinculo desta fatura do módulo de Lançamentos?</p>
-                    <p class="note note-info"><i class="fa fa-info-circle fa-fw fa-lg"></i> Todas as atualizações de valores desta fatura deixarão de ser refletidas automaticamente no módulo de Lançamentos</p>
+                    <p class="note note-info"><i class="text-info fa fa-info-circle fa-fw fa-lg"></i> Todas as atualizações de valores desta fatura deixarão de ser refletidas automaticamente no módulo de Lançamentos</p>
                     <input class="idFatura" type="hidden" name="idFatura" />
                     <input class="urlAtual" type="hidden" name="urlAtual" />
                 </div>
@@ -583,7 +586,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white">Pagar fatura</h4>
             </div>
-            <form id="formPagar" action="<?php echo base_url() ?>financeiro/faturas/pagar" method="post" autocomplete="off">
+            <form id="formPagar" action="<?php echo base_url('financeiro/faturas/pagar') ?>" method="post" autocomplete="off">
                 <div class="modal-body">
                     <p>Confirma o pagamento desta fatura?</p>
                     <input id="id_fatura_pagar" type="hidden" name="id_fatura" value="" />
