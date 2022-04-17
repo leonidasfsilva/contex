@@ -261,7 +261,7 @@ class Cartoes_model extends CI_Model
         return $this->db
             ->where('id_cartao', $id_cartao)
             ->get('cartoes')
-            ->result();
+            ->row();
     }
 
     function getCartaoPrincipalUsuario($idUsuario)

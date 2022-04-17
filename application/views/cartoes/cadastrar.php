@@ -31,11 +31,22 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-sm-6">
+                        <div class="form-group col-xs-6">
                             <input class="form-control" id="expiry" name="expiry" placeholder="Validade" type="text">
                         </div>
-                        <div class="form-group col-sm-6">
+                        <div class="form-group col-xs-6">
                             <input class="form-control" id="cvc" name="cvc" placeholder="Código de segurança" type="text">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-xs-6">
+                            <input class="form-control" id="apelido" name="apelido" placeholder="Apelido do cartão" type="text">
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <div class="checkbox icheck">
+                                <input type="checkbox" class="form-control" id="principal" name="principal" value="1">
+                            </div>
+                            <label for="principal" class="font-weight-bold">Cartão Principal</label>
                         </div>
                     </div>
                     <input type="hidden" name="bandeira" id="bandeira">

@@ -37,6 +37,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
     $dateObj = DateTime::createFromFormat('!m', $mes_referencia);
     $month = $dateObj->format('M'); // March
     $nome_mes = padronizarString(strftime('%b', strtotime($month)));
+    $creditoFatura = 0;
+    $debitoFatura = 0;
 ?>
 <?php } ?>
 
@@ -165,8 +167,6 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 </thead>
                 <tbody>
                     <?php
-                    $debitoFatura = 0;
-
                     foreach ($results as $r) {
                         foreach ($subresults as $s) {
                             if ($s->id_lancamento == $r->id_lancamento) {

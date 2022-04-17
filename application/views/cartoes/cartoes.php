@@ -21,7 +21,8 @@
             <tr role="row">
                 <th style="text-align: left !important;">Bandeira</th>
                 <th style="text-align: left !important;">Final Cartão</th>
-                <th style="text-align: left !important;">Nome</th>
+                <th style="text-align: left !important;">Nome Impresso</th>
+                <th style="text-align: left !important;">Apelido Cartão</th>
                 <th style="text-align: left !important;">Tipo Cartão</th>
                 <th style="text-align: left !important; width: 180px">Ações</th>
             </tr>
@@ -71,6 +72,7 @@
                         <td><?= $r->bandeira ?></td>
                         <td><?= '**** **** **** ' . $final ?> <span class="label label-<?= $labelPrincipal ?? null ?>"><?= $cartaoPrincipal ?></span></td>
                         <td><?= $r->nome ?></td>
+                        <td><?= $r->apelido ?></td>
                         <td><span class="label label-<?= $label_cartao ?>"><?= $tipo_cartao ?></span></td>
                         <?=
                         '<td>

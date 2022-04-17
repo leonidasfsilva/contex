@@ -211,7 +211,7 @@ class Fatura_model extends CI_Model
         );
         $this->db->where('id_fatura', $id);
         $this->db->update('faturas', $data);
-        if ($this->db->affected_rows() == '1') {
+        if ($this->db->affected_rows() == 1) {
             return true;
         }
 
@@ -222,7 +222,7 @@ class Fatura_model extends CI_Model
     {
         $this->db->where($fieldID, $ID);
         $this->db->delete($table);
-        if ($this->db->affected_rows() == '1') {
+        if ($this->db->affected_rows() == 1) {
             return true;
         }
 
@@ -306,7 +306,6 @@ class Fatura_model extends CI_Model
 
     function getFaturaPaga($id)
     {
-
         $this->db->select('*');
         $this->db->from('faturas');
         $this->db->where(
@@ -477,5 +476,22 @@ class Fatura_model extends CI_Model
             ->order_by('c.nome')
             ->get('clientes AS c')
             ->result();
+    }
+
+    function getVinculoFatura($idFatura)
+    {
+        $this->db->select('*');
+        $this->db->from('lancamentos');
+        $this->db->where('status', 1);
+        $this->db->where('id_fatura', $idFatura);
+
+        return $this->db->count_all_results();
+    }
+
+    function getFaturaByLancamento($idLancamento)
+    {
+        $this->db->from('lancamentos_faturas');
+        $this->db->where('id_lancamento', $idLancamento);
+        return $this->db->get()->row('id_fatura');
     }
 }
