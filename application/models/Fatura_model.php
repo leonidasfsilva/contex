@@ -387,6 +387,8 @@ class Fatura_model extends CI_Model
 
         if (isset($faturas) && $faturas) {
             $results = [];
+            $total = null;
+
             foreach ($faturas as $f) {
                 if ($f != null) {
                     $this->db
@@ -396,14 +398,14 @@ class Fatura_model extends CI_Model
                         ->where('mes_referencia', $f->mes_referencia)
                         ->where('ano_referencia', $f->ano_referencia);
                     $results[] = $this->db->get('lancamentos_faturas_assoc')->row();
-                    $valor = null;
-                }
-
-                foreach ($results as $r) {
-                    $valor += $r->total;
                 }
             }
-            return ($valor);
+
+            foreach ($results as $r) {
+                $total += $r->total;
+            }
+
+            return $total;
         }
         return null;
     }
