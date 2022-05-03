@@ -95,7 +95,7 @@
                     minlength: 19
                 },
                 apelido: {
-                    maxlength: 12
+                    maxlength: 13
                 },
             },
             messages: {
@@ -104,7 +104,7 @@
                     minlength: 'O número do cartão deve conter 12 dígitos',
                 },
                 apelido: {
-                    maxlength: 'Limite máximo de 12 dígitos',
+                    maxlength: 'Limite máximo de 13 dígitos',
                 },
             },
 
