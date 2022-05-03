@@ -94,11 +94,17 @@
                     required: true,
                     minlength: 19
                 },
+                apelido: {
+                    maxlength: 12
+                },
             },
             messages: {
                 number: {
                     required: 'Informe o número do cartão',
                     minlength: 'O número do cartão deve conter 12 dígitos',
+                },
+                apelido: {
+                    maxlength: 'Limite máximo de 12 dígitos',
                 },
             },
 
