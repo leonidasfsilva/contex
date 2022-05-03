@@ -105,6 +105,30 @@ class Cartoes_model extends CI_Model
         }
     }
 
+    function getCartoesUsuarioFatura($id_usuario, $id_cartao = null)
+    {
+        if ($id_cartao) {
+            return $this->db
+                ->where('id_usuario', $id_usuario)
+                ->where('id_cartao', $id_cartao)
+                ->where('ativo', 1)
+                ->where('status', 1)
+                ->get('cartoes')
+                ->result();
+        } else {
+            return $this->db
+                ->where('status', 1)
+                ->where('ativo', 1)
+                ->where('id_usuario', $id_usuario)
+                ->or_where('id_usuario_titular', $id_usuario)
+                ->where('ativo', 1)
+                ->where('status', 1)
+                ->order_by('id_cartao', 'asc')
+                ->get('cartoes')
+                ->result();
+        }
+    }
+
     function getCartoesAdicionais($id_cartao)
     {
         return $this->db
@@ -213,7 +237,7 @@ class Cartoes_model extends CI_Model
     {
         $this->db->where($fieldID, $ID);
         $this->db->update($table, $data);
-        if ($this->db->affected_rows() == '1') {
+        if ($this->db->affected_rows() == 1) {
             return true;
         }
 
@@ -224,7 +248,7 @@ class Cartoes_model extends CI_Model
     {
         $this->db->where($fieldID, $ID);
         $this->db->delete($table);
-        if ($this->db->affected_rows() == '1') {
+        if ($this->db->affected_rows() == 1) {
             return true;
         }
 

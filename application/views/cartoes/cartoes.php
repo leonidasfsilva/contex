@@ -18,73 +18,84 @@
     <div class="panel-body panel-no-padding table-responsive">
         <table class="table table-condensed table-striped table-bordeless table-hover" role="grid" style="width: 100%;">
             <thead>
-            <tr role="row">
-                <th style="text-align: left !important;">Bandeira</th>
-                <th style="text-align: left !important;">Final Cartão</th>
-                <th style="text-align: left !important;">Nome Impresso</th>
-                <th style="text-align: left !important;">Apelido Cartão</th>
-                <th style="text-align: left !important;">Tipo Cartão</th>
-                <th style="text-align: left !important; width: 180px">Ações</th>
-            </tr>
+                <tr role="row">
+                    <th style="text-align: left !important;">Bandeira</th>
+                    <th style="text-align: left !important;">Final Cartão</th>
+                    <th style="text-align: left !important;">Nome Impresso</th>
+                    <th style="text-align: left !important;">Apelido Cartão</th>
+                    <th style="text-align: left !important;">Tipo Cartão</th>
+                    <th style="text-align: left !important; width: 210px">Ações</th>
+                </tr>
             </thead>
             <tbody>
-            <?php if (!$results) { ?>
-                <tr>
-                    <td colspan="6">Nenhum cartão cadastrado</td>
-                </tr>
-            <?php } else {
-                foreach ($results as $r) {
-                    $n_cartao = explode(" ", trim(decriptar($r->numero)));
-                    $final = $n_cartao[3];
-                    $mascara = preg_replace('/\d/', '*', $n_cartao);
+                <?php if (!$results) { ?>
+                    <tr>
+                        <td colspan="6">Nenhum cartão cadastrado</td>
+                    </tr>
+                    <?php } else {
+                    foreach ($results as $r) {
+                        $n_cartao = explode(" ", trim(decriptar($r->numero)));
+                        $final = $n_cartao[3];
+                        $mascara = preg_replace('/\d/', '*', $n_cartao);
 
-                    if ($r->id_usuario == getUserId()) {
-                        if ($r->principal) {
-                            $cartaoPrincipal = 'PRINCIPAL';
-                            $labelPrincipal = 'success';
+                        if ($r->id_usuario == getUserId()) {
+                            if ($r->principal) {
+                                $cartaoPrincipal = 'PRINCIPAL';
+                                $labelPrincipal = 'success';
+                            } else {
+                                $cartaoPrincipal = '';
+                            }
                         } else {
                             $cartaoPrincipal = '';
                         }
-                    } else {
-                        $cartaoPrincipal = '';
-                    }
 
-                    if ($r->adicional) {
-                        if ($r->id_usuario == getUserId()) {
-                            $disabled_editar = 'disabled="disabled"';
-                            $disabled_excluir = 'disabled="disabled"';
+                        if ($r->adicional) {
+                            if ($r->id_usuario == getUserId()) {
+                                $disabled_editar = 'disabled="disabled"';
+                                $disabled_excluir = 'disabled="disabled"';
+                            } else {
+                                $disabled_editar = null;
+                                $disabled_excluir = null;
+                            }
+                            $disabled_adicional = 'disabled="disabled"';
+                            $tipo_cartao = 'ADICIONAL';
+                            $label_cartao = 'warning';
                         } else {
                             $disabled_editar = null;
                             $disabled_excluir = null;
+                            $disabled_adicional = null;
+                            $tipo_cartao = 'TITULAR';
+                            $label_cartao = 'primary';
                         }
-                        $disabled_adicional = 'disabled="disabled"';
-                        $tipo_cartao = 'ADICIONAL';
-                        $label_cartao = 'warning';
-                    } else {
-                        $disabled_editar = null;
-                        $disabled_excluir = null;
-                        $disabled_adicional = null;
-                        $tipo_cartao = 'TITULAR';
-                        $label_cartao = 'primary';
-                    }
+
+                        if ($r->ativo == 1) {
+                            $status = 'Ativo';
+                            $label_status = 'success';
+                            $btn_status = '<a href="#modalDesativar" role="button" data-toggle="modal" cartao="' . $r->id_cartao . '"class="btn btn-success btn-sm desativar" title="Cartão ativo"><i class="fas fa-check-circle fa-lg fa-fw" ></i></a>';
+                        } else {
+                            $status = 'Inativo';
+                            $label_status = 'warning';
+                            $btn_status = '<a href="#modalAtivar" role="button" data-toggle="modal" cartao="' . $r->id_cartao . '"class="btn btn-warning btn-sm ativar" title="Cartão inativo"><i class="fas fa-minus-circle fa-lg fa-fw" ></i></a>';
+                        }
                     ?>
-                    <tr>
-                        <td><?= $r->bandeira ?></td>
-                        <td><?= '**** **** **** ' . $final ?> <span class="label label-<?= $labelPrincipal ?? null ?>"><?= $cartaoPrincipal ?></span></td>
-                        <td><?= $r->nome ?></td>
-                        <td><?= $r->apelido ?></td>
-                        <td><span class="label label-<?= $label_cartao ?>"><?= $tipo_cartao ?></span></td>
-                        <?=
-                        '<td>
+                        <tr>
+                            <td><?= $r->bandeira ?></td>
+                            <td><?= '**** **** **** ' . $final ?> <span class="label label-<?= $labelPrincipal ?? null ?>"><?= $cartaoPrincipal ?></span></td>
+                            <td><?= $r->nome ?></td>
+                            <td><?= $r->apelido ?></td>
+                            <td><span class="label label-<?= $label_cartao ?>"><?= $tipo_cartao ?></span></td>
+                            <?=
+                            '<td>
                             <button href="#modalVisualizarCartao" role="button" data-toggle="modal" numero="' . decriptar($r->numero) . '" validade="' . $r->validade . '" bandeira="' . $r->bandeira . '" cvc="' . decriptar($r->cvc) .
-                        '" nome="' . $r->nome . '" class="btn btn-info btn-sm visualizar" title="Visualizar cartão"><i class="fas fa-eye fa-lg fa-fw"></i></button>
+                                '" nome="' . $r->nome . '" class="btn btn-info btn-sm visualizar" title="Visualizar cartão"><i class="fas fa-eye fa-lg fa-fw"></i></button>
                             <a href="' . base_url('financeiro/cartoes/editar/') . $r->id_cartao . '" class="btn btn-primary btn-sm" title="Editar" ' . $disabled_editar . '><i class="fas fa-edit fa-lg fa-fw"></i></a>
                             <a href="' . base_url('financeiro/cartoes/adicional/') . $r->id_cartao . '" class="btn btn-inverse btn-sm" title="Gerar cartão adicional" ' . $disabled_adicional . '><i class="fas fa-credit-card fa-lg fa-fw"></i></a>
+                            ' . $btn_status . '
                             <button href="#modalExcluir" role="button" data-toggle="modal" id_cartao="' . $r->id_cartao . '" class="btn btn-danger btn-sm excluir" title="Excluir" ' . $disabled_excluir . '><i class="fas fa-trash-alt fa-lg fa-fw" ></i></button>
                         </td>'; ?>
-                    </tr>
+                        </tr>
                 <?php }
-            } ?>
+                } ?>
             </tbody>
         </table>
     </div>
@@ -105,37 +116,37 @@
                             <label class="tip-top" title="Filtrar faturas por período específico">Período <i class="fa fa-info-circle fa-fw"></i></label>
                             <select name="periodo" id="select_periodos" class="form-control">
                                 <option value="">Selecione o período</option>
-                                <option value="3dias"<?php if ($periodo == '3dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 3 dias
+                                <option value="3dias" <?php if ($periodo == '3dias') {
+                                                            echo 'selected';
+                                                        } ?>>Últimos 3 dias
                                 </option>
                                 <option value="5dias" <?php if ($periodo == '5dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 5 dias
+                                                            echo 'selected';
+                                                        } ?>>Últimos 5 dias
                                 </option>
                                 <option value="7dias" <?php if ($periodo == '7dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 7 dias
+                                                            echo 'selected';
+                                                        } ?>>Últimos 7 dias
                                 </option>
                                 <option value="15dias" <?php if ($periodo == '15dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 15 dias
+                                                            echo 'selected';
+                                                        } ?>>Últimos 15 dias
                                 </option>
                                 <option value="30dias" <?php if ($periodo == '30dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 30 dias
+                                                            echo 'selected';
+                                                        } ?>>Últimos 30 dias
                                 </option>
                                 <option value="60dias" <?php if ($periodo == '60dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 60 dias
+                                                            echo 'selected';
+                                                        } ?>>Últimos 60 dias
                                 </option>
                                 <option value="90dias" <?php if ($periodo == '90dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 90 dias
+                                                            echo 'selected';
+                                                        } ?>>Últimos 90 dias
                                 </option>
                                 <option value="todos" <?php if ($periodo == 'todos') {
-                                    echo 'selected';
-                                } ?>>Todos
+                                                            echo 'selected';
+                                                        } ?>>Todos
                                 </option>
                             </select>
                         </div>
@@ -143,17 +154,17 @@
                             <label class="tip-top" title="Filtrar faturas por status">Status <i class="fa fa-info-circle fa-fw"></i></label>
                             <select class="form-control" id="select_status" name="status">
                                 <option value="">Selecione o status</option>
-                                <option value="aberta"<?php if ($periodo == 'aberta') {
-                                    echo 'selected';
-                                } ?>>Aberta
+                                <option value="aberta" <?php if ($periodo == 'aberta') {
+                                                            echo 'selected';
+                                                        } ?>>Aberta
                                 </option>
                                 <option value="fechada" <?php if ($periodo == 'fechada') {
-                                    echo 'selected';
-                                } ?>>Fechada
+                                                            echo 'selected';
+                                                        } ?>>Fechada
                                 </option>
                                 <option value="futura" <?php if ($periodo == 'futura') {
-                                    echo 'selected';
-                                } ?>>Futura
+                                                            echo 'selected';
+                                                        } ?>>Futura
                                 </option>
                             </select>
                         </div>
@@ -202,6 +213,57 @@
     </div>
 </div>
 
+<!-- Modal DESATIVAR-->
+<div class="modal fade" id="modalDesativar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-white ">Desativar cartão</h4>
+            </div>
+            <form action="<?= base_url('financeiro/cartoes/desativar') ?>" method="post">
+                <div class="modal-body">
+                    <p class="font-weight-bold">Deseja realmente tornar este cartão inativo?</p>
+                    <p class="note note-info"><i class="text-info fa fa-info-circle fa-fw fa-lg"></i> Não será possível acessar as faturas deste cartão até que seja reativado novamente</p>
+                    <input type="hidden" class="id" name="id" value="" />
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
+                        Cancelar
+                    </button>
+                    <button class="btn btn-warning btn-sm"><i class="fa fa-check fa-fw"></i> Desativar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal ATIVAR-->
+<div class="modal fade" id="modalAtivar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-white ">Ativar cartão</h4>
+            </div>
+            <form action="<?= base_url('financeiro/cartoes/ativar') ?>" method="post">
+                <div class="modal-body">
+                <p class="font-weight-bold">Deseja realmente tornar este cartão ativo?</p>
+                    <p class="note note-info"><i class="text-info fa fa-info-circle fa-fw fa-lg"></i> Ao ativar o cartão você poderá criar novas faturas ou acessar faturas já existentes deste cartão</p>
+                    <input type="hidden" class="id" name="id" value="" />
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
+                        Cancelar
+                    </button>
+                    <button class="btn btn-success btn-sm"><i class="fa fa-check fa-fw"></i> Ativar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Modal EXCLUIR -->
 <div class="modal fade" id="modalExcluir" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -213,7 +275,7 @@
             <form id="formNovaFatura" action="<?php echo base_url('financeiro/cartoes/excluir') ?>" method="post">
                 <div class="modal-body">
                     <p>Deseja realmente excluir este cartão?</p>
-                    <input name="id_cartao" id="id_excluir" type="hidden"/>
+                    <input name="id_cartao" id="id_excluir" type="hidden" />
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir">
@@ -227,15 +289,15 @@
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(function() {
         mountCard('#formVerCartao', '.card-wrapper');
 
-        $(document).on('change', '#select_periodos, #select_status', function () {
+        $(document).on('change', '#select_periodos, #select_status', function() {
             $("#_form_filtro").submit();
         });
 
         let flipped;
-        $('#ver_cvc').click(function () {
+        $('#ver_cvc').click(function() {
             if (flipped == null) {
                 $(this).html('<i class="fa fa-eye-slash fa-fw"></i> Ocultar CVC');
                 $('.jp-card').toggleClass('jp-card-flipped');
@@ -247,14 +309,14 @@
             }
         });
 
-        $('.visualizar').click(function () {
+        $('.visualizar').click(function() {
             // $('#number').mask('0000 0000 0000 0000');
             let numero = $(this).attr('numero');
             let nome = $(this).attr('nome');
             let validade = $(this).attr('validade');
             let cvc = $(this).attr('cvc');
 
-            setTimeout(function () {
+            setTimeout(function() {
                 var evt = document.createEvent('HTMLEvents');
                 evt.initEvent('keyup', false, true);
                 document.getElementById('number').dispatchEvent(evt);
@@ -263,7 +325,7 @@
                 document.getElementById('cvc').dispatchEvent(evt);
             }, 200);
 
-            setTimeout(function () {
+            setTimeout(function() {
                 $("#number").val(numero);
                 $("#name").val(nome);
                 $("#expiry").val(validade);
@@ -271,14 +333,13 @@
             }, 100);
         });
 
-        $(document).on('click', '.fechar', function (event) {
-            $("#id_fatura").val($(this).attr('id_fatura'));
-            $("#urlFecharFatura").val($(location).attr('href'));
+        $(document).on('click', '.ativar, .desativar', function(event) {
+            $(".id").val($(this).attr('cartao'));
         });
 
         $(".money").maskMoney();
 
-        $('#pago').click(function (event) {
+        $('#pago').click(function(event) {
             var flag = $(this).is(':checked');
             if (flag == true) {
                 $('#divPagamento').show();
@@ -287,7 +348,7 @@
             }
         });
 
-        $('#recebido').click(function (event) {
+        $('#recebido').click(function(event) {
             var flag = $(this).is(':checked');
             if (flag == true) {
                 $('#divRecebimento').show();
@@ -296,7 +357,7 @@
             }
         });
 
-        $('#pagoEditar').click(function (event) {
+        $('#pagoEditar').click(function(event) {
             var flag = $(this).is(':checked');
             if (flag == true) {
                 $('#divPagamentoEditar').show();
@@ -307,20 +368,24 @@
 
         $("#formNovaFatura").validate({
             rules: {
-                vencimento_fatura: {required: true}
+                vencimento_fatura: {
+                    required: true
+                }
 
             },
             messages: {
-                vencimento_fatura: {required: 'Informe a data de vencimento da fatura'}
+                vencimento_fatura: {
+                    required: 'Informe a data de vencimento da fatura'
+                }
             },
 
             errorClass: "help-block",
             errorElement: "p",
-            highlight: function (element, errorClass, validClass) {
+            highlight: function(element, errorClass, validClass) {
                 $(element).parents('.form-group').addClass('has-error');
                 $(element).parents('.form-group').removeClass('has-success');
             },
-            unhighlight: function (element, errorClass, validClass) {
+            unhighlight: function(element, errorClass, validClass) {
                 $(element).parents('.form-group').removeClass('has-error');
                 $(element).parents('.form-group').addClass('has-success');
             }
@@ -329,47 +394,51 @@
 
         $("#formPagar").validate({
             rules: {
-                forma_pagamento: {required: true}
+                forma_pagamento: {
+                    required: true
+                }
             },
             messages: {
-                forma_pagamento: {required: 'Selecione a forma de pagamento'},
+                forma_pagamento: {
+                    required: 'Selecione a forma de pagamento'
+                },
             },
 
             errorClass: "help-block",
             errorElement: "p",
-            highlight: function (element, errorClass, validClass) {
+            highlight: function(element, errorClass, validClass) {
                 $(element).parents('.form-group').addClass('has-error');
                 $(element).parents('.form-group').removeClass('has-success');
             },
-            unhighlight: function (element, errorClass, validClass) {
+            unhighlight: function(element, errorClass, validClass) {
                 $(element).parents('.form-group').removeClass('has-error');
                 $(element).parents('.form-group').addClass('has-success');
             }
 
         });
 
-        $(document).on('click', '#novaFatura', function () {
+        $(document).on('click', '#novaFatura', function() {
             $("#urlFatura").val($(location).attr('href'));
         });
 
-        $(document).on('click', '.excluir', function (event) {
+        $(document).on('click', '.excluir', function(event) {
             $("#id_excluir").val($(this).attr('id_cartao'));
         });
 
-        $(document).on('click', '.pagar', function (event) {
+        $(document).on('click', '.pagar', function(event) {
             $("#id_fatura_pagar").val($(this).attr('id_fatura'));
             $("#urlPagarFatura").val($(location).attr('href'));
         });
 
-        $(document).on('click', '#pendencia', function () {
+        $(document).on('click', '#pendencia', function() {
             $("#urlPendencia").val($(location).attr('href'));
         });
 
-        $(document).on('click', '#devedor', function () {
+        $(document).on('click', '#devedor', function() {
             $("#url").val($(location).attr('href'));
         });
 
-        $(document).on('click', '.editar', function (event) {
+        $(document).on('click', '.editar', function(event) {
             $("#id_pendencia").val($(this).attr('id_pendencia'));
             $("#descricaoEditar").val($(this).attr('descricao'));
             $("#id_clienteEditar").val($(this).attr('id_cliente'));
@@ -395,14 +464,14 @@
 
             $.ajax({
                 type: "POST",
-                url: "<?php echo base_url();?>index.php/financeiro/pagarPendencia",
+                url: "<?php echo base_url(); ?>index.php/financeiro/pagarPendencia",
                 data: {
                     id: id,
                     data_pagamento: data_pagamento,
                     forma_pagamento: forma_pagamento
                 },
                 dataType: 'json',
-                success: function (data) {
+                success: function(data) {
                     if (data.result == true) {
                         $("#btnCancelPagar").trigger('click');
                         $("#divLancamentos").html('<div class="progress progress-striped active"><div class="bar" style="width: 100%;"></div></div>');

@@ -53,7 +53,7 @@ class Faturas extends CI_Controller
         $config['last_tag_open'] = '<li>';
         $config['last_tag_close'] = '</li>';
 
-        $this->data['parcelas'] = array(
+        $data['parcelas'] = array(
             2   => '2 x',
             3   => '3 x',
             4   => '4 x',
@@ -83,19 +83,19 @@ class Faturas extends CI_Controller
             $id_cartao = $cartaoPrincipal->id_cartao;
         }
 
-        $this->data['existe_configuracao'] = $this->fatura_model->existeConfiguracao($id_cartao);
-        $this->data['dia_vencimento'] = $this->fatura_model->getDiaVencimentoFatura($id_cartao);
-        $this->data['cartao_selecionado'] = $this->cartoes_model->getDetalhesCartao($id_cartao);
-        $this->data['cartoes'] = $this->cartoes_model->getCartoesUsuario(getUserId());
-        $this->data['saldoVencidas'] = $this->fatura_model->getSaldoFaturasVencidas($id_cartao);
-        $this->data['saldoPendente'] = $this->fatura_model->getSaldoFaturasPendentes($id_cartao);
-        $this->data['saldoQuitado'] = $this->fatura_model->getSaldoFaturasPagas($id_cartao);
-        $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
-        $this->data['faturaAberta'] = $this->fatura_model->getFaturaAbertaUsuario(getUserId(), $id_cartao);
-        $this->data['results'] = $this->fatura_model->get('faturas', '*', $where, getUserId(), $id_cartao, $config['per_page'], $this->input->get('per_page'));
-        $this->data['menuFinanceiro'] = true;
-        $this->data['view'] = 'faturas/gerenciar_faturas';
-        $this->load->view('tema/topo', $this->data);
+        $data['existe_configuracao'] = $this->fatura_model->existeConfiguracao($id_cartao);
+        $data['dia_vencimento'] = $this->fatura_model->getDiaVencimentoFatura($id_cartao);
+        $data['cartao_selecionado'] = $this->cartoes_model->getDetalhesCartao($id_cartao);
+        $data['cartoes'] = $this->cartoes_model->getCartoesUsuarioFatura(getUserId());
+        $data['saldoVencidas'] = $this->fatura_model->getSaldoFaturasVencidas($id_cartao);
+        $data['saldoPendente'] = $this->fatura_model->getSaldoFaturasPendentes($id_cartao);
+        $data['saldoQuitado'] = $this->fatura_model->getSaldoFaturasPagas($id_cartao);
+        $data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
+        $data['faturaAberta'] = $this->fatura_model->getFaturaAbertaUsuario(getUserId(), $id_cartao);
+        $data['results'] = $this->fatura_model->get('faturas', '*', $where, getUserId(), $id_cartao, $config['per_page'], $this->input->get('per_page'));
+        $data['menuFinanceiro'] = true;
+        $data['view'] = 'faturas/gerenciar_faturas';
+        $this->load->view('tema/topo', $data);
     }
 
     public function detalhes($id = null, $id_cartao = null)
