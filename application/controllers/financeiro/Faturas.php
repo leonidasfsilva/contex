@@ -81,7 +81,7 @@ class Faturas extends CI_Controller
             }
 
             if (!$cartao->ativo) {
-                $this->session->set_flashdata('erro', 'Cartão solicitado encontra-se inativo, para acessar esta fatura, por favor reative o cartão');
+                $this->session->set_flashdata('erro', 'Cartão solicitado encontra-se inativo, para acessar as faturas, por favor reative o cartão');
                 redirect('financeiro/faturas');
             }
         } else {
