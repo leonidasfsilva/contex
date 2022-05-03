@@ -60,7 +60,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             $final = $n_cartao[3];
                             $cartao_config = $cartao->apelido ? $cartao->apelido : $cartao->bandeira;
                             $cartao_config = $cartao_config . ' - FINAL ' . $final;
-                            ?>
+                        ?>
                             <!--                <option value=""><< Selecione um Cartão >></option>-->
                             <option value="<?= $cartao->id_cartao ?>" <?= $selected ?>><?= $cartao_config ?></option>
                         <?php } ?>
@@ -172,13 +172,15 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         if (getVinculoFatura($r->id_fatura) == 0) {
                             $statusVinculo = null;
                             $hrefVinculo = '#modalVincular';
-                            $titleVinculo = 'Vincular Fatura';
-                            $iconVinculo = '<i class="fas fa-link fa-lg fa-fw" title="Vincular fatura"></i>';
+                            $titleVinculo = 'Fatura não vinculada';
+                            $colorVinculo = 'warning';
+                            $iconVinculo = '<i class="fas fa-unlink fa-lg fa-fw"></i>';
                         } else {
                             $statusVinculo = ' <i class="fas fa-link fa-fw" title="Fatura vinculada"></i>';
                             $hrefVinculo = '#modalDesvincular';
-                            $titleVinculo = 'Desvincular Fatura';
-                            $iconVinculo = '<i class="fas fa-unlink fa-lg fa-fw" title="Desvincular fatura"></i>';
+                            $titleVinculo = 'Fatura vinculada';
+                            $colorVinculo = 'success';
+                            $iconVinculo = '<i class="fas fa-link fa-lg fa-fw"></i>';
                         }
 
                         if ($r->fatura_paga == 2) {
@@ -217,7 +219,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             echo '<button ' . $disabled . ' href="#modalFechar" style="margin-right: 1%"  class="btn btn-inverse btn-sm fechar" data-toggle="modal" title="Fechar Fatura" id_fatura="' . $r->id_fatura . '">
                                 <i class="' . $iconFechar . ' fa-lg fa-fw"></i></button>';
 
-                            echo '<button href="' . $hrefVinculo . '" style="margin-right: 1%"  class="btn btn-warning btn-sm vinculo" data-toggle="modal" title="' . $titleVinculo . '" id_fatura="' . $r->id_fatura . '">
+                            echo '<button href="' . $hrefVinculo . '" style="margin-right: 1%"  class="btn btn-' . $colorVinculo . ' btn-sm vinculo" data-toggle="modal" title="' . $titleVinculo . '" id_fatura="' . $r->id_fatura . '">
                                 ' . $iconVinculo . '</button>';
 
                             echo '<a href="' . base_url('financeiro/faturas/detalhes/') . $r->id_fatura . '/' . $cartao_selecionado->id_cartao . '" type="button" id="btn_detalhes" style="margin-right: 1%" class="btn btn-primary btn-sm detalhes" title="Detalhes da Fatura" id_fatura="' .
