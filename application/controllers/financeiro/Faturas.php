@@ -959,7 +959,7 @@ class Faturas extends CI_Controller
                 'descricao' => 'FATURA CARTAO DE CREDITO' . $apelido,
                 'cliente_fornecedor' => $detalhesCartaoFatura->bandeira ? $detalhesCartaoFatura->bandeira . ' - FINAL ' . $final : null,
                 'valor' => '-' . $valorTotalFatura,
-                'data_lancamento' => $detalhesFatura->data_pagamento ?? $detalhesFatura->vencimento,
+                'data_lancamento' => $detalhesFatura->vencimento ?? $detalhesFatura->data_pagamento,
                 'data_pagamento' => $detalhesFatura->data_pagamento ?? $detalhesFatura->vencimento,
                 'forma_pgto' => $detalhesFatura->forma_pgto ?? 5,
                 'baixado' => $detalhesFatura->fatura_paga,
