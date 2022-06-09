@@ -7,9 +7,7 @@ image: leonidasfsilva/debian
 
 pipelines:
   branches:
-    producao:
+    master:
       - step:
           script:
-            - ssh -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $BIT_USER_SSH@mxcode.net "cd /home4/mxcodene/contex/ && git --work-tree=/home4/mxcodene/contex/ remote update && git --work-tree=/home4/mxcodene/contex/ reset --hard origin/producao"
-
-
+            - ssh -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $BIT_USER_SSH@mxcode.net "cd /home4/mxcodene/contex/ && git --work-tree=/home4/mxcodene/contex/ remote update && git --work-tree=/home4/mxcodene/contex/ reset --hard origin/master"
