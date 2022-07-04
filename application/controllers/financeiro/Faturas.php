@@ -935,17 +935,17 @@ class Faturas extends CI_Controller
         $urlAtual = $this->input->post('urlAtual');
         $idFatura = $this->input->post('idFatura');
 
+        $vinculoFatura = $this->fatura_model->getVinculoFatura($idFatura);
+        if ($vinculoFatura) {
+            $this->session->set_flashdata('erro', 'A fatura solicitada já possui vínculo ativo ao módulo de Lançamentos');
+            redirect($urlAtual);
+        }
+
         $data = array(
             'fatura_vinculada' => 1
         );
 
         if ($this->fatura_model->edit('faturas', $data, 'id_fatura', $idFatura)) {
-            $vinculoFatura = $this->fatura_model->getVinculoFatura($idFatura);
-            if ($vinculoFatura) {
-                $this->session->set_flashdata('erro', 'A fatura solicitada já possui vínculo ativo ao módulo de Lançamentos');
-                redirect($urlAtual);
-            }
-
             $detalhesFatura = $this->fatura_model->getDetalhesFatura($idFatura);
             $valorTotalFatura = $this->fatura_model->getValorTotalFatura($idFatura);
             $detalhesCartaoFatura = $this->cartoes_model->getCartao($detalhesFatura->id_cartao);
@@ -972,6 +972,61 @@ class Faturas extends CI_Controller
             $this->session->set_flashdata('erro', 'Erro ao tentar vincular a fatura');
             redirect($urlAtual);
         }
+    }
+
+    public function vincularFaturas()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eFaturas')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para vincular faturas.');
+            redirect(base_url());
+        }
+        $urlAtual = $this->input->post('urlAtual');
+        $mes = $this->input->post('mesReferencia');
+
+        $cartoesAtivos = $this->cartoes_model->getCartoesUsuarioFatura(getUserId());
+
+        foreach ($cartoesAtivos as $cartao) {
+            $faturaReferencia = $this->fatura_model->getFaturaReferencia($cartao->id_cartao, $mes, date('Y'));
+
+            if (!$faturaReferencia) {
+                continue;
+            }
+            $idFatura       = $faturaReferencia->id_fatura;
+            $vinculoFatura  = $this->fatura_model->getVinculoFatura($idFatura);
+
+            if ($vinculoFatura) {
+                continue;
+            }
+
+            $data = array(
+                'fatura_vinculada' => 1
+            );    
+
+            if ($this->fatura_model->edit('faturas', $data, 'id_fatura', $idFatura)) {
+                $detalhesFatura         = $this->fatura_model->getDetalhesFatura($idFatura);
+                $valorTotalFatura       = $this->fatura_model->getValorTotalFatura($idFatura);
+                $detalhesCartaoFatura   = $this->cartoes_model->getCartao($detalhesFatura->id_cartao);
+                $n_cartao               = explode(" ", trim(decriptar($detalhesCartaoFatura->numero)));
+                $final                  = $n_cartao[3];
+                $apelido                = $detalhesCartaoFatura->apelido ? ' - ' . $detalhesCartaoFatura->apelido : null;
+
+                $data = array(
+                    'id_usuario'            => getUserId(),
+                    'id_fatura'             => $idFatura,
+                    'descricao'             => 'FATURA CARTAO DE CREDITO' . $apelido,
+                    'cliente_fornecedor'    => $detalhesCartaoFatura->bandeira ? $detalhesCartaoFatura->bandeira . ' - FINAL ' . $final : null,
+                    'valor'                 => '-' . $valorTotalFatura,
+                    'data_lancamento'       => $detalhesFatura->vencimento ?? $detalhesFatura->data_pagamento,
+                    'data_pagamento'        => $detalhesFatura->data_pagamento ?? $detalhesFatura->vencimento,
+                    'forma_pgto'            => $detalhesFatura->forma_pgto ?? 5,
+                    'baixado'               => $detalhesFatura->fatura_paga,
+                    'tipo'                  => 2
+                );
+                $this->financeiro_model->add('lancamentos', $data);
+            }               
+        }
+        $this->session->set_flashdata('sucesso', 'Faturas dos cartões vinculadas com sucesso');
+        redirect($urlAtual);
     }
 
     public function desvincular()
