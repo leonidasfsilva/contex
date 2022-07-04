@@ -481,7 +481,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     </div>
 
                     <p class="note note-info"><i class="text-info fa fa-info-circle fa-fw fa-lg"></i>
-                        Esta ação irá vincular ao módulo de Lançamentos todas as faturas relacionadas a todos os cartões ativos referentes ao mês de referência selecionado.
+                        Esta ação irá vincular ao módulo de Lançamentos todas as faturas pertencentes aos cartões ativos para o mês de referência selecionado.
                     </p>
                     <!-- <p class="note note-info"><i class="text-info fa fa-info-circle fa-fw fa-lg"></i>
                         Todas as atualizações de valores das faturas serão refletidas automaticamente no módulo de Lançamentos
