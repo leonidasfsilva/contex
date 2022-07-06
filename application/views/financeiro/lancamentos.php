@@ -143,8 +143,8 @@ $fim = $this->input->get('dataFinal');
                         <th class="th_soma hidden" style="width: 10px !important;">Soma</th>
                         <th>Data</th>
                         <th>Descrição</th>
-                        <th>Status</th>
                         <th>Valor (R$)</th>
+                        <th>Status</th>
                         <th style="width: 130px">Ações</th>
                     </tr>
                 </thead>
@@ -198,8 +198,8 @@ $fim = $this->input->get('dataFinal');
                         echo '<td>' . $vencimento . '</td>';
                         //                    echo '<td><span class="badge badge-' . $label . '">' . ucfirst($r->tipo) . '</span></td>';
                         echo '<td>' . strtoupper($r->descricao) . '<br><span class="small">' . ($fornecedor) . '</span></td>';
-                        echo '<td><span class="label label-' . $label_tipo . '">' . strtoupper($tipo) . '</span><br><span class="label label-' . $label_status . '">' . strtoupper($status) . '</span></td>';
                         echo '<td><span class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small">' . ($forma_pgto) . '</td>';
+                        echo '<td><span class="label label-' . $label_tipo . '">' . strtoupper($tipo) . '</span><br><span class="label label-' . $label_status . '">' . strtoupper($status) . '</span></td>';
 
                         if ($r->valor < 0) {
                             $valor = number_format(abs($r->valor), 2, ',', '.');
