@@ -159,31 +159,29 @@ $fim = $this->input->get('dataFinal');
                         if ($r->baixado == 0) {
                             $status = 'Pendente';
                             $label_status = 'warning';
+                            $iconTipo = '<i class="fas fa-clock"></i>';
                         } else {
                             $status = 'Efetivado';
                             $label_status = 'primary';
+                            $iconTipo = '<i class="fas fa-check circle"></i>';
                         };
 
                         if ($r->tipo == 1) {
                             $color = 'green';
                             $label_tipo = 'success';
                             $tipo = 'ENTRADA';
+                            $icon = '<i class="fas fa-sign-in-alt fa-rotate-90"></i>';
                         } else {
                             $color = 'red';
                             $label_tipo = 'danger';
                             $tipo = 'SAÍDA';
+                            $icon = '<i class="fas fa-sign-out-alt fa-rotate-270"></i>';
                         }
 
                         if ($r->cliente_fornecedor) {
                             $fornecedor = $r->cliente_fornecedor;
                         } else {
                             $fornecedor = "&nbsp;";
-                        }
-
-                        if ($r->tipo == 1) {
-                            $tipo = 'ENTRADA';
-                        } else {
-                            $tipo = 'SAÍDA';
                         }
 
                         foreach ($formasPagamento as $f) {
@@ -197,9 +195,11 @@ $fim = $this->input->get('dataFinal');
                         echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
                         echo '<td>' . $vencimento . '</td>';
                         //                    echo '<td><span class="badge badge-' . $label . '">' . ucfirst($r->tipo) . '</span></td>';
-                        echo '<td>' . strtoupper($r->descricao) . '<br><span class="small">' . ($fornecedor) . '</span></td>';
-                        echo '<td><span class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small">' . ($forma_pgto) . '</td>';
-                        echo '<td><span class="label label-' . $label_tipo . '">' . strtoupper($tipo) . '</span><br><span class="label label-' . $label_status . '">' . strtoupper($status) . '</span></td>';
+                        echo '<td>' . strtoupper($r->descricao) . '<br><span class="small" style="color: grey;">' . ($fornecedor) . '</span></td>';
+                        echo '<td><span class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small" style="color: grey;">' . ($forma_pgto) . '</td>';
+                        echo '<td><span class="text-' . $label_tipo . '">' . ($icon) . '</span> <span class="label label-' . $label_tipo . '">' . ($tipo) . '</span>
+                        <br>
+                        <span class="text-' . $label_status . '">' . ($iconTipo) . '</span> <span class="label label-' . $label_status . '">' . ($status) . '</span></td>';
 
                         if ($r->valor < 0) {
                             $valor = number_format(abs($r->valor), 2, ',', '.');
@@ -723,7 +723,7 @@ $fim = $this->input->get('dataFinal');
             </div>
             <form id="formExcluir" action="<?= base_url('financeiro/lancamentos/excluir'); ?>" method="post">
                 <div class="modal-body">
-                    <p>Deseja realmente excluir este lançamento?</p>
+                    <p class="font-weight-bold">Deseja realmente excluir este lançamento?</p>
                     <input id="idExcluir" type="hidden" name="id" value="" />
                     <input class="urlAtual" type="hidden" name="urlAtual" value="" />
                 </div>
