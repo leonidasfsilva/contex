@@ -207,7 +207,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         $valor_total = $this->fatura_model->getValorTotalFatura($r->id_fatura);
 
                         echo '<tr>';
-                        echo '<td>' . $mes . ' / ' . $ano . '</td>';
+                        echo '<td><a href="' . base_url('financeiro/faturas/detalhes/' . $r->id_fatura . '/' . $cartao_selecionado->id_cartao) . '">' . $mes . ' / ' . $ano . '</a></td>';
                         echo '<td>' . date(('d/m/Y'), strtotime($r->vencimento)) . $statusVinculo . '</td>';
 
                         echo '<td style="cursor: pointer; color: ' . $color . '" class="i-copy-total"><i class="fas fa-copy fa-fw hidden icon-total"></i> ' . number_format($valor_total, 2, ',', '.') . '</td>';
