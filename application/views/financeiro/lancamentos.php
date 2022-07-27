@@ -159,23 +159,23 @@ $fim = $this->input->get('dataFinal');
                         if ($r->baixado == 0) {
                             $status = 'Pendente';
                             $label_status = 'warning';
-                            $iconTipo = '<i class="fas fa-clock"></i>';
+                            $iconTipo = '<i class="fas fa-clock fa-fw"></i>';
                         } else {
                             $status = 'Efetivado';
                             $label_status = 'primary';
-                            $iconTipo = '<i class="fas fa-check circle"></i>';
+                            $iconTipo = '<i class="fas fa-check fa-fw"></i>';
                         };
 
                         if ($r->tipo == 1) {
                             $color = 'green';
                             $label_tipo = 'success';
                             $tipo = 'ENTRADA';
-                            $icon = '<i class="fas fa-sign-in-alt fa-rotate-90"></i>';
+                            $icon = '<i class="fas fa-arrow-down fa-fw"></i>';
                         } else {
                             $color = 'red';
                             $label_tipo = 'danger';
                             $tipo = 'SAÍDA';
-                            $icon = '<i class="fas fa-sign-out-alt fa-rotate-270"></i>';
+                            $icon = '<i class="fas fa-arrow-up fa-fw"></i>';
                         }
 
                         if ($r->cliente_fornecedor) {
