@@ -190,22 +190,26 @@ $fim = $this->input->get('dataFinal');
                             }
                         }
 
-
-                        echo '<tr>';
-                        echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
-                        echo '<td>' . $vencimento . '</td>';
-                        //                    echo '<td><span class="badge badge-' . $label . '">' . ucfirst($r->tipo) . '</span></td>';
-                        echo '<td>' . strtoupper($r->descricao) . '<br><span class="small" style="color: grey;">' . ($fornecedor) . '</span></td>';
-                        echo '<td><span class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small" style="color: grey;">' . ($forma_pgto) . '</td>';
-                        echo '<td><span class="text-' . $label_tipo . '">' . ($icon) . '</span> <span class="label label-' . $label_tipo . '">' . ($tipo) . '</span>
-                        <br>
-                        <span class="text-' . $label_status . '">' . ($iconTipo) . '</span> <span class="label label-' . $label_status . '">' . ($status) . '</span></td>';
-
                         if ($r->valor < 0) {
                             $valor = number_format(abs($r->valor), 2, ',', '.');
                         } else {
                             $valor = number_format($r->valor, 2, ',', '.');
                         }
+
+                        echo '<tr>';
+                        echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
+                        echo '<td>' . $vencimento . '</td>';
+                        //                    echo '<td><span class="badge badge-' . $label . '">' . ucfirst($r->tipo) . '</span></td>';
+                        echo '<td><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Detalhes" idLancamento="' .
+                            $r->id_lancamento . '" descricao="' . $r->descricao . '" valor="' . $valor . '" vencimento="' .
+                            date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
+                            $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '">' .
+                            strtoupper($r->descricao) .
+                            '<br><span class="small" style="color: grey;">' . ($fornecedor) . '</span></a></td>';
+                        echo '<td><span class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small" style="color: grey;">' . ($forma_pgto) . '</td>';
+                        echo '<td><span class="text-' . $label_tipo . '">' . ($icon) . '</span> <span class="label label-' . $label_tipo . '">' . ($tipo) . '</span>
+                        <br>
+                        <span class="text-' . $label_status . '">' . ($iconTipo) . '</span> <span class="label label-' . $label_status . '">' . ($status) . '</span></td>';
 
                         echo '<td>';
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
@@ -346,7 +350,7 @@ $fim = $this->input->get('dataFinal');
                             <label class="tooltips font-weight-bold" title="Filtrar lançamentos por período específico">Período <i class="fa fa-info-circle fa-fw"></i></label>
                             <select name="periodo" id="select_periodo" class="form-control">
                                 <option value="">
-                                    << Selecione >>
+                                    << Selecione>>
                                 </option>
                                 <option value="todos" <?php if ($periodo_lancamentos == 'todos') {
                                                             echo 'selected';
@@ -458,7 +462,7 @@ $fim = $this->input->get('dataFinal');
                                 <label for="formaPgto" class="font-weight-bold">Forma Pagamento *</label>
                                 <select name="formaPgto" class="form-control">
                                     <option value="">
-                                        << Selecione >>
+                                        << Selecione>>
                                     </option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
@@ -530,7 +534,7 @@ $fim = $this->input->get('dataFinal');
                                 <label for="formaPgto" class="font-weight-bold">Forma Pagamento *</label>
                                 <select name="formaPgto" class="form-control">
                                     <option value="">
-                                        << Selecione >>
+                                        << Selecione>>
                                     </option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
@@ -610,7 +614,7 @@ $fim = $this->input->get('dataFinal');
                                 <label for="formaPgtoEditar" class="font-weight-bold">Forma Pagamento *</label>
                                 <select name="formaPgto" id="formaPgtoEditar" class="form-control">
                                     <option value="">
-                                        << Selecione >>
+                                        << Selecione>>
                                     </option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
@@ -690,7 +694,7 @@ $fim = $this->input->get('dataFinal');
                                 <label for="formaPgtoCopiar" class="font-weight-bold">Forma Pagamento *</label>
                                 <select name="formaPgto" id="formaPgtoCopiar" class="form-control">
                                     <option value="">
-                                        << Selecione >>
+                                        << Selecione>>
                                     </option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
