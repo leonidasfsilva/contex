@@ -154,7 +154,7 @@ $fim = $this->input->get('dataFinal');
                     $totalDespesa = 0;
                     $saldo = 0;
                     foreach ($results as $r) {
-                        $vencimento = date(('d/m'), strtotime($r->data_lancamento));
+                        $vencimento = date(('d/m/y'), strtotime($r->data_lancamento));
 
                         if ($r->baixado == 0) {
                             $status = 'Pendente';
