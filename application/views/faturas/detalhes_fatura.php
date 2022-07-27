@@ -196,7 +196,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                     $color = 'black';
                                 }
 
-                                $data_compra = date(('d/m/Y'), strtotime($r->data_compra));
+                                $data_compra = date(('d/m/y'), strtotime($r->data_compra));
                                 $debitoFatura += $r->valor_parcela;
 
                                 if ($r->valor_total < 0) {
@@ -208,7 +208,13 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                 echo '<tr>';
                                 echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
                                 echo '<td>' . $data_compra . '</td>';
-                                echo '<td>' . strtoupper($s->descricao) . '</td>';
+                                echo '<td><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Detalhes" id_lancamento="' .
+                                    $s->id_lancamento . '" descricao="' . $s->descricao . '" valor="' . $valor . '" data_compra="' .
+                                    date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
+                                    '" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '" nome_cliente="' . $s->nome_cliente .
+                                    '" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento_1 . ' ' . $disabled_lancamento_2 . '>' .
+                                    strtoupper($s->descricao) .
+                                    '</a></td>';
                                 echo '<td><a href="' . base_url('clientes/visualizar/') . $s->id_cliente . '">' . strtoupper($s->nome_cliente) . '</a></td>';
                                 echo '<td>' . $n_parcela . '/' . $total_parcelas . '</td>';
                                 echo '<td class="valor_parcela" style=" color: ' . $color .
@@ -414,7 +420,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                 <label for="qnt_parcelas" class="font-weight-bold">Nº Parcelas</label>
                                 <select name="qnt_parcelas" id="qnt_parcelas" class="form-control qnt_parcelas">
                                     <option value="">
-                                        << Selecione >>
+                                        << Selecione>>
                                     </option>
                                     <?php if ($parcelas) {
                                         foreach ($parcelas as $k => $v) { ?>
@@ -507,7 +513,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                 <label for="qnt_parcelasEditar" class="font-weight-bold">Nº Parcelas *</label>
                                 <select name="qnt_parcelas" id="qnt_parcelasEditar" class="form-control qnt_parcelas">
                                     <option value="">
-                                        << Selecione >>
+                                        << Selecione>>
                                     </option>
                                     <?php if ($parcelas) {
                                         foreach ($parcelas as $k => $v) { ?>
