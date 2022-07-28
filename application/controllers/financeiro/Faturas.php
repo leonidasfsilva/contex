@@ -191,6 +191,7 @@ class Faturas extends CI_Controller
                 $data['fatura'] = $this->fatura_model->getDetalhesFatura($id_fatura);
                 $data['id_fatura'] = $id_fatura;
                 $data['id_cartao'] = $id_cartao;
+                $data['cartao'] = $cartao;
                 $data['mes_referencia'] = ($data['fatura']->mes_referencia);
                 $data['ano_referencia'] = ($data['fatura']->ano_referencia);
                 $data['status_fatura'] = ($data['fatura']->fatura_aberta);

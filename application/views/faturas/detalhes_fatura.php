@@ -39,14 +39,24 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
     $nome_mes = padronizarString(strftime('%b', strtotime($month)));
     $creditoFatura = 0;
     $debitoFatura = 0;
+
+    $n_cartao = explode(" ", trim(decriptar($cartao->numero)));
+    $final = $n_cartao[3];
+    $cartao_config = $cartao->apelido ? $cartao->apelido : $cartao->bandeira;
+    $cartaoAlternativeLabel = $cartao->bandeira . ' - FINAL ' . $final;
+
 ?>
 <?php } ?>
 
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
-        <h3>
+        <h3 style="margin: 0 15px 0 0;">
             <i class="fas fa-file-invoice-dollar fa-lg fa-fw"></i>
-            Detalhes da Fatura: # <?= $id_fatura ?>
+            Detalhes da Fatura: #<?= $id_fatura ?>
+        </h3>
+        <h3>
+            <i class="fas fa-credit-card fa-lg fa-fw"></i>
+            <?= $cartao->apelido ? $cartao->apelido : $cartaoAlternativeLabel ?>
         </h3>
         <div class="panel-ctrls">
             <a href="<?= base_url('financeiro/faturas?id_cartao=') . $id_cartao ?>" class="btn btn-sm btn-default"><i class="fas fa-arrow-left fa-fw"></i> Faturas</a>
