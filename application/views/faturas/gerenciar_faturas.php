@@ -159,17 +159,20 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             $label = 'inverse';
                             $disabled = 'disabled';
                             $iconFechar = 'fas fa-lock';
+                            $iconFaturaAtual = null;
                         } else if ($r->fatura_aberta == 2) {
                             $status = '';
                             $label = '';
                             $disabledPagar = 'disabled';
                             $disabled = 'disabled';
                             $iconFechar = 'fas fa-unlock';
+                            $iconFaturaAtual = null;
                         } else {
                             $status = 'ABERTA';
                             $label = 'default';
                             $disabledPagar = 'disabled';
                             $iconFechar = 'fas fa-unlock';
+                            $iconFaturaAtual = ' <i class="fas fa-long-arrow-alt-left fa-lg fa-fw" title="Fatura atual"></i>';
                         }
 
                         if (getVinculoFatura($r->id_fatura) == 0) {
@@ -207,7 +210,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         $valor_total = $this->fatura_model->getValorTotalFatura($r->id_fatura);
 
                         echo '<tr>';
-                        echo '<td><a href="' . base_url('financeiro/faturas/detalhes/' . $r->id_fatura . '/' . $cartao_selecionado->id_cartao) . '">' . $mes . ' / ' . $ano . '</a></td>';
+                        echo '<td><a href="' . base_url('financeiro/faturas/detalhes/' . $r->id_fatura . '/' . $cartao_selecionado->id_cartao) . '">' . $mes . ' / ' . $ano . $iconFaturaAtual .'</a></td>';
                         echo '<td>' . date(('d/m/Y'), strtotime($r->vencimento)) . $statusVinculo . '</td>';
 
                         echo '<td style="cursor: pointer; color: ' . $color . '" class="i-copy-total"><i class="fas fa-copy fa-fw hidden icon-total"></i> ' . number_format($valor_total, 2, ',', '.') . '</td>';
