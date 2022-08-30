@@ -160,7 +160,7 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td colspan="6">Nenhuma pendência encontrada para este cliente</td>
+                                        <td colspan="7">Nenhuma pendência encontrada para este cliente</td>
                                     </tr>
                                 </tbody>
                             </table>
