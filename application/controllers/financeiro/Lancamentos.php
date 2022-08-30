@@ -34,14 +34,15 @@ class Lancamentos extends CI_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar lançamentos.');
             redirect(base_url());
         }
-        $status = $_GET['status'] ?? null;
-        $tipo = $_GET['tipo'] ?? null;
-        $periodo = $_GET['periodo'] ?? null;
-        $inicio = $_GET['dataInicial'] ?? null;
-        $fim = $_GET['dataFinal'] ?? null;
-        $start = $_GET['per_page'] ?? null;
-        $where = null;
-        $limit = null;
+        
+        $status     = $_GET['status'] ?? null;
+        $tipo       = $_GET['tipo'] ?? null;
+        $periodo    = $_GET['periodo'] ?? null;
+        $inicio     = $_GET['dataInicial'] ?? null;
+        $fim        = $_GET['dataFinal'] ?? null;
+        $start      = $_GET['per_page'] ?? null;
+        $where      = null;
+        $limit      = null;
 
         $this->load->library('pagination');
 
