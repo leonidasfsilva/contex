@@ -135,8 +135,8 @@ class Investimentos extends CI_Controller
         $config['total_rows']           = $this->investimentos_model->count(getUserId(), $where ?? null);
         $config['per_page']             = 20;
         $config['page_query_string']    = true;
-        $config['next_link']            = 'Próxima';
-        $config['prev_link']            = 'Anterior';
+        $config['next_link']            = false;
+        $config['prev_link']            = false;
         $config['full_tag_open']        = '<ul class="pagination pagination-sm">';
         $config['full_tag_close']       = '</ul>';
         $config['num_tag_open']         = '<li>';

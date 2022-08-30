@@ -145,39 +145,39 @@ class Lancamentos extends CI_Controller
             }
         }
 
-        $config['base_url'] = base_url('financeiro/lancamentos');
-        $config['suffix'] = '&' . $query_string;
-        $config['first_url'] = $config['base_url'] . '?' . $query_string;
-        $config['total_rows'] = $this->financeiro_model->countLancamentos(getUserId(), $where ?? null);
-        $config['per_page'] = 20;
-        $config['page_query_string'] = true;
-        $config['next_link'] = false;
-        $config['prev_link'] = false;
-        $config['full_tag_open'] = '<ul class="pagination pagination-sm">';
-        $config['full_tag_close'] = '</ul>';
-        $config['num_tag_open'] = '<li>';
-        $config['num_tag_close'] = '</li>';
-        $config['cur_tag_open'] = '<li class="disabled"><a style="background-color:#337ab7; color: white" class="js:"><b>';
-        $config['cur_tag_close'] = '</b></a></li>';
-        $config['prev_tag_open'] = '<li>';
-        $config['prev_tag_close'] = '</li>';
-        $config['next_tag_open'] = '<li>';
-        $config['next_tag_close'] = '</li>';
-        $config['first_link'] = 'Primeira';
-        $config['last_link'] = 'Última';
-        $config['first_tag_open'] = '<li>';
-        $config['first_tag_close'] = '</li>';
-        $config['last_tag_open'] = '<li>';
-        $config['last_tag_close'] = '</li>';
+        $config['base_url']             = base_url('financeiro/lancamentos');
+        $config['suffix']               = '&' . $query_string;
+        $config['first_url']            = $config['base_url'] . '?' . $query_string;
+        $config['total_rows']           = $this->financeiro_model->countLancamentos(getUserId(), $where ?? null);
+        $config['per_page']             = 20;
+        $config['page_query_string']    = true;
+        $config['next_link']            = false;
+        $config['prev_link']            = false;
+        $config['full_tag_open']        = '<ul class="pagination pagination-sm">';
+        $config['full_tag_close']       = '</ul>';
+        $config['num_tag_open']         = '<li>';
+        $config['num_tag_close']        = '</li>';
+        $config['cur_tag_open']         = '<li class="disabled"><a style="background-color:#337ab7; color: white" class="js:"><b>';
+        $config['cur_tag_close']        = '</b></a></li>';
+        $config['prev_tag_open']        = '<li>';
+        $config['prev_tag_close']       = '</li>';
+        $config['next_tag_open']        = '<li>';
+        $config['next_tag_close']       = '</li>';
+        $config['first_link']           = 'Primeira';
+        $config['last_link']            = 'Última';
+        $config['first_tag_open']       = '<li>';
+        $config['first_tag_close']      = '</li>';
+        $config['last_tag_open']        = '<li>';
+        $config['last_tag_close']       = '</li>';
 
         $this->pagination->initialize($config);
 
-        $this->data['total_provisorio'] = $this->financeiro_model->getTotalProvisorio(getUserId());
-        $this->data['saidas_pendentes'] = $this->financeiro_model->getSaidasPendentes(getUserId());
-        $this->data['entradas_pendentes'] = $this->financeiro_model->getEntradasPendentes(getUserId());
-        $this->data['total'] = $this->financeiro_model->getTotal(getUserId());
-        $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
-        $this->data['results'] = $this->financeiro_model->get(
+        $this->data['total_provisorio']     = $this->financeiro_model->getTotalProvisorio(getUserId());
+        $this->data['saidas_pendentes']     = $this->financeiro_model->getSaidasPendentes(getUserId());
+        $this->data['entradas_pendentes']   = $this->financeiro_model->getEntradasPendentes(getUserId());
+        $this->data['total']                = $this->financeiro_model->getTotal(getUserId());
+        $this->data['formasPagamento']      = $this->financeiro_model->getFormasPagamento();
+        $this->data['results']              = $this->financeiro_model->get(
             'lancamentos',
             '*',
             $where,
