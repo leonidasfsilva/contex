@@ -91,7 +91,7 @@ class Investimentos extends CI_Controller
 
         $this->load->library('pagination');
 
-        $config['base_url']             = site_url() . 'financeiro/investimentos/?periodo=' . $periodo . '&situacao=' . $situacao;
+        $config['base_url']             = site_url() . 'financeiro/investimentos/?periodo=' . $periodo . '&situacao=' . $status;
         $config['total_rows']           = $this->investimentos_model->count('investimentos', 'status = 1 AND id_usuario = ' . getUserId());
         $config['per_page']             = 100;
         $config['page_query_string']    = true;
