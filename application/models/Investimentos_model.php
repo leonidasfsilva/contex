@@ -10,7 +10,7 @@ class Investimentos_model extends CI_Model
     }
 
 
-    function get($table, $fields, $where = '', $id_usuario, $limit, $rows, $perpage = 0, $start = 0, $one = false, $array = 'array')
+    function get($table, $fields, $where = '', $id_usuario, $limit, $rows, $perpage = 0, $start = 0, $order_by = null, $one = false)
     {
 
         $this->db->select($fields);
@@ -25,9 +25,19 @@ class Investimentos_model extends CI_Model
 
         }
 
+        if ($order_by) {
+            if (is_array($order_by)) {
+                foreach ($order_by as $key => $value) {
+                    $this->db->order_by($key, $value);
+                }
+            } else {
+                $this->db->order_by('data_lancamento', $order_by);
+            }
+        }
+
         if ($limit) {
             if ($rows > $limit) {
-                $this->db->order_by('id_lancamentos', 'asc');
+                $this->db->order_by('id_lancamento', 'asc');
                 $this->db->limit($limit, ($rows - $limit));
             }
         }
