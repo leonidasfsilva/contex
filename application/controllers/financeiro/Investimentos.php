@@ -77,9 +77,9 @@ class Investimentos extends CI_Controller
                 $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
                 break;
             default:
-                if ($this->financeiro_model->countLancamentos(getUserId()) > 20) {
+                if ($this->investimentos_model->count(getUserId()) > 20) {
                     $limit = 20;
-                    $start = $this->financeiro_model->countLancamentos(getUserId()) - $limit;
+                    $start = $this->investimentos_model->count(getUserId()) - $limit;
                 }
                 $order_by = [
                     'data_lancamento' => 'desc',
@@ -89,11 +89,51 @@ class Investimentos extends CI_Controller
                 break;
         }
 
+        if (isset($status) && $status != null) {
+            if ($status == 'pendente') {
+                if (!isset($where)) {
+                    $where = 'baixado = 0';
+                } else {
+                    $where .= ' AND baixado = 0';
+                }
+            } elseif ($status == 'efetivado') {
+                if (!isset($where)) {
+                    $where = 'baixado = 1';
+                } else {
+                    $where .= ' AND baixado = 1';
+                }
+            }
+        }
+
+        if (isset($inicio) && isset($fim) && $inicio != null && $fim != null) {
+            $inicio = explode('/', $inicio);
+            $inicio = $inicio[2] . '-' . $inicio[1] . '-' . $inicio[0];
+
+            $fim = explode('/', $fim);
+            $fim = $fim[2] . '-' . $fim[1] . '-' . $fim[0];
+
+            $limit = null;
+            if (!isset($where)) {
+                $where = 'data_lancamento BETWEEN "' . $inicio . '" AND "' . $fim . '"';
+            } else {
+                $where .= ' AND data_lancamento BETWEEN "' . $inicio . '" AND "' . $fim . '"';
+            }
+        }
+
+        $query_string = null;
+        foreach ($_GET as $key => $value) {
+            if ($key != 'per_page') {
+                $query_string .= $key . '=' . $value . '&';
+            }
+        }
+
         $this->load->library('pagination');
 
-        $config['base_url']             = site_url() . 'financeiro/investimentos/?periodo=' . $periodo . '&situacao=' . $status;
-        $config['total_rows']           = $this->investimentos_model->count('investimentos', 'status = 1 AND id_usuario = ' . getUserId());
-        $config['per_page']             = 100;
+        $config['base_url']             = base_url('financeiro/investimentos');
+        $config['suffix']               = '&' . $query_string;
+        $config['first_url']            = $config['base_url'] . '?' . $query_string;
+        $config['total_rows']           = $this->investimentos_model->count(getUserId(), $where ?? null);
+        $config['per_page']             = 20;
         $config['page_query_string']    = true;
         $config['next_link']            = 'Próxima';
         $config['prev_link']            = 'Anterior';
@@ -127,8 +167,8 @@ class Investimentos extends CI_Controller
             $where,
             getUserId(),
             $limit,
-            $config['total_rows'],
             $config['per_page'],
+            $config['total_rows'],
             $this->input->get('per_page'),
             $order_by ? $order_by : 'desc'
         );

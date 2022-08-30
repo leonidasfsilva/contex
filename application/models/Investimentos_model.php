@@ -10,19 +10,16 @@ class Investimentos_model extends CI_Model
     }
 
 
-    function get($table, $fields, $where = '', $id_usuario, $limit, $rows, $perpage = 0, $start = 0, $order_by = null, $one = false)
+    function get($table, $fields, $where = null, $id_usuario, $limit = null, $rows, $perpage = 0, $start = 0, $order_by = null, $one = false)
     {
-
         $this->db->select($fields);
         $this->db->from($table);
         $this->db->limit($perpage, $start);
 
         if ($where) {
             $this->db->where($where . ' AND status = 1 AND id_usuario = ' . $id_usuario);
-
         } else {
             $this->db->where('status = 1 AND id_usuario = ' . $id_usuario);
-
         }
 
         if ($order_by) {
@@ -37,15 +34,15 @@ class Investimentos_model extends CI_Model
 
         if ($limit) {
             if ($rows > $limit) {
-                $this->db->order_by('id_lancamento', 'asc');
                 $this->db->limit($limit, ($rows - $limit));
+            } else {
+                $this->db->limit($limit, $start);
             }
         }
 
-        $this->db->order_by('data_lancamento', 'asc');
         $query = $this->db->get();
-
         $result = !$one ? $query->result() : $query->row();
+
         return $result;
     }
 
@@ -90,14 +87,17 @@ class Investimentos_model extends CI_Model
         return false;
     }
 
-    function count($table, $where)
+    function count($id_usuario, $where = null, $limit = null, $start = null)
     {
-
-        $this->db->from($table);
         if ($where) {
             $this->db->where($where);
         }
-        return $this->db->count_all_results();
+        $this->db->where('id_usuario', $id_usuario);
+        $this->db->where('status', 1);
+        if ($limit) {
+            $this->db->limit($limit, $start);
+        }
+        return $this->db->count_all_results('investimentos');
     }
 
     function getTotalEntradas($id_usuario)
