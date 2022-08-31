@@ -11,7 +11,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             $disabled_lancamento_1 = '';
         }
         $statusFatura = 'ABERTA';
-        $label_status = 'default';
+        $label_status = 'primary';
     } else if ($status_fatura == 2) {
         $disabled_lancamento_1 = 'disabled';
         $statusFatura = 'FUTURA';
@@ -34,9 +34,27 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         $label_pgto = '';
     }
 
-    $dateObj = DateTime::createFromFormat('!m', $mes_referencia);
-    $month = $dateObj->format('M'); // March
-    $nome_mes = padronizarString(strftime('%b', strtotime($month)));
+    $dateFormatter = new \IntlDateFormatter(
+        'pt_BR',
+        \IntlDateFormatter::FULL,
+        \IntlDateFormatter::NONE,
+        'America/Sao_Paulo',
+        \IntlDateFormatter::GREGORIAN,
+        "MMM"
+    );
+
+    $dateFormatterExtended = new \IntlDateFormatter(
+        'pt_BR',
+        \IntlDateFormatter::FULL,
+        \IntlDateFormatter::NONE,
+        'America/Sao_Paulo',
+        \IntlDateFormatter::GREGORIAN,
+        "MMMM"
+    );
+
+    $dateObj = DateTime::createFromFormat('!m', ($mes_referencia));
+    $nome_mes = str_replace('.', '', strtoupper($dateFormatterExtended->format($dateObj)));
+    $nome_mes_extenso = str_replace('.', '', strtoupper($dateFormatterExtended->format($dateObj)));
     $creditoFatura = 0;
     $debitoFatura = 0;
 
@@ -52,7 +70,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
     <div class="panel-heading">
         <h3 style="margin: 0 15px 0 0;">
             <i class="fas fa-file-invoice-dollar fa-lg fa-fw"></i>
-            Detalhes da Fatura: #<?= $id_fatura ?>
+            Fatura: #<?= $id_fatura . ' - ' . $nome_mes ?>
         </h3>
         <h3>
             <i class="fas fa-credit-card fa-lg fa-fw"></i>
@@ -74,13 +92,13 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         <div class="col-lg-3">
             <div class="input-group">
                 <span class="input-group-addon font-weight-bold">Referência:</span>
-                <div class="input-group-addon"><span class="label label-inverse"><?= $nome_mes . ' / ' . $ano_referencia ?></span></div>
+                <div class="input-group-addon"><span class="label label-default"><?= $nome_mes ?></span></div>
             </div>
         </div>
         <div class="col-lg-3">
             <div class="input-group">
                 <span class="input-group-addon font-weight-bold">Vencimento:</span>
-                <div class="input-group-addon"><span class="label label-inverse"><?= date(('d/m/Y'), strtotime($fatura->vencimento)) ?></span></div>
+                <div class="input-group-addon"><span class="label label-default"><?= date(('d/m/Y'), strtotime($fatura->vencimento)) ?></span></div>
             </div>
         </div>
         <div class="col-lg-3">

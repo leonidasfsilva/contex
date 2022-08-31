@@ -169,7 +169,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             $iconFaturaAtual = null;
                         } else {
                             $status = 'ABERTA';
-                            $label = 'default';
+                            $label = 'primary';
                             $disabledPagar = 'disabled';
                             $iconFechar = 'fas fa-unlock';
                             $iconFaturaAtual = ' <i class="fas fa-long-arrow-alt-left fa-lg fa-fw" title="Fatura atual"></i>';
