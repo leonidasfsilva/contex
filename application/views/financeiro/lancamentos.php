@@ -688,7 +688,7 @@ $fim = $this->input->get('dataFinal');
                         <div id="divPagamentoCopiar" class="hidden">
                             <div class="form-group col-lg-4">
                                 <label for="pagamentoCopiar" class="font-weight-bold">Data Pagamento</label>
-                                <input class="form-control datepicker" id="pagamentoCopiar" type="text" name="pagamento" />
+                                <input class="form-control datepicker reset-data-pagamento" id="pagamentoCopiar" type="text" name="pagamento" />
                             </div>
                             <div class="form-group col-lg-4">
                                 <label for="formaPgtoCopiar" class="font-weight-bold">Forma Pagamento *</label>
@@ -864,6 +864,7 @@ $fim = $this->input->get('dataFinal');
             } else {
                 $('#divRecebimento, #divPagamentoEditar, #divPagamentoCopiar, #divPagamento').addClass('hidden');
             }
+            $('.reset-data-pagamento').val('');
         }
 
         function calculaValorParcela(parcela, valor) {
@@ -1117,6 +1118,7 @@ $fim = $this->input->get('dataFinal');
             } else {
                 $("#pagoEditar, #pagoCopiar").iCheck('uncheck');
                 $("#divPagamentoEditar, #divPagamentoCopiar").addClass('hidden');
+                $('.reset-data-pagamento').val('');
             }
         });
     });
