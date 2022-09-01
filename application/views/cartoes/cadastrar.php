@@ -127,8 +127,6 @@
                 $(element).parents('.form-group').removeClass('has-error');
                 $(element).parents('.form-group').addClass('has-success');
             }
-
         });
-
     });
 </script>
