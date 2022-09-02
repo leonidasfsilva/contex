@@ -355,7 +355,7 @@ class Investimentos extends CI_Controller
                 'tipo' => $tipo
             );
 
-            if ($this->investimentos_model->edit('investimentos', $data, 'id_lancamentos', $this->input->post('id')) == true) {
+            if ($this->investimentos_model->edit('investimentos', $data, 'id_lancamento', $this->input->post('id')) == true) {
                 $this->session->set_flashdata('sucesso', 'Lançamento editado com sucesso!');
                 redirect($urlAtual);
             } else {
@@ -394,7 +394,7 @@ class Investimentos extends CI_Controller
                 'status' => 0
             );
 
-            if ($this->financeiro_model->delete('investimentos', $data, 'id_lancamentos', $id) == true) {
+            if ($this->financeiro_model->delete('investimentos', $data, 'id_lancamento', $id) == true) {
                 $this->session->set_flashdata('sucesso', 'Lançamento excluído com sucesso!');
                 redirect($urlAtual);
 
