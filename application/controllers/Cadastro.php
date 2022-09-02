@@ -88,6 +88,7 @@ class Cadastro extends CI_Controller
 
             if ($this->cadastro_model->gravaValidacao($validacao) == true) {
                 $id_validacao = $this->db->insert_id();
+                gravaLog(null, 'Usuário desconhecido', $email, 'Validação de conta finalizada: (' . $id_validacao . ') nova conta validada com sucesso', getenv("REMOTE_ADDR"));
             } else {
                 $this->session->set_flashdata('erro', 'Não foi possível registrar pré cadastro de usuário.<br>ERRO: gravaValidacao()');
                 redirect('cadastro');
