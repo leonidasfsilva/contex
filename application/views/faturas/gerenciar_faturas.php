@@ -250,7 +250,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 <?= $this->pagination->create_links(); ?>
 
 <form id="form_cartao" action="<?php echo base_url('financeiro/faturas'); ?>" method="get">
-    <input type="hidden" id="id_cartao" name="id_cartao">
+    <input type="hidden" id="id_cartao" name="cartao">
 </form>
 
 <!-- Modal FILTRAR -->

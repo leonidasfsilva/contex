@@ -69,8 +69,8 @@ class Faturas extends CI_Controller
 
         $cartaoPrincipal = $this->cartoes_model->getCartaoPrincipalUsuario(getUserId());
 
-        if (isset($_GET['id_cartao'])) {
-            $id_cartao = $_GET['id_cartao'];
+        if (isset($_GET['cartao'])) {
+            $id_cartao = $_GET['cartao'];
             $cartao = $this->cartoes_model->cartaoExistente($id_cartao);
 
             if ($cartao->id_usuario != getUserId()) {
@@ -1001,7 +1001,7 @@ class Faturas extends CI_Controller
 
             $data = array(
                 'fatura_vinculada' => 1
-            );    
+            );
 
             if ($this->fatura_model->edit('faturas', $data, 'id_fatura', $idFatura)) {
                 $detalhesFatura         = $this->fatura_model->getDetalhesFatura($idFatura);
@@ -1024,7 +1024,7 @@ class Faturas extends CI_Controller
                     'tipo'                  => 2
                 );
                 $this->financeiro_model->add('lancamentos', $data);
-            }               
+            }
         }
         $this->session->set_flashdata('sucesso', 'Faturas dos cartões vinculadas com sucesso');
         redirect($urlAtual);
@@ -1160,6 +1160,55 @@ class Faturas extends CI_Controller
         $data['formasPagamento'] = $this->faturas_model->getFormasPagamento();
         $data['results'] = $this->faturas_model->pesquisa($termo, getUserId());
         $data['view'] = 'financeiro/lancamentos';
+        $this->load->view('tema/topo', $data);
+    }
+
+    public function terceiros()
+    {
+        if (!isset($_GET['nome'])) {
+            $this->session->set_flashdata('erro', 'Método não permitido');
+            redirect('financeiro/faturas');
+        }
+
+        $nome       = $_GET['nome'] ?? null;
+        $idCartao   = $_GET['cartao'] ?? null;
+
+        if (!is_string($nome) || is_numeric($nome)) {
+            $this->session->set_flashdata('erro', 'O nome pesquisado para o terceiro é inválido');
+            redirect('financeiro/faturas?cartao=' . $idCartao);
+        }
+
+        $data = [];
+        $data ['idCartao'] = $idCartao;
+        $faturasTerceiros = $this->fatura_model->getFaturasTerceiros(getUserId(), $nome);
+
+        if ($faturasTerceiros) {
+            foreach ($faturasTerceiros as $fatura) {
+                $data['nome']               = $nome;
+                $lancamentosTerceiros       = $this->fatura_model->getLancamentosTerceiros(getUserId(), $fatura['id_fatura'], $nome);
+                $data['lancamentoEditavel'] = $this->fatura_model->getLancamentoEditavel($fatura['mes_referencia'], $fatura['ano_referencia']);
+
+                $dateFormatterExtended = new \IntlDateFormatter(
+                    'pt_BR',
+                    \IntlDateFormatter::FULL,
+                    \IntlDateFormatter::NONE,
+                    'America/Sao_Paulo',
+                    \IntlDateFormatter::GREGORIAN,
+                    "MMMM"
+                );
+            
+                $dateObj        = DateTime::createFromFormat('!m', ($fatura['mes_referencia']));
+                $nomeMes        = str_replace('.', '', strtoupper($dateFormatterExtended->format($dateObj)));
+                $mesReferencia  = $nomeMes . ' / ' . $fatura['ano_referencia'];
+
+                $data['results'][$fatura['id_fatura']]                  = $fatura;
+                $data['results'][$fatura['id_fatura']]['cartao']        = $this->cartoes_model->getDetalhesCartao($fatura['id_cartao']);
+                $data['results'][$fatura['id_fatura']]['referencia']    = $mesReferencia;
+                $data['results'][$fatura['id_fatura']]['lancamentos']   = $lancamentosTerceiros;
+            }
+        }
+        // varDump($data);
+        $data['view'] = 'faturas/lancamentos_terceiros';
         $this->load->view('tema/topo', $data);
     }
 

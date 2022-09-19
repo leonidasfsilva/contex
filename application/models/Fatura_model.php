@@ -496,4 +496,60 @@ class Fatura_model extends CI_Model
         $this->db->where('id_lancamento', $idLancamento);
         return $this->db->get()->row('id_fatura');
     }
+
+    function getFaturasTerceiros($idUsuario, $nome)
+    {
+        if (!is_string($nome) || is_numeric($nome)) {
+            return false;
+        }
+
+        $query = "SELECT DISTINCT f.*
+            FROM faturas f
+            INNER JOIN lancamentos_faturas lf
+            ON lf.id_fatura = f.id_fatura
+            WHERE lf.nome_cliente LIKE '$nome'
+            AND f.id_usuario = $idUsuario
+            ORDER BY lf.criado_em DESC";
+
+        $resultQuery = $this->db->query($query);
+        $result = $resultQuery->result_array();
+
+        if (!$result) {
+            return false;
+        }
+
+        return $result;
+    }
+
+    function getLancamentosTerceiros($idUsuario, $idFatura, $nome)
+    {
+        if (!is_string($nome) || is_numeric($nome)) {
+            return false;
+        }
+
+        $query = "SELECT lf.*,
+            lfa.valor_parcela,
+            lfa.id_fatura,
+            lfa.n_parcela
+            FROM lancamentos_faturas lf
+            INNER JOIN faturas f
+            ON lf.id_fatura = f.id_fatura
+            INNER JOIN lancamentos_faturas_assoc lfa
+            ON lfa.id_lancamento = lf.id_lancamento
+            WHERE lf.nome_cliente LIKE '$nome'
+            AND f.id_usuario = $idUsuario
+            AND f.id_fatura = $idFatura
+            AND lf.status = 1
+            AND lfa.status = 1
+            ORDER BY lf.criado_em DESC";
+
+        $resultQuery = $this->db->query($query);
+        $result = $resultQuery->result_array();
+
+        if (!$result) {
+            return false;
+        }
+
+        return $result;
+    }
 }

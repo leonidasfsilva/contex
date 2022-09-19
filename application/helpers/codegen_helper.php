@@ -36,6 +36,16 @@ function print_array_exit($a)
 
 function varDump($a)
 {
+    // xdebug without limit
+    // ini_set('xdebug.var_display_max_depth', -1);
+    // ini_set('xdebug.var_display_max_children', -1);
+    // ini_set('xdebug.var_display_max_data', -1);
+
+    //xdebug with safe deep
+    ini_set('xdebug.var_display_max_depth', 10);
+    ini_set('xdebug.var_display_max_children', 256);
+    ini_set('xdebug.var_display_max_data', 1024);
+
     echo '<pre>';
     var_dump($a);
     echo '</pre>';
@@ -43,6 +53,16 @@ function varDump($a)
 
 function varDumpExit($a)
 {
+    // xdebug without limit
+    // ini_set('xdebug.var_display_max_depth', -1);
+    // ini_set('xdebug.var_display_max_children', -1);
+    // ini_set('xdebug.var_display_max_data', -1);
+
+    //xdebug with safe deep
+    ini_set('xdebug.var_display_max_depth', 10);
+    ini_set('xdebug.var_display_max_children', 256);
+    ini_set('xdebug.var_display_max_data', 1024);
+
     echo '<pre>';
     var_dump($a);
     echo '</pre>';
