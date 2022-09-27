@@ -179,6 +179,19 @@ class Lancamentos extends CI_Controller
             }
         }
 
+        if ($referenceMonth) {
+            $dateFormatter = new \IntlDateFormatter(
+                'pt_BR',
+                \IntlDateFormatter::FULL,
+                \IntlDateFormatter::NONE,
+                'America/Sao_Paulo',
+                \IntlDateFormatter::GREGORIAN,
+                "MMMM"
+            );
+            $dateObj = DateTime::createFromFormat('!m', ($referenceMonth));
+            $this->data['month'] = str_replace('.', '', strtoupper($dateFormatter->format($dateObj)));    
+        }    
+
         $config['base_url']             = base_url('financeiro/lancamentos');
         $config['suffix']               = '&' . $query_string;
         $config['first_url']            = $config['base_url'] . '?' . $query_string;
