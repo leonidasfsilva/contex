@@ -178,11 +178,11 @@ $fim = $this->input->get('dataFinal');
                         $vencimento = date(('d/m/y'), strtotime($r->data_lancamento));
 
                         if ($r->baixado == 0) {
-                            $status = 'Pendente';
+                            $status = 'PENDENTE';
                             $label_status = 'warning';
                             $iconTipo = '<i class="fas fa-clock fa-fw"></i>';
                         } else {
-                            $status = 'Efetivado';
+                            $status = 'EFETIVADO';
                             $label_status = 'primary';
                             $iconTipo = '<i class="fas fa-check fa-fw"></i>';
                         };
@@ -228,9 +228,9 @@ $fim = $this->input->get('dataFinal');
                             strtoupper($r->descricao) .
                             '<br><span class="small" style="color: grey;">' . ($fornecedor) . '</span></a></td>';
                         echo '<td><span class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small" style="color: grey;">' . ($forma_pgto) . '</td>';
-                        echo '<td><span class="text-' . $label_tipo . '">' . ($icon) . '</span> <span class="label label-' . $label_tipo . '">' . ($tipo) . '</span>
+                        echo '<td><span class="text-' . $label_tipo . '">' . ($icon) . '</span> <span class="badge badge-' . $label_tipo . '">' . ($tipo) . '</span>
                         <br>
-                        <span class="text-' . $label_status . '">' . ($iconTipo) . '</span> <span class="label label-' . $label_status . '">' . ($status) . '</span></td>';
+                        <span class="text-' . $label_status . '">' . ($iconTipo) . '</span> <span class="badge badge-' . $label_status . '">' . ($status) . '</span></td>';
 
                         echo '<td>';
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
