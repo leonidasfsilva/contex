@@ -8,7 +8,6 @@ class Fatura_model extends CI_Model
     /**
      * author: Leônidas Ferreira
      * email: leonidas.f.silva@hotmail.com
-     *
      */
 
     function __construct()
@@ -27,8 +26,8 @@ class Fatura_model extends CI_Model
             $this->db->where($where);
         }
         $this->db->where('status', 1);
-        //        este trecho do codigo foi retirado para tornar visivel aos titulares as faturas do cartoes adicionais
-        //        $this->db->where('id_usuario', $id_usuario);
+        // este trecho do codigo foi comentado para tornar visivel aos titulares as faturas do cartoes adicionais
+        // $this->db->where('id_usuario', $id_usuario);
         $this->db->where('id_cartao', $id_cartao);
         $query = $this->db->get();
 
@@ -517,7 +516,6 @@ class Fatura_model extends CI_Model
         if (!$result) {
             return false;
         }
-
         return $result;
     }
 

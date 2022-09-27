@@ -69,6 +69,27 @@ function varDumpExit($a)
     exit();
 }
 
+function getSqlStatement()
+{
+    // xdebug without limit
+    // ini_set('xdebug.var_display_max_depth', -1);
+    // ini_set('xdebug.var_display_max_children', -1);
+    // ini_set('xdebug.var_display_max_data', -1);
+
+    //xdebug with safe deep
+    ini_set('xdebug.var_display_max_depth', 10);
+    ini_set('xdebug.var_display_max_children', 256);
+    ini_set('xdebug.var_display_max_data', 1024);
+
+    $CI     = get_instance();
+    $query  = $CI->db->last_query();
+
+    echo '<pre>';
+    var_dump($query);
+    echo '</pre>';
+    exit;
+}
+
 function clean_header($array)
 {
     $CI = get_instance();

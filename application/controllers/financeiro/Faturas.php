@@ -1178,9 +1178,9 @@ class Faturas extends CI_Controller
             redirect('financeiro/faturas?cartao=' . $idCartao);
         }
 
-        $data = [];
-        $data ['idCartao'] = $idCartao;
-        $faturasTerceiros = $this->fatura_model->getFaturasTerceiros(getUserId(), $nome);
+        $data               = [];
+        $data ['idCartao']  = $idCartao;
+        $faturasTerceiros   = $this->fatura_model->getFaturasTerceiros(getUserId(), $nome);
 
         if ($faturasTerceiros) {
             foreach ($faturasTerceiros as $fatura) {
@@ -1207,7 +1207,7 @@ class Faturas extends CI_Controller
                 $data['results'][$fatura['id_fatura']]['lancamentos']   = $lancamentosTerceiros;
             }
         }
-        // varDump($data);
+
         $data['view'] = 'faturas/lancamentos_terceiros';
         $this->load->view('tema/topo', $data);
     }

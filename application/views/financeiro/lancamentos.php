@@ -63,6 +63,25 @@ $fim = $this->input->get('dataFinal');
                 </tr>
             </thead>
             <tr>
+                <td colspan="2" style="text-align: left;">(+) SALDO PROVISÓRIO EM CONTA</td>
+                <td colspan="1" style="text-align: right;">
+                    <?php echo number_format($total_provisorio->total, 2, ',', '.') ?></td>
+            </tr>
+            <?php if ($saidas_pendentes->total) { ?>
+                <tr>
+                    <td colspan="2" style="text-align: left; color: red">(-) SALDO DE SAÍDAS A CONFIRMAR</td>
+                    <td colspan="1" style="text-align: right; color: red">
+                        <?php echo number_format($saidas_pendentes->total, 2, ',', '.') ?></td>
+                </tr>
+            <?php } ?>
+            <?php if ($entradas_pendentes->total) { ?>
+                <tr>
+                    <td colspan="2" style="text-align: left; color: green">(+) SALDO DE ENTRADAS A CONFIRMAR</td>
+                    <td colspan="1" style="text-align: right; color: green">
+                        <?php echo number_format($entradas_pendentes->total, 2, ',', '.') ?></td>
+                </tr>
+            <?php } ?>
+            <tr>
                 <td colspan="2" style="text-align: left; font-weight: bold">(=) SALDO DISPONÍVEL</td>
                 <td colspan="1" style="text-align: right; font-weight: bold">
                     <strong><?php echo number_format($total->total, 2, ',', '.') ?></strong>
@@ -316,15 +335,15 @@ $fim = $this->input->get('dataFinal');
                             <label class="tooltips font-weight-bold" title="Filtrar lançamentos por tipo">Tipo <i class="fa fa-info-circle fa-fw"></i></label>
                             <select class="form-control" id="select_tipo" name="tipo">
                                 <option value="todos">
-                                    << Todos>>
+                                    << Todos >>
                                 </option>
                                 <option value="entrada" <?php if ($tipo_lancamentos == 'entrada') {
                                                             echo 'selected';
-                                                        } ?>>ENTRADA
+                                                        } ?> >ENTRADA
                                 </option>
                                 <option value="saida" <?php if ($tipo_lancamentos == 'saida') {
                                                             echo 'selected';
-                                                        } ?>>SAÍDA
+                                                        } ?> >SAÍDA
                                 </option>
                             </select>
                         </div>
@@ -332,15 +351,11 @@ $fim = $this->input->get('dataFinal');
                             <label class="tooltips font-weight-bold" title="Filtrar lançamentos por status">Status <i class="fa fa-info-circle fa-fw"></i></label>
                             <select class="form-control" id="select_status" name="status">
                                 <option value="todos">
-                                    << Todos>>
+                                    << Todos >>
                                 </option>
-                                <option value="efetivado" <?php if ($status_lancamentos == 'efetivado') {
-                                                                echo 'selected';
-                                                            } ?>>EFETIVADO
+                                <option value="efetivado" <?= ($status_lancamentos == 'efetivado') ? 'selected' : null ?> >EFETIVADO
                                 </option>
-                                <option value="pendente" <?php if ($status_lancamentos == 'pendente') {
-                                                                echo 'selected';
-                                                            } ?>>PENDENTE
+                                <option value="pendente" <?= ($status_lancamentos == 'pendente') ? 'selected' : null ?> >PENDENTE
                                 </option>
                             </select>
                         </div>
@@ -350,7 +365,7 @@ $fim = $this->input->get('dataFinal');
                             <label class="tooltips font-weight-bold" title="Filtrar lançamentos por período específico">Período <i class="fa fa-info-circle fa-fw"></i></label>
                             <select name="periodo" id="select_periodo" class="form-control">
                                 <option value="">
-                                    << Selecione>>
+                                    << Selecione >>
                                 </option>
                                 <option value="todos" <?php if ($periodo_lancamentos == 'todos') {
                                                             echo 'selected';
@@ -384,6 +399,10 @@ $fim = $this->input->get('dataFinal');
                                                             echo 'selected';
                                                         } ?>>Últimos 90 dias
                                 </option>
+                                <option value="mensal" <?php if ($periodo_lancamentos == 'mensal' || !$periodo_lancamentos) {
+                                                            echo 'selected';
+                                                        } ?>>MÊS ESPECÍFICO
+                                </option>
                                 <option value="especifico" <?php if ($periodo_lancamentos == 'especifico') {
                                                                 echo 'selected';
                                                             } ?>>PERÍODO ESPECÍFICO
@@ -398,6 +417,28 @@ $fim = $this->input->get('dataFinal');
                                 <span class="input-group-addon">até</span>
                                 <input type="text" class="form-control datepicker" id="dataFinal" name="dataFinal" value="<?= $fim ?>">
                             </div>
+                        </div>
+                        <div class="form-group col-lg-6" id="div_periodo_mensal" hidden>
+                            <label class="control-label font-weight-bold" for="select_mes">
+                                Mês específico
+                            </label>
+                            <select class="form-control" id="mesReferencia" name="mesReferencia">
+                                <option value="">
+                                    << Selecione >>
+                                </option>
+                                <option value="01" <?= ($referenceMonth == '01') ? 'selected' : null ?> >01 - JANEIRO</option>
+                                <option value="02" <?= ($referenceMonth == '02') ? 'selected' : null ?> >02 - FEVEREIRO</option>
+                                <option value="03" <?= ($referenceMonth == '03') ? 'selected' : null ?> >03 - MARÇO</option>
+                                <option value="04" <?= ($referenceMonth == '04') ? 'selected' : null ?> >04 - ABRIL</option>
+                                <option value="05" <?= ($referenceMonth == '05') ? 'selected' : null ?> >05 - MAIO</option>
+                                <option value="06" <?= ($referenceMonth == '06') ? 'selected' : null ?> >06 - JUNHO</option>
+                                <option value="07" <?= ($referenceMonth == '07') ? 'selected' : null ?> >07 - JULHO</option>
+                                <option value="08" <?= ($referenceMonth == '08') ? 'selected' : null ?> >08 - AGOSTO</option>
+                                <option value="09" <?= ($referenceMonth == '09') ? 'selected' : null ?> >09 - SETEMBRO</option>
+                                <option value="10" <?= ($referenceMonth == '10') ? 'selected' : null ?> >10 - OUTUBRO</option>
+                                <option value="11" <?= ($referenceMonth == '11') ? 'selected' : null ?> >11 - NOVEMBRO</option>
+                                <option value="12" <?= ($referenceMonth == '12') ? 'selected' : null ?> >12 - DEZEMBRO</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -462,7 +503,7 @@ $fim = $this->input->get('dataFinal');
                                 <label for="formaPgto" class="font-weight-bold">Forma Pagamento *</label>
                                 <select name="formaPgto" class="form-control">
                                     <option value="">
-                                        << Selecione>>
+                                        << Selecione >>
                                     </option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
@@ -534,7 +575,7 @@ $fim = $this->input->get('dataFinal');
                                 <label for="formaPgto" class="font-weight-bold">Forma Pagamento *</label>
                                 <select name="formaPgto" class="form-control">
                                     <option value="">
-                                        << Selecione>>
+                                        << Selecione >>
                                     </option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
@@ -614,7 +655,7 @@ $fim = $this->input->get('dataFinal');
                                 <label for="formaPgtoEditar" class="font-weight-bold">Forma Pagamento *</label>
                                 <select name="formaPgto" id="formaPgtoEditar" class="form-control">
                                     <option value="">
-                                        << Selecione>>
+                                        << Selecione >>
                                     </option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
@@ -694,7 +735,7 @@ $fim = $this->input->get('dataFinal');
                                 <label for="formaPgtoCopiar" class="font-weight-bold">Forma Pagamento *</label>
                                 <select name="formaPgto" id="formaPgtoCopiar" class="form-control">
                                     <option value="">
-                                        << Selecione>>
+                                        << Selecione  >>
                                     </option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
@@ -821,6 +862,7 @@ $fim = $this->input->get('dataFinal');
 
         $('#select_periodo').change(function() {
             const value = $(this).val();
+
             if (value === 'especifico') {
                 $('#div_intervalo_data').show();
             } else {
@@ -828,15 +870,29 @@ $fim = $this->input->get('dataFinal');
                 $('#dataInicial').val('');
                 $('#dataFinal').val('');
             }
+
+            if (value === 'mensal') {
+                $('#div_periodo_mensal').show();
+            } else {
+                $('#div_periodo_mensal').hide();
+            }
         });
 
         $('#select_periodo option:selected').each(function(index, element) {
-            if ($(this).val() == 'especifico') {
+            const value = $(this).val();
+
+            if (value == 'especifico') {
                 $('#div_intervalo_data').show();
             } else {
                 $('#div_intervalo_data').hide();
                 $('#dataInicial').val('');
                 $('#dataFinal').val('');
+            }
+
+            if (value === 'mensal') {
+                $('#div_periodo_mensal').show();
+            } else {
+                $('#div_periodo_mensal').hide();
             }
         });
 
