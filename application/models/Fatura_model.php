@@ -550,4 +550,26 @@ class Fatura_model extends CI_Model
 
         return $result;
     }
+
+    function autoCompleteTerceiros($q, $id_usuario)
+    {
+        $query = $this->db->select('*')
+            ->limit(5)
+            ->like('nome_cliente', $q)
+            ->where('id_usuario', $id_usuario)
+            ->where('status', 1)
+            ->group_by('nome_cliente')
+            ->get('lancamentos_faturas');
+
+        if ($query->num_rows() > 0) {
+            $row_set = [];
+
+            foreach ($query->result_array() as $row) {
+                $row_set[] = [
+                    'label' => $row['nome_cliente']
+                ];
+            }
+            echo json_encode($row_set);
+        }
+    }
 }

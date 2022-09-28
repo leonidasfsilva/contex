@@ -28,7 +28,7 @@ class Faturas extends CI_Controller
         }
         $where = '';
         $periodo = $this->input->get('periodo');
-        $cliente = $this->input->get('id_cliente');
+        $cliente = $this->input->get('terceiro');
 
         $config['base_url'] = site_url() . 'financeiro/faturas/?periodo=' . $periodo;
         $config['total_rows'] = $this->fatura_model->count('faturas', 'status = 1 AND id_usuario = ' . getUserId());
@@ -120,7 +120,7 @@ class Faturas extends CI_Controller
 
         $urlAtual = $this->input->post('urlAtual');
         $periodo = $this->input->get('periodo');
-        $cliente = $this->input->get('cliente');
+        $cliente = $this->input->get('terceiro');
         $where = null;
 
         $this->load->library('pagination');
@@ -168,7 +168,7 @@ class Faturas extends CI_Controller
         }
 
         if (isset($cliente) && $cliente != null) {
-            $where = 'id_cliente = ' . $cliente;
+            $where = 'nome_cliente = ' . $cliente;
         }
 
         $faturaExistente = $this->fatura_model->getById($id_fatura);
@@ -283,7 +283,7 @@ class Faturas extends CI_Controller
             //ARRAY LANCAMENTOS_FATURAS
             $data = array(
                 'id_fatura' => $faturaAtual->id_fatura,
-                'id_cliente' => $this->input->post('id_cliente') ?: null,
+                // 'id_cliente' => $this->input->post('id_cliente') ?: null,
                 'id_usuario' => $faturaAtual->id_usuario,
                 'descricao' => padronizarString($this->input->post('descricao')),
                 'nome_cliente' => $this->input->post('nome_cliente') ? padronizarString($this->input->post('nome_cliente')) : null,
@@ -384,7 +384,6 @@ class Faturas extends CI_Controller
                             //MONTA ARRAY DE PENDENCIAS
                             $data2 = array(
                                 'id_lancamento_fatura' => $last_id,
-                                // VERIFICAR O FUNCIONAMENTO DESTA REGRA DE NEGOCIO: id_usuario()
                                 'id_usuario' => getUserId(),
                                 'id_cliente' => $this->input->post('id_cliente'),
                                 'descricao' => padronizarString($this->input->post('descricao')) . ' - ' . $parcela_atual . '/' . $total_parcelas,
@@ -393,7 +392,7 @@ class Faturas extends CI_Controller
                                 'data_vencimento' => $vencimentoFormatado,
                             );
                             //removendo adicao de compras parceladas de terceiros em Pendencias
-                            //                            $this->pendencia_model->add('pendencias', $data2);
+                            //$this->pendencia_model->add('pendencias', $data2);
                         }
 
                         $mes++;
@@ -451,7 +450,7 @@ class Faturas extends CI_Controller
                             'data_vencimento' => $vencimentoFormatado,
                         );
                         //removendo adicao de compras a vista de terceiros em Pendencias
-                        //                        $this->pendencia_model->add('pendencias', $data2);
+                        //$this->pendencia_model->add('pendencias', $data2);
                     }
 
                     if ($this->fatura_model->add('lancamentos_faturas_assoc', $data1)) {
@@ -550,7 +549,7 @@ class Faturas extends CI_Controller
                 'data_compra' => $data_compra,
                 'mes_referencia' => $mes,
                 'ano_referencia' => $ano,
-                'id_cliente' => $this->input->post('id_cliente'),
+                // 'id_cliente' => $this->input->post('id_cliente'),
                 'nome_cliente' => $this->input->post('nome_cliente') ? padronizarString($this->input->post('nome_cliente')) : null,
                 'compra_terceiros' => $compra_terceiros,
             );
@@ -651,7 +650,7 @@ class Faturas extends CI_Controller
                                 'data_vencimento' => $vencimentoFormatado,
                             );
                             //removendo edicao de compras parceladas de terceiros em Pendencias
-                            //                            $this->pendencia_model->add('pendencias', $data2);
+                            //$this->pendencia_model->add('pendencias', $data2);
                         }
 
                         $mes++;
@@ -709,7 +708,7 @@ class Faturas extends CI_Controller
                             'data_vencimento' => $vencimentoFormatado,
                         );
                         //removendo edicao de compras a vista de terceiros em Pendencias
-                        //                        $this->pendencia_model->add('pendencias', $data2);
+                        //$this->pendencia_model->add('pendencias', $data2);
                     }
 
                     if ($this->fatura_model->add('lancamentos_faturas_assoc', $data1)) {
@@ -1216,7 +1215,7 @@ class Faturas extends CI_Controller
     {
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
-            $this->clientes_model->autoCompleteCliente($q, getUserId());
+            $this->fatura_model->autoCompleteTerceiros($q, getUserId());
         }
     }
 

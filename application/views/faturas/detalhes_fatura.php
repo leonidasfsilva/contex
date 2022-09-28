@@ -75,7 +75,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             <?= $cartao->apelido ? $cartao->apelido : $cartaoAlternativeLabel ?>
         </h3>
         <div class="panel-ctrls">
-            <a href="<?= base_url('financeiro/faturas?id_cartao=') . $id_cartao ?>" class="btn btn-sm btn-default"><i class="fas fa-arrow-left fa-fw"></i> Faturas</a>
+            <a href="<?= base_url('financeiro/faturas?cartao=') . $id_cartao ?>" class="btn btn-sm btn-default"><i class="fas fa-arrow-left fa-fw"></i> Faturas</a>
             <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar faturas">
                 <i class="fas fa-filter fa-fw"></i>
                 Filtrar
@@ -685,7 +685,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             source: "<?php echo base_url(); ?>financeiro/faturas/autoCompleteCliente",
             minLength: 1,
             select: function(event, ui) {
-                $("#id_cliente, #id_clienteEditar").val(ui.item.id);
+                $("#id_cliente, #id_clienteEditar").val(ui.item.label);
             }
         });
 

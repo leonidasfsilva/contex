@@ -30,7 +30,6 @@
                                     <?= $result['cartao']->apelido ? $result['cartao']->apelido : $cartaoAlternativeLabel ?>
                                 </span>
                             </h2>
-
                         </a>
                         <div id="<?= $result['id_fatura'] ?>" class="collapse">
                             <div class="accordion-body" style="padding: 0 !important;">
