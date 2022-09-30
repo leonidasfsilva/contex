@@ -44,7 +44,10 @@ class Lancamentos extends CI_Controller
         $referenceMonth = $_GET['mesReferencia'] ?? null;
         $where          = null;
         $limit          = null;
-        $order_by       = null;
+        $order_by       = [
+            'data_lancamento'   => 'desc',
+            'id_lancamento'     => 'desc',
+        ];
 
         $this->load->library('pagination');
 
@@ -189,8 +192,8 @@ class Lancamentos extends CI_Controller
                 "MMMM"
             );
             $dateObj = DateTime::createFromFormat('!m', ($referenceMonth));
-            $this->data['month'] = str_replace('.', '', strtoupper($dateFormatter->format($dateObj)));    
-        }    
+            $this->data['month'] = str_replace('.', '', strtoupper($dateFormatter->format($dateObj)));
+        }
 
         $config['base_url']             = base_url('financeiro/lancamentos');
         $config['suffix']               = '&' . $query_string;
