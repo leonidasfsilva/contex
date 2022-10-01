@@ -29,9 +29,9 @@
                         <a class="accordion-title" data-toggle="collapse" data-parent="#accordion" href="#<?= $result['id_fatura'] ?>">
                             <h2>
                                 <i class="fas fa-file-invoice-dollar fa-lg fa-fw"></i>
-                                Fatura: #<?= $result['id_fatura'] . ' - ' . $result['reference'] ?>
+                                Período: <?= $result['reference'] ?>
 
-                                <span style="padding-left: 20px;">
+                                <span style="padding-left: 10px;">
                                     <i class="fas fa-credit-card fa-lg fa-fw"></i>
                                     <?= $result['cartao']->apelido ? $result['cartao']->apelido : $cartaoAlternativeLabel ?>
                                 </span>
