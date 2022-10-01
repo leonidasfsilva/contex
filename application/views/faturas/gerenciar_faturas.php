@@ -155,22 +155,34 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         $disabledPagar = '';
 
                         if ($r->fatura_aberta == 0) {
+                            //FATURA FECHADA
                             $status = 'FECHADA';
                             $label = 'inverse';
-                            $disabled = 'disabled';
+                            // $disabled = 'disabled';
+                            $hrefFechar = '#modalReabrir';
+                            $titleFechar = 'Abrir fatura';
+                            $colorFechar = 'inverse';
                             $iconFechar = 'fas fa-lock';
                             $iconFaturaAtual = null;
                         } else if ($r->fatura_aberta == 2) {
+                            //FATURA FUTURA
                             $status = '';
                             $label = '';
                             $disabledPagar = 'disabled';
                             $disabled = 'disabled';
-                            $iconFechar = 'fas fa-unlock';
+                            $hrefFechar = '#modalFechar';
+                            $titleFechar = 'Abrir fatura';
+                            $colorFechar = 'inverse';
+                            $iconFechar = 'fas fa-lock';
                             $iconFaturaAtual = null;
                         } else {
+                            //FATURA ABERTA
                             $status = 'ABERTA';
                             $label = 'primary';
+                            $hrefFechar = '#modalFechar';
+                            $titleFechar = 'Fechar fatura';
                             $disabledPagar = 'disabled';
+                            $colorFechar = 'default';
                             $iconFechar = 'fas fa-unlock';
                             $iconFaturaAtual = ' <i class="fas fa-long-arrow-alt-left fa-lg fa-fw" title="Fatura atual"></i>';
                         }
@@ -210,7 +222,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         $valor_total = $this->fatura_model->getValorTotalFatura($r->id_fatura);
 
                         echo '<tr>';
-                        echo '<td><a href="' . base_url('financeiro/faturas/detalhes/' . $r->id_fatura . '/' . $cartao_selecionado->id_cartao) . '">' . $mes . ' / ' . $ano . $iconFaturaAtual .'</a></td>';
+                        echo '<td><a href="' . base_url('financeiro/faturas/detalhes/' . $r->id_fatura . '/' . $cartao_selecionado->id_cartao) . '">' . $mes . ' / ' . $ano . $iconFaturaAtual . '</a></td>';
                         echo '<td>' . date(('d/m/Y'), strtotime($r->vencimento)) . $statusVinculo . '</td>';
 
                         echo '<td style="cursor: pointer; color: ' . $color . '" class="i-copy-total"><i class="fas fa-copy fa-fw hidden icon-total"></i> ' . number_format($valor_total, 2, ',', '.') . '</td>';
@@ -222,7 +234,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             echo '<button ' . $disabledPagar . ' href="#modalPagar" style="margin-right: 1%"  class="btn btn-success btn-sm pagar" data-toggle="modal" title="Pagar Fatura" id_fatura="' . $r->id_fatura . '">
                                 <i class="' . $iconPagar . ' fa-lg fa-fw"></i></button>';
 
-                            echo '<button ' . $disabled . ' href="#modalFechar" style="margin-right: 1%"  class="btn btn-inverse btn-sm fechar" data-toggle="modal" title="Fechar Fatura" id_fatura="' . $r->id_fatura . '">
+                            echo '<button ' . $disabled . ' href="' . $hrefFechar . '" style="margin-right: 1%"  class="btn btn-' . $colorFechar . ' btn-sm fechar" data-toggle="modal" title="' . $titleFechar . '" id_fatura="' . $r->id_fatura . '">
                                 <i class="' . $iconFechar . ' fa-lg fa-fw"></i></button>';
 
                             echo '<button href="' . $hrefVinculo . '" style="margin-right: 1%"  class="btn btn-' . $colorVinculo . ' btn-sm vinculo" data-toggle="modal" title="' . $titleVinculo . '" id_fatura="' . $r->id_fatura . '">
@@ -568,21 +580,48 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 <div class="modal fade" id="modalFechar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-inverse">
+            <div class="modal-header bg-default">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white">Fechar fatura</h4>
+                <h4 class="modal-title">Fechar fatura</h4>
             </div>
             <form id="formFechar" action="<?php echo base_url('financeiro/faturas/fechar') ?>" method="post">
                 <div class="modal-body">
                     <p class="font-weight-bold">Confirma o fechamento desta fatura?</p>
-                    <input id="id_fatura" type="hidden" name="id_fatura" value="" />
-                    <input id="urlFecharFatura" type="hidden" name="urlAtual" value="" />
+                    <input class="id_fatura" type="hidden" name="id_fatura" value="" />
+                    <input class="urlAtual" type="hidden" name="urlAtual" value="" />
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                         <i class="fa fa-times fa-fw"></i> Cancelar
                     </button>
-                    <button class="btn btn-inverse btn-sm" id="btnFechar">
+                    <button class="btn btn-primary btn-sm" id="btnFechar">
+                        <i class="fa fa-check fa-fw"></i> Confirmar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal REABRIR FATURA -->
+<div class="modal fade" id="modalReabrir" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-inverse">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-white">Reabrir fatura</h4>
+            </div>
+            <form id="formFechar" action="<?php echo base_url('financeiro/faturas/reabrir') ?>" method="post">
+                <div class="modal-body">
+                    <p class="font-weight-bold">Confirma a reabertura desta fatura?</p>
+                    <input class="id_fatura" type="hidden" name="id_fatura" value="" />
+                    <input class="urlAtual" type="hidden" name="urlAtual" value="" />
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                        <i class="fa fa-times fa-fw"></i> Cancelar
+                    </button>
+                    <button class="btn btn-primary btn-sm" id="btnFechar">
                         <i class="fa fa-check fa-fw"></i> Confirmar
                     </button>
                 </div>
@@ -791,7 +830,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         });
 
         $(document).on('click', '.fechar', function(event) {
-            $("#id_fatura").val($(this).attr('id_fatura'));
+            $(".id_fatura").val($(this).attr('id_fatura'));
             $("#urlFecharFatura").val($(location).attr('href'));
         });
 

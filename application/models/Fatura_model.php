@@ -579,4 +579,33 @@ class Fatura_model extends CI_Model
             echo json_encode($row_set);
         }
     }
+
+    function fecharTodasFaturasAbertas($id_cartao, $id_usuario)
+    {
+        $this->db->select('*');
+        $this->db->where('fatura_aberta', 1);
+        $this->db->where('status', 1);
+        $this->db->where('id_usuario', $id_usuario);
+        $this->db->where('id_cartao', $id_cartao);
+        $query = $this->db->get('faturas');
+
+        $results = $query->result_array();
+
+        if ($results) {
+            foreach ($results as $result) {
+                try {
+                    $update = [
+                        'fatura_aberta' => 0
+                    ];
+    
+                    $this->edit('faturas', $update, 'id_fatura', $result['id_fatura']);
+
+                } catch (\Exception $e) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 }

@@ -845,6 +845,35 @@ class Faturas extends CI_Controller
         }
     }
 
+    public function reabrir()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eFaturas')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para reabrir faturas.');
+            redirect(base_url());
+        }
+
+        $urlAtual       = $this->input->post('urlAtual');
+        $faturaAtual    = $this->fatura_model->getFaturaAtual($_POST['id_fatura']);
+
+        $faturaFechadas = $this->fatura_model->fecharTodasFaturasAbertas($faturaAtual->id_cartao, getUserId());
+
+        if ($faturaFechadas) {
+            try {
+                $update = [
+                    'fatura_aberta' => 1,
+                ];
+                $this->fatura_model->edit('faturas', $update, 'id_fatura', $_POST['id_fatura']);
+                $this->session->set_flashdata('sucesso', 'Fatura reaberta com sucesso!');
+                redirect($urlAtual);
+            } catch (\Exception $e) {
+                $this->session->set_flashdata('erro', 'Erro ao tentar reabrir a fatura');
+                redirect($urlAtual);
+            }
+        }
+        $this->session->set_flashdata('erro', 'Erro ao tentar reabrir a fatura');
+        redirect($urlAtual);
+    }
+
     public function excluir()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dFaturas')) {
