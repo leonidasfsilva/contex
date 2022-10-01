@@ -227,6 +227,7 @@
                         </div>
                     </div>
                     <input type="hidden" id="nome" name="nome" value="<?= $_GET['nome'] ?>">
+                    <input type="hidden" name="cartao" value="<?= $idCard ?>">
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir">
