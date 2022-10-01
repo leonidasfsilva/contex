@@ -193,11 +193,13 @@ $fim = $this->input->get('dataFinal');
                 </thead>
                 <tbody>
                     <?php
-                    $saidasPendentes    = 0;
-                    $entradasPendentes  = 0;
-                    $saidasEfetivadas   = 0;
-                    $entradasEfetivadas = 0;
-                    $totalGeral         = 0;
+                    $saidasPendentes    = null;
+                    $entradasPendentes  = null;
+                    $saidasEfetivadas   = null;
+                    $entradasEfetivadas = null;
+                    $totalSaidas        = null;
+                    $totalEntradas      = null;
+                    $totalGeral         = null;
 
                     foreach ($results as $r) {
                         $vencimento = date(('d/m/y'), strtotime($r->data_lancamento));
@@ -289,7 +291,10 @@ $fim = $this->input->get('dataFinal');
 
                         echo '</td>';
                         echo '</tr>';
-                    } ?>
+                    } 
+                    $totalEntradas  = $entradasEfetivadas + $entradasPendentes;
+                    $totalSaidas    = $saidasEfetivadas + $saidasPendentes;
+                    ?>
                 </tbody>
             </table>
             <div id="somatorio_lancamentos" class="panel-footer hidden">
@@ -357,6 +362,15 @@ $fim = $this->input->get('dataFinal');
                         <?php echo number_format($entradasEfetivadas, 2, ',', '.') ?></td>
                 </tr>
             <?php } ?>
+            <?php if ($entradasEfetivadas && $entradasPendentes) { ?>
+                <tr>
+                    <td colspan="2" style="text-align: left;">(=) SALDO TOTAL DE ENTRADAS</td>
+                    <td colspan="1" style="text-align: right;">
+                        <?php echo number_format($totalEntradas, 2, ',', '.') ?>
+                    </td>
+                </tr>
+            <?php } ?>
+
             <?php if ($saidasPendentes) { ?>
                 <tr>
                     <td colspan="2" style="text-align: left; color: red">(-) SALDO DE SAÍDAS PENDENTES</td>
@@ -371,11 +385,19 @@ $fim = $this->input->get('dataFinal');
                         <?php echo number_format($saidasEfetivadas, 2, ',', '.') ?></td>
                 </tr>
             <?php } ?>
+            <?php if ($saidasEfetivadas && $saidasPendentes) { ?>
+                <tr>
+                    <td colspan="2" style="text-align: left;">(=) SALDO TOTAL DE SAÍDAS</td>
+                    <td colspan="1" style="text-align: right;">
+                        <?php echo number_format($totalSaidas, 2, ',', '.') ?>
+                    </td>
+                </tr>
+            <?php } ?>
             <?php if ($totalGeral) { ?>
                 <tr>
                     <td colspan="2" style="text-align: left; font-weight: bold">(=) SALDO TOTAL DO PERÍODO</td>
                     <td colspan="1" style="text-align: right; font-weight: bold">
-                        <strong><?php echo number_format($totalGeral, 2, ',', '.') ?></strong>
+                        <?php echo number_format($totalGeral, 2, ',', '.') ?>
                     </td>
                 </tr>
             <?php } ?>
