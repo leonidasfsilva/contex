@@ -1171,43 +1171,69 @@ class Faturas extends CI_Controller
 
         $nome       = $_GET['nome'] ?? null;
         $idCartao   = $_GET['cartao'] ?? null;
+        $mes        = $_GET['mesReferencia'] ?? null;
+        $ano        = $_GET['anoReferencia'] ?? null;
 
         if (!is_string($nome) || is_numeric($nome)) {
             $this->session->set_flashdata('erro', 'O nome pesquisado para o terceiro é inválido');
             redirect('financeiro/faturas?cartao=' . $idCartao);
         }
 
-        $data               = [];
-        $data ['idCartao']  = $idCartao;
-        $faturasTerceiros   = $this->fatura_model->getFaturasTerceiros(getUserId(), $nome);
+        $todayDate          = date('Y-m-d');
+        $todayArray         = explode('-', $todayDate);
+        $mesReferencia      = $todayArray[1];
+        $anoReferencia      = $todayArray[0];
+        $result             = [];
+        $data['idCard']     = $idCartao;
+        $year               = date('Y');
+        $keys               = range(2018, $year + 5);
+        $yearsList          = array_combine($keys, $keys);
+
+        if ($mes) {
+            $mesReferencia = $mes;
+        }
+
+        if ($ano) {
+            $anoReferencia = $ano;
+        }
+
+        $faturasTerceiros   = $this->fatura_model->getFaturasTerceiros(getUserId(), $nome, $mesReferencia, $anoReferencia);
+
+        $dateFormatterExtended = new \IntlDateFormatter(
+            'pt_BR',
+            \IntlDateFormatter::FULL,
+            \IntlDateFormatter::NONE,
+            'America/Sao_Paulo',
+            \IntlDateFormatter::GREGORIAN,
+            "MMMM"
+        );
+
+        $dateObj    = DateTime::createFromFormat('!m', ($mesReferencia));
+        $monthName  = str_replace('.', '', strtoupper($dateFormatterExtended->format($dateObj)));
 
         if ($faturasTerceiros) {
             foreach ($faturasTerceiros as $fatura) {
-                $data['nome']               = $nome;
-                $lancamentosTerceiros       = $this->fatura_model->getLancamentosTerceiros(getUserId(), $fatura['id_fatura'], $nome);
+                $lancamentosTerceiros       = $this->fatura_model->getLancamentosTerceiros(getUserId(), $fatura['id_cartao'], $nome, $mesReferencia);
                 $data['lancamentoEditavel'] = $this->fatura_model->getLancamentoEditavel($fatura['mes_referencia'], $fatura['ano_referencia']);
 
-                $dateFormatterExtended = new \IntlDateFormatter(
-                    'pt_BR',
-                    \IntlDateFormatter::FULL,
-                    \IntlDateFormatter::NONE,
-                    'America/Sao_Paulo',
-                    \IntlDateFormatter::GREGORIAN,
-                    "MMMM"
-                );
-            
-                $dateObj        = DateTime::createFromFormat('!m', ($fatura['mes_referencia']));
-                $nomeMes        = str_replace('.', '', strtoupper($dateFormatterExtended->format($dateObj)));
-                $mesReferencia  = $nomeMes . ' / ' . $fatura['ano_referencia'];
+                $dateObj    = DateTime::createFromFormat('!m', ($fatura['mes_referencia']));
+                $monthName  = str_replace('.', '', strtoupper($dateFormatterExtended->format($dateObj)));
+                $reference  = $monthName . ' / ' . $fatura['ano_referencia'];
 
-                $data['results'][$fatura['id_fatura']]                  = $fatura;
-                $data['results'][$fatura['id_fatura']]['cartao']        = $this->cartoes_model->getDetalhesCartao($fatura['id_cartao']);
-                $data['results'][$fatura['id_fatura']]['referencia']    = $mesReferencia;
-                $data['results'][$fatura['id_fatura']]['lancamentos']   = $lancamentosTerceiros;
+                $result[$fatura['id_fatura']]                  = $fatura;
+                $result[$fatura['id_fatura']]['cartao']        = $this->cartoes_model->getDetalhesCartao($fatura['id_cartao']);
+                $result[$fatura['id_fatura']]['reference']     = $reference;
+                $result[$fatura['id_fatura']]['lancamentos']   = $lancamentosTerceiros;
             }
         }
 
-        $data['view'] = 'faturas/lancamentos_terceiros';
+        $data['results']            = $result;
+        $data['name']               = $nome;
+        $data['yearsList']          = $yearsList;
+        $data['referencePeriod']    = sprintf('%s / %s', $monthName, $anoReferencia);
+        $data['referenceMonth']     = $mesReferencia;
+        $data['referenceYear']      = $anoReferencia;
+        $data['view']               = 'faturas/lancamentos_terceiros';
         $this->load->view('tema/topo', $data);
     }
 

@@ -123,7 +123,7 @@ $fim = $this->input->get('dataFinal');
         <div class="panel-heading">
             <h2>
                 Extrato de Lançamentos
-                <?= ($referenceMonth ? "<span class='badge badge-primary' style='margin-left: 10px;'>Período: $month</span>" : null) ?>
+                <?= (isset($referenceMonth) && $referenceMonth ? "<span class='badge badge-primary' style='margin-left: 10px;'>Período: $month</span>" : null) ?>
             </h2>
             <div class="panel-ctrls">
                 <a href="#" class="button-icon close-panel">

@@ -496,18 +496,24 @@ class Fatura_model extends CI_Model
         return $this->db->get()->row('id_fatura');
     }
 
-    function getFaturasTerceiros($idUsuario, $nome)
+    function getFaturasTerceiros($idUsuario, $nome, $mesReferencia, $anoReferencia)
     {
         if (!is_string($nome) || is_numeric($nome)) {
             return false;
         }
 
-        $query = "SELECT DISTINCT f.*
+        $query = "SELECT f.*,
+            lfa.mes_referencia
             FROM faturas f
             INNER JOIN lancamentos_faturas lf
             ON lf.id_fatura = f.id_fatura
+            INNER JOIN lancamentos_faturas_assoc lfa
+            ON lfa.id_lancamento = lf.id_lancamento
             WHERE lf.nome_cliente LIKE '$nome'
+            AND lfa.mes_referencia = $mesReferencia
+            AND lfa.ano_referencia = $anoReferencia
             AND f.id_usuario = $idUsuario
+            GROUP BY f.id_cartao
             ORDER BY lf.criado_em DESC";
 
         $resultQuery = $this->db->query($query);
@@ -519,16 +525,16 @@ class Fatura_model extends CI_Model
         return $result;
     }
 
-    function getLancamentosTerceiros($idUsuario, $idFatura, $nome)
+    function getLancamentosTerceiros($idUsuario, $idCartao, $nome, $mesReferencia)
     {
         if (!is_string($nome) || is_numeric($nome)) {
             return false;
         }
 
-        $query = "SELECT lf.*,
-            lfa.valor_parcela,
-            lfa.id_fatura,
-            lfa.n_parcela
+        $query = "SELECT lfa.*,
+            lf.nome_cliente,
+            lf.descricao,
+            f.id_cartao
             FROM lancamentos_faturas lf
             INNER JOIN faturas f
             ON lf.id_fatura = f.id_fatura
@@ -536,7 +542,8 @@ class Fatura_model extends CI_Model
             ON lfa.id_lancamento = lf.id_lancamento
             WHERE lf.nome_cliente LIKE '$nome'
             AND f.id_usuario = $idUsuario
-            AND f.id_fatura = $idFatura
+            AND f.id_cartao = $idCartao
+            AND lfa.mes_referencia = $mesReferencia
             AND lf.status = 1
             AND lfa.status = 1
             ORDER BY lf.criado_em DESC";

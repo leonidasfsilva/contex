@@ -241,7 +241,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                     '" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento_1 . ' ' . $disabled_lancamento_2 . '>' .
                                     strtoupper($s->descricao) .
                                     '</a></td>';
-                                echo '<td><a href="' . base_url('financeiro/faturas/terceiros?nome=') . $s->nome_cliente . '">' . strtoupper($s->nome_cliente) . '</a></td>';
+                                echo '<td><a href="' . sprintf(base_url('financeiro/faturas/terceiros?mesReferencia=%s&anoReferencia=%s&cartao=%s&nome=%s'), $mes_referencia, $s->ano_referencia, $cartao->id_cartao, $s->nome_cliente) . '">' . strtoupper($s->nome_cliente) . '</a></td>';
                                 echo '<td>' . $n_parcela . '/' . $total_parcelas . '</td>';
                                 echo '<td class="valor_parcela" style=" color: ' . $color .
                                     '"><span>' . number_format($r->valor_parcela, 2, ',', '.') .
