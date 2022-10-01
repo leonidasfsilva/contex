@@ -1588,8 +1588,8 @@ body.nooverflow {
 }
 
 .panel-body .panel-footer {
-    margin: 0 -24px -24px;
-    padding: 24px;
+    margin: 0;
+    padding: 15px;
     border-bottom-right-radius: 2px;
     border-bottom-left-radius: 2px;
     border-top: 0;

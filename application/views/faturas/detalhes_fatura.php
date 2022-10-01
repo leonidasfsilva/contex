@@ -185,7 +185,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         <th class="th_soma hidden" style="width: 10px !important;">Soma</th>
                         <th style="width: 100px !important;">Data Compra</th>
                         <th style="width: 300px !important;">Descrição</th>
-                        <th style="width: 200px !important;">Cliente</th>
+                        <th style="width: 200px !important;">Terceiro</th>
                         <th>Parcela</th>
                         <th>Valor Parcela (R$) <br> Valor Compra (R$)</th>
                         <th style="width: 100px !important;">Ações</th>
@@ -426,11 +426,11 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-6">
-                            <label for="valor" class="font-weight-bold">Valor da Compra *</label>
+                            <label for="valor" class="font-weight-bold">Valor do lançamento *</label>
                             <input class="form-control money valor" id="valor" type="text" name="valor" />
                         </div>
                         <div class="form-group col-lg-6">
-                            <label for="data_compra" class="font-weight-bold">Data da Compra</label>
+                            <label for="data_compra" class="font-weight-bold">Data do lançamento</label>
                             <input class="form-control datepicker" id="data_compra" type="text" name="data_compra" />
                         </div>
                     </div>
@@ -443,7 +443,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         </div>
                         <div id="divParcelamento" class="hidden">
                             <div class="form-group col-lg-4">
-                                <label for="qnt_parcelas" class="font-weight-bold">Nº Parcelas</label>
+                                <label for="qnt_parcelas" class="font-weight-bold">Nº parcelas</label>
                                 <select name="qnt_parcelas" id="qnt_parcelas" class="form-control qnt_parcelas">
                                     <option value="">
                                         << Selecione>>
@@ -456,7 +456,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                 </select>
                             </div>
                             <div class="form-group col-lg-4">
-                                <label for="valor_parcela" class="font-weight-bold">Valor da Parcela *</label>
+                                <label for="valor_parcela" class="font-weight-bold">Valor da parcela *</label>
                                 <input class="form-control money parcela" id="valor_parcela" type="text" name="valor_parcela" />
                             </div>
                         </div>
@@ -470,7 +470,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         </div>
                         <div id="divTerceiros" class="hidden">
                             <div class="form-group col-lg-6">
-                                <label for="nome_cliente" class="font-weight-bold">Cliente</label>
+                                <label for="nome_cliente" class="font-weight-bold">Nome do terceiro</label>
                                 <input class="form-control" id="nome_cliente" type="text" name="nome_cliente" />
                                 <input id="id_cliente" type="hidden" name="id_cliente" />
                             </div>

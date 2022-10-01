@@ -1215,7 +1215,7 @@ class Faturas extends CI_Controller
         $result             = [];
         $data['idCard']     = $idCartao;
         $year               = date('Y');
-        $keys               = range(2018, $year + 5);
+        $keys               = range(2018, $year + 2);
         $yearsList          = array_combine($keys, $keys);
 
         if ($mes) {

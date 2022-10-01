@@ -113,32 +113,32 @@
                                                 } ?>
                                             </tbody>
                                         </table>
-                                        <div class="panel" style="margin: 0 !important;">
-                                            <div class="panel-footer font-weight-bold">
-                                                <p>
-                                                    Resumo da Fatura
-                                                </p>
-                                            </div>
-                                            <div class="panel-body panel-no-padding">
-                                                <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
-                                                    <thead>
-                                                        <tr>
-                                                            <th colspan="2" style="text-align: left !important;">Descrição</th>
-                                                            <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
-                                                        </tr>
-                                                    </thead>
+                                    </div>
+                                    <div class="panel" style="margin: 0 !important;">
+                                        <div class="panel-footer font-weight-bold">
+                                            <p>
+                                                Resumo da Fatura #<?= $result['id_fatura'] ?>
+                                            </p>
+                                        </div>
+                                        <div class="panel-body panel-no-padding">
+                                            <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
+                                                <thead>
                                                     <tr>
-                                                        <td colspan="2" style="text-align: left; color: red">(-) SALDO DEVEDOR NA FATURA</td>
-                                                        <td colspan="1" style="text-align: right; color: red">
-                                                            <input type="hidden" id="debit-balance" value="<?php echo number_format($debitoFatura, 2, ',', '.') ?>">
-                                                            <span style="cursor: pointer;" title="Copiar para área de transferência" id="i-copy-debit">
-                                                                <i class="fas fa-copy fa-fw hidden" id="icon-debit"></i>
-                                                                <?php echo number_format($debitoFatura, 2, ',', '.') ?>
-                                                            </span>
-                                                        </td>
+                                                        <th colspan="2" style="text-align: left !important;">Descrição</th>
+                                                        <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
                                                     </tr>
-                                                </table>
-                                            </div>
+                                                </thead>
+                                                <tr>
+                                                    <td colspan="2" style="text-align: left; color: red">(-) SALDO DEVEDOR NA FATURA</td>
+                                                    <td colspan="1" style="text-align: right; color: red">
+                                                        <input type="hidden" id="debit-balance" value="<?php echo number_format($debitoFatura, 2, ',', '.') ?>">
+                                                        <span style="cursor: pointer;" title="Copiar para área de transferência" id="i-copy-debit">
+                                                            <i class="fas fa-copy fa-fw hidden" id="icon-debit"></i>
+                                                            <?php echo number_format($debitoFatura, 2, ',', '.') ?>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
@@ -150,7 +150,7 @@
             <div class="panel panel-midnightblue" style="margin: 0 !important;">
                 <div class="panel-heading font-weight-bold">
                     <h2>
-                        Resumo Geral
+                        Resumo Total do Período <?= $result['reference'] ?>
                     </h2>
                 </div>
                 <div class="panel-body panel-no-padding">
@@ -162,7 +162,7 @@
                             </tr>
                         </thead>
                         <tr>
-                            <td colspan="2" style="text-align: left; color: red">(-) SALDO TOTAL DEVEDOR</td>
+                            <td colspan="2" style="text-align: left; color: red">(-) SALDO DEVEDOR TOTAL</td>
                             <td colspan="1" style="text-align: right; color: red">
                                 <input type="hidden" id="debit-balance" value="<?php echo number_format($totalSum, 2, ',', '.') ?>">
                                 <span style="cursor: pointer;" title="Copiar para área de transferência" id="i-copy-debit">
