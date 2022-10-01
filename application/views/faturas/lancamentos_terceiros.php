@@ -199,9 +199,6 @@
                                 Mês específico
                             </label>
                             <select class="form-control" id="mesReferenciaSelect" name="mesReferencia">
-                                <option value="">
-                                    << Selecione>>
-                                </option>
                                 <option value="01" <?= ($referenceMonth == '01') ? 'selected' : null ?>>01 - JANEIRO</option>
                                 <option value="02" <?= ($referenceMonth == '02') ? 'selected' : null ?>>02 - FEVEREIRO</option>
                                 <option value="03" <?= ($referenceMonth == '03') ? 'selected' : null ?>>03 - MARÇO</option>
@@ -221,9 +218,6 @@
                                 Ano específico
                             </label>
                             <select class="form-control" id="anoReferenciaSelect" name="anoReferencia">
-                                <option value="">
-                                    << Selecione>>
-                                </option>
                                 <?php if ($yearsList) {
                                     foreach ($yearsList as $year) { ?>
                                         <option value="<?= $year ?>" <?= ($referenceYear == $year ? 'selected' : '') ?>><?= $year ?></option>
