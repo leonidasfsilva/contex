@@ -61,11 +61,11 @@ $fim = $this->input->get('dataFinal');
                 <i class="fas fa-expand-arrows-alt expand-icon"></i>
             </a>
             <a href="#" class="button-icon panel-collapse">
-                <i class="fas fa-minus"></i>
+                <i class="fas fa-plus"></i>
             </a>
         </div>
     </div>
-    <div class="panel-body panel-no-padding">
+    <div class="panel-body panel-no-padding" style="display: none;">
         <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
             <thead>
                 <tr role="row">
@@ -102,12 +102,39 @@ $fim = $this->input->get('dataFinal');
     </div>
 </div>
 
-<?php if (!$results) { ?>
+<?php
+$saidasPendentes    = null;
+$entradasPendentes  = null;
+$saidasEfetivadas   = null;
+$entradasEfetivadas = null;
+$totalSaidas        = null;
+$totalEntradas      = null;
+$totalGeral         = null;
+$prevLink           = null;
+$nextLink           = null;
+$monthText          = null;
+
+if (isset($referenceMonth) && $referenceMonth) {
+    $prevReferenceMonth = $referenceMonth - 1;
+    $nextReferenceMonth = $referenceMonth + 1;
+    if ($referenceMonth == '12') {
+        $nextReferenceMonth = '01';
+    }
+    if ($referenceMonth == '01') {
+        $prevReferenceMonth = '12';
+    }
+    $prevLink   = "<a href=" . base_url('financeiro/lancamentos?periodo=mensal&mesReferencia=') . $prevReferenceMonth  . " title='Período anterior'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-left'></i></span></a>";
+    $monthText  = "<span class='badge badge-primary' style='margin-left: 10px;'>Período: $month</span>";
+    $nextLink   = "<a href=" . base_url('financeiro/lancamentos?periodo=mensal&mesReferencia=') . $nextReferenceMonth  . " title='Próximo período'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-right'></i></span></a>";
+}
+
+if (!$results) {
+?>
     <div class="panel panel-midnightblue">
         <div class="panel-heading">
             <h2>
                 Extrato de Lançamentos
-                <?= ($referenceMonth ? "<span class='badge badge-primary' style='margin-left: 10px;'>Período: $month</span>" : null) ?>
+                <?= ($referenceMonth ? $prevLink . $monthText . $nextLink : null) ?>
             </h2>
             <div class="panel-ctrls">
                 <a href="#" class="button-icon close-panel">
@@ -145,7 +172,7 @@ $fim = $this->input->get('dataFinal');
         <div class="panel-heading">
             <h2>
                 Extrato de Lançamentos
-                <?= (isset($referenceMonth) && $referenceMonth ? "<span class='badge badge-primary' style='margin-left: 10px;'>Período: $month</span>" : null) ?>
+                <?= ($referenceMonth ? $prevLink . $monthText . $nextLink : null) ?>
             </h2>
             <div class="panel-ctrls">
                 <a href="#" class="button-icon close-panel">
@@ -193,14 +220,6 @@ $fim = $this->input->get('dataFinal');
                 </thead>
                 <tbody>
                     <?php
-                    $saidasPendentes    = null;
-                    $entradasPendentes  = null;
-                    $saidasEfetivadas   = null;
-                    $entradasEfetivadas = null;
-                    $totalSaidas        = null;
-                    $totalEntradas      = null;
-                    $totalGeral         = null;
-
                     foreach ($results as $r) {
                         $vencimento = date(('d/m/y'), strtotime($r->data_lancamento));
 
@@ -291,7 +310,7 @@ $fim = $this->input->get('dataFinal');
 
                         echo '</td>';
                         echo '</tr>';
-                    } 
+                    }
                     $totalEntradas  = $entradasEfetivadas + $entradasPendentes;
                     $totalSaidas    = $saidasEfetivadas + $saidasPendentes;
                     ?>

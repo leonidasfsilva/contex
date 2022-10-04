@@ -9,7 +9,7 @@
                 post: true
             },
             dataType: 'html',
-            success: function () {
+            success: function() {
                 atualizaNotificacoesUsuario()
             }
         });
@@ -23,15 +23,15 @@
                 id: id
             },
             dataType: 'html',
-            success: function () {
+            success: function() {
                 atualizaNotificacoesUsuario()
                 window.location.replace('<?= base_url('notificacoes'); ?>')
             }
         });
     }
 
-    $(document).ready(function () {
-        setInterval(function () {
+    $(document).ready(function() {
+        setInterval(function() {
             if (conectado === true) {
                 // atualizaNotificacoesUsuario();
             }
@@ -46,7 +46,7 @@
             data: {
                 request: true
             },
-            success: function (data) {
+            success: function(data) {
                 if (data.result === true) {
                     let link;
                     let icone;
@@ -89,7 +89,7 @@
                     if (data.retorno !== null) {
                         // console.log('atualizaNotificacoesUsuario(): usuario possui novas notificacoes')
                         $('#notifications-panel-footer').removeClass('hidden')
-                        $(data.retorno).each(function (index, item) {
+                        $(data.retorno).each(function(index, item) {
                             if (height < 210) {
                                 height = height + 72;
                             }
@@ -132,21 +132,21 @@
         });
     }
 
-    $(document).on('ready', function (event) {
+    $(document).on('ready', function(event) {
         atualizaNotificacoesUsuario();
 
         $("#urlAtual, .urlAtual").val($(location).attr('href'));
 
-        $('.modal_anuncio').each(function (key, value) {
+        $('.modal_anuncio').each(function(key, value) {
             $('.modal_anuncio').modal('show');
         });
 
-        $('[disabled="disabled"]').click(function (e) {
+        $('[disabled="disabled"]').click(function(e) {
             e.preventDefault();
         });
 
         $(".preloader").show();
-        setTimeout(function () {
+        setTimeout(function() {
             hidePreLoader();
         }, 500);
     });
@@ -189,20 +189,25 @@
     }
 
     function hidePreLoader() {
-        if ($(".preloader").fadeOut()) {
-        }
+        if ($(".preloader").fadeOut()) {}
     }
 
-    $(function () {
-        $('.datepicker').inputmask('date', {placeholder: '__/__/____'});
+    $(function() {
+        $('.datepicker').inputmask('date', {
+            placeholder: '__/__/____'
+        });
     });
 
-    $(function () {
-        $(".money").maskMoney({thousands: '.', decimal: ',', allowZero: true});
+    $(function() {
+        $(".money").maskMoney({
+            thousands: '.',
+            decimal: ',',
+            allowZero: true
+        });
         $('.money').prop('type', 'tel');
     });
 
-    $(function () {
+    $(function() {
         $('.popover-btn').popover()
     });
 
@@ -214,12 +219,13 @@
         '[href="#"], ' +
         '[data-toggle="modal"], ' +
         '[data-toggle="collapse"], ' +
-        '[data-toggle="tab"])', function () {
-        $(".subconteudo-principal").hide();
-        $(".preloader").show();
-    });
+        '[data-toggle="tab"])',
+        function() {
+            $(".subconteudo-principal").hide();
+            $(".preloader").show();
+        });
 
-    $(document).on('submit', 'form', function (event) {
+    $(document).on('submit', 'form', function(event) {
         var form = this;
         event.preventDefault();
         // $('#btn-acessar').addClass('disabled');
@@ -233,16 +239,16 @@
             $(".subconteudo-principal").fadeOut();
             $(".preloader").fadeIn();
 
-            setTimeout(function () {
+            setTimeout(function() {
                 form.submit();
             }, 1000);
         }
     });
 
-    $(document).on('click', '#teste-btn', function () {
+    $(document).on('click', '#teste-btn', function() {
         // console.log('teste ok!');
         $(".preloader").fadeIn();
-        setTimeout(function () {
+        setTimeout(function() {
             $(".preloader").fadeOut();
         }, 1000);
     });
@@ -262,19 +268,19 @@
     );
 
     if (!count(array_intersect($segments, $bloqueados)) > 0) { ?>
-    window.onload = function () {
-        // var wrapper = document.body;
-        // wrapper.className += " page-loading";
-        // setTimeout(function () {
-        //     wrapper.classList.remove('page-loading');
-        // }, 2000);
-    };
+        window.onload = function() {
+            // var wrapper = document.body;
+            // wrapper.className += " page-loading";
+            // setTimeout(function () {
+            //     wrapper.classList.remove('page-loading');
+            // }, 2000);
+        };
     <?php
     } ?>
 
-    $(document).ready(function () {
+    $(document).ready(function() {
 
-        $('#body').each(function () {
+        $('#body').each(function() {
             if ($(this).hasClass('sidebar-collapsed')) {
                 // SIDEBAR OCULTO
                 $('#menu-toggle-icon').addClass('fa-ellipsis-v')
@@ -286,7 +292,7 @@
             }
         });
 
-        $('#menu-switcher').click(function () {
+        $('#menu-switcher').click(function() {
             if ($('#body').hasClass('sidebar-collapsed')) {
                 // SIDEBAR OCULTO
                 $('#menu-toggle-icon').toggleClass('fa-chevron-left fa-ellipsis-v')
@@ -309,7 +315,7 @@
         }
 
         //Quando o campo cep possui algum caracter digitado.
-        $("#cep").keyup(function () {
+        $("#cep").keyup(function() {
 
             //Nova variável "cep" somente com dígitos.
             var cep = $(this).val().replace(/\D/g, '');
@@ -332,7 +338,7 @@
                     $("#ibge").val("aguarde...");
 
                     //Consulta o webservice viacep.com.br/
-                    $.getJSON("https://viacep.com.br/ws/" + cep + "/json/", function (dados) {
+                    $.getJSON("https://viacep.com.br/ws/" + cep + "/json/", function(dados) {
 
                         if (!("erro" in dados)) {
                             //Atualiza os campos com os valores da consulta.
@@ -398,7 +404,7 @@
 
         $('.tooltips').tooltip();
 
-        $('.poupanca').click(function () {
+        $('.poupanca').click(function() {
             Swal.fire({
                 position: 'top',
                 type: 'info',
@@ -421,61 +427,61 @@
         });
 
         <?php if ($this->session->flashdata('erro') != null) { ?>
-        Swal.fire({
-            position: 'top',
-            icon: 'error',
-            // timer: 3000,
-            title: 'Erro!',
-            html: '<?= $this->session->flashdata('erro') ?>',
-            showConfirmButton: false,
-            showCancelButton: false,
-            showCloseButton: true,
-            reverseButtons: true,
-            confirmButtonText: '<i class="fa fa-refresh fa-fw"></i> Tentar de novo ',
-            cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
-        }).then((result) => {
-            if (result.value) {
-                recuperar_senha();
-            } else {
+            Swal.fire({
+                position: 'top',
+                icon: 'error',
+                // timer: 3000,
+                title: 'Erro!',
+                html: '<?= $this->session->flashdata('erro') ?>',
+                showConfirmButton: false,
+                showCancelButton: false,
+                showCloseButton: true,
+                reverseButtons: true,
+                confirmButtonText: '<i class="fa fa-refresh fa-fw"></i> Tentar de novo ',
+                cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
+            }).then((result) => {
+                if (result.value) {
+                    recuperar_senha();
+                } else {
 
-            }
-        });
+                }
+            });
         <?php } ?>
 
         <?php if ($this->session->flashdata('sucesso') != null) { ?>
-        Swal.fire({
-            position: 'top',
-            icon: 'success',
-            title: 'Feito!',
-            timer: 3000,
-            html: '<?= $this->session->flashdata('sucesso') ?>',
-            showConfirmButton: false,
-            showCancelButton: false,
-            showCloseButton: true,
-            confirmButtonText: '<i class="fa fa-check fa-fw"></i> OK ',
-            cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
-            reverseButtons: true,
-        }).then((result) => {
-            if (result.value) {
+            Swal.fire({
+                position: 'top',
+                icon: 'success',
+                title: 'Feito!',
+                timer: 3000,
+                html: '<?= $this->session->flashdata('sucesso') ?>',
+                showConfirmButton: false,
+                showCancelButton: false,
+                showCloseButton: true,
+                confirmButtonText: '<i class="fa fa-check fa-fw"></i> OK ',
+                cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
+                reverseButtons: true,
+            }).then((result) => {
+                if (result.value) {
 
-            } else {
+                } else {
 
-            }
-        });
+                }
+            });
         <?php } ?>
 
         $.fn.extend({
-            toggleText: function (a, b) {
+            toggleText: function(a, b) {
                 return this.text(this.text() == b ? a : b);
             }
         });
 
-        $.each($('.expand-icon'), function (key, value) {
+        $.each($('.expand-icon'), function(key, value) {
             $(this).attr('class', 'fas fa-expand expand-icon');
             $(this).attr('title', 'Expandir');
         });
 
-        $(".panel .expand").click(function () {
+        $(".panel .expand").click(function() {
             var n = $(this).closest(".panel");
             var m = $(this).find(".expand-icon");
             n.toggleClass("widget-fullscreen");
@@ -489,16 +495,22 @@
             }
         });
 
-        $(".panel .close-panel").click(function () {
+        $(".panel .close-panel").click(function() {
             $(this).closest(".panel").hide();
         });
 
         // -------------------------------
         // Panel Collapses
         // -------------------------------
-        $('.panel-collapse').click(function () {
-            $(this).children().toggleClass("fa-minus fa-plus");
-            $(this).closest(".panel-heading").next().slideToggle({duration: 200});
+        $('.panel-collapse').click(function() {
+            if ($(this).children().hasClass('fa-chevron-up') || $(this).children().hasClass('fa-chevron-down')) {
+                $(this).children().toggleClass("fa-chevron-up fa-chevron-down");
+            } else {
+                $(this).children().toggleClass("fa-minus fa-plus");
+            }
+            $(this).closest(".panel-heading").next().slideToggle({
+                duration: 200
+            });
             $(this).closest(".panel-heading").toggleClass('rounded-bottom');
             return false;
         });
