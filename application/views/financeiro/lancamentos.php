@@ -123,9 +123,11 @@ if (isset($referenceMonth) && $referenceMonth) {
     if ($referenceMonth == '01') {
         $prevReferenceMonth = '12';
     }
-    $prevLink   = "<a href=" . base_url('financeiro/lancamentos?periodo=mensal&mesReferencia=') . $prevReferenceMonth  . " title='Período anterior'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-left'></i></span></a>";
+    $prevLink   = "<a href=" . base_url('financeiro/lancamentos?periodo=mensal&mesReferencia=') . $prevReferenceMonth .
+        " title='Período anterior'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-left'></i></span></a>";
     $monthText  = "<span class='badge badge-primary' style='margin-left: 10px;'>Período: $month</span>";
-    $nextLink   = "<a href=" . base_url('financeiro/lancamentos?periodo=mensal&mesReferencia=') . $nextReferenceMonth  . " title='Próximo período'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-right'></i></span></a>";
+    $nextLink   = "<a href=" . base_url('financeiro/lancamentos?periodo=mensal&mesReferencia=') . $nextReferenceMonth .
+        " title='Próximo período'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-right'></i></span></a>";
 }
 
 if (!$results) {
