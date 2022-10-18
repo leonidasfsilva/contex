@@ -187,7 +187,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             $iconFaturaAtual = ' <i class="fas fa-long-arrow-alt-left fa-lg fa-fw" title="Fatura atual"></i>';
                         }
 
-                        if (getVinculoFatura($r->id_fatura) == 0) {
+                        if (!getVinculoFatura($r->id_fatura)) {
                             $statusVinculo = null;
                             $hrefVinculo = '#modalVincular';
                             $titleVinculo = 'Fatura não vinculada';

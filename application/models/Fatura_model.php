@@ -481,12 +481,20 @@ class Fatura_model extends CI_Model
 
     function getVinculoFatura($idFatura)
     {
-        $this->db->select('*');
-        $this->db->from('lancamentos');
-        $this->db->where('status', 1);
-        $this->db->where('id_fatura', $idFatura);
+        $count = $this->db->select('*')
+            ->from('lancamentos')
+            ->where('status', 1)
+            ->where('id_fatura', $idFatura);
 
-        return $this->db->count_all_results();
+        if ($count->count_all_results() > 0) {
+            $this->db
+                ->select('*')
+                ->from('lancamentos')
+                ->where('status', 1)
+                ->where('id_fatura', $idFatura);
+            return $this->db->get()->row();
+        }
+        return false;
     }
 
     function getFaturaByLancamento($idLancamento)
@@ -597,9 +605,8 @@ class Fatura_model extends CI_Model
                     $update = [
                         'fatura_aberta' => 0
                     ];
-    
-                    $this->edit('faturas', $update, 'id_fatura', $result['id_fatura']);
 
+                    $this->edit('faturas', $update, 'id_fatura', $result['id_fatura']);
                 } catch (\Exception $e) {
                     return false;
                 }
