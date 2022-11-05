@@ -1,9 +1,9 @@
 <?php
-$status_lancamentos = $this->input->get('status');
-$tipo_lancamentos = $this->input->get('tipo');
-$periodo_lancamentos = $this->input->get('periodo');
-$inicio = $this->input->get('dataInicial');
-$fim = $this->input->get('dataFinal');
+$status_lancamentos     = $this->input->get('status');
+$tipo_lancamentos       = $this->input->get('tipo');
+$periodo_lancamentos    = $this->input->get('periodo');
+$inicio                 = $this->input->get('dataInicial');
+$fim                    = $this->input->get('dataFinal');
 ?>
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
