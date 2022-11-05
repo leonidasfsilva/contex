@@ -26,32 +26,32 @@ class Faturas extends CI_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar faturas.');
             redirect(base_url());
         }
-        $where = '';
-        $periodo = $this->input->get('periodo');
-        $cliente = $this->input->get('terceiro');
+        $where      = '';
+        $periodo    = $this->input->get('periodo');
+        $cliente    = $this->input->get('terceiro');
 
-        $config['base_url'] = site_url() . 'financeiro/faturas/?periodo=' . $periodo;
-        $config['total_rows'] = $this->fatura_model->count('faturas', 'status = 1 AND id_usuario = ' . getUserId());
-        $config['per_page'] = 100;
-        $config['page_query_string'] = true;
-        $config['next_link'] = 'Próxima';
-        $config['prev_link'] = 'Anterior';
-        $config['full_tag_open'] = '<div class="pagination alternate"><ul>';
-        $config['full_tag_close'] = '</ul></div>';
-        $config['num_tag_open'] = '<li>';
-        $config['num_tag_close'] = '</li>';
-        $config['cur_tag_open'] = '<li><a style="color: #2D335B"><b>';
-        $config['cur_tag_close'] = '</b></a></li>';
-        $config['prev_tag_open'] = '<li>';
-        $config['prev_tag_close'] = '</li>';
-        $config['next_tag_open'] = '<li>';
-        $config['next_tag_close'] = '</li>';
-        $config['first_link'] = 'Primeira';
-        $config['last_link'] = 'Última';
-        $config['first_tag_open'] = '<li>';
-        $config['first_tag_close'] = '</li>';
-        $config['last_tag_open'] = '<li>';
-        $config['last_tag_close'] = '</li>';
+        $config['base_url']             = site_url() . 'financeiro/faturas/?periodo=' . $periodo;
+        $config['total_rows']           = $this->fatura_model->count('faturas', 'status = 1 AND id_usuario = ' . getUserId());
+        $config['per_page']             = 100;
+        $config['page_query_string']    = true;
+        $config['next_link']            = 'Próxima';
+        $config['prev_link']            = 'Anterior';
+        $config['full_tag_open']        = '<div class="pagination alternate"><ul>';
+        $config['full_tag_close']       = '</ul></div>';
+        $config['num_tag_open']         = '<li>';
+        $config['num_tag_close']        = '</li>';
+        $config['cur_tag_open']         = '<li><a style="color: #2D335B"><b>';
+        $config['cur_tag_close']        = '</b></a></li>';
+        $config['prev_tag_open']        = '<li>';
+        $config['prev_tag_close']       = '</li>';
+        $config['next_tag_open']        = '<li>';
+        $config['next_tag_close']       = '</li>';
+        $config['first_link']           = 'Primeira';
+        $config['last_link']            = 'Última';
+        $config['first_tag_open']       = '<li>';
+        $config['first_tag_close']      = '</li>';
+        $config['last_tag_open']        = '<li>';
+        $config['last_tag_close']       = '</li>';
 
         $data['parcelas'] = array(
             2   => '2 x',
@@ -70,8 +70,8 @@ class Faturas extends CI_Controller
         $cartaoPrincipal = $this->cartoes_model->getCartaoPrincipalUsuario(getUserId());
 
         if (isset($_GET['cartao'])) {
-            $id_cartao = $_GET['cartao'];
-            $cartao = $this->cartoes_model->cartaoExistente($id_cartao);
+            $id_cartao  = $_GET['cartao'];
+            $cartao     = $this->cartoes_model->cartaoExistente($id_cartao);
 
             if ($cartao->id_usuario != getUserId()) {
                 if ($cartao->id_usuario_titular != getUserId()) {
@@ -88,18 +88,19 @@ class Faturas extends CI_Controller
             $id_cartao = $cartaoPrincipal->id_cartao;
         }
 
-        $data['existe_configuracao'] = $this->fatura_model->existeConfiguracao($id_cartao);
-        $data['dia_vencimento'] = $this->fatura_model->getDiaVencimentoFatura($id_cartao);
-        $data['cartao_selecionado'] = $this->cartoes_model->getDetalhesCartao($id_cartao);
-        $data['cartoes'] = $this->cartoes_model->getCartoesUsuarioFatura(getUserId());
-        $data['saldoVencidas'] = $this->fatura_model->getSaldoFaturasVencidas($id_cartao);
-        $data['saldoPendente'] = $this->fatura_model->getSaldoFaturasPendentes($id_cartao);
-        $data['saldoQuitado'] = $this->fatura_model->getSaldoFaturasPagas($id_cartao);
-        $data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
-        $data['faturaAberta'] = $this->fatura_model->getFaturaAbertaUsuario(getUserId(), $id_cartao);
-        $data['results'] = $this->fatura_model->get('faturas', '*', $where, getUserId(), $id_cartao, $config['per_page'], $this->input->get('per_page'));
-        $data['menuFinanceiro'] = true;
-        $data['view'] = 'faturas/gerenciar_faturas';
+        $data['existe_configuracao']    = $this->fatura_model->existeConfiguracao($id_cartao);
+        $data['dia_vencimento']         = $this->fatura_model->getDiaVencimentoFatura($id_cartao);
+        $data['cartao_selecionado']     = $this->cartoes_model->getDetalhesCartao($id_cartao);
+        $data['cartoes']                = $this->cartoes_model->getCartoesUsuarioFatura(getUserId());
+        $data['saldoVencidas']          = $this->fatura_model->getSaldoFaturasVencidas($id_cartao);
+        $data['saldoPendente']          = $this->fatura_model->getSaldoFaturasPendentes($id_cartao);
+        $data['saldoQuitado']           = $this->fatura_model->getSaldoFaturasPagas($id_cartao);
+        $data['formasPagamento']        = $this->financeiro_model->getFormasPagamento();
+        $data['faturaAberta']           = $this->fatura_model->getFaturaAbertaUsuario(getUserId(), $id_cartao);
+        $data['results']                = $this->fatura_model->get('faturas', '*', $where, getUserId(), $id_cartao, $config['per_page'], $this->input->get('per_page'));
+        $data['menuFinanceiro']         = true;
+        $data['view']                   = 'faturas/gerenciar_faturas';
+
         $this->load->view('tema/topo', $data);
     }
 
@@ -118,35 +119,35 @@ class Faturas extends CI_Controller
             $id_fatura = $id;
         }
 
-        $urlAtual = $this->input->post('urlAtual');
-        $periodo = $this->input->get('periodo');
-        $cliente = $this->input->get('terceiro');
-        $where = null;
+        $urlAtual   = $this->input->post('urlAtual');
+        $periodo    = $this->input->get('periodo');
+        $cliente    = $this->input->get('terceiro');
+        $where      = null;
 
         $this->load->library('pagination');
 
-        $config['base_url'] = site_url() . 'faturas/';
-        $config['total_rows'] = $this->fatura_model->count('faturas', 'status = 1 AND id_usuario = ' . getUserId());
-        $config['per_page'] = 0;
-        $config['page_query_string'] = true;
-        $config['next_link'] = 'Próxima';
-        $config['prev_link'] = 'Anterior';
-        $config['full_tag_open'] = '<div class="pagination alternate"><ul>';
-        $config['full_tag_close'] = '</ul></div>';
-        $config['num_tag_open'] = '<li>';
-        $config['num_tag_close'] = '</li>';
-        $config['cur_tag_open'] = '<li><a style="color: #2D335B"><b>';
-        $config['cur_tag_close'] = '</b></a></li>';
-        $config['prev_tag_open'] = '<li>';
-        $config['prev_tag_close'] = '</li>';
-        $config['next_tag_open'] = '<li>';
-        $config['next_tag_close'] = '</li>';
-        $config['first_link'] = 'Primeira';
-        $config['last_link'] = 'Última';
-        $config['first_tag_open'] = '<li>';
-        $config['first_tag_close'] = '</li>';
-        $config['last_tag_open'] = '<li>';
-        $config['last_tag_close'] = '</li>';
+        $config['base_url']             = site_url() . 'faturas/';
+        $config['total_rows']           = $this->fatura_model->count('faturas', 'status = 1 AND id_usuario = ' . getUserId());
+        $config['per_page']             = 0;
+        $config['page_query_string']    = true;
+        $config['next_link']            = 'Próxima';
+        $config['prev_link']            = 'Anterior';
+        $config['full_tag_open']        = '<div class="pagination alternate"><ul>';
+        $config['full_tag_close']       = '</ul></div>';
+        $config['num_tag_open']         = '<li>';
+        $config['num_tag_close']        = '</li>';
+        $config['cur_tag_open']         = '<li><a style="color: #2D335B"><b>';
+        $config['cur_tag_close']        = '</b></a></li>';
+        $config['prev_tag_open']        = '<li>';
+        $config['prev_tag_close']       = '</li>';
+        $config['next_tag_open']        = '<li>';
+        $config['next_tag_close']       = '</li>';
+        $config['first_link']           = 'Primeira';
+        $config['last_link']            = 'Última';
+        $config['first_tag_open']       = '<li>';
+        $config['first_tag_close']      = '</li>';
+        $config['last_tag_open']        = '<li>';
+        $config['last_tag_close']       = '</li>';
 
         $data['parcelas'] = array(
             2 => '2 x',
@@ -175,34 +176,34 @@ class Faturas extends CI_Controller
 
         if ($faturaExistente) {
             $fatura_selecionada = $this->fatura_model->getFatura($id_fatura);
-            $cartao = $this->cartoes_model->getDetalhesCartao($id_cartao);
+            $cartao             = $this->cartoes_model->getDetalhesCartao($id_cartao);
 
             if (($fatura_selecionada->id_usuario == getUserId() && $cartao->id_usuario == getUserId()) || ($fatura_selecionada->id_cartao == $id_cartao && $cartao->id_usuario_titular == getUserId())) {
                 $orderByLancamentosAssoc = [
-                    'data_compra' => 'desc',
-                    'id_assoc' => 'desc',
+                    'data_compra'   => 'desc',
+                    'id_assoc'      => 'desc',
                 ];
                 $orderByLancamentos = [
                     'id_lancamento' => 'desc',
                 ];
 
-                $data['clientes'] = $this->fatura_model->getClientesPorFatura($id_fatura);
-                $data['selected_cliente'] = $cliente;
-                $data['fatura'] = $this->fatura_model->getDetalhesFatura($id_fatura);
-                $data['id_fatura'] = $id_fatura;
-                $data['id_cartao'] = $id_cartao;
-                $data['cartao'] = $cartao;
-                $data['mes_referencia'] = ($data['fatura']->mes_referencia);
-                $data['ano_referencia'] = ($data['fatura']->ano_referencia);
-                $data['status_fatura'] = ($data['fatura']->fatura_aberta);
-                $data['id_usuario'] = ($data['fatura']->id_usuario);
-                $data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
-                $data['fatura_paga'] = ($data['fatura']->fatura_paga);
+                $data['clientes']           = $this->fatura_model->getClientesPorFatura($id_fatura);
+                $data['selected_cliente']   = $cliente;
+                $data['fatura']             = $this->fatura_model->getDetalhesFatura($id_fatura);
+                $data['id_fatura']          = $id_fatura;
+                $data['id_cartao']          = $id_cartao;
+                $data['cartao']             = $cartao;
+                $data['mes_referencia']     = ($data['fatura']->mes_referencia);
+                $data['ano_referencia']     = ($data['fatura']->ano_referencia);
+                $data['status_fatura']      = ($data['fatura']->fatura_aberta);
+                $data['id_usuario']         = ($data['fatura']->id_usuario);
+                $data['formasPagamento']    = $this->financeiro_model->getFormasPagamento();
+                $data['fatura_paga']        = ($data['fatura']->fatura_paga);
                 $data['lancamentoEditavel'] = $this->fatura_model->getLancamentoEditavel($data['mes_referencia'], $data['ano_referencia']);
-                $data['subresults'] = $this->fatura_model->getLancamentos('lancamentos_faturas', '*', $fatura_selecionada->id_usuario, $where, $config['per_page'], $this->input->get('per_page'), $orderByLancamentos);
-                $data['results'] = $this->fatura_model->getLancamentosAssoc('lancamentos_faturas_assoc', '*', $id_fatura, $where = null, $config['per_page'], $this->input->get('per_page'), $orderByLancamentosAssoc);
-                $data['menuFinanceiro'] = true;
-                $data['menuFaturas'] = true;
+                $data['subresults']         = $this->fatura_model->getLancamentos('lancamentos_faturas', '*', $fatura_selecionada->id_usuario, $where, $config['per_page'], $this->input->get('per_page'), $orderByLancamentos);
+                $data['results']            = $this->fatura_model->getLancamentosAssoc('lancamentos_faturas_assoc', '*', $id_fatura, $where = null, $config['per_page'], $this->input->get('per_page'), $orderByLancamentosAssoc);
+                $data['menuFinanceiro']     = true;
+                $data['menuFaturas']        = true;
 
                 $data['view'] = 'faturas/detalhes_fatura';
                 $this->load->view('tema/topo', $data);
@@ -228,9 +229,9 @@ class Faturas extends CI_Controller
             redirect('financeiro/faturas');
         }
 
-        $urlAtual = $this->input->post('urlAtual');
-        $valor = $this->input->post('valor');
-        $valor_parcela = $this->input->post('valor_parcela');
+        $urlAtual       = $this->input->post('urlAtual');
+        $valor          = $this->input->post('valor');
+        $valor_parcela  = $this->input->post('valor_parcela');
 
         if ($this->input->post('qnt_parcelas')) {
             $qnt_parcelas = $this->input->post('qnt_parcelas');
@@ -251,8 +252,8 @@ class Faturas extends CI_Controller
         }
 
         if ($this->input->post('estorno')) {
-            $estorno = 1;
-            $valor = '-' . $valor;
+            $estorno    = 1;
+            $valor      = '-' . $valor;
         } else {
             $estorno = 0;
         }
@@ -276,25 +277,25 @@ class Faturas extends CI_Controller
         $faturaExistente = $this->fatura_model->getFaturaUsuario($id_fatura);
 
         if ($faturaExistente) {
-            $faturaAtual = $this->fatura_model->getFaturaAtual($id_fatura);
-            $mes = $faturaAtual->mes_referencia;
-            $ano = $faturaAtual->ano_referencia;
+            $faturaAtual    = $this->fatura_model->getFaturaAtual($id_fatura);
+            $mes            = $faturaAtual->mes_referencia;
+            $ano            = $faturaAtual->ano_referencia;
 
             //ARRAY LANCAMENTOS_FATURAS
             $data = array(
-                'id_fatura' => $faturaAtual->id_fatura,
-                // 'id_cliente' => $this->input->post('id_cliente') ?: null,
-                'id_usuario' => $faturaAtual->id_usuario,
-                'descricao' => padronizarString($this->input->post('descricao')),
-                'nome_cliente' => $this->input->post('nome_cliente') ? padronizarString($this->input->post('nome_cliente')) : null,
-                'valor_total' => $valor,
-                'total_parcelas' => $qnt_parcelas,
-                'compra_parcelada' => $compra_parcelada,
-                'compra_terceiros' => $compra_terceiros,
-                'estorno' => $estorno,
-                'data_compra' => $data_compra,
-                'mes_referencia' => $mes,
-                'ano_referencia' => $ano,
+                'id_fatura'         => $faturaAtual->id_fatura,
+                // 'id_cliente'        => $this->input->post('id_cliente') ?: null,
+                'id_usuario'        => $faturaAtual->id_usuario,
+                'descricao'         => padronizarString($this->input->post('descricao')),
+                'nome_cliente'      => $this->input->post('nome_cliente') ? padronizarString($this->input->post('nome_cliente')) : null,
+                'valor_total'       => $valor,
+                'total_parcelas'    => $qnt_parcelas,
+                'compra_parcelada'  => $compra_parcelada,
+                'compra_terceiros'  => $compra_terceiros,
+                'estorno'           => $estorno,
+                'data_compra'       => $data_compra,
+                'mes_referencia'    => $mes,
+                'ano_referencia'    => $ano,
             );
 
             if ($this->fatura_model->add('lancamentos_faturas', $data)) {
@@ -313,9 +314,9 @@ class Faturas extends CI_Controller
 
                             $vencimento = $ultimaFatura->vencimento;
                             $vencimento = explode('-', $vencimento);
-                            $dia_venc = $vencimento[2];
-                            $mes_venc = $vencimento[1] + 1;
-                            $ano_venc = $vencimento[0];
+                            $dia_venc   = $vencimento[2];
+                            $mes_venc   = $vencimento[1] + 1;
+                            $ano_venc   = $vencimento[0];
 
                             if ($mes_venc == 13) {
                                 $mes_venc = 01;
@@ -325,12 +326,12 @@ class Faturas extends CI_Controller
 
                             //ARRAY ABRIR NOVA FATURA
                             $data = array(
-                                'id_usuario' => $ultimaFatura->id_usuario,
-                                'id_cartao' => $ultimaFatura->id_cartao,
-                                'mes_referencia' => $mes,
-                                'ano_referencia' => $ano,
-                                'vencimento' => $vencimentoFormatado,
-                                'fatura_aberta' => 2,
+                                'id_usuario'        => $ultimaFatura->id_usuario,
+                                'id_cartao'         => $ultimaFatura->id_cartao,
+                                'mes_referencia'    => $mes,
+                                'ano_referencia'    => $ano,
+                                'vencimento'        => $vencimentoFormatado,
+                                'fatura_aberta'     => 2,
                             );
 
                             if (!$this->fatura_model->abrirFatura($data)) {
@@ -343,15 +344,15 @@ class Faturas extends CI_Controller
 
                         //ARRAY LANCAMENTOS_FATURAS_ASSOC
                         $data1 = array(
-                            'id_lancamento' => $last_id,
-                            'id_fatura' => $faturaReferencia->id_fatura,
-                            'valor_parcela' => $valor_parcela,
-                            'valor_total' => $valor,
-                            'mes_referencia' => $mes,
-                            'ano_referencia' => $ano,
-                            'data_compra' => $data_compra,
-                            'n_parcela' => $x,
-                            'total_parcelas' => $qnt_parcelas,
+                            'id_lancamento'     => $last_id,
+                            'id_fatura'         => $faturaReferencia->id_fatura,
+                            'valor_parcela'     => $valor_parcela,
+                            'valor_total'       => $valor,
+                            'mes_referencia'    => $mes,
+                            'ano_referencia'    => $ano,
+                            'data_compra'       => $data_compra,
+                            'n_parcela'         => $x,
+                            'total_parcelas'    => $qnt_parcelas,
                         );
 
                         // COMPRA DE TERCEIROS
@@ -359,9 +360,9 @@ class Faturas extends CI_Controller
 
                             $vencimento = $faturaReferencia->vencimento;
                             $vencimento = explode('-', $vencimento);
-                            $dia_venc = $vencimento[2];
-                            $mes_venc = $vencimento[1];
-                            $ano_venc = $vencimento[0];
+                            $dia_venc   = $vencimento[2];
+                            $mes_venc   = $vencimento[1];
+                            $ano_venc   = $vencimento[0];
 
                             if ($mes_venc == 13) {
                                 $mes_venc = 01;
@@ -383,13 +384,13 @@ class Faturas extends CI_Controller
 
                             //MONTA ARRAY DE PENDENCIAS
                             $data2 = array(
-                                'id_lancamento_fatura' => $last_id,
-                                'id_usuario' => getUserId(),
-                                'id_cliente' => $this->input->post('id_cliente'),
-                                'descricao' => padronizarString($this->input->post('descricao')) . ' - ' . $parcela_atual . '/' . $total_parcelas,
-                                'tipo' => 1,
-                                'valor' => $valor_parcela,
-                                'data_vencimento' => $vencimentoFormatado,
+                                'id_lancamento_fatura'  => $last_id,
+                                'id_usuario'            => getUserId(),
+                                'id_cliente'            => $this->input->post('id_cliente'),
+                                'descricao'             => padronizarString($this->input->post('descricao')) . ' - ' . $parcela_atual . '/' . $total_parcelas,
+                                'tipo'                  => 1,
+                                'valor'                 => $valor_parcela,
+                                'data_vencimento'       => $vencimentoFormatado,
                             );
                             //removendo adicao de compras parceladas de terceiros em Pendencias
                             //$this->pendencia_model->add('pendencias', $data2);
@@ -430,9 +431,9 @@ class Faturas extends CI_Controller
 
                         $vencimento = $faturaAtual->vencimento;
                         $vencimento = explode('-', $vencimento);
-                        $dia_venc = $vencimento[2];
-                        $mes_venc = $vencimento[1];
-                        $ano_venc = $vencimento[0];
+                        $dia_venc   = $vencimento[2];
+                        $mes_venc   = $vencimento[1];
+                        $ano_venc   = $vencimento[0];
 
                         if ($mes_venc == 13) {
                             $mes_venc = 01;
@@ -491,9 +492,9 @@ class Faturas extends CI_Controller
         }
 
         $urlAtual = $this->input->post('urlAtual');
-        $valor = $this->input->post('valor');
-        $valor_parcela = $this->input->post('valor_parcela');
-        $id_lancamento = $this->input->post('id_lancamento');
+        $valor          = $this->input->post('valor');
+        $valor_parcela  = $this->input->post('valor_parcela');
+        $id_lancamento  = $this->input->post('id_lancamento');
 
         if ($this->input->post('compra_parcelada') == 1) {
             $qnt_parcelas = $this->input->post('qnt_parcelas');
@@ -533,9 +534,9 @@ class Faturas extends CI_Controller
         $faturaExistente = $this->fatura_model->getFaturaUsuario($id_fatura);
 
         if ($faturaExistente) {
-            $faturaAtual = $this->fatura_model->getFaturaAtual($id_fatura);
-            $mes = $faturaAtual->mes_referencia;
-            $ano = $faturaAtual->ano_referencia;
+            $faturaAtual    = $this->fatura_model->getFaturaAtual($id_fatura);
+            $mes            = $faturaAtual->mes_referencia;
+            $ano            = $faturaAtual->ano_referencia;
 
             //ARRAY LANCAMENTOS_FATURAS
             $data = array(
@@ -928,12 +929,12 @@ class Faturas extends CI_Controller
         if ($this->fatura_model->edit('faturas', $data, 'id_fatura', $_POST['id_fatura'])) {
             $vinculoFatura = $this->fatura_model->getVinculoFatura($_POST['id_fatura']);
             if ($vinculoFatura) {
-                $detalhesFatura = $this->fatura_model->getDetalhesFatura($_POST['id_fatura']);
-                $valorTotalFatura = $this->fatura_model->getValorTotalFatura($_POST['id_fatura']);
-                $detalhesCartaoFatura = $this->cartoes_model->getCartao($detalhesFatura->id_cartao);
-                $n_cartao = explode(" ", trim(decriptar($detalhesCartaoFatura->numero)));
-                $final = $n_cartao[3];
-                $apelido = $detalhesCartaoFatura->apelido ? ' - ' . $detalhesCartaoFatura->apelido : null;
+                $detalhesFatura         = $this->fatura_model->getDetalhesFatura($_POST['id_fatura']);
+                $valorTotalFatura       = $this->fatura_model->getValorTotalFatura($_POST['id_fatura']);
+                $detalhesCartaoFatura   = $this->cartoes_model->getCartao($detalhesFatura->id_cartao);
+                $n_cartao               = explode(" ", trim(decriptar($detalhesCartaoFatura->numero)));
+                $final                  = $n_cartao[3];
+                $apelido                = $detalhesCartaoFatura->apelido ? ' - ' . $detalhesCartaoFatura->apelido : null;
 
                 $data = array(
                     'descricao' => 'FATURA CARTAO DE CREDITO' . $apelido,
@@ -975,12 +976,12 @@ class Faturas extends CI_Controller
         );
 
         if ($this->fatura_model->edit('faturas', $data, 'id_fatura', $idFatura)) {
-            $detalhesFatura = $this->fatura_model->getDetalhesFatura($idFatura);
-            $valorTotalFatura = $this->fatura_model->getValorTotalFatura($idFatura);
-            $detalhesCartaoFatura = $this->cartoes_model->getCartao($detalhesFatura->id_cartao);
-            $n_cartao = explode(" ", trim(decriptar($detalhesCartaoFatura->numero)));
-            $final = $n_cartao[3];
-            $apelido = $detalhesCartaoFatura->apelido ? ' - ' . $detalhesCartaoFatura->apelido : null;
+            $detalhesFatura         = $this->fatura_model->getDetalhesFatura($idFatura);
+            $valorTotalFatura       = $this->fatura_model->getValorTotalFatura($idFatura);
+            $detalhesCartaoFatura   = $this->cartoes_model->getCartao($detalhesFatura->id_cartao);
+            $n_cartao               = explode(" ", trim(decriptar($detalhesCartaoFatura->numero)));
+            $final                  = $n_cartao[3];
+            $apelido                = $detalhesCartaoFatura->apelido ? ' - ' . $detalhesCartaoFatura->apelido : null;
 
             $data = array(
                 'id_usuario' => getUserId(),
