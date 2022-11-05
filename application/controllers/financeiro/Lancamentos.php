@@ -42,8 +42,13 @@ class Lancamentos extends CI_Controller
         $fim            = $_GET['dataFinal'] ?? null;
         $start          = $_GET['per_page'] ?? null;
         $referenceMonth = $_GET['mesReferencia'] ?? null;
+        $referenceYear  = $_GET['anoReferencia'] ?? null;
         $where          = null;
         $limit          = null;
+        $year           = date('Y');
+        $keys           = range(2018, $year + 3);
+        $yearsList      = $keys;
+
         $order_by       = [
             'data_lancamento'   => 'desc',
             'id_lancamento'     => 'desc',
@@ -100,13 +105,20 @@ class Lancamentos extends CI_Controller
                 }
                 break;
             case 'mensal':
-                if (isset($referenceMonth) && $referenceMonth != null) {
+                if (isset($referenceMonth) && $referenceMonth) {
                     $todayDate      = date('Y-m-d');
                     $todayArray     = explode('-', $todayDate);
                     $daysInMonth    = cal_days_in_month(CAL_GREGORIAN, $referenceMonth, $todayArray[0]);
                     $todayStartDate = $todayArray[0] . '-' . $referenceMonth . '-01';
                     $todayEndDate   = $todayArray[0] . '-' . $referenceMonth . '-' . $daysInMonth;
                     $limit = null;
+
+                    if (isset($referenceYear) && $referenceYear) {
+                        $todayStartDate = $referenceYear . '-' . $referenceMonth . '-01';
+                        $todayEndDate   = $referenceYear . '-' . $referenceMonth . '-' . $daysInMonth;
+                    } else {
+                        $referenceYear  = $todayArray[0];
+                    }
 
                     if (!isset($where)) {
                         $where = "data_lancamento BETWEEN '$todayStartDate' AND '$todayEndDate'";
@@ -128,6 +140,13 @@ class Lancamentos extends CI_Controller
                 $todayEndDate   = $todayArray[0] . '-' . $todayArray[1] . '-' . $daysInMonth;
                 $referenceMonth = $todayArray[1];
                 $limit          = null;
+
+                if (isset($referenceYear) && $referenceYear) {
+                    $todayStartDate = $referenceYear . '-' . $todayArray[1] . '-01';
+                    $todayEndDate   = $referenceYear . '-' . $todayArray[1] . '-' . $daysInMonth;
+                } else {
+                    $referenceYear  = $todayArray[0];
+                }
 
                 if (!isset($where)) {
                     $where = "data_lancamento BETWEEN '$todayStartDate' AND '$todayEndDate'";
@@ -222,7 +241,9 @@ class Lancamentos extends CI_Controller
 
         $this->pagination->initialize($config);
 
+        $this->data['yearsList']            = $yearsList;
         $this->data['referenceMonth']       = $referenceMonth;
+        $this->data['referenceYear']        = $referenceYear;
         $this->data['total_provisorio']     = $this->financeiro_model->getTotalProvisorio(getUserId());
         $this->data['saidas_pendentes']     = $this->financeiro_model->getSaidasPendentes(getUserId());
         $this->data['entradas_pendentes']   = $this->financeiro_model->getEntradasPendentes(getUserId());

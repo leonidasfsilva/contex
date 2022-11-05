@@ -115,18 +115,25 @@ $nextLink           = null;
 $monthText          = null;
 
 if (isset($referenceMonth) && $referenceMonth) {
+    $prevReferenceYear  = $referenceYear;
+    $nextReferenceYear  = $referenceYear;
     $prevReferenceMonth = $referenceMonth - 1;
     $nextReferenceMonth = $referenceMonth + 1;
-    if ($referenceMonth == '12') {
-        $nextReferenceMonth = '01';
+
+    if ($referenceMonth == 12) {
+        $nextReferenceMonth = 1;
+        $nextReferenceYear++;
     }
-    if ($referenceMonth == '01') {
-        $prevReferenceMonth = '12';
+
+    if ($referenceMonth == 1) {
+        $prevReferenceMonth = 12;
+        $prevReferenceYear--;
     }
-    $prevLink   = "<a href=" . base_url('financeiro/lancamentos?periodo=mensal&mesReferencia=') . $prevReferenceMonth .
+
+    $prevLink   = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $prevReferenceMonth, $prevReferenceYear)) .
         " title='Período anterior'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-left'></i></span></a>";
-    $monthText  = "<span class='badge badge-primary' style='margin-left: 10px;'>Período: $month</span>";
-    $nextLink   = "<a href=" . base_url('financeiro/lancamentos?periodo=mensal&mesReferencia=') . $nextReferenceMonth .
+    $monthText  = "<span class='badge badge-primary' style='margin-left: 10px;'>Período: $month / $referenceYear</span>";
+    $nextLink   = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $nextReferenceMonth, $nextReferenceYear)) .
         " title='Próximo período'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-right'></i></span></a>";
 }
 
@@ -136,6 +143,7 @@ if (!$results) {
         <div class="panel-heading">
             <h2>
                 Extrato de Lançamentos
+                <br class="visible-xs-block">
                 <?= ($referenceMonth ? $prevLink . $monthText . $nextLink : null) ?>
             </h2>
             <div class="panel-ctrls">
@@ -174,6 +182,7 @@ if (!$results) {
         <div class="panel-heading">
             <h2>
                 Extrato de Lançamentos
+                <br class="visible-xs-block">
                 <?= ($referenceMonth ? $prevLink . $monthText . $nextLink : null) ?>
             </h2>
             <div class="panel-ctrls">
@@ -507,7 +516,7 @@ if (!$results) {
                                 </option>
                                 <option value="mensal" <?php if ($periodo_lancamentos == 'mensal' || !$periodo_lancamentos) {
                                                             echo 'selected';
-                                                        } ?>>MÊS ESPECÍFICO
+                                                        } ?>>MÊS/ANO ESPECÍFICOS
                                 </option>
                                 <option value="especifico" <?php if ($periodo_lancamentos == 'especifico') {
                                                                 echo 'selected';
@@ -526,25 +535,37 @@ if (!$results) {
                         </div>
                         <div class="form-group col-lg-6" id="div_periodo_mensal" hidden>
                             <label class="control-label font-weight-bold" for="select_mes">
-                                Mês específico
+                                Mês/ano específicos
                             </label>
-                            <select class="form-control" id="mesReferencia" name="mesReferencia">
-                                <option value="">
-                                    << Selecione>>
-                                </option>
-                                <option value="01" <?= ($referenceMonth == '01') ? 'selected' : null ?>>01 - JANEIRO</option>
-                                <option value="02" <?= ($referenceMonth == '02') ? 'selected' : null ?>>02 - FEVEREIRO</option>
-                                <option value="03" <?= ($referenceMonth == '03') ? 'selected' : null ?>>03 - MARÇO</option>
-                                <option value="04" <?= ($referenceMonth == '04') ? 'selected' : null ?>>04 - ABRIL</option>
-                                <option value="05" <?= ($referenceMonth == '05') ? 'selected' : null ?>>05 - MAIO</option>
-                                <option value="06" <?= ($referenceMonth == '06') ? 'selected' : null ?>>06 - JUNHO</option>
-                                <option value="07" <?= ($referenceMonth == '07') ? 'selected' : null ?>>07 - JULHO</option>
-                                <option value="08" <?= ($referenceMonth == '08') ? 'selected' : null ?>>08 - AGOSTO</option>
-                                <option value="09" <?= ($referenceMonth == '09') ? 'selected' : null ?>>09 - SETEMBRO</option>
-                                <option value="10" <?= ($referenceMonth == '10') ? 'selected' : null ?>>10 - OUTUBRO</option>
-                                <option value="11" <?= ($referenceMonth == '11') ? 'selected' : null ?>>11 - NOVEMBRO</option>
-                                <option value="12" <?= ($referenceMonth == '12') ? 'selected' : null ?>>12 - DEZEMBRO</option>
-                            </select>
+                            <div class="input-group">
+                                <span class="input-group-addon">mês</span>
+
+                                <select class="form-control" id="mesReferencia" name="mesReferencia">
+                                    <option value="">
+                                        << Selecione>>
+                                    </option>
+                                    <option value="01" <?= ($referenceMonth == '01') ? 'selected' : null ?>>01 - JANEIRO</option>
+                                    <option value="02" <?= ($referenceMonth == '02') ? 'selected' : null ?>>02 - FEVEREIRO</option>
+                                    <option value="03" <?= ($referenceMonth == '03') ? 'selected' : null ?>>03 - MARÇO</option>
+                                    <option value="04" <?= ($referenceMonth == '04') ? 'selected' : null ?>>04 - ABRIL</option>
+                                    <option value="05" <?= ($referenceMonth == '05') ? 'selected' : null ?>>05 - MAIO</option>
+                                    <option value="06" <?= ($referenceMonth == '06') ? 'selected' : null ?>>06 - JUNHO</option>
+                                    <option value="07" <?= ($referenceMonth == '07') ? 'selected' : null ?>>07 - JULHO</option>
+                                    <option value="08" <?= ($referenceMonth == '08') ? 'selected' : null ?>>08 - AGOSTO</option>
+                                    <option value="09" <?= ($referenceMonth == '09') ? 'selected' : null ?>>09 - SETEMBRO</option>
+                                    <option value="10" <?= ($referenceMonth == '10') ? 'selected' : null ?>>10 - OUTUBRO</option>
+                                    <option value="11" <?= ($referenceMonth == '11') ? 'selected' : null ?>>11 - NOVEMBRO</option>
+                                    <option value="12" <?= ($referenceMonth == '12') ? 'selected' : null ?>>12 - DEZEMBRO</option>
+                                </select>
+                                <span class="input-group-addon">ano</span>
+                                <select class="form-control" id="anoReferenciaSelect" name="anoReferencia">
+                                    <?php if ($yearsList) {
+                                        foreach ($yearsList as $year) { ?>
+                                            <option value="<?= $year ?>" <?= ($referenceYear == $year ? 'selected' : '') ?>><?= $year ?></option>
+                                    <?php }
+                                    } ?>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>

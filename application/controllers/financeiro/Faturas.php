@@ -1233,8 +1233,8 @@ class Faturas extends CI_Controller
         $result             = [];
         $data['idCard']     = $idCartao;
         $year               = date('Y');
-        $keys               = range(2018, $year + 2);
-        $yearsList          = array_combine($keys, $keys);
+        $keys               = range(2018, $year + 3);
+        $yearsList          = $keys;
 
         if ($mes) {
             $mesReferencia = $mes;
