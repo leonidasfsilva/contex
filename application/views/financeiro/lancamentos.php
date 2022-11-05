@@ -130,11 +130,16 @@ if (isset($referenceMonth) && $referenceMonth) {
         $prevReferenceYear--;
     }
 
+    if ($prevMonth && $nextMonth) {
+        $prevLinkTitle = sprintf('%s / %s', $prevMonth, $prevReferenceYear); 
+        $nextLinkTitle = sprintf('%s / %s', $nextMonth, $nextReferenceYear); 
+    }
+
     $prevLink   = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $prevReferenceMonth, $prevReferenceYear)) .
-        " title='Período anterior'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-left'></i></span></a>";
+        " title='$prevLinkTitle'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-left'></i></span></a>";
     $monthText  = "<span class='badge badge-primary' style='margin-left: 10px;'>Período: $month / $referenceYear</span>";
     $nextLink   = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $nextReferenceMonth, $nextReferenceYear)) .
-        " title='Próximo período'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-right'></i></span></a>";
+        " title='$nextLinkTitle'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-right'></i></span></a>";
 }
 
 if (!$results) {

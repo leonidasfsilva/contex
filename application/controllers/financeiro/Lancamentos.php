@@ -210,8 +210,12 @@ class Lancamentos extends CI_Controller
                 \IntlDateFormatter::GREGORIAN,
                 "MMMM"
             );
-            $dateObj = DateTime::createFromFormat('!m', ($referenceMonth));
-            $this->data['month'] = str_replace('.', '', strtoupper($dateFormatter->format($dateObj)));
+            $dateObj                    = DateTime::createFromFormat('!m', ($referenceMonth));
+            $nextMonthObj               = DateTime::createFromFormat('!m', ($referenceMonth + 1));
+            $prevMonthObj               = DateTime::createFromFormat('!m', ($referenceMonth - 1));
+            $this->data['month']        = str_replace('.', '', strtoupper($dateFormatter->format($dateObj)));
+            $this->data['nextMonth']    = str_replace('.', '', strtoupper($dateFormatter->format($nextMonthObj)));
+            $this->data['prevMonth']    = str_replace('.', '', strtoupper($dateFormatter->format($prevMonthObj)));
         }
 
         $config['base_url']             = base_url('financeiro/lancamentos');
