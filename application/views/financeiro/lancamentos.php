@@ -131,8 +131,8 @@ if (isset($referenceMonth) && $referenceMonth) {
     }
 
     if ($prevMonth && $nextMonth) {
-        $prevLinkTitle = sprintf('%s / %s', $prevMonth, $prevReferenceYear); 
-        $nextLinkTitle = sprintf('%s / %s', $nextMonth, $nextReferenceYear); 
+        $prevLinkTitle = sprintf('%s / %s', $prevMonth, $prevReferenceYear);
+        $nextLinkTitle = sprintf('%s / %s', $nextMonth, $nextReferenceYear);
     }
 
     $prevLink   = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $prevReferenceMonth, $prevReferenceYear)) .
@@ -361,7 +361,7 @@ if (!$results) {
     <div class="panel-heading">
         <h2>
             Posição Consolidada
-            <?= (isset($referenceMonth) && $referenceMonth ? " do Período: $month" : null) ?>
+            <?= (isset($referenceMonth) && $referenceMonth ? " do Período: $month / $referenceYear" : null) ?>
         </h2>
         <div class="panel-ctrls">
             <a href="#" class="button-icon close-panel">
@@ -429,13 +429,25 @@ if (!$results) {
                 </tr>
             <?php } ?>
             <?php if ($totalGeral) { ?>
-                <tr>
+                <tr class="total-geral">
                     <td colspan="2" style="text-align: left; font-weight: bold">(=) SALDO TOTAL DO PERÍODO</td>
                     <td colspan="1" style="text-align: right; font-weight: bold">
                         <?php echo number_format($totalGeral, 2, ',', '.') ?>
                     </td>
                 </tr>
+                <?php
+                if ($totalGeral < 0) {
+                ?>
+                    <tr class="hidden provisorio-periodo">
+                        <td colspan="2" style="text-align: left; font-weight: bold">(±) SALDO PROVISÓRIO DO PERÍODO</td>
+                        <td colspan="1" style="text-align: right; font-weight: bold">
+                            <?php echo number_format(($total->total + $totalGeral), 2, ',', '.') ?>
+                        </td>
+                    </tr>
+
+                <?php } ?>
             <?php } ?>
+
         </table>
     </div>
 </div>
@@ -920,6 +932,10 @@ if (!$results) {
 
     $('.dropdown-menu>form').click(function(e) {
         e.stopPropagation();
+    });
+
+    $('.total-geral').click(function(e) {
+        $('.provisorio-periodo').toggleClass('hidden');
     });
 
     $(document).on('change', '#select_periodo, #select_situacao', function() {
