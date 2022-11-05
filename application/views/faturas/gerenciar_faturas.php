@@ -580,9 +580,9 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 <div class="modal fade" id="modalFechar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-default">
+            <div class="modal-header bg-inverse">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title">Fechar fatura</h4>
+                <h4 class="modal-title text-white">Fechar fatura</h4>
             </div>
             <form id="formFechar" action="<?php echo base_url('financeiro/faturas/fechar') ?>" method="post">
                 <div class="modal-body">
@@ -607,9 +607,9 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 <div class="modal fade" id="modalReabrir" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-inverse">
+            <div class="modal-header bg-default">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white">Reabrir fatura</h4>
+                <h4 class="modal-title ">Reabrir fatura</h4>
             </div>
             <form id="formFechar" action="<?php echo base_url('financeiro/faturas/reabrir') ?>" method="post">
                 <div class="modal-body">
