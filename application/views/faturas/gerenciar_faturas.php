@@ -458,64 +458,6 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
     </div>
 </div>
 
-<!-- Modal VINCULAR FATURAS DE TODOS OS CARTOES -->
-<div class="modal fade" id="modalVincularFaturas" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white ">Vincular faturas</h4>
-            </div>
-            <form id="formVincularFaturas" action="<?php echo base_url('financeiro/faturas/vincularFaturas') ?>" method="post">
-                <div class="modal-body">
-                    <p class="font-weight-bold">Defina o mês de referência para vínculo de todas as faturas dos cartões ativos:</p>
-                    <div class="row">
-                        <div class="col-lg-6 form-group">
-                            <label class="control-label font-weight-bold" for="select_mes">
-                                Mês de referência *
-                            </label>
-                            <select class="form-control" id="mes_referencia" name="mesReferencia">
-                                <?php $mesAtual = date('m'); ?>
-                                <option value="">
-                                    << Selecione>>
-                                </option>
-                                <option value="01" <?= $mesAtual == '01' ? 'selected' : ''; ?>>01 - JANEIRO</option>
-                                <option value="02" <?= $mesAtual == '02' ? 'selected' : ''; ?>>02 - FEVEREIRO</option>
-                                <option value="03" <?= $mesAtual == '03' ? 'selected' : ''; ?>>03 - MARÇO</option>
-                                <option value="04" <?= $mesAtual == '04' ? 'selected' : ''; ?>>04 - ABRIL</option>
-                                <option value="05" <?= $mesAtual == '05' ? 'selected' : ''; ?>>05 - MAIO</option>
-                                <option value="06" <?= $mesAtual == '06' ? 'selected' : ''; ?>>06 - JUNHO</option>
-                                <option value="07" <?= $mesAtual == '07' ? 'selected' : ''; ?>>07 - JULHO</option>
-                                <option value="08" <?= $mesAtual == '08' ? 'selected' : ''; ?>>08 - AGOSTO</option>
-                                <option value="09" <?= $mesAtual == '09' ? 'selected' : ''; ?>>09 - SETEMBRO</option>
-                                <option value="10" <?= $mesAtual == '10' ? 'selected' : ''; ?>>10 - OUTUBRO</option>
-                                <option value="11" <?= $mesAtual == '11' ? 'selected' : ''; ?>>11 - NOVEMBRO</option>
-                                <option value="12" <?= $mesAtual == '12' ? 'selected' : ''; ?>>12 - DEZEMBRO</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <p class="note note-info"><i class="text-info fa fa-info-circle fa-fw fa-lg"></i>
-                        Esta ação irá vincular ao módulo de Lançamentos todas as faturas pertencentes aos cartões ativos para o mês de referência selecionado.
-                    </p>
-                    <!-- <p class="note note-info"><i class="text-info fa fa-info-circle fa-fw fa-lg"></i>
-                        Todas as atualizações de valores das faturas serão refletidas automaticamente no módulo de Lançamentos
-                    </p> -->
-                    <input class="urlAtual" type="hidden" name="urlAtual" />
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
-                        <i class="fa fa-times fa-fw"></i> Cancelar
-                    </button>
-                    <button class="btn btn-primary btn-sm" id="btnFechar">
-                        <i class="fa fa-check fa-fw"></i> Confirmar
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <!-- Modal EXCLUIR -->
 <div class="modal fade" id="modalExcluir" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -630,7 +572,77 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
     </div>
 </div>
 
-<!-- Modal VINCULAR FATURA -->
+<!-- Modal VINCULAR FATURAS DE TODOS OS CARTOES -->
+<div class="modal fade" id="modalVincularFaturas" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-white ">Vincular faturas</h4>
+            </div>
+            <form id="formVincularFaturas" action="<?php echo base_url('financeiro/faturas/vincularFaturas') ?>" method="post">
+                <div class="modal-body">
+                    <p class="font-weight-bold">Defina o mês e ano de referência para vínculo de todas as faturas dos cartões ativos:</p>
+                    <div class="row">
+                        <div class="col-lg-6 form-group">
+                            <label class="control-label font-weight-bold" for="select_mes">
+                                Mês de referência *
+                            </label>
+                            <select class="form-control" id="mes_referencia" name="mesReferencia">
+                                <?php $mesAtual = date('m'); ?>
+                                <option value="">
+                                    << Selecione>>
+                                </option>
+                                <option value="01" <?= $mesAtual == '01' ? 'selected' : ''; ?>>01 - JANEIRO</option>
+                                <option value="02" <?= $mesAtual == '02' ? 'selected' : ''; ?>>02 - FEVEREIRO</option>
+                                <option value="03" <?= $mesAtual == '03' ? 'selected' : ''; ?>>03 - MARÇO</option>
+                                <option value="04" <?= $mesAtual == '04' ? 'selected' : ''; ?>>04 - ABRIL</option>
+                                <option value="05" <?= $mesAtual == '05' ? 'selected' : ''; ?>>05 - MAIO</option>
+                                <option value="06" <?= $mesAtual == '06' ? 'selected' : ''; ?>>06 - JUNHO</option>
+                                <option value="07" <?= $mesAtual == '07' ? 'selected' : ''; ?>>07 - JULHO</option>
+                                <option value="08" <?= $mesAtual == '08' ? 'selected' : ''; ?>>08 - AGOSTO</option>
+                                <option value="09" <?= $mesAtual == '09' ? 'selected' : ''; ?>>09 - SETEMBRO</option>
+                                <option value="10" <?= $mesAtual == '10' ? 'selected' : ''; ?>>10 - OUTUBRO</option>
+                                <option value="11" <?= $mesAtual == '11' ? 'selected' : ''; ?>>11 - NOVEMBRO</option>
+                                <option value="12" <?= $mesAtual == '12' ? 'selected' : ''; ?>>12 - DEZEMBRO</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-6 form-group">
+                            <label class="control-label font-weight-bold" for="select_mes">
+                                Ano de referência *
+                            </label>
+                            <select class="form-control" id="anoReferenciaSelect" name="anoReferencia">
+                                <?php if ($yearsList) {
+                                    foreach ($yearsList as $year) { ?>
+                                        <option value="<?= $year ?>" <?= (date('Y') == $year ? 'selected' : '') ?>><?= $year ?></option>
+                                <?php }
+                                } ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <p class="note note-info"><i class="text-info fa fa-info-circle fa-fw fa-lg"></i>
+                        Esta ação irá vincular ao módulo de Lançamentos todas as faturas pertencentes aos cartões ativos para o mês de referência selecionado.
+                    </p>
+                    <!-- <p class="note note-info"><i class="text-info fa fa-info-circle fa-fw fa-lg"></i>
+                        Todas as atualizações de valores das faturas serão refletidas automaticamente no módulo de Lançamentos
+                    </p> -->
+                    <input class="urlAtual" type="hidden" name="urlAtual" />
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                        <i class="fa fa-times fa-fw"></i> Cancelar
+                    </button>
+                    <button class="btn btn-primary btn-sm" id="btnFechar">
+                        <i class="fa fa-check fa-fw"></i> Confirmar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal VINCULAR FATURA UNICA -->
 <div class="modal fade" id="modalVincular" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

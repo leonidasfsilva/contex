@@ -4,6 +4,7 @@
 
 class Faturas extends CI_Controller
 {
+    protected $yearsList = [];
 
     public function __construct()
     {
@@ -12,6 +13,7 @@ class Faturas extends CI_Controller
             redirect('mxcode/login');
         }
         $this->load->library('pagination');
+        $this->yearsList = range(2018, date('Y') + 3);
     }
 
     public function index()
@@ -88,6 +90,7 @@ class Faturas extends CI_Controller
             $id_cartao = $cartaoPrincipal->id_cartao;
         }
 
+        $data['yearsList']              = $this->yearsList;
         $data['existe_configuracao']    = $this->fatura_model->existeConfiguracao($id_cartao);
         $data['dia_vencimento']         = $this->fatura_model->getDiaVencimentoFatura($id_cartao);
         $data['cartao_selecionado']     = $this->cartoes_model->getDetalhesCartao($id_cartao);
@@ -1010,13 +1013,13 @@ class Faturas extends CI_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para vincular faturas.');
             redirect(base_url());
         }
-        $urlAtual = $this->input->post('urlAtual');
-        $mes = $this->input->post('mesReferencia');
-
-        $cartoesAtivos = $this->cartoes_model->getCartoesUsuarioFatura(getUserId());
+        $urlAtual       = $this->input->post('urlAtual');
+        $mesReferencia  = $this->input->post('mesReferencia');
+        $anoReferencia  = $this->input->post('anoReferencia');
+        $cartoesAtivos  = $this->cartoes_model->getCartoesUsuarioFatura(getUserId());
 
         foreach ($cartoesAtivos as $cartao) {
-            $faturaReferencia = $this->fatura_model->getFaturaReferencia($cartao->id_cartao, $mes, date('Y'));
+            $faturaReferencia = $this->fatura_model->getFaturaReferencia($cartao->id_cartao, $mesReferencia, $anoReferencia);
 
             if (!$faturaReferencia) {
                 continue;
@@ -1232,9 +1235,6 @@ class Faturas extends CI_Controller
         $anoReferencia      = $todayArray[0];
         $result             = [];
         $data['idCard']     = $idCartao;
-        $year               = date('Y');
-        $keys               = range(2018, $year + 3);
-        $yearsList          = $keys;
 
         if ($mes) {
             $mesReferencia = $mes;
@@ -1276,7 +1276,7 @@ class Faturas extends CI_Controller
 
         $data['results']            = $result;
         $data['name']               = $nome;
-        $data['yearsList']          = $yearsList;
+        $data['yearsList']          = $this->yearsList;
         $data['referencePeriod']    = sprintf('%s / %s', $monthName, $anoReferencia);
         $data['referenceMonth']     = $mesReferencia;
         $data['referenceYear']      = $anoReferencia;
