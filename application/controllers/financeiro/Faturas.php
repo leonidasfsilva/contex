@@ -478,8 +478,8 @@ class Faturas extends CI_Controller
 
     public function editarLancamento($id = null)
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aFaturas')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para adicionar novos lançamentos de faturas.');
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eFaturas')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para editar lançamentos de faturas.');
             redirect(base_url());
         }
 
@@ -734,6 +734,268 @@ class Faturas extends CI_Controller
             redirect($urlAtual);
         }
         redirect($urlAtual);
+    }
+
+    public function copiarLancamento($id = null)
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aFaturas')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para copiar lançamentos de faturas.');
+            redirect(base_url());
+        }
+
+        if (!$_POST) {
+            $this->session->set_flashdata('erro', 'Método não permitido.');
+            redirect('financeiro/faturas');
+        }
+
+        if ($_POST['id_fatura']) {
+            $id_fatura = $_POST['id_fatura'];
+        } else {
+            $id_fatura = $id;
+        }
+
+        $urlAtual       = $this->input->post('urlAtual');
+        $valor          = $this->input->post('valor');
+        $valor_parcela  = $this->input->post('valor_parcela');
+
+        if ($this->input->post('qnt_parcelas')) {
+            $qnt_parcelas = $this->input->post('qnt_parcelas');
+        } else {
+            $qnt_parcelas = 1;
+        }
+
+        if ($this->input->post('compra_parcelada')) {
+            $compra_parcelada = 1;
+        } else {
+            $compra_parcelada = 0;
+        }
+
+        if ($this->input->post('compra_terceiros')) {
+            $compra_terceiros = 1;
+        } else {
+            $compra_terceiros = 0;
+        }
+
+        if ($this->input->post('estorno')) {
+            $estorno    = 1;
+            $valor      = '-' . $valor;
+        } else {
+            $estorno = 0;
+        }
+
+        if ($this->input->post('data_compra')) {
+            $data_compra = $this->input->post('data_compra');
+            $data_compra = explode('/', $data_compra);
+            $data_compra = $data_compra[2] . '-' . $data_compra[1] . '-' . $data_compra[0];
+        } else {
+            $data_compra = date('Y/m/d');
+        }
+
+        if (!validate_money($valor_parcela)) {
+            $valor_parcela = str_replace(array('.', ','), array('', '.'), $valor_parcela);
+        }
+
+        if (!validate_money($valor)) {
+            $valor = str_replace(array('.', ','), array('', '.'), $valor);
+        }
+
+        $faturaExistente = $this->fatura_model->getFaturaUsuario($id_fatura);
+
+        if ($faturaExistente) {
+            $faturaAtual    = $this->fatura_model->getFaturaAtual($id_fatura);
+            $mes            = $faturaAtual->mes_referencia;
+            $ano            = $faturaAtual->ano_referencia;
+
+            //ARRAY LANCAMENTOS_FATURAS
+            $data = array(
+                'id_fatura'         => $faturaAtual->id_fatura,
+                // 'id_cliente'        => $this->input->post('id_cliente') ?: null,
+                'id_usuario'        => $faturaAtual->id_usuario,
+                'descricao'         => padronizarString($this->input->post('descricao')),
+                'nome_cliente'      => $this->input->post('nome_cliente') ? padronizarString($this->input->post('nome_cliente')) : null,
+                'valor_total'       => $valor,
+                'total_parcelas'    => $qnt_parcelas,
+                'compra_parcelada'  => $compra_parcelada,
+                'compra_terceiros'  => $compra_terceiros,
+                'estorno'           => $estorno,
+                'data_compra'       => $data_compra,
+                'mes_referencia'    => $mes,
+                'ano_referencia'    => $ano,
+            );
+
+            if ($this->fatura_model->add('lancamentos_faturas', $data)) {
+                $last_id = $this->fatura_model->insert_id('lancamentos_faturas');
+
+                //COMPRA PARCELADA
+                if ($this->input->post('compra_parcelada') == 1) {
+                    for ($x = 1; $x <= $qnt_parcelas; $x++) {
+
+                        //CONSULTA SE EXISTE FATURA REFERENTE AO MES DE LANÇAMENTO DA PARCELA
+                        $faturaReferencia = $this->fatura_model->getFaturaReferencia($faturaAtual->id_cartao, $mes, $ano);
+
+                        //CASO NÃO EXISTA, O SISTEMA CRIA A FATURA REFERENTE AO MES DE LANÇAMENTO DA PARCELA
+                        if (!$faturaReferencia) {
+                            $ultimaFatura = $this->fatura_model->getUltimaFatura($faturaAtual->id_cartao);
+
+                            $vencimento = $ultimaFatura->vencimento;
+                            $vencimento = explode('-', $vencimento);
+                            $dia_venc   = $vencimento[2];
+                            $mes_venc   = $vencimento[1] + 1;
+                            $ano_venc   = $vencimento[0];
+
+                            if ($mes_venc == 13) {
+                                $mes_venc = 01;
+                                $ano_venc++;
+                            }
+                            $vencimentoFormatado = ($ano_venc . '-' . $mes_venc . '-' . $dia_venc);
+
+                            //ARRAY ABRIR NOVA FATURA
+                            $data = array(
+                                'id_usuario'        => $ultimaFatura->id_usuario,
+                                'id_cartao'         => $ultimaFatura->id_cartao,
+                                'mes_referencia'    => $mes,
+                                'ano_referencia'    => $ano,
+                                'vencimento'        => $vencimentoFormatado,
+                                'fatura_aberta'     => 2,
+                            );
+
+                            if (!$this->fatura_model->abrirFatura($data)) {
+                                $this->session->set_flashdata('erro', 'Erro ao tentar abrir nova fatura.');
+                                redirect($urlAtual);
+                            }
+                        }
+
+                        $faturaReferencia = $this->fatura_model->getFaturaReferencia($faturaAtual->id_cartao, $mes, $ano);
+
+                        //ARRAY LANCAMENTOS_FATURAS_ASSOC
+                        $data1 = array(
+                            'id_lancamento'     => $last_id,
+                            'id_fatura'         => $faturaReferencia->id_fatura,
+                            'valor_parcela'     => $valor_parcela,
+                            'valor_total'       => $valor,
+                            'mes_referencia'    => $mes,
+                            'ano_referencia'    => $ano,
+                            'data_compra'       => $data_compra,
+                            'n_parcela'         => $x,
+                            'total_parcelas'    => $qnt_parcelas,
+                        );
+
+                        // COMPRA DE TERCEIROS
+                        if ($compra_terceiros == 1) {
+
+                            $vencimento = $faturaReferencia->vencimento;
+                            $vencimento = explode('-', $vencimento);
+                            $dia_venc   = $vencimento[2];
+                            $mes_venc   = $vencimento[1];
+                            $ano_venc   = $vencimento[0];
+
+                            if ($mes_venc == 13) {
+                                $mes_venc = 01;
+                                $ano_venc++;
+                            }
+                            $vencimentoFormatado = ($ano_venc . '-' . $mes_venc . '-' . $dia_venc);
+
+                            if ($x > 9) {
+                                $parcela_atual = $x;
+                            } else {
+                                $parcela_atual = '0' . $x;
+                            }
+
+                            if ($qnt_parcelas > 9) {
+                                $total_parcelas = $qnt_parcelas;
+                            } else {
+                                $total_parcelas = '0' . $qnt_parcelas;
+                            }
+
+                            //MONTA ARRAY DE PENDENCIAS
+                            $data2 = array(
+                                'id_lancamento_fatura'  => $last_id,
+                                'id_usuario'            => getUserId(),
+                                'id_cliente'            => $this->input->post('id_cliente'),
+                                'descricao'             => padronizarString($this->input->post('descricao')) . ' - ' . $parcela_atual . '/' . $total_parcelas,
+                                'tipo'                  => 1,
+                                'valor'                 => $valor_parcela,
+                                'data_vencimento'       => $vencimentoFormatado,
+                            );
+                            //removendo adicao de compras parceladas de terceiros em Pendencias
+                            //$this->pendencia_model->add('pendencias', $data2);
+                        }
+
+                        $mes++;
+                        if ($mes == 13) {
+                            $mes = 01;
+                            $ano++;
+                        }
+
+                        if ($this->fatura_model->add('lancamentos_faturas_assoc', $data1)) {
+                            atualizaValorVinculoFatura($id_fatura);
+                            $this->session->set_flashdata('sucesso', 'Lançamento copiado com sucesso!');
+                        } else {
+                            $this->session->set_flashdata('erro', 'Erro ao tentar adicionar lançamentos_assoc!');
+                            redirect($urlAtual);
+                        }
+                    }
+                    redirect($urlAtual);
+                } else {
+                    //COMPRA A VISTA
+                    //ARRAY LANCAMENTOS_FATURA_ASSOC
+                    $data1 = array(
+                        'id_lancamento' => $last_id,
+                        'id_fatura' => $faturaAtual->id_fatura,
+                        'valor_parcela' => $valor,
+                        'valor_total' => $valor,
+                        'mes_referencia' => $mes,
+                        'ano_referencia' => $ano,
+                        'data_compra' => $data_compra,
+                        'n_parcela' => 1,
+                        'total_parcelas' => 1,
+                    );
+
+                    //MONTA ARRAY DE PENDENCIA, NO CASO DE COMPRA DE TERCEIROS
+                    if ($compra_terceiros == 1) {
+
+                        $vencimento = $faturaAtual->vencimento;
+                        $vencimento = explode('-', $vencimento);
+                        $dia_venc   = $vencimento[2];
+                        $mes_venc   = $vencimento[1];
+                        $ano_venc   = $vencimento[0];
+
+                        if ($mes_venc == 13) {
+                            $mes_venc = 01;
+                            $ano_venc++;
+                        }
+                        $vencimentoFormatado = ($ano_venc . '-' . $mes_venc . '-' . $dia_venc);
+
+                        $data2 = array(
+                            'id_lancamento_fatura' => $last_id,
+                            'id_usuario' => getUserId(),
+                            'id_cliente' => $this->input->post('id_cliente'),
+                            'descricao' => padronizarString($this->input->post('descricao')),
+                            'tipo' => 1,
+                            'valor' => $valor,
+                            'data_vencimento' => $vencimentoFormatado,
+                        );
+                        //removendo adicao de compras a vista de terceiros em Pendencias
+                        //$this->pendencia_model->add('pendencias', $data2);
+                    }
+
+                    if ($this->fatura_model->add('lancamentos_faturas_assoc', $data1)) {
+                        atualizaValorVinculoFatura($id_fatura);
+                        $this->session->set_flashdata('sucesso', 'Lançamento copiado com sucesso!');
+                    } else {
+                        $this->session->set_flashdata('erro', 'Erro ao tentar adicionar lançamentos_assoc!');
+                        redirect($urlAtual);
+                    }
+                }
+                redirect($urlAtual);
+            } else {
+                $this->session->set_flashdata('erro', 'Erro ao tentar copiar lançamento de fatura.');
+                redirect($urlAtual);
+            }
+        } else {
+            $this->session->set_flashdata('erro', 'Não existem faturas abertas, não é possível copiar esta compra.');
+            redirect('financeiro/faturas');
+        }
     }
 
     public function excluirLancamento()
@@ -1047,8 +1309,8 @@ class Faturas extends CI_Controller
                     'baixado'               => $detalhesFatura->fatura_paga,
                     'tipo'                  => 2
                 ];
-                
-                $this->financeiro_model->edit('lancamentos', $updateLancamentos, 'id_lancamento', $vinculoFatura->id_lancamento);    
+
+                $this->financeiro_model->edit('lancamentos', $updateLancamentos, 'id_lancamento', $vinculoFatura->id_lancamento);
 
                 continue;
             }

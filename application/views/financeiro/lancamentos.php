@@ -815,6 +815,7 @@ if (!$results) {
                     <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                         <i class="fa fa-times fa-fw"></i> Cancelar
                     </button>
+                    <button type="button" href="#modalCopiar" data-dismiss="modal" data-toggle="modal" class="btn btn-info btn-sm"><i class="fa fa-copy fa-fw"></i> Copiar</button>
                     <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
                 </div>
             </form>
@@ -895,7 +896,7 @@ if (!$results) {
                     <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                         <i class="fa fa-times fa-fw"></i> Cancelar
                     </button>
-                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Copiar</button>
+                    <button type="submit" class="btn btn-info btn-sm"><i class="fa fa-check fa-fw"></i> Copiar</button>
                 </div>
             </form>
         </div>
