@@ -1032,11 +1032,11 @@ class Faturas extends CI_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para abrir novas faturas.');
             redirect(base_url());
         }
-        $urlAtual = $_POST['urlAtual'];
-        $mes_referencia = $_POST['mes_referencia'];
-
-        $mes = $mes_referencia + 1;
-        $ano = date('Y');
+        $urlAtual       = $_POST['urlAtual'];
+        $mesReferencia  = $_POST['mes_referencia'];
+        $mes            = $mesReferencia + 1;
+        $ano            = date('Y');
+        $anoReferencia  = date('Y');
 
         if ($mes == 13) {
             $mes = '01';
@@ -1052,8 +1052,8 @@ class Faturas extends CI_Controller
         $data = array(
             'id_usuario' => getUserId(),
             'id_cartao' => $_POST['id_cartao'],
-            'mes_referencia' => $mes_referencia,
-            'ano_referencia' => $ano,
+            'mes_referencia' => $mesReferencia,
+            'ano_referencia' => $anoReferencia,
             'vencimento' => $vencimentoFormatado,
         );
 
@@ -1073,11 +1073,10 @@ class Faturas extends CI_Controller
             redirect(base_url());
         }
 
-        $urlAtual = $this->input->post('urlAtual');
-
-        $faturaAtual = $this->fatura_model->getFaturaAtual($_POST['id_fatura']);
-        $mes = $faturaAtual->mes_referencia;
-        $ano = $faturaAtual->ano_referencia;
+        $urlAtual       = $this->input->post('urlAtual');
+        $faturaAtual    = $this->fatura_model->getFaturaAtual($_POST['id_fatura']);
+        $mes            = $faturaAtual->mes_referencia;
+        $ano            = $faturaAtual->ano_referencia;
 
         $mes++;
         if ($mes == 13) {
