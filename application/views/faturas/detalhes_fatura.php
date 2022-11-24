@@ -717,9 +717,12 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 </div>
 
 <script type="text/javascript">
+    $('#modalLancamento').on('shown.bs.modal', function(e) {
+        $('#descricao').focus();
+    })
+
     $(document).ready(function($) {
         $('#novoLancamento').click(function() {
-            $('#descricao').focus();
             $(".descricao").val('');
             $(".valor").val('');
             $(".valorParcela").val('');
