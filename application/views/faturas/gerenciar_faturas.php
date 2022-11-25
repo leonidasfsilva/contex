@@ -61,7 +61,6 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             $cartao_config = $cartao->apelido ? $cartao->apelido : $cartao->bandeira;
                             $cartao_config = $cartao_config . ' - FINAL ' . $final;
                         ?>
-                            <!--                <option value=""><< Selecione um Cartão >></option>-->
                             <option value="<?= $cartao->id_cartao ?>" <?= $selected ?>><?= $cartao_config ?></option>
                         <?php } ?>
                     </select>
@@ -113,6 +112,10 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             <button href="#modalConfiguracoes" class="btn btn-default btn-sm" id="configurar_fatura" data-toggle="modal" title="Configurações de fatura" <?= $disabledConfig ?>>
                 <i class="fas fa-cog fa-fw"></i>
             </button>
+            <button href="#modalVincularFaturas" id="vincularFaturas" data-toggle="modal" role="button" class="btn btn-primary btn-sm tip-bottom" title="Vincular faturas">
+                <i class="fas fa-link fa-fw"></i>
+                Vincular Faturas
+            </button>
             <button href="#modalNovaFatura" id="novaFatura" data-toggle="modal" role="button" class="btn btn-primary btn-sm tip-bottom" title="Abrir nova fatura" <?= $disabledFatura ?>>
                 <i class="fas fa-plus fa-fw"></i>
                 Nova Fatura
@@ -152,24 +155,39 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         $disabledPagar = '';
 
                         if ($r->fatura_aberta == 0) {
+                            //FATURA FECHADA
                             $status = 'FECHADA';
                             $label = 'inverse';
-                            $disabled = 'disabled';
+                            // $disabled = 'disabled';
+                            $hrefFechar = '#modalReabrir';
+                            $titleFechar = 'Abrir fatura';
+                            $colorFechar = 'inverse';
                             $iconFechar = 'fas fa-lock';
+                            $iconFaturaAtual = null;
                         } else if ($r->fatura_aberta == 2) {
+                            //FATURA FUTURA
                             $status = '';
                             $label = '';
                             $disabledPagar = 'disabled';
                             $disabled = 'disabled';
-                            $iconFechar = 'fas fa-unlock';
+                            $hrefFechar = '#modalFechar';
+                            $titleFechar = 'Abrir fatura';
+                            $colorFechar = 'inverse';
+                            $iconFechar = 'fas fa-lock';
+                            $iconFaturaAtual = null;
                         } else {
+                            //FATURA ABERTA
                             $status = 'ABERTA';
-                            $label = 'default';
+                            $label = 'primary';
+                            $hrefFechar = '#modalFechar';
+                            $titleFechar = 'Fechar fatura';
                             $disabledPagar = 'disabled';
+                            $colorFechar = 'default';
                             $iconFechar = 'fas fa-unlock';
+                            $iconFaturaAtual = ' <i class="fas fa-long-arrow-alt-left fa-lg fa-fw" title="Fatura atual"></i>';
                         }
 
-                        if (getVinculoFatura($r->id_fatura) == 0) {
+                        if (!getVinculoFatura($r->id_fatura)) {
                             $statusVinculo = null;
                             $hrefVinculo = '#modalVincular';
                             $titleVinculo = 'Fatura não vinculada';
@@ -204,7 +222,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         $valor_total = $this->fatura_model->getValorTotalFatura($r->id_fatura);
 
                         echo '<tr>';
-                        echo '<td>' . $mes . ' / ' . $ano . '</td>';
+                        echo '<td><a href="' . base_url('financeiro/faturas/detalhes/' . $r->id_fatura . '/' . $cartao_selecionado->id_cartao) . '">' . $mes . ' / ' . $ano . $iconFaturaAtual . '</a></td>';
                         echo '<td>' . date(('d/m/Y'), strtotime($r->vencimento)) . $statusVinculo . '</td>';
 
                         echo '<td style="cursor: pointer; color: ' . $color . '" class="i-copy-total"><i class="fas fa-copy fa-fw hidden icon-total"></i> ' . number_format($valor_total, 2, ',', '.') . '</td>';
@@ -216,7 +234,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             echo '<button ' . $disabledPagar . ' href="#modalPagar" style="margin-right: 1%"  class="btn btn-success btn-sm pagar" data-toggle="modal" title="Pagar Fatura" id_fatura="' . $r->id_fatura . '">
                                 <i class="' . $iconPagar . ' fa-lg fa-fw"></i></button>';
 
-                            echo '<button ' . $disabled . ' href="#modalFechar" style="margin-right: 1%"  class="btn btn-inverse btn-sm fechar" data-toggle="modal" title="Fechar Fatura" id_fatura="' . $r->id_fatura . '">
+                            echo '<button ' . $disabled . ' href="' . $hrefFechar . '" style="margin-right: 1%"  class="btn btn-' . $colorFechar . ' btn-sm fechar" data-toggle="modal" title="' . $titleFechar . '" id_fatura="' . $r->id_fatura . '">
                                 <i class="' . $iconFechar . ' fa-lg fa-fw"></i></button>';
 
                             echo '<button href="' . $hrefVinculo . '" style="margin-right: 1%"  class="btn btn-' . $colorVinculo . ' btn-sm vinculo" data-toggle="modal" title="' . $titleVinculo . '" id_fatura="' . $r->id_fatura . '">
@@ -244,7 +262,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 <?= $this->pagination->create_links(); ?>
 
 <form id="form_cartao" action="<?php echo base_url('financeiro/faturas'); ?>" method="get">
-    <input type="hidden" id="id_cartao" name="id_cartao">
+    <input type="hidden" id="id_cartao" name="cartao">
 </form>
 
 <!-- Modal FILTRAR -->
@@ -377,7 +395,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
     </div>
 </div>
 
-<!-- Modal ABRIR NOVA FATURA-->
+<!-- Modal ABRIR NOVA FATURA -->
 <div class="modal fade" id="modalNovaFatura" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -500,7 +518,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
     </div>
 <?php } ?>
 
-<!-- Modal FECHAR FATURA-->
+<!-- Modal FECHAR FATURA -->
 <div class="modal fade" id="modalFechar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -511,14 +529,14 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             <form id="formFechar" action="<?php echo base_url('financeiro/faturas/fechar') ?>" method="post">
                 <div class="modal-body">
                     <p class="font-weight-bold">Confirma o fechamento desta fatura?</p>
-                    <input id="id_fatura" type="hidden" name="id_fatura" value="" />
-                    <input id="urlFecharFatura" type="hidden" name="urlAtual" value="" />
+                    <input class="id_fatura" type="hidden" name="id_fatura" value="" />
+                    <input class="urlAtual" type="hidden" name="urlAtual" value="" />
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                         <i class="fa fa-times fa-fw"></i> Cancelar
                     </button>
-                    <button class="btn btn-inverse btn-sm" id="btnFechar">
+                    <button class="btn btn-primary btn-sm" id="btnFechar">
                         <i class="fa fa-check fa-fw"></i> Confirmar
                     </button>
                 </div>
@@ -527,7 +545,104 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
     </div>
 </div>
 
-<!-- Modal VINCULAR FATURA-->
+<!-- Modal REABRIR FATURA -->
+<div class="modal fade" id="modalReabrir" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-default">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title ">Reabrir fatura</h4>
+            </div>
+            <form id="formFechar" action="<?php echo base_url('financeiro/faturas/reabrir') ?>" method="post">
+                <div class="modal-body">
+                    <p class="font-weight-bold">Confirma a reabertura desta fatura?</p>
+                    <input class="id_fatura" type="hidden" name="id_fatura" value="" />
+                    <input class="urlAtual" type="hidden" name="urlAtual" value="" />
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                        <i class="fa fa-times fa-fw"></i> Cancelar
+                    </button>
+                    <button class="btn btn-primary btn-sm" id="btnFechar">
+                        <i class="fa fa-check fa-fw"></i> Confirmar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal VINCULAR FATURAS DE TODOS OS CARTOES -->
+<div class="modal fade" id="modalVincularFaturas" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-white ">Vincular faturas</h4>
+            </div>
+            <form id="formVincularFaturas" action="<?php echo base_url('financeiro/faturas/vincularFaturas') ?>" method="post">
+                <div class="modal-body">
+                    <p class="font-weight-bold">Defina o mês e ano de referência para vínculo de todas as faturas dos cartões ativos:</p>
+                    <div class="row">
+                        <div class="col-lg-6 form-group">
+                            <label class="control-label font-weight-bold" for="select_mes">
+                                Mês de referência *
+                            </label>
+                            <select class="form-control" id="mes_referencia" name="mesReferencia">
+                                <?php $mesAtual = date('m'); ?>
+                                <option value="">
+                                    << Selecione>>
+                                </option>
+                                <option value="01" <?= $mesAtual == '01' ? 'selected' : ''; ?>>01 - JANEIRO</option>
+                                <option value="02" <?= $mesAtual == '02' ? 'selected' : ''; ?>>02 - FEVEREIRO</option>
+                                <option value="03" <?= $mesAtual == '03' ? 'selected' : ''; ?>>03 - MARÇO</option>
+                                <option value="04" <?= $mesAtual == '04' ? 'selected' : ''; ?>>04 - ABRIL</option>
+                                <option value="05" <?= $mesAtual == '05' ? 'selected' : ''; ?>>05 - MAIO</option>
+                                <option value="06" <?= $mesAtual == '06' ? 'selected' : ''; ?>>06 - JUNHO</option>
+                                <option value="07" <?= $mesAtual == '07' ? 'selected' : ''; ?>>07 - JULHO</option>
+                                <option value="08" <?= $mesAtual == '08' ? 'selected' : ''; ?>>08 - AGOSTO</option>
+                                <option value="09" <?= $mesAtual == '09' ? 'selected' : ''; ?>>09 - SETEMBRO</option>
+                                <option value="10" <?= $mesAtual == '10' ? 'selected' : ''; ?>>10 - OUTUBRO</option>
+                                <option value="11" <?= $mesAtual == '11' ? 'selected' : ''; ?>>11 - NOVEMBRO</option>
+                                <option value="12" <?= $mesAtual == '12' ? 'selected' : ''; ?>>12 - DEZEMBRO</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-6 form-group">
+                            <label class="control-label font-weight-bold" for="select_mes">
+                                Ano de referência *
+                            </label>
+                            <select class="form-control" id="anoReferenciaSelect" name="anoReferencia">
+                                <?php if ($yearsList) {
+                                    foreach ($yearsList as $year) { ?>
+                                        <option value="<?= $year ?>" <?= (date('Y') == $year ? 'selected' : '') ?>><?= $year ?></option>
+                                <?php }
+                                } ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <p class="note note-info"><i class="text-info fa fa-info-circle fa-fw fa-lg"></i>
+                        Esta ação irá vincular ao módulo de Lançamentos todas as faturas dos cartões ativos referentes ao mês e ano selecionados.
+                    </p>
+                    <!-- <p class="note note-info"><i class="text-info fa fa-info-circle fa-fw fa-lg"></i>
+                        Todas as atualizações de valores das faturas serão refletidas automaticamente no módulo de Lançamentos
+                    </p> -->
+                    <input class="urlAtual" type="hidden" name="urlAtual" />
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                        <i class="fa fa-times fa-fw"></i> Cancelar
+                    </button>
+                    <button class="btn btn-primary btn-sm" id="btnFechar">
+                        <i class="fa fa-check fa-fw"></i> Confirmar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal VINCULAR FATURA UNICA -->
 <div class="modal fade" id="modalVincular" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -555,7 +670,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
     </div>
 </div>
 
-<!-- Modal DESVINCULAR FATURA-->
+<!-- Modal DESVINCULAR FATURA -->
 <div class="modal fade" id="modalDesvincular" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -583,7 +698,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
     </div>
 </div>
 
-<!-- Modal PAGAR FATURA-->
+<!-- Modal PAGAR FATURA -->
 <div class="modal fade" id="modalPagar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -727,7 +842,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         });
 
         $(document).on('click', '.fechar', function(event) {
-            $("#id_fatura").val($(this).attr('id_fatura'));
+            $(".id_fatura").val($(this).attr('id_fatura'));
             $("#urlFecharFatura").val($(location).attr('href'));
         });
 
@@ -791,6 +906,30 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         });
 
         $("#formNovaFatura").validate({
+            rules: {
+                mes_referencia: {
+                    required: true
+                },
+            },
+            messages: {
+                mes_referencia: {
+                    required: 'Selecione o mês de referência'
+                },
+            },
+
+            errorClass: "help-block",
+            errorElement: "p",
+            highlight: function(element, errorClass, validClass) {
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
+            }
+        });
+
+        $("#formVincularFaturas").validate({
             rules: {
                 mes_referencia: {
                     required: true

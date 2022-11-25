@@ -1,16 +1,16 @@
 <?php if ($anuncios) {
     foreach ($anuncios as $a) {
-        $format = "d-m-Y";
-        $hoje = DateTime::createFromFormat($format, date('d-m-Y'));
-        $expiracao = DateTime::createFromFormat($format, date(('d-m-Y'), strtotime($a->data_expiracao)));
-        $validade = $expiracao > $hoje;
+        $format     = "d-m-Y";
+        $hoje       = DateTime::createFromFormat($format, date('d-m-Y'));
+        $expiracao  = DateTime::createFromFormat($format, date(('d-m-Y'), strtotime($a->data_expiracao)));
+        $validade   = $expiracao > $hoje;
 
         if ($validade == true) {
             if ($a->estilo != 'bg-default') {
-                $estilo = $a->estilo;
+                $estilo     = $a->estilo;
                 $text_white = 'text-white';
             } else {
-                $estilo = $a->estilo;
+                $estilo     = $a->estilo;
                 $text_white = '';
             }
 ?>
@@ -43,16 +43,16 @@
 if ($direcionados) {
     foreach ($direcionados as $d) {
         $format = "d-m-Y";
-        $hoje = DateTime::createFromFormat($format, date('d-m-Y'));
-        $expiracao = DateTime::createFromFormat($format, date(('d-m-Y'), strtotime($d->data_expiracao)));
-        $validade = $expiracao > $hoje;
+        $hoje       = DateTime::createFromFormat($format, date('d-m-Y'));
+        $expiracao  = DateTime::createFromFormat($format, date(('d-m-Y'), strtotime($d->data_expiracao)));
+        $validade   = $expiracao > $hoje;
 
         if ($validade == true) {
             if ($d->estilo != 'bg-default') {
-                $estilo = $d->estilo;
+                $estilo     = $d->estilo;
                 $text_white = 'text-white';
             } else {
-                $estilo = $d->estilo;
+                $estilo     = $d->estilo;
                 $text_white = '';
             }
         ?>

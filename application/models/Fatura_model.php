@@ -8,7 +8,6 @@ class Fatura_model extends CI_Model
     /**
      * author: Leônidas Ferreira
      * email: leonidas.f.silva@hotmail.com
-     *
      */
 
     function __construct()
@@ -27,8 +26,8 @@ class Fatura_model extends CI_Model
             $this->db->where($where);
         }
         $this->db->where('status', 1);
-        //        este trecho do codigo foi retirado para tornar visivel aos titulares as faturas do cartoes adicionais
-        //        $this->db->where('id_usuario', $id_usuario);
+        // este trecho do codigo foi comentado para tornar visivel aos titulares as faturas do cartoes adicionais
+        // $this->db->where('id_usuario', $id_usuario);
         $this->db->where('id_cartao', $id_cartao);
         $query = $this->db->get();
 
@@ -482,12 +481,20 @@ class Fatura_model extends CI_Model
 
     function getVinculoFatura($idFatura)
     {
-        $this->db->select('*');
-        $this->db->from('lancamentos');
-        $this->db->where('status', 1);
-        $this->db->where('id_fatura', $idFatura);
+        $count = $this->db->select('*')
+            ->from('lancamentos')
+            ->where('status', 1)
+            ->where('id_fatura', $idFatura);
 
-        return $this->db->count_all_results();
+        if ($count->count_all_results() > 0) {
+            $this->db
+                ->select('*')
+                ->from('lancamentos')
+                ->where('status', 1)
+                ->where('id_fatura', $idFatura);
+            return $this->db->get()->row();
+        }
+        return false;
     }
 
     function getFaturaByLancamento($idLancamento)
@@ -495,5 +502,117 @@ class Fatura_model extends CI_Model
         $this->db->from('lancamentos_faturas');
         $this->db->where('id_lancamento', $idLancamento);
         return $this->db->get()->row('id_fatura');
+    }
+
+    function getFaturasTerceiros($idUsuario, $nome, $mesReferencia, $anoReferencia)
+    {
+        if (!is_string($nome) || is_numeric($nome)) {
+            return false;
+        }
+
+        $query = "SELECT f.*,
+            lfa.mes_referencia
+            FROM faturas f
+            INNER JOIN lancamentos_faturas lf
+            ON lf.id_fatura = f.id_fatura
+            INNER JOIN lancamentos_faturas_assoc lfa
+            ON lfa.id_lancamento = lf.id_lancamento
+            WHERE lf.nome_cliente LIKE '$nome'
+            AND lfa.mes_referencia = $mesReferencia
+            AND lfa.ano_referencia = $anoReferencia
+            AND f.id_usuario = $idUsuario
+            GROUP BY f.id_cartao
+            ORDER BY lf.criado_em DESC";
+
+        $resultQuery = $this->db->query($query);
+        $result = $resultQuery->result_array();
+
+        if (!$result) {
+            return false;
+        }
+        return $result;
+    }
+
+    function getLancamentosTerceiros($idUsuario, $idCartao, $nome, $mesReferencia)
+    {
+        if (!is_string($nome) || is_numeric($nome)) {
+            return false;
+        }
+
+        $query = "SELECT lfa.*,
+            lf.nome_cliente,
+            lf.descricao,
+            f.id_cartao
+            FROM lancamentos_faturas lf
+            INNER JOIN faturas f
+            ON lf.id_fatura = f.id_fatura
+            INNER JOIN lancamentos_faturas_assoc lfa
+            ON lfa.id_lancamento = lf.id_lancamento
+            WHERE lf.nome_cliente LIKE '$nome'
+            AND f.id_usuario = $idUsuario
+            AND f.id_cartao = $idCartao
+            AND lfa.mes_referencia = $mesReferencia
+            AND lf.status = 1
+            AND lfa.status = 1
+            ORDER BY lf.criado_em DESC";
+
+        $resultQuery = $this->db->query($query);
+        $result = $resultQuery->result_array();
+
+        if (!$result) {
+            return false;
+        }
+
+        return $result;
+    }
+
+    function autoCompleteTerceiros($q, $id_usuario)
+    {
+        $query = $this->db->select('*')
+            ->limit(5)
+            ->like('nome_cliente', $q)
+            ->where('id_usuario', $id_usuario)
+            ->where('status', 1)
+            ->group_by('nome_cliente')
+            ->get('lancamentos_faturas');
+
+        if ($query->num_rows() > 0) {
+            $row_set = [];
+
+            foreach ($query->result_array() as $row) {
+                $row_set[] = [
+                    'label' => $row['nome_cliente']
+                ];
+            }
+            echo json_encode($row_set);
+        }
+    }
+
+    function fecharTodasFaturasAbertas($id_cartao, $id_usuario)
+    {
+        $this->db->select('*');
+        $this->db->where('fatura_aberta', 1);
+        $this->db->where('status', 1);
+        $this->db->where('id_usuario', $id_usuario);
+        $this->db->where('id_cartao', $id_cartao);
+        $query = $this->db->get('faturas');
+
+        $results = $query->result_array();
+
+        if ($results) {
+            foreach ($results as $result) {
+                try {
+                    $update = [
+                        'fatura_aberta' => 0
+                    ];
+
+                    $this->edit('faturas', $update, 'id_fatura', $result['id_fatura']);
+                } catch (\Exception $e) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 }

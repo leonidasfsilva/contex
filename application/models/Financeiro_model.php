@@ -39,9 +39,9 @@ class Financeiro_model extends CI_Model
             }
         }
 
-        $query = $this->db->get();
+        $query  = $this->db->get();
         $result = !$one ? $query->result() : $query->row();
-
+        // getSqlStatement(); //retrieve the sql statement query string
         return $result;
     }
 

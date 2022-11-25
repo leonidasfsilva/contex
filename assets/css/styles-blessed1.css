@@ -1588,8 +1588,8 @@ body.nooverflow {
 }
 
 .panel-body .panel-footer {
-    margin: 0 -24px -24px;
-    padding: 24px;
+    margin: 0;
+    padding: 15px;
     border-bottom-right-radius: 2px;
     border-bottom-left-radius: 2px;
     border-top: 0;
@@ -2407,7 +2407,7 @@ a.amazo-tile {
 
 .shortcut-tile .tile-body {
     padding: 12px;
-    font-size: 30px;
+    font-size: 13px;
     line-height: 30px;
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;

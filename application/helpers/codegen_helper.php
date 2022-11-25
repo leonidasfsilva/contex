@@ -9,8 +9,8 @@ function differenceInHours($startdate, $enddate)
     $starttimestamp = strtotime($startdate);
     $endtimestamp = strtotime($enddate);
     $return = abs($endtimestamp - $starttimestamp) / 3600;
-//    print_array($starttimestamp);
-//    print_array($endtimestamp);
+    //    print_array($starttimestamp);
+    //    print_array($endtimestamp);
     return $return;
 }
 
@@ -36,6 +36,16 @@ function print_array_exit($a)
 
 function varDump($a)
 {
+    // xdebug without limit
+    // ini_set('xdebug.var_display_max_depth', -1);
+    // ini_set('xdebug.var_display_max_children', -1);
+    // ini_set('xdebug.var_display_max_data', -1);
+
+    //xdebug with safe deep
+    ini_set('xdebug.var_display_max_depth', 10);
+    ini_set('xdebug.var_display_max_children', 256);
+    ini_set('xdebug.var_display_max_data', 1024);
+
     echo '<pre>';
     var_dump($a);
     echo '</pre>';
@@ -43,10 +53,41 @@ function varDump($a)
 
 function varDumpExit($a)
 {
+    // xdebug without limit
+    // ini_set('xdebug.var_display_max_depth', -1);
+    // ini_set('xdebug.var_display_max_children', -1);
+    // ini_set('xdebug.var_display_max_data', -1);
+
+    //xdebug with safe deep
+    ini_set('xdebug.var_display_max_depth', 10);
+    ini_set('xdebug.var_display_max_children', 256);
+    ini_set('xdebug.var_display_max_data', 1024);
+
     echo '<pre>';
     var_dump($a);
     echo '</pre>';
     exit();
+}
+
+function getSqlStatement()
+{
+    // xdebug without limit
+    // ini_set('xdebug.var_display_max_depth', -1);
+    // ini_set('xdebug.var_display_max_children', -1);
+    // ini_set('xdebug.var_display_max_data', -1);
+
+    //xdebug with safe deep
+    ini_set('xdebug.var_display_max_depth', 10);
+    ini_set('xdebug.var_display_max_children', 256);
+    ini_set('xdebug.var_display_max_data', 1024);
+
+    $CI     = get_instance();
+    $query  = $CI->db->last_query();
+
+    echo '<pre>';
+    var_dump($query);
+    echo '</pre>';
+    exit;
 }
 
 function clean_header($array)
@@ -75,9 +116,9 @@ function padronizarString($str)
     $str = preg_replace('/[óòõôö]/ui', 'o', $str);
     $str = preg_replace('/[úùûü]/ui', 'u', $str);
     $str = preg_replace('/[ç]/ui', 'c', $str);
-//    $str = preg_replace('/[,(),;:|!"#$%&\/=?~^><ªº-]/', '_', $str);
+    // $str = preg_replace('/[,(),;:|!"#$%&\/=?~^><ªº-]/', '_', $str);
     $str = preg_replace('/[^a-z0-9\/\-_. ]/i', '', $str);
-//    $str = preg_replace('/_+/', '_', $str); // ideia do Bacco :)
+    // $str = preg_replace('/_+/', '_', $str); // ideia do Bacco :)
     return strtoupper($str);
 }
 
@@ -86,6 +127,7 @@ function capsLock($str)
     return mb_convert_case($str, MB_CASE_UPPER, 'UTF-8');
 }
 
+// Refactor this method to receive an array instead of multiple parameters
 function gravaLog($id_usuario = null, $nome = null, $email = null, $acao = null, $ip = null)
 {
     $CI = get_instance();
@@ -136,7 +178,7 @@ function returnURL($get = null)
             $fullURL = $currentURL . '?' . $params; //full URL with parameter
             $CI->session->set_userdata('last_url', $fullURL);
         } else {
-//            $CI->session->unset_userdata('last_url');
+            //            $CI->session->unset_userdata('last_url');
         }
     }
 }

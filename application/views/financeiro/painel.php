@@ -14,24 +14,24 @@
     <?php endif ?>
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')): ?>
         <div class="col-md-6">
-            <a href="<?= base_url() ?>financeiro/cartoes" class="shortcut-tile tile-inverse">
-                <div class="tile-body">
-                    <div class="pull-left"><i class="fas fa-credit-card fa-fw"></i></div>
-                    <!--                            <div class="pull-right"><span class="badge">5</span></div>-->
-                </div>
-                <div class="tile-footer">
-                    Cartões
-                </div>
-            </a>
-        </div>
-        <div class="col-md-6">
-            <a href="<?= base_url() ?>financeiro/faturas" class="shortcut-tile tile-midnightblue">
+            <a href="<?= base_url() ?>financeiro/faturas" class="shortcut-tile tile-inverse">
                 <div class="tile-body">
                     <div class="pull-left"><i class="fas fa-file-invoice-dollar fa-fw"></i></div>
                     <!--                            <div class="pull-right"><span class="badge">5</span></div>-->
                 </div>
                 <div class="tile-footer">
                     Faturas
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6">
+            <a href="<?= base_url() ?>financeiro/cartoes" class="shortcut-tile tile-midnightblue">
+                <div class="tile-body">
+                    <div class="pull-left"><i class="fas fa-credit-card fa-fw"></i></div>
+                    <div class="pull-right"><span class="badge"><?= $this->cartoes_model->countCartoesUsuario(); ?></span></div>
+                </div>
+                <div class="tile-footer">
+                    Cartões
                 </div>
             </a>
         </div>

@@ -3091,7 +3091,7 @@ fieldset[disabled] .btn.btn-social.btn-windows-alt.active {
 }
 .badge {
     padding: 1px 5px;
-    font-size: 11px;
+    font-size: 85%;
     font-family: 'Open Sans', 'Droid Sans', Tahoma, Arial, sans-serif;
     line-height: 14px;
     color: rgba(255, 255, 255, 0.9) !important;
@@ -3104,28 +3104,28 @@ fieldset[disabled] .btn.btn-social.btn-windows-alt.active {
     background-color: #0286c2;
 }
 .badge-success {
-    background-color: #8bc34a;
+    background-color: #5cb85c;
 }
 .badge-success[href]:hover,
 .badge-success[href]:focus {
     background-color: #71a436;
 }
 .badge-info {
-    background-color: #00bcd4;
+    background-color: #5bc0de;
 }
 .badge-info[href]:hover,
 .badge-info[href]:focus {
     background-color: #008fa1;
 }
 .badge-warning {
-    background-color: #ffeb3b;
+    background-color: #f0ad4e;
 }
 .badge-warning[href]:hover,
 .badge-warning[href]:focus {
     background-color: #ffe608;
 }
 .badge-danger {
-    background-color: #e51c23;
+    background-color: #d9534f;
 }
 .badge-danger[href]:hover,
 .badge-danger[href]:focus {
