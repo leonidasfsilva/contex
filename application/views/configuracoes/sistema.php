@@ -252,7 +252,7 @@
             timer: 5000,
             timerProgressBar: true,
             icon: 'info',
-            title: 'Versão do Sistema: <?= versionApp() ?><br>Versão do PHP: <?= phpversion() ?>',
+            title: 'Versão do Sistema: <?= VERSION_APP ?><br>Versão do PHP: <?= phpversion() ?>',
             didOpen: (toast) => {
                 toast.addEventListener('mouseenter', Swal.stopTimer)
                 toast.addEventListener('mouseleave', Swal.resumeTimer)
