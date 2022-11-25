@@ -576,7 +576,7 @@ $this->load->view('includes/custom_js');
                         <div class="clearfix">
                             <ul class="list-unstyled list-inline pull-left pl-sm">
                                 <li>
-                                    <h6 style="margin: 0; text-transform: none">&copy; <?= date('Y'); ?> CONTEX - Sistema de Gestão | Powered by MX CODE</h6>
+                                    <h6 style="margin: 0; text-transform: none">&copy; <?= sprintf('%s %s ver. %s', date('Y'), 'CONTEX • Sistema de Gestão •', VERSION_APP) ; ?> </h6>
                                 </li>
                             </ul>
                             <button class="pull-right btn btn-link btn-xs hidden-print" id="back-to-top"><i class="fa fa-arrow-up"></i></button>

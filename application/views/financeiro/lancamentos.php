@@ -1,9 +1,9 @@
 <?php
-$status_lancamentos = $this->input->get('status');
-$tipo_lancamentos = $this->input->get('tipo');
-$periodo_lancamentos = $this->input->get('periodo');
-$inicio = $this->input->get('dataInicial');
-$fim = $this->input->get('dataFinal');
+$status_lancamentos     = $this->input->get('status');
+$tipo_lancamentos       = $this->input->get('tipo');
+$periodo_lancamentos    = $this->input->get('periodo');
+$inicio                 = $this->input->get('dataInicial');
+$fim                    = $this->input->get('dataFinal');
 ?>
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
@@ -53,8 +53,19 @@ $fim = $this->input->get('dataFinal');
         <h2>
             Saldo Resumido
         </h2>
+        <div class="panel-ctrls">
+            <a href="#" class="button-icon close-panel">
+                <i class="fas fa-times"></i>
+            </a>
+            <a href="#" class="button-icon expand">
+                <i class="fas fa-expand-arrows-alt expand-icon"></i>
+            </a>
+            <a href="#" class="button-icon panel-collapse">
+                <i class="fas fa-plus"></i>
+            </a>
+        </div>
     </div>
-    <div class="panel-body panel-no-padding">
+    <div class="panel-body panel-no-padding" style="display: none;">
         <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
             <thead>
                 <tr role="row">
@@ -63,7 +74,26 @@ $fim = $this->input->get('dataFinal');
                 </tr>
             </thead>
             <tr>
-                <td colspan="2" style="text-align: left; font-weight: bold">(=) SALDO DISPONÍVEL</td>
+                <td colspan="2" style="text-align: left;">(±) SALDO PROVISÓRIO EM CONTA</td>
+                <td colspan="1" style="text-align: right;">
+                    <?php echo number_format($total_provisorio->total, 2, ',', '.') ?></td>
+            </tr>
+            <?php if ($saidas_pendentes->total) { ?>
+                <tr>
+                    <td colspan="2" style="text-align: left; color: red">(-) SALDO DE SAÍDAS A CONFIRMAR</td>
+                    <td colspan="1" style="text-align: right; color: red">
+                        <?php echo number_format($saidas_pendentes->total, 2, ',', '.') ?></td>
+                </tr>
+            <?php } ?>
+            <?php if ($entradas_pendentes->total) { ?>
+                <tr>
+                    <td colspan="2" style="text-align: left; color: green">(+) SALDO DE ENTRADAS A CONFIRMAR</td>
+                    <td colspan="1" style="text-align: right; color: green">
+                        <?php echo number_format($entradas_pendentes->total, 2, ',', '.') ?></td>
+                </tr>
+            <?php } ?>
+            <tr>
+                <td colspan="2" style="text-align: left; font-weight: bold">(=) SALDO DISPONÍVEL EM CONTA</td>
                 <td colspan="1" style="text-align: right; font-weight: bold">
                     <strong><?php echo number_format($total->total, 2, ',', '.') ?></strong>
                 </td>
@@ -72,12 +102,66 @@ $fim = $this->input->get('dataFinal');
     </div>
 </div>
 
-<?php if (!$results) { ?>
+<?php
+$saidasPendentes    = null;
+$entradasPendentes  = null;
+$saidasEfetivadas   = null;
+$entradasEfetivadas = null;
+$totalSaidas        = null;
+$totalEntradas      = null;
+$totalGeral         = null;
+$prevLink           = null;
+$nextLink           = null;
+$monthText          = null;
+
+if (isset($referenceMonth) && $referenceMonth) {
+    $prevReferenceYear  = $referenceYear;
+    $nextReferenceYear  = $referenceYear;
+    $prevReferenceMonth = $referenceMonth - 1;
+    $nextReferenceMonth = $referenceMonth + 1;
+
+    if ($referenceMonth == 12) {
+        $nextReferenceMonth = 1;
+        $nextReferenceYear++;
+    }
+
+    if ($referenceMonth == 1) {
+        $prevReferenceMonth = 12;
+        $prevReferenceYear--;
+    }
+
+    if ($prevMonth && $nextMonth) {
+        $prevLinkTitle = sprintf('%s / %s', $prevMonth, $prevReferenceYear);
+        $nextLinkTitle = sprintf('%s / %s', $nextMonth, $nextReferenceYear);
+    }
+
+    $prevLink   = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $prevReferenceMonth, $prevReferenceYear)) .
+        " title='$prevLinkTitle'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-left'></i></span></a>";
+    $monthText  = "<span class='badge badge-primary' style='margin-left: 10px;'>Período: $month / $referenceYear</span>";
+    $nextLink   = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $nextReferenceMonth, $nextReferenceYear)) .
+        " title='$nextLinkTitle'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-right'></i></span></a>";
+}
+
+if (!$results) {
+?>
     <div class="panel panel-midnightblue">
         <div class="panel-heading">
             <h2>
                 Extrato de Lançamentos
+                <br class="visible-xs-block">
+                <?= ($referenceMonth ? $prevLink . $monthText . $nextLink : null) ?>
             </h2>
+            <div class="panel-ctrls">
+                <a href="#" class="button-icon close-panel">
+                    <i class="fas fa-times"></i>
+                </a>
+                <a href="#" class="button-icon expand">
+                    <i class="fas fa-expand-arrows-alt expand-icon"></i>
+                </a>
+                <a href="#" class="button-icon panel-collapse">
+                    <i class="fas fa-minus"></i>
+                </a>
+            </div>
         </div>
         <div class="panel-body panel-no-padding ">
             <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
@@ -103,6 +187,8 @@ $fim = $this->input->get('dataFinal');
         <div class="panel-heading">
             <h2>
                 Extrato de Lançamentos
+                <br class="visible-xs-block">
+                <?= ($referenceMonth ? $prevLink . $monthText . $nextLink : null) ?>
             </h2>
             <div class="panel-ctrls">
                 <a href="#" class="button-icon close-panel">
@@ -143,47 +229,42 @@ $fim = $this->input->get('dataFinal');
                         <th class="th_soma hidden" style="width: 10px !important;">Soma</th>
                         <th>Data</th>
                         <th>Descrição</th>
-                        <th>Status</th>
                         <th>Valor (R$)</th>
+                        <th>Status</th>
                         <th style="width: 130px">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                    $totalReceita = 0;
-                    $totalDespesa = 0;
-                    $saldo = 0;
                     foreach ($results as $r) {
-                        $vencimento = date(('d/m'), strtotime($r->data_lancamento));
+                        $vencimento = date(('d/m/y'), strtotime($r->data_lancamento));
 
                         if ($r->baixado == 0) {
-                            $status = 'Pendente';
+                            $status = 'PENDENTE';
                             $label_status = 'warning';
+                            $iconTipo = '<i class="fas fa-clock fa-fw"></i>';
                         } else {
-                            $status = 'Efetivado';
+                            $status = 'EFETIVADO';
                             $label_status = 'primary';
+                            $iconTipo = '<i class="fas fa-check fa-fw"></i>';
                         };
 
                         if ($r->tipo == 1) {
                             $color = 'green';
                             $label_tipo = 'success';
                             $tipo = 'ENTRADA';
+                            $icon = '<i class="fas fa-arrow-down fa-fw"></i>';
                         } else {
                             $color = 'red';
                             $label_tipo = 'danger';
                             $tipo = 'SAÍDA';
+                            $icon = '<i class="fas fa-arrow-up fa-fw"></i>';
                         }
 
                         if ($r->cliente_fornecedor) {
                             $fornecedor = $r->cliente_fornecedor;
                         } else {
                             $fornecedor = "&nbsp;";
-                        }
-
-                        if ($r->tipo == 1) {
-                            $tipo = 'ENTRADA';
-                        } else {
-                            $tipo = 'SAÍDA';
                         }
 
                         foreach ($formasPagamento as $f) {
@@ -193,19 +274,38 @@ $fim = $this->input->get('dataFinal');
                         }
 
 
+                        if ($r->valor < 0) {
+                            if ($r->baixado == 0) {
+                                $saidasPendentes += $r->valor;
+                            } else {
+                                $saidasEfetivadas += $r->valor;
+                            }
+                            $valor = number_format(abs($r->valor), 2, ',', '.');
+                        } else {
+                            if ($r->baixado == 0) {
+                                $entradasPendentes += $r->valor;
+                            } else {
+                                $entradasEfetivadas += $r->valor;
+                            }
+                            $valor = number_format($r->valor, 2, ',', '.');
+                        }
+
+                        $totalGeral += $r->valor;
+
                         echo '<tr>';
                         echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
                         echo '<td>' . $vencimento . '</td>';
                         //                    echo '<td><span class="badge badge-' . $label . '">' . ucfirst($r->tipo) . '</span></td>';
-                        echo '<td>' . strtoupper($r->descricao) . '<br><span class="small">' . ($fornecedor) . '</span></td>';
-                        echo '<td><span class="label label-' . $label_tipo . '">' . strtoupper($tipo) . '</span><br><span class="label label-' . $label_status . '">' . strtoupper($status) . '</span></td>';
-                        echo '<td><span class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small">' . ($forma_pgto) . '</td>';
-
-                        if ($r->valor < 0) {
-                            $valor = number_format(abs($r->valor), 2, ',', '.');
-                        } else {
-                            $valor = number_format($r->valor, 2, ',', '.');
-                        }
+                        echo '<td><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Detalhes" idLancamento="' .
+                            $r->id_lancamento . '" descricao="' . $r->descricao . '" valor="' . $valor . '" vencimento="' .
+                            date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
+                            $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '">' .
+                            strtoupper($r->descricao) .
+                            '<br><span class="small" style="color: grey;">' . ($fornecedor) . '</span></a></td>';
+                        echo '<td><span class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small" style="color: grey;">' . ($forma_pgto) . '</td>';
+                        echo '<td><span class="text-' . $label_tipo . '">' . ($icon) . '</span> <span class="badge badge-' . $label_tipo . '">' . ($tipo) . '</span>
+                        <br>
+                        <span class="text-' . $label_status . '">' . ($iconTipo) . '</span> <span class="badge badge-' . $label_status . '">' . ($status) . '</span></td>';
 
                         echo '<td>';
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
@@ -226,7 +326,10 @@ $fim = $this->input->get('dataFinal');
 
                         echo '</td>';
                         echo '</tr>';
-                    } ?>
+                    }
+                    $totalEntradas  = $entradasEfetivadas + $entradasPendentes;
+                    $totalSaidas    = $saidasEfetivadas + $saidasPendentes;
+                    ?>
                 </tbody>
             </table>
             <div id="somatorio_lancamentos" class="panel-footer hidden">
@@ -258,7 +361,19 @@ $fim = $this->input->get('dataFinal');
     <div class="panel-heading">
         <h2>
             Posição Consolidada
+            <?= (isset($referenceMonth) && $referenceMonth ? " do Período: $month / $referenceYear" : null) ?>
         </h2>
+        <div class="panel-ctrls">
+            <a href="#" class="button-icon close-panel">
+                <i class="fas fa-times"></i>
+            </a>
+            <a href="#" class="button-icon expand">
+                <i class="fas fa-expand-arrows-alt expand-icon"></i>
+            </a>
+            <a href="#" class="button-icon panel-collapse">
+                <i class="fas fa-minus"></i>
+            </a>
+        </div>
     </div>
     <div class="panel-body panel-no-padding">
         <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
@@ -268,31 +383,71 @@ $fim = $this->input->get('dataFinal');
                     <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
                 </tr>
             </thead>
-            <tr>
-                <td colspan="2" style="text-align: left;">(+) SALDO PROVISÓRIO EM CONTA</td>
-                <td colspan="1" style="text-align: right;">
-                    <?php echo number_format($total_provisorio->total, 2, ',', '.') ?></td>
-            </tr>
-            <?php if ($saidas_pendentes->total) { ?>
+            <?php if ($entradasPendentes) { ?>
                 <tr>
-                    <td colspan="2" style="text-align: left; color: red">(-) SALDO DE SAÍDAS A CONFIRMAR</td>
+                    <td colspan="2" style="text-align: left; color: #5cb85c">(+) SALDO DE ENTRADAS PENDENTES</td>
+                    <td colspan="1" style="text-align: right; color: #5cb85c">
+                        <?php echo number_format($entradasPendentes, 2, ',', '.') ?></td>
+                </tr>
+            <?php } ?>
+            <?php if ($entradasEfetivadas) { ?>
+                <tr>
+                    <td colspan="2" style="text-align: left; color: green">(+) SALDO DE ENTRADAS EFETIVADAS</td>
+                    <td colspan="1" style="text-align: right;  color: green">
+                        <?php echo number_format($entradasEfetivadas, 2, ',', '.') ?></td>
+                </tr>
+            <?php } ?>
+            <?php if ($entradasEfetivadas && $entradasPendentes) { ?>
+                <tr>
+                    <td colspan="2" style="text-align: left;">(=) SALDO TOTAL DE ENTRADAS</td>
+                    <td colspan="1" style="text-align: right;">
+                        <?php echo number_format($totalEntradas, 2, ',', '.') ?>
+                    </td>
+                </tr>
+            <?php } ?>
+
+            <?php if ($saidasPendentes) { ?>
+                <tr>
+                    <td colspan="2" style="text-align: left; color: red">(-) SALDO DE SAÍDAS PENDENTES</td>
                     <td colspan="1" style="text-align: right; color: red">
-                        <?php echo number_format($saidas_pendentes->total, 2, ',', '.') ?></td>
+                        <?php echo number_format($saidasPendentes, 2, ',', '.') ?></td>
                 </tr>
             <?php } ?>
-            <?php if ($entradas_pendentes->total) { ?>
+            <?php if ($saidasEfetivadas) { ?>
                 <tr>
-                    <td colspan="2" style="text-align: left; color: green">(+) SALDO DE ENTRADAS A CONFIRMAR</td>
-                    <td colspan="1" style="text-align: right; color: green">
-                        <?php echo number_format($entradas_pendentes->total, 2, ',', '.') ?></td>
+                    <td colspan="2" style="text-align: left; color: #d9534f">(-) SALDO DE SAÍDAS EFETIVADAS</td>
+                    <td colspan="1" style="text-align: right; color: #d9534f">
+                        <?php echo number_format($saidasEfetivadas, 2, ',', '.') ?></td>
                 </tr>
             <?php } ?>
-            <tr>
-                <td colspan="2" style="text-align: left; font-weight: bold">(=) SALDO DISPONÍVEL EM CONTA</td>
-                <td colspan="1" style="text-align: right; font-weight: bold">
-                    <strong><?php echo number_format($total->total, 2, ',', '.') ?></strong>
-                </td>
-            </tr>
+            <?php if ($saidasEfetivadas && $saidasPendentes) { ?>
+                <tr>
+                    <td colspan="2" style="text-align: left;">(=) SALDO TOTAL DE SAÍDAS</td>
+                    <td colspan="1" style="text-align: right;">
+                        <?php echo number_format($totalSaidas, 2, ',', '.') ?>
+                    </td>
+                </tr>
+            <?php } ?>
+            <?php if ($totalGeral) { ?>
+                <tr class="total-geral">
+                    <td colspan="2" style="text-align: left; font-weight: bold">(=) SALDO TOTAL DO PERÍODO</td>
+                    <td colspan="1" style="text-align: right; font-weight: bold">
+                        <?php echo number_format($totalGeral, 2, ',', '.') ?>
+                    </td>
+                </tr>
+                <?php
+                if ($totalGeral < 0) {
+                ?>
+                    <tr class="hidden provisorio-periodo">
+                        <td colspan="2" style="text-align: left; font-weight: bold">(±) SALDO PROVISÓRIO DO PERÍODO</td>
+                        <td colspan="1" style="text-align: right; font-weight: bold">
+                            <?php echo number_format(($total->total + $totalGeral), 2, ',', '.') ?>
+                        </td>
+                    </tr>
+
+                <?php } ?>
+            <?php } ?>
+
         </table>
     </div>
 </div>
@@ -330,13 +485,9 @@ $fim = $this->input->get('dataFinal');
                                 <option value="todos">
                                     << Todos>>
                                 </option>
-                                <option value="efetivado" <?php if ($status_lancamentos == 'efetivado') {
-                                                                echo 'selected';
-                                                            } ?>>EFETIVADO
+                                <option value="efetivado" <?= ($status_lancamentos == 'efetivado') ? 'selected' : null ?>>EFETIVADO
                                 </option>
-                                <option value="pendente" <?php if ($status_lancamentos == 'pendente') {
-                                                                echo 'selected';
-                                                            } ?>>PENDENTE
+                                <option value="pendente" <?= ($status_lancamentos == 'pendente') ? 'selected' : null ?>>PENDENTE
                                 </option>
                             </select>
                         </div>
@@ -346,7 +497,7 @@ $fim = $this->input->get('dataFinal');
                             <label class="tooltips font-weight-bold" title="Filtrar lançamentos por período específico">Período <i class="fa fa-info-circle fa-fw"></i></label>
                             <select name="periodo" id="select_periodo" class="form-control">
                                 <option value="">
-                                    << Selecione >>
+                                    << Selecione>>
                                 </option>
                                 <option value="todos" <?php if ($periodo_lancamentos == 'todos') {
                                                             echo 'selected';
@@ -380,6 +531,10 @@ $fim = $this->input->get('dataFinal');
                                                             echo 'selected';
                                                         } ?>>Últimos 90 dias
                                 </option>
+                                <option value="mensal" <?php if ($periodo_lancamentos == 'mensal' || !$periodo_lancamentos) {
+                                                            echo 'selected';
+                                                        } ?>>MÊS/ANO ESPECÍFICOS
+                                </option>
                                 <option value="especifico" <?php if ($periodo_lancamentos == 'especifico') {
                                                                 echo 'selected';
                                                             } ?>>PERÍODO ESPECÍFICO
@@ -393,6 +548,40 @@ $fim = $this->input->get('dataFinal');
                                 <input type="text" class="form-control datepicker" id="dataInicial" name="dataInicial" value="<?= $inicio ?>">
                                 <span class="input-group-addon">até</span>
                                 <input type="text" class="form-control datepicker" id="dataFinal" name="dataFinal" value="<?= $fim ?>">
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-6" id="div_periodo_mensal" hidden>
+                            <label class="control-label font-weight-bold" for="select_mes">
+                                Mês/ano específicos
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-addon">mês</span>
+
+                                <select class="form-control" id="mesReferencia" name="mesReferencia">
+                                    <option value="">
+                                        << Selecione>>
+                                    </option>
+                                    <option value="01" <?= ($referenceMonth == '01') ? 'selected' : null ?>>01 - JANEIRO</option>
+                                    <option value="02" <?= ($referenceMonth == '02') ? 'selected' : null ?>>02 - FEVEREIRO</option>
+                                    <option value="03" <?= ($referenceMonth == '03') ? 'selected' : null ?>>03 - MARÇO</option>
+                                    <option value="04" <?= ($referenceMonth == '04') ? 'selected' : null ?>>04 - ABRIL</option>
+                                    <option value="05" <?= ($referenceMonth == '05') ? 'selected' : null ?>>05 - MAIO</option>
+                                    <option value="06" <?= ($referenceMonth == '06') ? 'selected' : null ?>>06 - JUNHO</option>
+                                    <option value="07" <?= ($referenceMonth == '07') ? 'selected' : null ?>>07 - JULHO</option>
+                                    <option value="08" <?= ($referenceMonth == '08') ? 'selected' : null ?>>08 - AGOSTO</option>
+                                    <option value="09" <?= ($referenceMonth == '09') ? 'selected' : null ?>>09 - SETEMBRO</option>
+                                    <option value="10" <?= ($referenceMonth == '10') ? 'selected' : null ?>>10 - OUTUBRO</option>
+                                    <option value="11" <?= ($referenceMonth == '11') ? 'selected' : null ?>>11 - NOVEMBRO</option>
+                                    <option value="12" <?= ($referenceMonth == '12') ? 'selected' : null ?>>12 - DEZEMBRO</option>
+                                </select>
+                                <span class="input-group-addon">ano</span>
+                                <select class="form-control" id="anoReferenciaSelect" name="anoReferencia">
+                                    <?php if ($yearsList) {
+                                        foreach ($yearsList as $year) { ?>
+                                            <option value="<?= $year ?>" <?= ($referenceYear == $year ? 'selected' : '') ?>><?= $year ?></option>
+                                    <?php }
+                                    } ?>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -458,7 +647,7 @@ $fim = $this->input->get('dataFinal');
                                 <label for="formaPgto" class="font-weight-bold">Forma Pagamento *</label>
                                 <select name="formaPgto" class="form-control">
                                     <option value="">
-                                        << Selecione >>
+                                        << Selecione>>
                                     </option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
@@ -530,7 +719,7 @@ $fim = $this->input->get('dataFinal');
                                 <label for="formaPgto" class="font-weight-bold">Forma Pagamento *</label>
                                 <select name="formaPgto" class="form-control">
                                     <option value="">
-                                        << Selecione >>
+                                        << Selecione>>
                                     </option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
@@ -610,7 +799,7 @@ $fim = $this->input->get('dataFinal');
                                 <label for="formaPgtoEditar" class="font-weight-bold">Forma Pagamento *</label>
                                 <select name="formaPgto" id="formaPgtoEditar" class="form-control">
                                     <option value="">
-                                        << Selecione >>
+                                        << Selecione>>
                                     </option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
@@ -626,6 +815,7 @@ $fim = $this->input->get('dataFinal');
                     <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                         <i class="fa fa-times fa-fw"></i> Cancelar
                     </button>
+                    <button type="button" href="#modalCopiar" data-dismiss="modal" data-toggle="modal" class="btn btn-info btn-sm"><i class="fa fa-copy fa-fw"></i> Copiar</button>
                     <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
                 </div>
             </form>
@@ -684,13 +874,13 @@ $fim = $this->input->get('dataFinal');
                         <div id="divPagamentoCopiar" class="hidden">
                             <div class="form-group col-lg-4">
                                 <label for="pagamentoCopiar" class="font-weight-bold">Data Pagamento</label>
-                                <input class="form-control datepicker" id="pagamentoCopiar" type="text" name="pagamento" />
+                                <input class="form-control datepicker reset-data-pagamento" id="pagamentoCopiar" type="text" name="pagamento" />
                             </div>
                             <div class="form-group col-lg-4">
                                 <label for="formaPgtoCopiar" class="font-weight-bold">Forma Pagamento *</label>
                                 <select name="formaPgto" id="formaPgtoCopiar" class="form-control">
                                     <option value="">
-                                        << Selecione >>
+                                        << Selecione>>
                                     </option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
@@ -706,7 +896,7 @@ $fim = $this->input->get('dataFinal');
                     <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                         <i class="fa fa-times fa-fw"></i> Cancelar
                     </button>
-                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Copiar</button>
+                    <button type="submit" class="btn btn-info btn-sm"><i class="fa fa-check fa-fw"></i> Copiar</button>
                 </div>
             </form>
         </div>
@@ -723,7 +913,7 @@ $fim = $this->input->get('dataFinal');
             </div>
             <form id="formExcluir" action="<?= base_url('financeiro/lancamentos/excluir'); ?>" method="post">
                 <div class="modal-body">
-                    <p>Deseja realmente excluir este lançamento?</p>
+                    <p class="font-weight-bold">Deseja realmente excluir este lançamento?</p>
                     <input id="idExcluir" type="hidden" name="id" value="" />
                     <input class="urlAtual" type="hidden" name="urlAtual" value="" />
                 </div>
@@ -743,6 +933,10 @@ $fim = $this->input->get('dataFinal');
 
     $('.dropdown-menu>form').click(function(e) {
         e.stopPropagation();
+    });
+
+    $('.total-geral').click(function(e) {
+        $('.provisorio-periodo').toggleClass('hidden');
     });
 
     $(document).on('change', '#select_periodo, #select_situacao', function() {
@@ -817,6 +1011,7 @@ $fim = $this->input->get('dataFinal');
 
         $('#select_periodo').change(function() {
             const value = $(this).val();
+
             if (value === 'especifico') {
                 $('#div_intervalo_data').show();
             } else {
@@ -824,15 +1019,31 @@ $fim = $this->input->get('dataFinal');
                 $('#dataInicial').val('');
                 $('#dataFinal').val('');
             }
+
+            if (value === 'mensal') {
+                $('#div_periodo_mensal').show();
+            } else {
+                $('#div_periodo_mensal').hide();
+                $('#mesReferencia').val('');
+            }
         });
 
         $('#select_periodo option:selected').each(function(index, element) {
-            if ($(this).val() == 'especifico') {
+            const value = $(this).val();
+
+            if (value == 'especifico') {
                 $('#div_intervalo_data').show();
             } else {
                 $('#div_intervalo_data').hide();
                 $('#dataInicial').val('');
                 $('#dataFinal').val('');
+            }
+
+            if (value === 'mensal') {
+                $('#div_periodo_mensal').show();
+            } else {
+                $('#div_periodo_mensal').hide();
+                $('#mesReferencia').val('');
             }
         });
 
@@ -860,6 +1071,7 @@ $fim = $this->input->get('dataFinal');
             } else {
                 $('#divRecebimento, #divPagamentoEditar, #divPagamentoCopiar, #divPagamento').addClass('hidden');
             }
+            $('.reset-data-pagamento').val('');
         }
 
         function calculaValorParcela(parcela, valor) {
@@ -1113,6 +1325,7 @@ $fim = $this->input->get('dataFinal');
             } else {
                 $("#pagoEditar, #pagoCopiar").iCheck('uncheck');
                 $("#divPagamentoEditar, #divPagamentoCopiar").addClass('hidden');
+                $('.reset-data-pagamento').val('');
             }
         });
     });

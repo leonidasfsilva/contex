@@ -6198,15 +6198,10 @@ a.label:focus {
 .badge {
     display: inline-block;
     min-width: 10px;
-    padding: 3px 7px;
-    font-size: 11px;
     font-weight: 600;
-    color: #ffffff;
-    line-height: 1.5;
     vertical-align: baseline;
     white-space: nowrap;
     text-align: center;
-    background-color: #90a4ae;
     border-radius: 8px;
 }
 

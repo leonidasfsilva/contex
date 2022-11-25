@@ -34,14 +34,25 @@ class Lancamentos extends CI_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar lançamentos.');
             redirect(base_url());
         }
-        $status = $_GET['status'] ?? null;
-        $tipo = $_GET['tipo'] ?? null;
-        $periodo = $_GET['periodo'] ?? null;
-        $inicio = $_GET['dataInicial'] ?? null;
-        $fim = $_GET['dataFinal'] ?? null;
-        $start = $_GET['per_page'] ?? null;
-        $where = null;
-        $limit = null;
+
+        $status         = $_GET['status'] ?? null;
+        $tipo           = $_GET['tipo'] ?? null;
+        $periodo        = $_GET['periodo'] ?? null;
+        $inicio         = $_GET['dataInicial'] ?? null;
+        $fim            = $_GET['dataFinal'] ?? null;
+        $start          = $_GET['per_page'] ?? null;
+        $referenceMonth = $_GET['mesReferencia'] ?? null;
+        $referenceYear  = $_GET['anoReferencia'] ?? null;
+        $where          = null;
+        $limit          = null;
+        $year           = date('Y');
+        $keys           = range(2018, $year + 3);
+        $yearsList      = $keys;
+
+        $order_by       = [
+            'data_lancamento'   => 'desc',
+            'id_lancamento'     => 'desc',
+        ];
 
         $this->load->library('pagination');
 
@@ -77,16 +88,77 @@ class Lancamentos extends CI_Controller
                 $semana = $this->getLastNinetyDays();
                 $where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
                 break;
-            default:
-                if ($this->financeiro_model->countLancamentos(getUserId()) > 20) {
-                    $limit = 20;
-                    $start = $this->financeiro_model->countLancamentos(getUserId()) - $limit;
+            case 'especifico':
+                if (isset($inicio) && isset($fim) && $inicio != null && $fim != null) {
+                    $inicio = explode('/', $inicio);
+                    $inicio = $inicio[2] . '-' . $inicio[1] . '-' . $inicio[0];
+
+                    $fim = explode('/', $fim);
+                    $fim = $fim[2] . '-' . $fim[1] . '-' . $fim[0];
+
+                    $limit = null;
+                    if (!isset($where)) {
+                        $where = 'data_lancamento BETWEEN "' . $inicio . '" AND "' . $fim . '"';
+                    } else {
+                        $where .= ' AND data_lancamento BETWEEN "' . $inicio . '" AND "' . $fim . '"';
+                    }
                 }
+                break;
+            case 'mensal':
+                if (isset($referenceMonth) && $referenceMonth) {
+                    $todayDate      = date('Y-m-d');
+                    $todayArray     = explode('-', $todayDate);
+                    $daysInMonth    = cal_days_in_month(CAL_GREGORIAN, $referenceMonth, $todayArray[0]);
+                    $todayStartDate = $todayArray[0] . '-' . $referenceMonth . '-01';
+                    $todayEndDate   = $todayArray[0] . '-' . $referenceMonth . '-' . $daysInMonth;
+                    $limit = null;
+
+                    if (isset($referenceYear) && $referenceYear) {
+                        $todayStartDate = $referenceYear . '-' . $referenceMonth . '-01';
+                        $todayEndDate   = $referenceYear . '-' . $referenceMonth . '-' . $daysInMonth;
+                    } else {
+                        $referenceYear  = $todayArray[0];
+                    }
+
+                    if (!isset($where)) {
+                        $where = "data_lancamento BETWEEN '$todayStartDate' AND '$todayEndDate'";
+                    } else {
+                        $where .= " AND data_lancamento BETWEEN '$todayStartDate' AND '$todayEndDate'";
+                    }
+                }
+                break;
+            default:
                 $order_by = [
-                    'data_lancamento' => 'desc',
-                    'id_lancamento' => 'desc',
+                    'data_lancamento'   => 'desc',
+                    'id_lancamento'     => 'desc',
                 ];
-                $limitado = true;
+
+                $todayDate      = date('Y-m-d');
+                $todayArray     = explode('-', $todayDate);
+                $daysInMonth    = cal_days_in_month(CAL_GREGORIAN, $todayArray[1], $todayArray[0]);
+                $todayStartDate = $todayArray[0] . '-' . $todayArray[1] . '-01';
+                $todayEndDate   = $todayArray[0] . '-' . $todayArray[1] . '-' . $daysInMonth;
+                $referenceMonth = $todayArray[1];
+                $limit          = null;
+
+                if (isset($referenceYear) && $referenceYear) {
+                    $todayStartDate = $referenceYear . '-' . $todayArray[1] . '-01';
+                    $todayEndDate   = $referenceYear . '-' . $todayArray[1] . '-' . $daysInMonth;
+                } else {
+                    $referenceYear  = $todayArray[0];
+                }
+
+                if (!isset($where)) {
+                    $where = "data_lancamento BETWEEN '$todayStartDate' AND '$todayEndDate'";
+                } else {
+                    $where .= " AND data_lancamento BETWEEN '$todayStartDate' AND '$todayEndDate'";
+                }
+
+                if ($this->financeiro_model->countLancamentos(getUserId(), $where) > 20) {
+                    // $limit = 20;
+                    // $start = $this->financeiro_model->countLancamentos(getUserId()) - $limit;
+                }
+
                 break;
         }
 
@@ -122,21 +194,6 @@ class Lancamentos extends CI_Controller
             }
         }
 
-        if (isset($inicio) && isset($fim) && $inicio != null && $fim != null) {
-            $inicio = explode('/', $inicio);
-            $inicio = $inicio[2] . '-' . $inicio[1] . '-' . $inicio[0];
-
-            $fim = explode('/', $fim);
-            $fim = $fim[2] . '-' . $fim[1] . '-' . $fim[0];
-
-            $limit = null;
-            if (!isset($where)) {
-                $where = 'data_lancamento BETWEEN "' . $inicio . '" AND "' . $fim . '"';
-            } else {
-                $where .= ' AND data_lancamento BETWEEN "' . $inicio . '" AND "' . $fim . '"';
-            }
-        }
-
         $query_string = null;
         foreach ($_GET as $key => $value) {
             if ($key != 'per_page') {
@@ -144,47 +201,67 @@ class Lancamentos extends CI_Controller
             }
         }
 
-        $config['base_url'] = base_url('financeiro/lancamentos');
-        $config['suffix'] = '&' . $query_string;
-        $config['first_url'] = $config['base_url'] . '?' . $query_string;
-        $config['total_rows'] = $this->financeiro_model->countLancamentos(getUserId(), $where ?? null);
-        $config['per_page'] = 20;
-        $config['page_query_string'] = true;
-        $config['next_link'] = false;
-        $config['prev_link'] = false;
-        $config['full_tag_open'] = '<ul class="pagination pagination-sm">';
-        $config['full_tag_close'] = '</ul>';
-        $config['num_tag_open'] = '<li>';
-        $config['num_tag_close'] = '</li>';
-        $config['cur_tag_open'] = '<li class="disabled"><a style="background-color:#337ab7; color: white" class="js:"><b>';
-        $config['cur_tag_close'] = '</b></a></li>';
-        $config['prev_tag_open'] = '<li>';
-        $config['prev_tag_close'] = '</li>';
-        $config['next_tag_open'] = '<li>';
-        $config['next_tag_close'] = '</li>';
-        $config['first_link'] = 'Primeira';
-        $config['last_link'] = 'Última';
-        $config['first_tag_open'] = '<li>';
-        $config['first_tag_close'] = '</li>';
-        $config['last_tag_open'] = '<li>';
-        $config['last_tag_close'] = '</li>';
+        if ($referenceMonth) {
+            $dateFormatter = new \IntlDateFormatter(
+                'pt_BR',
+                \IntlDateFormatter::FULL,
+                \IntlDateFormatter::NONE,
+                'America/Sao_Paulo',
+                \IntlDateFormatter::GREGORIAN,
+                "MMMM"
+            );
+            $dateObj                    = DateTime::createFromFormat('!m', ($referenceMonth));
+            $nextMonthObj               = DateTime::createFromFormat('!m', ($referenceMonth + 1));
+            $prevMonthObj               = DateTime::createFromFormat('!m', ($referenceMonth - 1));
+            $this->data['month']        = str_replace('.', '', strtoupper($dateFormatter->format($dateObj)));
+            $this->data['nextMonth']    = str_replace('.', '', strtoupper($dateFormatter->format($nextMonthObj)));
+            $this->data['prevMonth']    = str_replace('.', '', strtoupper($dateFormatter->format($prevMonthObj)));
+        }
+
+        $config['base_url']             = base_url('financeiro/lancamentos');
+        $config['suffix']               = '&' . $query_string;
+        $config['first_url']            = $config['base_url'] . '?' . $query_string;
+        $config['total_rows']           = $this->financeiro_model->countLancamentos(getUserId(), $where ?? null);
+        $config['per_page']             = 30;
+        $config['page_query_string']    = true;
+        $config['next_link']            = false;
+        $config['prev_link']            = false;
+        $config['full_tag_open']        = '<ul class="pagination pagination-sm">';
+        $config['full_tag_close']       = '</ul>';
+        $config['num_tag_open']         = '<li>';
+        $config['num_tag_close']        = '</li>';
+        $config['cur_tag_open']         = '<li class="disabled"><a style="background-color:#337ab7; color: white" class="js:"><b>';
+        $config['cur_tag_close']        = '</b></a></li>';
+        $config['prev_tag_open']        = '<li>';
+        $config['prev_tag_close']       = '</li>';
+        $config['next_tag_open']        = '<li>';
+        $config['next_tag_close']       = '</li>';
+        $config['first_link']           = 'Primeira';
+        $config['last_link']            = 'Última';
+        $config['first_tag_open']       = '<li>';
+        $config['first_tag_close']      = '</li>';
+        $config['last_tag_open']        = '<li>';
+        $config['last_tag_close']       = '</li>';
 
         $this->pagination->initialize($config);
 
-        $this->data['total_provisorio'] = $this->financeiro_model->getTotalProvisorio(getUserId());
-        $this->data['saidas_pendentes'] = $this->financeiro_model->getSaidasPendentes(getUserId());
-        $this->data['entradas_pendentes'] = $this->financeiro_model->getEntradasPendentes(getUserId());
-        $this->data['total'] = $this->financeiro_model->getTotal(getUserId());
-        $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
-        $this->data['results'] = $this->financeiro_model->get(
+        $this->data['yearsList']            = $yearsList;
+        $this->data['referenceMonth']       = $referenceMonth;
+        $this->data['referenceYear']        = $referenceYear;
+        $this->data['total_provisorio']     = $this->financeiro_model->getTotalProvisorio(getUserId());
+        $this->data['saidas_pendentes']     = $this->financeiro_model->getSaidasPendentes(getUserId());
+        $this->data['entradas_pendentes']   = $this->financeiro_model->getEntradasPendentes(getUserId());
+        $this->data['total']                = $this->financeiro_model->getTotal(getUserId());
+        $this->data['formasPagamento']      = $this->financeiro_model->getFormasPagamento();
+        $this->data['results']              = $this->financeiro_model->get(
             'lancamentos',
             '*',
             $where,
             getUserId(),
             $limit,
-            $config['per_page'],
             $config['total_rows'],
-            $this->input->get('per_page'),
+            $config['per_page'],
+            $start,
             $order_by ? $order_by : 'desc'
         );
 

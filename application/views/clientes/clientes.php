@@ -17,8 +17,8 @@
             <?php if ($results) { ?>
             <thead>
             <tr role="row">
-                <th style="width: 30px">ID</th>
                 <th>Nome</th>
+                <th>Email</th>
                 <th>Telefone</th>
                 <th style="width: 150px">Ações</th>
             </tr>
@@ -26,8 +26,8 @@
             <tbody>
             <tr>
                 <?php foreach ($results as $r) {
-                    echo '<td>' . $r->id_clientes . '</td>';
-                    echo '<td>' . $r->nome . '</td>';
+                    echo '<td><a href="' . base_url('clientes/visualizar/') . $r->id_clientes . '">' . $r->nome . '</a></td>';
+                    echo '<td>' . $r->email . '</td>';
                     echo '<td>' . $r->telefone . '</td>';
                     echo '<td style="text-align: center">';
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) {

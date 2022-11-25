@@ -132,12 +132,12 @@ $periodo = $this->input->get('periodo');
                         echo '<td>';
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
                             echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Detalhes" idLancamento="' .
-                                $r->id_lancamentos . '" descricao="' . $r->descricao . '" valor="' . $valor . '" vencimento="' .
+                                $r->id_lancamento . '" descricao="' . $r->descricao . '" valor="' . $valor . '" vencimento="' .
                                 date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento ?? null)) . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '">
                                 <i class="fas fa-search-plus fa-lg fa-fw"></i></a>';
                         }
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
-                            echo '<a href="#modalExcluir" data-toggle="modal" idLancamento="' . $r->id_lancamentos . '" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw"></i></a>';
+                            echo '<a href="#modalExcluir" data-toggle="modal" idLancamento="' . $r->id_lancamento . '" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw"></i></a>';
                         }
 
                         echo '</td>';

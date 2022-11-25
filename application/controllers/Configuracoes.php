@@ -244,7 +244,7 @@ class Configuracoes extends CI_Controller
         $this->form_validation->set_rules('senha', 'Senha', 'required|trim');
 
         if ($this->form_validation->run() == false) {
-//            print_array(validation_errors());
+        //    print_array(validation_errors());
             $msgValidation = validation_errors();
             $this->session->set_flashdata('erro', 'Formato de e-mail inválido.');
             redirect('mxcode/login');
@@ -278,7 +278,7 @@ class Configuracoes extends CI_Controller
                     redirect('mxcode/login');
                 }
             } else {
-                gravaLog(null, 'Usuário desconhecido', $email, 'Tentativa de login recusada: email inexistente', getenv("REMOTE_ADDR"));
+                gravaLog(null, null, $email, 'Tentativa de login recusada: email inexistente', getenv("REMOTE_ADDR"));
                 $this->session->set_flashdata('erro', 'Dados de acesso inválidos, por favor tente novamente.');
                 redirect('mxcode/login');
             }
