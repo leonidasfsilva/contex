@@ -509,7 +509,7 @@ $this->load->view('includes/custom_js');
                     <!--                DIV PRINCIPAL-->
                     <div class="page-content">
                         <!--                    BREADCRUMB-->
-                        <ol class="breadcrumb"">
+                        <ol class="breadcrumb">
                         <li class="">
                             <a href=" <?= base_url() ?>" title="Painel Inicial">
                             Painel Inicial
@@ -576,7 +576,7 @@ $this->load->view('includes/custom_js');
                         <div class="clearfix">
                             <ul class="list-unstyled list-inline pull-left pl-sm">
                                 <li>
-                                    <h6 style="margin: 0; text-transform: none">&copy; <?= sprintf('%s %s ver.%s', date('Y'), 'CONTEX • Sistema de Gestão •', VERSION_APP, phpversion()) ; ?> </h6>
+                                    <h6 style="margin: 0; text-transform: none"><?= sprintf('&copy; 2019 - %s %s ver.%s', date('Y'), 'CONTEX • Sistema de Gestão •', VERSION_APP, phpversion()) ; ?> </h6>
                                 </li>
                             </ul>
                             <button class="pull-right btn btn-link btn-xs hidden-print" id="back-to-top"><i class="fa fa-arrow-up"></i></button>

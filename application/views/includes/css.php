@@ -23,10 +23,10 @@
     <link href="<?php echo base_url(); ?>assets/plugins/jquery-cropper/css/cropper.css" type="text/css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/jquery.toast.min.css" rel="stylesheet">
 
-    <link href="<?php echo base_url(); ?>assets/css/styles-blessed3.css?v=<?= versionApp() ?>" type="text/css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
-    <link href="<?php echo base_url(); ?>assets/css/styles-blessed2.css?v=<?= versionApp() ?>" type="text/css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
-    <link href="<?php echo base_url(); ?>assets/css/styles-blessed1.css?v=<?= versionApp() ?>" type="text/css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
-    <link href="<?php echo base_url(); ?>assets/css/styles.css?v=<?= versionApp() ?>" type="text/css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
+    <link href="<?php echo base_url(); ?>assets/css/styles-blessed3.css?v=<?= versionApp() ?>" type="text/css" rel="stylesheet">            <!-- Core CSS with all styles -->
+    <link href="<?php echo base_url(); ?>assets/css/styles-blessed2.css?v=<?= versionApp() ?>" type="text/css" rel="stylesheet">            <!-- Core CSS with all styles -->
+    <link href="<?php echo base_url(); ?>assets/css/styles-blessed1.css?v=<?= versionApp() ?>" type="text/css" rel="stylesheet">            <!-- Core CSS with all styles -->
+    <link href="<?php echo base_url(); ?>assets/css/styles.css?v=<?= versionApp() ?>" type="text/css" rel="stylesheet">                     <!-- Core CSS with all styles -->
 
     <link href="<?php echo base_url(); ?>assets/plugins/jstree/dist/themes/avenger/style.min.css" type="text/css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/codeprettifier/prettify.css" type="text/css" rel="stylesheet">
