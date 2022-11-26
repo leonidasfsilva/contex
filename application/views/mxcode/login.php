@@ -123,16 +123,16 @@
                         </div>
                     </div>
                 </form>
-                <footer role="contentinfo" class="footer">
-                    <div class="clearfix text-center">
-                        <ul class="list-unstyled list-inline pl-sm">
-                            <li>
-                                <h6 style="margin: 0; text-transform: none"><?= sprintf('&copy; 2019 - %s %s', date('Y'), '• Powered by MX CODE SISTEMAS •') ?></h6>
-                            </li>
-                        </ul>
-                    </div>
-                </footer>
             </div>
+            <footer role="contentinfo" class="footer">
+                <div class="clearfix text-center">
+                    <ul class="list-unstyled list-inline pl-sm">
+                        <li>
+                            <h6 style="margin: 0; text-transform: none"><?= sprintf('&copy; 2019 - %s %s', date('Y'), '• Powered by MX CODE SISTEMAS •') ?></h6>
+                        </li>
+                    </ul>
+                </div>
+            </footer>
         </div>
     </section>
 
