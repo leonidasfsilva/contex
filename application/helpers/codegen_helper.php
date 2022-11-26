@@ -170,12 +170,17 @@ function returnURL($get = null)
 {
     $CI = get_instance();
     if ((!session_id()) || (!$CI->session->userdata('logado'))) {
-        $checkVars = array('mxcode/login', 'mxcode/verificarLogin');
+        $notRedirectedUlrs = [
+            '',
+            'mxcode',
+            'mxcode/login',
+            'mxcode/verificarLogin'
+        ];
 
-        if (!in_array(uri_string(), $checkVars, true)) {
+        if (!in_array(uri_string(), $notRedirectedUlrs, true) && !$get) {
             $currentURL = current_url(); //for simple URL
-            $params = $_SERVER['QUERY_STRING']; //for parameters
-            $fullURL = $currentURL . '?' . $params; //full URL with parameter
+            $params     = $_SERVER['QUERY_STRING']; //for parameters
+            $fullURL    = $currentURL . '?' . $params; //full URL with parameter
             $CI->session->set_userdata('last_url', $fullURL);
         } else {
             //            $CI->session->unset_userdata('last_url');
