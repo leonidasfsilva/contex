@@ -128,7 +128,7 @@
                 <div class="clearfix text-center">
                     <ul class="list-unstyled list-inline pl-sm">
                         <li>
-                            <h6 style="margin: 0; text-transform: none"><?= sprintf('&copy; 2019 - %s %s', date('Y'), '• Powered by MX CODE SISTEMAS •') ?></h6>
+                            <h6 style="margin: 0; text-transform: none"><?= sprintf('&copy; 2019 - %s %s', date('Y'), '• Powered by <a href="https://mxcode.net" >MX CODE SISTEMAS</a>') ?></h6>
                         </li>
                     </ul>
                 </div>
