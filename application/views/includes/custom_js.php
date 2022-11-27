@@ -529,7 +529,7 @@
             $('.dropdown-hover').hover(function() {
                 $('.dropdown-toggle', this).trigger('click');
                 //uncomment below to make the parent item clickable
-                $('.dropdown-toggle', this).toggleClass("disabled"); 
+                $('.dropdown-toggle', this).toggleClass("disabled");
             });
         }
     });

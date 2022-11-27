@@ -861,7 +861,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             }
         }
 
-        //Metodos para função de parcelamento
+        // Metodos para função de parcelamento
         $('#qnt_parcelas, #valor').on('change', function() {
             var parcelas = $('#qnt_parcelas').val();
             var valor = $('#valor').val();
@@ -875,13 +875,27 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         });
 
         $('.qntParcelas, .valor').on('change', function() {
-            var parcelas = $('.qntParcelas').val();
-            var valor = $('.valor').val();
+            var parcelas = undefined;
+            var valor = undefined;
+            var result = null;
 
-            var result = calculaValorParcela(parcelas, valor);
-            if (parcelas != null) {
-                $('.valorParcela').val(result);
-            }
+            $('.modal-body').each(function() {
+                parcelas = $(this).find('.qntParcelas').val();
+                valor = $(this).find('.valor').val();
+                valorParcela = $(this).find('.valorParcela');
+
+                if ((parcelas != '' && valor != '') && (parcelas != undefined && valor != undefined)) {
+                    result = calculaValorParcela(parcelas, valor)
+                    valorParcela.val(result);
+                } else {
+                    valorParcela.val('');
+                }
+                console.log(
+                    {
+                        // 'qntParcela': parcelas
+                    }
+                )
+            });
         });
 
         function calculaValorParcela(parcela, valor) {
@@ -1120,18 +1134,20 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             $(".idCliente").val($(this).attr('id_cliente'));
             $(".descricao").val($(this).attr('descricao'));
             $(".valor").val($(this).attr('valor'));
-            $(".valorParcela").val($(this).attr('valor_parcela'));
             $(".dataCompra").val($(this).attr('data_compra'));
             $(".nomeCliente").val($(this).attr('nome_cliente'));
-            $(".qntParcelas").val($(this).attr('n_parcelas'));
 
             var estorno = $(this).attr('estorno');
             var terceiros = $(this).attr('terceiros');
             var parcelada = $(this).attr('parcelada');
             if (parcelada == 1) {
+                $(".qntParcelas").val($(this).attr('n_parcelas'));
+                $(".valorParcela").val($(this).attr('valor_parcela'));
                 $('.parcelada').iCheck('check');
                 $(".divParcelamento").removeClass('hidden');
             } else {
+                // $(".qntParcelas").val($(this).attr('n_parcelas'));
+                $(".valorParcela").val('');
                 $('.parcelada').iCheck('uncheck');
                 $(".divParcelamento").addClass('hidden');
             }

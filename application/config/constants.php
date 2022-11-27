@@ -56,7 +56,7 @@ define('FOPEN_READ_WRITE_CREATE_STRICT', 'x+b');
 |
 */
 
-define('VERSION_APP', '2022.2.5-2');
+define('VERSION_APP', '2022.2.5-3');
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
