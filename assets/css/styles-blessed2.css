@@ -8028,6 +8028,13 @@ nav.navbar {
     min-width: 16px;
     text-align: center;
 }
+.dropdown-menu-hover li a i {
+    color: #cfd8dc;
+    margin-left: 0;
+    min-width: 16px;
+    text-align: center;
+    line-height: 20px;
+}
 #topnav .toolbar .dropdown-menu.userinfo li a span.badge {
     line-height: 16px;
     top: inherit;

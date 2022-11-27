@@ -520,11 +520,21 @@ $this->load->view('includes/custom_js');
                                     <li class="dropdown dropdown-hover">
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?= ucfirst($this->uri->segment(1)); ?> <span class="caret"></span></a>
                                         <ul class="dropdown-menu dropdown-menu-hover">
-                                            <li <?= ($this->uri->segment(2) == 'lancamentos' ? 'class="active"' : '') ?>><a href="<?= base_url('financeiro/lancamentos') ?>">Lançamentos</a></li>
-                                            <li <?= ($this->uri->segment(2) == 'faturas' ? 'class="active"' : '') ?>><a href="<?= base_url('financeiro/faturas') ?>">Faturas</a></li>
-                                            <li <?= ($this->uri->segment(2) == 'cartoes' ? 'class="active"' : '') ?>><a href="<?= base_url('financeiro/cartoes') ?>">Cartões</a></li>
-                                            <li <?= ($this->uri->segment(2) == 'investimentos' ? 'class="active"' : '') ?>><a href="<?= base_url('financeiro/investimentos') ?>">Investimentos</a></li>
-                                            <li <?= ($this->uri->segment(2) == 'pendencias' ? 'class="active"' : '') ?>><a href="<?= base_url('financeiro/pendencias') ?>">Pendências</a></li>
+                                            <li <?= ($this->uri->segment(2) == 'lancamentos' ? 'class="active"' : '') ?>>
+                                                <a href="<?= base_url('financeiro/lancamentos') ?>"><i class="pull-right fas fa-chart-line fa-lg fa-fw"></i> Lançamentos</a>
+                                            </li>
+                                            <li <?= ($this->uri->segment(2) == 'faturas' ? 'class="active"' : '') ?>>
+                                                <a href="<?= base_url('financeiro/faturas') ?>"><i class="pull-right fas fa-file-invoice-dollar fa-lg fa-fw"></i> Faturas</a>
+                                            </li>
+                                            <li <?= ($this->uri->segment(2) == 'cartoes' ? 'class="active"' : '') ?>>
+                                                <a href="<?= base_url('financeiro/cartoes') ?>"><i class="pull-right fas fa-credit-card fa-lg fa-fw"></i> Cartões</a>
+                                            </li>
+                                            <li <?= ($this->uri->segment(2) == 'investimentos' ? 'class="active"' : '') ?>>
+                                                <a href="<?= base_url('financeiro/investimentos') ?>"><i class="pull-right fas fa-hand-holding-usd fa-lg fa-fw"></i> Investimentos</a>
+                                            </li>
+                                            <li <?= ($this->uri->segment(2) == 'pendencias' ? 'class="active"' : '') ?>>
+                                                <a href="<?= base_url('financeiro/pendencias') ?>"><i class="pull-right fas fa-money-check-alt fa-lg fa-fw"></i> Pendências</a>
+                                            </li>
                                         </ul>
                                     </li>
                                 <?php } else { ?>
