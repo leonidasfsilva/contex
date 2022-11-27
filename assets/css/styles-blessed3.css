@@ -4472,7 +4472,7 @@ tbody.collapse.in {
 .dropdown-menu > li > a:focus {
     text-decoration: none;
     color: #263238;
-    background-color: #eeeeee;
+    background-color: #fafafa;
 }
 
 .dropdown-menu > .active > a,
@@ -4481,8 +4481,9 @@ tbody.collapse.in {
 .tt-suggestion > p:hover,
 .tt-suggestion > p:focus,
 .tt-suggestion.tt-cursor > p {
-    color: #ffffff;
+    /* color: #ffffff; */
     text-decoration: none;
+    font-weight: bold;
     outline: 0;
     background-color: #eeeeee;
 }

@@ -515,4 +515,22 @@
             return false;
         });
     });
+
+    // Function to make the dropdown shows on mouse hover - 27/11/2022
+    $(function() {
+        function is_touch_device() {
+            return 'ontouchstart' in window // works on most browsers 
+                ||
+                navigator.maxTouchPoints; // works on IE10/11 and Surface
+        };
+
+        if (!is_touch_device() && $('.navbar-toggle:hidden')) {
+            $('.dropdown-menu-hover', this).css('margin-top', 0);
+            $('.dropdown-hover').hover(function() {
+                $('.dropdown-toggle', this).trigger('click');
+                //uncomment below to make the parent item clickable
+                $('.dropdown-toggle', this).toggleClass("disabled"); 
+            });
+        }
+    });
 </script>
