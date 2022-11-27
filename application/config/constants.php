@@ -38,6 +38,24 @@ define('FOPEN_READ_WRITE_CREATE', 'a+b');
 define('FOPEN_WRITE_CREATE_STRICT', 'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT', 'x+b');
 
+/*
+|--------------------------------------------------------------------------
+| Version of system
+|--------------------------------------------------------------------------
+|
+| Definition of system version
+| to control when new features and bugfixes are released
+| and to avoid CSS conflicts on mobiles devices
+|
+| Format: YYYY.S.M-X
+|--------------------
+| YYYY - current year
+| S -  current semester of year (1st or 2nd)
+| M -  order of current month of semester (1st to 6th)
+| X -  current feature release
+|
+*/
+
 define('VERSION_APP', '2022.2.5-2');
 
 /* End of file constants.php */
