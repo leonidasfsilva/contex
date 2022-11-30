@@ -72,7 +72,7 @@ class Usuarios extends CI_Controller
 
             $data1 = array(
                 'nome' => $this->input->post('nome'),
-                'cpf' => $this->input->post('cpf'),
+                'cpf' => empty($this->input->post('cpf'))? null : $this->input->post('cpf'),
                 'cep' => $this->input->post('cep'),
                 'logradouro' => $this->input->post('logradouro'),
                 'complemento' => $this->input->post('complemento'),
@@ -89,13 +89,6 @@ class Usuarios extends CI_Controller
             );
 
             if ($this->usuarios_model->add('usuarios', $data1) == true) {
-                $last_id = $this->db->insert_id('usuarios');
-
-                $data2 = array(
-                    'id_usuario' => $last_id,
-                    'nome' => $this->input->post('nome'),
-                );
-                $this->configs_model->registraConfigsUsuario($data2);
                 $this->session->set_flashdata('sucesso', 'Usuário cadastrado com sucesso!');
                 redirect(base_url() . 'usuarios/');
             } else {

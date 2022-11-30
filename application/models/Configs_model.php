@@ -146,7 +146,7 @@ class Configs_model extends CI_Model
 
     function registraConfigsUsuario($data)
     {
-        $this->db->insert('configs_usuario', $data);
+        $this->db->insert('configs_usuario_assoc', $data);
         if ($this->db->affected_rows() == 1) {
             return true;
         }

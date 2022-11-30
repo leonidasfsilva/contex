@@ -15,7 +15,7 @@ class Usuarios_model extends CI_Model
 
         $this->db->from('usuarios');
         $this->db->select('usuarios.*, permissoes.nome as permissao');
-        $this->db->limit($perpage, $start);
+        // $this->db->limit($perpage, $start);
         $this->db->join('permissoes', 'usuarios.permissoes_id = permissoes.id_permissao', 'left');
         $this->db->where('usuarios.status', 1);
 

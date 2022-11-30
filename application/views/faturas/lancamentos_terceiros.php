@@ -145,7 +145,7 @@ if (isset($referenceMonth) && $referenceMonth) {
                                     <div class="panel" style="margin: 0 !important;">
                                         <div class="panel-footer font-weight-bold">
                                             <p>
-                                                Resumo da Fatura #<?= $result['id_fatura'] ?>
+                                                Resumo de Gastos na Fatura #<?= $result['id_fatura'] ?>
                                             </p>
                                         </div>
                                         <div class="panel-body panel-no-padding">

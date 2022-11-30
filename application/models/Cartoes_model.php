@@ -81,7 +81,7 @@ class Cartoes_model extends CI_Model
         return $this->db
             ->where('id_cartao', $id_cartao)
             ->get('cartoes')
-            ->row();
+            ->result_array()[0];
     }
 
     function getCartoesUsuario($id_usuario, $id_cartao = null)

@@ -11,7 +11,7 @@
         </div>
     </div>
     <div class="panel-body">
-        <?php if ($custom_error != '') {
+        <?php if (isset($custom_error)) {
             echo '<div class="alert alert-danger alert-dismissible"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' . $custom_error . '</div>';
         } ?>
         <form action="<?php echo current_url(); ?>" id="formUsuario" method="post" autocomplete="off">
@@ -85,7 +85,7 @@
                     <select class="form-control" name="permissoes_id" id="permissoes_id">
                         <option value=""><< Selecione >></option>
                         <?php foreach ($permissoes as $p) {
-                            echo '<option value="' . $p->idPermissao . '">' . $p->nome . '</option>';
+                            echo '<option value="' . $p->id_permissao . '">' . $p->nome . '</option>';
                         } ?>
                     </select>
                 </div>

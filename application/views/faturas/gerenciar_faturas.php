@@ -19,13 +19,13 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         foreach ($cartoes as $cartao) {
             if ($cartao->id_usuario != getUserId()) {
                 if ($cartao->adicional) {
-                    if ($cartao_selecionado->id_cartao == $cartao->id_cartao) {
+                    if ($cartaoSelecionado['id_cartao'] == $cartao->id_cartao) {
                         $disabledFatura = '';
                         $disabledConfig = '';
                     }
                 }
             } else {
-                if ($cartao_selecionado->id_cartao == $cartao->id_cartao) {
+                if ($cartaoSelecionado['id_cartao'] == $cartao->id_cartao) {
                     if ($cartao->adicional) {
                         $disabledConfig = 'disabled';
                     } else {
@@ -47,27 +47,33 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             Controle de Faturas
         </h3>
         <div class="panel-ctrls">
-            <div class=" mt10 pull-right">
-                <?php if ($cartoes) { ?>
-                    <select name="cartoes" id="cartoes" class="form-control">
-                        <?php foreach ($cartoes as $cartao) {
-                            if ($cartao_selecionado->id_cartao == $cartao->id_cartao) {
-                                $selected = 'selected';
-                            } else {
-                                $selected = '';
-                            }
-                            $n_cartao = explode(" ", trim(decriptar($cartao->numero)));
-                            $final = $n_cartao[3];
-                            $cartao_config = $cartao->apelido ? $cartao->apelido : $cartao->bandeira;
-                            $cartao_config = $cartao_config . ' - FINAL ' . $final;
-                        ?>
-                            <option value="<?= $cartao->id_cartao ?>" <?= $selected ?>><?= $cartao_config ?></option>
-                        <?php } ?>
-                    </select>
-                <?php } else { ?>
-                    <input type="text" name="cartoes" id="cartoes" class="form-control" placeholder="Não há cartões cadastrados" disabled />
-                <?php }
-                ?>
+            <div class="pull-right">
+                <div class="btn-group dropdown-hover">
+                    <?php if ($cartoes) { ?>
+                        <button type="button" class="form-control btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <?= $cartaoSelecionado['cartaoLabel'] ?> <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-hover" role="menu">
+                            <?php foreach ($cartoes as $cartao) {
+                                if ($cartaoSelecionado['id_cartao'] == $cartao->id_cartao) {
+                                    $selected = 'active';
+                                } else {
+                                    $selected = '';
+                                }
+                                $n_cartao       = explode(" ", trim(decriptar($cartao->numero)));
+                                $final          = $n_cartao[3];
+                                $cartao_config  = $cartao->apelido ? $cartao->apelido : $cartao->bandeira;
+                                $cartao_config  = $cartao_config . ' - FINAL ' . $final; ?>
+                                <li class="<?= $selected ?>"><a href="<?= sprintf(base_url('financeiro/faturas?cartao=%s'), $cartao->id_cartao) ?>"><?= $cartao_config ?></a></li>
+                            <?php } ?>
+                        </ul>
+                    <?php } else { ?>
+                        <button type="button" class="form-control btn btn-default" disabled>
+                            Não há cartões cadastrados
+                        </button>
+                    <?php }
+                    ?>
+                </div>
             </div>
         </div>
     </div>
@@ -82,9 +88,10 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             <tr>
                 <td colspan="2" style="text-align: left; color: green">SALDO DE FATURAS QUITADAS</td>
                 <td colspan="1" style="text-align: right; color: green">
-                    <?php echo number_format($saldoQuitado->total, 2, ',', '.') ?></td>
+                    <?php if (isset($saldoQuitado)) echo number_format($saldoQuitado->total, 2, ',', '.');
+                    else echo '0,00' ?></td>
             </tr>
-            <?php if ($saldoVencidas->total > 0) { ?>
+            <?php if (isset($saldoVencidas) && $saldoVencidas->total > 0) { ?>
                 <tr>
                     <td colspan="2" style="text-align: left; color: red">SALDO DE FATURAS VENCIDAS</td>
                     <td colspan="1" style="text-align: right; color: red">
@@ -94,7 +101,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             <tr>
                 <td colspan="2" style="text-align: left">SALDO DE FATURAS A VENCER</td>
                 <td colspan="1" style="text-align: right">
-                    <?php echo number_format($saldoPendente->total, 2, ',', '.') ?></td>
+                    <?php if (isset($saldoPendente)) echo number_format($saldoPendente->total, 2, ',', '.');
+                    else echo '0,00' ?></td>
             </tr>
         </table>
     </div>
@@ -135,7 +143,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 </tr>
             </thead>
             <tbody>
-                <?php if ($results) {
+                <?php if (isset($results)) {
                     $totalReceita = 0;
                     $totalDespesa = 0;
                     $saldo = 0;
@@ -222,7 +230,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         $valor_total = $this->fatura_model->getValorTotalFatura($r->id_fatura);
 
                         echo '<tr>';
-                        echo '<td><a href="' . base_url('financeiro/faturas/detalhes/' . $r->id_fatura . '/' . $cartao_selecionado->id_cartao) . '">' . $mes . ' / ' . $ano . $iconFaturaAtual . '</a></td>';
+                        echo '<td><a href="' . base_url('financeiro/faturas/detalhes/' . $r->id_fatura . '/' . $cartaoSelecionado['id_cartao']) . '">' . $mes . ' / ' . $ano . $iconFaturaAtual . '</a></td>';
                         echo '<td>' . date(('d/m/Y'), strtotime($r->vencimento)) . $statusVinculo . '</td>';
 
                         echo '<td style="cursor: pointer; color: ' . $color . '" class="i-copy-total"><i class="fas fa-copy fa-fw hidden icon-total"></i> ' . number_format($valor_total, 2, ',', '.') . '</td>';
@@ -240,7 +248,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             echo '<button href="' . $hrefVinculo . '" style="margin-right: 1%"  class="btn btn-' . $colorVinculo . ' btn-sm vinculo" data-toggle="modal" title="' . $titleVinculo . '" id_fatura="' . $r->id_fatura . '">
                                 ' . $iconVinculo . '</button>';
 
-                            echo '<a href="' . base_url('financeiro/faturas/detalhes/') . $r->id_fatura . '/' . $cartao_selecionado->id_cartao . '" type="button" id="btn_detalhes" style="margin-right: 1%" class="btn btn-primary btn-sm detalhes" title="Detalhes da Fatura" id_fatura="' .
+                            echo '<a href="' . base_url('financeiro/faturas/detalhes/') . $r->id_fatura . '/' . $cartaoSelecionado['id_cartao'] . '" type="button" id="btn_detalhes" style="margin-right: 1%" class="btn btn-primary btn-sm detalhes" title="Detalhes da Fatura" id_fatura="' .
                                 $r->id_fatura . '">
                                 <i class="fas fa-search-plus fa-lg fa-fw"></i></a>';
                         }
@@ -252,7 +260,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     }
                 } else { ?>
                     <tr>
-                        <td colspan="6">Nenhuma fatura encontrada para o cartão <span class="font-weight-bold"><?= $cartao_config ?></span></td>
+                        <td colspan="6">Nenhuma fatura encontrada <span class="font-weight-bold"><?= isset($cartao_config) ? 'para o cartão ' . $cartao_config : null ?></span></td>
                     </tr>
                 <?php } ?>
             </tbody>
@@ -488,7 +496,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 </div>
 
 <!-- Modal ALERTA CONFIGURACAO -->
-<?php if (!$existe_configuracao) { ?>
+<?php if (isset($cartao) && !$existe_configuracao) { ?>
     <div class="modal fade alerta-usuario" id="modalAlerta" tabindex="-10" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -512,6 +520,37 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     <button href="#modalConfiguracoes" class="btn btn-primary btn-sm" id="configurar_fatura" data-dismiss="modal" data-toggle="modal" title="Configurações de fatura" <?= $disabledConfig ?>>
                         <i class="fas fa-cog fa-fw"></i> Configurar Fatura
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php } ?>
+
+<!-- Modal ALERTA AUSENCIA DE CARTAO -->
+<?php if (!isset($cartao)) { ?>
+    <div class="modal fade alerta-usuario" id="modalAlerta" tabindex="-10" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title text-white ">Configuração pendente</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="note note-danger font-weight-bold">
+                        <span>Não existe cartão cadastrado.</span>
+                        <br>
+                        <span>Não é possível abrir novas faturas sem um cartão previamente cadastrado.</span>
+                        <br>
+                        <span>Cadastre seu primeiro cartão clicando no botão: <span class="label label-primary"> <i class="fas fa-cog fa-fw"></i> Cadastrar Cartão</span></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                        <i class="fa fa-times fa-fw"></i> Fechar
+                    </button>
+                    <a href="<?= base_url('financeiro/cartoes/cadastrar') ?>" class="btn btn-primary btn-sm" title="Cadastrar novo cartão">
+                        <i class="fas fa-credit-card fa-fw"></i> Cadastrar Cartão
+                    </a>
                 </div>
             </div>
         </div>
