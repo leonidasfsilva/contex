@@ -120,7 +120,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             <button href="#modalConfiguracoes" class="btn btn-default btn-sm" id="configurar_fatura" data-toggle="modal" title="Configurações de fatura" <?= $disabledConfig ?>>
                 <i class="fas fa-cog fa-fw"></i>
             </button>
-            <button href="#modalVincularFaturas" id="vincularFaturas" data-toggle="modal" role="button" class="btn btn-primary btn-sm tip-bottom" title="Vincular faturas">
+            <button href="#modalVincularFaturas" id="vincularFaturas" data-toggle="modal" role="button" class="btn btn-primary btn-sm tip-bottom" title="Vincular faturas" <?= !isset($cartao) ? 'disabled' : '' ?>>
                 <i class="fas fa-link fa-fw"></i>
                 Vincular Faturas
             </button>
@@ -537,7 +537,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 </div>
                 <div class="modal-body">
                     <div class="note note-danger font-weight-bold">
-                        <span>Não existe cartão cadastrado.</span>
+                        <span>Não há nenhum cartão de crédito cadastrado.</span>
                         <br>
                         <span>Não é possível abrir novas faturas sem um cartão previamente cadastrado.</span>
                         <br>

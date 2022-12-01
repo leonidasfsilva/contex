@@ -57,10 +57,10 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
     $creditoFatura = 0;
     $debitoFatura = 0;
 
-    $n_cartao = explode(" ", trim(decriptar($cartao->numero)));
+    $n_cartao = explode(" ", trim(decriptar($cartao['numero'])));
     $final = $n_cartao[3];
-    $cartao_config = $cartao->apelido ? $cartao->apelido : $cartao->bandeira;
-    $cartaoAlternativeLabel = $cartao->bandeira . ' - FINAL ' . $final;
+    $cartao_config = $cartao['apelido'] ? $cartao['apelido'] : $cartao['bandeira'];
+    $cartaoAlternativeLabel = $cartao['bandeira'] . ' - FINAL ' . $final;
 ?>
 <?php } ?>
 
@@ -72,7 +72,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         </h3>
         <h3>
             <i class="fas fa-credit-card fa-lg fa-fw"></i>
-            <?= $cartao->apelido ? $cartao->apelido : $cartaoAlternativeLabel ?>
+            <?= $cartao['apelido'] ? $cartao['apelido'] : $cartaoAlternativeLabel ?>
         </h3>
         <div class="panel-ctrls">
             <a href="<?= base_url('financeiro/faturas?cartao=') . $id_cartao ?>" class="btn btn-sm btn-default"><i class="fas fa-arrow-left fa-fw"></i> Faturas</a>
@@ -241,7 +241,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                     '" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento_1 . ' ' . $disabled_lancamento_2 . '>' .
                                     strtoupper($s->descricao) .
                                     '</a></td>';
-                                echo '<td><a href="' . sprintf(base_url('financeiro/faturas/terceiros?mesReferencia=%s&anoReferencia=%s&cartao=%s&nome=%s'), $mes_referencia, $s->ano_referencia, $cartao->id_cartao, $s->nome_cliente) . '">' . strtoupper($s->nome_cliente) . '</a></td>';
+                                echo '<td><a href="' . sprintf(base_url('financeiro/faturas/terceiros?mesReferencia=%s&anoReferencia=%s&cartao=%s&nome=%s'), $mes_referencia, $s->ano_referencia, $cartao['id_cartao'], $s->nome_cliente) . '">' . strtoupper($s->nome_cliente) . '</a></td>';
                                 echo '<td>' . $n_parcela . '/' . $total_parcelas . '</td>';
                                 echo '<td class="valor_parcela" style=" color: ' . $color .
                                     '"><span>' . number_format($r->valor_parcela, 2, ',', '.') .

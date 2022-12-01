@@ -198,7 +198,7 @@ class Faturas extends CI_Controller
             $fatura_selecionada = $this->fatura_model->getFatura($id_fatura);
             $cartao             = $this->cartoes_model->getDetalhesCartao($id_cartao);
 
-            if (($fatura_selecionada->id_usuario == getUserId() && $cartao->id_usuario == getUserId()) || ($fatura_selecionada->id_cartao == $id_cartao && $cartao->id_usuario_titular == getUserId())) {
+            if (($fatura_selecionada->id_usuario == getUserId() && $cartao['id_usuario'] == getUserId()) || ($fatura_selecionada->id_cartao == $id_cartao && $cartao['id_usuario_titular'] == getUserId())) {
                 $orderByLancamentosAssoc = [
                     'data_compra'   => 'desc',
                     'id_assoc'      => 'desc',
