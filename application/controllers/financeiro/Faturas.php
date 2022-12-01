@@ -1265,16 +1265,16 @@ class Faturas extends CI_Controller
             $apelido                = $detalhesCartaoFatura->apelido ? ' - ' . $detalhesCartaoFatura->apelido : null;
 
             $data = array(
-                'id_usuario' => getUserId(),
-                'id_fatura' => $idFatura,
-                'descricao' => 'FATURA CARTAO DE CREDITO' . $apelido,
-                'cliente_fornecedor' => $detalhesCartaoFatura->bandeira ? $detalhesCartaoFatura->bandeira . ' - FINAL ' . $final : null,
-                'valor' => '-' . $valorTotalFatura,
-                'data_lancamento' => $detalhesFatura->vencimento ?? $detalhesFatura->data_pagamento,
-                'data_pagamento' => $detalhesFatura->data_pagamento ?? $detalhesFatura->vencimento,
-                'forma_pgto' => $detalhesFatura->forma_pgto ?? 5,
-                'baixado' => $detalhesFatura->fatura_paga,
-                'tipo' => 2
+                'id_usuario'            => getUserId(),
+                'id_fatura'             => $idFatura,
+                'descricao'             => 'FATURA CARTAO DE CREDITO' . $apelido,
+                'cliente_fornecedor'    => $detalhesCartaoFatura->bandeira ? $detalhesCartaoFatura->bandeira . ' - FINAL ' . $final : null,
+                'valor'                 => '-' . $valorTotalFatura,
+                'data_lancamento'       => $detalhesFatura->vencimento ?? $detalhesFatura->data_pagamento,
+                'data_pagamento'        => $detalhesFatura->data_pagamento ?? $detalhesFatura->vencimento,
+                'forma_pgto'            => $detalhesFatura->forma_pgto ?? 5,
+                'baixado'               => ($detalhesFatura->fatura_paga == 1),
+                'tipo'                  => 2
             );
             $this->financeiro_model->add('lancamentos', $data);
             $this->session->set_flashdata('sucesso', 'Fatura vinculada com sucesso');
@@ -1322,7 +1322,7 @@ class Faturas extends CI_Controller
                     'data_lancamento'       => $detalhesFatura->vencimento ?? $detalhesFatura->data_pagamento,
                     'data_pagamento'        => $detalhesFatura->data_pagamento ?? $detalhesFatura->vencimento,
                     'forma_pgto'            => $detalhesFatura->forma_pgto ?? 5,
-                    'baixado'               => $detalhesFatura->fatura_paga,
+                    'baixado'               => ($detalhesFatura->fatura_paga == 1),
                     'tipo'                  => 2
                 ];
 
