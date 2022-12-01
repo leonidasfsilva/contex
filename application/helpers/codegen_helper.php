@@ -132,13 +132,15 @@ function gravaLog($id_usuario = null, $nome = null, $email = null, $acao = null,
 {
     $CI = get_instance();
     $CI->load->model('mxcode_model');
+    
     $data = array(
-        'id_usuario' => $id_usuario,
-        'nome' => $nome,
-        'email' => $email,
-        'acao' => $acao,
-        'ip' => $ip,
+        'id_usuario'    => $id_usuario,
+        'nome'          => $nome,
+        'email'         => $email,
+        'descricao'     => $acao,
+        'ip'            => $ip,
     );
+
     $CI->mxcode_model->gravaLog($data);
 }
 
