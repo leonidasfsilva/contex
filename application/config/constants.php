@@ -11,15 +11,14 @@
 | to control when new features and bugfixes are released
 | and to avoid CSS conflicts on mobiles devices
 |
-| Format: YYYY.S.M-X
+| Format: YYYY.S.X
 |--------------------
 | YYYY - current year
 | S -  current semester of year (1st or 2nd)
-| M -  order of current month of semester (1st to 6th)
 | X -  current feature release
 |
 */
-define('VERSION_APP', '2022.2.5-5');
+define('VERSION_APP', '2022.2.5');
 
 /*
 |--------------------------------------------------------------------------
