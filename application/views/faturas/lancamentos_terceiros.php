@@ -49,9 +49,9 @@ if (isset($referenceMonth) && $referenceMonth) {
                 $totalSum = 0;
 
                 foreach ($results as $result) {
-                    $n_cartao = explode(" ", trim(decriptar($result['cartao']->numero)));
+                    $n_cartao = explode(" ", trim(decriptar($result['cartao']['numero'])));
                     $final = $n_cartao[3];
-                    $cartaoAlternativeLabel = $result['cartao']->bandeira . ' - FINAL ' . $final;
+                    $cartaoAlternativeLabel = $result['cartao']['bandeira'] . ' - FINAL ' . $final;
                 ?>
                     <div class="panel accordion-item">
                         <a class="accordion-title" data-toggle="collapse" data-parent="#accordion" href="#<?= $result['id_fatura'] ?>">
@@ -61,13 +61,13 @@ if (isset($referenceMonth) && $referenceMonth) {
 
                                 <span style="padding-left: 10px;">
                                     <i class="fas fa-credit-card fa-lg fa-fw"></i>
-                                    <?= $result['cartao']->apelido ? $result['cartao']->apelido : $cartaoAlternativeLabel ?>
+                                    <?= $result['cartao']['apelido'] ? $result['cartao']['apelido'] : $cartaoAlternativeLabel ?>
                                 </span>
                             </h2>
                         </a>
                         <div id="<?= $result['id_fatura'] ?>" class="collapse">
                             <div class="accordion-body" style="padding: 0 !important;">
-                                <div class="panel" style="margin: 0 !important;">
+                                <div class="panel panel-midnightblue" style="margin: 0 !important;">
                                     <div class="panel-body panel-no-padding table-responsive">
                                         <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid">
                                             <thead>
@@ -142,8 +142,8 @@ if (isset($referenceMonth) && $referenceMonth) {
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="panel" style="margin: 0 !important;">
-                                        <div class="panel-footer font-weight-bold">
+                                    <div class="panel " style="margin: 0 !important;">
+                                        <div class="panel-footer bg-midnightblue font-weight-bold text-white panel-no-padding">
                                             <p>
                                                 Resumo de Gastos na Fatura #<?= $result['id_fatura'] ?>
                                             </p>
