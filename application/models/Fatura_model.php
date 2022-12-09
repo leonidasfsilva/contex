@@ -594,6 +594,7 @@ class Fatura_model extends CI_Model
             ->where('id_usuario', $idUsuario)
             ->where('status', 1)
             ->where('compra_terceiros', 1)
+            ->where('nome_cliente IS NOT NULL', NULL, FALSE)
             ->group_by('nome_cliente')
             ->get('lancamentos_faturas');
 
@@ -603,6 +604,7 @@ class Fatura_model extends CI_Model
                 ->where('id_fatura', $idFatura)
                 ->where('status', 1)
                 ->where('compra_terceiros', 1)
+                ->where('nome_cliente IS NOT NULL', NULL, FALSE)
                 ->group_by('nome_cliente')
                 ->get('lancamentos_faturas');
         }
