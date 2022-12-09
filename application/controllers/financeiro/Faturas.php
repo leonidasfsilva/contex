@@ -141,7 +141,7 @@ class Faturas extends CI_Controller
 
         $urlAtual   = $this->input->post('urlAtual');
         $periodo    = $this->input->get('periodo');
-        $cliente    = $this->input->get('terceiro');
+        $terceiro    = $this->input->get('terceiro');
         $where      = null;
 
         $this->load->library('pagination');
@@ -183,13 +183,27 @@ class Faturas extends CI_Controller
             12 => '12 x',
         );
 
-        if ($id_fatura == null) {
+        if (!$id_fatura) {
             $this->session->set_flashdata('erro', 'Método não permitido');
             redirect('financeiro/faturas');
         }
 
-        if (isset($cliente) && $cliente != null) {
-            $where = 'nome_cliente = ' . $cliente;
+        $terceirosNotAllowed = ['nenhum', 'todos'];
+
+        if (isset($terceiro) && $terceiro != null) {
+            if (!in_array($terceiro, $terceirosNotAllowed)) {
+                $where = sprintf("nome_cliente = '%s'", $terceiro);
+            }
+
+            if (in_array($terceiro, $terceirosNotAllowed)) {
+                if ($terceiro == 'nenhum') {
+                    $where = "compra_terceiros = 0";
+                }
+                
+                if ($terceiro == 'todos') {
+                    $where = "compra_terceiros = 1";
+                }
+            }
         }
 
         $faturaExistente = $this->fatura_model->getById($id_fatura);
@@ -207,8 +221,8 @@ class Faturas extends CI_Controller
                     'id_lancamento' => 'desc',
                 ];
 
-                $data['clientes']           = $this->fatura_model->getClientesPorFatura($id_fatura);
-                $data['selected_cliente']   = $cliente;
+                $data['terceiros']          = $this->fatura_model->getAllTerceiros(getUserId(), $id_fatura);
+                $data['selectedTerceiro']   = $terceiro;
                 $data['fatura']             = $this->fatura_model->getDetalhesFatura($id_fatura);
                 $data['id_fatura']          = $id_fatura;
                 $data['id_cartao']          = $id_cartao;
@@ -1562,7 +1576,7 @@ class Faturas extends CI_Controller
         $this->load->view('tema/topo', $data);
     }
 
-    public function autoCompleteCliente()
+    public function autoCompleteTerceiros()
     {
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);

@@ -387,14 +387,27 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </select>
                         </div>
                         <div class="form-group col-lg-6">
-                            <label class="tooltips font-weight-bold" for="select_clientes" title="Filtrar pendências por cliente">Cliente <i class="fa fa-info-circle fa-fw"></i></label>
-                            <select class="form-control" id="select_clientes" name="cliente">
-                                <option value="">Todos</option>
-                                <?php if ($clientes) {
-                                    foreach ($clientes as $d) { ?>
-                                        <option value="<?= $d->id_clientes ?>" <?php if ($selected_cliente == $d->id_clientes) {
-                                                                                    echo 'selected';
-                                                                                } ?>><?= $d->nome ?></option>
+                            <label class="tooltips font-weight-bold" title="Filtrar lançamentos por terceiros">Terceiros <i class="fa fa-info-circle fa-fw"></i></label>
+                            <select class="form-control" name="terceiro">
+                                <option value="">
+                                    << Sem filtro>>
+                                </option>
+                                <option value="nenhum" <?php if ($selectedTerceiro == 'nenhum') {
+                                                            echo 'selected';
+                                                        } ?>>
+                                    [ Apenas meus gastos ]
+                                </option>
+                                <option value="todos" <?php if ($selectedTerceiro == 'todos') {
+                                                            echo 'selected';
+                                                        } ?>>
+                                    [ Apenas gastos de terceiros ]
+                                </option>
+                                <?php if ($terceiros) {
+                                    foreach ($terceiros as $terceiro) { ?>
+                                        <option value="<?= $terceiro['nome'] ?>" <?php if ($selectedTerceiro == $terceiro['nome']) {
+                                                                                        echo 'selected';
+                                                                                    } ?>><?= $terceiro['nome'] ?>
+                                        </option>
                                 <?php }
                                 } ?>
                             </select>
@@ -794,7 +807,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         })
 
         $("#nome_cliente, .nomeCliente").autocomplete({
-            source: "<?php echo base_url(); ?>financeiro/faturas/autoCompleteCliente",
+            source: "<?php echo base_url(); ?>financeiro/faturas/autoCompleteTerceiros",
             minLength: 1,
             select: function(event, ui) {
                 $("#id_cliente, .idCliente").val(ui.item.label);
@@ -890,11 +903,9 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 } else {
                     valorParcela.val('');
                 }
-                console.log(
-                    {
-                        // 'qntParcela': parcelas
-                    }
-                )
+                console.log({
+                    // 'qntParcela': parcelas
+                })
             });
         });
 

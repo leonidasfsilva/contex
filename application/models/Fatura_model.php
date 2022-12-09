@@ -588,6 +588,38 @@ class Fatura_model extends CI_Model
         }
     }
 
+    function getAllTerceiros($idUsuario, $idFatura = null)
+    {
+        $query = $this->db->select('*')
+            ->where('id_usuario', $idUsuario)
+            ->where('status', 1)
+            ->where('compra_terceiros', 1)
+            ->group_by('nome_cliente')
+            ->get('lancamentos_faturas');
+
+        if ($idFatura) {
+            $query = $this->db->select('*')
+                ->where('id_usuario', $idUsuario)
+                ->where('id_fatura', $idFatura)
+                ->where('status', 1)
+                ->where('compra_terceiros', 1)
+                ->group_by('nome_cliente')
+                ->get('lancamentos_faturas');
+        }
+
+        if ($query->num_rows() > 0) {
+            $row_set = [];
+
+            foreach ($query->result_array() as $row) {
+                $row_set[] = [
+                    'nome' => $row['nome_cliente']
+                ];
+            }
+            return $row_set;
+        }
+        return false;
+    }
+
     function fecharTodasFaturasAbertas($id_cartao, $id_usuario)
     {
         $this->db->select('*');
