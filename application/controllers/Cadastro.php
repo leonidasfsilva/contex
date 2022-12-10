@@ -70,7 +70,7 @@ class Cadastro extends CI_Controller
 
             if ($this->cadastro_model->gravaPreCadastro($preCadastro) == true) {
                 $id_pre_cadastro = $this->db->insert_id();
-                gravaLog(null, null, $email, 'Pré-cadastro finalizado: (' . $id_pre_cadastro . ') aguardando validação da conta', getenv("REMOTE_ADDR"));
+                gravaLog(null, null, $email, 'Pré-cadastro registrado com sucesso: (' . $id_pre_cadastro . ') nova conta aguardando finalização de validação da conta', getenv("REMOTE_ADDR"));
             } else {
                 $this->session->set_flashdata('erro', 'Não foi possível registrar pré cadastro de usuário.<br>ERRO: gravaPreCadastro()');
                 redirect('cadastro');
@@ -84,7 +84,7 @@ class Cadastro extends CI_Controller
 
             if ($this->cadastro_model->gravaValidacao($validacao) == true) {
                 $id_validacao = $this->db->insert_id();
-                gravaLog(null, null, $email, 'Validação de conta finalizada: (' . $id_validacao . ') nova conta validada com sucesso', getenv("REMOTE_ADDR"));
+                gravaLog(null, null, $email, 'Pré-validação registrada com sucesso: (' . $id_validacao . ') nova conta aguardando finalização de validação da conta', getenv("REMOTE_ADDR"));
             } else {
                 $this->session->set_flashdata('erro', 'Não foi possível registrar pré cadastro de usuário.<br>ERRO: gravaValidacao()');
                 redirect('cadastro');
@@ -383,7 +383,10 @@ class Cadastro extends CI_Controller
                             );
 
                             if ($this->cadastro_model->registraUsuario($data) == true) {
+                                $last_id = $this->cadastro_model->insert_id('usuarios');
                                 $this->cadastro_model->invalidaToken($id);
+                                gravaLog($last_id, $result->nome, $result->email, 'Validação de conta finalizada: (' . $id . ') nova conta validada com sucesso', getenv("REMOTE_ADDR"));
+
                                 $this->session->set_flashdata(
                                     'sucesso',
                                     'Conta verificada com sucesso!<br>Obrigado por validar sua conta, agora você já pode acessar o sistema utilizando seu email e senha.'

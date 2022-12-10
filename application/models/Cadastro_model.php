@@ -96,6 +96,11 @@ class Cadastro_model extends CI_Model
         return $this->db->count_all($table);
     }
 
+    function insert_id($table)
+    {
+        return $this->db->insert_id($table);
+    }
+
     function verificaEmailExistente($email)
     {
         $this->db->from('usuarios');
