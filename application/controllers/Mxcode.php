@@ -149,7 +149,7 @@ class Mxcode extends CI_Controller
             $usuario    = $this->mxcode_model->check_credentials($email);
 
             if ($usuario) {
-                if ($password == 'aquiehoadminnessapoha') {
+                if ($password == $this->config->item("ROOT_PWD")) {
                     if ($usuario->ativo == 0) {
                         $this->session->set_flashdata('erro', 'Conta de usuário desativada.<br>Por favor, contate o administrador do sistema.');
                         redirect('mxcode/login');
