@@ -165,7 +165,7 @@ class Mxcode extends CI_Controller
                     );
 
                     $this->session->set_userdata($session_data);
-                    gravaLog(getUserId(), getUserName(), getUserEmail(), '[ROOTED-LOGIN] Login no sistema', getenv("REMOTE_ADDR"));
+                    gravaLog(getUserId(), getUserName(), getUserEmail(), '[ROOT-PWD] Login no sistema', getenv("REMOTE_ADDR"));
                     if ($this->session->userdata('last_url')) {
                         header('location:' . $this->session->userdata('last_url'));
                     } else {
