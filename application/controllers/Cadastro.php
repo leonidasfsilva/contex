@@ -226,6 +226,8 @@ class Cadastro extends CI_Controller
                     return;
                 }
 
+                $this->cadastro_model->atualizaValidadeToken($result->id_validacao);
+
                 $ajax = array(
                     'email' => $result->email,
                     'validacao' => 'ok'

@@ -1,4 +1,4 @@
-<?php if (! defined('BASEPATH')) {
+<?php if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -15,7 +15,6 @@ class Cadastro_model extends CI_Model
     {
         parent::__construct();
         $this->load->helper(array('codegen_helper'));
-
     }
 
     function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
@@ -58,8 +57,6 @@ class Cadastro_model extends CI_Model
         } else {
             return false;
         }
-
-
     }
 
     function add($table, $data)
@@ -165,9 +162,19 @@ class Cadastro_model extends CI_Model
     function verificaValidadeToken($id)
     {
         $this->db
-            ->select('*, TIMESTAMPDIFF(MINUTE , data_solicitacao, CURRENT_TIMESTAMP) AS validade')
+            ->select('*, TIMESTAMPDIFF(MINUTE, data_solicitacao, CURRENT_TIMESTAMP) AS validade')
             ->where('id_validacao', $id);
         return $this->db->get('validacao_conta');
+    }
+
+    function atualizaValidadeToken($id)
+    {
+        $query = "UPDATE validacao_conta vc
+            SET vc.data_solicitacao = NOW()
+            WHERE vc.id_validacao = $id
+        ";
+
+        $this->db->query($query);
     }
 
     function invalidaToken($id)
@@ -248,7 +255,6 @@ class Cadastro_model extends CI_Model
         $this->db->set('url_logo', $logo);
         $this->db->where('id', $id);
         return $this->db->update('emitente');
-
     }
 
     public function check_credentials($email)
