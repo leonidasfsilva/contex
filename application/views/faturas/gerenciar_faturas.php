@@ -48,6 +48,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         </h3>
         <div class="panel-ctrls">
             <div class="pull-right">
+                <input type="hidden" id="cartoes" value="<?= $cartaoSelecionado['id_cartao'] ?? null ?>">
                 <div class="btn-group dropdown-hover">
                     <?php if ($cartoes) { ?>
                         <button type="button" class="form-control btn btn-default dropdown-toggle" data-toggle="dropdown">
