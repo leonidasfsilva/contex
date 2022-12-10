@@ -588,31 +588,49 @@ class Fatura_model extends CI_Model
         }
     }
 
-    function getAllTerceiros($idUsuario, $idFatura = null)
+    function getAllTerceiros($idCartao = null, $mesReferencia = null, $anoReferencia = null, $idUsuario = null)
     {
-        $query = $this->db->select('*')
-            ->where('id_usuario', $idUsuario)
-            ->where('status', 1)
-            ->where('compra_terceiros', 1)
-            ->where('nome_cliente IS NOT NULL', NULL, FALSE)
-            ->group_by('nome_cliente')
-            ->get('lancamentos_faturas');
-
-        if ($idFatura) {
-            $query = $this->db->select('*')
-                ->where('id_usuario', $idUsuario)
-                ->where('id_fatura', $idFatura)
-                ->where('status', 1)
-                ->where('compra_terceiros', 1)
-                ->where('nome_cliente IS NOT NULL', NULL, FALSE)
-                ->group_by('nome_cliente')
-                ->get('lancamentos_faturas');
+        if (!$idUsuario) {
+            $idUsuario = getUserId();
         }
 
-        if ($query->num_rows() > 0) {
+        if ($idCartao && $mesReferencia && $anoReferencia) {
+            $query = "SELECT
+                lf.*
+                FROM lancamentos_faturas lf
+                INNER JOIN faturas f
+                ON lf.id_fatura = f.id_fatura
+                INNER JOIN lancamentos_faturas_assoc lfa
+                ON lfa.id_lancamento = lf.id_lancamento
+                WHERE f.id_usuario = $idUsuario
+                AND f.id_cartao = $idCartao
+                AND lfa.mes_referencia = $mesReferencia
+                AND lfa.ano_referencia = $anoReferencia
+                AND lfa.status = 1
+                AND lf.nome_cliente IS NOT NULL
+                GROUP BY lf.nome_cliente ASC
+            ";
+        } else {
+            $query = "SELECT
+                lf.*
+                FROM lancamentos_faturas lf
+                INNER JOIN faturas f
+                ON lf.id_fatura = f.id_fatura
+                INNER JOIN lancamentos_faturas_assoc lfa
+                ON lfa.id_lancamento = lf.id_lancamento
+                WHERE f.id_usuario = $idUsuario
+                AND lfa.status = 1
+                AND lf.nome_cliente IS NOT NULL
+                GROUP BY lf.nome_cliente ASC
+            ";
+        }
+
+        $resultQuery = $this->db->query($query);
+
+        if ($resultQuery->num_rows() > 0) {
             $row_set = [];
 
-            foreach ($query->result_array() as $row) {
+            foreach ($resultQuery->result_array() as $row) {
                 $row_set[] = [
                     'nome' => $row['nome_cliente']
                 ];

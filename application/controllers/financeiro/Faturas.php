@@ -199,7 +199,7 @@ class Faturas extends CI_Controller
                 if ($terceiro == 'nenhum') {
                     $where = "compra_terceiros = 0";
                 }
-                
+
                 if ($terceiro == 'todos') {
                     $where = "compra_terceiros = 1";
                 }
@@ -221,7 +221,7 @@ class Faturas extends CI_Controller
                     'id_lancamento' => 'desc',
                 ];
 
-                $data['terceiros']          = $this->fatura_model->getAllTerceiros(getUserId(), $id_fatura);
+                $data['terceiros']          = $this->fatura_model->getAllTerceiros($id_cartao, $fatura_selecionada->mes_referencia, $fatura_selecionada->ano_referencia);
                 $data['selectedTerceiro']   = $terceiro;
                 $data['fatura']             = $this->fatura_model->getDetalhesFatura($id_fatura);
                 $data['id_fatura']          = $id_fatura;
