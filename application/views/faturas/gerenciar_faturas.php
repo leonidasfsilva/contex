@@ -620,7 +620,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Vincular faturas</h4>
             </div>
-            <form id="formVincularFaturas" action="<?php echo base_url('financeiro/faturas/vincularFaturas') ?>" method="post">
+            <form id="formVincularFaturas" action="<?php echo base_url('financeiro/faturas/vincularAtualizarFaturas') ?>" method="post">
                 <div class="modal-body">
                     <p class="font-weight-bold">Defina o mês e ano de referência para vínculo de todas as faturas dos cartões ativos:</p>
                     <div class="row">

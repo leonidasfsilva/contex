@@ -108,9 +108,11 @@ class Mxcode extends CI_Controller
         if (($this->session->userdata('logado'))) {
             redirect($this->index());
         }
+
         if ($this->session->userdata('last_url')) {
             $this->session->set_flashdata('error', 'Efetue seu login para continuar.');
         }
+
         $this->load->view('mxcode/login');
     }
 
@@ -118,6 +120,7 @@ class Mxcode extends CI_Controller
     {
         if ((session_id()) && ($this->session->userdata('logado'))) {
             gravaLog(getUserId(), getUserName(), getUserEmail(), 'Logoff no sistema', getenv("REMOTE_ADDR"));
+            atualizaValorVinculoFaturas();
             $this->session->sess_destroy();
             redirect('mxcode/login');
         } else {
@@ -128,7 +131,6 @@ class Mxcode extends CI_Controller
 
     public function verificarLogin()
     {
-
         header('Access-Control-Allow-Origin: ' . base_url());
         header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
         header('Access-Control-Max-Age: 1000');
@@ -190,6 +192,7 @@ class Mxcode extends CI_Controller
 
                     $this->session->set_userdata($session_data);
                     gravaLog(getUserId(), getUserName(), getUserEmail(), 'Login no sistema', getenv("REMOTE_ADDR"));
+                    atualizaValorVinculoFaturas();
                     if ($this->session->userdata('last_url')) {
                         header('location:' . $this->session->userdata('last_url'));
                     } else {
@@ -206,7 +209,6 @@ class Mxcode extends CI_Controller
                 redirect('mxcode/login');
             }
         }
-        die();
     }
 
     public function backup()
