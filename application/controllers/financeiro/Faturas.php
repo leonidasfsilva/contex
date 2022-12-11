@@ -1299,7 +1299,7 @@ class Faturas extends CI_Controller
         }
     }
 
-    public function vincularAtualizarFaturas()
+    public function vinculoFaturas()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eFaturas')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para vincular faturas.');
@@ -1353,7 +1353,11 @@ class Faturas extends CI_Controller
             ];
 
             if ($vinculoFatura) {
-                $this->financeiro_model->edit('lancamentos', $lancamentosList, 'id_lancamento', $vinculoFatura->id_lancamento);
+                if ($_POST['desvincularFaturas']) {
+                    desvinculaFatura($faturaReferencia->id_fatura);
+                } else {
+                    $this->financeiro_model->edit('lancamentos', $lancamentosList, 'id_lancamento', $vinculoFatura->id_lancamento);
+                }
                 continue;
             }
 
@@ -1362,7 +1366,7 @@ class Faturas extends CI_Controller
             }
 
             $updateFaturas = [
-                'fatura_vinculada' => 1
+                'fatura_vinculada' => $_POST['desvincularFaturas'] ? 0 : 1
             ];
 
             $this->fatura_model->edit('faturas', $updateFaturas, 'id_fatura', $faturaReferencia->id_fatura);
@@ -1370,7 +1374,11 @@ class Faturas extends CI_Controller
         }
 
         if ($_POST) {
-            $this->session->set_flashdata('sucesso', 'Faturas de cartões ativos vinculadas com sucesso');
+            if ($_POST['desvincularFaturas']) {
+                $this->session->set_flashdata('sucesso', 'Faturas de cartões ativos desvinculadas com sucesso');
+            } else {
+                $this->session->set_flashdata('sucesso', 'Faturas de cartões ativos vinculadas com sucesso');
+            }
             redirect($urlAtual);
         }
     }

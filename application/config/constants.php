@@ -11,14 +11,14 @@
 | to control when new features and bugfixes are released
 | and to avoid CSS conflicts on mobiles devices
 |
-| Format: YYYY.S.X
+| Format: YYYY.S.R
 |--------------------
-| YYYY - current year
-| S -  current semester of year (1st or 2nd)
-| X -  current feature release
+| YYYY  - current year
+| S     - current semester of year (1st or 2nd)
+| R     - current release version of system
 |
 */
-define('VERSION_APP', '2022.2.14');
+define('VERSION_APP', '2022.2.15');
 
 /*
 |--------------------------------------------------------------------------

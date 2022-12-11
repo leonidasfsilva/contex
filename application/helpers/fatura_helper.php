@@ -97,6 +97,7 @@ function desvinculaFatura($idFatura)
         }
 
         $CI->fatura_model->delete_real('lancamentos', 'id_fatura', $idFatura);
+        return true;
     }
     return false;
 }

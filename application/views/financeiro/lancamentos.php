@@ -136,7 +136,7 @@ if (isset($referenceMonth) && $referenceMonth) {
     }
 
     $prevLink   = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $prevReferenceMonth, $prevReferenceYear)) .
-        " title='$prevLinkTitle'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-left'></i></span></a>";
+        " title='$prevLinkTitle'><span class='badge badge-primary'><i style='margin: 0 !important;' class='fas fa-angle-double-left'></i></span></a>";
     $monthText  = "<span class='badge badge-primary' style='margin-left: 10px;'>Período: $month / $referenceYear</span>";
     $nextLink   = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $nextReferenceMonth, $nextReferenceYear)) .
         " title='$nextLinkTitle'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-right'></i></span></a>";
@@ -147,7 +147,7 @@ if (!$results) {
     <div class="panel panel-midnightblue">
         <div class="panel-heading">
             <h2>
-                Extrato de Lançamentos
+                <span style='margin-right: 10px !important;'>Extrato de Lançamentos</span>
                 <br class="visible-xs-block">
                 <?= ($referenceMonth ? $prevLink . $monthText . $nextLink : null) ?>
             </h2>
@@ -186,7 +186,7 @@ if (!$results) {
     <div class="panel panel-midnightblue">
         <div class="panel-heading">
             <h2>
-                Extrato de Lançamentos
+                <span style='margin-right: 10px !important;'>Extrato de Lançamentos</span>
                 <br class="visible-xs-block">
                 <?= ($referenceMonth ? $prevLink . $monthText . $nextLink : null) ?>
             </h2>

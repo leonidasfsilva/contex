@@ -221,10 +221,10 @@ class Fatura_model extends CI_Model
     {
         $this->db->where($fieldID, $ID);
         $this->db->delete($table);
+        
         if ($this->db->affected_rows() == 1) {
             return true;
         }
-
         return false;
     }
 

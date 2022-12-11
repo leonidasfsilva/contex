@@ -13,12 +13,14 @@ if (isset($referenceMonth) && $referenceMonth) {
         $nextReferenceMonth = '01';
         $nextReferenceYear  = $referenceYear + 1;
     }
+
     if ($referenceMonth == '01') {
         $prevReferenceMonth = '12';
         $prevReferenceYear  = $referenceYear - 1;
     }
+
     $prevLink       = "<a href='" . base_url(sprintf('financeiro/faturas/terceiros?mesReferencia=%s&anoReferencia=%s&cartao=%s&nome=%s', $prevReferenceMonth, $prevReferenceYear, $idCard, $name))
-        . "' title='Período anterior'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-left'></i></span></a>";
+        . "' title='Período anterior'><span class='badge badge-primary'><i style='margin: 0 !important;' class='fas fa-angle-double-left'></i></span></a>";
     $referenceText  = "<span class='badge badge-primary' style='margin-left: 10px;'>Referência: $referencePeriod</span>";
     $nextLink       = "<a href='" . base_url(sprintf('financeiro/faturas/terceiros?mesReferencia=%s&anoReferencia=%s&cartao=%s&nome=%s', $nextReferenceMonth, $nextReferenceYear, $idCard, $name))
         . "' title='Próximo período'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-right'></i></span></a>";
@@ -28,7 +30,7 @@ if (isset($referenceMonth) && $referenceMonth) {
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h2>
-            Registro de Compras: <?= $name ?>
+            <span style='margin-right: 10px !important;'>Registro de Compras: <?= $name ?></span>
             <br class="visible-xs-block">
             <?= ($referenceMonth ? $prevLink . $referenceText . $nextLink : null) ?>
         </h2>
