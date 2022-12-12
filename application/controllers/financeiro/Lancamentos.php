@@ -563,6 +563,21 @@ class Lancamentos extends CI_Controller
         $this->load->view('tema/topo', $this->data);
     }
 
+    public function autoCompleteDescricao()
+    {
+        if (isset($_GET['term'])) {
+            $q = strtolower($_GET['term']);
+            $this->financeiro_model->autoCompleteDescricao($q, getUserId());
+        }
+    }
+
+    public function autoCompleteFornecedor()
+    {
+        if (isset($_GET['term'])) {
+            $q = strtolower($_GET['term']);
+            $this->financeiro_model->autoCompleteFornecedor($q, getUserId());
+        }
+    }
 
     // MODULO DE TESTES
     public function getTeste($id = null)

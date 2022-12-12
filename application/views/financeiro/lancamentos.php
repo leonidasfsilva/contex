@@ -1,9 +1,9 @@
 <?php
-$status_lancamentos     = $this->input->get('status');
-$tipo_lancamentos       = $this->input->get('tipo');
-$periodo_lancamentos    = $this->input->get('periodo');
-$inicio                 = $this->input->get('dataInicial');
-$fim                    = $this->input->get('dataFinal');
+$status_lancamentos = $this->input->get('status');
+$tipo_lancamentos = $this->input->get('tipo');
+$periodo_lancamentos = $this->input->get('periodo');
+$inicio = $this->input->get('dataInicial');
+$fim = $this->input->get('dataFinal');
 ?>
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
@@ -76,26 +76,31 @@ $fim                    = $this->input->get('dataFinal');
             <tr>
                 <td colspan="2" style="text-align: left;">(±) SALDO PROVISÓRIO EM CONTA</td>
                 <td colspan="1" style="text-align: right;">
-                    <?php echo number_format($total_provisorio->total, 2, ',', '.') ?></td>
+                    <?php echo number_format($total_provisorio->total, 2, ',', '.') ?>
+                </td>
             </tr>
             <?php if ($saidas_pendentes->total) { ?>
                 <tr>
                     <td colspan="2" style="text-align: left; color: red">(-) SALDO DE SAÍDAS A CONFIRMAR</td>
                     <td colspan="1" style="text-align: right; color: red">
-                        <?php echo number_format($saidas_pendentes->total, 2, ',', '.') ?></td>
+                        <?php echo number_format($saidas_pendentes->total, 2, ',', '.') ?>
+                    </td>
                 </tr>
             <?php } ?>
             <?php if ($entradas_pendentes->total) { ?>
                 <tr>
                     <td colspan="2" style="text-align: left; color: green">(+) SALDO DE ENTRADAS A CONFIRMAR</td>
                     <td colspan="1" style="text-align: right; color: green">
-                        <?php echo number_format($entradas_pendentes->total, 2, ',', '.') ?></td>
+                        <?php echo number_format($entradas_pendentes->total, 2, ',', '.') ?>
+                    </td>
                 </tr>
             <?php } ?>
             <tr>
                 <td colspan="2" style="text-align: left; font-weight: bold">(=) SALDO DISPONÍVEL EM CONTA</td>
                 <td colspan="1" style="text-align: right; font-weight: bold">
-                    <strong><?php echo number_format($total->total, 2, ',', '.') ?></strong>
+                    <strong>
+                        <?php echo number_format($total->total, 2, ',', '.') ?>
+                    </strong>
                 </td>
             </tr>
         </table>
@@ -103,20 +108,20 @@ $fim                    = $this->input->get('dataFinal');
 </div>
 
 <?php
-$saidasPendentes    = null;
-$entradasPendentes  = null;
-$saidasEfetivadas   = null;
+$saidasPendentes = null;
+$entradasPendentes = null;
+$saidasEfetivadas = null;
 $entradasEfetivadas = null;
-$totalSaidas        = null;
-$totalEntradas      = null;
-$totalGeral         = null;
-$prevLink           = null;
-$nextLink           = null;
-$monthText          = null;
+$totalSaidas = null;
+$totalEntradas = null;
+$totalGeral = null;
+$prevLink = null;
+$nextLink = null;
+$monthText = null;
 
 if (isset($referenceMonth) && $referenceMonth) {
-    $prevReferenceYear  = $referenceYear;
-    $nextReferenceYear  = $referenceYear;
+    $prevReferenceYear = $referenceYear;
+    $nextReferenceYear = $referenceYear;
     $prevReferenceMonth = $referenceMonth - 1;
     $nextReferenceMonth = $referenceMonth + 1;
 
@@ -135,10 +140,10 @@ if (isset($referenceMonth) && $referenceMonth) {
         $nextLinkTitle = sprintf('%s / %s', $nextMonth, $nextReferenceYear);
     }
 
-    $prevLink   = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $prevReferenceMonth, $prevReferenceYear)) .
+    $prevLink = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $prevReferenceMonth, $prevReferenceYear)) .
         " title='$prevLinkTitle'><span class='badge badge-primary'><i style='margin: 0 !important;' class='fas fa-angle-double-left'></i></span></a>";
-    $monthText  = "<span class='badge badge-primary' style='margin-left: 10px;'>Período: $month / $referenceYear</span>";
-    $nextLink   = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $nextReferenceMonth, $nextReferenceYear)) .
+    $monthText = "<span class='badge badge-primary' style='margin-left: 10px;'>Período: $month / $referenceYear</span>";
+    $nextLink = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $nextReferenceMonth, $nextReferenceYear)) .
         " title='$nextLinkTitle'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-right'></i></span></a>";
 }
 
@@ -327,8 +332,8 @@ if (!$results) {
                         echo '</td>';
                         echo '</tr>';
                     }
-                    $totalEntradas  = $entradasEfetivadas + $entradasPendentes;
-                    $totalSaidas    = $saidasEfetivadas + $saidasPendentes;
+                    $totalEntradas = $entradasEfetivadas + $entradasPendentes;
+                    $totalSaidas = $saidasEfetivadas + $saidasPendentes;
                     ?>
                 </tbody>
             </table>
@@ -387,14 +392,16 @@ if (!$results) {
                 <tr>
                     <td colspan="2" style="text-align: left; color: #5cb85c">(+) SALDO DE ENTRADAS PENDENTES</td>
                     <td colspan="1" style="text-align: right; color: #5cb85c">
-                        <?php echo number_format($entradasPendentes, 2, ',', '.') ?></td>
+                        <?php echo number_format($entradasPendentes, 2, ',', '.') ?>
+                    </td>
                 </tr>
             <?php } ?>
             <?php if ($entradasEfetivadas) { ?>
                 <tr>
                     <td colspan="2" style="text-align: left; color: green">(+) SALDO DE ENTRADAS EFETIVADAS</td>
                     <td colspan="1" style="text-align: right;  color: green">
-                        <?php echo number_format($entradasEfetivadas, 2, ',', '.') ?></td>
+                        <?php echo number_format($entradasEfetivadas, 2, ',', '.') ?>
+                    </td>
                 </tr>
             <?php } ?>
             <?php if ($entradasEfetivadas && $entradasPendentes) { ?>
@@ -410,14 +417,16 @@ if (!$results) {
                 <tr>
                     <td colspan="2" style="text-align: left; color: red">(-) SALDO DE SAÍDAS PENDENTES</td>
                     <td colspan="1" style="text-align: right; color: red">
-                        <?php echo number_format($saidasPendentes, 2, ',', '.') ?></td>
+                        <?php echo number_format($saidasPendentes, 2, ',', '.') ?>
+                    </td>
                 </tr>
             <?php } ?>
             <?php if ($saidasEfetivadas) { ?>
                 <tr>
                     <td colspan="2" style="text-align: left; color: #d9534f">(-) SALDO DE SAÍDAS EFETIVADAS</td>
                     <td colspan="1" style="text-align: right; color: #d9534f">
-                        <?php echo number_format($saidasEfetivadas, 2, ',', '.') ?></td>
+                        <?php echo number_format($saidasEfetivadas, 2, ',', '.') ?>
+                    </td>
                 </tr>
             <?php } ?>
             <?php if ($saidasEfetivadas && $saidasPendentes) { ?>
@@ -531,12 +540,16 @@ if (!$results) {
                                                             echo 'selected';
                                                         } ?>>Últimos 90 dias
                                 </option>
-                                <option value="mensal" <?php if ($periodo_lancamentos == 'mensal' || !$periodo_lancamentos) {
+                                <option value="mensal" <?php if (
+                                                            $periodo_lancamentos == 'mensal' ||
+                                                            !$periodo_lancamentos
+                                                        ) {
                                                             echo 'selected';
                                                         } ?>>MÊS/ANO ESPECÍFICOS
                                 </option>
                                 <option value="especifico" <?php if ($periodo_lancamentos == 'especifico') {
-                                                                echo 'selected';
+                                                                echo
+                                                                'selected';
                                                             } ?>>PERÍODO ESPECÍFICO
                                 </option>
                             </select>
@@ -561,24 +574,38 @@ if (!$results) {
                                     <option value="">
                                         << Selecione>>
                                     </option>
-                                    <option value="01" <?= ($referenceMonth == '01') ? 'selected' : null ?>>01 - JANEIRO</option>
-                                    <option value="02" <?= ($referenceMonth == '02') ? 'selected' : null ?>>02 - FEVEREIRO</option>
-                                    <option value="03" <?= ($referenceMonth == '03') ? 'selected' : null ?>>03 - MARÇO</option>
-                                    <option value="04" <?= ($referenceMonth == '04') ? 'selected' : null ?>>04 - ABRIL</option>
-                                    <option value="05" <?= ($referenceMonth == '05') ? 'selected' : null ?>>05 - MAIO</option>
-                                    <option value="06" <?= ($referenceMonth == '06') ? 'selected' : null ?>>06 - JUNHO</option>
-                                    <option value="07" <?= ($referenceMonth == '07') ? 'selected' : null ?>>07 - JULHO</option>
-                                    <option value="08" <?= ($referenceMonth == '08') ? 'selected' : null ?>>08 - AGOSTO</option>
-                                    <option value="09" <?= ($referenceMonth == '09') ? 'selected' : null ?>>09 - SETEMBRO</option>
-                                    <option value="10" <?= ($referenceMonth == '10') ? 'selected' : null ?>>10 - OUTUBRO</option>
-                                    <option value="11" <?= ($referenceMonth == '11') ? 'selected' : null ?>>11 - NOVEMBRO</option>
-                                    <option value="12" <?= ($referenceMonth == '12') ? 'selected' : null ?>>12 - DEZEMBRO</option>
+                                    <option value="01" <?= ($referenceMonth == '01') ? 'selected' : null ?>>01 - JANEIRO
+                                    </option>
+                                    <option value="02" <?= ($referenceMonth == '02') ? 'selected' : null ?>>02 - FEVEREIRO
+                                    </option>
+                                    <option value="03" <?= ($referenceMonth == '03') ? 'selected' : null ?>>03 - MARÇO
+                                    </option>
+                                    <option value="04" <?= ($referenceMonth == '04') ? 'selected' : null ?>>04 - ABRIL
+                                    </option>
+                                    <option value="05" <?= ($referenceMonth == '05') ? 'selected' : null ?>>05 - MAIO
+                                    </option>
+                                    <option value="06" <?= ($referenceMonth == '06') ? 'selected' : null ?>>06 - JUNHO
+                                    </option>
+                                    <option value="07" <?= ($referenceMonth == '07') ? 'selected' : null ?>>07 - JULHO
+                                    </option>
+                                    <option value="08" <?= ($referenceMonth == '08') ? 'selected' : null ?>>08 - AGOSTO
+                                    </option>
+                                    <option value="09" <?= ($referenceMonth == '09') ? 'selected' : null ?>>09 - SETEMBRO
+                                    </option>
+                                    <option value="10" <?= ($referenceMonth == '10') ? 'selected' : null ?>>10 - OUTUBRO
+                                    </option>
+                                    <option value="11" <?= ($referenceMonth == '11') ? 'selected' : null ?>>11 - NOVEMBRO
+                                    </option>
+                                    <option value="12" <?= ($referenceMonth == '12') ? 'selected' : null ?>>12 - DEZEMBRO
+                                    </option>
                                 </select>
                                 <span class="input-group-addon">ano</span>
                                 <select class="form-control" id="anoReferenciaSelect" name="anoReferencia">
                                     <?php if ($yearsList) {
                                         foreach ($yearsList as $year) { ?>
-                                            <option value="<?= $year ?>" <?= ($referenceYear == $year ? 'selected' : '') ?>><?= $year ?></option>
+                                            <option value="<?= $year ?>" <?= ($referenceYear == $year ? 'selected' : '') ?>><?=
+                                                                                                                            $year ?>
+                                            </option>
                                     <?php }
                                     } ?>
                                 </select>
@@ -610,14 +637,14 @@ if (!$results) {
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricao">Descrição *</label>
-                            <input class="form-control" id="descricao" type="text" name="descricao" />
+                            <input class="form-control descricao" id="descricao" type="text" name="descricao" />
                             <input id="urlEntrada" type="hidden" class="urlAtual" name="urlAtual" value="" />
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="fornecedor">Fornecedor</label>
-                            <input class="form-control" type="text" name="fornecedor" />
+                            <input class="form-control fornecedor" type="text" name="fornecedor" />
                         </div>
                     </div>
                     <div class="row">
@@ -651,7 +678,9 @@ if (!$results) {
                                     </option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
-                                            <option value="<?= $f->id_forma ?>"><?= $f->nome ?></option>
+                                            <option value="<?= $f->id_forma ?>">
+                                                <?= $f->nome ?>
+                                            </option>
                                     <?php }
                                     } ?>
                                 </select>
@@ -661,9 +690,13 @@ if (!$results) {
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
-                        <i class="fa fa-times fa-fw"></i> Cancelar
+                        <i class="fa fa-times fa-fw"></i>
+                        Cancelar
                     </button>
-                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
+                    <button type="submit" class="btn btn-success btn-sm">
+                        <i class="fa fa-check fa-fw"></i>
+                        Salvar
+                    </button>
                 </div>
             </form>
         </div>
@@ -683,14 +716,14 @@ if (!$results) {
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricao">Descrição *</label>
-                            <input class="form-control" type="text" name="descricao" />
+                            <input class="form-control descricao" type="text" name="descricao" />
                             <input class="urlAtual" type="hidden" name="urlAtual" value="" />
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="fornecedor">Fornecedor</label>
-                            <input class="form-control" type="text" name="fornecedor" />
+                            <input class="form-control fornecedor" type="text" name="fornecedor" />
                         </div>
                     </div>
                     <div class="row">
@@ -723,7 +756,9 @@ if (!$results) {
                                     </option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
-                                            <option value="<?= $f->id_forma ?>"><?= $f->nome ?></option>
+                                            <option value="<?= $f->id_forma ?>">
+                                                <?= $f->nome ?>
+                                            </option>
                                     <?php }
                                     } ?>
                                 </select>
@@ -733,9 +768,13 @@ if (!$results) {
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
-                        <i class="fa fa-times fa-fw"></i> Cancelar
+                        <i class="fa fa-times fa-fw"></i>
+                        Cancelar
                     </button>
-                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <i class="fa fa-check fa-fw"></i>
+                        Salvar
+                    </button>
                 </div>
             </form>
         </div>
@@ -756,14 +795,14 @@ if (!$results) {
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricaoEditar">Descrição *</label>
-                            <input class="form-control" id="descricaoEditar" type="text" name="descricao" />
+                            <input class="form-control descricao" id="descricaoEditar" type="text" name="descricao" />
                             <input type="hidden" id="idEditar" name="id" value="" />
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="fornecedorEditar">Fornecedor</label>
-                            <input class="form-control" id="fornecedorEditar" type="text" name="fornecedor" />
+                            <input class="form-control fornecedor" id="fornecedorEditar" type="text" name="fornecedor" />
                         </div>
                     </div>
                     <div class="row">
@@ -803,7 +842,9 @@ if (!$results) {
                                     </option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
-                                            <option value="<?= $f->id_forma ?>"><?= $f->nome ?></option>
+                                            <option value="<?= $f->id_forma ?>">
+                                                <?= $f->nome ?>
+                                            </option>
                                     <?php }
                                     } ?>
                                 </select>
@@ -816,7 +857,8 @@ if (!$results) {
                         <i class="fa fa-times fa-fw"></i> Cancelar
                     </button>
                     <button type="button" href="#modalCopiar" data-dismiss="modal" data-toggle="modal" class="btn btn-info btn-sm"><i class="fa fa-copy fa-fw"></i> Copiar</button>
-                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
+                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i>
+                        Salvar</button>
                 </div>
             </form>
         </div>
@@ -837,14 +879,14 @@ if (!$results) {
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricaoCopiar">Descrição *</label>
-                            <input class="form-control" id="descricaoCopiar" type="text" name="descricao" />
+                            <input class="form-control descricao" id="descricaoCopiar" type="text" name="descricao" />
                             <input type="hidden" id="idCopiar" name="id" value="" />
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="fornecedorCopiar">Fornecedor</label>
-                            <input class="form-control" id="fornecedorCopiar" type="text" name="fornecedor" />
+                            <input class="form-control fornecedor" id="fornecedorCopiar" type="text" name="fornecedor" />
                         </div>
                     </div>
                     <div class="row">
@@ -884,7 +926,9 @@ if (!$results) {
                                     </option>
                                     <?php if ($formasPagamento) {
                                         foreach ($formasPagamento as $f) { ?>
-                                            <option value="<?= $f->id_forma ?>"><?= $f->nome ?></option>
+                                            <option value="<?= $f->id_forma ?>">
+                                                <?= $f->nome ?>
+                                            </option>
                                     <?php }
                                     } ?>
                                 </select>
@@ -918,8 +962,12 @@ if (!$results) {
                     <input class="urlAtual" type="hidden" name="urlAtual" value="" />
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i> Cancelar</button>
-                    <button class="btn btn-danger btn-sm"><i class="fa fa-check fa-fw"></i> Excluir</button>
+                    <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
+                        Cancelar
+                    </button>
+                    <button class="btn btn-danger btn-sm"><i class="fa fa-check fa-fw"></i>
+                        Excluir
+                    </button>
                 </div>
             </form>
         </div>
@@ -927,6 +975,22 @@ if (!$results) {
 </div>
 
 <script type="text/javascript">
+    $(".descricao").autocomplete({
+        source: "<?php echo base_url('financeiro/lancamentos/autoCompleteDescricao'); ?>",
+        minLength: 5,
+        select: function(event, ui) {
+            $(".descricao").val(ui.item.label);
+        }
+    });
+
+    $(".fornecedor").autocomplete({
+        source: "<?php echo base_url('financeiro/lancamentos/autoCompleteFornecedor'); ?>",
+        minLength: 1,
+        select: function(event, ui) {
+            $(".fornecedor").val(ui.item.label);
+        }
+    });
+
     $('#div_pesquisa').on('shown.bs.dropdown', function(e) {
         $('#input_pesquisa').focus();
     });

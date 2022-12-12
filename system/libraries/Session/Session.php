@@ -727,7 +727,7 @@ class CI_Session {
 	 *
 	 * Legacy CI_Session compatibility method
 	 *
-	 * @returns	array
+	 * @return	array
 	 */
 	public function &get_userdata()
 	{

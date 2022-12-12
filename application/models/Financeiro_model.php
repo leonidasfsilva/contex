@@ -170,4 +170,48 @@ class Financeiro_model extends CI_Model
         //        $this->db->limit(5);
         return $this->db->get('lancamentos')->result();
     }
+
+    function autoCompleteDescricao($query, $idUsuario)
+    {
+        $query = $this->db->select('*')
+            ->limit(5)
+            ->like('descricao', $query)
+            ->where('id_usuario', $idUsuario)
+            ->where('status', 1)
+            ->group_by('descricao')
+            ->get('lancamentos');
+
+        if ($query->num_rows() > 0) {
+            $row_set = [];
+
+            foreach ($query->result_array() as $row) {
+                $row_set[] = [
+                    'label' => $row['descricao']
+                ];
+            }
+            echo json_encode($row_set);
+        }
+    }
+
+    function autoCompleteFornecedor($query, $idUsuario)
+    {
+        $query = $this->db->select('*')
+            ->limit(5)
+            ->like('cliente_fornecedor', $query)
+            ->where('id_usuario', $idUsuario)
+            ->where('status', 1)
+            ->group_by('cliente_fornecedor')
+            ->get('lancamentos');
+
+        if ($query->num_rows() > 0) {
+            $row_set = [];
+
+            foreach ($query->result_array() as $row) {
+                $row_set[] = [
+                    'label' => $row['cliente_fornecedor']
+                ];
+            }
+            echo json_encode($row_set);
+        }
+    }
 }
