@@ -977,7 +977,7 @@ if (!$results) {
 <script type="text/javascript">
     $(".descricao").autocomplete({
         source: "<?php echo base_url('financeiro/lancamentos/autoCompleteDescricao'); ?>",
-        minLength: 5,
+        minLength: 3,
         select: function(event, ui) {
             $(".descricao").val(ui.item.label);
         }
