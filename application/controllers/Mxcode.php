@@ -120,7 +120,6 @@ class Mxcode extends CI_Controller
     {
         if ((session_id()) && ($this->session->userdata('logado'))) {
             gravaLog(getUserId(), getUserName(), getUserEmail(), 'Logoff no sistema', getenv("REMOTE_ADDR"));
-            atualizaValorVinculoFaturas();
             $this->session->sess_destroy();
             redirect('mxcode/login');
         } else {
