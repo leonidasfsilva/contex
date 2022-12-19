@@ -588,6 +588,29 @@ class Fatura_model extends CI_Model
         }
     }
 
+    function autoCompleteDescricao($query, $idUsuario)
+    {
+        $query = $this->db->select('*')
+            ->limit(5)
+            ->like('descricao', $query)
+            ->where('id_usuario', $idUsuario)
+            ->where('status', 1)
+            ->group_by('descricao')
+            ->order_by('id_lancamento')
+            ->get('lancamentos_faturas');
+
+        if ($query->num_rows() > 0) {
+            $row_set = [];
+
+            foreach ($query->result_array() as $row) {
+                $row_set[] = [
+                    'label' => $row['descricao']
+                ];
+            }
+            echo json_encode($row_set);
+        }
+    }
+
     function getAllTerceiros($idCartao = null, $mesReferencia = null, $anoReferencia = null, $idUsuario = null)
     {
         if (!$idUsuario) {

@@ -1596,6 +1596,14 @@ class Faturas extends CI_Controller
         }
     }
 
+    public function autoCompleteDescricao()
+    {
+        if (isset($_GET['term'])) {
+            $q = strtolower($_GET['term']);
+            $this->fatura_model->autoCompleteDescricao($q, getUserId());
+        }
+    }
+
     public function ajaxDiaVencimentoFatura()
     {
         $id_cartao = $_POST['id_cartao'];

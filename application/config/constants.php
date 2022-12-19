@@ -18,7 +18,7 @@
 | R     - current release version of system
 |
 */
-define('VERSION_APP', '2022.2.16');
+define('VERSION_APP', '2022.2.17');
 
 /*
 |--------------------------------------------------------------------------

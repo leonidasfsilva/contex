@@ -438,7 +438,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricao">Descrição *</label>
-                            <input class="form-control" id="descricao" type="text" name="descricao" />
+                            <input class="form-control descricao" id="descricao" type="text" name="descricao" />
                             <input id="urlLancamento" type="hidden" name="urlAtual" value="" />
                         </div>
                     </div>
@@ -730,6 +730,14 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 </div>
 
 <script type="text/javascript">
+        $(".descricao").autocomplete({
+        source: "<?php echo base_url('financeiro/faturas/autoCompleteDescricao'); ?>",
+        minLength: 3,
+        select: function(event, ui) {
+            $(".descricao").val(ui.item.label);
+        }
+    });
+
     $('#modalLancamento').on('shown.bs.modal', function(e) {
         $('#descricao').focus();
     })
