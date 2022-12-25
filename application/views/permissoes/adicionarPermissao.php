@@ -316,6 +316,40 @@
                 <div class="col-lg-3">
                     <div class="panel pl20">
                         <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="vDespesas">
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Visualizar Despesas</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="aDespesas">
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Adicionar Despesas</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="eDespesas">
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Editar Despesas</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="dDespesas">
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Excluir Despesas</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
                             <input type="checkbox" class="form-control" name="atividades[]" value="vPendencias">
                         </div>
                         <label for="vCliente" class="font-weight-bold">Visualizar Pendências</label>
