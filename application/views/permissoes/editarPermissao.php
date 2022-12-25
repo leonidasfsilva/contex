@@ -347,6 +347,40 @@
                 <div class="col-lg-3">
                     <div class="panel pl20">
                         <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="vDespesas" <?= in_array('vDespesas', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="vCliente" class="font-weight-bold">Visualizar Despesas</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="aDespesas" <?= in_array('aDespesas', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="aCliente" class="font-weight-bold">Adicionar Despesas</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="eDespesas" <?= in_array('eDespesas', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="eCliente" class="font-weight-bold">Editar Despesas</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="dDespesas" <?= in_array('dDespesas', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Excluir Despesas</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
                             <input type="checkbox" class="form-control" name="atividades[]" value="vPendencias" <?= in_array('vPendencias', $atividades) ? 'checked' : '' ?>>
                         </div>
                         <label for="vCliente" class="font-weight-bold">Visualizar Pendências</label>
@@ -476,6 +510,14 @@
                             <input type="checkbox" class="form-control" name="atividades[]" value="rFaturas" <?= in_array('rFaturas', $atividades) ? 'checked' : '' ?>>
                         </div>
                         <label for="dCliente" class="font-weight-bold">Relatório Faturas</label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="rDespesas" <?= in_array('rDespesas', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Relatório Despesas</label>
                     </div>
                 </div>
             </div>
