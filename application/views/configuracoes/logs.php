@@ -54,15 +54,22 @@
                                     <tbody>
                                         <?php
                                         foreach ($logs as $r) {
-                                            $data = date(('d/m/Y - H:i:s'), strtotime($r->data_registro));
+                                            $data       = date(('d/m/Y - H:i:s'), strtotime($r->data_registro));
+                                            $needle     = 'recusada';
+
+                                            if (strpos($r->descricao, $needle) !== false) {
+                                                $class = 'text-danger font-weight-bold';
+                                            } else {
+                                                $class = '';
+                                            }
 
                                             echo '<tr>';
-                                            echo '<td>' . $r->id_log . '</td>';
-                                            echo '<td>' . $r->nome . '</td>';
-                                            echo '<td>' . $r->email . '</td>';
-                                            echo '<td>' . $r->descricao . '</td>';
-                                            echo "<td><a target='_blank' href='https://whatismyipaddress.com/ip/$r->ip'>" . $r->ip . "</a></td>";
-                                            echo '<td>' . $data . '</td>';
+                                            echo "<td class='$class'>" . $r->id_log . "</td>";
+                                            echo "<td class='$class'>" . $r->nome . "</td>";
+                                            echo "<td class='$class'>" . $r->email . "</td>";
+                                            echo "<td class='$class'>" . $r->descricao . "</td>";
+                                            echo "<td class='$class'><a target='_blank' href='https://whatismyipaddress.com/ip/$r->ip'>" . $r->ip . "</a></td>";
+                                            echo "<td class='$class'>" . $data . "</td>";
                                             echo '</tr>';
                                         } ?>
                                         <tr>
