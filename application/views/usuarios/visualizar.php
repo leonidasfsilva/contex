@@ -185,7 +185,7 @@
                                         echo '<tr>';
                                         echo '<td>' . $r->id_log . '</td>';
                                         echo '<td>' . $r->descricao . '</td>';
-                                        echo '<td>' . $r->ip . '</td>';
+                                        echo "<td><a target='_blank' href='https://whatismyipaddress.com/ip/$r->ip'>" . $r->ip . "</a></td>";
                                         echo '<td>' . $data . '</td>';
                                         echo '</tr>';
                                     } ?>
