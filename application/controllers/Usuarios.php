@@ -19,7 +19,6 @@ class Usuarios extends CI_Controller
         $this->load->helper(array('form', 'codegen_helper'));
         $this->data['menuUsuarios'] = 'Usuários';
         $this->data['menuConfiguracoes'] = 'Configurações';
-
     }
 
     function index()
@@ -72,7 +71,7 @@ class Usuarios extends CI_Controller
 
             $data1 = array(
                 'nome' => $this->input->post('nome'),
-                'cpf' => empty($this->input->post('cpf'))? null : $this->input->post('cpf'),
+                'cpf' => empty($this->input->post('cpf')) ? null : $this->input->post('cpf'),
                 'cep' => $this->input->post('cep'),
                 'logradouro' => $this->input->post('logradouro'),
                 'complemento' => $this->input->post('complemento'),
@@ -94,7 +93,6 @@ class Usuarios extends CI_Controller
             } else {
                 $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar cadastrar usuário.');
                 redirect(base_url() . 'usuarios/');
-
             }
         }
 
@@ -102,7 +100,6 @@ class Usuarios extends CI_Controller
         $this->data['permissoes'] = $this->permissoes_model->getActive('permissoes', 'permissoes.id_permissao,permissoes.nome');
         $this->data['view'] = 'usuarios/adicionarUsuario';
         $this->load->view('tema/topo', $this->data);
-
     }
 
     function editar($id = null)
@@ -113,10 +110,10 @@ class Usuarios extends CI_Controller
             redirect(base_url());
         }
 
-//        if ($this->input->post('id_usuarios') == 1 && $this->input->post('situacao') == 0) {
-//            $this->session->set_flashdata('erro', 'O administrador do sistema não pode ser desativado.');
-//            redirect(base_url() . 'usuarios/editar/' . $this->input->post('id_usuarios'));
-//        }
+        //        if ($this->input->post('id_usuarios') == 1 && $this->input->post('situacao') == 0) {
+        //            $this->session->set_flashdata('erro', 'O administrador do sistema não pode ser desativado.');
+        //            redirect(base_url() . 'usuarios/editar/' . $this->input->post('id_usuarios'));
+        //        }
 
         if ($_POST) {
 
@@ -203,7 +200,6 @@ class Usuarios extends CI_Controller
         $this->data['permissoes'] = $this->permissoes_model->getActive('permissoes', 'permissoes.id_permissao,permissoes.nome');
         $this->data['view'] = 'usuarios/editarUsuario';
         $this->load->view('tema/topo', $this->data);
-
     }
 
     function desativar()
@@ -222,7 +218,6 @@ class Usuarios extends CI_Controller
         if ($this->usuarios_model->delete('usuarios', $data, 'id_usuarios', $id) == true) {
             $this->session->set_flashdata('sucesso', 'Conta de usuário desativada com sucesso!');
             redirect(base_url() . 'usuarios');
-
         } else {
             $this->session->set_flashdata('erro', 'Erro ao tentar desativar conta de usuário.');
             redirect(base_url() . 'usuarios');
@@ -245,7 +240,6 @@ class Usuarios extends CI_Controller
         if ($this->usuarios_model->delete('usuarios', $data, 'id_usuarios', $id) == true) {
             $this->session->set_flashdata('sucesso', 'Conta de usuário excluída com sucesso!');
             redirect(base_url() . 'usuarios/gerenciar/');
-
         } else {
             $this->session->set_flashdata('erro', 'Erro ao tentar excluir conta de usuário.');
             redirect(base_url() . 'usuarios/gerenciar/');
@@ -263,7 +257,6 @@ class Usuarios extends CI_Controller
         if ($this->usuarios_model->delete('usuarios', $data, 'id_usuarios', $id) == true) {
             $this->session->set_flashdata('sucesso', 'Conta de usuário ativada com sucesso!');
             redirect(base_url() . 'usuarios');
-
         } else {
             $this->session->set_flashdata('erro', 'Erro ao tentar ativar conta de usuário.');
             redirect(base_url() . 'usuarios');
@@ -319,12 +312,12 @@ class Usuarios extends CI_Controller
         $this->data['logs'] = $this->usuarios_model->getLogsUsuario(
             $id,
             $config['per_page'],
-            $this->input->get('per_page'));
-//        $this->data['total_credito'] = $this->clientes_model->getPendenciasCreditoCliente(id_usuario(), $id);
-//        $this->data['total_debito'] = $this->clientes_model->getPendenciasDebitoCliente(id_usuario(), $id);
-//        $this->data['pendencias'] = $this->clientes_model->getPendenciasByCliente($id);
+            $this->input->get('per_page')
+        );
+        // $this->data['total_credito'] = $this->clientes_model->getPendenciasCreditoCliente(id_usuario(), $id);
+        // $this->data['total_debito'] = $this->clientes_model->getPendenciasDebitoCliente(id_usuario(), $id);
+        // $this->data['pendencias'] = $this->clientes_model->getPendenciasByCliente($id);
         $this->data['view'] = 'usuarios/visualizar';
         $this->load->view('tema/topo', $this->data);
     }
-
 }

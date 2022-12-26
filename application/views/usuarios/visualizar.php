@@ -184,7 +184,7 @@
 
                                         echo '<tr>';
                                         echo '<td>' . $r->id_log . '</td>';
-                                        echo '<td>' . $r->acao . '</td>';
+                                        echo '<td>' . $r->descricao . '</td>';
                                         echo '<td>' . $r->ip . '</td>';
                                         echo '<td>' . $data . '</td>';
                                         echo '</tr>';

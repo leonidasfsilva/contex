@@ -18,8 +18,8 @@
 | R     - current release version of system
 |
 */
-define('VERSION_APP', '2022.2.18'); // versao atual em produçao
-// define('VERSION_APP', '2022.2.19'); // versao de lançamento do modulo de Despesas 
+define('VERSION_APP', '2022.2.19'); // versao atual em produçao
+// define('VERSION_APP', '2022.2.20'); // versao de lançamento do modulo de Despesas 
 
 /*
 |--------------------------------------------------------------------------
