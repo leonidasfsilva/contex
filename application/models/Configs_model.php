@@ -1,4 +1,4 @@
-<?php if (! defined('BASEPATH')) {
+<?php if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -8,7 +8,6 @@ class Configs_model extends CI_Model
     {
         parent::__construct();
         $this->load->helper(array('codegen_helper'));
-
     }
 
     function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
@@ -72,8 +71,6 @@ class Configs_model extends CI_Model
         $data['servicos'] = $this->db->get('servicos')->result();
 
         return $data;
-
-
     }
 
     function add($table, $data)
@@ -202,7 +199,8 @@ class Configs_model extends CI_Model
     public function setWidgetLancamentos($id_usuario)
     {
         $this->db
-            ->insert('configs_usuario_assoc',
+            ->insert(
+                'configs_usuario_assoc',
                 array(
                     'id_config_opcao' => 3,
                     'id_usuario' => $id_usuario
@@ -221,7 +219,8 @@ class Configs_model extends CI_Model
     public function setWidgetCartaoCredito($id_usuario)
     {
         $this->db
-            ->insert('configs_usuario_assoc',
+            ->insert(
+                'configs_usuario_assoc',
                 array(
                     'id_config_opcao' => 4,
                     'id_usuario' => $id_usuario
@@ -240,7 +239,8 @@ class Configs_model extends CI_Model
     public function setWidgetInvestimentos($id_usuario)
     {
         $this->db
-            ->insert('configs_usuario_assoc',
+            ->insert(
+                'configs_usuario_assoc',
                 array(
                     'id_config_opcao' => 5,
                     'id_usuario' => $id_usuario
@@ -259,7 +259,8 @@ class Configs_model extends CI_Model
     public function setWidgetPendencias($id_usuario)
     {
         $this->db
-            ->insert('configs_usuario_assoc',
+            ->insert(
+                'configs_usuario_assoc',
                 array(
                     'id_config_opcao' => 6,
                     'id_usuario' => $id_usuario
@@ -275,5 +276,12 @@ class Configs_model extends CI_Model
             ->delete('configs_usuario_assoc');
     }
 
-
+    public function getLogsSistema($perpage, $start)
+    {
+        return $this->db
+            ->limit($perpage, $start)
+            ->order_by('data_registro', 'desc')
+            ->get('logs')
+            ->result();
+    }
 }

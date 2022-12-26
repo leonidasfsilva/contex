@@ -75,10 +75,14 @@ class Usuarios_model extends CI_Model
         return $this->db->count_all($table);
     }
 
-    function countLogs($id_usuario)
+    function countLogs($idUsuario =  null)
     {
+        if (!$idUsuario) {
+            return $this->db
+            ->count_all_results('logs');
+        }
         return $this->db
-            ->where('id_usuario', $id_usuario)
+            ->where('id_usuario', $idUsuario)
             ->count_all_results('logs');
     }
 

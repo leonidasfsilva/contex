@@ -73,6 +73,49 @@ class Configuracoes extends CI_Controller
         $this->load->view('tema/topo', $data);
     }
 
+    public function logs()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {
+            $this->session->set_flashdata('erro', 'Você não tem permissão para visualizar logs do sistema');
+            redirect(base_url());
+        }
+        $this->load->library('pagination');
+
+        $config['base_url']             = base_url('configuracoes/logs/');
+        $config['suffix']               = '#logs';
+        $config['first_url']            = $config['base_url'] . '#logs';
+        $config['total_rows']           = $this->usuarios_model->countLogs();
+        $config['per_page']             = 40;
+        $config['page_query_string']    = true;
+        $config['next_link']            = false;
+        $config['prev_link']            = false;
+        $config['full_tag_open']        = '<ul class="pagination pagination-sm">';
+        $config['full_tag_close']       = '</ul>';
+        $config['num_tag_open']         = '<li>';
+        $config['num_tag_close']        = '</li>';
+        $config['cur_tag_open']         = '<li class="disabled"><a style="background-color:#337ab7; color: white" class="js:"><b>';
+        $config['cur_tag_close']        = '</b></a></li>';
+        $config['prev_tag_open']        = '<li>';
+        $config['prev_tag_close']       = '</li>';
+        $config['next_tag_open']        = '<li>';
+        $config['next_tag_close']       = '</li>';
+        $config['first_link']           = 'Primeira';
+        $config['last_link']            = 'Última';
+        $config['first_tag_open']       = '<li>';
+        $config['first_tag_close']      = '</li>';
+        $config['last_tag_open']        = '<li>';
+        $config['last_tag_close']       = '</li>';
+
+        $this->pagination->initialize($config);
+
+        $data['logs'] = $this->configs_model->getLogsSistema(
+            $config['per_page'],
+            $this->input->get('per_page')
+        );
+        $data['view'] = 'configuracoes/logs';
+        $this->load->view('tema/topo', $data);
+    }
+
     public function adicionar()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {
@@ -162,7 +205,6 @@ class Configuracoes extends CI_Controller
         $data['view'] = 'mxcode/minhaConta';
         $data['minhaConta'] = 'Conta';
         $this->load->view('tema/topo', $data);
-
     }
 
     public function alterarSenha()
@@ -188,9 +230,7 @@ class Configuracoes extends CI_Controller
         } else {
             $this->session->set_flashdata('erro', 'Senha atual incorreta!');
             redirect(base_url() . 'mxcode/minhaConta');
-
         }
-
     }
 
     public function pesquisar()
@@ -208,7 +248,6 @@ class Configuracoes extends CI_Controller
         $this->data['clientes'] = $data['results']['clientes'];
         $this->data['view'] = 'mxcode/pesquisa';
         $this->load->view('tema/topo', $this->data);
-
     }
 
     public function login()
@@ -244,7 +283,7 @@ class Configuracoes extends CI_Controller
         $this->form_validation->set_rules('senha', 'Senha', 'required|trim');
 
         if ($this->form_validation->run() == false) {
-        //    print_array(validation_errors());
+            //    print_array(validation_errors());
             $msgValidation = validation_errors();
             $this->session->set_flashdata('erro', 'Formato de e-mail inválido.');
             redirect('mxcode/login');
@@ -377,8 +416,6 @@ class Configuracoes extends CI_Controller
             $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar cadastrar as informações.');
             redirect(base_url() . 'mxcode/emitente');
         }
-
-
     }
 
     public function editarEmitente()
@@ -417,8 +454,6 @@ class Configuracoes extends CI_Controller
             $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar alterar as informações.');
             redirect(base_url() . 'mxcode/emitente');
         }
-
-
     }
 
     function do_upload($file, $url = null, $dir)
@@ -428,10 +463,10 @@ class Configuracoes extends CI_Controller
             redirect('mxcode/login');
         }
 
-//        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
-//            $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
-//            redirect(base_url());
-//        }
+        //        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) {
+        //            $this->session->set_flashdata('error', 'Você não tem permissão para configurar emitente.');
+        //            redirect(base_url());
+        //        }
 
         $image_upload_folder = $dir;
 
@@ -457,13 +492,12 @@ class Configuracoes extends CI_Controller
             $upload_error = $this->upload->display_errors();
             $this->session->set_flashdata('error', $upload_error);
             redirect($url);
-//            print_r($upload_error);
+            //            print_r($upload_error);
             exit();
         } else {
             $file_info = array($this->upload->data());
             return $file_info[0]['file_name'];
         }
-
     }
 
     public function editarLogo()
@@ -501,7 +535,6 @@ class Configuracoes extends CI_Controller
             $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar alterar a logomarca.');
             redirect(base_url() . 'mxcode/emitente');
         }
-
     }
 
     public function excluirLogo()
@@ -536,7 +569,6 @@ class Configuracoes extends CI_Controller
             $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar excluir a logomarca.');
             redirect(base_url() . 'mxcode/emitente');
         }
-
     }
 
     public function editarFotoUsuario()
@@ -570,7 +602,7 @@ class Configuracoes extends CI_Controller
                 }
             } else {
                 $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar alterar a foto de perfil.<br>ERRO: do_upload()');
-//                redirect(base_url() . 'mxcode/minhaConta');
+                //                redirect(base_url() . 'mxcode/minhaConta');
             }
 
             $retorno = $this->mxcode_model->editAvatarUsuario(getUserId(), $image);
@@ -587,17 +619,15 @@ class Configuracoes extends CI_Controller
                 $this->session->set_userdata($session_data);
 
                 $this->session->set_flashdata('sucesso', 'Foto de perfil alterada com sucesso!');
-//                redirect(base_url() . 'mxcode/minhaConta');
+                //                redirect(base_url() . 'mxcode/minhaConta');
             } else {
                 $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar alterar a foto de perfil.<br>ERRO: editAvatarUsuario()');
-//                redirect(base_url() . 'mxcode/minhaConta');
+                //                redirect(base_url() . 'mxcode/minhaConta');
             }
-
         } else {
             $this->session->set_flashdata('erro', 'Nenhum arquivo enviado.');
             redirect(base_url() . 'mxcode/minhaConta');
         }
-
     }
 
     public function excluirFotoUsuario()
@@ -633,7 +663,6 @@ class Configuracoes extends CI_Controller
             $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar excluir a foto de perfil.');
             redirect(base_url() . 'mxcode/minhaConta');
         }
-
     }
 
     public function atualizarPerfil()
@@ -650,7 +679,7 @@ class Configuracoes extends CI_Controller
             'bairro' => $this->input->post('bairro'),
             'cidade' => $this->input->post('cidade'),
             'uf' => $this->input->post('uf'),
-//            'email' => $this->input->post('email'),
+            //            'email' => $this->input->post('email'),
             'telefone' => $this->input->post('telefone'),
         );
 
@@ -661,7 +690,6 @@ class Configuracoes extends CI_Controller
             $this->session->set_flashdata('sucesso', 'Ocorreu um erro ao atualizar conta de usuário.');
             redirect(base_url() . 'mxcode/minhaConta/');
         }
-
     }
 
 
