@@ -184,7 +184,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     <tr role="row">
                         <th class="th_soma hidden" style="width: 10px !important;">Soma</th>
                         <th style="width: 100px !important;">Data Compra</th>
-                        <th style="width: 300px !important;">Descrição</th>
+                        <th style="max-width: 300px !important;">Descrição</th>
                         <th style="width: 200px !important;">Terceiro</th>
                         <th>Parcela</th>
                         <th>Valor Parcela (R$) <br> Valor Compra (R$)</th>
@@ -475,7 +475,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </div>
                             <div class="form-group col-lg-4">
                                 <label for="valor_parcela" class="font-weight-bold">Valor da parcela *</label>
-                                <input class="form-control money parcela" id="valor_parcela" type="text" name="valor_parcela" />
+                                <input class="form-control money parcela" id="valor_parcela" type="text" name="valor_parcela" readonly/>
                             </div>
                         </div>
                     </div>
@@ -569,7 +569,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </div>
                             <div class="form-group col-lg-4">
                                 <label class="font-weight-bold">Valor da Parcela *</label>
-                                <input class="form-control money parcela valorParcela" type="text" name="valor_parcela" />
+                                <input class="form-control money parcela valorParcela" type="text" name="valor_parcela" readonly/>
                             </div>
                         </div>
                     </div>
@@ -662,7 +662,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </div>
                             <div class="form-group col-lg-4">
                                 <label class="font-weight-bold">Valor da Parcela *</label>
-                                <input class="form-control money parcela valorParcela" type="text" name="valor_parcela" />
+                                <input class="form-control money parcela valorParcela" type="text" name="valor_parcela" readonly/>
                             </div>
                         </div>
                     </div>
