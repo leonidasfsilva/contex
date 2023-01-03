@@ -90,25 +90,25 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         <div class="col-lg-3">
             <div class="input-group">
                 <span class="input-group-addon font-weight-bold">Referência:</span>
-                <div class="input-group-addon"><span class="label label-default"><?= $nome_mes ?></span></div>
+                <div class="input-group-addon"><span class="badge badge-info"><?= $nome_mes ?></span></div>
             </div>
         </div>
         <div class="col-lg-3">
             <div class="input-group">
                 <span class="input-group-addon font-weight-bold">Vencimento:</span>
-                <div class="input-group-addon"><span class="label label-default"><?= date(('d/m/Y'), strtotime($fatura->vencimento)) ?></span></div>
+                <div class="input-group-addon"><span class="badge badge-info"><?= date(('d/m/Y'), strtotime($fatura->vencimento)) ?></span></div>
             </div>
         </div>
         <div class="col-lg-3">
             <div class="input-group">
                 <span class="input-group-addon font-weight-bold">Status:</span>
-                <div class="input-group-addon"><span class="label label-<?= $label_status ?>"><?= $statusFatura ?></span></div>
+                <div class="input-group-addon"><span class="badge badge-<?= $label_status ?>"><?= $statusFatura ?></span></div>
             </div>
         </div>
         <div class="col-lg-3">
             <div class="input-group">
                 <span class="input-group-addon font-weight-bold">Pagamento:</span>
-                <div class="input-group-addon"><span class="label label-<?= $label_pgto ?>"><?= $pagamentoFatura ?></span></div>
+                <div class="input-group-addon"><span class="badge badge-<?= $label_pgto ?>"><?= $pagamentoFatura ?></span></div>
             </div>
         </div>
     </div>

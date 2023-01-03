@@ -237,8 +237,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         echo '<td>' . date(('d/m/Y'), strtotime($r->vencimento)) . $statusVinculo . '</td>';
 
                         echo '<td style="cursor: pointer; color: ' . $color . '" class="i-copy-total"><i class="fas fa-copy fa-fw hidden icon-total"></i> ' . number_format($valor_total, 2, ',', '.') . '</td>';
-                        echo '<td><span class="label label-' . $label . '">' . strtoupper($status) . '</span></td>';
-                        echo '<td><span class="label label-' . $labelPgto . '">' . strtoupper($pagamento) . '</span></td>';
+                        echo '<td><span class="badge badge-' . $label . '">' . strtoupper($status) . '</span></td>';
+                        echo '<td><span class="badge badge-' . $labelPgto . '">' . strtoupper($pagamento) . '</span></td>';
 
                         echo '<td>';
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eFaturas')) {
