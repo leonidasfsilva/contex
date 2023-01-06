@@ -108,16 +108,18 @@ $fim = $this->input->get('dataFinal');
 </div>
 
 <?php
-$saidasPendentes = null;
-$entradasPendentes = null;
-$saidasEfetivadas = null;
+$saidasPendentes    = null;
+$entradasPendentes  = null;
+$saidasEfetivadas   = null;
 $entradasEfetivadas = null;
-$totalSaidas = null;
-$totalEntradas = null;
-$totalGeral = null;
-$prevLink = null;
-$nextLink = null;
-$monthText = null;
+$totalSaidas        = null;
+$totalEntradas      = null;
+$totalGeralMes      = null;
+$totalGeral         = $total->total;
+$saldoProvisorioMes = null;
+$prevLink           = null;
+$nextLink           = null;
+$monthText          = null;
 
 if (isset($referenceMonth) && $referenceMonth) {
     $prevReferenceYear = $referenceYear;
@@ -295,7 +297,7 @@ if (!$results) {
                             $valor = number_format($r->valor, 2, ',', '.');
                         }
 
-                        $totalGeral += $r->valor;
+                        $totalGeralMes += $r->valor;
 
                         echo '<tr>';
                         echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
@@ -332,8 +334,8 @@ if (!$results) {
                         echo '</td>';
                         echo '</tr>';
                     }
-                    $totalEntradas = $entradasEfetivadas + $entradasPendentes;
-                    $totalSaidas = $saidasEfetivadas + $saidasPendentes;
+                    $totalEntradas  = $entradasEfetivadas + $entradasPendentes;
+                    $totalSaidas    = $saidasEfetivadas + $saidasPendentes;
                     ?>
                 </tbody>
             </table>
@@ -404,7 +406,9 @@ if (!$results) {
                     </td>
                 </tr>
             <?php } ?>
-            <?php if ($entradasEfetivadas && $entradasPendentes) { ?>
+            <?php if ($entradasEfetivadas && $entradasPendentes) {
+                $saldoProvisorioMes = $totalGeral + ($entradasPendentes);
+            ?>
                 <tr>
                     <td colspan="2" style="text-align: left;">(=) SALDO TOTAL DE ENTRADAS</td>
                     <td colspan="1" style="text-align: right;">
@@ -413,7 +417,13 @@ if (!$results) {
                 </tr>
             <?php } ?>
 
-            <?php if ($saidasPendentes) { ?>
+            <?php if ($saidasPendentes) {
+                if ($saldoProvisorioMes) {
+                    $saldoProvisorioMes = $saldoProvisorioMes + ($saidasPendentes);
+                } else {
+                    $saldoProvisorioMes = $totalGeral + ($saidasPendentes);
+                }
+            ?>
                 <tr>
                     <td colspan="2" style="text-align: left; color: red">(-) SALDO DE SAÍDAS PENDENTES</td>
                     <td colspan="1" style="text-align: right; color: red">
@@ -437,20 +447,20 @@ if (!$results) {
                     </td>
                 </tr>
             <?php } ?>
-            <?php if ($totalGeral) { ?>
+            <?php if ($totalGeralMes) { ?>
                 <tr class="total-geral">
                     <td colspan="2" style="text-align: left; font-weight: bold">(=) SALDO TOTAL DO PERÍODO</td>
                     <td colspan="1" style="text-align: right; font-weight: bold">
-                        <?php echo number_format($totalGeral, 2, ',', '.') ?>
+                        <?php echo number_format($totalGeralMes, 2, ',', '.') ?>
                     </td>
                 </tr>
                 <?php
-                if ($totalGeral < 0) {
+                if ($totalGeralMes < 0) {
                 ?>
                     <tr class="hidden provisorio-periodo">
                         <td colspan="2" style="text-align: left; font-weight: bold">(±) SALDO PROVISÓRIO DO PERÍODO</td>
                         <td colspan="1" style="text-align: right; font-weight: bold">
-                            <?php echo number_format(($total->total + $totalGeral), 2, ',', '.') ?>
+                            <?php echo number_format(($saldoProvisorioMes), 2, ',', '.') ?>
                         </td>
                     </tr>
 
@@ -990,6 +1000,10 @@ if (!$results) {
             $(".fornecedor").val(ui.item.label);
         }
     });
+
+    $('#modalEntrada, #modalSaida').on('shown.bs.modal', function(e) {
+        $('.descricao').focus();
+    })
 
     $('#div_pesquisa').on('shown.bs.dropdown', function(e) {
         $('#input_pesquisa').focus();
