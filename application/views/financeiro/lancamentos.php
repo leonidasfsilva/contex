@@ -390,7 +390,9 @@ if (!$results) {
                     <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
                 </tr>
             </thead>
-            <?php if ($entradasPendentes) { ?>
+            <?php if ($entradasPendentes) {
+                $saldoProvisorioMes = $totalGeral + ($entradasPendentes);
+            ?>
                 <tr>
                     <td colspan="2" style="text-align: left; color: #5cb85c">(+) SALDO DE ENTRADAS PENDENTES</td>
                     <td colspan="1" style="text-align: right; color: #5cb85c">
@@ -407,7 +409,6 @@ if (!$results) {
                 </tr>
             <?php } ?>
             <?php if ($entradasEfetivadas && $entradasPendentes) {
-                $saldoProvisorioMes = $totalGeral + ($entradasPendentes);
             ?>
                 <tr>
                     <td colspan="2" style="text-align: left;">(=) SALDO TOTAL DE ENTRADAS</td>
