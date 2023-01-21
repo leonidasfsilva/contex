@@ -213,9 +213,9 @@ class Lancamentos extends CI_Controller
             $dateObj                    = DateTime::createFromFormat('!m', ($referenceMonth));
             $nextMonthObj               = DateTime::createFromFormat('!m', ($referenceMonth + 1));
             $prevMonthObj               = DateTime::createFromFormat('!m', ($referenceMonth - 1));
-            $this->data['month']        = str_replace('.', '', strtoupper($dateFormatter->format($dateObj)));
-            $this->data['nextMonth']    = str_replace('.', '', strtoupper($dateFormatter->format($nextMonthObj)));
-            $this->data['prevMonth']    = str_replace('.', '', strtoupper($dateFormatter->format($prevMonthObj)));
+            $this->data['month']        = str_replace('.', '', mb_strtoupper($dateFormatter->format($dateObj)));
+            $this->data['nextMonth']    = str_replace('.', '', mb_strtoupper($dateFormatter->format($nextMonthObj)));
+            $this->data['prevMonth']    = str_replace('.', '', mb_strtoupper($dateFormatter->format($prevMonthObj)));
         }
 
         $config['base_url']             = base_url('financeiro/lancamentos');
@@ -594,70 +594,61 @@ class Lancamentos extends CI_Controller
     // MODULO DE RETORNO DE FILTROS POR PERIODO
     protected function getThisYear()
     {
-
-        $dias = date("z");
-        $primeiro = date("Y-m-d", strtotime("-" . ($dias) . " day"));
-        $ultimo = date("Y-m-d", strtotime("+" . (364 - $dias) . " day"));
+        $dias       = date("z");
+        $primeiro   = date("Y-m-d", strtotime("-" . ($dias) . " day"));
+        $ultimo     = date("Y-m-d", strtotime("+" . (364 - $dias) . " day"));
+        
         return array($primeiro, $ultimo);
     }
 
     protected function getThisWeek()
     {
-
         return array(date("Y/m/d", strtotime("last sunday", strtotime("now"))), date("Y/m/d", strtotime("next saturday", strtotime("now"))));
     }
 
     protected function getLastThreeDays()
     {
-
         return array(date("Y-m-d", strtotime("-3 day", strtotime("now"))), date("Y-m-d", strtotime("now")));
     }
 
     protected function getLastFiveDays()
     {
-
         return array(date("Y-m-d", strtotime("-5 day", strtotime("now"))), date("Y-m-d", strtotime("now")));
     }
 
     protected function getLastSevenDays()
     {
-
         return array(date("Y-m-d", strtotime("-7 day", strtotime("now"))), date("Y-m-d", strtotime("now")));
     }
 
     protected function getLastFifteenDays()
     {
-
         return array(date("Y-m-d", strtotime("-15 day", strtotime("now"))), date("Y-m-d", strtotime("now")));
     }
 
     protected function getLastTirthyDays()
     {
-
         return array(date("Y-m-d", strtotime("-30 day", strtotime("now"))), date("Y-m-d", strtotime("now")));
     }
 
     protected function getLastSixtyDays()
     {
-
         return array(date("Y-m-d", strtotime("-60 day", strtotime("now"))), date("Y-m-d", strtotime("now")));
     }
 
     protected function getLastNinetyDays()
     {
-
         return array(date("Y-m-d", strtotime("-90 day", strtotime("now"))), date("Y-m-d", strtotime("now")));
     }
 
     protected function getThisMonth()
     {
-
-        $mes = date('m');
-        $ano = date('Y');
+        $mes        = date('m');
+        $ano        = date('Y');
         $qtdDiasMes = date('t');
-        $inicia = $ano . "-" . $mes . "-01";
+        $inicia     = $ano . "-" . $mes . "-01";
+        $ate        = $ano . "-" . $mes . "-" . $qtdDiasMes;
 
-        $ate = $ano . "-" . $mes . "-" . $qtdDiasMes;
         return array($inicia, $ate);
     }
 }
