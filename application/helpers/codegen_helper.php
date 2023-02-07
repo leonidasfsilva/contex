@@ -117,7 +117,8 @@ function padronizarString($str)
     $str = preg_replace('/[úùûü]/ui', 'u', $str);
     $str = preg_replace('/[ç]/ui', 'c', $str);
     // $str = preg_replace('/[,(),;:|!"#$%&\/=?~^><ªº-]/', '_', $str);
-    $str = preg_replace('/[^a-z0-9\/\-_. ]/i', '', $str);
+    $str = preg_replace('/[^a-z0-9\/\-_., ]/i', '', $str);
+    $str = preg_replace('/[,]/', '.', $str);
     // $str = preg_replace('/_+/', '_', $str); // ideia do Bacco :)
     return strtoupper($str);
 }
