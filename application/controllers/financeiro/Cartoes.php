@@ -212,12 +212,12 @@ class Cartoes extends CI_Controller
                 redirect('financeiro/cartoes');
             }
 
-            if ($cartao->adicional) {
-                if ($cartao->id_usuario_titular != getUserId()) {
+            if ($cartao['adicional']) {
+                if ($cartao['id_usuario_titular'] != getUserId()) {
                     $this->session->set_flashdata('erro', 'Você não tem permissão para editar os dados deste cartão, solicite a alteração dos dados ao titular.');
                     redirect('financeiro/cartoes');
                 }
-                $usuario = $this->usuarios_model->getById($cartao->id_usuario)->nome;
+                $usuario = $this->usuarios_model->getById($cartao['id_usuario'])->nome;
             }
             $data['usuario'] = $usuario ?? null;
             $data['cartao'] = $cartao;
@@ -243,13 +243,13 @@ class Cartoes extends CI_Controller
 
         $cartao = $this->cartoes_model->cartaoExistente($id_cartao);
         if ($cartao) {
-            if ($cartao->adicional == 1) {
-                if ($cartao->id_usuario_titular != getUserId()) {
+            if ($cartao['adicional'] == 1) {
+                if ($cartao['id_usuario_titular'] != getUserId()) {
                     $this->session->set_flashdata('erro', 'Você não pode excluir este cartão, apenas o titular emissor pode exclui-lo.');
                     redirect('financeiro/cartoes');
                 }
             } else {
-                if ($cartao->possui_adicional == 1) {
+                if ($cartao['possui_adicional'] == 1) {
                     $this->session->set_flashdata('erro', 'Não é possível excluir cartões que possuam cartões adicionais associados.');
                     redirect('financeiro/cartoes');
                 }
