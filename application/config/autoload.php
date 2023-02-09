@@ -135,6 +135,7 @@ $autoload['model'] = array(
     'financeiro_model',
     'investimentos_model',
     'fatura_model',
+    'despesa_model',
     'pendencia_model',
     'usuarios_model',
     'redefinicao_model',

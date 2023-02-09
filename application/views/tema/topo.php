@@ -423,6 +423,9 @@ $this->load->view('includes/custom_js');
                                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) { ?>
                                                     <li><a href="<?= base_url('financeiro/faturas') ?>">Faturas</a></li>
                                                 <?php } ?>
+                                                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vDespesas')) { ?>
+                                                    <li><a href="<?= base_url('financeiro/despesas') ?>">Despesas</a></li>
+                                                <?php } ?>
                                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) { ?>
                                                     <li><a href="<?= base_url('financeiro/cartoes') ?>">Cartões</a></li>
                                                 <?php } ?>
@@ -525,6 +528,9 @@ $this->load->view('includes/custom_js');
                                             </li>
                                             <li <?= ($this->uri->segment(2) == 'faturas' ? 'class="active"' : '') ?>>
                                                 <a href="<?= base_url('financeiro/faturas') ?>"><i class="pull-right fas fa-file-invoice-dollar fa-lg fa-fw"></i> Faturas</a>
+                                            </li>
+                                            <li <?= ($this->uri->segment(2) == 'despesas' ? 'class="active"' : '') ?>>
+                                                <a href="<?= base_url('financeiro/despesas') ?>"><i class="pull-right fas fa-receipt fa-lg fa-fw"></i> Despesas</a>
                                             </li>
                                             <li <?= ($this->uri->segment(2) == 'cartoes' ? 'class="active"' : '') ?>>
                                                 <a href="<?= base_url('financeiro/cartoes') ?>"><i class="pull-right fas fa-credit-card fa-lg fa-fw"></i> Cartões</a>

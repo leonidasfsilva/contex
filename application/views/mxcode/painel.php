@@ -100,7 +100,7 @@ if ($direcionados) {
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
-                    <a href="<?= base_url() ?>financeiro/lancamentos" class="font-weight-bold">ver detalhes </a>
+                    <a href="<?= base_url('financeiro/lancamentos') ?>" class="font-weight-bold">ver detalhes</a>
                     <a href="#" style="color: #607d8b" class="pull-right widget-collapse" id="widget_lancamentos">
                         <span class="chevron-label">ocultar</span>
                         <i class="fas fa-chevron-up fa-fw collapse-icon"></i>
@@ -126,7 +126,7 @@ if ($direcionados) {
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
-                    <a href="<?= base_url('financeiro/faturas') ?>" class="font-weight-bold">ver detalhes </a>
+                    <a href="<?= base_url('financeiro/faturas') ?>" class="font-weight-bold">ver detalhes</a>
                     <a href="#" style="color: #607d8b" class="pull-right widget-collapse" id="widget_credito">
                         <span class="chevron-label">ocultar</span>
                         <i class="fas fa-chevron-up fa-fw collapse-icon"></i>
@@ -153,7 +153,7 @@ if ($direcionados) {
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
-                    <a href="<?= base_url() ?>financeiro/pendencias" class="font-weight-bold">ver detalhes </a>
+                    <a href="<?= base_url('financeiro/pendencias') ?>" class="font-weight-bold">ver detalhes</a>
                     <a href="#" style="color: #607d8b" class="pull-right widget-collapse" id="widget_pendencias">
                         <span class="chevron-label">ocultar</span>
                         <i class="fas fa-chevron-up fa-fw collapse-icon"></i>
@@ -179,7 +179,7 @@ if ($direcionados) {
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
-                    <a href="<?= base_url() ?>financeiro/investimentos" class="font-weight-bold">ver detalhes </a>
+                    <a href="<?= base_url('financeiro/investimentos') ?>" class="font-weight-bold">ver detalhes</a>
                     <a href="#" style="color: #607d8b" class="pull-right widget-collapse" id="widget_investimentos">
                         <span class="chevron-label">ocultar</span>
                         <i class="fas fa-chevron-up fa-fw collapse-icon"></i>
@@ -243,21 +243,21 @@ if ($direcionados) {
         </a>
     </div>
 
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vConsumo')) : ?>
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vDespesas')) : ?>
         <div class="col-md-6">
-            <a href="<?= base_url('/consumo') ?>" class="shortcut-tile tile-info">
+            <a href="<?= base_url('financeiro/despesas') ?>" class="shortcut-tile tile-info">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fas fa-lightbulb fa-fw"></i></div>
+                    <div class="pull-left"><i class="fas fa-receipt fa-fw"></i></div>
                     <!--                            <div class="pull-right"><span class="badge">16</span></div>-->
                 </div>
                 <div class="tile-footer">
-                    Consumo de Energia
+                    Despesas
                 </div>
             </a>
         </div>
     <?php endif ?>
 
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) : ?>
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) : ?>
         <div class="col-md-6">
             <a href="<?= base_url('/usuarios') ?>" class="shortcut-tile tile-inverse">
                 <div class="tile-body">

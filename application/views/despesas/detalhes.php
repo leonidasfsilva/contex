@@ -1,38 +1,9 @@
 <?php
-$situacao = $this->input->get('situacao');
-$periodo = $this->input->get('periodo');
-$cliente = $this->input->get('cliente');
+$situacao   = $this->input->get('situacao');
+$periodo    = $this->input->get('periodo');
+$terceiro   = $this->input->get('terceiro');
 
-if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
-    if ($status_fatura == 1) {
-        if ($id_usuario != getUserId()) {
-            $disabled_lancamento_1 = 'disabled';
-        } else {
-            $disabled_lancamento_1 = '';
-        }
-        $statusFatura = 'ABERTA';
-        $label_status = 'primary';
-    } else if ($status_fatura == 2) {
-        $disabled_lancamento_1 = 'disabled';
-        $statusFatura = 'FUTURA';
-        $label_status = 'inverse';
-    } else {
-        $disabledFatura = '';
-        $disabled_lancamento_1 = 'disabled';
-        $statusFatura = 'FECHADA';
-        $label_status = 'inverse';
-    }
-
-    if ($fatura_paga == 1) {
-        $pagamentoFatura = 'PAGA';
-        $label_pgto = 'success';
-    } else if ($fatura_paga == 2) {
-        $pagamentoFatura = 'PENDENTE';
-        $label_pgto = 'danger';
-    } else {
-        $pagamentoFatura = '';
-        $label_pgto = '';
-    }
+if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aDespesas')) {
 
     $dateFormatter = new \IntlDateFormatter(
         'pt_BR',
@@ -90,25 +61,25 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         <div class="col-lg-3">
             <div class="input-group">
                 <span class="input-group-addon font-weight-bold">Referência:</span>
-                <div class="input-group-addon"><span class="badge badge-info"><?= $nome_mes ?></span></div>
+                <div class="input-group-addon"><span class="label label-default"><?= $nome_mes ?></span></div>
             </div>
         </div>
         <div class="col-lg-3">
             <div class="input-group">
                 <span class="input-group-addon font-weight-bold">Vencimento:</span>
-                <div class="input-group-addon"><span class="badge badge-info"><?= date(('d/m/Y'), strtotime($fatura->vencimento)) ?></span></div>
+                <div class="input-group-addon"><span class="label label-default"><?= date(('d/m/Y'), strtotime($fatura->vencimento)) ?></span></div>
             </div>
         </div>
         <div class="col-lg-3">
             <div class="input-group">
                 <span class="input-group-addon font-weight-bold">Status:</span>
-                <div class="input-group-addon"><span class="badge badge-<?= $label_status ?>"><?= $statusFatura ?></span></div>
+                <div class="input-group-addon"><span class="label label-<?= $label_status ?>"><?= $statusFatura ?></span></div>
             </div>
         </div>
         <div class="col-lg-3">
             <div class="input-group">
                 <span class="input-group-addon font-weight-bold">Pagamento:</span>
-                <div class="input-group-addon"><span class="badge badge-<?= $label_pgto ?>"><?= $pagamentoFatura ?></span></div>
+                <div class="input-group-addon"><span class="label label-<?= $label_pgto ?>"><?= $pagamentoFatura ?></span></div>
             </div>
         </div>
     </div>
@@ -184,7 +155,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     <tr role="row">
                         <th class="th_soma hidden" style="width: 10px !important;">Soma</th>
                         <th style="width: 100px !important;">Data Compra</th>
-                        <th style="max-width: 300px !important;">Descrição</th>
+                        <th style="width: 300px !important;">Descrição</th>
                         <th style="width: 200px !important;">Terceiro</th>
                         <th>Parcela</th>
                         <th>Valor Parcela (R$) <br> Valor Compra (R$)</th>
@@ -241,7 +212,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                     '" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento_1 . ' ' . $disabled_lancamento_2 . '>' .
                                     strtoupper($s->descricao) .
                                     '</a></td>';
-                                echo '<td><a href="' . sprintf(base_url('financeiro/faturas/terceiros?mesReferencia=%s&anoReferencia=%s&cartao=%s&nome=%s'), $mes_referencia, date(('Y'), strtotime('today')), $cartao['id_cartao'], $s->nome_cliente) . '">' . strtoupper($s->nome_cliente) . '</a></td>';
+                                echo '<td><a href="' . sprintf(base_url('financeiro/faturas/terceiros?mesReferencia=%s&anoReferencia=%s&cartao=%s&nome=%s'), $mes_referencia, $s->ano_referencia, $cartao['id_cartao'], $s->nome_cliente) . '">' . strtoupper($s->nome_cliente) . '</a></td>';
                                 echo '<td>' . $n_parcela . '/' . $total_parcelas . '</td>';
                                 echo '<td class="valor_parcela" style=" color: ' . $color .
                                     '"><span>' . number_format($r->valor_parcela, 2, ',', '.') .
@@ -475,7 +446,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </div>
                             <div class="form-group col-lg-4">
                                 <label for="valor_parcela" class="font-weight-bold">Valor da parcela *</label>
-                                <input class="form-control money parcela" id="valor_parcela" type="text" name="valor_parcela" readonly/>
+                                <input class="form-control money parcela" id="valor_parcela" type="text" name="valor_parcela" />
                             </div>
                         </div>
                     </div>
@@ -569,7 +540,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </div>
                             <div class="form-group col-lg-4">
                                 <label class="font-weight-bold">Valor da Parcela *</label>
-                                <input class="form-control money parcela valorParcela" type="text" name="valor_parcela" readonly/>
+                                <input class="form-control money parcela valorParcela" type="text" name="valor_parcela" />
                             </div>
                         </div>
                     </div>
@@ -662,7 +633,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </div>
                             <div class="form-group col-lg-4">
                                 <label class="font-weight-bold">Valor da Parcela *</label>
-                                <input class="form-control money parcela valorParcela" type="text" name="valor_parcela" readonly/>
+                                <input class="form-control money parcela valorParcela" type="text" name="valor_parcela" />
                             </div>
                         </div>
                     </div>

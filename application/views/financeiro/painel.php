@@ -24,6 +24,8 @@
                 </div>
             </a>
         </div>
+    <?php endif ?>
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')): ?>
         <div class="col-md-6">
             <a href="<?= base_url() ?>financeiro/cartoes" class="shortcut-tile tile-midnightblue">
                 <div class="tile-body">
@@ -32,6 +34,19 @@
                 </div>
                 <div class="tile-footer">
                     Cartões
+                </div>
+            </a>
+        </div>
+    <?php endif ?>
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vDespesas')) : ?>
+        <div class="col-md-6">
+            <a href="<?= base_url() ?>financeiro/despesas" class="shortcut-tile tile-alizarin">
+                <div class="tile-body">
+                    <div class="pull-left"><i class="fas fa-receipt fa-fw"></i></div>
+                    <!--                            <div class="pull-right"><span class="badge">2</span></div>-->
+                </div>
+                <div class="tile-footer">
+                    Despesas
                 </div>
             </a>
         </div>
