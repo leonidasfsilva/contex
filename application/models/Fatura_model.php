@@ -574,6 +574,7 @@ class Fatura_model extends CI_Model
             ->where('id_usuario', $id_usuario)
             ->where('status', 1)
             ->group_by('nome_cliente')
+            ->order_by('id_lancamento', 'desc')
             ->get('lancamentos_faturas');
 
         if ($query->num_rows() > 0) {
@@ -596,7 +597,7 @@ class Fatura_model extends CI_Model
             ->where('id_usuario', $idUsuario)
             ->where('status', 1)
             ->group_by('descricao')
-            ->order_by('id_lancamento')
+            ->order_by('id_lancamento', 'desc')
             ->get('lancamentos_faturas');
 
         if ($query->num_rows() > 0) {

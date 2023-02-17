@@ -179,6 +179,7 @@ class Financeiro_model extends CI_Model
             ->where('id_usuario', $idUsuario)
             ->where('status', 1)
             ->group_by('descricao')
+            ->order_by('id_lancamento', 'desc')
             ->get('lancamentos');
 
         if ($query->num_rows() > 0) {
@@ -201,6 +202,7 @@ class Financeiro_model extends CI_Model
             ->where('id_usuario', $idUsuario)
             ->where('status', 1)
             ->group_by('cliente_fornecedor')
+            ->order_by('id_lancamento', 'desc')
             ->get('lancamentos');
 
         if ($query->num_rows() > 0) {
