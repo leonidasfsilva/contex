@@ -34,45 +34,19 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         $label_pgto = '';
     }
 
-    $dateFormatter = new \IntlDateFormatter(
-        'pt_BR',
-        \IntlDateFormatter::FULL,
-        \IntlDateFormatter::NONE,
-        'America/Sao_Paulo',
-        \IntlDateFormatter::GREGORIAN,
-        "MMM"
-    );
-
-    $dateFormatterExtended = new \IntlDateFormatter(
-        'pt_BR',
-        \IntlDateFormatter::FULL,
-        \IntlDateFormatter::NONE,
-        'America/Sao_Paulo',
-        \IntlDateFormatter::GREGORIAN,
-        "MMMM"
-    );
-
-    $dateObj = DateTime::createFromFormat('!m', ($mes_referencia));
-    $nome_mes = str_replace('.', '', strtoupper($dateFormatterExtended->format($dateObj)));
-    $creditoFatura = 0;
-    $debitoFatura = 0;
-
-    $n_cartao = explode(" ", trim(decriptar($cartao['numero'])));
-    $final = $n_cartao[3];
-    $cartao_config = $cartao['apelido'] ? $cartao['apelido'] : $cartao['bandeira'];
-    $cartaoAlternativeLabel = $cartao['bandeira'] . ' - FINAL ' . $final;
-?>
-<?php } ?>
+    $creditoFatura  = 0;
+    $debitoFatura   = 0;
+} ?>
 
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h3 style="margin: 0 15px 0 0;">
             <i class="fas fa-file-invoice-dollar fa-lg fa-fw"></i>
-            Fatura: #<?= $id_fatura . ' - ' . $nome_mes ?>
+            Fatura: #<?= $id_fatura . ' - ' . $nomeMes ?>
         </h3>
         <h3>
             <i class="fas fa-credit-card fa-lg fa-fw"></i>
-            <?= $cartao['apelido'] ? $cartao['apelido'] : $cartaoAlternativeLabel ?>
+            <?= $cartao['apelido'] ? $cartao['apelido'] : $alternativeLabel ?>
         </h3>
         <div class="panel-ctrls">
             <a href="<?= base_url('financeiro/faturas?cartao=') . $id_cartao ?>" class="btn btn-sm btn-default"><i class="fas fa-arrow-left fa-fw"></i> Faturas</a>
@@ -90,7 +64,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         <div class="col-lg-3">
             <div class="input-group">
                 <span class="input-group-addon font-weight-bold">Referência:</span>
-                <div class="input-group-addon"><span class="badge badge-info"><?= $nome_mes ?></span></div>
+                <div class="input-group-addon"><span class="badge badge-info"><?= $nomeMes ?></span></div>
             </div>
         </div>
         <div class="col-lg-3">
@@ -475,7 +449,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </div>
                             <div class="form-group col-lg-4">
                                 <label for="valor_parcela" class="font-weight-bold">Valor da parcela *</label>
-                                <input class="form-control money parcela" id="valor_parcela" type="text" name="valor_parcela" readonly/>
+                                <input class="form-control money parcela" id="valor_parcela" type="text" name="valor_parcela" readonly />
                             </div>
                         </div>
                     </div>
@@ -569,7 +543,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </div>
                             <div class="form-group col-lg-4">
                                 <label class="font-weight-bold">Valor da Parcela *</label>
-                                <input class="form-control money parcela valorParcela" type="text" name="valor_parcela" readonly/>
+                                <input class="form-control money parcela valorParcela" type="text" name="valor_parcela" readonly />
                             </div>
                         </div>
                     </div>
@@ -662,7 +636,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </div>
                             <div class="form-group col-lg-4">
                                 <label class="font-weight-bold">Valor da Parcela *</label>
-                                <input class="form-control money parcela valorParcela" type="text" name="valor_parcela" readonly/>
+                                <input class="form-control money parcela valorParcela" type="text" name="valor_parcela" readonly />
                             </div>
                         </div>
                     </div>
@@ -730,7 +704,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 </div>
 
 <script type="text/javascript">
-        $(".descricao").autocomplete({
+    $(".descricao").autocomplete({
         source: "<?php echo base_url('financeiro/faturas/autoCompleteDescricao'); ?>",
         minLength: 3,
         select: function(event, ui) {

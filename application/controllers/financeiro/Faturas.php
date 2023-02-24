@@ -170,21 +170,28 @@ class Faturas extends CI_Controller
         $config['last_tag_close']       = '</li>';
 
         $data['parcelas'] = array(
-            2 => '2 x',
-            3 => '3 x',
-            4 => '4 x',
-            5 => '5 x',
-            6 => '6 x',
-            7 => '7 x',
-            8 => '8 x',
-            9 => '9 x',
-            10 => '10 x',
-            11 => '11 x',
-            12 => '12 x',
+            2   => '2 x',
+            3   => '3 x',
+            4   => '4 x',
+            5   => '5 x',
+            6   => '6 x',
+            7   => '7 x',
+            8   => '8 x',
+            9   => '9 x',
+            10  => '10 x',
+            11  => '11 x',
+            12  => '12 x',
         );
 
         if (!$id_fatura) {
             $this->session->set_flashdata('erro', 'Método não permitido');
+            redirect('financeiro/faturas');
+        }
+
+        $faturaExistente = $this->fatura_model->getById($id_fatura);
+
+        if (!$faturaExistente) {
+            $this->session->set_flashdata('erro', 'Fatura solicitada não encontrada');
             redirect('financeiro/faturas');
         }
 
@@ -206,47 +213,69 @@ class Faturas extends CI_Controller
             }
         }
 
-        $faturaExistente = $this->fatura_model->getById($id_fatura);
+        $dateFormatter = new \IntlDateFormatter(
+            'pt_BR',
+            \IntlDateFormatter::FULL,
+            \IntlDateFormatter::NONE,
+            'America/Sao_Paulo',
+            \IntlDateFormatter::GREGORIAN,
+            "MMM"
+        );
 
-        if ($faturaExistente) {
-            $fatura_selecionada = $this->fatura_model->getFatura($id_fatura);
-            $cartao             = $this->cartoes_model->getDetalhesCartao($id_cartao);
+        $dateFormatterExtended = new \IntlDateFormatter(
+            'pt_BR',
+            \IntlDateFormatter::FULL,
+            \IntlDateFormatter::NONE,
+            'America/Sao_Paulo',
+            \IntlDateFormatter::GREGORIAN,
+            "MMMM"
+        );
 
-            if (($fatura_selecionada->id_usuario == getUserId() && $cartao['id_usuario'] == getUserId()) || ($fatura_selecionada->id_cartao == $id_cartao && $cartao['id_usuario_titular'] == getUserId())) {
-                $orderByLancamentosAssoc = [
-                    'data_compra'   => 'desc',
-                    'id_assoc'      => 'desc',
-                ];
-                $orderByLancamentos = [
-                    'id_lancamento' => 'desc',
-                ];
+        $fatura_selecionada = $this->fatura_model->getFatura($id_fatura);
+        $detalhesCartao     = $this->cartoes_model->getDetalhesCartao($id_cartao);
 
-                $data['terceiros']          = $this->fatura_model->getAllTerceiros($id_cartao, $fatura_selecionada->mes_referencia, $fatura_selecionada->ano_referencia);
-                $data['selectedTerceiro']   = $terceiro;
-                $data['fatura']             = $this->fatura_model->getDetalhesFatura($id_fatura);
-                $data['id_fatura']          = $id_fatura;
-                $data['id_cartao']          = $id_cartao;
-                $data['cartao']             = $cartao;
-                $data['mes_referencia']     = ($data['fatura']->mes_referencia);
-                $data['ano_referencia']     = ($data['fatura']->ano_referencia);
-                $data['status_fatura']      = ($data['fatura']->fatura_aberta);
-                $data['id_usuario']         = ($data['fatura']->id_usuario);
-                $data['formasPagamento']    = $this->financeiro_model->getFormasPagamento();
-                $data['fatura_paga']        = ($data['fatura']->fatura_paga);
-                $data['lancamentoEditavel'] = $this->fatura_model->getLancamentoEditavel($data['mes_referencia'], $data['ano_referencia']);
-                $data['subresults']         = $this->fatura_model->getLancamentos('lancamentos_faturas', '*', $fatura_selecionada->id_usuario, $where, $config['per_page'], $this->input->get('per_page'), $orderByLancamentos);
-                $data['results']            = $this->fatura_model->getLancamentosAssoc('lancamentos_faturas_assoc', '*', $id_fatura, $where = null, $config['per_page'], $this->input->get('per_page'), $orderByLancamentosAssoc);
-                $data['menuFinanceiro']     = true;
-                $data['menuFaturas']        = true;
+        if (($fatura_selecionada->id_usuario == getUserId() && $detalhesCartao['id_usuario'] == getUserId()) || ($fatura_selecionada->id_cartao == $id_cartao && $detalhesCartao['id_usuario_titular'] == getUserId())) {
+            $detalhesFatura = $this->fatura_model->getDetalhesFatura($id_fatura);
+            $dateObj        = DateTime::createFromFormat('!m', ($detalhesFatura->mes_referencia));
+            $nomeMes        = str_replace('.', '', mb_strtoupper($dateFormatterExtended->format($dateObj)));
+    
+            $numCartao      = explode(" ", trim(decriptar($detalhesCartao['numero'])));
+            $final          = $numCartao[3];
+            $cartaoAlternativeLabel = $detalhesCartao['bandeira'] . ' - FINAL ' . $final;
+    
+            $orderByLancamentosAssoc = [
+                'data_compra'   => 'desc',
+                'id_assoc'      => 'desc',
+            ];
 
-                $data['view'] = 'faturas/detalhes_fatura';
-                $this->load->view('tema/topo', $data);
-            } else {
-                $this->session->set_flashdata('erro', 'Fatura solicitada não encontrada para este usuário');
-                redirect('financeiro/faturas');
-            }
+            $orderByLancamentos = [
+                'id_lancamento' => 'desc',
+            ];
+
+            $data['terceiros']          = $this->fatura_model->getAllTerceiros($id_cartao, $fatura_selecionada->mes_referencia, $fatura_selecionada->ano_referencia);
+            $data['selectedTerceiro']   = $terceiro;
+            $data['fatura']             = $detalhesFatura;
+            $data['id_fatura']          = $id_fatura;
+            $data['id_cartao']          = $id_cartao;
+            $data['cartao']             = $detalhesCartao;
+            $data['nomeMes']            = $nomeMes;
+            $data['alternativeLabel']   = $cartaoAlternativeLabel;
+            $data['mes_referencia']     = ($data['fatura']->mes_referencia);
+            $data['ano_referencia']     = ($data['fatura']->ano_referencia);
+            $data['status_fatura']      = ($data['fatura']->fatura_aberta);
+            $data['id_usuario']         = ($data['fatura']->id_usuario);
+            $data['formasPagamento']    = $this->financeiro_model->getFormasPagamento();
+            $data['fatura_paga']        = ($data['fatura']->fatura_paga);
+            $data['lancamentoEditavel'] = $this->fatura_model->getLancamentoEditavel($data['mes_referencia'], $data['ano_referencia']);
+            $data['subresults']         = $this->fatura_model->getLancamentos('lancamentos_faturas', '*', $fatura_selecionada->id_usuario, $where, $config['per_page'], $this->input->get('per_page'), $orderByLancamentos);
+            $data['results']            = $this->fatura_model->getLancamentosAssoc('lancamentos_faturas_assoc', '*', $id_fatura, $where = null, $config['per_page'], $this->input->get('per_page'), $orderByLancamentosAssoc);
+            $data['menuFinanceiro']     = true;
+            $data['menuFaturas']        = true;
+
+            $data['view'] = 'faturas/detalhes_fatura';
+            $this->load->view('tema/topo', $data);
         } else {
-            $this->session->set_flashdata('erro', 'Fatura solicitada não encontrada');
+            $this->session->set_flashdata('erro', 'Fatura solicitada não encontrada para este usuário');
             redirect('financeiro/faturas');
         }
     }
