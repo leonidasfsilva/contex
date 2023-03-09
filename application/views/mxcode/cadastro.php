@@ -120,7 +120,7 @@
                     </div>
                     <div class="form-group m-b-0">
                         <div class="col-sm-12 text-center">
-                            <p>Já possui uma conta? <a href="<?php echo base_url() ?>mxcode/login" id="login" class="text-primary"><b>Efetue seu login</b></a>.</p>
+                            <p>Já possui uma conta? <a href="<?php echo base_url('mxcode/login') ?>" id="login" class="text-primary"><b>Acesse sua conta</b></a>.</p>
                         </div>
                     </div>
                 </div>

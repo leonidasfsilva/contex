@@ -83,7 +83,7 @@
                         <?php } ?>
 
                         <div class="form-group">
-                            <h3 class="font-bold m-b-40">Efetue seu login</h3>
+                            <h3 class="font-bold m-b-40">Acesse sua conta</h3>
                         </div>
                         <div class="form-group">
                             <input type="text" class="form-control" id="email" name="email" required />
@@ -115,7 +115,7 @@
                         <!--                </div>-->
                         <div class="form-group m-b-0">
                             <div class="col-sm-12 text-center">
-                                <p>Não tem uma conta? <a href="<?php echo base_url() ?>cadastro" class="text-primary"><b>Cadastre-se</b></a>.</p>
+                                <p>Não tem uma conta? <a href="<?php echo base_url() ?>cadastro" class="text-primary"><b>Crie sua conta</b></a>.</p>
                                 <!--                            <p><a href="--><?php //echo base_url() 
                                                                                 ?>
                                 <!--conecte" class="text-primary"><b>Acesso para clientes</b></a>.</p>-->
