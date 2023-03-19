@@ -211,20 +211,20 @@ if (!$results) {
             <div class="panel-ctrls">
                 <span class="hidden" id="div_btn_marcar">
                     <button class="btn btn-default btn-sm marcar_desmarcar" id="marcar_todos" title="Marcar todos os lançamentos da fatura">
-                        <i class="fas fa-check-square fa-fw"></i>
+                        <i class="far fa-square fa-fw"></i>
                         Marcar Todos
                     </button>
                     <button class="btn btn-default marcar_desmarcar btn-sm hidden" id="desmarcar_todos" title="Desmarcar todos os lançamentos da fatura">
-                        <i class="far fa-square fa-fw"></i>
+                        <i class="fas fa-check-square fa-fw"></i>
                         Desmarcar Todos
                     </button>
                 </span>
                 <button class="btn btn-default btn-sm habilita_desabilita_soma" id="exibir_soma" title="Habilitar soma de lançamentos individuais">
-                    <i class="fas fa-toggle-on fa-fw"></i>
+                    <i class="fas fa-toggle-off fa-fw"></i>
                     Habilitar Soma
                 </button>
                 <button class="btn btn-default btn-sm habilita_desabilita_soma hidden" id="esconder_soma" title="Desabilitar soma de lançamentos individuais">
-                    <i class="fas fa-toggle-off fa-fw"></i>
+                    <i class="fas fa-toggle-on fa-fw"></i>
                     Desabilitar Soma
                 </button>
             </div>

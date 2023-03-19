@@ -144,7 +144,6 @@ class Cartoes extends CI_Controller
         if ($this->cartoes_model->delete('cartoes', $data, 'id_cartao', $id) == true) {
             $this->session->set_flashdata('sucesso', 'Cartão desativado com sucesso');
             redirect(base_url() . 'financeiro/cartoes');
-
         } else {
             $this->session->set_flashdata('erro', 'Erro ao tentar desativar cartão solicitado');
             redirect(base_url() . 'financeiro/cartoes');
@@ -162,7 +161,6 @@ class Cartoes extends CI_Controller
         if ($this->cartoes_model->delete('cartoes', $data, 'id_cartao', $id) == true) {
             $this->session->set_flashdata('sucesso', 'Cartão ativado com sucesso');
             redirect(base_url() . 'financeiro/cartoes');
-
         } else {
             $this->session->set_flashdata('erro', 'Erro ao tentar ativar cartão solicitado');
             redirect(base_url() . 'financeiro/cartoes');
