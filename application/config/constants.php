@@ -18,7 +18,7 @@
 | R     - current release version of system
 |
 */
-define('VERSION_APP', '2023.1.8'); // versao atual em produçao
+define('VERSION_APP', '2023.1.9'); // versao atual em produçao
 // define('VERSION_APP', '2023.2.?'); // versao de lançamento do modulo de Despesas 
 
 /*

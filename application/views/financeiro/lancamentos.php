@@ -391,7 +391,7 @@ if (!$results) {
                 </tr>
             </thead>
             <?php if ($entradasPendentes) {
-                $saldoProvisorioMes = $totalGeral + ($entradasPendentes);
+                $saldoProvisorioMes = $totalGeral + $entradasPendentes;
             ?>
                 <tr>
                     <td colspan="2" style="text-align: left; color: #5cb85c">(+) SALDO DE ENTRADAS PENDENTES</td>
@@ -409,6 +409,11 @@ if (!$results) {
                 </tr>
             <?php } ?>
             <?php if ($entradasEfetivadas && $entradasPendentes) {
+                if ($saldoProvisorioMes) {
+                    $saldoProvisorioMes = $totalGeral + $entradasPendentes;
+                } else {
+                    $saldoProvisorioMes = $totalGeral + $entradasPendentes + $entradasEfetivadas;
+                }
             ?>
                 <tr>
                     <td colspan="2" style="text-align: left;">(=) SALDO TOTAL DE ENTRADAS</td>
@@ -456,7 +461,7 @@ if (!$results) {
                     </td>
                 </tr>
                 <?php
-                if ($totalGeralMes < 0) {
+                if ($totalGeralMes < 0 && $saldoProvisorioMes) {
                 ?>
                     <tr class="hidden provisorio-periodo">
                         <td colspan="2" style="text-align: left; font-weight: bold">(±) SALDO PROVISÓRIO DO PERÍODO</td>
@@ -464,7 +469,6 @@ if (!$results) {
                             <?php echo number_format(($saldoProvisorioMes), 2, ',', '.') ?>
                         </td>
                     </tr>
-
                 <?php } ?>
             <?php } ?>
 
