@@ -578,7 +578,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                         <i class="fa fa-times fa-fw"></i> Cancelar
                     </button>
-                    <button class="btn btn-primary btn-sm" id="btnFechar">
+                    <button class="btn btn-inverse btn-sm" id="btnFechar">
                         <i class="fa fa-check fa-fw"></i> Confirmar
                     </button>
                 </div>

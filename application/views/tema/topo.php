@@ -518,8 +518,8 @@ $this->load->view('includes/custom_js');
                             <?php if ($this->uri->segment(1)) {
                                 if ($this->uri->segment(1) == 'financeiro') { ?>
                                     <li class="dropdown dropdown-hover">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?= ucfirst($this->uri->segment(1)); ?> <span class="caret"></span></a>
-                                        <ul class="dropdown-menu dropdown-menu-hover">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="link" aria-haspopup="false" aria-expanded="false"><?= ucfirst($this->uri->segment(1)); ?> <span class="caret"></span></a>
+                                        <ul class="dropdown-menu dropdown-menu-hover" role="menu">
                                             <li <?= ($this->uri->segment(2) == 'lancamentos' ? 'class="active"' : '') ?>>
                                                 <a href="<?= base_url('financeiro/lancamentos') ?>"><i class="pull-right fas fa-chart-line fa-lg fa-fw"></i> Lançamentos</a>
                                             </li>
