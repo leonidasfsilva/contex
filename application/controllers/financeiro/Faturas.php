@@ -31,18 +31,45 @@ class Faturas extends CI_Controller
         $where      = '';
         $periodo    = $this->input->get('periodo');
         $cliente    = $this->input->get('terceiro');
+        $start      = $_GET['per_page'] ?? null;
+        $limit      = null;
+        $idCartao   = null;
 
-        $config['base_url']             = site_url() . 'financeiro/faturas/?periodo=' . $periodo;
-        $config['total_rows']           = $this->fatura_model->count('faturas', 'status = 1 AND id_usuario = ' . getUserId());
-        $config['per_page']             = 100;
+        $order_by       = [
+            'ano_referencia'    => 'desc',
+            'mes_referencia'    => 'desc',
+        ];
+
+        if (isset($_GET['cartao'])) {
+            $idCartao  = $_GET['cartao'];
+        }
+
+        $query_string = null;
+        $lastElement = end($_GET);
+
+        foreach ($_GET as $key => $value) {
+            if ($key != 'per_page') {
+                if ($value == $lastElement) {
+                    $query_string .= $key . '=' . $value;
+                } else {
+                    $query_string .= $key . '=' . $value . '&';
+                }
+            }
+        }
+
+        $config['base_url']             = base_url('financeiro/faturas/');
+        $config['suffix']               = '&' . $query_string;
+        $config['first_url']            = $config['base_url'] . '?' . $query_string;
+        $config['total_rows']           = $this->fatura_model->count('faturas', 'status = 1 AND id_usuario = ' . getUserId(), $idCartao);
+        $config['per_page']             = 13;
         $config['page_query_string']    = true;
-        $config['next_link']            = 'Próxima';
-        $config['prev_link']            = 'Anterior';
-        $config['full_tag_open']        = '<div class="pagination alternate"><ul>';
-        $config['full_tag_close']       = '</ul></div>';
+        $config['next_link']            = false;
+        $config['prev_link']            = false;
+        $config['full_tag_open']        = '<ul class="pagination pagination-sm">';
+        $config['full_tag_close']       = '</ul>';
         $config['num_tag_open']         = '<li>';
         $config['num_tag_close']        = '</li>';
-        $config['cur_tag_open']         = '<li><a style="color: #2D335B"><b>';
+        $config['cur_tag_open']         = '<li class="disabled"><a style="background-color:#337ab7; color: white" class="js:"><b>';
         $config['cur_tag_close']        = '</b></a></li>';
         $config['prev_tag_open']        = '<li>';
         $config['prev_tag_close']       = '</li>';
@@ -54,6 +81,8 @@ class Faturas extends CI_Controller
         $config['first_tag_close']      = '</li>';
         $config['last_tag_open']        = '<li>';
         $config['last_tag_close']       = '</li>';
+
+        $this->pagination->initialize($config);
 
         $data['parcelas'] = array(
             2   => '2 x',
@@ -71,9 +100,8 @@ class Faturas extends CI_Controller
 
         $cartaoPrincipal = $this->cartoes_model->getCartaoPrincipalUsuario(getUserId());
 
-        if (isset($_GET['cartao'])) {
-            $id_cartao  = $_GET['cartao'];
-            $cartao     = $this->cartoes_model->cartaoExistente($id_cartao);
+        if ($idCartao) {
+            $cartao     = $this->cartoes_model->cartaoExistente($idCartao);
 
             if ($cartao->id_usuario != getUserId()) {
                 if ($cartao->id_usuario_titular != getUserId()) {
@@ -87,11 +115,17 @@ class Faturas extends CI_Controller
                 redirect('financeiro/faturas');
             }
         } else {
-            $id_cartao = $cartaoPrincipal->id_cartao ?? null;
+            $idCartao = $cartaoPrincipal->id_cartao ?? null;
         }
 
-        if ($id_cartao) {
-            $cartaoSelecionado = $this->cartoes_model->getDetalhesCartao($id_cartao);
+        $data['cartoes']                = null;
+        $data['faturaAberta']           = null;
+        $data['existe_configuracao']    = null;
+        $data['saldoVencidas']          = null;
+        $data['saldoQuitado']           = null;
+
+        if ($idCartao) {
+            $cartaoSelecionado = $this->cartoes_model->getDetalhesCartao($idCartao);
 
             $n_cartao       = explode(" ", trim(decriptar($cartaoSelecionado['numero'])));
             $final          = $n_cartao[3];
@@ -101,21 +135,26 @@ class Faturas extends CI_Controller
 
 
             $data['yearsList']              = $this->yearsList;
-            $data['existe_configuracao']    = $this->fatura_model->existeConfiguracao($id_cartao);
-            $data['dia_vencimento']         = $this->fatura_model->getDiaVencimentoFatura($id_cartao);
+            $data['existe_configuracao']    = $this->fatura_model->existeConfiguracao($idCartao);
+            $data['dia_vencimento']         = $this->fatura_model->getDiaVencimentoFatura($idCartao);
             $data['cartoes']                = $this->cartoes_model->getCartoesUsuarioFatura(getUserId());
-            $data['saldoVencidas']          = $this->fatura_model->getSaldoFaturasVencidas($id_cartao);
-            $data['saldoPendente']          = $this->fatura_model->getSaldoFaturasPendentes($id_cartao);
-            $data['saldoQuitado']           = $this->fatura_model->getSaldoFaturasPagas($id_cartao);
+            $data['saldoVencidas']          = $this->fatura_model->getSaldoFaturasVencidas($idCartao);
+            $data['saldoPendente']          = $this->fatura_model->getSaldoFaturasPendentes($idCartao);
+            $data['saldoQuitado']           = $this->fatura_model->getSaldoFaturasPagas($idCartao);
             $data['formasPagamento']        = $this->financeiro_model->getFormasPagamento();
-            $data['faturaAberta']           = $this->fatura_model->getFaturaAbertaUsuario(getUserId(), $id_cartao);
-            $data['results']                = $this->fatura_model->get('faturas', '*', $where, getUserId(), $id_cartao, $config['per_page'], $this->input->get('per_page'));
-        } else {
-            $data['cartoes']                = null;
-            $data['faturaAberta']           = null;
-            $data['existe_configuracao']    = null;
-            $data['saldoVencidas']          = null;
-            $data['saldoQuitado']           = null;
+            $data['faturaAberta']           = $this->fatura_model->getFaturaAbertaUsuario(getUserId(), $idCartao);
+            $data['results']                = $this->fatura_model->get(
+                'faturas',
+                '*',
+                $idCartao,
+                getUserId(),
+                $where,
+                $limit,
+                $config['total_rows'],
+                $config['per_page'],
+                $start,
+                $order_by ? $order_by : 'desc'
+            );
         }
 
         $data['menuFinanceiro']         = true;
@@ -124,7 +163,7 @@ class Faturas extends CI_Controller
         $this->load->view('tema/topo', $data);
     }
 
-    public function detalhes($id = null, $id_cartao = null)
+    public function detalhes($id = null, $idCartao = null)
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para gerenciar faturas.');
@@ -147,7 +186,7 @@ class Faturas extends CI_Controller
         $this->load->library('pagination');
 
         $config['base_url']             = site_url() . 'faturas/';
-        $config['total_rows']           = $this->fatura_model->count('faturas', 'status = 1 AND id_usuario = ' . getUserId());
+        $config['total_rows']           = $this->fatura_model->count('faturas', 'status = 1 AND id_usuario = ' . getUserId(), $idCartao);
         $config['per_page']             = 0;
         $config['page_query_string']    = true;
         $config['next_link']            = 'Próxima';
@@ -232,17 +271,17 @@ class Faturas extends CI_Controller
         );
 
         $fatura_selecionada = $this->fatura_model->getFatura($id_fatura);
-        $detalhesCartao     = $this->cartoes_model->getDetalhesCartao($id_cartao);
+        $detalhesCartao     = $this->cartoes_model->getDetalhesCartao($idCartao);
 
-        if (($fatura_selecionada->id_usuario == getUserId() && $detalhesCartao['id_usuario'] == getUserId()) || ($fatura_selecionada->id_cartao == $id_cartao && $detalhesCartao['id_usuario_titular'] == getUserId())) {
+        if (($fatura_selecionada->id_usuario == getUserId() && $detalhesCartao['id_usuario'] == getUserId()) || ($fatura_selecionada->id_cartao == $idCartao && $detalhesCartao['id_usuario_titular'] == getUserId())) {
             $detalhesFatura = $this->fatura_model->getDetalhesFatura($id_fatura);
             $dateObj        = DateTime::createFromFormat('!m', ($detalhesFatura->mes_referencia));
             $nomeMes        = str_replace('.', '', mb_strtoupper($dateFormatterExtended->format($dateObj)));
-    
+
             $numCartao      = explode(" ", trim(decriptar($detalhesCartao['numero'])));
             $final          = $numCartao[3];
             $cartaoAlternativeLabel = $detalhesCartao['bandeira'] . ' - FINAL ' . $final;
-    
+
             $orderByLancamentosAssoc = [
                 'data_compra'   => 'desc',
                 'id_assoc'      => 'desc',
@@ -252,11 +291,11 @@ class Faturas extends CI_Controller
                 'id_lancamento' => 'desc',
             ];
 
-            $data['terceiros']          = $this->fatura_model->getAllTerceiros($id_cartao, $fatura_selecionada->mes_referencia, $fatura_selecionada->ano_referencia);
+            $data['terceiros']          = $this->fatura_model->getAllTerceiros($idCartao, $fatura_selecionada->mes_referencia, $fatura_selecionada->ano_referencia);
             $data['selectedTerceiro']   = $terceiro;
             $data['fatura']             = $detalhesFatura;
             $data['id_fatura']          = $id_fatura;
-            $data['id_cartao']          = $id_cartao;
+            $data['id_cartao']          = $idCartao;
             $data['cartao']             = $detalhesCartao;
             $data['nomeMes']            = $nomeMes;
             $data['alternativeLabel']   = $cartaoAlternativeLabel;

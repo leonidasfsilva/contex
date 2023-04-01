@@ -268,9 +268,13 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 <?php } ?>
             </tbody>
         </table>
+        <?php if ($this->pagination->create_links()) { ?>
+            <div class="panel-footer">
+                <?= $this->pagination->create_links() ?>
+            </div>
+        <?php } ?>
     </div>
 </div>
-<?= $this->pagination->create_links(); ?>
 
 <form id="form_cartao" action="<?php echo base_url('financeiro/faturas'); ?>" method="get">
     <input type="hidden" id="id_cartao" name="cartao">

@@ -14,6 +14,7 @@ class Lancamentos extends CI_Controller
             redirect('mxcode/login');
         }
 
+        $this->load->library('pagination');
         $this->load->model('financeiro_model', '', true);
         $this->load->model('pendencia_model', '', true);
         $this->load->model('fatura_model', '', true);
@@ -53,8 +54,6 @@ class Lancamentos extends CI_Controller
             'data_lancamento'   => 'desc',
             'id_lancamento'     => 'desc',
         ];
-
-        $this->load->library('pagination');
 
         switch ($periodo) {
             case 'todos':
@@ -195,9 +194,15 @@ class Lancamentos extends CI_Controller
         }
 
         $query_string = null;
+        $lastElement = end($_GET);
+
         foreach ($_GET as $key => $value) {
             if ($key != 'per_page') {
-                $query_string .= $key . '=' . $value . '&';
+                if ($value == $lastElement) {
+                    $query_string .= $key . '=' . $value;
+                } else {
+                    $query_string .= $key . '=' . $value . '&';
+                }
             }
         }
 
@@ -256,8 +261,8 @@ class Lancamentos extends CI_Controller
         $this->data['results']              = $this->financeiro_model->get(
             'lancamentos',
             '*',
-            $where,
             getUserId(),
+            $where,
             $limit,
             $config['total_rows'],
             $config['per_page'],

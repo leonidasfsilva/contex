@@ -15,13 +15,13 @@ class Fatura_model extends CI_Model
         parent::__construct();
     }
 
-    function get($table, $fields, $where = null, $id_usuario, $id_cartao, $perpage = 0, $start = 0, $one = false, $array = 'array')
+    function get($table, $fields, $id_cartao, $id_usuario = null, $where = null, $limit = null, $rows, $perpage = 0, $start = 0, $order_by = null, $one = false, $array = 'array')
     {
 
         $this->db->select($fields);
         $this->db->from($table);
-        $this->db->order_by('vencimento', 'asc');
         $this->db->limit($perpage, $start);
+
         if ($where) {
             $this->db->where($where);
         }
@@ -29,8 +29,26 @@ class Fatura_model extends CI_Model
         // este trecho do codigo foi comentado para tornar visivel aos titulares as faturas do cartoes adicionais
         // $this->db->where('id_usuario', $id_usuario);
         $this->db->where('id_cartao', $id_cartao);
-        $query = $this->db->get();
 
+        if ($order_by) {
+            if (is_array($order_by)) {
+                foreach ($order_by as $key => $value) {
+                    $this->db->order_by($key, $value);
+                }
+            } else {
+                $this->db->order_by('vencimento', $order_by);
+            }
+        }
+
+        if ($limit) {
+            if ($rows > $limit) {
+                $this->db->limit($limit, ($rows - $limit));
+            } else {
+                $this->db->limit($limit, $start);
+            }
+        }
+
+        $query = $this->db->get();
         $result = !$one ? $query->result() : $query->row();
         return $result;
     }
@@ -228,12 +246,16 @@ class Fatura_model extends CI_Model
         return false;
     }
 
-    function count($table, $where)
+    function count($table, $where, $idCartao)
     {
-
         $this->db->from($table);
+
         if ($where) {
             $this->db->where($where);
+        }
+
+        if ($idCartao) {
+            $this->db->where('id_cartao', $idCartao);
         }
         return $this->db->count_all_results();
     }
