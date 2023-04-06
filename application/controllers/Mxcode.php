@@ -398,7 +398,7 @@ class Mxcode extends CI_Controller
         }
 
         $id = $this->input->post('id_emitente');
-        if ($id == null || !is_numeric($id)) {
+        if (!$id || !is_numeric($id)) {
             $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar alterar a logomarca.');
             redirect(base_url() . 'mxcode/emitente');
         }
@@ -409,8 +409,7 @@ class Mxcode extends CI_Controller
             unlink('assets/uploads/logomarcas/' . $logo_atual->logomarca);
         }
         $dir = 'assets/uploads/logomarcas';
-        $image = $this->do_upload($_FILES['userfile'], base_url() . 'mxcode/emitente', $dir);
-        $logo = $image;
+        $logo = $this->do_upload($_FILES['userfile'], base_url('mxcode/emitente'), $dir);
 
         $retorno = $this->mxcode_model->editLogo($id, $logo);
         if ($retorno) {

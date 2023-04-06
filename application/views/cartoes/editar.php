@@ -118,7 +118,7 @@
                     minlength: 19
                 },
                 apelido: {
-                    maxlength: 12
+                    maxlength: 13
                 },
             },
             messages: {
