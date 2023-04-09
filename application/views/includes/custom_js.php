@@ -1,4 +1,36 @@
 <script>
+    $(document).ready(function() {
+        // method to close and open one modal after another one
+        $('.modal-copy').click(function(e) {
+            var parentModal = null
+            var parentElement = $(this)
+
+            for (var i = 0; i < 20; i++) {
+                if (parentModal != null && parentModal.attr('id') == "modalEditar") {
+                    toggleModals(parentModal, parentElement, true)
+                    return false;
+                }
+
+                if (parentModal != null) {
+                    parentModal = parentModal.parent()
+                } else {
+                    parentModal = parentElement.parent()
+                }
+            }
+        })
+    })
+
+    function toggleModals(discardModal, targetModal, trigger = false) {
+        $(discardModal).modal('hide')
+        $(discardModal).on('hidden.bs.modal', function() {
+            // get the ID button clicked to invoke the target modal
+            if (trigger) {
+                $('#' + targetModal.attr('id')).modal('show')
+                trigger = false
+            }
+        })
+    }
+
     let conectado = false;
 
     function lerTodasNotificacoes() {
@@ -305,7 +337,7 @@
         });
 
         // API CEP DOS CORREIOS (viacep.com.br)
-        function limpa_formulário_cep() {
+        function limpaFormCep() {
             // Limpa valores do formulário de cep.
             $("#logradouro").val("");
             $("#bairro").val("");
@@ -350,7 +382,7 @@
                         } //end if.
                         else {
                             //CEP pesquisado não foi encontrado.
-                            limpa_formulário_cep();
+                            limpaFormCep();
                             // alert("CEP não encontrado.");
                             Swal.fire({
                                 position: 'top',
@@ -370,7 +402,7 @@
                 } //end if.
                 else {
                     //cep é inválido.
-                    limpa_formulário_cep();
+                    limpaFormCep();
                     // alert("Formato de CEP inválido.");
                     Swal.fire({
                         position: 'top',
@@ -389,7 +421,7 @@
             } //end if.
             else {
                 //cep sem valor, limpa formulário.
-                limpa_formulário_cep();
+                limpaFormCep();
             }
         });
         // FIM API CEP CORREIOS

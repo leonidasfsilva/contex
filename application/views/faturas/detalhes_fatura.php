@@ -230,7 +230,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                         '" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '" 
                                     nome_cliente="' . $s->nome_cliente . '" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento_1 . ' ' . $disabled_lancamento_2 . '>
                                 <i class="fas fa-search-plus fa-lg fa-fw"></i></button>';
-                                    echo '<button type="button" href="#modalCopiar" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm copiar" title="Detalhes" id_lancamento="' .
+                                    echo '<button type="button" href="#modalCopiar" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm copiar" title="Copiar" id_lancamento="' .
                                         $s->id_lancamento . '" descricao="' . $s->descricao . '" valor="' . $valor . '" data_compra="' .
                                         date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
                                         '" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '" 
@@ -668,7 +668,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                                 <i class="fa fa-times fa-fw"></i> Cancelar
                             </button>
-                            <button type="button" href="#modalCopiar" data-dismiss="modal" data-toggle="modal" class="btn btn-info btn-sm"><i class="fa fa-copy fa-fw"></i> Copiar</button>
+                            <button type="button" id="modalCopiar" class="btn btn-info btn-sm modal-copy"><i class="fa fa-copy fa-fw"></i> Copiar</button>
                             <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
                         </div>
                     </div>

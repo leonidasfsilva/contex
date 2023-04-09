@@ -316,21 +316,20 @@ if (!$results) {
 
                         echo '<td>';
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
-                            echo '<a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Detalhes" idLancamento="' .
+                            echo '<button type="button" href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Detalhes" idLancamento="' .
                                 $r->id_lancamento . '" descricao="' . $r->descricao . '" valor="' . $valor . '" vencimento="' .
                                 date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
                                 $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '">
-                                <i class="fas fa-search-plus fa-lg fa-fw"></i></a>';
-                            echo '<a href="#modalCopiar" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm copiar" title="Copiar" idLancamento="' .
+                                <i class="fas fa-search-plus fa-lg fa-fw"></i></button>';
+                            echo '<button type="button" href="#modalCopiar" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm copiar" title="Copiar" idLancamento="' .
                                 $r->id_lancamento . '" descricao="' . $r->descricao . '" valor="' . $valor . '" vencimento="' .
                                 date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
                                 $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '">
-                                <i class="fas fa-copy fa-lg fa-fw"></i></a>';
+                                <i class="fas fa-copy fa-lg fa-fw"></i></button>';
                         }
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
-                            echo '<a href="#modalExcluir" data-toggle="modal" idLancamento="' . $r->id_lancamento . '" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw"></i></a>';
+                            echo '<button type="button" href="#modalExcluir" data-toggle="modal" idLancamento="' . $r->id_lancamento . '" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw"></i></button>';
                         }
-
                         echo '</td>';
                         echo '</tr>';
                     }
@@ -796,90 +795,6 @@ if (!$results) {
     </div>
 </div>
 
-<!-- Modal DETALHES -->
-<div class="modal fade" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white ">Detalhes do lançamento</h4>
-            </div>
-            <form id="formEditar" action="<?= base_url('financeiro/lancamentos/editar') ?>" method="post" autocomplete="off">
-                <input class="urlAtual" type="hidden" name="urlAtual" value="" />
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label class="font-weight-bold" for="descricaoEditar">Descrição *</label>
-                            <input class="form-control descricao" id="descricaoEditar" type="text" name="descricao" />
-                            <input type="hidden" id="idEditar" name="id" value="" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label class="font-weight-bold" for="fornecedorEditar">Fornecedor</label>
-                            <input class="form-control fornecedor" id="fornecedorEditar" type="text" name="fornecedor" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-4">
-                            <label for="valorEditar" class="font-weight-bold">Valor *</label>
-                            <input class="form-control money" id="valorEditar" type="text" name="valor" />
-                        </div>
-                        <div class="form-group col-lg-4">
-                            <label for="vencimentoEditar" class="font-weight-bold">Data de Lançamento</label>
-                            <input class="form-control datepicker" id="vencimentoEditar" type="text" name="vencimento" />
-                        </div>
-                        <div class="form-group col-lg-4">
-                            <label for="tipoEditar" class="font-weight-bold">Tipo</label>
-                            <select class="form-control" name="tipo" id="tipoEditar">
-                                <option value="1">ENTRADA</option>
-                                <option value="2">SAÍDA</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-4">
-                            <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control" id="pagoEditar" name="pago" value="1">
-                            </div>
-                            <label for="pagoEditar" class="font-weight-bold">Pago?</label>
-                        </div>
-                        <div id="divPagamentoEditar" class="hidden">
-                            <div class="form-group col-lg-4">
-                                <label for="pagamentoEditar" class="font-weight-bold">Data Pagamento</label>
-                                <input class="form-control datepicker" id="pagamentoEditar" type="text" name="pagamento" />
-                            </div>
-                            <div class="form-group col-lg-4">
-                                <label for="formaPgtoEditar" class="font-weight-bold">Forma Pagamento *</label>
-                                <select name="formaPgto" id="formaPgtoEditar" class="form-control">
-                                    <option value="">
-                                        << Selecione>>
-                                    </option>
-                                    <?php if ($formasPagamento) {
-                                        foreach ($formasPagamento as $f) { ?>
-                                            <option value="<?= $f->id_forma ?>">
-                                                <?= $f->nome ?>
-                                            </option>
-                                    <?php }
-                                    } ?>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
-                        <i class="fa fa-times fa-fw"></i> Cancelar
-                    </button>
-                    <button type="button" href="#modalCopiar" data-dismiss="modal" data-toggle="modal" class="btn btn-info btn-sm"><i class="fa fa-copy fa-fw"></i> Copiar</button>
-                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i>
-                        Salvar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <!-- Modal COPIAR -->
 <div class="modal fade" id="modalCopiar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -962,6 +877,92 @@ if (!$results) {
     </div>
 </div>
 
+<!-- Modal DETALHES -->
+<div class="modal fade" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-white ">Detalhes do lançamento</h4>
+            </div>
+            <form id="formEditar" action="<?= base_url('financeiro/lancamentos/editar') ?>" method="post" autocomplete="off">
+                <input class="urlAtual" type="hidden" name="urlAtual" value="" />
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label class="font-weight-bold" for="descricaoEditar">Descrição *</label>
+                            <input class="form-control descricao" id="descricaoEditar" type="text" name="descricao" />
+                            <input type="hidden" id="idEditar" name="id" value="" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label class="font-weight-bold" for="fornecedorEditar">Fornecedor</label>
+                            <input class="form-control fornecedor" id="fornecedorEditar" type="text" name="fornecedor" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-4">
+                            <label for="valorEditar" class="font-weight-bold">Valor *</label>
+                            <input class="form-control money" id="valorEditar" type="text" name="valor" />
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label for="vencimentoEditar" class="font-weight-bold">Data de Lançamento</label>
+                            <input class="form-control datepicker" id="vencimentoEditar" type="text" name="vencimento" />
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label for="tipoEditar" class="font-weight-bold">Tipo</label>
+                            <select class="form-control" name="tipo" id="tipoEditar">
+                                <option value="1">ENTRADA</option>
+                                <option value="2">SAÍDA</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-4">
+                            <div class="checkbox icheck">
+                                <input type="checkbox" class="form-control" id="pagoEditar" name="pago" value="1">
+                            </div>
+                            <label for="pagoEditar" class="font-weight-bold">Pago?</label>
+                        </div>
+                        <div id="divPagamentoEditar" class="hidden">
+                            <div class="form-group col-lg-4">
+                                <label for="pagamentoEditar" class="font-weight-bold">Data Pagamento</label>
+                                <input class="form-control datepicker" id="pagamentoEditar" type="text" name="pagamento" />
+                            </div>
+                            <div class="form-group col-lg-4">
+                                <label for="formaPgtoEditar" class="font-weight-bold">Forma Pagamento *</label>
+                                <select name="formaPgto" id="formaPgtoEditar" class="form-control">
+                                    <option value="">
+                                        << Selecione>>
+                                    </option>
+                                    <?php if ($formasPagamento) {
+                                        foreach ($formasPagamento as $f) { ?>
+                                            <option value="<?= $f->id_forma ?>">
+                                                <?= $f->nome ?>
+                                            </option>
+                                    <?php }
+                                    } ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                            <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                                <i class="fa fa-times fa-fw"></i> Cancelar
+                            </button>
+                            <button type="button" id="modalCopiar" class="btn btn-info btn-sm modal-copy"><i class="fa fa-copy fa-fw"></i> Copiar</button>
+                            <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i>
+                                Salvar
+                            </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Modal EXCLUIR-->
 <div class="modal fade" id="modalExcluir" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -1027,7 +1028,7 @@ if (!$results) {
     });
 
 
-    jQuery(document).ready(function($) {
+    $(document).ready(function($) {
 
         var marcados = false;
 
