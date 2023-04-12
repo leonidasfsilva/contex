@@ -270,7 +270,7 @@ class Mxcode extends CI_Controller
 
         if ($_FILES['userfile']['size'] > 0) {
             $dir = 'assets/uploads/logomarcas';
-            $image = $this->do_upload($_FILES['userfile'], base_url() . 'mxcode/emitente', $dir);
+            $image = $this->do_upload($_FILES['userfile'], base_url('mxcode/emitente'), $dir);
         } else {
             $image = null;
         }
