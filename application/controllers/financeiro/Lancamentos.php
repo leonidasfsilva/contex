@@ -287,17 +287,18 @@ class Lancamentos extends CI_Controller
             $urlAtual = $this->global_url;
         }
 
-        $vencimento = $this->input->post('vencimento');
-        $recebimento = $this->input->post('recebimento');
+        $vencimento     = $this->input->post('vencimento');
+        $recebimento    = $this->input->post('recebimento');
+        $observacoes    = $this->input->post('observacoes');
 
-        if ($vencimento != null) {
+        if ($vencimento) {
             $vencimento = explode('/', $vencimento);
             $vencimento = $vencimento[2] . '-' . $vencimento[1] . '-' . $vencimento[0];
         } else {
             $vencimento = date('Y-m-d');
         }
 
-        if ($recebimento != null) {
+        if ($recebimento) {
             $recebimento = explode('/', $recebimento);
             $recebimento = $recebimento[2] . '-' . $recebimento[1] . '-' . $recebimento[0];
         }
@@ -309,15 +310,16 @@ class Lancamentos extends CI_Controller
         }
 
         $data = array(
-            'descricao' => padronizarString($this->input->post('descricao')),
-            'valor' => $valor,
-            'id_usuario' => getUserId(),
-            'data_lancamento' => $vencimento,
-            'data_pagamento' => $recebimento != null ? $recebimento : $vencimento,
-            'baixado' => $this->input->post('recebido') ?: 0,
-            'cliente_fornecedor' => padronizarString($this->input->post('fornecedor')),
-            'forma_pgto' => ($this->input->post('formaPgto') ?: 6),
-            'tipo' => 1
+            'descricao'             => padronizarString($this->input->post('descricao')),
+            'observacoes'           => $observacoes ?? null,
+            'valor'                 => $valor,
+            'id_usuario'            => getUserId(),
+            'data_lancamento'       => $vencimento,
+            'data_pagamento'        => $recebimento != null ? $recebimento : $vencimento,
+            'baixado'               => $this->input->post('recebido') ?: 0,
+            'cliente_fornecedor'    => padronizarString($this->input->post('fornecedor')),
+            'forma_pgto'            => ($this->input->post('formaPgto') ?: 6),
+            'tipo'                  => 1
         );
 
         if ($this->financeiro_model->add('lancamentos', $data) == true) {
@@ -408,8 +410,9 @@ class Lancamentos extends CI_Controller
             $urlAtual = $this->global_url;
         }
 
-        $vencimento = $this->input->post('vencimento');
-        $pagamento = $this->input->post('pagamento');
+        $vencimento     = $this->input->post('vencimento');
+        $pagamento      = $this->input->post('pagamento');
+        $observacoes    = $this->input->post('observacoes');
 
         if ($vencimento != null) {
             $vencimento = explode('/', $vencimento);
@@ -433,14 +436,15 @@ class Lancamentos extends CI_Controller
         $valor = str_replace(array('.', ','), array('', '.'), $valor);
 
         $data = array(
-            'descricao' => padronizarString($this->input->post('descricao')),
-            'valor' => $valor,
-            'data_lancamento' => $vencimento,
-            'data_pagamento' => $pagamento != null ? $pagamento : $vencimento,
-            'baixado' => $this->input->post('pago') ?: 0,
-            'cliente_fornecedor' => padronizarString($this->input->post('fornecedor')),
-            'forma_pgto' => ($this->input->post('formaPgto')),
-            'tipo' => $tipo
+            'descricao'             => padronizarString($this->input->post('descricao')),
+            'observacoes'           => $observacoes ?? null,
+            'valor'                 => $valor,
+            'data_lancamento'       => $vencimento,
+            'data_pagamento'        => $pagamento != null ? $pagamento : $vencimento,
+            'baixado'               => $this->input->post('pago') ?: 0,
+            'cliente_fornecedor'    => padronizarString($this->input->post('fornecedor')),
+            'forma_pgto'            => ($this->input->post('formaPgto')),
+            'tipo'                  => $tipo
         );
 
         if ($this->financeiro_model->edit('lancamentos', $data, 'id_lancamento', $this->input->post('id'))) {
@@ -470,8 +474,9 @@ class Lancamentos extends CI_Controller
             $urlAtual = $this->global_url;
         }
 
-        $vencimento = $this->input->post('vencimento');
-        $pagamento = $this->input->post('pagamento');
+        $vencimento     = $this->input->post('vencimento');
+        $pagamento      = $this->input->post('pagamento');
+        $observacoes    = $this->input->post('observacoes');
 
         if ($vencimento != null) {
             $vencimento = explode('/', $vencimento);
@@ -495,15 +500,16 @@ class Lancamentos extends CI_Controller
         $valor = str_replace(array('.', ','), array('', '.'), $valor);
 
         $data = array(
-            'descricao' => padronizarString($this->input->post('descricao')),
-            'valor' => $valor,
-            'data_lancamento' => $vencimento,
-            'data_pagamento' => $pagamento != null ? $pagamento : $vencimento,
-            'baixado' => $this->input->post('pago') ?: 0,
-            'cliente_fornecedor' => padronizarString($this->input->post('fornecedor')),
-            'forma_pgto' => ($this->input->post('formaPgto')),
-            'tipo' => $tipo,
-            'id_usuario' => getUserId()
+            'descricao'             => padronizarString($this->input->post('descricao')),
+            'observacoes'           => $observacoes ?? null,
+            'valor'                 => $valor,
+            'data_lancamento'       => $vencimento,
+            'data_pagamento'        => $pagamento != null ? $pagamento : $vencimento,
+            'baixado'               => $this->input->post('pago') ?: 0,
+            'cliente_fornecedor'    => padronizarString($this->input->post('fornecedor')),
+            'forma_pgto'            => ($this->input->post('formaPgto')),
+            'tipo'                  => $tipo,
+            'id_usuario'            => getUserId()
         );
 
         if ($this->financeiro_model->add('lancamentos', $data)) {

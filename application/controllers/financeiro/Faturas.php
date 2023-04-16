@@ -334,6 +334,7 @@ class Faturas extends CI_Controller
         $urlAtual       = $this->input->post('urlAtual');
         $valor          = $this->input->post('valor');
         $valor_parcela  = $this->input->post('valor_parcela');
+        $observacoes    = $this->input->post('observacoes');
 
         if ($this->input->post('qnt_parcelas')) {
             $qnt_parcelas = $this->input->post('qnt_parcelas');
@@ -389,6 +390,7 @@ class Faturas extends CI_Controller
                 // 'id_cliente'        => $this->input->post('id_cliente') ?: null,
                 'id_usuario'        => $faturaAtual->id_usuario,
                 'descricao'         => padronizarString($this->input->post('descricao')),
+                'observacoes'       => $observacoes ?? null,
                 'nome_cliente'      => $this->input->post('nome_cliente') ? padronizarString($this->input->post('nome_cliente')) : null,
                 'valor_total'       => $valor,
                 'total_parcelas'    => $qnt_parcelas,
@@ -517,15 +519,15 @@ class Faturas extends CI_Controller
                     //COMPRA A VISTA
                     //ARRAY LANCAMENTOS_FATURA_ASSOC
                     $data1 = array(
-                        'id_lancamento' => $last_id,
-                        'id_fatura' => $faturaAtual->id_fatura,
-                        'valor_parcela' => $valor,
-                        'valor_total' => $valor,
-                        'mes_referencia' => $mes,
-                        'ano_referencia' => $ano,
-                        'data_compra' => $data_compra,
-                        'n_parcela' => 1,
-                        'total_parcelas' => 1,
+                        'id_lancamento'     => $last_id,
+                        'id_fatura'         => $faturaAtual->id_fatura,
+                        'valor_parcela'     => $valor,
+                        'valor_total'       => $valor,
+                        'mes_referencia'    => $mes,
+                        'ano_referencia'    => $ano,
+                        'data_compra'       => $data_compra,
+                        'n_parcela'         => 1,
+                        'total_parcelas'    => 1,
                     );
 
                     //MONTA ARRAY DE PENDENCIA, NO CASO DE COMPRA DE TERCEIROS
@@ -545,12 +547,12 @@ class Faturas extends CI_Controller
 
                         $data2 = array(
                             'id_lancamento_fatura' => $last_id,
-                            'id_usuario' => getUserId(),
-                            'id_cliente' => $this->input->post('id_cliente'),
-                            'descricao' => padronizarString($this->input->post('descricao')),
-                            'tipo' => 1,
-                            'valor' => $valor,
-                            'data_vencimento' => $vencimentoFormatado,
+                            'id_usuario'        => getUserId(),
+                            'id_cliente'        => $this->input->post('id_cliente'),
+                            'descricao'         => padronizarString($this->input->post('descricao')),
+                            'tipo'              => 1,
+                            'valor'             => $valor,
+                            'data_vencimento'   => $vencimentoFormatado,
                         );
                         //removendo adicao de compras a vista de terceiros em Pendencias
                         //$this->pendencia_model->add('pendencias', $data2);
@@ -593,10 +595,11 @@ class Faturas extends CI_Controller
             $id_fatura = $id;
         }
 
-        $urlAtual = $this->input->post('urlAtual');
+        $urlAtual       = $this->input->post('urlAtual');
         $valor          = $this->input->post('valor');
         $valor_parcela  = $this->input->post('valor_parcela');
         $id_lancamento  = $this->input->post('id_lancamento');
+        $observacoes    = $this->input->post('observacoes');
 
         if ($this->input->post('compra_parcelada') == 1) {
             $qnt_parcelas = $this->input->post('qnt_parcelas');
@@ -642,19 +645,20 @@ class Faturas extends CI_Controller
 
             //ARRAY LANCAMENTOS_FATURAS
             $data = array(
-                'id_fatura' => $faturaAtual->id_fatura,
-                'id_usuario' => getUserId(),
-                'descricao' => padronizarString($this->input->post('descricao')),
-                'valor_total' => $valor,
-                'total_parcelas' => $qnt_parcelas,
-                'compra_parcelada' => $this->input->post('compra_parcelada'),
-                'estorno' => $estorno,
-                'data_compra' => $data_compra,
-                'mes_referencia' => $mes,
-                'ano_referencia' => $ano,
+                'id_fatura'         => $faturaAtual->id_fatura,
+                'id_usuario'        => getUserId(),
+                'descricao'         => padronizarString($this->input->post('descricao')),
+                'observacoes'       => $observacoes ?? null,
+                'valor_total'       => $valor,
+                'total_parcelas'    => $qnt_parcelas,
+                'compra_parcelada'  => $this->input->post('compra_parcelada'),
+                'estorno'           => $estorno,
+                'data_compra'       => $data_compra,
+                'mes_referencia'    => $mes,
+                'ano_referencia'    => $ano,
                 // 'id_cliente' => $this->input->post('id_cliente'),
-                'nome_cliente' => $this->input->post('nome_cliente') ? padronizarString($this->input->post('nome_cliente')) : null,
-                'compra_terceiros' => $compra_terceiros,
+                'nome_cliente'      => $this->input->post('nome_cliente') ? padronizarString($this->input->post('nome_cliente')) : null,
+                'compra_terceiros'  => $compra_terceiros,
             );
 
             if ($this->fatura_model->edit('lancamentos_faturas', $data, 'id_lancamento', $id_lancamento)) {
@@ -705,15 +709,15 @@ class Faturas extends CI_Controller
 
                         //ARRAY LANCAMENTOS_FATURA_ASSOC
                         $dataLancFaturaAssoc = array(
-                            'id_lancamento' => $id_lancamento,
-                            'id_fatura' => $faturaReferencia->id_fatura,
-                            'valor_parcela' => $valor_parcela,
-                            'valor_total' => $valor,
-                            'mes_referencia' => $mes,
-                            'ano_referencia' => $ano,
-                            'data_compra' => $data_compra,
-                            'n_parcela' => $x,
-                            'total_parcelas' => $qnt_parcelas,
+                            'id_lancamento'     => $id_lancamento,
+                            'id_fatura'         => $faturaReferencia->id_fatura,
+                            'valor_parcela'     => $valor_parcela,
+                            'valor_total'       => $valor,
+                            'mes_referencia'    => $mes,
+                            'ano_referencia'    => $ano,
+                            'data_compra'       => $data_compra,
+                            'n_parcela'         => $x,
+                            'total_parcelas'    => $qnt_parcelas,
                         );
 
                         // COMPRA DE TERCEIROS
@@ -721,9 +725,9 @@ class Faturas extends CI_Controller
 
                             $vencimento = $faturaReferencia->vencimento;
                             $vencimento = explode('-', $vencimento);
-                            $dia_venc = $vencimento[2];
-                            $mes_venc = $vencimento[1];
-                            $ano_venc = $vencimento[0];
+                            $dia_venc   = $vencimento[2];
+                            $mes_venc   = $vencimento[1];
+                            $ano_venc   = $vencimento[0];
 
                             if ($mes_venc == 13) {
                                 $mes_venc = 01;
@@ -744,13 +748,13 @@ class Faturas extends CI_Controller
                             }
 
                             $data2 = array(
-                                'id_lancamento_fatura' => $id_lancamento,
-                                'id_usuario' => getUserId(),
-                                'id_cliente' => $this->input->post('id_cliente'),
-                                'descricao' => padronizarString($this->input->post('descricao')) . ' - ' . $parcela_atual . '/' . $total_parcelas,
-                                'tipo' => 1,
-                                'valor' => $valor_parcela,
-                                'data_vencimento' => $vencimentoFormatado,
+                                'id_lancamento_fatura'  => $id_lancamento,
+                                'id_usuario'            => getUserId(),
+                                'id_cliente'            => $this->input->post('id_cliente'),
+                                'descricao'             => padronizarString($this->input->post('descricao')) . ' - ' . $parcela_atual . '/' . $total_parcelas,
+                                'tipo'                  => 1,
+                                'valor'                 => $valor_parcela,
+                                'data_vencimento'       => $vencimentoFormatado,
                             );
                             //removendo edicao de compras parceladas de terceiros em Pendencias
                             //$this->pendencia_model->add('pendencias', $data2);
@@ -775,15 +779,15 @@ class Faturas extends CI_Controller
                     //COMPRA A VISTA
                     //ARRAY LANCAMENTOS_FATURA_ASSOC
                     $data1 = array(
-                        'id_lancamento' => $id_lancamento,
-                        'id_fatura' => $faturaAtual->id_fatura,
-                        'valor_parcela' => $valor,
-                        'valor_total' => $valor,
-                        'mes_referencia' => $mes,
-                        'ano_referencia' => $ano,
-                        'data_compra' => $data_compra,
-                        'n_parcela' => 1,
-                        'total_parcelas' => 1,
+                        'id_lancamento'     => $id_lancamento,
+                        'id_fatura'         => $faturaAtual->id_fatura,
+                        'valor_parcela'     => $valor,
+                        'valor_total'       => $valor,
+                        'mes_referencia'    => $mes,
+                        'ano_referencia'    => $ano,
+                        'data_compra'       => $data_compra,
+                        'n_parcela'         => 1,
+                        'total_parcelas'    => 1,
                     );
 
                     //MONTA ARRAY DE PENDENCIA, NO CASO DE COMPRA DE TERCEIROS
@@ -791,9 +795,9 @@ class Faturas extends CI_Controller
 
                         $vencimento = $faturaAtual->vencimento;
                         $vencimento = explode('-', $vencimento);
-                        $dia_venc = $vencimento[2];
-                        $mes_venc = $vencimento[1];
-                        $ano_venc = $vencimento[0];
+                        $dia_venc   = $vencimento[2];
+                        $mes_venc   = $vencimento[1];
+                        $ano_venc   = $vencimento[0];
 
                         if ($mes_venc == 13) {
                             $mes_venc = 01;

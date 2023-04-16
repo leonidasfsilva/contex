@@ -2,7 +2,7 @@
     exit('No direct script access allowed');
 }
 
-/*
+/**
 |--------------------------------------------------------------------------
 | Version of system
 |--------------------------------------------------------------------------
@@ -18,7 +18,7 @@
 | R     - current release version of system
 |
 */
-define('VERSION_APP', '2023.1.15'); // versao atual em produçao
+define('VERSION_APP', '2023.1.16'); // versao atual em produçao
 // define('VERSION_APP', '2023.2.?'); // versao de lançamento do modulo de Despesas 
 
 /*

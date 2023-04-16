@@ -14,11 +14,11 @@ $fim = $this->input->get('dataFinal');
         <div class="row mr5 ml5">
             <div class="panel-ctrls ml5">
                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
-                    <a href="#modalEntrada" id="entrada" data-toggle="modal" role="button" class="btn btn-success btn-sm tip-bottom" title="Registrar nova entrada">
+                    <a href="#modalEntrada" id="novaEntrada" data-toggle="modal" role="button" class="btn btn-success btn-sm tip-bottom" title="Registrar nova entrada">
                         <i class="fas fa-plus fa-fw"></i>
                         Nova Entrada
                     </a>
-                    <a href="#modalSaida" id="saida" data-toggle="modal" role="button" class="btn btn-danger btn-sm tip-bottom" title="Registrar nova saída">
+                    <a href="#modalSaida" id="novaSaida" data-toggle="modal" role="button" class="btn btn-danger btn-sm tip-bottom" title="Registrar nova saída">
                         <i class="fas fa-plus fa-fw"></i>
                         Nova Saída
                     </a>
@@ -256,6 +256,14 @@ if (!$results) {
                             $iconTipo = '<i class="fas fa-check fa-fw"></i>';
                         };
 
+                        if ($r->observacoes) {
+                            $iconObs = ' 
+                                <i class="fas fa-comment-dots fa-fw" title="Observações adicionais"></i>
+                            ';
+                        } else {
+                            $iconObs = '';
+                        };
+
                         if ($r->tipo == 1) {
                             $color = 'green';
                             $label_tipo = 'success';
@@ -302,27 +310,25 @@ if (!$results) {
                         echo '<tr>';
                         echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
                         echo '<td>' . $vencimento . '</td>';
-                        //                    echo '<td><span class="badge badge-' . $label . '">' . ucfirst($r->tipo) . '</span></td>';
                         echo '<td><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Detalhes" idLancamento="' .
-                            $r->id_lancamento . '" descricao="' . $r->descricao . '" valor="' . $valor . '" vencimento="' .
+                            $r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
                             date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
                             $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '">' .
-                            strtoupper($r->descricao) .
+                            strtoupper($r->descricao) . $iconObs .
                             '<br><span class="small" style="color: grey;">' . ($fornecedor) . '</span></a></td>';
                         echo '<td><span class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small" style="color: grey;">' . ($forma_pgto) . '</td>';
                         echo '<td><span class="text-' . $label_tipo . '">' . ($icon) . '</span> <span class="badge badge-' . $label_tipo . '">' . ($tipo) . '</span>
-                        <br>
-                        <span class="text-' . $label_status . '">' . ($iconTipo) . '</span> <span class="badge badge-' . $label_status . '">' . ($status) . '</span></td>';
-
+                            <br>
+                            <span class="text-' . $label_status . '">' . ($iconTipo) . '</span> <span class="badge badge-' . $label_status . '">' . ($status) . '</span></td>';
                         echo '<td>';
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
                             echo '<button type="button" href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Detalhes" idLancamento="' .
-                                $r->id_lancamento . '" descricao="' . $r->descricao . '" valor="' . $valor . '" vencimento="' .
+                                $r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
                                 date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
                                 $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '">
                                 <i class="fas fa-search-plus fa-lg fa-fw"></i></button>';
                             echo '<button type="button" href="#modalCopiar" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm copiar" title="Copiar" idLancamento="' .
-                                $r->id_lancamento . '" descricao="' . $r->descricao . '" valor="' . $valor . '" vencimento="' .
+                                $r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
                                 date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
                                 $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '">
                                 <i class="fas fa-copy fa-lg fa-fw"></i></button>';
@@ -678,7 +684,6 @@ if (!$results) {
                             </div>
                             <label for="recebido" class="font-weight-bold">Pago?</label>
                         </div>
-
                         <div id="divRecebimento" class="hidden">
                             <div class="form-group col-lg-4">
                                 <label for="recebimento" class="font-weight-bold">Data de Pagamento</label>
@@ -698,6 +703,20 @@ if (!$results) {
                                     <?php }
                                     } ?>
                                 </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-4" style="margin-bottom: 0;">
+                            <a href="javascript:" class="font-weight-bold obsLink">
+                                <i id="obsIcon" class="fas fa-plus fa-fw"></i>
+                                <span class="obsText">Adicionar observações</span>
+                            </a>
+                        </div>
+                        <div class="divObservacoes hidden">
+                            <div class="form-group col-lg-8 mb0">
+                                <label for="observacoes" class="font-weight-bold">Observações</label>
+                                <textarea rows="5" class="form-control observacoesTextarea" id="observacoesEntrada" name="observacoes"></textarea>
                             </div>
                         </div>
                     </div>
@@ -776,6 +795,20 @@ if (!$results) {
                                     <?php }
                                     } ?>
                                 </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-4" style="margin-bottom: 0;">
+                            <a href="javascript:" class="font-weight-bold obsLink">
+                                <i class="fas fa-plus fa-fw obsIcon"></i>
+                                <span class="obsText">Adicionar observações</span>
+                            </a>
+                        </div>
+                        <div class="divObservacoes hidden">
+                            <div class="form-group col-lg-8 mb0">
+                                <label for="observacoes" class="font-weight-bold">Observações</label>
+                                <textarea rows="5" class="form-control observacoesTextarea" id="observacoesSaida" name="observacoes"></textarea>
                             </div>
                         </div>
                     </div>
@@ -865,6 +898,20 @@ if (!$results) {
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="form-group col-lg-4" style="margin-bottom: 0;">
+                            <a href="javascript:" class="font-weight-bold obsLink">
+                                <i class="fas fa-plus fa-fw obsIcon"></i>
+                                <span class="obsText">Adicionar observações</span>
+                            </a>
+                        </div>
+                        <div class="divObservacoes hidden">
+                            <div class="form-group col-lg-8 mb0">
+                                <label for="observacoes" class="font-weight-bold">Observações</label>
+                                <textarea rows="5" class="form-control" id="observacoesCopiar" type="text" name="observacoes"></textarea>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
@@ -947,16 +994,34 @@ if (!$results) {
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="form-group col-lg-4" style="margin-bottom: 0;">
+                            <a href="javascript:" class="font-weight-bold obsLink">
+                                <i class="fas fa-plus fa-fw obsIcon"></i>
+                                <span class="obsText">Adicionar observações</span>
+                            </a>
+                        </div>
+                        <div class="divObservacoes hidden">
+                            <div class="form-group col-lg-8 mb0">
+                                <label for="observacoes" class="font-weight-bold">Observações</label>
+                                <textarea rows="5" class="form-control" id="observacoesEditar" name="observacoes"></textarea>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-
-                            <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
-                                <i class="fa fa-times fa-fw"></i> Cancelar
-                            </button>
-                            <button type="button" id="modalCopiar" class="btn btn-info btn-sm modal-copy"><i class="fa fa-copy fa-fw"></i> Copiar</button>
-                            <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i>
-                                Salvar
-                            </button>
+                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                        <i class="fa fa-times fa-fw"></i>
+                        Cancelar
+                    </button>
+                    <button type="button" id="modalCopiar" class="btn btn-info btn-sm modal-copy">
+                        <i class="fa fa-copy fa-fw"></i>
+                        Copiar
+                    </button>
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <i class="fa fa-check fa-fw"></i>
+                        Salvar
+                    </button>
                 </div>
             </form>
         </div>
@@ -991,6 +1056,22 @@ if (!$results) {
 </div>
 
 <script type="text/javascript">
+    $('.obsLink').click(function() {
+        var obsIcon = $(this).children('i')
+        var obsText = $(this).children('span.obsText')
+        var obsTextarea = $('.divObservacoes').children().children('textarea')
+
+        obsIcon.toggleClass('fa-plus fa-minus')
+        $('.divObservacoes').toggleClass('hidden')
+
+        if (obsIcon.hasClass('fa-minus')) {
+            obsText.text('Remover observações')
+        } else {
+            obsText.text('Adicionar observações')
+            obsTextarea.val('')
+        }
+    })
+
     $(".descricao").autocomplete({
         source: "<?php echo base_url('financeiro/lancamentos/autoCompleteDescricao'); ?>",
         minLength: 3,
@@ -1027,7 +1108,6 @@ if (!$results) {
         // $("#form_filtro").submit();
     });
 
-
     $(document).ready(function($) {
 
         var marcados = false;
@@ -1056,7 +1136,7 @@ if (!$results) {
 
         // Calculate the total invoice amount from selected items only
         function somaValorParcelas() {
-            var Soma = 0;
+            var soma = 0;
             // iterate through each td based on class and add the values
             $(".valor_parcela").each(function() {
                 //Check if the checkbox is checked
@@ -1066,16 +1146,16 @@ if (!$results) {
                     // console.log('valor do elemento: ' + value);
                     // add only if the value is number
                     if (!isNaN(value) && value.length != 0) {
-                        Soma += parseFloat(value);
+                        soma += parseFloat(value);
                         // console.log('valor do elemento: ' + value);
                     } else {
                         // console.log('erro no método somaValorParcelas()');
                     }
                 }
             });
-            var Sum = br_format(Soma);
+            var sum = br_format(soma);
 
-            $('#valor_soma_parcelas').text(Sum);
+            $('#valor_soma_parcelas').text(sum);
         }
 
         function marcarTodosiCheck() {
@@ -1091,7 +1171,6 @@ if (!$results) {
                 });
             }
         }
-
 
         $('#select_periodo').change(function() {
             const value = $(this).val();
@@ -1168,7 +1247,7 @@ if (!$results) {
 
             valor_parcela = br_format(valor_parcela);
 
-            return (valor_parcela);
+            return (valor_parcela)
         }
 
         function jquery_format(valor) {
@@ -1182,13 +1261,12 @@ if (!$results) {
             valor = parseFloat(valor);
             valor = parseFloat(valor) || 0.0;
 
-            return valor;
+            return valor
         }
 
         function br_format(n) {
             return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
         }
-
 
         $("#formReceita").validate({
             rules: {
@@ -1403,6 +1481,7 @@ if (!$results) {
             $("#formaPgtoEditar, #formaPgtoCopiar").val($(this).attr('formaPgto'));
             $("#tipoEditar, #tipoCopiar").val($(this).attr('tipo'));
             var baixado = $(this).attr('baixado');
+
             if (baixado == 1) {
                 $("#pagoEditar, #pagoCopiar").iCheck('check');
                 $("#divPagamentoEditar, #divPagamentoCopiar").removeClass('hidden');
@@ -1411,6 +1490,39 @@ if (!$results) {
                 $("#divPagamentoEditar, #divPagamentoCopiar").addClass('hidden');
                 $('.reset-data-pagamento').val('');
             }
-        });
-    });
+
+            var observacoes = $(this).attr('observacoes');
+
+            if (observacoes) {
+                var text = observacoes.replace(/<br \/> /gi, "\n")
+                $("#observacoesEditar, #observacoesCopiar").val(text)
+
+                $(".divObservacoes").removeClass('hidden');
+                var obsIcon = $(".divObservacoes").parent().children('div').children('a').children('i')
+                var obsText = $(".divObservacoes").parent().children('div').children('a').children('span.obsText')
+
+                obsIcon.removeClass('fa-plus')
+                obsIcon.addClass('fa-minus')
+                obsText.text('Remover observações')
+            } else {
+                $(".divObservacoes").addClass('hidden');
+                var obsIcon = $(".divObservacoes").parent().children('div').children('a').children('i')
+                var obsText = $(".divObservacoes").parent().children('div').children('a').children('span.obsText')
+
+                obsIcon.removeClass('fa-minus')
+                obsIcon.addClass('fa-plus')
+                obsText.text('Adicionar observações')
+            }
+        })
+
+        $('#novaEntrada, #novaSaida').click(function() {
+            $(".divObservacoes").addClass('hidden');
+            var obsIcon = $(".divObservacoes").parent().children('div').children('a').children('i')
+            var obsText = $(".divObservacoes").parent().children('div').children('a').children('span.obsText')
+
+            obsIcon.removeClass('fa-minus')
+            obsIcon.addClass('fa-plus')
+            obsText.text('Adicionar observações')
+        })
+    })
 </script>

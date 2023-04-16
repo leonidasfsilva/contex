@@ -190,6 +190,14 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                     $total_parcelas = $r->total_parcelas;
                                 }
 
+                                if ($s->observacoes) {
+                                    $iconObs = ' 
+                                        <i class="fas fa-comment-dots fa-fw" title="Observações adicionais"></i>
+                                    ';
+                                } else {
+                                    $iconObs = '';
+                                };
+        
                                 if ($s->estorno == 1) {
                                     $color = 'green';
                                 } else {
@@ -209,11 +217,11 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                 echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
                                 echo '<td>' . $data_compra . '</td>';
                                 echo '<td><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Detalhes" id_lancamento="' .
-                                    $s->id_lancamento . '" descricao="' . $s->descricao . '" valor="' . $valor . '" data_compra="' .
+                                    $s->id_lancamento . '" descricao="' . $s->descricao . '" observacoes="' . nl2br($s->observacoes) .'" valor="' . $valor . '" data_compra="' .
                                     date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
                                     '" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '" nome_cliente="' . $s->nome_cliente .
                                     '" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento_1 . ' ' . $disabled_lancamento_2 . '>' .
-                                    strtoupper($s->descricao) .
+                                    strtoupper($s->descricao) . $iconObs .
                                     '</a></td>';
                                 echo '<td><a href="' . sprintf(base_url('financeiro/faturas/terceiros?mesReferencia=%s&anoReferencia=%s&cartao=%s&nome=%s'), $mes_referencia, $s->ano_referencia, $cartao['id_cartao'], $s->nome_cliente) . '">' . strtoupper($s->nome_cliente) . '</a></td>';
                                 echo '<td>' . $n_parcela . '/' . $total_parcelas . '</td>';
@@ -225,13 +233,13 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                 echo '<td>';
                                 if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
                                     echo '<button type="button" href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Detalhes" id_lancamento="' .
-                                        $s->id_lancamento . '" descricao="' . $s->descricao . '" valor="' . $valor . '" data_compra="' .
+                                        $s->id_lancamento . '" descricao="' . $s->descricao . '" observacoes="' . nl2br($s->observacoes) . '" valor="' . $valor . '" data_compra="' .
                                         date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
                                         '" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '" 
                                     nome_cliente="' . $s->nome_cliente . '" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento_1 . ' ' . $disabled_lancamento_2 . '>
                                 <i class="fas fa-search-plus fa-lg fa-fw"></i></button>';
                                     echo '<button type="button" href="#modalCopiar" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm copiar" title="Copiar" id_lancamento="' .
-                                        $s->id_lancamento . '" descricao="' . $s->descricao . '" valor="' . $valor . '" data_compra="' .
+                                        $s->id_lancamento . '" descricao="' . $s->descricao . '" observacoes="' . nl2br($s->observacoes) . '" valor="' . $valor . '" data_compra="' .
                                         date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
                                         '" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '" 
                                     nome_cliente="' . $s->nome_cliente . '" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento_1 . ' ' . $disabled_lancamento_2 . '>
@@ -468,6 +476,20 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="form-group col-lg-4" style="margin-bottom: 0;">
+                            <a href="javascript:" class="font-weight-bold obsLink">
+                                <i id="obsIcon" class="fas fa-plus fa-fw"></i>
+                                <span class="obsText">Adicionar observações</span>
+                            </a>
+                        </div>
+                        <div class="divObservacoes hidden">
+                            <div class="form-group col-lg-8 mb0">
+                                <label for="observacoes" class="font-weight-bold">Observações</label>
+                                <textarea rows="5" class="form-control observacoesTextarea" id="observacoesEntrada" name="observacoes"></textarea>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <div class="row">
@@ -559,6 +581,20 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                 <label class="font-weight-bold">Cliente</label>
                                 <input class="form-control nomeCliente" type="text" name="nome_cliente" />
                                 <input class="idCliente" type="hidden" name="id_cliente" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-4" style="margin-bottom: 0;">
+                            <a href="javascript:" class="font-weight-bold obsLink">
+                                <i id="obsIcon" class="fas fa-plus fa-fw"></i>
+                                <span class="obsText">Adicionar observações</span>
+                            </a>
+                        </div>
+                        <div class="divObservacoes hidden">
+                            <div class="form-group col-lg-8 mb0">
+                                <label for="observacoes" class="font-weight-bold">Observações</label>
+                                <textarea rows="5" class="form-control observacoesTextarea" id="observacoesCopiar" name="observacoes"></textarea>
                             </div>
                         </div>
                     </div>
@@ -655,6 +691,20 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="form-group col-lg-4" style="margin-bottom: 0;">
+                            <a href="javascript:" class="font-weight-bold obsLink">
+                                <i id="obsIcon" class="fas fa-plus fa-fw"></i>
+                                <span class="obsText">Adicionar observações</span>
+                            </a>
+                        </div>
+                        <div class="divObservacoes hidden">
+                            <div class="form-group col-lg-8 mb0">
+                                <label for="observacoes" class="font-weight-bold">Observações</label>
+                                <textarea rows="5" class="form-control observacoesTextarea" id="observacoesEditar" name="observacoes"></textarea>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <div class="row">
@@ -704,6 +754,22 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 </div>
 
 <script type="text/javascript">
+    $('.obsLink').click(function() {
+        var obsIcon = $(this).children('i')
+        var obsText = $(this).children('span.obsText')
+        var obsTextarea = $('.divObservacoes').children().children('textarea')
+
+        obsIcon.toggleClass('fa-plus fa-minus')
+        $('.divObservacoes').toggleClass('hidden')
+
+        if (obsIcon.hasClass('fa-minus')) {
+            obsText.text('Remover observações')
+        } else {
+            obsText.text('Adicionar observações')
+            obsTextarea.val('')
+        }
+    })
+
     $(".descricao").autocomplete({
         source: "<?php echo base_url('financeiro/faturas/autoCompleteDescricao'); ?>",
         minLength: 3,
@@ -1159,42 +1225,38 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 $(".divTerceiros").addClass('hidden');
             }
 
-        });
+            var observacoes = $(this).attr('observacoes');
 
-        $(document).on('click', '#_btnExcluir', function(event) {
-            var id = $("#idExcluir").val();
+            if (observacoes) {
+                var text = observacoes.replace(/<br \/> /gi, "\n")
+                $("#observacoesEditar, #observacoesCopiar").val(text)
 
-            $.ajax({
-                type: "POST",
-                url: "<?php echo base_url('financeiro/excluirLancamento'); ?>",
-                data: "id=" + id,
-                dataType: 'json',
-                success: function(data) {
-                    if (data.result == true) {
-                        $("#btnCancelExcluir").trigger('click');
-                        $("#divLancamentos").html('<div class="progress progress-striped active"><div class="bar" style="width: 100%;"></div></div>');
-                        $("#divLancamentos").load($(location).attr('href') + " #divLancamentos");
-                        $("#divPosicaoConsolidada").load($(location).attr('href') + " #divPosicaoConsolidada");
+                $(".divObservacoes").removeClass('hidden');
+                var obsIcon = $(".divObservacoes").parent().children('div').children('a').children('i')
+                var obsText = $(".divObservacoes").parent().children('div').children('a').children('span.obsText')
 
-                        $.toast({
-                            //    heading: 'Receita adicionada com sucesso!',
-                            text: '<h5>Lançamento excluído com sucesso</h5>',
-                            position: 'top-center',
-                            hideAfter: 2000,
-                            showHideTransition: 'slide',
-                            loader: false,
-                            loaderBg: '#5fc55f',
-                            bgColor: '#5bb75b',
-                            icon: 'success'
-                        });
+                obsIcon.removeClass('fa-plus')
+                obsIcon.addClass('fa-minus')
+                obsText.text('Remover observações')
+            } else {
+                $(".divObservacoes").addClass('hidden');
+                var obsIcon = $(".divObservacoes").parent().children('div').children('a').children('i')
+                var obsText = $(".divObservacoes").parent().children('div').children('a').children('span.obsText')
 
-                    } else {
-                        $("#btnCancelExcluir").trigger('click');
-                        alert('Ocorreu um erro ao tentar excluir produto.');
-                    }
-                }
-            });
-            return false;
-        });
-    });
+                obsIcon.removeClass('fa-minus')
+                obsIcon.addClass('fa-plus')
+                obsText.text('Adicionar observações')
+            }
+        })
+
+        $('#novoLancamento').click(function() {
+            $(".divObservacoes").addClass('hidden');
+            var obsIcon = $(".divObservacoes").parent().children('div').children('a').children('i')
+            var obsText = $(".divObservacoes").parent().children('div').children('a').children('span.obsText')
+
+            obsIcon.removeClass('fa-minus')
+            obsIcon.addClass('fa-plus')
+            obsText.text('Adicionar observações')
+        })
+    })
 </script>
