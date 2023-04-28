@@ -1505,6 +1505,7 @@ if (!$results) {
                 obsIcon.addClass('fa-minus')
                 obsText.text('Remover observações')
             } else {
+                $("#observacoesEditar, #observacoesCopiar").val('')
                 $(".divObservacoes").addClass('hidden');
                 var obsIcon = $(".divObservacoes").parent().children('div').children('a').children('i')
                 var obsText = $(".divObservacoes").parent().children('div').children('a').children('span.obsText')
