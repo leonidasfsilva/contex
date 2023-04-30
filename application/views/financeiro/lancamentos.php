@@ -144,7 +144,7 @@ if (isset($referenceMonth) && $referenceMonth) {
 
     $prevLink = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $prevReferenceMonth, $prevReferenceYear)) .
         " title='$prevLinkTitle'><span class='badge badge-primary'><i style='margin: 0 !important;' class='fas fa-angle-double-left'></i></span></a>";
-    $monthText = "<a href='#modalSelectMounth' data-toggle='modal' role='button'><span class='badge badge-primary' style='margin-left: 10px;'>Período: $month / $referenceYear</span></a>";
+    $monthText = "<a href='#modalSelectMounth' data-toggle='modal' role='button' title='Clique para selecionar um mes específico'><span class='badge badge-primary' style='margin-left: 10px;'>Período: $month / $referenceYear</span></a>";
     $nextLink = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $nextReferenceMonth, $nextReferenceYear)) .
         " title='$nextLinkTitle'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-right'></i></span></a>";
 }
@@ -1059,10 +1059,6 @@ if (!$results) {
 <div class="modal fade" id="modalSelectMounth" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
-            <!-- <div class="modal-header bg-midnightblue">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white ">Selecione o mes</h4>
-            </div> -->
             <div class="modal-body">
                 <p class="font-weight-bold">Selecione um mês específico para visualizar</p>
                 <form id="form_filtro_mes" method="get">
@@ -1073,8 +1069,13 @@ if (!$results) {
                     $count = 0;
                     foreach ($monthList as $index => $month) {
                         $count++;
+                        if ($referenceMonth == $index) {
+                            $disabled = 'disabled';
+                        } else {
+                            $disabled = null;
+                        }
                     ?>
-                        <button type="button" style="width: 60px;" class="btn btn-info btn-sm selectMonth <?= $month['notification'] ? 'notification-dot' : null  ?>" value="<?= $index ?>">
+                        <button type="button" style="width: 60px;" class="btn btn-info btn-sm selectMonth <?= $month['notification'] ? 'notification-dot' : null ?>" value="<?= $index ?>" <?= $disabled ?>>
                             <?= $month['name'] ?>
                         </button>
                         <?php if ($count == 4 && $index != 12) {

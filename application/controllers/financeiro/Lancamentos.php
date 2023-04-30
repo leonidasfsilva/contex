@@ -197,7 +197,6 @@ class Lancamentos extends CI_Controller
         }
 
         for ($m = 1; $m <= 12; $m++) {
-
             $currentMonth = $this->constructStartEndDate($this->translateMonth($m, true, true), $referenceYear);
 
             $this->data['monthList'][$m]['name']            = $this->translateMonth($m, true, true) . ' - ' . $this->translateMonth($m, true);
