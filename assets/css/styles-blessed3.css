@@ -1730,6 +1730,10 @@ a.bg-warning:hover {
     background-color: #ff524d;
 }
 
+.bg-dark {
+    background-color: #3e4d6c !important;
+}
+
 .bg-midnightblue {
     background-color: #37474f !important;
 }

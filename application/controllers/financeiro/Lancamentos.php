@@ -1,4 +1,8 @@
-<?php if (!defined('BASEPATH')) {
+<?php
+
+use Mpdf\Tag\Tr;
+
+if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -193,8 +197,8 @@ class Lancamentos extends CI_Controller
             }
         }
 
-        $query_string = null;
-        $lastElement = end($_GET);
+        $query_string   = null;
+        $lastElement    = end($_GET);
 
         foreach ($_GET as $key => $value) {
             if ($key != 'per_page') {
@@ -206,21 +210,14 @@ class Lancamentos extends CI_Controller
             }
         }
 
+        for ($m = 1; $m <= 12; $m++) {
+            $this->data['monthList'][$m] = $this->translateMonth($m, true, true) . ' - ' . $this->translateMonth($m, true);
+        }
+
         if ($referenceMonth) {
-            $dateFormatter = new \IntlDateFormatter(
-                'pt_BR',
-                \IntlDateFormatter::FULL,
-                \IntlDateFormatter::NONE,
-                'America/Sao_Paulo',
-                \IntlDateFormatter::GREGORIAN,
-                "MMMM"
-            );
-            $dateObj                    = DateTime::createFromFormat('!m', ($referenceMonth));
-            $nextMonthObj               = DateTime::createFromFormat('!m', ($referenceMonth + 1));
-            $prevMonthObj               = DateTime::createFromFormat('!m', ($referenceMonth - 1));
-            $this->data['month']        = str_replace('.', '', mb_strtoupper($dateFormatter->format($dateObj)));
-            $this->data['nextMonth']    = str_replace('.', '', mb_strtoupper($dateFormatter->format($nextMonthObj)));
-            $this->data['prevMonth']    = str_replace('.', '', mb_strtoupper($dateFormatter->format($prevMonthObj)));
+            $this->data['month']        = $this->translateMonth($referenceMonth);
+            $this->data['nextMonth']    = $this->translateMonth($referenceMonth + 1);
+            $this->data['prevMonth']    = $this->translateMonth($referenceMonth - 1);
         }
 
         $config['base_url']             = base_url('financeiro/lancamentos');
@@ -574,6 +571,31 @@ class Lancamentos extends CI_Controller
         $this->load->view('tema/topo', $this->data);
     }
 
+    public function translateMonth($referenceMonth, $abbreviate = false, $returnMonthNumber = false)
+    {
+        $monthFormatString = 'MMMM';
+
+        if ($abbreviate) {
+            $monthFormatString = 'MMM';
+
+            if ($returnMonthNumber) {
+                $monthFormatString = 'MM';
+            }
+        }
+
+        $dateFormatter = new \IntlDateFormatter(
+            'pt_BR',
+            \IntlDateFormatter::FULL,
+            \IntlDateFormatter::NONE,
+            'America/Sao_Paulo',
+            \IntlDateFormatter::GREGORIAN,
+            $monthFormatString
+        );
+
+        $dateObj = DateTime::createFromFormat('!m', ($referenceMonth));
+        return str_replace('.', '', mb_strtoupper($dateFormatter->format($dateObj)));
+    }
+
     public function autoCompleteDescricao()
     {
         if (isset($_GET['term'])) {
@@ -608,7 +630,7 @@ class Lancamentos extends CI_Controller
         $dias       = date("z");
         $primeiro   = date("Y-m-d", strtotime("-" . ($dias) . " day"));
         $ultimo     = date("Y-m-d", strtotime("+" . (364 - $dias) . " day"));
-        
+
         return array($primeiro, $ultimo);
     }
 

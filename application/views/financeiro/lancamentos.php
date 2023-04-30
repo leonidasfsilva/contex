@@ -1,9 +1,9 @@
 <?php
-$status_lancamentos = $this->input->get('status');
-$tipo_lancamentos = $this->input->get('tipo');
-$periodo_lancamentos = $this->input->get('periodo');
-$inicio = $this->input->get('dataInicial');
-$fim = $this->input->get('dataFinal');
+$status_lancamentos     = $this->input->get('status');
+$tipo_lancamentos       = $this->input->get('tipo');
+$periodo_lancamentos    = $this->input->get('periodo');
+$inicio                 = $this->input->get('dataInicial');
+$fim                    = $this->input->get('dataFinal');
 ?>
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
@@ -144,7 +144,7 @@ if (isset($referenceMonth) && $referenceMonth) {
 
     $prevLink = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $prevReferenceMonth, $prevReferenceYear)) .
         " title='$prevLinkTitle'><span class='badge badge-primary'><i style='margin: 0 !important;' class='fas fa-angle-double-left'></i></span></a>";
-    $monthText = "<span class='badge badge-primary' style='margin-left: 10px;'>Período: $month / $referenceYear</span>";
+    $monthText = "<a href='#modalSelectMounth' data-toggle='modal' role='button'><span class='badge badge-primary' style='margin-left: 10px;'>Período: $month / $referenceYear</span></a>";
     $nextLink = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $nextReferenceMonth, $nextReferenceYear)) .
         " title='$nextLinkTitle'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-right'></i></span></a>";
 }
@@ -287,7 +287,6 @@ if (!$results) {
                                 $forma_pgto = $f->nome;
                             }
                         }
-
 
                         if ($r->valor < 0) {
                             if ($r->baixado == 0) {
@@ -589,7 +588,6 @@ if (!$results) {
                             </label>
                             <div class="input-group">
                                 <span class="input-group-addon">mês</span>
-
                                 <select class="form-control" id="mesReferencia" name="mesReferencia">
                                     <option value="">
                                         << Selecione>>
@@ -623,8 +621,8 @@ if (!$results) {
                                 <select class="form-control" id="anoReferenciaSelect" name="anoReferencia">
                                     <?php if ($yearsList) {
                                         foreach ($yearsList as $year) { ?>
-                                            <option value="<?= $year ?>" <?= ($referenceYear == $year ? 'selected' : '') ?>><?=
-                                                                                                                            $year ?>
+                                            <option value="<?= $year ?>" <?= ($referenceYear == $year ? 'selected' : '') ?>>
+                                                <?= $year ?>
                                             </option>
                                     <?php }
                                     } ?>
@@ -1028,7 +1026,7 @@ if (!$results) {
     </div>
 </div>
 
-<!-- Modal EXCLUIR-->
+<!-- Modal EXCLUIR -->
 <div class="modal fade" id="modalExcluir" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -1055,7 +1053,54 @@ if (!$results) {
     </div>
 </div>
 
+<!-- Modal SELECAO DE MES -->
+<div class="modal fade" id="modalSelectMounth" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <!-- <div class="modal-header bg-midnightblue">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-white ">Selecione o mes</h4>
+            </div> -->
+            <div class="modal-body">
+                <p class="font-weight-bold">Selecione um mês específico para visualizar</p>
+                <form id="form_filtro_mes" method="get">
+                    <input type="hidden" name="periodo" value="mensal"/>
+                    <input type="hidden" name="anoReferencia" value="<?= $referenceYear ?>"/>
+                    <input type="hidden" name="mesReferencia" class="selectedMonth"/>
+                    <?php
+                    $count = 0;
+                    foreach ($monthList as $index => $month) {
+                        $count++;
+                    ?>
+                        <button type="button" class="btn btn-info btn-sm selectMonth" value="<?= $index ?>"> <?= $month ?> </button>
+                        <?php if ($count == 4 && $index != 12) {
+                            $count = 0;
+                        ?>
+                            <br>
+                            <br>
+                    <?php }
+                    } ?>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
+    $('.selectMonth').click(function() {
+        var value = $(this).val()
+        var target = $(':input.selectedMonth')
+        var form = $(this).parent()
+
+        target.val(value)
+        form.submit()
+    })
+
     $('.obsLink').click(function() {
         var obsIcon = $(this).children('i')
         var obsText = $(this).children('span.obsText')
