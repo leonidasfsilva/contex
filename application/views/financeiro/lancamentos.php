@@ -243,10 +243,12 @@ if (!$results) {
                 </thead>
                 <tbody>
                     <?php
+                    $pendingNotification = null;
                     foreach ($results as $r) {
                         $vencimento = date(('d/m/y'), strtotime($r->data_lancamento));
 
                         if ($r->baixado == 0) {
+                            $pendingNotification = 'notification-dot';
                             $status = 'PENDENTE';
                             $label_status = 'warning';
                             $iconTipo = '<i class="fas fa-clock fa-fw"></i>';
@@ -1064,15 +1066,17 @@ if (!$results) {
             <div class="modal-body">
                 <p class="font-weight-bold">Selecione um mês específico para visualizar</p>
                 <form id="form_filtro_mes" method="get">
-                    <input type="hidden" name="periodo" value="mensal"/>
-                    <input type="hidden" name="anoReferencia" value="<?= $referenceYear ?>"/>
-                    <input type="hidden" name="mesReferencia" class="selectedMonth"/>
+                    <input type="hidden" name="periodo" value="mensal" />
+                    <input type="hidden" name="mesReferencia" class="selectedMonth" />
+                    <input type="hidden" name="anoReferencia" value="<?= $referenceYear ?>" />
                     <?php
                     $count = 0;
                     foreach ($monthList as $index => $month) {
                         $count++;
                     ?>
-                        <button type="button" class="btn btn-info btn-sm selectMonth" value="<?= $index ?>"> <?= $month ?> </button>
+                        <button type="button" style="width: 60px;" class="btn btn-info btn-sm selectMonth <?= $month['notification'] ? 'notification-dot' : null  ?>" value="<?= $index ?>">
+                            <?= $month['name'] ?>
+                        </button>
                         <?php if ($count == 4 && $index != 12) {
                             $count = 0;
                         ?>

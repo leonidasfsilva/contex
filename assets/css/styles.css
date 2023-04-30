@@ -3,6 +3,22 @@
 /*@import url('styles-blessed1.css?');*/
 @import "spinners.css";
 
+.selectMonth {
+  position: relative;
+}
+
+.notification-dot::before {
+  content: '';
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  bottom: 4px;
+  border-radius: 50%;
+  width: 4px;
+  height: 4px;
+  background-color: #ff5e00;
+}
+
 body.fullscreen-widget-active {
   overflow: hidden !important;
   position: fixed !important;

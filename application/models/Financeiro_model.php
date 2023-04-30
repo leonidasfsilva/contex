@@ -130,6 +130,21 @@ class Financeiro_model extends CI_Model
         return $this->db->get()->row();
     }
 
+    function getLancamentosPendentes($id_usuario, $startDate, $endDate)
+    {
+        $this->db
+            ->from('lancamentos')
+            ->where('status', 1)
+            ->where('baixado', 0)
+            ->where('id_usuario', $id_usuario)
+            ->where("data_lancamento BETWEEN '$startDate' AND '$endDate'");
+
+        if ($this->db->get()->row()) {
+            return true;
+        }
+        return false;
+    }
+
     function getTotal($id_usuario)
     {
         $this->db

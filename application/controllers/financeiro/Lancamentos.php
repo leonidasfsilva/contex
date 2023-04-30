@@ -109,24 +109,17 @@ class Lancamentos extends CI_Controller
                 break;
             case 'mensal':
                 if (isset($referenceMonth) && $referenceMonth) {
-                    $todayDate      = date('Y-m-d');
-                    $todayArray     = explode('-', $todayDate);
-                    $daysInMonth    = cal_days_in_month(CAL_GREGORIAN, $referenceMonth, $todayArray[0]);
-                    $todayStartDate = $todayArray[0] . '-' . $referenceMonth . '-01';
-                    $todayEndDate   = $todayArray[0] . '-' . $referenceMonth . '-' . $daysInMonth;
-                    $limit = null;
+                    $startEndDate   = $this->constructStartEndDate($referenceMonth);
+                    $limit          = null;
 
-                    if (isset($referenceYear) && $referenceYear) {
-                        $todayStartDate = $referenceYear . '-' . $referenceMonth . '-01';
-                        $todayEndDate   = $referenceYear . '-' . $referenceMonth . '-' . $daysInMonth;
-                    } else {
-                        $referenceYear  = $todayArray[0];
+                    if (!isset($referenceYear) && !$referenceYear) {
+                        $referenceYear = $startEndDate['referenceYear'];
                     }
 
                     if (!isset($where)) {
-                        $where = "data_lancamento BETWEEN '$todayStartDate' AND '$todayEndDate'";
+                        $where = "data_lancamento BETWEEN '{$startEndDate['startDate']}' AND '{$startEndDate['endDate']}'";
                     } else {
-                        $where .= " AND data_lancamento BETWEEN '$todayStartDate' AND '$todayEndDate'";
+                        $where .= " AND data_lancamento BETWEEN '{$startEndDate['startDate']}' AND '{$startEndDate['endDate']}'";
                     }
                 }
                 break;
@@ -136,25 +129,18 @@ class Lancamentos extends CI_Controller
                     'id_lancamento'     => 'desc',
                 ];
 
-                $todayDate      = date('Y-m-d');
-                $todayArray     = explode('-', $todayDate);
-                $daysInMonth    = cal_days_in_month(CAL_GREGORIAN, $todayArray[1], $todayArray[0]);
-                $todayStartDate = $todayArray[0] . '-' . $todayArray[1] . '-01';
-                $todayEndDate   = $todayArray[0] . '-' . $todayArray[1] . '-' . $daysInMonth;
-                $referenceMonth = $todayArray[1];
+                $startEndDate   = $this->constructStartEndDate();
+                $referenceMonth = $startEndDate['referenceMonth'];
                 $limit          = null;
 
-                if (isset($referenceYear) && $referenceYear) {
-                    $todayStartDate = $referenceYear . '-' . $todayArray[1] . '-01';
-                    $todayEndDate   = $referenceYear . '-' . $todayArray[1] . '-' . $daysInMonth;
-                } else {
-                    $referenceYear  = $todayArray[0];
+                if (!isset($referenceYear) && !$referenceYear) {
+                    $referenceYear = $startEndDate['referenceYear'];
                 }
 
                 if (!isset($where)) {
-                    $where = "data_lancamento BETWEEN '$todayStartDate' AND '$todayEndDate'";
+                    $where = "data_lancamento BETWEEN '{$startEndDate['startDate']}' AND '{$startEndDate['endDate']}'";
                 } else {
-                    $where .= " AND data_lancamento BETWEEN '$todayStartDate' AND '$todayEndDate'";
+                    $where .= " AND data_lancamento BETWEEN '{$startEndDate['startDate']}' AND '{$startEndDate['endDate']}'";
                 }
 
                 if ($this->financeiro_model->countLancamentos(getUserId(), $where) > 20) {
@@ -211,7 +197,11 @@ class Lancamentos extends CI_Controller
         }
 
         for ($m = 1; $m <= 12; $m++) {
-            $this->data['monthList'][$m] = $this->translateMonth($m, true, true) . ' - ' . $this->translateMonth($m, true);
+
+            $currentMonth = $this->constructStartEndDate($this->translateMonth($m, true, true), $referenceYear);
+
+            $this->data['monthList'][$m]['name']            = $this->translateMonth($m, true, true) . ' - ' . $this->translateMonth($m, true);
+            $this->data['monthList'][$m]['notification']    = $this->financeiro_model->getLancamentosPendentes(getUserId(), $currentMonth['startDate'], $currentMonth['endDate']);
         }
 
         if ($referenceMonth) {
@@ -594,6 +584,35 @@ class Lancamentos extends CI_Controller
 
         $dateObj = DateTime::createFromFormat('!m', ($referenceMonth));
         return str_replace('.', '', mb_strtoupper($dateFormatter->format($dateObj)));
+    }
+
+    public function constructStartEndDate($referenceMonth = null, $referenceYear = null)
+    {
+        $return     = [];
+        $todayDate  = date('Y-m-d');
+        $todayArray = explode('-', $todayDate);
+
+        if ($referenceMonth) {
+            $daysInMonth                = cal_days_in_month(CAL_GREGORIAN, $referenceMonth, $todayArray[0]);
+            $return['startDate']        = $todayArray[0] . '-' . $referenceMonth . '-01';
+            $return['endDate']          = $todayArray[0] . '-' . $referenceMonth . '-' . $daysInMonth;
+            $return['referenceMonth']   = $referenceMonth;
+        } else {
+            $daysInMonth                = cal_days_in_month(CAL_GREGORIAN, $todayArray[1], $todayArray[0]);
+            $return['startDate']        = $todayArray[0] . '-' . $todayArray[1] . '-01';
+            $return['endDate']          = $todayArray[0] . '-' . $todayArray[1] . '-' . $daysInMonth;
+            $return['referenceMonth']   = $todayArray[1];
+        }
+
+        if ($referenceYear) {
+            $return['startDate']        = $referenceYear . '-' . $referenceMonth . '-01';
+            $return['endDate']          = $referenceYear . '-' . $referenceMonth . '-' . $daysInMonth;
+            $return['referenceYear']    = $referenceYear;
+        } else {
+            $return['referenceYear'] = $todayArray[0];
+        }
+
+        return $return;
     }
 
     public function autoCompleteDescricao()
