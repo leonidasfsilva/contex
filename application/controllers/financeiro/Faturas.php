@@ -1632,7 +1632,7 @@ class Faturas extends CI_Controller
         );
 
         $dateObj    = DateTime::createFromFormat('!m', ($mesReferencia));
-        $monthName  = str_replace('.', '', strtoupper($dateFormatterExtended->format($dateObj)));
+        $monthName  = str_replace('.', '', mb_strtoupper($dateFormatterExtended->format($dateObj)));
 
         if ($faturasTerceiros) {
             foreach ($faturasTerceiros as $fatura) {
@@ -1640,7 +1640,7 @@ class Faturas extends CI_Controller
                 $data['lancamentoEditavel'] = $this->fatura_model->getLancamentoEditavel($fatura['mes_referencia'], $fatura['ano_referencia']);
 
                 $dateObj    = DateTime::createFromFormat('!m', ($fatura['mes_referencia']));
-                $monthName  = str_replace('.', '', strtoupper($dateFormatterExtended->format($dateObj)));
+                $monthName  = str_replace('.', '', mb_strtoupper($dateFormatterExtended->format($dateObj)));
                 $reference  = $monthName . ' / ' . $fatura['ano_referencia'];
 
                 $result[$fatura['id_fatura']]                  = $fatura;

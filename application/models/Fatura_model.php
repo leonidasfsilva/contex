@@ -539,7 +539,7 @@ class Fatura_model extends CI_Model
             ON lf.id_fatura = f.id_fatura
             INNER JOIN lancamentos_faturas_assoc lfa
             ON lfa.id_lancamento = lf.id_lancamento
-            WHERE lf.nome_cliente LIKE '$nome'
+            WHERE lf.nome_cliente LIKE '%$nome%'
             AND lfa.mes_referencia = $mesReferencia
             AND lfa.ano_referencia = $anoReferencia
             AND f.id_usuario = $idUsuario
@@ -570,7 +570,7 @@ class Fatura_model extends CI_Model
             ON lf.id_fatura = f.id_fatura
             INNER JOIN lancamentos_faturas_assoc lfa
             ON lfa.id_lancamento = lf.id_lancamento
-            WHERE lf.nome_cliente LIKE '$nome'
+            WHERE lf.nome_cliente LIKE '%$nome%'
             AND f.id_usuario = $idUsuario
             AND f.id_cartao = $idCartao
             AND lfa.mes_referencia = $mesReferencia
