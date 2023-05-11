@@ -555,7 +555,7 @@ class Fatura_model extends CI_Model
         return $result;
     }
 
-    function getLancamentosTerceiros($idUsuario, $idCartao, $nome, $mesReferencia)
+    function getLancamentosTerceiros($idUsuario, $idCartao, $nome, $mesReferencia, $anoReferencia)
     {
         if (!is_string($nome) || is_numeric($nome)) {
             return false;
@@ -574,6 +574,7 @@ class Fatura_model extends CI_Model
             AND f.id_usuario = $idUsuario
             AND f.id_cartao = $idCartao
             AND lfa.mes_referencia = $mesReferencia
+            AND lfa.ano_referencia = $anoReferencia
             AND lf.status = 1
             AND lfa.status = 1
             ORDER BY lf.criado_em DESC";
