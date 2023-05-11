@@ -333,8 +333,10 @@ class Lancamentos extends CI_Controller
             $urlAtual = $this->global_url;
         }
 
-        $vencimento = $this->input->post('vencimento');
-        $pagamento = $this->input->post('pagamento');
+        $vencimento     = $this->input->post('vencimento');
+        $pagamento      = $this->input->post('pagamento');
+        $observacoes    = $this->input->post('observacoes');
+
 
         if ($vencimento != null) {
             $vencimento = explode('/', $vencimento);
@@ -357,6 +359,7 @@ class Lancamentos extends CI_Controller
 
         $data = array(
             'descricao' => padronizarString($this->input->post('descricao')),
+            'observacoes'           => $observacoes ?? null,
             'valor' => $valor,
             'id_usuario' => getUserId(),
             'data_lancamento' => $vencimento,
