@@ -111,7 +111,7 @@ class Faturas extends CI_Controller
             }
 
             if (!$cartao->ativo) {
-                $this->session->set_flashdata('erro', 'Cartão solicitado encontra-se inativo, para acessar as faturas, por favor reative o cartão');
+                $this->session->set_flashdata('erro', 'Cartão solicitado encontra-se inativo, reative o cartão para acessar as faturas');
                 redirect('financeiro/faturas');
             }
         } else {
@@ -1636,12 +1636,10 @@ class Faturas extends CI_Controller
 
         if ($faturasTerceiros) {
             foreach ($faturasTerceiros as $fatura) {
-                $lancamentosTerceiros       = $this->fatura_model->getLancamentosTerceiros(getUserId(), $fatura['id_cartao'], $nome, $mesReferencia);
-                $data['lancamentoEditavel'] = $this->fatura_model->getLancamentoEditavel($fatura['mes_referencia'], $fatura['ano_referencia']);
-
-                $dateObj    = DateTime::createFromFormat('!m', ($fatura['mes_referencia']));
-                $monthName  = str_replace('.', '', mb_strtoupper($dateFormatterExtended->format($dateObj)));
-                $reference  = $monthName . ' / ' . $fatura['ano_referencia'];
+                $lancamentosTerceiros   = $this->fatura_model->getLancamentosTerceiros(getUserId(), $fatura['id_cartao'], $nome, $mesReferencia, $anoReferencia);
+                $dateObj                = DateTime::createFromFormat('!m', ($fatura['mes_referencia']));
+                $monthName              = str_replace('.', '', mb_strtoupper($dateFormatterExtended->format($dateObj)));
+                $reference              = $monthName . ' / ' . $fatura['ano_referencia'];
 
                 $result[$fatura['id_fatura']]                  = $fatura;
                 $result[$fatura['id_fatura']]['cartao']        = $this->cartoes_model->getDetalhesCartao($fatura['id_cartao']);
