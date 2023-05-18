@@ -860,6 +860,7 @@ class Faturas extends CI_Controller
         $urlAtual       = $this->input->post('urlAtual');
         $valor          = $this->input->post('valor');
         $valor_parcela  = $this->input->post('valor_parcela');
+        $observacoes    = $this->input->post('observacoes');
 
         if ($this->input->post('qnt_parcelas')) {
             $qnt_parcelas = $this->input->post('qnt_parcelas');
@@ -915,6 +916,7 @@ class Faturas extends CI_Controller
                 // 'id_cliente'        => $this->input->post('id_cliente') ?: null,
                 'id_usuario'        => $faturaAtual->id_usuario,
                 'descricao'         => padronizarString($this->input->post('descricao')),
+                'observacoes'       => $observacoes ?? null,
                 'nome_cliente'      => $this->input->post('nome_cliente') ? padronizarString($this->input->post('nome_cliente')) : null,
                 'valor_total'       => $valor,
                 'total_parcelas'    => $qnt_parcelas,

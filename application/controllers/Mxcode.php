@@ -110,7 +110,7 @@ class Mxcode extends CI_Controller
         }
 
         if ($this->session->userdata('last_url')) {
-            $this->session->set_flashdata('error', 'Efetue seu login para continuar.');
+            $this->session->set_flashdata('error', 'Acesse sua conta para continuar');
         }
 
         $this->load->view('mxcode/login');
