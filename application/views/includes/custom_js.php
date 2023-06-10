@@ -266,6 +266,7 @@
         // $(".progress-bar").animate({
         //     width: "100%"
         // }, 1000);
+        
         if ($(form).valid()) {
             // console.log('executou preloader');
             $(".subconteudo-principal").fadeOut();

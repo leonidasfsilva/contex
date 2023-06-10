@@ -442,12 +442,11 @@ class Faturas extends CI_Controller
                                 $this->session->set_flashdata('erro', 'Erro ao tentar abrir nova fatura.');
                                 redirect($urlAtual);
                             }
+                            $faturaReferencia = $this->fatura_model->getFaturaReferencia($faturaAtual->id_cartao, $mes, $ano);
                         }
-
-                        $faturaReferencia = $this->fatura_model->getFaturaReferencia($faturaAtual->id_cartao, $mes, $ano);
-
+                        
                         //ARRAY LANCAMENTOS_FATURAS_ASSOC
-                        $data1 = array(
+                        $lancamentosFaturasAssocArray = array(
                             'id_lancamento'     => $last_id,
                             'id_fatura'         => $faturaReferencia->id_fatura,
                             'valor_parcela'     => $valor_parcela,
@@ -500,25 +499,25 @@ class Faturas extends CI_Controller
                             //$this->pendencia_model->add('pendencias', $data2);
                         }
 
-                        $mes++;
-                        if ($mes == 13) {
-                            $mes = 01;
-                            $ano++;
-                        }
-
-                        if ($this->fatura_model->add('lancamentos_faturas_assoc', $data1)) {
-                            atualizaValorVinculoFaturas($id_fatura);
+                        if ($this->fatura_model->add('lancamentos_faturas_assoc', $lancamentosFaturasAssocArray)) {
+                            atualizaValorVinculoFaturas($faturaReferencia->id_fatura);
                             $this->session->set_flashdata('sucesso', 'Lançamento adicionado com sucesso!');
                         } else {
                             $this->session->set_flashdata('erro', 'Erro ao tentar adicionar lançamentos_assoc!');
                             redirect($urlAtual);
+                        }
+
+                        $mes++;
+                        if ($mes == 13) {
+                            $mes = 01;
+                            $ano++;
                         }
                     }
                     redirect($urlAtual);
                 } else {
                     //COMPRA A VISTA
                     //ARRAY LANCAMENTOS_FATURA_ASSOC
-                    $data1 = array(
+                    $lancamentosFaturasAssocArray = array(
                         'id_lancamento'     => $last_id,
                         'id_fatura'         => $faturaAtual->id_fatura,
                         'valor_parcela'     => $valor,
@@ -558,7 +557,7 @@ class Faturas extends CI_Controller
                         //$this->pendencia_model->add('pendencias', $data2);
                     }
 
-                    if ($this->fatura_model->add('lancamentos_faturas_assoc', $data1)) {
+                    if ($this->fatura_model->add('lancamentos_faturas_assoc', $lancamentosFaturasAssocArray)) {
                         atualizaValorVinculoFaturas($id_fatura);
                         $this->session->set_flashdata('sucesso', 'Lançamento adicionado com sucesso!');
                     } else {
@@ -703,9 +702,9 @@ class Faturas extends CI_Controller
                                 $this->session->set_flashdata('erro', 'Erro ao tentar abrir nova fatura.');
                                 redirect($urlAtual);
                             }
+                            $faturaReferencia = $this->fatura_model->getFaturaReferencia($faturaAtual->id_cartao, $mes, $ano);
                         }
 
-                        $faturaReferencia = $this->fatura_model->getFaturaReferencia($faturaAtual->id_cartao, $mes, $ano);
 
                         //ARRAY LANCAMENTOS_FATURA_ASSOC
                         $dataLancFaturaAssoc = array(
@@ -767,7 +766,7 @@ class Faturas extends CI_Controller
                         }
 
                         if ($this->fatura_model->add('lancamentos_faturas_assoc', $dataLancFaturaAssoc)) {
-                            atualizaValorVinculoFaturas($id_fatura);
+                            atualizaValorVinculoFaturas($faturaReferencia->id_fatura);
                             $this->session->set_flashdata('sucesso', 'Lançamento alterado com sucesso!');
                         } else {
                             $this->session->set_flashdata('erro', 'Erro ao tentar adicionar lançamentos_assoc!');
@@ -968,12 +967,11 @@ class Faturas extends CI_Controller
                                 $this->session->set_flashdata('erro', 'Erro ao tentar abrir nova fatura.');
                                 redirect($urlAtual);
                             }
+                            $faturaReferencia = $this->fatura_model->getFaturaReferencia($faturaAtual->id_cartao, $mes, $ano);
                         }
 
-                        $faturaReferencia = $this->fatura_model->getFaturaReferencia($faturaAtual->id_cartao, $mes, $ano);
-
                         //ARRAY LANCAMENTOS_FATURAS_ASSOC
-                        $data1 = array(
+                        $lancamentosFaturasAssocArray = array(
                             'id_lancamento'     => $last_id,
                             'id_fatura'         => $faturaReferencia->id_fatura,
                             'valor_parcela'     => $valor_parcela,
@@ -1032,8 +1030,8 @@ class Faturas extends CI_Controller
                             $ano++;
                         }
 
-                        if ($this->fatura_model->add('lancamentos_faturas_assoc', $data1)) {
-                            atualizaValorVinculoFaturas($id_fatura);
+                        if ($this->fatura_model->add('lancamentos_faturas_assoc', $lancamentosFaturasAssocArray)) {
+                            atualizaValorVinculoFaturas($faturaReferencia->id_fatura);
                             $this->session->set_flashdata('sucesso', 'Lançamento copiado com sucesso!');
                         } else {
                             $this->session->set_flashdata('erro', 'Erro ao tentar adicionar lançamentos_assoc!');
@@ -1044,7 +1042,7 @@ class Faturas extends CI_Controller
                 } else {
                     //COMPRA A VISTA
                     //ARRAY LANCAMENTOS_FATURA_ASSOC
-                    $data1 = array(
+                    $lancamentosFaturasAssocArray = array(
                         'id_lancamento' => $last_id,
                         'id_fatura' => $faturaAtual->id_fatura,
                         'valor_parcela' => $valor,
@@ -1084,7 +1082,7 @@ class Faturas extends CI_Controller
                         //$this->pendencia_model->add('pendencias', $data2);
                     }
 
-                    if ($this->fatura_model->add('lancamentos_faturas_assoc', $data1)) {
+                    if ($this->fatura_model->add('lancamentos_faturas_assoc', $lancamentosFaturasAssocArray)) {
                         atualizaValorVinculoFaturas($id_fatura);
                         $this->session->set_flashdata('sucesso', 'Lançamento copiado com sucesso!');
                     } else {
