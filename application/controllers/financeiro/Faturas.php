@@ -1115,13 +1115,18 @@ class Faturas extends CI_Controller
             'status' => 0,
         );
 
-        $idFatura = $this->fatura_model->getFaturaByLancamento($id_lancamento);
+        $faturas = $this->fatura_model->getFaturaByLancamentosAssoc($id_lancamento);
 
         if ($this->fatura_model->delete('lancamentos_faturas', $data, 'id_lancamento', $id_lancamento) == true) {
             $this->fatura_model->delete('lancamentos_faturas_assoc', $data, 'id_lancamento', $id_lancamento);
             $this->pendencia_model->delete('pendencias', $data, 'id_lancamento_fatura', $id_lancamento);
             $this->session->set_flashdata('sucesso', 'Lançamento excluído com sucesso!');
-            atualizaValorVinculoFaturas($idFatura);
+
+            if (is_array($faturas) && $faturas) {
+                foreach ($faturas as $fatura) {
+                    atualizaValorVinculoFaturas($fatura['id_fatura']);
+                }
+            }
             redirect($urlAtual);
         } else {
             $this->session->set_flashdata('erro', 'Erro ao tentar excluir lançamento de fatura.');

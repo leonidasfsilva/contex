@@ -526,6 +526,13 @@ class Fatura_model extends CI_Model
         return $this->db->get()->row('id_fatura');
     }
 
+    function getFaturaByLancamentosAssoc($idLancamento)
+    {
+        $this->db->from('lancamentos_faturas_assoc');
+        $this->db->where('id_lancamento', $idLancamento);
+        return $this->db->get()->result_array('id_fatura');
+    }
+
     function getFaturasTerceiros($idUsuario, $nome, $mesReferencia, $anoReferencia)
     {
         if (!is_string($nome) || is_numeric($nome)) {
