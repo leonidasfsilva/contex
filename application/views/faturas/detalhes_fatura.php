@@ -133,6 +133,10 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             </div>
             <div class="panel-ctrls">
                 <span class="hidden" id="div_btn_marcar">
+                    <button class="btn btn-danger btn-sm excluir_serie disabled" id="excluir_serie" title="Excluir todos os lançamentos selecionados">
+                        <i class="fas fa-trash-alt fa-fw"></i>
+                        Excluir
+                    </button>
                     <button class="btn btn-default btn-sm marcar_desmarcar" id="marcar_todos" title="Marcar todos os lançamentos da fatura">
                         <i class="far fa-square fa-fw"></i>
                         Marcar Todos
@@ -197,7 +201,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                 } else {
                                     $iconObs = '';
                                 };
-        
+
                                 if ($s->estorno == 1) {
                                     $color = 'green';
                                 } else {
@@ -215,9 +219,10 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
                                 echo '<tr>';
                                 echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
+                                echo '<td class="idLancamento hidden">' . $s->id_lancamento . '</td>';
                                 echo '<td>' . $data_compra . '</td>';
                                 echo '<td><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Detalhes" id_lancamento="' .
-                                    $s->id_lancamento . '" descricao="' . $s->descricao . '" observacoes="' . nl2br($s->observacoes) .'" valor="' . $valor . '" data_compra="' .
+                                    $s->id_lancamento . '" descricao="' . $s->descricao . '" observacoes="' . nl2br($s->observacoes) . '" valor="' . $valor . '" data_compra="' .
                                     date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
                                     '" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '" nome_cliente="' . $s->nome_cliente .
                                     '" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento_1 . ' ' . $disabled_lancamento_2 . '>' .
@@ -736,10 +741,10 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Excluir lançamento</h4>
             </div>
-            <form id="formNovaFatura" action="<?php echo base_url('financeiro/faturas/excluirLancamento') ?>" method="post">
+            <form id="formExcluir" action="<?php echo base_url('financeiro/faturas/excluirLancamento') ?>" method="post">
                 <div class="modal-body">
                     <p class="font-weight-bold">Deseja realmente excluir este lançamento?</p>
-                    <input name="id_lancamento" id="idExcluir" type="hidden" value="" />
+                    <input name="id" id="idExcluir" type="hidden" value="" />
                     <input id="urlExcluirLancamento" type="hidden" name="urlAtual" value="" />
                 </div>
                 <div class="modal-footer">
@@ -747,6 +752,33 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         <i class="fa fa-times fa-fw"></i> Cancelar
                     </button>
                     <button class="btn btn-danger btn-sm" id="btnExcluir"><i class="fa fa-check fa-fw"></i> Excluir</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal EXCLUIR SERIE -->
+<div class="modal fade" id="modalExcluirSerie" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-white ">Excluir série de lançamentos</h4>
+            </div>
+            <form id="formExcluirSerie" action="<?= base_url('financeiro/faturas/excluirSerieLancamentos'); ?>" method="post">
+                <div class="modal-body">
+                    <p class="font-weight-bold">Deseja realmente excluir os lançamentos selecionados?</p>
+                    <input class="urlAtual" type="hidden" name="urlAtual" value="" />
+                </div>
+                <div id="deleteSerieFormBody"></div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
+                        Cancelar
+                    </button>
+                    <button class="btn btn-danger btn-sm"><i class="fa fa-check fa-fw"></i>
+                        Excluir
+                    </button>
                 </div>
             </form>
         </div>
@@ -886,24 +918,43 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             somaValorParcelas();
         });
 
+        $('.excluir_serie').click(function() {
+            $('#modalExcluirSerie').modal('show')
+            // mountDeleteSerieModal()
+        });
+
         // Calculate the total invoice amount from selected items only
         function somaValorParcelas() {
             var Soma = 0;
+            var deleteSerie = []
+            var idLancamento = null
+
+            $('#deleteSerieFormBody').html('')
+
             // iterate through each td based on class and add the values
             $(".valor_parcela").each(function() {
                 //Check if the checkbox is checked
                 if ($(this).closest('tr').find('.soma_parcelas').is(':checked')) {
+                    idLancamento = $(this).closest('tr').find('.idLancamento').html()
+                    deleteSerie.push(idLancamento)
                     var value = $('span', this).text();
                     value = jquery_format(value);
                     // add only if the value is number
                     if (!isNaN(value) && value.length != 0) {
                         Soma += parseFloat(value);
-                    } else {
-                        // console.log('erro no método somaValorParcelas()');
                     }
                 }
             });
             var Sum = br_format(Soma);
+
+            if (deleteSerie.length > 1) {
+                $('#excluir_serie').removeClass('disabled')
+                deleteSerie.forEach(function(item) {
+                    $('#deleteSerieFormBody').append('<input type="hidden" name="id[]" value="' + item + '"/>')
+                });
+            } else {
+                $('#excluir_serie').addClass('disabled')
+            }
 
             $('#valor_soma_parcelas').text(Sum);
         }

@@ -1,4 +1,8 @@
-<?php if (!defined('BASEPATH')) {
+<?php
+
+use LDAP\Result;
+
+ if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -1101,25 +1105,27 @@ class Faturas extends CI_Controller
         }
     }
 
-    public function excluirLancamento()
+    public function excluirLancamento($id = null, $parameter = false)
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dFaturas')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para excluir lançamentos de faturas.');
             redirect(base_url());
         }
 
-        $urlAtual = $this->input->post('urlAtual');
-        $id_lancamento = $this->input->post('id_lancamento');
+        if (!$parameter) {
+            $urlAtual   = $this->input->post('urlAtual');
+            $id         = $this->input->post('id');    
+        }
 
         $data = array(
             'status' => 0,
         );
 
-        $faturas = $this->fatura_model->getFaturaByLancamentosAssoc($id_lancamento);
+        $faturas = $this->fatura_model->getFaturaByLancamentosAssoc($id);
 
-        if ($this->fatura_model->delete('lancamentos_faturas', $data, 'id_lancamento', $id_lancamento) == true) {
-            $this->fatura_model->delete('lancamentos_faturas_assoc', $data, 'id_lancamento', $id_lancamento);
-            $this->pendencia_model->delete('pendencias', $data, 'id_lancamento_fatura', $id_lancamento);
+        if ($this->fatura_model->delete('lancamentos_faturas', $data, 'id_lancamento', $id) == true) {
+            $this->fatura_model->delete('lancamentos_faturas_assoc', $data, 'id_lancamento', $id);
+            $this->pendencia_model->delete('pendencias', $data, 'id_lancamento_fatura', $id);
             $this->session->set_flashdata('sucesso', 'Lançamento excluído com sucesso!');
 
             if (is_array($faturas) && $faturas) {
@@ -1127,11 +1133,45 @@ class Faturas extends CI_Controller
                     atualizaValorVinculoFaturas($fatura['id_fatura']);
                 }
             }
-            redirect($urlAtual);
+
+            if (!$parameter) {
+                redirect($urlAtual);
+            } else {
+                return true;
+            }
         } else {
             $this->session->set_flashdata('erro', 'Erro ao tentar excluir lançamento de fatura.');
+            if (!$parameter) {
+                redirect($urlAtual);
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public function excluirSerieLancamentos() {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dFaturas')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para excluir lançamentos de faturas.');
+            redirect(base_url());
+        }
+
+        $urlAtual   = $this->input->post('urlAtual');
+        $id         = $this->input->post('id');
+        $result     = false;
+
+        if (is_array($id) && count($id) > 0) {
+            foreach ($id as $value) {
+                $result = $this->excluirLancamento($value, true);
+            }
+
+            if (!$result) {
+                $this->session->set_flashdata('erro', 'Erro ao tentar excluir série de lançamentos');
+                redirect($urlAtual);    
+            }
+            $this->session->set_flashdata('sucesso', 'Lançamentos excluídos com sucesso!');
             redirect($urlAtual);
         }
+
     }
 
     public function abrir()
