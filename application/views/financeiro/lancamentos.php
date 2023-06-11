@@ -210,6 +210,10 @@ if (!$results) {
             </div>
             <div class="panel-ctrls">
                 <span class="hidden" id="div_btn_marcar">
+                    <button class="btn btn-danger btn-sm excluir_serie disabled" id="excluir_serie" title="Excluir todos os lançamentos selecionados">
+                        <i class="fas fa-trash-alt fa-fw"></i>
+                        Excluir
+                    </button>
                     <button class="btn btn-default btn-sm marcar_desmarcar" id="marcar_todos" title="Marcar todos os lançamentos da fatura">
                         <i class="far fa-square fa-fw"></i>
                         Marcar Todos
@@ -310,6 +314,7 @@ if (!$results) {
 
                         echo '<tr>';
                         echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
+                        echo '<td class="idLancamento hidden">' . $r->id_lancamento . '</td>';
                         echo '<td>' . $vencimento . '</td>';
                         echo '<td><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Detalhes" idLancamento="' .
                             $r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
@@ -1055,6 +1060,33 @@ if (!$results) {
     </div>
 </div>
 
+<!-- Modal EXCLUIR SERIE -->
+<div class="modal fade" id="modalExcluirSerie" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-white ">Excluir série de lançamentos</h4>
+            </div>
+            <form id="formExcluirSerie" action="<?= base_url('financeiro/lancamentos/excluir'); ?>" method="post">
+                <div class="modal-body">
+                    <p class="font-weight-bold">Deseja realmente excluir os lançamentos selecionados?</p>
+                    <input class="urlAtual" type="hidden" name="urlAtual" value="" />
+                </div>
+                <div id="deleteSerieFormBody"></div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
+                        Cancelar
+                    </button>
+                    <button class="btn btn-danger btn-sm"><i class="fa fa-check fa-fw"></i>
+                        Excluir
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Modal SELECAO DE MES -->
 <div class="modal fade" id="modalSelectMounth" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
@@ -1159,9 +1191,7 @@ if (!$results) {
     });
 
     $(document).ready(function($) {
-
         var marcados = false;
-
         somaValorParcelas();
 
         $('#marcar_todos, #desmarcar_todos').click(function() {
@@ -1184,26 +1214,45 @@ if (!$results) {
             somaValorParcelas();
         });
 
+        $('.excluir_serie').click(function() {
+            $('#modalExcluirSerie').modal('show')
+            // mountDeleteSerieModal()
+        });
+
         // Calculate the total invoice amount from selected items only
         function somaValorParcelas() {
-            var soma = 0;
+            var soma = 0
+            var value = 0
+            var deleteSerie = []
+            var idLancamento = null
+
+            $('#deleteSerieFormBody').html('')
+
             // iterate through each td based on class and add the values
             $(".valor_parcela").each(function() {
                 //Check if the checkbox is checked
                 if ($(this).closest('tr').find('.soma_parcelas').is(':checked')) {
-                    var value = $('span', this).text();
-                    value = jquery_format(value);
-                    // console.log('valor do elemento: ' + value);
+                    idLancamento = $(this).closest('tr').find('.idLancamento').html()
+                    deleteSerie.push(idLancamento)
+                    value = $('span', this).text()
+                    value = jquery_format(value)
                     // add only if the value is number
                     if (!isNaN(value) && value.length != 0) {
-                        soma += parseFloat(value);
-                        // console.log('valor do elemento: ' + value);
-                    } else {
-                        // console.log('erro no método somaValorParcelas()');
+                        soma += parseFloat(value)
                     }
                 }
-            });
+            })
+
             var sum = br_format(soma);
+
+            if (deleteSerie.length > 1) {
+                $('#excluir_serie').removeClass('disabled')
+                deleteSerie.forEach(function(item) {
+                    $('#deleteSerieFormBody').append('<input type="hidden" name="id[]" value="' + item + '"/>')
+                });
+            } else {
+                $('#excluir_serie').addClass('disabled')
+            }
 
             $('#valor_soma_parcelas').text(sum);
         }

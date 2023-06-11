@@ -525,21 +525,29 @@ class Lancamentos extends CI_Controller
             $urlAtual = $this->global_url;
         }
 
-        if ($id == null || !is_numeric($id)) {
+        if (!$id) {
             $this->session->set_flashdata('erro', 'Método não permitido.');
             redirect($this->global_url);
-        } else {
-            $data = array(
-                'status' => 0
-            );
+        }
 
-            if ($this->financeiro_model->delete('lancamentos', $data, 'id_lancamento', $id) == true) {
-                $this->session->set_flashdata('sucesso', 'Lançamento excluído com sucesso!');
-                redirect($urlAtual);
-            } else {
-                $this->session->set_flashdata('erro', 'Erro ao tentar excluir lançamento.');
-                redirect($urlAtual);
+        $data = array(
+            'status' => 0
+        );
+
+        if (is_array($id) && count($id) > 0) {
+            foreach ($id as $value) {
+                $this->financeiro_model->delete('lancamentos', $data, 'id_lancamento', $value);
             }
+            $this->session->set_flashdata('sucesso', 'Lançamentos excluídos com sucesso!');
+            redirect($urlAtual);
+        }
+
+        if ($this->financeiro_model->delete('lancamentos', $data, 'id_lancamento', $id) == true) {
+            $this->session->set_flashdata('sucesso', 'Lançamento excluído com sucesso!');
+            redirect($urlAtual);
+        } else {
+            $this->session->set_flashdata('erro', 'Erro ao tentar excluir lançamento.');
+            redirect($urlAtual);
         }
     }
 
