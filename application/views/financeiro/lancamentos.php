@@ -210,7 +210,7 @@ if (!$results) {
             </div>
             <div class="panel-ctrls">
                 <span class="hidden" id="div_btn_marcar">
-                    <button class="btn btn-danger btn-sm excluir_serie disabled" id="excluir_serie" title="Excluir todos os lançamentos selecionados">
+                    <button class="btn btn-danger btn-sm excluir_serie " id="excluir_serie" title="Excluir todos os lançamentos selecionados" disabled>
                         <i class="fas fa-trash-alt fa-fw"></i>
                         Excluir
                     </button>
@@ -1216,8 +1216,8 @@ if (!$results) {
 
         $('.excluir_serie').click(function() {
             $('#modalExcluirSerie').modal('show')
-            // mountDeleteSerieModal()
         });
+
 
         // Calculate the total invoice amount from selected items only
         function somaValorParcelas() {
@@ -1246,12 +1246,12 @@ if (!$results) {
             var sum = br_format(soma);
 
             if (deleteSerie.length > 1) {
-                $('#excluir_serie').removeClass('disabled')
+                $('#excluir_serie').attr('disabled', false)
                 deleteSerie.forEach(function(item) {
                     $('#deleteSerieFormBody').append('<input type="hidden" name="id[]" value="' + item + '"/>')
                 });
             } else {
-                $('#excluir_serie').addClass('disabled')
+                $('#excluir_serie').attr('disabled', true)
             }
 
             $('#valor_soma_parcelas').text(sum);
