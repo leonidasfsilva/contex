@@ -462,7 +462,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </div>
                             <div class="form-group col-lg-4">
                                 <label for="valor_parcela" class="font-weight-bold">Valor da parcela *</label>
-                                <input class="form-control money parcela" id="valor_parcela" type="text" name="valor_parcela" readonly />
+                                <input class="form-control parcela" id="valor_parcela" type="text" name="valor_parcela" readonly />
                             </div>
                         </div>
                     </div>
@@ -570,7 +570,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </div>
                             <div class="form-group col-lg-4">
                                 <label class="font-weight-bold">Valor da Parcela *</label>
-                                <input class="form-control money parcela valorParcela" type="text" name="valor_parcela" readonly />
+                                <input class="form-control parcela valorParcela" type="text" name="valor_parcela" readonly />
                             </div>
                         </div>
                     </div>
@@ -677,7 +677,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </div>
                             <div class="form-group col-lg-4">
                                 <label class="font-weight-bold">Valor da Parcela *</label>
-                                <input class="form-control money parcela valorParcela" type="text" name="valor_parcela" readonly />
+                                <input class="form-control valorParcela" type="text" name="valor_parcela" readonly/>
                             </div>
                         </div>
                     </div>
@@ -1093,7 +1093,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     required: true
                 },
                 valor_parcela: {
-                    required: true
+                    required: false
                 },
 
             },
@@ -1143,9 +1143,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     required: true
                 },
                 valor_parcela: {
-                    required: true
-                },
-
+                    required: false
+                }
             },
             messages: {
                 descricao: {
@@ -1162,9 +1161,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 },
                 valor_parcela: {
                     required: 'Informe o valor das parcelas'
-                },
+                }
             },
-
             errorClass: "help-block",
             errorElement: "p",
             highlight: function(element, errorClass, validClass) {
@@ -1194,7 +1192,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     required: true
                 },
                 valor_parcela: {
-                    required: true
+                    required: false
                 },
 
             },

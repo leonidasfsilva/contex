@@ -7842,7 +7842,7 @@ select.tt-hint {
 }
 
 .form-group.has-success .form-control {
-    background-color: #ffffff;
+    /* background-color: #ffffff; */
 }
 
 .form-group.has-success .form-control::-moz-placeholder {
