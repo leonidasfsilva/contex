@@ -122,7 +122,7 @@ if ($direcionados) {
                         </div>
                     </div>
                     <div class="pull-right">
-                        <span><i class="fas fa-credit-card fa-lg fa-fw"></i></span>
+                        <span><i class="fas fa-file-invoice-dollar fa-lg fa-fw"></i></span>
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
@@ -149,7 +149,7 @@ if ($direcionados) {
                         </div>
                     </div>
                     <div class="pull-right">
-                        <span><i class="fas fa-file-invoice-dollar fa-lg fa-fw"></i></span>
+                        <span><i class="fas fa-money-check-alt fa-lg fa-fw"></i></span>
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
