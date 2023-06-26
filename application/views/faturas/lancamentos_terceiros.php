@@ -9,10 +9,10 @@ if (isset($referenceMonth) && $referenceMonth) {
         $nextLinkTitle = sprintf('%s / %s', $nextMonth, $nextReferenceYear);
     }
 
-    $prevLink       = "<a href='" . base_url(sprintf('financeiro/faturas/terceiros?mesReferencia=%s&anoReferencia=%s&nome=%s', $prevReferenceMonth, $prevReferenceYear, $name))
+    $prevLink       = "<a href='" . base_url(sprintf('financeiro/faturas/terceiros?mesReferencia=%s&anoReferencia=%s&cartao=%s&nome=%s', $prevReferenceMonth, $prevReferenceYear, $idCard, $name))
         . "' title='$prevLinkTitle'><span class='badge badge-primary'><i style='margin: 0 !important;' class='fas fa-angle-double-left'></i></span></a>";
     $currentMonthText  = "<a href='#modalSelectMounth' data-toggle='modal' role='button' title='Clique para selecionar um mes específico'><span class='badge badge-primary' style='margin-left: 10px;'>Referência: $referencePeriod</span></a>";
-    $nextLink       = "<a href='" . base_url(sprintf('financeiro/faturas/terceiros?mesReferencia=%s&anoReferencia=%s&nome=%s', $nextReferenceMonth, $nextReferenceYear, $name))
+    $nextLink       = "<a href='" . base_url(sprintf('financeiro/faturas/terceiros?mesReferencia=%s&anoReferencia=%s&cartao=%s&nome=%s', $nextReferenceMonth, $nextReferenceYear, $idCard, $name))
         . "'  title='$nextLinkTitle'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-right'></i></span></a>";
 }
 
@@ -80,7 +80,7 @@ if (isset($referenceMonth) && $referenceMonth) {
 
                                                 foreach ($result['lancamentos'] as $r) {
                                                     $s = $r;
-                                                    
+
                                                     if ($r['n_parcela'] < 10) {
                                                         $n_parcela = str_pad($r['n_parcela'], 2, '0', STR_PAD_LEFT);
                                                     } else {
@@ -267,6 +267,7 @@ if (isset($referenceMonth) && $referenceMonth) {
                 <form id="form_filtro_mes" method="get">
                     <input type="hidden" name="mesReferencia" class="selectedMonth" />
                     <input type="hidden" name="anoReferencia" value="<?= $referenceYear ?>" />
+                    <input type="hidden" name="cartao" value="<?= $idCard ?>" />
                     <input type="hidden" name="nome" value="<?= $name ?>" />
                     <?php
                     $count = 0;

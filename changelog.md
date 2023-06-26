@@ -1,6 +1,11 @@
 # Changelog
 
-### Versão atual de produção: [2023.1.32]
+### Versão atual de produção: [2023.1.33]
+---
+### 25/06/2023 - [2023.1.33]
+### Bugfix:
+- correções de bugs em ```financeiro/faturas/terceiros```
+
 ---
 ### 25/06/2023 - [2023.1.32]
 ### Feature:
@@ -13,4 +18,5 @@
 
 
 
+[2023.1.33]: #
 [2023.1.32]: https://bitbucket.org/leonidasfsilva/contex/commits/3b1bade1127cd1b24d0382403bb6418a0137fd6d
