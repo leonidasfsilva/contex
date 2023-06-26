@@ -249,3 +249,73 @@ function getCurrentFullUrl()
     }
     return $fullUrl;
 }
+
+function getExtendedMonthName($monthNumber, $formatter = null)
+{
+    $dateFormatterExtended = new \IntlDateFormatter(
+        'pt_BR',
+        \IntlDateFormatter::FULL,
+        \IntlDateFormatter::NONE,
+        'America/Sao_Paulo',
+        \IntlDateFormatter::GREGORIAN,
+        "MMMM"
+    );
+
+    if ($formatter) {
+        $dateFormatterExtended = new \IntlDateFormatter(
+            'pt_BR',
+            \IntlDateFormatter::FULL,
+            \IntlDateFormatter::NONE,
+            'America/Sao_Paulo',
+            \IntlDateFormatter::GREGORIAN,
+            $formatter
+        );
+    }
+
+    $dateObj    = DateTime::createFromFormat('!m', ($monthNumber));
+    return str_replace('.', '', mb_strtoupper($dateFormatterExtended->format($dateObj)));
+}
+
+function translateMonth($referenceMonth, $abbreviate = false, $returnMonthNumber = false)
+{
+    $monthFormatString = 'MMMM';
+
+    if ($abbreviate) {
+        $monthFormatString = 'MMM';
+
+        if ($returnMonthNumber) {
+            $monthFormatString = 'MM';
+        }
+    }
+    
+    return getExtendedMonthName($referenceMonth, $monthFormatString);
+}
+
+function constructStartEndDate($referenceMonth = null, $referenceYear = null)
+{
+    $return     = [];
+    $todayDate  = date('Y-m-d');
+    $todayArray = explode('-', $todayDate);
+
+    if ($referenceMonth) {
+        $daysInMonth                = cal_days_in_month(CAL_GREGORIAN, $referenceMonth, $todayArray[0]);
+        $return['startDate']        = $todayArray[0] . '-' . $referenceMonth . '-01';
+        $return['endDate']          = $todayArray[0] . '-' . $referenceMonth . '-' . $daysInMonth;
+        $return['referenceMonth']   = $referenceMonth;
+    } else {
+        $daysInMonth                = cal_days_in_month(CAL_GREGORIAN, $todayArray[1], $todayArray[0]);
+        $return['startDate']        = $todayArray[0] . '-' . $todayArray[1] . '-01';
+        $return['endDate']          = $todayArray[0] . '-' . $todayArray[1] . '-' . $daysInMonth;
+        $return['referenceMonth']   = $todayArray[1];
+    }
+
+    if ($referenceYear) {
+        $return['startDate']        = $referenceYear . '-' . $referenceMonth . '-01';
+        $return['endDate']          = $referenceYear . '-' . $referenceMonth . '-' . $daysInMonth;
+        $return['referenceYear']    = $referenceYear;
+    } else {
+        $return['referenceYear'] = $todayArray[0];
+    }
+
+    return $return;
+}

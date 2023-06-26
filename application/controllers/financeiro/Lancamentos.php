@@ -109,7 +109,7 @@ class Lancamentos extends CI_Controller
                 break;
             case 'mensal':
                 if (isset($referenceMonth) && $referenceMonth) {
-                    $startEndDate   = $this->constructStartEndDate($referenceMonth);
+                    $startEndDate   = constructStartEndDate($referenceMonth);
                     $limit          = null;
 
                     if (!isset($referenceYear) && !$referenceYear) {
@@ -129,7 +129,7 @@ class Lancamentos extends CI_Controller
                     'id_lancamento'     => 'desc',
                 ];
 
-                $startEndDate   = $this->constructStartEndDate();
+                $startEndDate   = constructStartEndDate();
                 $referenceMonth = $startEndDate['referenceMonth'];
                 $limit          = null;
 
@@ -147,7 +147,6 @@ class Lancamentos extends CI_Controller
                     // $limit = 20;
                     // $start = $this->financeiro_model->countLancamentos(getUserId()) - $limit;
                 }
-
                 break;
         }
 
@@ -196,17 +195,31 @@ class Lancamentos extends CI_Controller
             }
         }
 
-        for ($m = 1; $m <= 12; $m++) {
-            $currentMonth = $this->constructStartEndDate($this->translateMonth($m, true, true), $referenceYear);
+        $prevReferenceMonth = $referenceMonth - 1;
+        $nextReferenceMonth = $referenceMonth + 1;
+        $prevReferenceYear  = $referenceYear;
+        $nextReferenceYear  = $referenceYear;
+    
+        if ($referenceMonth == 12) {
+            $nextReferenceMonth = 1;
+            $nextReferenceYear++;
+        }
+    
+        if ($referenceMonth == 1) {
+            $prevReferenceMonth = 12;
+            $prevReferenceYear--;
+        }
 
-            $this->data['monthList'][$m]['name']            = $this->translateMonth($m, true, true) . ' - ' . $this->translateMonth($m, true);
-            $this->data['monthList'][$m]['notification']    = $this->financeiro_model->getLancamentosPendentes(getUserId(), $currentMonth['startDate'], $currentMonth['endDate']);
+        for ($m = 1; $m <= 12; $m++) {
+            $currentMonth                                                               = constructStartEndDate(translateMonth($m, true, true), $referenceYear);
+            $this->data['monthList'][$currentMonth["referenceMonth"]]['name']           = translateMonth($m, true, true) . ' - ' . translateMonth($m, true);
+            $this->data['monthList'][$currentMonth["referenceMonth"]]['notification']   = $this->financeiro_model->getLancamentosPendentes(getUserId(), $currentMonth['startDate'], $currentMonth['endDate']);
         }
 
         if ($referenceMonth) {
-            $this->data['month']        = $this->translateMonth($referenceMonth);
-            $this->data['nextMonth']    = $this->translateMonth($referenceMonth + 1);
-            $this->data['prevMonth']    = $this->translateMonth($referenceMonth - 1);
+            $this->data['month']        = translateMonth($referenceMonth);
+            $this->data['nextMonth']    = translateMonth($referenceMonth + 1);
+            $this->data['prevMonth']    = translateMonth($referenceMonth - 1);
         }
 
         $config['base_url']             = base_url('financeiro/lancamentos');
@@ -239,6 +252,10 @@ class Lancamentos extends CI_Controller
         $this->data['yearsList']            = $yearsList;
         $this->data['referenceMonth']       = $referenceMonth;
         $this->data['referenceYear']        = $referenceYear;
+        $this->data['prevReferenceMonth']   = translateMonth($prevReferenceMonth, true, true);
+        $this->data['nextReferenceMonth']   = translateMonth($nextReferenceMonth, true, true);
+        $this->data['prevReferenceYear']    = $prevReferenceYear;
+        $this->data['nextReferenceYear']    = $nextReferenceYear;
         $this->data['total_provisorio']     = $this->financeiro_model->getTotalProvisorio(getUserId());
         $this->data['saidas_pendentes']     = $this->financeiro_model->getSaidasPendentes(getUserId());
         $this->data['entradas_pendentes']   = $this->financeiro_model->getEntradasPendentes(getUserId());
@@ -569,60 +586,6 @@ class Lancamentos extends CI_Controller
         $this->data['results'] = $this->financeiro_model->pesquisa($termo, getUserId());
         $this->data['view'] = 'financeiro/lancamentos';
         $this->load->view('tema/topo', $this->data);
-    }
-
-    public function translateMonth($referenceMonth, $abbreviate = false, $returnMonthNumber = false)
-    {
-        $monthFormatString = 'MMMM';
-
-        if ($abbreviate) {
-            $monthFormatString = 'MMM';
-
-            if ($returnMonthNumber) {
-                $monthFormatString = 'MM';
-            }
-        }
-
-        $dateFormatter = new \IntlDateFormatter(
-            'pt_BR',
-            \IntlDateFormatter::FULL,
-            \IntlDateFormatter::NONE,
-            'America/Sao_Paulo',
-            \IntlDateFormatter::GREGORIAN,
-            $monthFormatString
-        );
-
-        $dateObj = DateTime::createFromFormat('!m', ($referenceMonth));
-        return str_replace('.', '', mb_strtoupper($dateFormatter->format($dateObj)));
-    }
-
-    public function constructStartEndDate($referenceMonth = null, $referenceYear = null)
-    {
-        $return     = [];
-        $todayDate  = date('Y-m-d');
-        $todayArray = explode('-', $todayDate);
-
-        if ($referenceMonth) {
-            $daysInMonth                = cal_days_in_month(CAL_GREGORIAN, $referenceMonth, $todayArray[0]);
-            $return['startDate']        = $todayArray[0] . '-' . $referenceMonth . '-01';
-            $return['endDate']          = $todayArray[0] . '-' . $referenceMonth . '-' . $daysInMonth;
-            $return['referenceMonth']   = $referenceMonth;
-        } else {
-            $daysInMonth                = cal_days_in_month(CAL_GREGORIAN, $todayArray[1], $todayArray[0]);
-            $return['startDate']        = $todayArray[0] . '-' . $todayArray[1] . '-01';
-            $return['endDate']          = $todayArray[0] . '-' . $todayArray[1] . '-' . $daysInMonth;
-            $return['referenceMonth']   = $todayArray[1];
-        }
-
-        if ($referenceYear) {
-            $return['startDate']        = $referenceYear . '-' . $referenceMonth . '-01';
-            $return['endDate']          = $referenceYear . '-' . $referenceMonth . '-' . $daysInMonth;
-            $return['referenceYear']    = $referenceYear;
-        } else {
-            $return['referenceYear'] = $todayArray[0];
-        }
-
-        return $return;
     }
 
     public function autoCompleteDescricao()

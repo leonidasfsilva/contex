@@ -266,7 +266,7 @@
         // $(".progress-bar").animate({
         //     width: "100%"
         // }, 1000);
-        
+
         if ($(form).valid()) {
             // console.log('executou preloader');
             $(".subconteudo-principal").fadeOut();
@@ -565,5 +565,17 @@
                 // $('.dropdown-toggle', this).toggleClass("disabled");
             });
         }
-    });
+    })
+
+    // JS to controller the select mounths modals - 25/06/2023
+    $(document).ready(function() {
+        $('.selectMonth').click(function() {
+            var value = $(this).val()
+            var target = $(':input.selectedMonth')
+            var form = $(this).parent()
+
+            target.val(value)
+            form.submit()
+        })
+    })
 </script>

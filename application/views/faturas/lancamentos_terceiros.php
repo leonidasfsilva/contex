@@ -1,29 +1,19 @@
 <?php
-$prevLink       = null;
-$nextLink       = null;
-$referenceText  = null;
+$prevLink           = null;
+$nextLink           = null;
+$currentMonthText   = null;
 
 if (isset($referenceMonth) && $referenceMonth) {
-    $prevReferenceMonth = $referenceMonth - 1;
-    $nextReferenceMonth = $referenceMonth + 1;
-    $prevReferenceYear  = $referenceYear;
-    $nextReferenceYear  = $referenceYear;
-
-    if ($referenceMonth == '12') {
-        $nextReferenceMonth = '01';
-        $nextReferenceYear  = $referenceYear + 1;
+    if ($prevMonth && $nextMonth) {
+        $prevLinkTitle = sprintf('%s / %s', $prevMonth, $prevReferenceYear);
+        $nextLinkTitle = sprintf('%s / %s', $nextMonth, $nextReferenceYear);
     }
 
-    if ($referenceMonth == '01') {
-        $prevReferenceMonth = '12';
-        $prevReferenceYear  = $referenceYear - 1;
-    }
-
-    $prevLink       = "<a href='" . base_url(sprintf('financeiro/faturas/terceiros?mesReferencia=%s&anoReferencia=%s&cartao=%s&nome=%s', $prevReferenceMonth, $prevReferenceYear, $idCard, $name))
-        . "' title='Período anterior'><span class='badge badge-primary'><i style='margin: 0 !important;' class='fas fa-angle-double-left'></i></span></a>";
-    $referenceText  = "<span class='badge badge-primary' style='margin-left: 10px;'>Referência: $referencePeriod</span>";
-    $nextLink       = "<a href='" . base_url(sprintf('financeiro/faturas/terceiros?mesReferencia=%s&anoReferencia=%s&cartao=%s&nome=%s', $nextReferenceMonth, $nextReferenceYear, $idCard, $name))
-        . "' title='Próximo período'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-right'></i></span></a>";
+    $prevLink       = "<a href='" . base_url(sprintf('financeiro/faturas/terceiros?mesReferencia=%s&anoReferencia=%s&nome=%s', $prevReferenceMonth, $prevReferenceYear, $name))
+        . "' title='$prevLinkTitle'><span class='badge badge-primary'><i style='margin: 0 !important;' class='fas fa-angle-double-left'></i></span></a>";
+    $currentMonthText  = "<a href='#modalSelectMounth' data-toggle='modal' role='button' title='Clique para selecionar um mes específico'><span class='badge badge-primary' style='margin-left: 10px;'>Referência: $referencePeriod</span></a>";
+    $nextLink       = "<a href='" . base_url(sprintf('financeiro/faturas/terceiros?mesReferencia=%s&anoReferencia=%s&nome=%s', $nextReferenceMonth, $nextReferenceYear, $name))
+        . "'  title='$nextLinkTitle'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-right'></i></span></a>";
 }
 
 ?>
@@ -32,7 +22,7 @@ if (isset($referenceMonth) && $referenceMonth) {
         <h2>
             <span style='margin-right: 10px !important;'>Registro de Compras: <?= $name ?></span>
             <br class="visible-xs-block">
-            <?= ($referenceMonth ? $prevLink . $referenceText . $nextLink : null) ?>
+            <?= ($referenceMonth ? $prevLink . $currentMonthText . $nextLink : null) ?>
         </h2>
 
         <div class="panel-ctrls">
@@ -90,14 +80,7 @@ if (isset($referenceMonth) && $referenceMonth) {
 
                                                 foreach ($result['lancamentos'] as $r) {
                                                     $s = $r;
-                                                    if (is_array($lancamentoEditavel)) {
-                                                        if (in_array($r['id_lancamento'], $lancamentoEditavel, true)) {
-                                                            $disabled_lancamento_2 = '';
-                                                        } else {
-                                                            $disabled_lancamento_2 = 'disabled';
-                                                        }
-                                                    }
-
+                                                    
                                                     if ($r['n_parcela'] < 10) {
                                                         $n_parcela = str_pad($r['n_parcela'], 2, '0', STR_PAD_LEFT);
                                                     } else {
@@ -210,6 +193,11 @@ if (isset($referenceMonth) && $referenceMonth) {
                 Nenhum resultado encontrado para o período de referência solicitado
             </div>
         <?php } ?>
+        <div class="panel-footer font-weight-bold">
+            <span class="pull-right">
+                Vencimento: <?= $dueDatePeriod ?>
+            </span>
+        </div>
     </div>
 </div>
 
@@ -266,6 +254,47 @@ if (isset($referenceMonth) && $referenceMonth) {
                     <button class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Filtrar</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal SELECAO DE MES -->
+<div class="modal fade" id="modalSelectMounth" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p class="font-weight-bold">Selecione um mês específico para visualizar</p>
+                <form id="form_filtro_mes" method="get">
+                    <input type="hidden" name="mesReferencia" class="selectedMonth" />
+                    <input type="hidden" name="anoReferencia" value="<?= $referenceYear ?>" />
+                    <input type="hidden" name="nome" value="<?= $name ?>" />
+                    <?php
+                    $count = 0;
+                    foreach ($monthList as $index => $month) {
+                        $count++;
+                        if ($referenceMonth == $index) {
+                            $disabled = 'disabled';
+                        } else {
+                            $disabled = null;
+                        }
+                    ?>
+                        <button type="button" style="width: 60px;" class="btn btn-info btn-sm selectMonth <?= $month['notification'] ? 'notification-dot' : null ?>" value="<?= $index ?>" <?= $disabled ?>>
+                            <?= $month['name'] ?>
+                        </button>
+                        <?php if ($count == 4 && $index != 12) {
+                            $count = 0;
+                        ?>
+                            <br>
+                            <br>
+                    <?php }
+                    } ?>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
+                    Cancelar
+                </button>
+            </div>
         </div>
     </div>
 </div>

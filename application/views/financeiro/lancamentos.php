@@ -119,24 +119,9 @@ $totalGeral         = $total->total;
 $saldoProvisorioMes = null;
 $prevLink           = null;
 $nextLink           = null;
-$monthText          = null;
+$currentMonthText   = null;
 
 if (isset($referenceMonth) && $referenceMonth) {
-    $prevReferenceYear = $referenceYear;
-    $nextReferenceYear = $referenceYear;
-    $prevReferenceMonth = $referenceMonth - 1;
-    $nextReferenceMonth = $referenceMonth + 1;
-
-    if ($referenceMonth == 12) {
-        $nextReferenceMonth = 1;
-        $nextReferenceYear++;
-    }
-
-    if ($referenceMonth == 1) {
-        $prevReferenceMonth = 12;
-        $prevReferenceYear--;
-    }
-
     if ($prevMonth && $nextMonth) {
         $prevLinkTitle = sprintf('%s / %s', $prevMonth, $prevReferenceYear);
         $nextLinkTitle = sprintf('%s / %s', $nextMonth, $nextReferenceYear);
@@ -144,7 +129,7 @@ if (isset($referenceMonth) && $referenceMonth) {
 
     $prevLink = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $prevReferenceMonth, $prevReferenceYear)) .
         " title='$prevLinkTitle'><span class='badge badge-primary'><i style='margin: 0 !important;' class='fas fa-angle-double-left'></i></span></a>";
-    $monthText = "<a href='#modalSelectMounth' data-toggle='modal' role='button' title='Clique para selecionar um mes específico'><span class='badge badge-primary' style='margin-left: 10px;'>Período: $month / $referenceYear</span></a>";
+    $currentMonthText = "<a href='#modalSelectMounth' data-toggle='modal' role='button' title='Clique para selecionar um mes específico'><span class='badge badge-primary' style='margin-left: 10px;'>Período: $month / $referenceYear</span></a>";
     $nextLink = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $nextReferenceMonth, $nextReferenceYear)) .
         " title='$nextLinkTitle'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-right'></i></span></a>";
 }
@@ -156,7 +141,7 @@ if (!$results) {
             <h2>
                 <span style='margin-right: 10px !important;'>Extrato de Lançamentos</span>
                 <br class="visible-xs-block">
-                <?= ($referenceMonth ? $prevLink . $monthText . $nextLink : null) ?>
+                <?= ($referenceMonth ? $prevLink . $currentMonthText . $nextLink : null) ?>
             </h2>
             <div class="panel-ctrls">
                 <a href="#" class="button-icon close-panel">
@@ -195,7 +180,7 @@ if (!$results) {
             <h2>
                 <span style='margin-right: 10px !important;'>Extrato de Lançamentos</span>
                 <br class="visible-xs-block">
-                <?= ($referenceMonth ? $prevLink . $monthText . $nextLink : null) ?>
+                <?= ($referenceMonth ? $prevLink . $currentMonthText . $nextLink : null) ?>
             </h2>
             <div class="panel-ctrls">
                 <a href="#" class="button-icon close-panel">
@@ -1129,15 +1114,6 @@ if (!$results) {
 </div>
 
 <script type="text/javascript">
-    $('.selectMonth').click(function() {
-        var value = $(this).val()
-        var target = $(':input.selectedMonth')
-        var form = $(this).parent()
-
-        target.val(value)
-        form.submit()
-    })
-
     $('.obsLink').click(function() {
         var obsIcon = $(this).children('i')
         var obsText = $(this).children('span.obsText')

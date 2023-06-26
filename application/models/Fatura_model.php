@@ -239,7 +239,7 @@ class Fatura_model extends CI_Model
     {
         $this->db->where($fieldID, $ID);
         $this->db->delete($table);
-        
+
         if ($this->db->affected_rows() == 1) {
             return true;
         }
@@ -720,5 +720,31 @@ class Fatura_model extends CI_Model
             return true;
         }
         return false;
+    }
+
+    function getLancamentosPendentesTerceiros($id_usuario, $referenceMonth, $referenceYear, $terceiro)
+    {
+        $query = "SELECT lf.id_lancamento, lfa.mes_referencia
+            FROM lancamentos_faturas lf
+            JOIN lancamentos_faturas_assoc lfa
+            ON lf.id_lancamento = lfa.id_lancamento
+            JOIN faturas f
+            ON lfa.id_fatura = f.id_fatura
+            WHERE lf.id_usuario = $id_usuario
+            AND f.fatura_aberta IN (1, 2)
+            AND lf.nome_cliente LIKE '%$terceiro%'
+            AND lfa.mes_referencia = $referenceMonth
+            AND lfa.ano_referencia = $referenceYear
+            GROUP BY lfa.mes_referencia
+        ";
+
+        $resultQuery    = $this->db->query($query);
+        $result         = $resultQuery->result_array();
+
+        if (!$result) {
+            return false;
+        }
+
+        return $result;
     }
 }

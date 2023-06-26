@@ -1650,55 +1650,86 @@ class Faturas extends CI_Controller
             redirect('financeiro/faturas?cartao=' . $idCartao);
         }
 
+        if ($mes) {
+            $data['month']      = translateMonth($mes);
+            $data['nextMonth']  = translateMonth($mes + 1);
+            $data['prevMonth']  = translateMonth($mes - 1);
+        }
+
         $todayDate          = date('Y-m-d');
         $todayArray         = explode('-', $todayDate);
-        $mesReferencia      = $todayArray[1];
-        $anoReferencia      = $todayArray[0];
+        $referenceMonth     = $todayArray[1];
+        $referenceYear      = $todayArray[0];
         $result             = [];
         $data['idCard']     = $idCartao;
 
         if ($mes) {
-            $mesReferencia = $mes;
+            $referenceMonth = $mes;
         }
 
         if ($ano) {
-            $anoReferencia = $ano;
+            $referenceYear = $ano;
         }
 
-        $faturasTerceiros   = $this->fatura_model->getFaturasTerceiros(getUserId(), $nome, $mesReferencia, $anoReferencia);
+        $prevReferenceMonth = $referenceMonth - 1;
+        $nextReferenceMonth = $referenceMonth + 1;
+        $prevReferenceYear  = $referenceYear;
+        $nextReferenceYear  = $referenceYear;
+    
+        if ($referenceMonth == 12) {
+            $nextReferenceMonth = 1;
+            $nextReferenceYear++;
+        }
+    
+        if ($referenceMonth == 1) {
+            $prevReferenceMonth = 12;
+            $prevReferenceYear--;
+        }
+            
+        $mesVencimento = $referenceMonth + 1;
+        $anoVencimento = $referenceYear;
 
-        $dateFormatterExtended = new \IntlDateFormatter(
-            'pt_BR',
-            \IntlDateFormatter::FULL,
-            \IntlDateFormatter::NONE,
-            'America/Sao_Paulo',
-            \IntlDateFormatter::GREGORIAN,
-            "MMMM"
-        );
+        if ($mesVencimento == 13) {
+            $mesVencimento = '01';
+            $anoVencimento++;
+        }
 
-        $dateObj    = DateTime::createFromFormat('!m', ($mesReferencia));
-        $monthName  = str_replace('.', '', mb_strtoupper($dateFormatterExtended->format($dateObj)));
+        for ($m = 1; $m <= 12; $m++) {
+            $currentMonth                                                       = constructStartEndDate(translateMonth($m, true, true), $ano);
+            $data['monthList'][$currentMonth["referenceMonth"]]['name']         = translateMonth($m, true, true) . ' - ' . translateMonth($m, true);
+            $data['monthList'][$currentMonth["referenceMonth"]]['notification'] = $this->fatura_model->getLancamentosPendentesTerceiros(getUserId(), $currentMonth['referenceMonth'], $currentMonth['referenceYear'], $nome);
+        }
+
+        $faturasTerceiros   = $this->fatura_model->getFaturasTerceiros(getUserId(), $nome, $referenceMonth, $referenceYear);
+        $referenceMonthName = getExtendedMonthName($referenceMonth);
+        $prevReferenceMonth = translateMonth($prevReferenceMonth, true, true);
+        $nextReferenceMonth = translateMonth($nextReferenceMonth, true, true);
+        $dueDateMonthName   = getExtendedMonthName($mesVencimento);
 
         if ($faturasTerceiros) {
-            foreach ($faturasTerceiros as $fatura) {
-                $lancamentosTerceiros   = $this->fatura_model->getLancamentosTerceiros(getUserId(), $fatura['id_cartao'], $nome, $mesReferencia, $anoReferencia);
-                $dateObj                = DateTime::createFromFormat('!m', ($fatura['mes_referencia']));
-                $monthName              = str_replace('.', '', mb_strtoupper($dateFormatterExtended->format($dateObj)));
+            foreach ($faturasTerceiros as $fatura) {        
+                $lancamentosTerceiros   = $this->fatura_model->getLancamentosTerceiros(getUserId(), $fatura['id_cartao'], $nome, $referenceMonth, $referenceYear);
+                $monthName              = getExtendedMonthName($fatura['mes_referencia']);
                 $reference              = $monthName . ' / ' . $fatura['ano_referencia'];
 
-                $result[$fatura['id_fatura']]                  = $fatura;
-                $result[$fatura['id_fatura']]['cartao']        = $this->cartoes_model->getDetalhesCartao($fatura['id_cartao']);
-                $result[$fatura['id_fatura']]['reference']     = $reference;
-                $result[$fatura['id_fatura']]['lancamentos']   = $lancamentosTerceiros;
+                $result[$fatura['id_fatura']]                   = $fatura;
+                $result[$fatura['id_fatura']]['cartao']         = $this->cartoes_model->getDetalhesCartao($fatura['id_cartao']);
+                $result[$fatura['id_fatura']]['reference']      = $reference;
+                $result[$fatura['id_fatura']]['lancamentos']    = $lancamentosTerceiros;
             }
         }
 
         $data['results']            = $result;
         $data['name']               = $nome;
         $data['yearsList']          = $this->yearsList;
-        $data['referencePeriod']    = sprintf('%s / %s', $monthName, $anoReferencia);
-        $data['referenceMonth']     = $mesReferencia;
-        $data['referenceYear']      = $anoReferencia;
+        $data['referencePeriod']    = sprintf('%s / %s', $referenceMonthName, $referenceYear);
+        $data['dueDatePeriod']      = sprintf('%s / %s', $dueDateMonthName, $anoVencimento);
+        $data['referenceMonth']     = $referenceMonth;
+        $data['prevReferenceMonth'] = $prevReferenceMonth;
+        $data['nextReferenceMonth'] = $nextReferenceMonth;
+        $data['prevReferenceYear']  = $prevReferenceYear;
+        $data['nextReferenceYear']  = $nextReferenceYear;
+        $data['referenceYear']      = $referenceYear;
         $data['view']               = 'faturas/lancamentos_terceiros';
         $this->load->view('tema/topo', $data);
     }
