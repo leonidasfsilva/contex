@@ -1,6 +1,11 @@
 # Changelog
 
-### Versão atual de produção: [2023.1.33]
+### Versão atual de produção: [2023.1.34]
+---
+### 29/06/2023 - [2023.1.34]
+### Release:
+- ajuste do tempo de exibição do modal de Sucesso: de 3s para 1.2s
+
 ---
 ### 25/06/2023 - [2023.1.33]
 ### Bugfix:
@@ -8,7 +13,7 @@
 
 ---
 ### 25/06/2023 - [2023.1.32]
-### Feature:
+### Release:
 - início do changelog 
 - exibição da data de vencimento da fatura em ```financeiro/faturas/terceiros```
 - implementação de modal para seleção de meses em ```financeiro/faturas/terceiros```
@@ -18,5 +23,6 @@
 
 
 
+[2023.1.34]: #
 [2023.1.33]: https://bitbucket.org/leonidasfsilva/contex/commits/d157892e53456f17266c190399c9ba9277fa1828
 [2023.1.32]: https://bitbucket.org/leonidasfsilva/contex/commits/3b1bade1127cd1b24d0382403bb6418a0137fd6d

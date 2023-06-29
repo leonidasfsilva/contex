@@ -486,7 +486,7 @@
                 position: 'top',
                 icon: 'success',
                 title: 'Feito!',
-                timer: 3000,
+                timer: 1200,
                 html: '<?= $this->session->flashdata('sucesso') ?>',
                 showConfirmButton: false,
                 showCancelButton: false,
