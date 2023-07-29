@@ -40,7 +40,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-xs-6">
-                            <input class="form-control" id="apelido" name="apelid" placeholder="Apelido do cartão" type="text">
+                            <input class="form-control" id="apelido" name="apelido" placeholder="Apelido do cartão" type="text">
                         </div>
                         <div class="form-group col-xs-6">
                             <div class="checkbox icheck">
