@@ -1,5 +1,10 @@
 # Changelog
 
+### 29/07/2023 - [2023.1.36]
+### Bugfix:
+- correções de bugs em ```financeiro/cartoes```
+
+---
 ### 29/07/2023 - [2023.1.35]
 ### Bugfix:
 - correções de bugs
@@ -25,8 +30,3 @@
 - outros ajustes em métodos
 
 
-
-[2023.1.35]: #
-[2023.1.34]: https://bitbucket.org/leonidasfsilva/contex/commits/36c32ae72fad0cefcc4958a37a94c08faa05defb
-[2023.1.33]: https://bitbucket.org/leonidasfsilva/contex/commits/d157892e53456f17266c190399c9ba9277fa1828
-[2023.1.32]: https://bitbucket.org/leonidasfsilva/contex/commits/3b1bade1127cd1b24d0382403bb6418a0137fd6d
