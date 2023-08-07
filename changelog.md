@@ -1,6 +1,11 @@
 # Changelog
 
-### 29/07/2023 - [2023.1.36]
+### 29/07/2023 - [2023.2.37]
+### Feature:
+- implementado método para copiar saldo devedor ao clicar no valor, em ```financeiro/faturas/terceiros```
+
+---
+### 29/07/2023 - [2023.2.36]
 ### Bugfix:
 - correções de bugs em ```financeiro/cartoes```
 

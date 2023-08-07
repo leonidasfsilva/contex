@@ -145,7 +145,7 @@ if (isset($referenceMonth) && $referenceMonth) {
                                                     <td colspan="2" style="text-align: left; color: red">(-) SALDO DEVEDOR NA FATURA</td>
                                                     <td colspan="1" style="text-align: right; color: red">
                                                         <input type="hidden" id="debit-balance" value="<?php echo number_format($debitoFatura, 2, ',', '.') ?>">
-                                                        <span style="cursor: pointer;" title="Copiar para área de transferência" id="i-copy-debit">
+                                                        <span style="cursor: pointer;" title="Copiar para área de transferência" class="i-copy-debit">
                                                             <i class="fas fa-copy fa-fw hidden" id="icon-debit"></i>
                                                             <?php echo number_format($debitoFatura, 2, ',', '.') ?>
                                                         </span>
@@ -178,8 +178,8 @@ if (isset($referenceMonth) && $referenceMonth) {
                             <td colspan="2" style="text-align: left; color: red">(-) SALDO DEVEDOR TOTAL</td>
                             <td colspan="1" style="text-align: right; color: red">
                                 <input type="hidden" id="debit-balance" value="<?php echo number_format($totalSum, 2, ',', '.') ?>">
-                                <span style="cursor: pointer;" title="Copiar para área de transferência" id="i-copy-debit">
-                                    <i class="fas fa-copy fa-fw hidden" id="icon-debit"></i>
+                                <span style="cursor: pointer;" title="Copiar para área de transferência" class="i-copy-debit">
+                                    <i class="fas fa-copy fa-fw hidden"></i>
                                     <?php echo number_format($totalSum, 2, ',', '.') ?>
                                 </span>
                             </td>
@@ -303,14 +303,14 @@ if (isset($referenceMonth) && $referenceMonth) {
 <script>
     $('.accordion-title').addClass('collapsed');
 
-    $("#copy-cpf").hover(function() {
-        $('#copy-cpf').toggleClass('font-weight-bold')
+    $(".i-copy-debit").hover(function() {
+        $(this).toggleClass('font-weight-bold')
     });
 
-    $("#copy-cpf").click(function() {
-        var copyText = document.getElementById("copy-cpf");
+    $(".i-copy-debit").click(function() {
+        var copyText = $(this);
         var textArea = document.createElement("textarea");
-        value = copyText.textContent.trim();
+        value = copyText[0].innerText;
         valueNew = value.toString().split('.').join('');
         valueNew = valueNew.toString().split('-').join('');
         textArea.value = valueNew;
@@ -333,6 +333,5 @@ if (isset($referenceMonth) && $referenceMonth) {
                 toast.addEventListener('mouseleave', Swal.resumeTimer)
             }
         })
-
     })
 </script>
