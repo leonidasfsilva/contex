@@ -677,7 +677,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </div>
                             <div class="form-group col-lg-4">
                                 <label class="font-weight-bold">Valor da Parcela *</label>
-                                <input class="form-control valorParcela" type="text" name="valor_parcela" readonly/>
+                                <input class="form-control valorParcela" type="text" name="valor_parcela" readonly />
                             </div>
                         </div>
                     </div>

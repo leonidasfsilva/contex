@@ -1719,6 +1719,7 @@ class Faturas extends CI_Controller
             }
         }
 
+        $data['terceiros']          = $this->fatura_model->getAllTerceiros(null, null, $referenceYear);
         $data['results']            = $result;
         $data['name']               = $nome;
         $data['yearsList']          = $this->yearsList;

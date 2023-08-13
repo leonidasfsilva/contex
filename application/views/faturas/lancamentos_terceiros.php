@@ -212,7 +212,7 @@ if (isset($referenceMonth) && $referenceMonth) {
             <form action="<?php echo current_url(); ?>" method="get" id="form_filtro" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
-                        <div class="form-group col-lg-6" id="div_periodo_mensal">
+                        <div class="form-group col-lg-4" id="div_periodo_mensal">
                             <label class="control-label font-weight-bold" for="select_mes">
                                 Mês específico
                             </label>
@@ -231,7 +231,7 @@ if (isset($referenceMonth) && $referenceMonth) {
                                 <option value="12" <?= ($referenceMonth == '12') ? 'selected' : null ?>>12 - DEZEMBRO</option>
                             </select>
                         </div>
-                        <div class="form-group col-lg-6" id="div_periodo_anual">
+                        <div class="form-group col-lg-4" id="div_periodo_anual">
                             <label class="control-label font-weight-bold" for="select_ano">
                                 Ano específico
                             </label>
@@ -243,9 +243,22 @@ if (isset($referenceMonth) && $referenceMonth) {
                                 } ?>
                             </select>
                         </div>
+                        <input type="hidden" name="cartao" value="<?= $idCard ?>">
+                        <div class="form-group col-lg-4">
+                            <label class="tooltips font-weight-bold" title="Filtrar lançamentos por terceiros">Terceiros <i class="fa fa-info-circle fa-fw"></i></label>
+                            <select class="form-control" name="nome">
+                                <?php if ($terceiros) {
+                                    foreach ($terceiros as $terceiro) { ?>
+                                        <option value="<?= $terceiro['nome'] ?>" <?php if ($name == $terceiro['nome']) {
+                                                                                        echo 'selected';
+                                                                                    } ?>><?= $terceiro['nome'] ?>
+                                        </option>
+                                <?php }
+                                } ?>
+                            </select>
+                        </div>
                     </div>
-                    <input type="hidden" id="nome" name="nome" value="<?= $_GET['nome'] ?>">
-                    <input type="hidden" name="cartao" value="<?= $idCard ?>">
+                    <!-- <input type="hidden" id="nome" name="nome" value="<?= $_GET['nome'] ?>"> -->
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir">

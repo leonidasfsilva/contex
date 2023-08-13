@@ -648,38 +648,36 @@ class Fatura_model extends CI_Model
             $idUsuario = getUserId();
         }
 
-        if ($idCartao && $mesReferencia && $anoReferencia) {
-            $query = "SELECT
-                lf.*
-                FROM lancamentos_faturas lf
-                INNER JOIN faturas f
-                ON lf.id_fatura = f.id_fatura
-                INNER JOIN lancamentos_faturas_assoc lfa
-                ON lfa.id_lancamento = lf.id_lancamento
-                WHERE f.id_usuario = $idUsuario
-                AND f.id_cartao = $idCartao
-                AND lfa.mes_referencia = $mesReferencia
-                AND lfa.ano_referencia = $anoReferencia
-                AND lfa.status = 1
-                AND lf.nome_cliente IS NOT NULL
-                GROUP BY lf.nome_cliente ASC
-            ";
-        } else {
-            $query = "SELECT
-                lf.*
-                FROM lancamentos_faturas lf
-                INNER JOIN faturas f
-                ON lf.id_fatura = f.id_fatura
-                INNER JOIN lancamentos_faturas_assoc lfa
-                ON lfa.id_lancamento = lf.id_lancamento
-                WHERE f.id_usuario = $idUsuario
-                AND lfa.status = 1
-                AND lf.nome_cliente IS NOT NULL
-                GROUP BY lf.nome_cliente ASC
-            ";
-        }
+        $mainQuery = "SELECT
+            lf.*
+            FROM lancamentos_faturas lf
+            INNER JOIN faturas f
+            ON lf.id_fatura = f.id_fatura
+            INNER JOIN lancamentos_faturas_assoc lfa
+            ON lfa.id_lancamento = lf.id_lancamento
+            WHERE f.id_usuario = $idUsuario
+            AND lfa.status = 1
+            AND lf.nome_cliente IS NOT NULL
+            AND lf.nome_cliente != ''
+        ";
 
-        $resultQuery = $this->db->query($query);
+        $where = "";
+
+        if ($idCartao) {
+            $where .= " AND f.id_cartao = $idCartao ";
+        } 
+        
+        if ($mesReferencia) {
+            $where .= " AND lfa.mes_referencia = $mesReferencia";
+        } 
+        
+        if ($anoReferencia) {
+            $where .= " AND lfa.ano_referencia = $anoReferencia";
+        } 
+        
+        $groupBy        = " GROUP BY lf.nome_cliente ASC";
+        $mainQuery      .= $where .= $groupBy;
+        $resultQuery    = $this->db->query($mainQuery);
 
         if ($resultQuery->num_rows() > 0) {
             $row_set = [];
