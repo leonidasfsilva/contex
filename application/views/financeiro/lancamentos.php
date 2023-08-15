@@ -168,7 +168,9 @@ if (!$results) {
                 </thead>
                 <tbody>
                     <tr>
-                        <td colspan="5">Nenhum registro encontrado</td>
+                        <td colspan="5">
+                            Nenhum registro encontrado para o período solicitado
+                        </td>
                     </tr>
                 </tbody>
             </table>

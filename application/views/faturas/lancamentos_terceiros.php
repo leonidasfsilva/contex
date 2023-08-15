@@ -190,7 +190,7 @@ if (isset($referenceMonth) && $referenceMonth) {
 
         <?php } else { ?>
             <div class="note note-info font-weight-bold">
-                Nenhum resultado encontrado para o período de referência solicitado
+                Nenhum registro encontrado para o período de referência solicitado
             </div>
         <?php } ?>
         <div class="panel-footer font-weight-bold">
