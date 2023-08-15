@@ -282,10 +282,10 @@ function translateMonth($referenceMonth, $abbreviate = false, $returnMonthNumber
 
     if ($abbreviate) {
         $monthFormatString = 'MMM';
+    }
 
-        if ($returnMonthNumber) {
-            $monthFormatString = 'MM';
-        }
+    if ($returnMonthNumber) {
+        $monthFormatString = 'MM';
     }
     
     return getExtendedMonthName($referenceMonth, $monthFormatString);

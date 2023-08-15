@@ -109,7 +109,7 @@ class Lancamentos extends CI_Controller
                 break;
             case 'mensal':
                 if (isset($referenceMonth) && $referenceMonth) {
-                    $startEndDate   = constructStartEndDate($referenceMonth);
+                    $startEndDate   = constructStartEndDate($referenceMonth, ($referenceYear) ? $referenceYear : null);
                     $limit          = null;
 
                     if (!isset($referenceYear) && !$referenceYear) {
