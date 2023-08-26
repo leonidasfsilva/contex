@@ -81,12 +81,12 @@
                     ?>
                         <tr>
                             <td><?= '<a href="#modalVisualizarCartao" role="button" data-toggle="modal" numero="'.decriptar($r->numero).'" validade="'.$r->validade.'" bandeira="'.$r->bandeira.'" cvc="'.decriptar($r->cvc).'" 
-                            nome="'.$r->nome.'" class="visualizar" title="Visualizar cartão"> **** **** **** ' . $final .'</a> <span class="label label-'.$labelPrincipal.'"> '.$cartaoPrincipal.' </span>' ?>
+                            nome="'.$r->nome.'" class="visualizar" title="Visualizar cartão"> **** **** **** ' . $final .'</a> <span class="badge badge-'.$labelPrincipal.'"> '.$cartaoPrincipal.' </span>' ?>
                             </td>
                             <td><?= $r->bandeira ?></td>
                             <td><?= $r->nome ?></td>
                             <td><?= $r->apelido ?></td>
-                            <td><span class="label label-<?= $label_cartao ?>"><?= $tipo_cartao ?></span></td>
+                            <td><span class="badge badge-<?= $label_cartao ?>"><?= $tipo_cartao ?></span></td>
                             <?=
                             '<td>
                             <button href="#modalVisualizarCartao" role="button" data-toggle="modal" numero="' . decriptar($r->numero) . '" validade="' . $r->validade . '" bandeira="' . $r->bandeira . '" cvc="' . decriptar($r->cvc) .
