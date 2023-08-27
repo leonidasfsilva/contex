@@ -1078,12 +1078,11 @@ if (!$results) {
 <div class="modal fade" id="modalSelectMounth" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
-            <div class="modal-body">
-                <p class="font-weight-bold">Selecione um mês específico para visualizar</p>
-                <form id="form_filtro_mes" method="get">
+            <form id="form_filtro_mes" method="get">
+                <div class="modal-body">
+                    <p class="font-weight-bold">Selecione o mês e ano específicos</p>
                     <input type="hidden" name="periodo" value="mensal" />
                     <input type="hidden" name="mesReferencia" class="selectedMonth" />
-                    <input type="hidden" name="anoReferencia" value="<?= $referenceYear ?>" />
                     <?php
                     $count = 0;
                     foreach ($monthList as $index => $month) {
@@ -1104,13 +1103,31 @@ if (!$results) {
                             <br>
                     <?php }
                     } ?>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
-                    Cancelar
-                </button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="form-group col-xs-6" style="margin: 0;">
+                            <div class="input-group">
+                                <span class="input-group-addon">Ano</span>
+                                <select class="form-control" id="anoReferenciaSelect" name="anoReferencia">
+                                    <?php if ($yearsList) {
+                                        foreach ($yearsList as $year) { ?>
+                                            <option value="<?= $year ?>" <?= ($referenceYear == $year ? 'selected' : '') ?>>
+                                                <?= $year ?>
+                                            </option>
+                                    <?php }
+                                    } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
