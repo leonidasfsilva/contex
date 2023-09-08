@@ -79,8 +79,6 @@ if (isset($referenceMonth) && $referenceMonth) {
                                                 $debitoFatura = 0;
 
                                                 foreach ($result['lancamentos'] as $r) {
-                                                    $s = $r;
-
                                                     if ($r['n_parcela'] < 10) {
                                                         $n_parcela = str_pad($r['n_parcela'], 2, '0', STR_PAD_LEFT);
                                                     } else {
@@ -103,13 +101,24 @@ if (isset($referenceMonth) && $referenceMonth) {
                                                         $valor = number_format($r['valor_total'], 2, ',', '.');
                                                     }
 
+                                                    if (isset($r['observacoes'])) {
+                                                        $iconObs = ' 
+                                                            <i class="fas fa-comment-dots fa-fw" title="Observações adicionais"></i>
+                                                        ';
+                                                    } else {
+                                                        $iconObs = '';
+                                                    };
+
                                                     echo '<tr>';
                                                     echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
                                                     echo '<td>' . $data_compra . '</td>';
-                                                    echo '<td>' .
-                                                        strtoupper($s['descricao']) .
-                                                        '</td>';
-                                                    echo '<td>' . strtoupper($s['nome_cliente']) . '</td>';
+                                                    echo '<td><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Detalhes" id_lancamento="' .
+                                                        $r['id_lancamento'] . '" descricao="' . $r['descricao'] . '" observacoes="' . nl2br($r['observacoes']) . '" valor="' . $valor . '" data_compra="' .
+                                                        date('d/m/Y', strtotime($r['data_compra'])) . '" parcelada="' . $r['compra_parcelada'] . '" estorno="' . $r['estorno'] . '" n_parcelas="' . $r['total_parcelas'] .
+                                                        '" valor_parcela="' . number_format($r['valor_parcela'], 2, ',', '.') . '" terceiros="' . $r['compra_terceiros'] . '" nome_cliente="' . $r['nome_cliente'] .
+                                                        '" id_cliente="' . $r['id_cliente'] . '">' . strtoupper($r['descricao']) . $iconObs .
+                                                        '</a></td>';
+                                                    echo '<td>' . strtoupper($r['nome_cliente']) . '</td>';
                                                     echo '<td>' . $n_parcela . '/' . $total_parcelas . '</td>';
                                                     echo '<td class="valor_parcela" style=" color: ' . $color = null .
                                                         '"><span>' . number_format($r['valor_parcela'], 2, ',', '.') .
@@ -187,7 +196,6 @@ if (isset($referenceMonth) && $referenceMonth) {
                     </table>
                 </div>
             </div>
-
         <?php } else { ?>
             <div class="note note-info font-weight-bold">
                 Nenhum registro encontrado para o período de referência solicitado
@@ -363,5 +371,66 @@ if (isset($referenceMonth) && $referenceMonth) {
                 toast.addEventListener('mouseleave', Swal.resumeTimer)
             }
         })
+    })
+
+    $(document).on('click', '.editar, .copiar', function(event) {
+        $(".id_lancamento").val($(this).attr('id_lancamento'));
+        $(".idCliente").val($(this).attr('id_cliente'));
+        $(".descricao").val($(this).attr('descricao'));
+        $(".valor").val($(this).attr('valor'));
+        $(".dataCompra").val($(this).attr('data_compra'));
+        $(".nomeCliente").val($(this).attr('nome_cliente'));
+
+        var estorno = $(this).attr('estorno');
+        var terceiros = $(this).attr('terceiros');
+        var parcelada = $(this).attr('parcelada');
+        if (parcelada == 1) {
+            $(".qntParcelas").val($(this).attr('n_parcelas'));
+            $(".valorParcela").val($(this).attr('valor_parcela'));
+            $('.parcelada').iCheck('check');
+            $(".divParcelamento").removeClass('hidden');
+        } else {
+            // $(".qntParcelas").val($(this).attr('n_parcelas'));
+            $(".valorParcela").val('');
+            $('.parcelada').iCheck('uncheck');
+            $(".divParcelamento").addClass('hidden');
+        }
+        if (estorno == 1) {
+            $('.estorno').iCheck('check');
+            $(".div_parcelada").addClass('hidden');
+        } else {
+            $('.estorno').iCheck('uncheck');
+            $(".div_parcelada").removeClass('hidden');
+        }
+        if (terceiros == 1) {
+            $('.terceiros').iCheck('check');
+            $(".divTerceiros").removeClass('hidden');
+        } else {
+            $('.terceiros').iCheck('uncheck');
+            $(".divTerceiros").addClass('hidden');
+        }
+
+        var observacoes = $(this).attr('observacoes');
+
+        if (observacoes) {
+            var text = observacoes.replace(/<br \/> /gi, "\n")
+            $("#observacoesEditar, #observacoesCopiar").val(text)
+
+            $(".divObservacoes").removeClass('hidden');
+            var obsIcon = $(".divObservacoes").parent().children('div').children('a').children('i')
+            var obsText = $(".divObservacoes").parent().children('div').children('a').children('span.obsText')
+
+            obsIcon.removeClass('fa-plus')
+            obsIcon.addClass('fa-minus')
+            obsText.text('Remover observações')
+        } else {
+            $(".divObservacoes").addClass('hidden');
+            var obsIcon = $(".divObservacoes").parent().children('div').children('a').children('i')
+            var obsText = $(".divObservacoes").parent().children('div').children('a').children('span.obsText')
+
+            obsIcon.removeClass('fa-minus')
+            obsIcon.addClass('fa-plus')
+            obsText.text('Adicionar observações')
+        }
     })
 </script>

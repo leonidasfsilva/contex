@@ -1,9 +1,13 @@
 # Changelog
 
+### 08/09/2023 - [2023.2.41]
+### Bugfix:
+- corrigido bug do campo Observações nos modais de Copiar
+---
 ### 26/08/2023 - [2023.2.40]
 ### Release:
 - alteradas as tags no cadastro de Cartões: de Labels para Badges em ```financeiro/cartoes```
-- implementado botão/dropdpwn para selecionar o ano no modal de seleção de meses
+- implementado botão/dropdown para selecionar o ano no modal de seleção de meses
 ---
 ### 14/08/2023 - [2023.2.39]
 ### Bugfix:

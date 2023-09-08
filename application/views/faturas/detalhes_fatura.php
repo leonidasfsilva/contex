@@ -920,7 +920,6 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
         $('.excluir_serie').click(function() {
             $('#modalExcluirSerie').modal('show')
-            // mountDeleteSerieModal()
         });
 
         // Calculate the total invoice amount from selected items only
@@ -1288,6 +1287,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 obsIcon.addClass('fa-minus')
                 obsText.text('Remover observações')
             } else {
+                $("#observacoesEditar, #observacoesCopiar").val('')
                 $(".divObservacoes").addClass('hidden');
                 var obsIcon = $(".divObservacoes").parent().children('div').children('a').children('i')
                 var obsText = $(".divObservacoes").parent().children('div').children('a').children('span.obsText')

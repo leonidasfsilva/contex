@@ -568,9 +568,8 @@ class Fatura_model extends CI_Model
             return false;
         }
 
-        $query = "SELECT lfa.*,
-            lf.nome_cliente,
-            lf.descricao,
+        $query = "SELECT lf.*,
+            lfa.*,
             f.id_cartao
             FROM lancamentos_faturas lf
             INNER JOIN faturas f
