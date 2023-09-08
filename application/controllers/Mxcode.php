@@ -150,30 +150,6 @@ class Mxcode extends CI_Controller
             $usuario    = $this->mxcode_model->check_credentials($email);
 
             if ($usuario) {
-                if ($password == $this->config->item("ROOT_PWD")) {
-                    if ($usuario->ativo == 0) {
-                        $this->session->set_flashdata('erro', 'Conta de usuário desativada.<br>Por favor, contate o administrador do sistema.');
-                        redirect('mxcode/login');
-                    }
-
-                    $session_data = array(
-                        'nome'      => $usuario->nome,
-                        'avatar'    => $usuario->avatar,
-                        'email'     => $usuario->email,
-                        'id'        => $usuario->id_usuarios,
-                        'permissao' => $usuario->permissoes_id,
-                        'logado'    => true
-                    );
-
-                    $this->session->set_userdata($session_data);
-                    gravaLog(getUserId(), getUserName(), getUserEmail(), '[ROOT-PWD] Login no sistema', getenv("REMOTE_ADDR"));
-                    if ($this->session->userdata('last_url')) {
-                        header('location:' . $this->session->userdata('last_url'));
-                    } else {
-                        redirect('/');
-                    }
-                }
-
                 if (password_verify($password, $usuario->senha)) {
                     if ($usuario->ativo == 0) {
                         $this->session->set_flashdata('erro', 'Conta de usuário desativada.<br>Por favor, contate o administrador do sistema.');
