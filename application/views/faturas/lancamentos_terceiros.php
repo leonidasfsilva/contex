@@ -266,7 +266,6 @@ if (isset($referenceMonth) && $referenceMonth) {
                             </select>
                         </div>
                     </div>
-                    <!-- <input type="hidden" id="nome" name="nome" value="<?= $_GET['nome'] ?>"> -->
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir">
@@ -286,18 +285,18 @@ if (isset($referenceMonth) && $referenceMonth) {
             <form id="form_filtro_mes" method="get">
                 <div class="modal-body">
                     <p class="font-weight-bold">Selecione o mês e ano específicos</p>
-                    <input type="hidden" name="mesReferencia" class="selectedMonth" />
+                    <input type="hidden" name="mesReferencia" class="selectedMonth" value="<?= $referenceMonth ?>"/>
                     <?php
                     $count = 0;
                     foreach ($monthList as $index => $month) {
                         $count++;
                         if ($referenceMonth == $index) {
-                            $disabled = 'disabled';
+                            $active = 'active';
                         } else {
-                            $disabled = null;
+                            $active = null;
                         }
                     ?>
-                        <button type="button" style="width: 60px;" class="btn btn-info btn-sm selectMonth <?= $month['notification'] ? 'notification-dot' : null ?>" value="<?= $index ?>" <?= $disabled ?>>
+                        <button type="button" style="width: 60px;" class="btn btn-info btn-sm selectMonth <?= $active ?> <?= $month['notification'] ? 'notification-dot' : null ?>" value="<?= $index ?>">
                             <?= $month['name'] ?>
                         </button>
                         <?php if ($count == 4 && $index != 12) {
@@ -310,9 +309,9 @@ if (isset($referenceMonth) && $referenceMonth) {
                 </div>
                 <div class="modal-footer">
                     <div class="row">
-                        <div class="form-group col-xs-6" style="margin: 0;">
+                        <div class="btn-block">
                             <div class="input-group">
-                                <span class="input-group-addon">Ano</span>
+                                <span class="input-group-addon">Ano: </span>
                                 <select class="form-control" id="anoReferenciaSelect" name="anoReferencia">
                                     <?php if ($yearsList) {
                                         foreach ($yearsList as $year) { ?>
@@ -324,11 +323,9 @@ if (isset($referenceMonth) && $referenceMonth) {
                                 </select>
                             </div>
                         </div>
-                        <div class="col-xs-6">
-                            <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
-                                Cancelar
-                            </button>
-                        </div>
+                        <!-- <div class="col-xs-6">
+                            <button class="btn btn-default btn-sm" data-dismiss="modal" title="Cancelar"><i class="fa fa-times fa-fw"></i>Cancelar</button>
+                        </div> -->
                     </div>
                     <input type="hidden" name="cartao" value="<?= $idCard ?>" />
                     <input type="hidden" name="nome" value="<?= $name ?>" />

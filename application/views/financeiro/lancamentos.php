@@ -1088,12 +1088,12 @@ if (!$results) {
                     foreach ($monthList as $index => $month) {
                         $count++;
                         if ($referenceMonth == $index) {
-                            $disabled = 'disabled';
+                            $active = 'active';
                         } else {
-                            $disabled = null;
+                            $active = null;
                         }
                     ?>
-                        <button type="button" style="width: 60px;" class="btn btn-info btn-sm selectMonth <?= $month['notification'] ? 'notification-dot' : null ?>" value="<?= $index ?>" <?= $disabled ?>>
+                        <button type="button" style="width: 60px;" class="btn btn-info btn-sm selectMonth <?= $active ?> <?= $month['notification'] ? 'notification-dot' : null ?>" value="<?= $index ?>">
                             <?= $month['name'] ?>
                         </button>
                         <?php if ($count == 4 && $index != 12) {
@@ -1106,7 +1106,7 @@ if (!$results) {
                 </div>
                 <div class="modal-footer">
                     <div class="row">
-                        <div class="form-group col-xs-6" style="margin: 0;">
+                        <div class="btn-block">
                             <div class="input-group">
                                 <span class="input-group-addon">Ano</span>
                                 <select class="form-control" id="anoReferenciaSelect" name="anoReferencia">
@@ -1120,11 +1120,11 @@ if (!$results) {
                                 </select>
                             </div>
                         </div>
-                        <div class="col-xs-6">
+                        <!-- <div class="col-xs-6">
                             <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
                                 Cancelar
                             </button>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </form>
