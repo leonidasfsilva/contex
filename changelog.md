@@ -1,5 +1,9 @@
 # Changelog
 
+### 29/09/2023 - [2023.2.42]
+### Bugfix:
+- corrigido titulo do campo **Nome do terceiro** nos modais de Copiar e Detalhes em ```financeiro/faturas```
+---
 ### 08/09/2023 - [2023.2.41]
 ### Bugfix:
 - corrigido bug do campo Observações nos modais de Copiar

@@ -425,7 +425,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricao">Descrição *</label>
-                            <input class="form-control descricao" id="descricao" type="text" name="descricao" />
+                            <input class="form-control descricao" type="text" name="descricao" />
                             <input id="urlLancamento" type="hidden" name="urlAtual" value="" />
                         </div>
                     </div>
@@ -583,7 +583,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         </div>
                         <div class="divTerceiros hidden">
                             <div class="form-group col-lg-6">
-                                <label class="font-weight-bold">Cliente</label>
+                                <label class="font-weight-bold">Nome do terceiro</label>
                                 <input class="form-control nomeCliente" type="text" name="nome_cliente" />
                                 <input class="idCliente" type="hidden" name="id_cliente" />
                             </div>
@@ -690,7 +690,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         </div>
                         <div class="divTerceiros hidden">
                             <div class="form-group col-lg-6">
-                                <label class="font-weight-bold">Cliente</label>
+                                <label class="font-weight-bold">Nome do terceiro</label>
                                 <input class="form-control nomeCliente" type="text" name="nome_cliente" />
                                 <input class="idCliente" type="hidden" name="id_cliente" />
                             </div>
@@ -1077,41 +1077,16 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             }
         }
 
-        $("#formNovoLancamento").validate({
+        $("#form").validate({
             rules: {
                 descricao: {
                     required: true
-                },
-                valor: {
-                    required: true
-                },
-                data_compra: {
-                    required: false
-                },
-                qnt_parcelas: {
-                    required: true
-                },
-                valor_parcela: {
-                    required: false
-                },
-
+                }
             },
             messages: {
                 descricao: {
                     required: 'Informe uma descrição'
-                },
-                valor: {
-                    required: 'Informe o valor da compra'
-                },
-                data_compra: {
-                    required: 'Informe a data da compra'
-                },
-                qnt_parcelas: {
-                    required: 'Informe o número de parcelas'
-                },
-                valor_parcela: {
-                    required: 'Informe o valor das parcelas'
-                },
+                }
             },
 
             errorClass: "help-block",
@@ -1124,7 +1099,6 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 $(element).parents('.form-group').removeClass('has-error');
                 $(element).parents('.form-group').addClass('has-success');
             }
-
         });
 
         $("#formEditarLancamento").validate({
