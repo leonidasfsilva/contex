@@ -1,5 +1,9 @@
 # Changelog
 
+### 01/10/2023 - [2023.2.43]
+### Bugfix:
+- corrigido bug do autofocus no campo Descrição nos modais de Novo Lançamento
+---
 ### 29/09/2023 - [2023.2.42]
 ### Bugfix:
 - corrigido titulo do campo **Nome do terceiro** nos modais de Copiar e Detalhes em ```financeiro/faturas```

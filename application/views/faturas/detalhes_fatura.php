@@ -425,7 +425,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricao">Descrição *</label>
-                            <input class="form-control descricao" type="text" name="descricao" />
+                            <input class="form-control descricao" type="text" name="descricao" id="descricao" />
                             <input id="urlLancamento" type="hidden" name="urlAtual" value="" />
                         </div>
                     </div>
