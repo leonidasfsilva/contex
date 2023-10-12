@@ -18,7 +18,6 @@ class Lancamentos extends CI_Controller
             redirect('mxcode/login');
         }
 
-        $this->load->library('pagination');
         $this->load->model('financeiro_model', '', true);
         $this->load->model('pendencia_model', '', true);
         $this->load->model('fatura_model', '', true);
@@ -181,6 +180,32 @@ class Lancamentos extends CI_Controller
                 }
             }
         }
+        
+        if ($referenceMonth) {
+            $this->data['month']        = translateMonth($referenceMonth);
+            $this->data['nextMonth']    = translateMonth($referenceMonth + 1);
+            $this->data['prevMonth']    = translateMonth($referenceMonth - 1);
+            $prevReferenceMonth         = $referenceMonth - 1;
+            $nextReferenceMonth         = $referenceMonth + 1;
+            $prevReferenceYear          = $referenceYear;
+            $nextReferenceYear          = $referenceYear;
+        }
+
+        if ($referenceMonth == 12) {
+            $nextReferenceMonth = 1;
+            $nextReferenceYear++;
+        }
+
+        if ($referenceMonth == 1) {
+            $prevReferenceMonth = 12;
+            $prevReferenceYear--;
+        }
+
+        for ($m = 1; $m <= 12; $m++) {
+            $currentMonth                                                               = constructStartEndDate(translateMonth($m, true, true), $referenceYear);
+            $this->data['monthList'][$currentMonth["referenceMonth"]]['name']           = translateMonth($m, true, true) . ' - ' . translateMonth($m, true);
+            $this->data['monthList'][$currentMonth["referenceMonth"]]['notification']   = $this->financeiro_model->getLancamentosPendentes(getUserId(), $currentMonth['startDate'], $currentMonth['endDate']);
+        }
 
         $query_string   = null;
         $lastElement    = end($_GET);
@@ -193,33 +218,6 @@ class Lancamentos extends CI_Controller
                     $query_string .= $key . '=' . $value . '&';
                 }
             }
-        }
-
-        $prevReferenceMonth = $referenceMonth - 1;
-        $nextReferenceMonth = $referenceMonth + 1;
-        $prevReferenceYear  = $referenceYear;
-        $nextReferenceYear  = $referenceYear;
-    
-        if ($referenceMonth == 12) {
-            $nextReferenceMonth = 1;
-            $nextReferenceYear++;
-        }
-    
-        if ($referenceMonth == 1) {
-            $prevReferenceMonth = 12;
-            $prevReferenceYear--;
-        }
-
-        for ($m = 1; $m <= 12; $m++) {
-            $currentMonth                                                               = constructStartEndDate(translateMonth($m, true, true), $referenceYear);
-            $this->data['monthList'][$currentMonth["referenceMonth"]]['name']           = translateMonth($m, true, true) . ' - ' . translateMonth($m, true);
-            $this->data['monthList'][$currentMonth["referenceMonth"]]['notification']   = $this->financeiro_model->getLancamentosPendentes(getUserId(), $currentMonth['startDate'], $currentMonth['endDate']);
-        }
-
-        if ($referenceMonth) {
-            $this->data['month']        = translateMonth($referenceMonth);
-            $this->data['nextMonth']    = translateMonth($referenceMonth + 1);
-            $this->data['prevMonth']    = translateMonth($referenceMonth - 1);
         }
 
         $config['base_url']             = base_url('financeiro/lancamentos');
@@ -252,10 +250,10 @@ class Lancamentos extends CI_Controller
         $this->data['yearsList']            = $yearsList;
         $this->data['referenceMonth']       = $referenceMonth;
         $this->data['referenceYear']        = $referenceYear;
-        $this->data['prevReferenceMonth']   = translateMonth($prevReferenceMonth, true, true);
-        $this->data['nextReferenceMonth']   = translateMonth($nextReferenceMonth, true, true);
-        $this->data['prevReferenceYear']    = $prevReferenceYear;
-        $this->data['nextReferenceYear']    = $nextReferenceYear;
+        $this->data['prevReferenceMonth']   = translateMonth($prevReferenceMonth ?? null, true, true);
+        $this->data['nextReferenceMonth']   = translateMonth($nextReferenceMonth ?? null, true, true);
+        $this->data['prevReferenceYear']    = $prevReferenceYear ?? null;
+        $this->data['nextReferenceYear']    = $nextReferenceYear ?? null;
         $this->data['total_provisorio']     = $this->financeiro_model->getTotalProvisorio(getUserId());
         $this->data['saidas_pendentes']     = $this->financeiro_model->getSaidasPendentes(getUserId());
         $this->data['entradas_pendentes']   = $this->financeiro_model->getEntradasPendentes(getUserId());

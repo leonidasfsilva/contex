@@ -37,7 +37,10 @@
                     foreach ($results as $r) { ?>
                         <tr>
                             <td><?= $r->id ?></td>
-                            <td><?= date('d/m/Y', strtotime($r->data_leitura)) ?></td>
+                            <td><?= '<a href="#modalEditar" style="margin-right: 0%" data-toggle="modal" class="action" title="Editar" id_consumo="' .
+                                    $r->id . '" leitura_anterior="' . $r->leitura_anterior . '" leitura_atual="' . $r->leitura_atual . '" consumo="' . $r->consumo . '" valor="' . number_format($r->valor, 2, ',', '.') . '" data_leitura="' .
+                                    date('d/m/Y', strtotime($r->data_leitura)) . '">' . date('d/m/Y', strtotime($r->data_leitura)) . '</a>' ?>
+                            </td>
                             <td><?= $r->leitura_anterior ?></td>
                             <td><?= $r->leitura_atual ?></td>
                             <td style="font-weight: bold"><?= $r->consumo ?></td>
@@ -55,6 +58,11 @@
                 } ?>
             </tbody>
         </table>
+        <?php if ($this->pagination->create_links()) { ?>
+            <div class="panel-footer">
+                <?= $this->pagination->create_links() ?>
+            </div>
+        <?php } ?>
     </div>
 </div>
 
@@ -120,7 +128,7 @@
                                                                                         ?><!--</span>-->
                     <!--                    </div>-->
                     <div class="row">
-                    <div class="form-group col-sm-4">
+                        <div class="form-group col-sm-4">
                             <div class="input-icon right">
                                 <label class="font-weight-bold" for="medicao">Leitura anterior (kWh)</label>
                                 <input class="form-control" id="leitura_anterior_editar" name="leitura_anterior" placeholder="Leitura anterior (kWh)" type="text">
@@ -188,7 +196,7 @@
             </div>
             <div class="modal-body">
                 <p>
-                    No campo <strong>Leitura anterior</strong> você pode informar o último registro de kilowatts consumidos, caso se lembre. 
+                    No campo <strong>Leitura anterior</strong> você pode informar o último registro de kilowatts consumidos, caso se lembre.
                     Este campo é opcional, caso não preencha este campo, o sistema irá efetuar os cálculos com base no último registro informado (caso exista).
                 </p>
                 <p>
