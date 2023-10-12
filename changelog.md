@@ -1,5 +1,10 @@
 # Changelog
 
+### 12/10/2023 - [2023.2.44]
+### Release:
+- adicionado campo **Leitura anterior** nos modais de cadastro e edição de consumo de energia
+- outras melhorias
+---
 ### 01/10/2023 - [2023.2.43]
 ### Bugfix:
 - corrigido bug do autofocus no campo Descrição nos modais de Novo Lançamento

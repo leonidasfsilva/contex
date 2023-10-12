@@ -18,7 +18,7 @@
 | R     - current release version of system
 |
 */
-define('VERSION_APP', '2023.2.43');
+define('VERSION_APP', '2023.2.44');
 
 // previsão de lançamento do modulo de Despesas (segundo semestre de 2023)
 // define('VERSION_APP', '2023.2.?'); 

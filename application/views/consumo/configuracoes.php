@@ -22,16 +22,16 @@
             <div class="row">
                 <div class="form-group col-sm-4">
                     <div class="input-icon right">
-                        <label class="font-weight-bold" for="leitura_inicial">Leitura Inicial *</label>
+                        <label class="font-weight-bold" for="leitura_inicial">Leitura inicial *</label>
                         <i class="fas fa-fw fa-question-circle" style="cursor: pointer" title="Ajuda" id="ajuda1"></i>
                         <input class="form-control" id="leitura_inicial" name="leitura_inicial" placeholder="Leitura inicial do medidor" type="text" value="<?= $configs->leitura_inicial ? $configs->leitura_inicial : '' ?>">
                     </div>
                 </div>
                 <div class="form-group col-sm-4">
                     <div class="input-icon right">
-                        <label class="font-weight-bold" for="data_leitura">Data da Leitura Inicial</label>
+                        <label class="font-weight-bold" for="data_leitura">Início da medição</label>
                         <i class="fas fa-fw fa-question-circle" style="cursor: pointer" title="Ajuda" id="ajuda2"></i>
-                        <input class="form-control datepicker" id="data_leitura" name="data_leitura" placeholder="Data da leitura inicial" type="text" value="<?= $configs->data_leitura ? date('d/m/Y', strtotime($configs->data_leitura)) : '' ?>">
+                        <input class="form-control datepicker" id="data_leitura" name="data_leitura" placeholder="Data de início da medição" type="text" value="<?= $configs->data_leitura ? date('d/m/Y', strtotime($configs->data_leitura)) : '' ?>">
                     </div>
                 </div>
                 <div class="form-group col-sm-4">
@@ -52,7 +52,7 @@
         <div class="modal-content">
             <div class="modal-header bg-default">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title">Leitura Inicial</h4>
+                <h4 class="modal-title">Leitura inicial</h4>
             </div>
             <div class="modal-body">
                 <p>
@@ -69,13 +69,12 @@
         <div class="modal-content">
             <div class="modal-header bg-default">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title">Data da Leitura Inicial</h4>
+                <h4 class="modal-title">Início da medição</h4>
             </div>
             <div class="modal-body">
                 <p>
-                    Informe a data de início das leituras de energia, ou seja, a data em que você começou a utilizar o módulo de Consumo de Energia.
+                    Informe a data de início da medição de energia, ou seja, a data em que você começou a utilizar o módulo de Consumo de Energia.
                     Caso não informe este dado, o sistema utilizará a data atual.
-                    Precisamos desta informação para o sistema controlar as marcações dos meses subsequentes.
                 </p>
             </div>
         </div>
