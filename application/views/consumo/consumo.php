@@ -130,7 +130,7 @@
                     <div class="row">
                         <div class="form-group col-sm-4">
                             <div class="input-icon right">
-                                <label class="font-weight-bold" for="medicao">Leitura anterior (kWh)</label>
+                                <label class="font-weight-bold" for="medicao">Leitura anterior (kWh) *</label>
                                 <input class="form-control" id="leitura_anterior_editar" name="leitura_anterior" placeholder="Leitura anterior (kWh)" type="text">
                             </div>
                         </div>
@@ -269,12 +269,20 @@
 
     $("#formEditarConsumo").validate({
         rules: {
+            leitura_anterior: {
+                required: true,
+                number: true
+            },
             leitura_atual: {
                 required: true,
                 number: true
             },
         },
         messages: {
+            leitura_anterior: {
+                required: 'Informe a leitura anterior do medidor',
+                number: 'Apenas números são permitidos',
+            },
             leitura_atual: {
                 required: 'Informe a leitura atual do medidor',
                 number: 'Apenas números são permitidos',

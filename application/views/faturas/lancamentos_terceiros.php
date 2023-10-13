@@ -285,7 +285,7 @@ if (isset($referenceMonth) && $referenceMonth) {
             <form id="form_filtro_mes" method="get">
                 <div class="modal-body">
                     <p class="font-weight-bold">Selecione o mês e ano específicos</p>
-                    <input type="hidden" name="mesReferencia" class="selectedMonth" value="<?= $referenceMonth ?>"/>
+                    <input type="hidden" name="mesReferencia" class="selectedMonth" value="<?= $referenceMonth ?>" />
                     <?php
                     $count = 0;
                     foreach ($monthList as $index => $month) {
@@ -331,6 +331,77 @@ if (isset($referenceMonth) && $referenceMonth) {
                     <input type="hidden" name="nome" value="<?= $name ?>" />
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal DETALHES LANÇAMENTO-->
+<div class="modal fade" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-white ">Detalhes do lançamento</h4>
+            </div>
+            <!-- <form id="formEditarLancamento" action="<?php echo base_url('financeiro/faturas/editarLancamento') ?>" method="post" autocomplete="off"> -->
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-lg-12">
+                        <label class="font-weight-bold">Descrição:</label>
+                        <input class="form-control descricao" type="text" name="descricao" readonly />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-lg-6">
+                        <label class="font-weight-bold">Valor da Compra *</label>
+                        <input class="form-control money valor" type="text" name="valor" readonly />
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label class="font-weight-bold">Data da Compra</label>
+                        <input class="form-control datepicker dataCompra" type="text" name="data_compra" readonly />
+                    </div>
+                </div>
+                <div class="row divContainerParcelamento">
+                    <div>
+                        <div class="form-group col-lg-4">
+                            <label class="font-weight-bold">Parcelas</label>
+                            <input class="form-control qntParcelas" type="text" readonly />
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label class="font-weight-bold">Valor da Parcela</label>
+                            <input class="form-control valorParcela" type="text" name="valor_parcela" readonly />
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label class="font-weight-bold">Nome do terceiro</label>
+                            <input class="form-control nomeCliente" type="text" name="nome_cliente" readonly />
+                        </div>
+                    </div>
+                </div>
+                <div class="divObservacoes hidden">
+                    <div class="form-group mb0">
+                        <label for="observacoes" class="font-weight-bold">Observações</label>
+                        <textarea rows="5" class="form-control observacoesTextarea" id="observacoesEditar" name="observacoes" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="text-left col-xs-4" style="margin-top: -10px;">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control estorno" name="estorno" value="1">
+                        </div>
+                        <label class="font-weight-bold">Estorno</label>
+                    </div>
+                    <div class="col-xs-8">
+                        <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                            <i class="fa fa-times fa-fw"></i> Fechar
+                        </button>
+                        <!-- <button type="button" id="modalCopiar" class="btn btn-info btn-sm modal-copy"><i class="fa fa-copy fa-fw"></i> Copiar</button>
+                            <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button> -->
+                    </div>
+                </div>
+            </div>
+            <!-- </form> -->
         </div>
     </div>
 </div>
@@ -385,19 +456,15 @@ if (isset($referenceMonth) && $referenceMonth) {
             $(".qntParcelas").val($(this).attr('n_parcelas'));
             $(".valorParcela").val($(this).attr('valor_parcela'));
             $('.parcelada').iCheck('check');
-            $(".divParcelamento").removeClass('hidden');
         } else {
-            // $(".qntParcelas").val($(this).attr('n_parcelas'));
-            $(".valorParcela").val('');
+            $(".qntParcelas").val($(this).attr('n_parcelas'));
+            $(".valorParcela").val($(this).attr('valor_parcela'));
             $('.parcelada').iCheck('uncheck');
-            $(".divParcelamento").addClass('hidden');
         }
         if (estorno == 1) {
             $('.estorno').iCheck('check');
-            $(".div_parcelada").addClass('hidden');
         } else {
             $('.estorno').iCheck('uncheck');
-            $(".div_parcelada").removeClass('hidden');
         }
         if (terceiros == 1) {
             $('.terceiros').iCheck('check');

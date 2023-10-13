@@ -550,6 +550,8 @@ class Fatura_model extends CI_Model
             AND lfa.mes_referencia = $mesReferencia
             AND lfa.ano_referencia = $anoReferencia
             AND f.id_usuario = $idUsuario
+            AND lf.status = 1
+            AND lfa.status = 1
             GROUP BY f.id_cartao
             ORDER BY lf.criado_em DESC";
 

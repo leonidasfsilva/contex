@@ -1,5 +1,10 @@
 # Changelog
 
+### 13/10/2023 - [2023.2.45]
+### Release:
+- adicionado modal **Detalhes do Lançamento** na tela de relatório de compras de terceiros
+- outras correções
+---
 ### 12/10/2023 - [2023.2.44]
 ### Release:
 - adicionado campo **Leitura anterior** nos modais de cadastro e edição de consumo de energia

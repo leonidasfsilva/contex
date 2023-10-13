@@ -1130,7 +1130,7 @@ class Faturas extends CI_Controller
 
             if (is_array($faturas) && $faturas) {
                 foreach ($faturas as $fatura) {
-                    atualizaValorVinculoFaturas($fatura['id_fatura']);
+                    atualizaValorVinculoFaturas($lancamentosTerceiros[0]["id_fatura"]);
                 }
             }
 
@@ -1712,10 +1712,10 @@ class Faturas extends CI_Controller
                 $monthName              = getExtendedMonthName($fatura['mes_referencia']);
                 $reference              = $monthName . ' / ' . $fatura['ano_referencia'];
 
-                $result[$fatura['id_fatura']]                   = $fatura;
-                $result[$fatura['id_fatura']]['cartao']         = $this->cartoes_model->getDetalhesCartao($fatura['id_cartao']);
-                $result[$fatura['id_fatura']]['reference']      = $reference;
-                $result[$fatura['id_fatura']]['lancamentos']    = $lancamentosTerceiros;
+                $result[$lancamentosTerceiros[0]["id_fatura"]]                  = $fatura;
+                $result[$lancamentosTerceiros[0]["id_fatura"]]['cartao']        = $this->cartoes_model->getDetalhesCartao($fatura['id_cartao']);
+                $result[$lancamentosTerceiros[0]["id_fatura"]]['reference']     = $reference;
+                $result[$lancamentosTerceiros[0]["id_fatura"]]['lancamentos']   = $lancamentosTerceiros;
             }
         }
 
