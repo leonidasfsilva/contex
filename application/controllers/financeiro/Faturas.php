@@ -660,7 +660,7 @@ class Faturas extends CI_Controller
                 'mes_referencia'    => $mes,
                 'ano_referencia'    => $ano,
                 // 'id_cliente' => $this->input->post('id_cliente'),
-                'nome_cliente'      => $this->input->post('nome_cliente') ? padronizarString($this->input->post('nome_cliente')) : null,
+                'nome_cliente'      => $compra_terceiros ? padronizarString($this->input->post('nome_cliente')) : null,
                 'compra_terceiros'  => $compra_terceiros,
             );
 
@@ -920,7 +920,7 @@ class Faturas extends CI_Controller
                 'id_usuario'        => $faturaAtual->id_usuario,
                 'descricao'         => padronizarString($this->input->post('descricao')),
                 'observacoes'       => $observacoes ?? null,
-                'nome_cliente'      => $this->input->post('nome_cliente') ? padronizarString($this->input->post('nome_cliente')) : null,
+                'nome_cliente'      => $compra_terceiros ? padronizarString($this->input->post('nome_cliente')) : null,
                 'valor_total'       => $valor,
                 'total_parcelas'    => $qnt_parcelas,
                 'compra_parcelada'  => $compra_parcelada,

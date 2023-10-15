@@ -1,5 +1,10 @@
 # Changelog
 
+### 15/10/2023 - [2023.2.46]
+### Bugfix:
+- correções nos formularios de **Copiar lançamento** e **Editar lançamento**:
+    - corrigido comportamento: ao desmarcar a opção Compra de Terceiros o nome do terceiro era cadastrado no DB equivocadamente
+---
 ### 13/10/2023 - [2023.2.45]
 ### Release:
 - adicionado modal **Detalhes do Lançamento** na tela de relatório de compras de terceiros
