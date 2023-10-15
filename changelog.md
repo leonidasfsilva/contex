@@ -1,5 +1,9 @@
 # Changelog
 
+### 15/10/2023 - [2023.2.47]
+### Feature:
+- adicionado modal para copiar múltiplos lançamentos de uma uníca vez em ```financeiro/lancamentos```
+---
 ### 15/10/2023 - [2023.2.46]
 ### Bugfix:
 - correções nos formularios de **Copiar lançamento** e **Editar lançamento**:
@@ -70,5 +74,3 @@
 - implementação de ícones de notificações nos botões de seleção de meses em ```financeiro/faturas/terceiros```
 - ajustes nos links dos seletores de meses
 - outros ajustes em métodos
-
-

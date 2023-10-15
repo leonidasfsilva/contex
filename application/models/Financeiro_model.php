@@ -46,11 +46,17 @@ class Financeiro_model extends CI_Model
     }
 
 
-    function getById($id)
+    function getById($id, $idUsuario)
     {
-        $this->db->where('idClientes', $id);
-        $this->db->limit(1);
-        return $this->db->get('clientes')->row();
+        $this->db->where('id_lancamento', $id);
+        $this->db->where('id_usuario', $idUsuario);
+        $this->db->where('status', 1);
+        $result = $this->db->get('lancamentos')->row();
+
+        if (!$result) {
+            return false;
+        }
+        return $result;        
     }
 
     function add($table, $data)

@@ -201,6 +201,10 @@ if (!$results) {
                         <i class="fas fa-trash-alt fa-fw"></i>
                         Excluir
                     </button>
+                    <button class="btn btn-info btn-sm copiar_serie " id="copiar_serie" title="Copiar todos os lançamentos selecionados" disabled>
+                        <i class="fas fa-copy fa-fw"></i>
+                        Copiar
+                    </button>
                     <button class="btn btn-default btn-sm marcar_desmarcar" id="marcar_todos" title="Marcar todos os lançamentos da fatura">
                         <i class="far fa-square fa-fw"></i>
                         Marcar Todos
@@ -1074,6 +1078,39 @@ if (!$results) {
     </div>
 </div>
 
+<!-- Modal COPIAR SERIE -->
+<div class="modal fade" id="modalCopiarSerie" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-white ">Copiar série de lançamentos</h4>
+            </div>
+            <form id="formCopiarSerie" action="<?= base_url('financeiro/lancamentos/copiar'); ?>" method="post">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-lg-4">
+                            <label for="vencimento" class="font-weight-bold">Informe a data alvo para cópia</label>
+                            <input class="form-control datepicker" type="text" name="vencimento" />
+                        </div>
+                    </div>
+                    <p class="font-weight-bold">Deseja realmente copiar todos os lançamentos selecionados para a data previamente informada?</p>
+                    <input class="urlAtual" type="hidden" name="urlAtual" value="" />
+                </div>
+                <div id="copiaSerieFormBody"></div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
+                        Cancelar
+                    </button>
+                    <button class="btn btn-info btn-sm"><i class="fa fa-check fa-fw"></i>
+                        Copiar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Modal SELECAO DE MES -->
 <div class="modal fade" id="modalSelectMounth" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
@@ -1213,15 +1250,21 @@ if (!$results) {
             $('#modalExcluirSerie').modal('show')
         });
 
+        $('.copiar_serie').click(function() {
+            $('#modalCopiarSerie').modal('show')
+        });
+
 
         // Calculate the total invoice amount from selected items only
         function somaValorParcelas() {
             var soma = 0
             var value = 0
             var deleteSerie = []
+            var copiaSerie = []
             var idLancamento = null
 
             $('#deleteSerieFormBody').html('')
+            $('#copiaSerieFormBody').html('')
 
             // iterate through each td based on class and add the values
             $(".valor_parcela").each(function() {
@@ -1229,6 +1272,7 @@ if (!$results) {
                 if ($(this).closest('tr').find('.soma_parcelas').is(':checked')) {
                     idLancamento = $(this).closest('tr').find('.idLancamento').html()
                     deleteSerie.push(idLancamento)
+                    copiaSerie.push(idLancamento)
                     value = $('span', this).text()
                     value = jquery_format(value)
                     // add only if the value is number
@@ -1247,6 +1291,15 @@ if (!$results) {
                 });
             } else {
                 $('#excluir_serie').attr('disabled', true)
+            }
+
+            if (copiaSerie.length > 1) {
+                $('#copiar_serie').attr('disabled', false)
+                deleteSerie.forEach(function(item) {
+                    $('#copiaSerieFormBody').append('<input type="hidden" name="id[]" value="' + item + '"/>')
+                });
+            } else {
+                $('#copiar_serie').attr('disabled', true)
             }
 
             $('#valor_soma_parcelas').text(sum);
@@ -1546,6 +1599,30 @@ if (!$results) {
                 },
                 formaPgto: {
                     required: 'Selecione a forma de pagamento'
+                }
+            },
+
+            errorClass: "help-block",
+            errorElement: "p",
+            highlight: function(element, errorClass, validClass) {
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
+            }
+        });
+
+        $("#formCopiarSerie").validate({
+            rules: {
+                vencimento: {
+                    required: true
+                },
+            },
+            messages: {
+                vencimento: {
+                    required: 'Informe a data alvo para a cópia'
                 }
             },
 

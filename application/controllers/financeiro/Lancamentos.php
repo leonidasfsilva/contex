@@ -180,7 +180,7 @@ class Lancamentos extends CI_Controller
                 }
             }
         }
-        
+
         if ($referenceMonth) {
             $this->data['month']        = translateMonth($referenceMonth);
             $this->data['nextMonth']    = translateMonth($referenceMonth + 1);
@@ -478,6 +478,7 @@ class Lancamentos extends CI_Controller
             $urlAtual = $this->global_url;
         }
 
+        $id             = $this->input->post('id');
         $vencimento     = $this->input->post('vencimento');
         $pagamento      = $this->input->post('pagamento');
         $observacoes    = $this->input->post('observacoes');
@@ -487,6 +488,37 @@ class Lancamentos extends CI_Controller
             $vencimento = $vencimento[2] . '-' . $vencimento[1] . '-' . $vencimento[0];
         } else {
             $vencimento = date('Y-m-d');
+        }
+
+        if (is_array($id) && count($id) > 0) {
+            $id = array_reverse($id);
+            $data = [];
+
+            foreach ($id as $value) {
+                $lancamento = $this->financeiro_model->getById($value, getUserId());
+
+                if ($lancamento) {
+                    $data = [
+                        'descricao'             => $lancamento->descricao,
+                        'observacoes'           => $lancamento->observacoes,
+                        'valor'                 => $lancamento->valor,
+                        'data_lancamento'       => $vencimento,
+                        'data_pagamento'        => $lancamento->data_pagamento ?? $vencimento,
+                        'baixado'               => $lancamento->baixado,
+                        'cliente_fornecedor'    => $lancamento->cliente_fornecedor,
+                        'forma_pgto'            => $lancamento->forma_pgto,
+                        'tipo'                  => $lancamento->tipo,
+                        'id_usuario'            => getUserId()
+                    ];
+                }
+
+                if (!$this->financeiro_model->add('lancamentos', $data)) {
+                    $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar copiar a série de lançamentos.');
+                    redirect($urlAtual);
+                }
+            }
+            $this->session->set_flashdata('sucesso', 'Série de lançamentos copiada com sucesso!');
+            redirect($urlAtual);
         }
 
         if ($pagamento != null) {
@@ -553,7 +585,8 @@ class Lancamentos extends CI_Controller
             foreach ($id as $value) {
                 $this->financeiro_model->delete('lancamentos', $data, 'id_lancamento', $value);
             }
-            $this->session->set_flashdata('sucesso', 'Lançamentos excluídos com sucesso!');
+
+            $this->session->set_flashdata('sucesso', 'Série de lançamentos excluída com sucesso!');
             redirect($urlAtual);
         }
 
