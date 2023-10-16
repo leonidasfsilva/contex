@@ -197,13 +197,13 @@ if (!$results) {
             </div>
             <div class="panel-ctrls">
                 <span class="hidden" id="div_btn_marcar">
-                    <button class="btn btn-danger btn-sm excluir_serie " id="excluir_serie" title="Excluir todos os lançamentos selecionados" disabled>
-                        <i class="fas fa-trash-alt fa-fw"></i>
-                        Excluir
-                    </button>
                     <button class="btn btn-info btn-sm copiar_serie " id="copiar_serie" title="Copiar todos os lançamentos selecionados" disabled>
                         <i class="fas fa-copy fa-fw"></i>
                         Copiar
+                    </button>
+                    <button class="btn btn-danger btn-sm excluir_serie " id="excluir_serie" title="Excluir todos os lançamentos selecionados" disabled>
+                        <i class="fas fa-trash-alt fa-fw"></i>
+                        Excluir
                     </button>
                     <button class="btn btn-default btn-sm marcar_desmarcar" id="marcar_todos" title="Marcar todos os lançamentos da fatura">
                         <i class="far fa-square fa-fw"></i>
@@ -1622,7 +1622,7 @@ if (!$results) {
             },
             messages: {
                 vencimento: {
-                    required: 'Informe a data alvo para a cópia'
+                    required: 'Preenchimento obrigatório'
                 }
             },
 
