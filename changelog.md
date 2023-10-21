@@ -1,5 +1,9 @@
 # Changelog
 
+### 15/10/2023 - [2023.2.48]
+### Feature:
+- pequeno ajuste em ```financeiro/faturas/terceiros```
+---
 ### 15/10/2023 - [2023.2.47]
 ### Feature:
 - adicionado modal para copiar múltiplos lançamentos de uma uníca vez em ```financeiro/lancamentos```

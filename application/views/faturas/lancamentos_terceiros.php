@@ -101,7 +101,7 @@ if (isset($referenceMonth) && $referenceMonth) {
                                                         $valor = number_format($r['valor_total'], 2, ',', '.');
                                                     }
 
-                                                    if (isset($r['observacoes'])) {
+                                                    if (isset($r['observacoes']) && $r['observacoes']) {
                                                         $iconObs = ' 
                                                             <i class="fas fa-comment-dots fa-fw" title="Observações adicionais"></i>
                                                         ';
