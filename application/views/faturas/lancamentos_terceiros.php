@@ -341,7 +341,7 @@ if (isset($referenceMonth) && $referenceMonth) {
         <div class="modal-content">
             <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white ">Detalhes do lançamento</h4>
+                <h4 class="modal-title text-white ">Detalhes da compra</h4>
             </div>
             <!-- <form id="formEditarLancamento" action="<?php echo base_url('financeiro/faturas/editarLancamento') ?>" method="post" autocomplete="off"> -->
             <div class="modal-body">
