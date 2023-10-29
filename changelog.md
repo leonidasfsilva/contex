@@ -1,5 +1,9 @@
 # Changelog
 
+### 28/10/2023 - [2023.2.49]
+### Feature:
+- ajuste em ```mxcode/backup``` para não exibir *loading fade* ao clicar no link para baixar Backup
+---
 ### 15/10/2023 - [2023.2.48]
 ### Feature:
 - pequeno ajuste em ```financeiro/faturas/terceiros```

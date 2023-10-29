@@ -491,7 +491,7 @@ $this->load->view('includes/custom_js');
                                                     <li><a href="<?= base_url() ?>permissoes">Permissões</a></li>
                                                 <?php } ?>
                                                 <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cBackup')) { ?>
-                                                    <li><a href="<?= base_url() ?>mxcode/backup">Backup</a></li>
+                                                    <li><a href="<?= base_url() ?>mxcode/backup" class="js:">Backup</a></li>
                                                 <?php } ?>
                                             </ul>
                                         </li>

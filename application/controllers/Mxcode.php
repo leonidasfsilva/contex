@@ -188,7 +188,6 @@ class Mxcode extends CI_Controller
 
     public function backup()
     {
-
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
             redirect('mxcode/login');
         }
@@ -198,6 +197,8 @@ class Mxcode extends CI_Controller
             redirect(base_url());
         }
 
+        $currentPage = isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : base_url();
+
         $this->load->dbutil();
         $prefs = array(
             'format' => 'zip',
@@ -205,13 +206,20 @@ class Mxcode extends CI_Controller
             'filename' => 'backup' . date('d-m-Y') . '.sql',
         );
 
-        $backup = $this->dbutil->backup($prefs);
-
-        $this->load->helper('file');
-        write_file(base_url() . 'backup/backup.zip', $backup);
-
-        $this->load->helper('download');
-        force_download('backup' . date('d-m-Y H:m:s') . '.zip', $backup);
+        try {
+            $backup = $this->dbutil->backup($prefs);
+    
+            $this->load->helper('file');
+            write_file(base_url() . 'backup/backup.zip', $backup);
+    
+            $this->load->helper('download');
+            force_download('backup' . date('d-m-Y H:m:s') . '.zip', $backup);
+            $this->session->set_flashdata('sucesso', 'Backup do banco de dados exportado com sucesso!');
+            redirect($currentPage);
+        } catch (\Throwable $e) {
+            $this->session->set_flashdata('erro', 'Erro ao tentar gerar backup do banco de dados.');
+            redirect($currentPage);
+        }
     }
 
     public function emitente()
