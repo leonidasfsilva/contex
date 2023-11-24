@@ -2,7 +2,7 @@
 
 use LDAP\Result;
 
- if (!defined('BASEPATH')) {
+if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -448,7 +448,7 @@ class Faturas extends CI_Controller
                             }
                             $faturaReferencia = $this->fatura_model->getFaturaReferencia($faturaAtual->id_cartao, $mes, $ano);
                         }
-                        
+
                         //ARRAY LANCAMENTOS_FATURAS_ASSOC
                         $lancamentosFaturasAssocArray = array(
                             'id_lancamento'     => $last_id,
@@ -1114,7 +1114,7 @@ class Faturas extends CI_Controller
 
         if (!$parameter) {
             $urlAtual   = $this->input->post('urlAtual');
-            $id         = $this->input->post('id');    
+            $id         = $this->input->post('id');
         }
 
         $data = array(
@@ -1149,7 +1149,8 @@ class Faturas extends CI_Controller
         }
     }
 
-    public function excluirSerieLancamentos() {
+    public function excluirSerieLancamentos()
+    {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dFaturas')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para excluir lançamentos de faturas.');
             redirect(base_url());
@@ -1166,12 +1167,11 @@ class Faturas extends CI_Controller
 
             if (!$result) {
                 $this->session->set_flashdata('erro', 'Erro ao tentar excluir série de lançamentos');
-                redirect($urlAtual);    
+                redirect($urlAtual);
             }
             $this->session->set_flashdata('sucesso', 'Lançamentos excluídos com sucesso!');
             redirect($urlAtual);
         }
-
     }
 
     public function abrir()
@@ -1423,9 +1423,10 @@ class Faturas extends CI_Controller
             redirect(base_url());
         }
 
-        $urlAtual       = $this->input->post('urlAtual') ?? null;
-        $mesReferencia  = $this->input->post('mesReferencia') ?? null;
-        $anoReferencia  = $this->input->post('anoReferencia') ?? null;
+        $urlAtual           = $this->input->post('urlAtual') ?? null;
+        $mesReferencia      = $this->input->post('mesReferencia') ?? null;
+        $anoReferencia      = $this->input->post('anoReferencia') ?? null;
+        $desvincularFaturas = $this->input->post('desvincularFaturas') ?? null;
 
         if (!$_POST) {
             $todayDate      = date('Y-m-d');
@@ -1448,50 +1449,23 @@ class Faturas extends CI_Controller
                 continue;
             }
 
-            $vinculoFatura          = $this->fatura_model->getVinculoFatura($faturaReferencia->id_fatura);
-            $detalhesFatura         = $this->fatura_model->getDetalhesFatura($faturaReferencia->id_fatura);
-            $valorTotalFatura       = $this->fatura_model->getValorTotalFatura($faturaReferencia->id_fatura);
-            $detalhesCartaoFatura   = $this->cartoes_model->getCartao($detalhesFatura->id_cartao);
-            $n_cartao               = explode(" ", trim(decriptar($detalhesCartaoFatura->numero)));
-            $final                  = $n_cartao[3];
-            $apelido                = $detalhesCartaoFatura->apelido ? sprintf('- %s', $detalhesCartaoFatura->apelido) : null;
+            $vinculoFatura = $this->fatura_model->getVinculoFatura($faturaReferencia->id_fatura);
 
-            $lancamentosList = [
-                'id_usuario'            => getUserId(),
-                'id_fatura'             => $faturaReferencia->id_fatura,
-                'descricao'             => sprintf('FATURA CARTAO DE CREDITO %s', $apelido),
-                'cliente_fornecedor'    => $detalhesCartaoFatura->bandeira ? $detalhesCartaoFatura->bandeira . ' - FINAL ' . $final : null,
-                'valor'                 => sprintf('-%s', $valorTotalFatura),
-                'data_lancamento'       => $detalhesFatura->vencimento ?? $detalhesFatura->data_pagamento,
-                'data_pagamento'        => $detalhesFatura->data_pagamento ?? $detalhesFatura->vencimento,
-                'forma_pgto'            => $detalhesFatura->forma_pgto ?? 5,
-                'baixado'               => ($detalhesFatura->fatura_paga == 1),
-                'tipo'                  => 2
-            ];
-
-            if ($vinculoFatura) {
-                if ($_POST['desvincularFaturas']) {
+            if ($desvincularFaturas) {
+                if ($vinculoFatura) {
                     desvinculaFatura($faturaReferencia->id_fatura);
-                } else {
-                    $this->financeiro_model->edit('lancamentos', $lancamentosList, 'id_lancamento', $vinculoFatura->id_lancamento);
                 }
-                continue;
+            } else {
+                if ($vinculoFatura) {
+                    atualizaValorVinculoFaturas($faturaReferencia->id_fatura);
+                } else {
+                    vinculaFatura($faturaReferencia->id_fatura);
+                }
             }
-
-            if (!$_POST) {
-                continue;
-            }
-
-            $updateFaturas = [
-                'fatura_vinculada' => $_POST['desvincularFaturas'] ? 0 : 1
-            ];
-
-            $this->fatura_model->edit('faturas', $updateFaturas, 'id_fatura', $faturaReferencia->id_fatura);
-            $this->financeiro_model->add('lancamentos', $lancamentosList);
         }
 
         if ($_POST) {
-            if ($_POST['desvincularFaturas']) {
+            if ($desvincularFaturas) {
                 $this->session->set_flashdata('sucesso', 'Faturas de cartões ativos desvinculadas com sucesso');
             } else {
                 $this->session->set_flashdata('sucesso', 'Faturas de cartões ativos vinculadas com sucesso');
@@ -1675,17 +1649,17 @@ class Faturas extends CI_Controller
         $nextReferenceMonth = $referenceMonth + 1;
         $prevReferenceYear  = $referenceYear;
         $nextReferenceYear  = $referenceYear;
-    
+
         if ($referenceMonth == 12) {
             $nextReferenceMonth = 1;
             $nextReferenceYear++;
         }
-    
+
         if ($referenceMonth == 1) {
             $prevReferenceMonth = 12;
             $prevReferenceYear--;
         }
-            
+
         $mesVencimento = $referenceMonth + 1;
         $anoVencimento = $referenceYear;
 
@@ -1707,7 +1681,7 @@ class Faturas extends CI_Controller
         $dueDateMonthName   = getExtendedMonthName($mesVencimento);
 
         if ($faturasTerceiros) {
-            foreach ($faturasTerceiros as $fatura) {        
+            foreach ($faturasTerceiros as $fatura) {
                 $lancamentosTerceiros   = $this->fatura_model->getLancamentosTerceiros(getUserId(), $fatura['id_cartao'], $nome, $referenceMonth, $referenceYear);
                 $monthName              = getExtendedMonthName($fatura['mes_referencia']);
                 $reference              = $monthName . ' / ' . $fatura['ano_referencia'];

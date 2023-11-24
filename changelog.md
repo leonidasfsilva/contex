@@ -1,5 +1,9 @@
 # Changelog
 
+### 24/11/2023 - [2023.2.50]
+### Bugfix:
+- correções nos métodos de **Vincular fatura** e **Desvincular fatura**:
+---
 ### 28/10/2023 - [2023.2.49]
 ### Feature:
 - ajuste em ```mxcode/backup``` para não exibir *loading fade* ao clicar no link para baixar Backup

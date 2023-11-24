@@ -78,6 +78,52 @@ function atualizaValorVinculoFaturas($idFatura = null)
     return true;
 }
 
+function vinculaFatura($idFatura)
+{
+    if (!$idFatura) {
+        return false;
+    }
+    $CI = get_instance();
+    $CI->load->model('fatura_model');
+
+    $vinculoFatura = $CI->fatura_model->getVinculoFatura($idFatura);
+
+    if ($vinculoFatura) {
+        return false;
+    }
+
+    $data = [
+        'fatura_vinculada' => 1
+    ];
+
+    if ($CI->fatura_model->edit('faturas', $data, 'id_fatura', $idFatura)) {
+
+
+        $detalhesFatura         = $CI->fatura_model->getDetalhesFatura($idFatura);
+        $valorTotalFatura       = $CI->fatura_model->getValorTotalFatura($idFatura);
+        $detalhesCartaoFatura   = $CI->cartoes_model->getCartao($detalhesFatura->id_cartao);
+        $n_cartao               = explode(" ", trim(decriptar($detalhesCartaoFatura->numero)));
+        $final                  = $n_cartao[3];
+        $apelido                = $detalhesCartaoFatura->apelido ? ' - ' . $detalhesCartaoFatura->apelido : null;
+
+        $data = array(
+            'id_usuario'            => getUserId(),
+            'id_fatura'             => $idFatura,
+            'descricao'             => 'FATURA CARTAO DE CREDITO' . $apelido,
+            'cliente_fornecedor'    => $detalhesCartaoFatura->bandeira ? $detalhesCartaoFatura->bandeira . ' - FINAL ' . $final : null,
+            'valor'                 => '-' . $valorTotalFatura,
+            'data_lancamento'       => $detalhesFatura->vencimento ?? $detalhesFatura->data_pagamento,
+            'data_pagamento'        => $detalhesFatura->data_pagamento ?? $detalhesFatura->vencimento,
+            'forma_pgto'            => $detalhesFatura->forma_pgto ?? 5,
+            'baixado'               => ($detalhesFatura->fatura_paga == 1),
+            'tipo'                  => 2
+        );
+
+        $CI->financeiro_model->add('lancamentos', $data);
+    }
+    return true;
+}
+
 function desvinculaFatura($idFatura)
 {
     if (!$idFatura) {
