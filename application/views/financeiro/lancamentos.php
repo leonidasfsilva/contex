@@ -230,9 +230,9 @@ if (!$results) {
                     <tr role="row">
                         <th class="th_soma hidden" style="width: 10px !important;">Soma</th>
                         <th>Data</th>
-                        <th>Descrição</th>
-                        <th>Valor (R$)</th>
-                        <th>Status</th>
+                        <th>Descrição<br>Fornecedor</th>
+                        <th>Valor (R$)<br>Forma Pagamento</th>
+                        <th>Tipo<br>Status</th>
                         <th style="width: 130px">Ações</th>
                     </tr>
                 </thead>

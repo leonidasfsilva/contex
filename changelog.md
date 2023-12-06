@@ -1,5 +1,9 @@
 # Changelog
 
+### 06/12/2023 - [2023.2.51]
+### Release:
+- adicionado novos títulos no cabeçalho da tabela de listagem de lançamentos em ```financeiro/lancamentos```
+---
 ### 24/11/2023 - [2023.2.50]
 ### Bugfix:
 - correções nos métodos de **Vincular fatura** e **Desvincular fatura**:
