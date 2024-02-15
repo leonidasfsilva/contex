@@ -41,45 +41,45 @@
     <div class="panel-body panel-no-padding table-responsive">
         <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
             <thead>
-                <tr role="row">
-                    <th style="width: 30px">ID</th>
-                    <th>Descrição</th>
-                    <th>Setor</th>
-                    <th>Status</th>
-                    <th style="width: 135px">Ações</th>
-                </tr>
+            <tr role="row">
+                <th style="width: 30px">ID</th>
+                <th>Descrição</th>
+                <th>Setor</th>
+                <th>Status</th>
+                <th style="width: 135px">Ações</th>
+            </tr>
             </thead>
             <tbody>
-                <?php if (!$results) { ?>
-                    <tr>
-                        <td colspan="5">Nenhum opção de configuração cadastrada</td>
-                    </tr>
-                <?php } else {
-                    foreach ($results as $r) {
+            <?php if (!$results) { ?>
+                <tr>
+                    <td colspan="5">Nenhum opção de configuração cadastrada</td>
+                </tr>
+            <?php } else {
+                foreach ($results as $r) {
 
-                        if ($r->status == 1) {
-                            $status = 'Ativo';
-                            $label_status = 'success';
-                            $btn_status = '<a href="#modalDesativar" role="button" data-toggle="modal" id_opcao="' . $r->id_opcao . '" style="margin-right: 2%" class="btn btn-warning btn-sm" title="Desativar"><i class="fas fa-minus-circle fa-lg fa-fw" ></i></a>';
-                        } else {
-                            $status = 'Inativo';
-                            $label_status = 'warning';
-                            $btn_status = '<a href="#modalAtivar" role="button" data-toggle="modal" id_opcao="' . $r->id_opcao . '" style="margin-right: 2%" class="btn btn-success btn-sm" title="Ativar"><i class="fas fa-check-circle fa-lg fa-fw" ></i></a>';
-                        }
-
-                        echo '<tr>';
-                        echo '<td>' . $r->id_opcao . '</td>';
-                        echo '<td>' . $r->descricao . '</td>';
-                        echo '<td>' . $r->setor . '</td>';
-                        echo '<td><span class="label label-' . $label_status . '">' . strtoupper($status) . '</span></td>';
-                        echo '<td style="text-align: center">';
-                        echo '<a href="#modalEditar" role="button" data-toggle="modal" id_opcao="' . $r->id_opcao . '" descricao="' . $r->descricao . '" setor="' . $r->setor . '" style="margin-right: 2%" class="btn btn-primary btn-sm editar" title="Editar"><i class="fas fa-edit fa-lg fa-fw" ></i></a>';
-                        echo $btn_status;
-                        echo '<a href="#modalExcluir" role="button" data-toggle="modal" id_opcao="' . $r->id_opcao . '" style="margin-right: 2%" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw" ></i></a>';
-                        echo '</td>';
-                        echo '</tr>';
+                    if ($r->status == 1) {
+                        $status = 'Ativo';
+                        $label_status = 'success';
+                        $btn_status = '<a href="#modalDesativar" role="button" data-toggle="modal" id_opcao="' . $r->id_opcao . '" style="margin-right: 2%" class="btn btn-warning btn-sm" title="Desativar"><i class="fas fa-minus-circle fa-lg fa-fw" ></i></a>';
+                    } else {
+                        $status = 'Inativo';
+                        $label_status = 'warning';
+                        $btn_status = '<a href="#modalAtivar" role="button" data-toggle="modal" id_opcao="' . $r->id_opcao . '" style="margin-right: 2%" class="btn btn-success btn-sm" title="Ativar"><i class="fas fa-check-circle fa-lg fa-fw" ></i></a>';
                     }
-                } ?>
+
+                    echo '<tr>';
+                    echo '<td>' . $r->id_opcao . '</td>';
+                    echo '<td>' . $r->descricao . '</td>';
+                    echo '<td>' . $r->setor . '</td>';
+                    echo '<td><span class="label label-' . $label_status . '">' . strtoupper($status) . '</span></td>';
+                    echo '<td style="text-align: center">';
+                    echo '<a href="#modalEditar" role="button" data-toggle="modal" id_opcao="' . $r->id_opcao . '" descricao="' . $r->descricao . '" setor="' . $r->setor . '" style="margin-right: 2%" class="btn btn-primary btn-sm editar" title="Editar"><i class="fas fa-edit fa-lg fa-fw" ></i></a>';
+                    echo $btn_status;
+                    echo '<a href="#modalExcluir" role="button" data-toggle="modal" id_opcao="' . $r->id_opcao . '" style="margin-right: 2%" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw" ></i></a>';
+                    echo '</td>';
+                    echo '</tr>';
+                }
+            } ?>
             </tbody>
         </table>
     </div>
@@ -96,7 +96,7 @@
             <form action="<?php echo base_url('configuracoes/desativar') ?>" method="post">
                 <div class="modal-body">
                     <p>Deseja realmente desativar esta opção de configuração?</p>
-                    <input type="hidden" id="id_desativar" name="id" value="" />
+                    <input type="hidden" id="id_desativar" name="id" value=""/>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
@@ -120,7 +120,7 @@
             <form action="<?php echo base_url('configuracoes/ativar') ?>" method="post">
                 <div class="modal-body">
                     <p>Deseja realmente ativar esta opção de configuração?</p>
-                    <input type="hidden" id="id_ativar" name="id" value="" />
+                    <input type="hidden" id="id_ativar" name="id" value=""/>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
@@ -146,7 +146,7 @@
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricao">Descrição *</label>
-                            <input class="form-control" id="descricao" type="text" name="descricao" value="" />
+                            <input class="form-control" id="descricao" type="text" name="descricao" value=""/>
                             <input type="hidden" name="id_opcao" id="id_opcao">
                         </div>
                     </div>
@@ -160,7 +160,7 @@
                                 <?php if ($setores) {
                                     foreach ($setores as $k => $v) { ?>
                                         <option value="<?= $v ?>"><?= $v ?></option>
-                                <?php }
+                                    <?php }
                                 } ?>
                             </select>
                         </div>
@@ -190,7 +190,7 @@
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricao">Descrição *</label>
-                            <input class="form-control" id="descricao" type="text" name="descricao" value="" />
+                            <input class="form-control" id="descricao" type="text" name="descricao" value=""/>
                             <input type="hidden" name="id_opcao" id="id_opcao">
                         </div>
                     </div>
@@ -204,7 +204,7 @@
                                 <?php if ($setores) {
                                     foreach ($setores as $k => $v) { ?>
                                         <option value="<?= $v ?>"><?= $v ?></option>
-                                <?php }
+                                    <?php }
                                 } ?>
                             </select>
                         </div>
@@ -233,7 +233,7 @@
                 <div class="modal-body">
                     <p>Deseja realmente excluir esta opção de configuração?</p>
                     <span class="note note-danger block font-weight-bold">Atenção! Isto irá excluir permanentemente este registro.</span>
-                    <input type="hidden" id="id_excluir" name="id_opcao" value="" />
+                    <input type="hidden" id="id_excluir" name="id_opcao" value=""/>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
@@ -264,14 +264,14 @@
         })
     }
 
-    $(document).ready(function() {
-        $('.excluir').click(function() {
+    $(document).ready(function () {
+        $('.excluir').click(function () {
             let id_opcao = $(this).attr('id_opcao');
 
             $('#id_excluir').val(id_opcao);
         })
 
-        $('.editar').click(function() {
+        $('.editar').click(function () {
             let descricao = $(this).attr('descricao');
             let setor = $(this).attr('setor');
             let id_opcao = $(this).attr('id_opcao');
@@ -294,11 +294,11 @@
             },
             errorClass: "help-block",
             errorElement: "p",
-            highlight: function(element, errorClass, validClass) {
+            highlight: function (element, errorClass, validClass) {
                 $(element).parents('.form-group').addClass('has-error');
                 $(element).parents('.form-group').removeClass('has-success');
             },
-            unhighlight: function(element, errorClass, validClass) {
+            unhighlight: function (element, errorClass, validClass) {
                 $(element).parents('.form-group').removeClass('has-error');
                 $(element).parents('.form-group').addClass('has-success');
             }
@@ -324,11 +324,11 @@
 
             errorClass: "help-block",
             errorElement: "p",
-            highlight: function(element, errorClass, validClass) {
+            highlight: function (element, errorClass, validClass) {
                 $(element).parents('.form-group').addClass('has-error');
                 $(element).parents('.form-group').removeClass('has-success');
             },
-            unhighlight: function(element, errorClass, validClass) {
+            unhighlight: function (element, errorClass, validClass) {
                 $(element).parents('.form-group').removeClass('has-error');
                 $(element).parents('.form-group').addClass('has-success');
             }
@@ -354,11 +354,11 @@
 
             errorClass: "help-block",
             errorElement: "p",
-            highlight: function(element, errorClass, validClass) {
+            highlight: function (element, errorClass, validClass) {
                 $(element).parents('.form-group').addClass('has-error');
                 $(element).parents('.form-group').removeClass('has-success');
             },
-            unhighlight: function(element, errorClass, validClass) {
+            unhighlight: function (element, errorClass, validClass) {
                 $(element).parents('.form-group').removeClass('has-error');
                 $(element).parents('.form-group').addClass('has-success');
             }
