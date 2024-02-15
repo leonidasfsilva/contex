@@ -319,3 +319,11 @@ function constructStartEndDate($referenceMonth = null, $referenceYear = null)
 
     return $return;
 }
+
+function dd()
+{
+    foreach (func_get_args() as $arg) {
+        var_dump($arg);
+    }
+    exit();
+}
