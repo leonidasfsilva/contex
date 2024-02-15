@@ -145,9 +145,9 @@ class Mxcode extends CI_Controller
             $this->session->set_flashdata('erro', 'Formato de e-mail inválido.');
             redirect('mxcode/login');
         } else {
-            $email      = $this->input->post('email');
-            $password   = $this->input->post('senha');
-            $usuario    = $this->mxcode_model->check_credentials($email);
+            $email = $this->input->post('email');
+            $password = $this->input->post('senha');
+            $usuario = $this->mxcode_model->check_credentials($email);
 
             if ($usuario) {
                 if (password_verify($password, $usuario->senha)) {
@@ -208,10 +208,10 @@ class Mxcode extends CI_Controller
 
         try {
             $backup = $this->dbutil->backup($prefs);
-    
+
             $this->load->helper('file');
             write_file(base_url() . 'backup/backup.zip', $backup);
-    
+
             $this->load->helper('download');
             force_download('backup' . date('d-m-Y H:m:s') . '.zip', $backup);
             $this->session->set_flashdata('sucesso', 'Backup do banco de dados exportado com sucesso!');
@@ -588,5 +588,40 @@ class Mxcode extends CI_Controller
     public function checarPermissoes()
     {
         print_array_exit($this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente'));
+    }
+
+    public function teste($get = null)
+    {
+        $data = array(
+            'heading' => 'Erro 404: Página não encontrada',
+            'message' => 'A página solicitada não foi encontrada.<br><a href="' . base_url() . '"> << Voltar à página inicial.</a>'
+        );
+
+        $data = array(
+            'heading' => 'Página para Testes de Scripts PHP',
+            'message' => 'Efetue seus testes aqui.<br><a href="' . base_url() . '"> << Voltar à página inicial.</a>'
+        );
+
+        if (!$get) {
+            return $this->load->view('errors/html/test', $data);
+        }
+
+        $n = 4;
+        // $ratings = array();
+        // resposta certa: 123
+        $ratings = [
+            [512, 2],
+            [123, 3],
+            [987, 4],
+            [123, 5]
+        ];
+        // for ($i_ratings = 0; $i_ratings < $n; $i_ratings++) {
+        //     array_push($ratings, explode(" ", 4));
+        // }
+
+        $out_ = $this->solution($n, $ratings);
+//        dd($get);
+        // echo $ratings;
+        return $this->load->view('errors/html/test', $data);
     }
 }
