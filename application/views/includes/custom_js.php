@@ -111,7 +111,7 @@
                             cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
                         }).then((result) => {
                             if (result.value) {
-                                window.location.reload(true)
+                                window.location.reload()
                             } else {
 
                             }
@@ -129,6 +129,9 @@
                             if (item.link) {
                                 base_url = '<?= base_url() ?>'
                                 link = base_url + item.link
+                                if (item.link.includes('http')) {
+                                    link = item.link
+                                }
                             } else {
                                 link = 'notificacoes'
                             }
@@ -141,7 +144,7 @@
                                 '<li>' +
                                 '<a href="' + link + '" class="notification-info">' +
                                 '<div class="notification-icon"><i class="' + icone + '"></i></div>' +
-                                '<div class="notification-content ajax-notification font-weight-bold">' + (item.titulo) + '</div>' +
+                                '<div class="notification-content ajax-notification ">' + (item.descricao) + '</div>' +
                                 '</a>' +
                                 '</li>'
                             )
