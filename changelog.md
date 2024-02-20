@@ -1,8 +1,14 @@
 # Changelog
 
+### 20/02/2024 - `2024.1.1`
+### Bugfix:
+- correção no módulo de Chamados
+### Feature:
+- adição da função/helper `DD` do Laravel
+---
 ### 06/12/2023 - [2023.2.51]
 ### Release:
-- adicionado novos títulos no cabeçalho da tabela de listagem de lançamentos em ```financeiro/lancamentos```
+- adicionado novos títulos no cabeçalho da tabela de listagem de lançamentos em `financeiro/lancamentos`
 ---
 ### 24/11/2023 - [2023.2.50]
 ### Bugfix:

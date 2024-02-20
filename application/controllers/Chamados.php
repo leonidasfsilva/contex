@@ -184,13 +184,12 @@ class Chamados extends CI_Controller
             $this->chamados_model->edit('chamados', $data2, 'id_chamado', $_POST['id_chamado']);
         }
 
-        if ($this->chamados_model->add('chamados_respostas', $data) == true) {
+        if ($this->chamados_model->add('chamados_respostas', $data)) {
             $this->session->set_flashdata('sucesso', 'Resposta enviada com sucesso!');
-            redirect('chamados/detalhes/' . $_POST['id_chamado']);
         } else {
             $this->session->set_flashdata('erro', 'Erro ao tentar responder chamado.');
-            redirect('chamados/detalhes/' . $_POST['id_chamado']);
         }
+        redirect('chamados/detalhes/' . $_POST['id_chamado']);
     }
 
     public function finalizar()
