@@ -80,6 +80,7 @@
             },
             success: function(data) {
                 if (data.result === true) {
+                    let target = '';
                     let link;
                     let icone;
                     let height = 0;
@@ -131,6 +132,7 @@
                                 link = base_url + item.link
                                 if (item.link.includes('http')) {
                                     link = item.link
+                                    target = '_blank'
                                 }
                             } else {
                                 link = 'notificacoes'
@@ -142,7 +144,7 @@
                             }
                             $('#notifications-panel').append(
                                 '<li>' +
-                                '<a href="' + link + '" class="notification-info">' +
+                                '<a href="' + link + '" class="notification-info" target="'+ target +'">' +
                                 '<div class="notification-icon"><i class="' + icone + '"></i></div>' +
                                 '<div class="notification-content ajax-notification ">' + (item.descricao) + '</div>' +
                                 '</a>' +
