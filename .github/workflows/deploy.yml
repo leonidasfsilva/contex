@@ -15,7 +15,6 @@ jobs:
     - name: Installing ssh keys...
       # check this thread to understand why its needed:
       # https://stackoverflow.com/a/70447517
-      # SERVER_SSH_KEY is the public key on the host
       run: |
         install -m 600 -D /dev/null ~/.ssh/id_rsa
         echo "${{ secrets.SERVER_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa 
