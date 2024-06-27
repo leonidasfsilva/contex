@@ -8,7 +8,7 @@ on:
   
 jobs:
   run_pull:
-    name: Runing git reset hard on prod...
+    name: Running git reset hard on prod...
     runs-on: ubuntu-latest
     
     steps:        
