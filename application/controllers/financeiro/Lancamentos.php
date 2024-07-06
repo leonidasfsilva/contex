@@ -123,14 +123,8 @@ class Lancamentos extends CI_Controller
                 }
                 break;
             default:
-                $order_by = [
-                    'data_lancamento'   => 'desc',
-                    'id_lancamento'     => 'desc',
-                ];
-
                 $startEndDate   = constructStartEndDate();
                 $referenceMonth = $startEndDate['referenceMonth'];
-                $limit          = null;
 
                 if (!isset($referenceYear) && !$referenceYear) {
                     $referenceYear = $startEndDate['referenceYear'];
