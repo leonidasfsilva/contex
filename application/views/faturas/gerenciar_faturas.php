@@ -145,7 +145,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 </tr>
             </thead>
             <tbody>
-                <?php if (isset($results)) {
+                <?php if (isset($results) && $results) {
                     $totalReceita   = 0;
                     $totalDespesa   = 0;
                     $saldo          = 0;
