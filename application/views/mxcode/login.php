@@ -321,12 +321,7 @@
                                             '</strong>, ' +
                                             'verifique sua caixa de entrada ou pasta de <i>spam</i> e siga as instruções de recuperação.</p>',
                                     }).then((result) => {
-                                        if (result.value) {
-                                            //window.location.replace('<? //= site_url() 
-                                                                        ?>//' + 'redefinirsenha/verificacao?token=' + res.token + '&id=' + res.id);
-                                        } else {
-
-                                        }
+                                        
                                     })
                                 }
                                 if (res.validacao == false) {

@@ -513,11 +513,11 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 </div>
                 <div class="modal-body">
                     <div class="note note-danger font-weight-bold">
-                        <span>Este cartão não possui uma data de vencimento padrão para fatura configurada.</span>
+                        <span>Este cartão não possui uma data de vencimento padrão configurada para faturas.</span>
                         <br>
                         <span>Sem este parâmentro configurado não é possível abrir novas faturas.</span>
                         <br>
-                        <span>Configure a data de vencimento padrão da fatura clicando no botão: <span class="label label-primary"> <i class="fas fa-cog fa-fw"></i> Configurar Fatura</span></span>
+                        <span>Defina uma data de vencimento padrão para fatura clicando no botão: <span class="label label-primary"> <i class="fas fa-cog fa-fw"></i> Configurar Fatura</span></span>
                     </div>
                 </div>
                 <div class="modal-footer">

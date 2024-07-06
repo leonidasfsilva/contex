@@ -50,7 +50,7 @@ class Lancamentos extends CI_Controller
         $where          = null;
         $limit          = null;
         $year           = date('Y');
-        $keys           = range(2018, $year + 3);
+        $keys           = range(2019, $year + 3);
         $yearsList      = $keys;
 
         $order_by       = [

@@ -91,7 +91,6 @@ class Configs_model extends CI_Model
         if ($this->db->affected_rows() > 0) {
             return true;
         }
-
         return false;
     }
 

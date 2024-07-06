@@ -26,7 +26,7 @@ class Fatura_model extends CI_Model
             $this->db->where($where);
         }
         $this->db->where('status', 1);
-        // este trecho do codigo foi comentado para tornar visivel aos titulares as faturas do cartoes adicionais
+        // este trecho do codigo foi comentado para tornar visivel aos titulares as faturas dos cartoes adicionais
         // $this->db->where('id_usuario', $id_usuario);
         $this->db->where('id_cartao', $id_cartao);
 
@@ -616,7 +616,7 @@ class Fatura_model extends CI_Model
                     'label' => $row['nome_cliente']
                 ];
             }
-            echo json_encode($row_set);
+            return json_encode($row_set);
         }
     }
 
@@ -639,8 +639,21 @@ class Fatura_model extends CI_Model
                     'label' => $row['descricao']
                 ];
             }
-            echo json_encode($row_set);
+            return json_encode($row_set);
         }
+    }
+
+    function atualizaDescricao($term, $dataList)
+    {
+        $this->db->where('descricao', $term);
+        $this->db->where('id_usuario', getUserId());
+        $this->db->where('status', 1);
+        $this->db->update('lancamentos_faturas', $dataList);
+
+        if ($this->db->affected_rows()) {
+            return true;
+        }
+        return false;
     }
 
     function getAllTerceiros($idCartao = null, $mesReferencia = null, $anoReferencia = null, $idUsuario = null)
@@ -666,19 +679,19 @@ class Fatura_model extends CI_Model
 
         if ($idCartao) {
             $where .= " AND f.id_cartao = $idCartao ";
-        } 
-        
+        }
+
         if ($mesReferencia) {
             $where .= " AND lfa.mes_referencia = $mesReferencia";
-        } 
-        
+        }
+
         if ($anoReferencia) {
             $where .= " AND lfa.ano_referencia = $anoReferencia";
-        } 
-        
-        $groupBy        = " GROUP BY lf.nome_cliente ASC";
-        $mainQuery      .= $where .= $groupBy;
-        $resultQuery    = $this->db->query($mainQuery);
+        }
+
+        $groupBy = " GROUP BY lf.nome_cliente ASC";
+        $mainQuery .= $where .= $groupBy;
+        $resultQuery = $this->db->query($mainQuery);
 
         if ($resultQuery->num_rows() > 0) {
             $row_set = [];
@@ -737,8 +750,8 @@ class Fatura_model extends CI_Model
             GROUP BY lfa.mes_referencia
         ";
 
-        $resultQuery    = $this->db->query($query);
-        $result         = $resultQuery->result_array();
+        $resultQuery = $this->db->query($query);
+        $result = $resultQuery->result_array();
 
         if (!$result) {
             return false;
