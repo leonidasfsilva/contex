@@ -1091,7 +1091,7 @@ if (!$results) {
                     <div class="row">
                         <div class="form-group col-lg-4">
                             <label for="vencimento" class="font-weight-bold">Informe a data alvo para cópia</label>
-                            <input class="form-control datepicker" type="text" name="vencimento" />
+                            <input class="form-control datepicker" type="text" name="vencimento" autocomplete="off"/>
                         </div>
                     </div>
                     <p class="font-weight-bold">Deseja realmente copiar todos os lançamentos selecionados para a data previamente informada?</p>
