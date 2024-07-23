@@ -184,7 +184,7 @@
 
         $(".preloader").show();
         setTimeout(function() {
-            hidePreLoader();
+            $(".preloader").fadeOut()
         }, 500);
     });
 
@@ -224,11 +224,7 @@
         });
         return card;
     }
-
-    function hidePreLoader() {
-        if ($(".preloader").fadeOut()) {}
-    }
-
+    
     $(function() {
         $('.datepicker').inputmask('date', {
             placeholder: '__/__/____'

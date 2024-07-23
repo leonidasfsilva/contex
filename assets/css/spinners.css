@@ -1,42 +1,72 @@
 .preloader {
-  width: 100%;
-  height: 31px;
-  text-align: center;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    z-index: 1;
+    background: #eee;
+    text-align: center;
 }
 
 .cssload-speeding-wheel {
-  width: 31px;
-  height: 31px;
-  margin: 0 auto;
-  border: 2px solid rgb(0, 152, 218);
-  border-radius: 50%;
-  border-left-color: transparent;
-  border-right-color: transparent;
-  animation: cssload-spin 425ms infinite linear;
-    -o-animation: cssload-spin 425ms infinite linear;
-    -ms-animation: cssload-spin 425ms infinite linear;
-    -webkit-animation: cssload-spin 425ms infinite linear;
-    -moz-animation: cssload-spin 425ms infinite linear;
+    position: absolute;
+    top: calc(35%);
+    left: calc(48%);
+    width: 40px;
+    height: 40px;
+    margin: 0 auto;
+    border: 4px solid rgb(140, 191, 213);
+    /*border: 3px solid rgb(213, 140, 170);*/
+    border-radius: 50%;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    animation: cssload-spin 1000ms infinite linear;
+    /*-o-animation: cssload-spin 425ms infinite linear;*/
+    /*-webkit-animation: cssload-spin 425ms infinite linear;*/
+    /*-moz-animation: cssload-spin 425ms infinite linear;*/
 }
 
+@media only screen and (max-width: 600px) {
+    .cssload-speeding-wheel {
+        position: absolute;
+        top: calc(35%);
+        left: calc(45%);
+    }
+}
 
 
 @keyframes cssload-spin {
-  100%{ transform: rotate(360deg); transform: rotate(360deg); }
+    100% {
+        transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
 
 @-o-keyframes cssload-spin {
-  100%{ -o-transform: rotate(360deg); transform: rotate(360deg); }
+    100% {
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
 
 @-ms-keyframes cssload-spin {
-  100%{ -ms-transform: rotate(360deg); transform: rotate(360deg); }
+    100% {
+        -ms-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
 
 @-webkit-keyframes cssload-spin {
-  100%{ -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
 
 @-moz-keyframes cssload-spin {
-  100%{ -moz-transform: rotate(360deg); transform: rotate(360deg); }
+    100% {
+        -moz-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
