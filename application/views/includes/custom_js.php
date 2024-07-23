@@ -271,7 +271,7 @@
         if ($(form).valid()) {
             // console.log('executou preloader');
             $(".subconteudo-principal").fadeOut();
-            $(".preloader").fadeIn();
+            $(".preloader").show();
 
             setTimeout(function() {
                 form.submit();

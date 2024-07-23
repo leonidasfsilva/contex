@@ -506,7 +506,14 @@ $this->load->view('includes/custom_js');
         <div class="static-content-wrapper">
             <div class="static-content">
                 <!--                DIV PRINCIPAL-->
-                <div class="page-content">
+                <div class="page-content principal-div">
+                    <div class="preloader" style="display: none">
+                        <div class="cssload-speeding-wheel"></div>
+                        <h4 class="preloader-text font-weight-bold text-gray">
+                            Carregando...
+                        </h4>
+                    </div>
+
                     <!--                    BREADCRUMB-->
                     <ol class="breadcrumb">
                         <li class="">
@@ -567,12 +574,6 @@ $this->load->view('includes/custom_js');
 
                     <!--CONTAINER CONTEUDO-->
                     <div class="container-fluid conteudo-principal">
-                        <div class="preloader" style="display: none">
-                            <div class="cssload-speeding-wheel"></div>
-                            <h4 class="preloader-text font-weight-bold text-gray">
-                                Carregando...
-                            </h4>
-                        </div>
 						<?php if ($this->session->flashdata('error') != null) { ?>
                             <div class="alert alert-danger">
                                 <button type="button" class="close" data-dismiss="alert">&times;</button>
