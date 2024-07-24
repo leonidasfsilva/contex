@@ -30,8 +30,6 @@
     <script src="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/jquery.validate.js"></script>
 </head>
-<style>
-</style>
 
 <body class="focused-form" style="background-color: #37474f">
 
@@ -41,13 +39,15 @@
             <img class="contex-words" src="<?php echo base_url() ?>assets/img/contex_brand.png" alt="CONTEX - Sistema de Gestão"/>
         </div>
         <div class="white-box box-login">
+            <div class="preloader-login" style="display: none">
+                <i class="fas fa-spinner fa-2x fa-fw cssload-speeding-wheel"></i>
+                <h4 class="preloader-text font-weight-bold text-gray">
+                    Acessando...
+                </h4>
+            </div>
+
             <form class="form-horizontal floating-labels" id="formLogin" method="post" action="<?php echo base_url() ?>mxcode/verificarLogin">
-                <div class="preloader-login">
-                    <div class="cssload-speeding-wheel"></div>
-                    <h4 class="preloader-text font-weight-bold text-gray">
-                        Acessando...
-                    </h4>
-                </div>
+
                 <div class="before-loading">
 					<?php if ($this->session->flashdata('error') != null) { ?>
                         <div class="row">
@@ -174,7 +174,7 @@
             $(".preloader-login").fadeIn();
 
             setTimeout(function () {
-                form.submit();
+                // form.submit();
             }, 1000);
         }
     });

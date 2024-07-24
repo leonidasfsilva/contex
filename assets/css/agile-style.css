@@ -1519,6 +1519,7 @@ table.dataTable thead .sorting:after {
   font-size: 40px;
 }
 .white-box {
+  height: 60%;
   background: #ffffff;
   padding: 25px;
   margin-bottom: 15px;
