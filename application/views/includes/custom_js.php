@@ -288,7 +288,7 @@
 
         if ($(form).valid()) {
             // console.log('executou preloader');
-            $(".principal-div").fadeOut();
+            $(".principal-div").hide();
             $(".preloader").show();
             form.submit();
         }
