@@ -288,12 +288,9 @@
 
         if ($(form).valid()) {
             // console.log('executou preloader');
-            $(".subconteudo-principal").fadeOut();
+            $(".principal-div").fadeOut();
             $(".preloader").show();
-
-            setTimeout(function () {
-                form.submit();
-            }, 1000);
+            form.submit();
         }
     });
 
