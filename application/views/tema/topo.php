@@ -504,16 +504,10 @@ $this->load->view('includes/custom_js');
         <!--                    SIDEBAR fim-->
 
         <div class="static-content-wrapper">
+
             <div class="static-content">
                 <!--                DIV PRINCIPAL-->
                 <div class="page-content principal-div">
-                    <div class="preloader" style="display: none">
-                        <div class="cssload-speeding-wheel"></div>
-                        <h4 class="preloader-text font-weight-bold text-gray">
-                            Carregando...
-                        </h4>
-                    </div>
-
                     <!--                    BREADCRUMB-->
                     <ol class="breadcrumb">
                         <li class="">
@@ -588,30 +582,43 @@ $this->load->view('includes/custom_js');
                             </div>
 						<?php } ?>
                         <!--CONTEUDO PRINCIPAL-->
-                        <div class="subconteudo-principal">
-							<?php if (isset($view)) {
-								echo $this->load->view($view, null, true);
-							} ?>
-                        </div>
-                        <!--CONTEUDO PRINCIPAL-->
                     </div>
-                    <!--CONTAINER CONTEUDO-->
+
+                    <div class="subconteudo-principal">
+						
+						<?php if (isset($view)) {
+							echo $this->load->view($view, null, true);
+						} ?>
+                    </div>
+                    <!--CONTEUDO PRINCIPAL-->
                 </div>
-                <!--DIV FOOTER-->
-                <footer role="contentinfo">
-                    <div class="clearfix">
-                        <ul class="list-unstyled list-inline pull-left pl-sm">
-                            <li>
-                                <h6 style="margin: 0; text-transform: none"><?= sprintf('&copy; 2019 - %s %s ver.%s', date('Y'), 'CONTEX • Sistema de Gestão •', VERSION_APP, phpversion()); ?> </h6>
-                            </li>
-                        </ul>
-                        <button class="pull-right btn btn-link btn-xs hidden-print" id="back-to-top"><i class="fa fa-arrow-up"></i></button>
-                    </div>
-                </footer>
-                <!--DIV FOOTER-->
+                <!--CONTAINER CONTEUDO-->
             </div>
+
+            <div class="preloader" style="display: none">
+                <!--                            <i class="fas fa-circle-notch fa-2x fa-fw cssload-speeding-wheel"></i>-->
+                <i class="fas fa-spinner fa-2x fa-fw cssload-speeding-wheel"></i>
+                <h4 class="preloader-text font-weight-bold text-gray">
+                    Carregando...
+                </h4>
+            </div>
+
+
+            <!--DIV FOOTER-->
+            <footer role="contentinfo">
+                <div class="clearfix">
+                    <ul class="list-unstyled list-inline pull-left pl-sm">
+                        <li>
+                            <h6 style="margin: 0; text-transform: none"><?= sprintf('&copy; 2019 - %s %s ver.%s', date('Y'), 'CONTEX • Sistema de Gestão •', VERSION_APP, phpversion()); ?> </h6>
+                        </li>
+                    </ul>
+                    <button class="pull-right btn btn-link btn-xs hidden-print" id="back-to-top"><i class="fa fa-arrow-up"></i></button>
+                </div>
+            </footer>
+            <!--DIV FOOTER-->
         </div>
     </div>
+</div>
 </body>
 
 </html>

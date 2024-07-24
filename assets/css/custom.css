@@ -115,21 +115,72 @@ table {
     font-size: 11px;
 }
 
+.preloader {
+    /*margin: auto;*/
+    /*width: 50%;*/
+    /*padding-top: 50%;*/
+    /*top: 50%;*/
+    /*left: 50%;*/
+    /*position: relative;*/
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*z-index: 1;*/
+    background: #eee;
+    /*text-align: center;*/
+}
+
+.cssload-speeding-wheel {
+    /*position: absolute;*/
+    /*top: 50%;*/
+    /*transform: translateY(-50%);*/
+
+    /*width: 50%;*/
+    font-size: 50pt;
+    color: rgb(140, 191, 213);
+    animation: cssload-spin 700ms infinite linear;
+
+    /*left: calc(48%);*/
+    /*width: 40px;*/
+    /*height: 40px;*/
+    /*margin: auto;*/
+    /*line-height: normal !important;*/
+    /*margin: auto;*/
+    /*border: 3px solid rgb(213, 140, 170);*/
+    /*border-radius: 50%;*/
+    /*border-left-color: transparent;*/
+    /*border-right-color: transparent;*/
+    /*-o-animation: cssload-spin 425ms infinite linear;*/
+    /*-webkit-animation: cssload-spin 425ms infinite linear;*/
+    /*-moz-animation: cssload-spin 425ms infinite linear;*/
+}
+
+@media only screen and (max-width: 600px) {
+    .preloader {
+        height: 80%;
+    }
+}
+
+
 .preloader-text {
     position: absolute;
-    top: calc(39%);
-    left: calc(45%);
+    /*margin: 0 auto;*/
+    padding-top: 110px;
+    /*top: 50%;*/
+    /*left: calc(45%);*/
     font-size: 12pt;
+    text-align: center;
     /*color: rgb(0, 152, 218);*/
     color: rgb(187, 187, 187);
 }
 
 @media only screen and (max-width: 600px) {
-    .preloader-text {
-        position: absolute;
-        top: calc(40%);
-        left: calc(40%);
-    }
+    /*.preloader-text {*/
+    /*    position: absolute;*/
+    /*    top: calc(40%);*/
+    /*    left: calc(40%);*/
+    /*}*/
 }
 
 

@@ -183,9 +183,30 @@
         });
 
         $(".preloader").show();
+        var elemnent = $(".principal-div")
+        
+        elemnent.hide()
+        
+        removeSpinnerLoader(elemnent)
+
+    });
+    
+    function removeSpinnerLoader(element) {
         setTimeout(function() {
             $(".preloader").fadeOut()
         }, 500);
+        
+        setTimeout(function() {
+            $(element).fadeIn();
+        }, 900);
+    }
+
+    $(document).on('click', '#teste-btn', function() {
+        // console.log('teste ok!');
+        $(".preloader").fadeIn();
+        setTimeout(function() {
+            $(".preloader").fadeOut();
+        }, 1000);
     });
 
     function mountCard(form, container, timeout) {
@@ -278,15 +299,7 @@
             }, 1000);
         }
     });
-
-    $(document).on('click', '#teste-btn', function() {
-        // console.log('teste ok!');
-        $(".preloader").fadeIn();
-        setTimeout(function() {
-            $(".preloader").fadeOut();
-        }, 1000);
-    });
-
+    
     $('#telefone').mask("(99) 9999-99990");
     $('#cep').mask("99999-999");
     $('#cpf').mask("999.999.999-99");
