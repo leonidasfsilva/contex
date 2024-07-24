@@ -14,20 +14,6 @@
   max-width: 160px;
   padding-bottom: 20px;
 }
-.preloader {
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  position: absolute;
-  z-index: 1;
-  background: #EEEEEE;
-}
-.preloader .cssload-speeding-wheel {
-  position: absolute;
-  top: calc(50% - 4%);
-  left: calc(50% - 4%);
-}
 /* This is for popins font for firefox */
 @font-face {
   font-family: 'Poppins';
@@ -1533,6 +1519,7 @@ table.dataTable thead .sorting:after {
   font-size: 40px;
 }
 .white-box {
+  height: 60%;
   background: #ffffff;
   padding: 25px;
   margin-bottom: 15px;
