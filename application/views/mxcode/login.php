@@ -174,7 +174,7 @@
             $(".preloader-login").fadeIn();
 
             setTimeout(function () {
-                // form.submit();
+                form.submit();
             }, 1000);
         }
     });

@@ -505,9 +505,9 @@ $this->load->view('includes/custom_js');
 
         <div class="static-content-wrapper">
 
-            <div class="static-content">
+            <div class="static-content principal-div">
                 <!--                DIV PRINCIPAL-->
-                <div class="page-content principal-div">
+                <div class="page-content ">
                     <!--                    BREADCRUMB-->
                     <ol class="breadcrumb">
                         <li class="">
