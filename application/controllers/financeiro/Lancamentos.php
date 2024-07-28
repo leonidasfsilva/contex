@@ -52,7 +52,7 @@ class Lancamentos extends CI_Controller
 		$year             = date('Y');
 		$keys             = range(2019, $year + 3);
 		$yearsList        = $keys;
-		$defaultMonthUser = null;
+		$defaultMonthUser = $this->configs_model->getMesPadraoUsuario(getUserId());
 		
 		$order_by = [
 			'data_lancamento' => 'desc',
@@ -122,7 +122,6 @@ class Lancamentos extends CI_Controller
 				}
 				break;
 			default:
-				$defaultMonthUser = $this->configs_model->getMesPadraoUsuario(getUserId());
 				$startEndDate     = buildStartEndDate($defaultMonthUser);
 				$referenceMonth   = $startEndDate['referenceMonth'];
 				
@@ -649,16 +648,11 @@ class Lancamentos extends CI_Controller
 		$mes = $this->input->post('mesPadrao');
 		
 		$data = array(
-			'mes_padrao' => $mes ?? null,
+			'mes_padrao' => !empty($mes) ? $mes : null,
 			'id_usuario' => getUserId()
 		);
 		
-		if ($this->configs_model->getMesPadraoUsuario(getUserId())) {
-			if ($this->configs_model->edit('configs_lancamentos', $data, 'id_usuario', getUserId())) {
-				$this->session->set_flashdata('sucesso', 'Configurações salvas com sucesso!');
-				redirect($urlAtual);
-			}
-		}
+		$this->configs_model->unsetMesPadraoUsuario(getUserId());
 		
 		if (!$this->configs_model->add('configs_lancamentos', $data)) {
 			$this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar salvar as configurações.');
