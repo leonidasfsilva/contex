@@ -39,19 +39,20 @@ class Lancamentos extends CI_Controller
 			redirect(base_url());
 		}
 		
-		$status         = $_GET['status'] ?? null;
-		$tipo           = $_GET['tipo'] ?? null;
-		$periodo        = $_GET['periodo'] ?? null;
-		$inicio         = $_GET['dataInicial'] ?? null;
-		$fim            = $_GET['dataFinal'] ?? null;
-		$start          = $_GET['per_page'] ?? null;
-		$referenceMonth = $_GET['mesReferencia'] ?? null;
-		$referenceYear  = $_GET['anoReferencia'] ?? null;
-		$where          = null;
-		$limit          = null;
-		$year           = date('Y');
-		$keys           = range(2019, $year + 3);
-		$yearsList      = $keys;
+		$status           = $_GET['status'] ?? null;
+		$tipo             = $_GET['tipo'] ?? null;
+		$periodo          = $_GET['periodo'] ?? null;
+		$inicio           = $_GET['dataInicial'] ?? null;
+		$fim              = $_GET['dataFinal'] ?? null;
+		$start            = $_GET['per_page'] ?? null;
+		$referenceMonth   = $_GET['mesReferencia'] ?? null;
+		$referenceYear    = $_GET['anoReferencia'] ?? null;
+		$where            = null;
+		$limit            = null;
+		$year             = date('Y');
+		$keys             = range(2019, $year + 3);
+		$yearsList        = $keys;
+		$defaultMonthUser = null;
 		
 		$order_by = [
 			'data_lancamento' => 'desc',
@@ -107,7 +108,7 @@ class Lancamentos extends CI_Controller
 				break;
 			case 'mensal':
 				if (isset($referenceMonth) && $referenceMonth) {
-					$startEndDate = buildStartEndDate($referenceMonth, ($referenceYear) ? $referenceYear : null);
+					$startEndDate = buildStartEndDate($referenceMonth, ($referenceYear) ?: null);
 					
 					if (!isset($referenceYear) && !$referenceYear) {
 						$referenceYear = $startEndDate['referenceYear'];
@@ -121,8 +122,9 @@ class Lancamentos extends CI_Controller
 				}
 				break;
 			default:
-				$startEndDate   = buildStartEndDate();
-				$referenceMonth = $startEndDate['referenceMonth'];
+				$defaultMonthUser = $this->configs_model->getMesPadraoUsuario(getUserId());
+				$startEndDate     = buildStartEndDate($defaultMonthUser);
+				$referenceMonth   = $startEndDate['referenceMonth'];
 				
 				if (!isset($referenceYear) && !$referenceYear) {
 					$referenceYear = $startEndDate['referenceYear'];
@@ -251,8 +253,8 @@ class Lancamentos extends CI_Controller
 		$this->data['entradas_pendentes'] = $this->financeiro_model->getEntradasPendentes(getUserId());
 		$this->data['total']              = $this->financeiro_model->getTotal(getUserId());
 		$this->data['formasPagamento']    = $this->financeiro_model->getFormasPagamento();
-		$this->data['defaultMonth']       = $this->configs_model->getMesPadraoUsuario(getUserId());
-		$this->data['results']     = $this->financeiro_model->get(
+		$this->data['defaultMonth']       = $defaultMonthUser;
+		$this->data['results']            = $this->financeiro_model->get(
 			'lancamentos',
 			'*',
 			getUserId(),
@@ -263,7 +265,7 @@ class Lancamentos extends CI_Controller
 			$start,
 			$order_by ? $order_by : 'desc'
 		);
-		$this->data['hiddenItems'] = $this->financeiro_model->getHiddenItems(
+		$this->data['hiddenItems']        = $this->financeiro_model->getHiddenItems(
 			'lancamentos',
 			'*',
 			getUserId(),
