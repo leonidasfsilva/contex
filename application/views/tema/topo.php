@@ -506,9 +506,9 @@ $this->load->view('includes/custom_js');
         <div class="static-content-wrapper">
 
             <div class="static-content principal-div">
-                <!--                DIV PRINCIPAL-->
+                <!--DIV PRINCIPAL-->
                 <div class="page-content ">
-                    <!--                    BREADCRUMB-->
+                    <!--BREADCRUMB-->
                     <ol class="breadcrumb">
                         <li class="">
                             <a href=" <?= base_url() ?>" title="Painel Inicial">
@@ -566,7 +566,6 @@ $this->load->view('includes/custom_js');
 						<?php } ?>
                     </ol>
 
-                    <!--CONTAINER CONTEUDO-->
                     <div class="container-fluid conteudo-principal">
 						<?php if ($this->session->flashdata('error') != null) { ?>
                             <div class="alert alert-danger">
@@ -581,41 +580,38 @@ $this->load->view('includes/custom_js');
 								<?= $this->session->flashdata('success'); ?>
                             </div>
 						<?php } ?>
-                        <!--CONTEUDO PRINCIPAL-->
                     </div>
 
+                    <!--CONTEUDO PRINCIPAL-->
                     <div class="subconteudo-principal">
 						
 						<?php if (isset($view)) {
 							echo $this->load->view($view, null, true);
 						} ?>
                     </div>
-                    <!--CONTEUDO PRINCIPAL-->
                 </div>
-                <!--CONTAINER CONTEUDO-->
             </div>
 
+            <!--SPINNER LOADER-->
             <div class="preloader" style="display: none">
-                <!--                            <i class="fas fa-circle-notch fa-2x fa-fw cssload-speeding-wheel"></i>-->
-                <i class="fas fa-spinner fa-2x fa-fw cssload-speeding-wheel"></i>
+                <i class="fas fa-duotone fa-spinner-third fa-spin cssload-speeding-wheel"></i>
+                <!--<i class="fas fa-spinner fa-spin-pulse fa-2x cssload-speeding-wheel"></i>-->
                 <h4 class="preloader-text font-weight-bold text-gray">
-                    Carregando...
+                    Aguarde...
                 </h4>
             </div>
-
 
             <!--DIV FOOTER-->
             <footer role="contentinfo">
                 <div class="clearfix">
-                    <ul class="list-unstyled list-inline pull-left pl-sm">
+                    <ul class="list-unstyled list-inline pull-left">
                         <li>
-                            <h6 style="margin: 0; text-transform: none"><?= sprintf('&copy; 2019 - %s %s ver.%s', date('Y'), 'CONTEX • Sistema de Gestão •', VERSION_APP, phpversion()); ?> </h6>
+                            <h6 style="margin: 0; text-transform: none"><?= sprintf('&copy; 2019 - %s • %s %s • ver. %s', date('Y'), 'CONTEX', '<span class="hidden-xs">- Sistema de Gestão</span>', VERSION_APP); ?> </h6>
                         </li>
                     </ul>
-                    <button class="pull-right btn btn-link btn-xs hidden-print" id="back-to-top"><i class="fa fa-arrow-up"></i></button>
+                    <span class="pull-right badge badge-inverse hidden-print" id="back-to-top" style="cursor: pointer;">Voltar ao topo <i class="fa fa-arrow-up"></i></span>
                 </div>
             </footer>
-            <!--DIV FOOTER-->
         </div>
     </div>
 </div>

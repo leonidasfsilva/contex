@@ -2756,7 +2756,7 @@ fieldset[disabled] .btn.btn-social.btn-windows-alt.active {
 }
 .caret:before {
     content: "\f107";
-    font-family: "Font Awesome 5 Free 900";
+    font-family: "Font Awesome 6 Pro";
     font-style: normal;
     font-weight: normal;
     text-decoration: inherit;
@@ -8287,7 +8287,7 @@ body.infobar-offcanvas #topnav {
     opacity: 0.5;
     filter: alpha(opacity=50);
     content: "\f107";
-    font-family: "Font Awesome 5 Free 900";
+    font-family: "Font Awesome 6 Pro";
     font-style: normal;
     font-weight: normal;
     float: right;
@@ -9007,7 +9007,7 @@ ul.settings li > span {
 .sidebar nav.widget-body > ul.acc-menu li.hasChild > a:before,
 .sidebar nav.widget-body > ul.acc-menu li.hasChild.open > a:before,
 .sidebar nav.widget-body > ul.acc-menu li.hasChild.open > a:before {
-    font-family: "Font Awesome 5 Free 900";
+    font-family: "Font Awesome 6 Pro";
 }
 
 .sidebar nav.widget-body > ul.acc-menu li.hasChild li.hasChild a:before {

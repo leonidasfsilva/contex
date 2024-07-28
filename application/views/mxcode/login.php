@@ -16,8 +16,7 @@
     <link href="<?php echo base_url(); ?>assets/css/agile-style.css?v=<?= versionApp() ?>" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/custom.css?v=<?= versionApp() ?>" type="text/css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,400italic,600,700' rel='stylesheet' type='text/css'>
-    <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/font-awesome5/css/fontawesome5.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/font-awesome-6/css/all.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.css" type="text/css" rel="stylesheet">
 
 
@@ -39,10 +38,12 @@
             <img class="contex-words" src="<?php echo base_url() ?>assets/img/contex_brand.png" alt="CONTEX - Sistema de Gestão"/>
         </div>
         <div class="white-box box-login">
+            <!--SPINNER LOADER-->
             <div class="preloader-login" style="display: none">
-                <i class="fas fa-spinner fa-2x fa-fw cssload-speeding-wheel"></i>
+                <i class="fas fa-duotone fa-spinner-third fa-spin cssload-speeding-wheel"></i>
+                <!--<i class="fas fa-spinner fa-spin-pulse fa-2x cssload-speeding-wheel"></i>-->
                 <h4 class="preloader-text font-weight-bold text-gray">
-                    Acessando...
+                    Aguarde...
                 </h4>
             </div>
 

@@ -126,7 +126,8 @@ table {
 .cssload-speeding-wheel {
     font-size: 50pt !important;
     color: rgb(140, 191, 213);
-    animation: cssload-spin 700ms infinite linear;
+    --fa-animation-duration: 0.6s;
+    /*animation: cssload-spin 700ms infinite linear;*/
 }
 
 @media only screen and (max-width: 600px) {

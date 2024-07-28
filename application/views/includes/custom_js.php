@@ -182,21 +182,51 @@
             e.preventDefault();
         });
 
+        var element = $(".principal-div")
+        element.hide()
         $(".preloader").show();
-        var elemnent = $(".principal-div")
-        elemnent.hide()
-        removeSpinnerLoader(elemnent)
+        removeSpinnerLoader(element)
     })
 
-    function removeSpinnerLoader(element) {
+    function removeSpinnerLoader(element, time = 600) {
+        var percentage = Math.round((time * 20) / 100)
+        
         setTimeout(function () {
             $(".preloader").fadeOut()
-        }, 500);
+        }, (time - percentage));
 
         setTimeout(function () {
             $(element).fadeIn();
-        }, 600);
+        }, time);
     }
+
+    $(document).on('click', 'a:not([href="javascript:"],' +
+        '[target="_blank"], ' +
+        '[disabled="disabled"], ' +
+        '[class="js:"], ' +
+        '[class="ui-corner-all"], ' +
+        '[href="#"], ' +
+        '[data-toggle="modal"], ' +
+        '[data-toggle="collapse"], ' +
+        '[data-toggle="tab"])',
+        function () {
+            var element = $(".principal-div")
+            element.hide()
+            $(".preloader").show();
+            // removeSpinnerLoader(element)
+        });
+
+    $(document).on('submit', 'form', function (event) {
+        var form = this;
+        event.preventDefault();
+
+        if ($(form).valid()) {
+            // console.log('executou preloader');
+            $(".principal-div").hide();
+            $(".preloader").show();
+            form.submit();
+        }
+    });
 
     $(document).on('click', '#teste-btn', function () {
         // console.log('teste ok!');
@@ -261,39 +291,7 @@
     $(function () {
         $('.popover-btn').popover()
     });
-
-    $(document).on('click', 'a:not([href="javascript:"],' +
-        '[target="_blank"], ' +
-        '[disabled="disabled"], ' +
-        '[class="js:"], ' +
-        '[class="ui-corner-all"], ' +
-        '[href="#"], ' +
-        '[data-toggle="modal"], ' +
-        '[data-toggle="collapse"], ' +
-        '[data-toggle="tab"])',
-        function () {
-            $(".principal-div").hide();
-            $(".preloader").show();
-        });
-
-    $(document).on('submit', 'form', function (event) {
-        var form = this;
-        event.preventDefault();
-        // $('#btn-acessar').addClass('disabled');
-        // $('#btn-acessar').html('Acessando... <i class="fa fa-spinner fa-pulse fa-fw"></i>');
-        // $('#progress-acessar').removeClass('hidden');
-        // $(".progress-bar").animate({
-        //     width: "100%"
-        // }, 1000);
-
-        if ($(form).valid()) {
-            // console.log('executou preloader');
-            $(".principal-div").hide();
-            $(".preloader").show();
-            form.submit();
-        }
-    });
-
+    
     $('#telefone').mask("(99) 9999-99990");
     $('#cep').mask("99999-999");
     $('#cpf').mask("999.999.999-99");
@@ -575,7 +573,7 @@
         }
     })
 
-    // JS to controller the select mounths modals - 25/06/2023
+    // JS to control the select mounths modals - 25/06/2023
     $(document).ready(function () {
         $('.selectMonth').click(function () {
             var value = $(this).val()
