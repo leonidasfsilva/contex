@@ -306,7 +306,6 @@ class Configs_model extends CI_Model
 	{
 		$this->db
 			->where('id_usuario', $id_usuario)
-			->where('mes_padrao IS NOT NULL', null, false)
 			->delete('configs_lancamentos');
 	}
 	
