@@ -1667,7 +1667,7 @@ class Faturas extends CI_Controller
 		}
 		
 		for ($m = 1; $m <= 12; $m++) {
-			$currentMonth                                                       = constructStartEndDate(translateMonth($m, true, true), $ano);
+			$currentMonth                                                       = buildStartEndDate(translateMonth($m, true, true), $ano);
 			$data['monthList'][$currentMonth["referenceMonth"]]['name']         = translateMonth($m, true, true) . ' - ' . translateMonth($m, true);
 			$data['monthList'][$currentMonth["referenceMonth"]]['notification'] = $this->fatura_model->getLancamentosPendentesTerceiros(getUserId(), $currentMonth['referenceMonth'], $currentMonth['referenceYear'], $nome);
 		}

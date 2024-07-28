@@ -25,6 +25,10 @@ $fim                 = $this->input->get('dataFinal');
 				<?php } ?>
             </div>
             <div class="panel-ctrls">
+                <button href="#modalSelectDefaultMounth" class="btn btn-default btn-sm" data-toggle="modal">
+                    <i class="fas fa-cog fa-fw"></i>
+                    Configurações
+                </button>
                 <div class="btn-group" id="div_pesquisa">
                     <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" id="btn_pesquisa">
                         <i class="fas fa-search fa-fw"></i>
@@ -132,6 +136,8 @@ if (isset($referenceMonth) && $referenceMonth) {
 	$currentMonthText = "<a href='#modalSelectMounth' data-toggle='modal' role='button' title='Clique para selecionar um mes específico'><span class='badge badge-primary' style='margin-left: 10px;'>Período: $month / $referenceYear</span></a>";
 	$nextLink         = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $nextReferenceMonth, $nextReferenceYear)) .
 		" title='$nextLinkTitle'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-right'></i></span></a>";
+	
+	$monthFilterButtons = $referenceMonth ? $prevLink . $currentMonthText . $nextLink : null;
 }
 
 if (!$results) {
@@ -141,7 +147,7 @@ if (!$results) {
             <h2>
                 <span style='margin-right: 10px !important;'>Extrato de Lançamentos</span>
                 <br class="visible-xs-block">
-				<?= ($referenceMonth ? $prevLink . $currentMonthText . $nextLink : null) ?>
+				<?= $monthFilterButtons ?>
             </h2>
             <div class="panel-ctrls">
                 <a href="#" class="button-icon close-panel">
@@ -182,7 +188,7 @@ if (!$results) {
             <h2>
                 <span style='margin-right: 10px !important;'>Extrato de Lançamentos</span>
                 <br class="visible-xs-block">
-				<?= ($referenceMonth ? $prevLink . $currentMonthText . $nextLink : null) ?>
+				<?= $monthFilterButtons ?>
             </h2>
             <div class="panel-ctrls">
                 <a href="#" class="button-icon close-panel">
@@ -529,21 +535,21 @@ if (!$results) {
                         Desmarcar Todos
                     </button>
                 </span>
-<!--                <button class="btn btn-default btn-sm habilita_desabilita_soma" id="exibir_soma" title="Habilitar soma de lançamentos individuais">-->
-<!--                    <i class="fas fa-toggle-off fa-fw"></i>-->
-<!--                    Habilitar Soma-->
-<!--                </button>-->
-<!--                <button class="btn btn-default btn-sm habilita_desabilita_soma hidden" id="esconder_soma" title="Desabilitar soma de lançamentos individuais">-->
-<!--                    <i class="fas fa-toggle-on fa-fw"></i>-->
-<!--                    Desabilitar Soma-->
-<!--                </button>-->
+                <!--                <button class="btn btn-default btn-sm habilita_desabilita_soma" id="exibir_soma" title="Habilitar soma de lançamentos individuais">-->
+                <!--                    <i class="fas fa-toggle-off fa-fw"></i>-->
+                <!--                    Habilitar Soma-->
+                <!--                </button>-->
+                <!--                <button class="btn btn-default btn-sm habilita_desabilita_soma hidden" id="esconder_soma" title="Desabilitar soma de lançamentos individuais">-->
+                <!--                    <i class="fas fa-toggle-on fa-fw"></i>-->
+                <!--                    Desabilitar Soma-->
+                <!--                </button>-->
             </div>
         </div>
         <div class="panel-body panel-no-padding table-responsive" style="display: none;">
             <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
                 <thead>
                 <tr role="row">
-<!--                    <th class="th_soma hidden" style="width: 10px !important;">Soma</th>-->
+                    <!--                    <th class="th_soma hidden" style="width: 10px !important;">Soma</th>-->
                     <th>Data</th>
                     <th>Descrição<br>Fornecedor</th>
                     <th>Valor (R$)<br>Forma Pagamento</th>
@@ -935,8 +941,8 @@ if (!$results) {
                                 </select>
                                 <span class="input-group-addon">ano</span>
                                 <select class="form-control" id="anoReferenciaSelect" name="anoReferencia">
-									<?php if ($yearsList) {
-										foreach ($yearsList as $year) { ?>
+									<?php if ($monthList) {
+										foreach ($monthList as $year) { ?>
                                             <option value="<?= $year ?>" <?= ($referenceYear == $year ? 'selected' : '') ?>>
 												<?= $year ?>
                                             </option>
@@ -1453,13 +1459,14 @@ if (!$results) {
     </div>
 </div>
 
-<!-- Modal SELECAO DE MES -->
+<!-- Modal SELECAO DE MES E ANO -->
 <div class="modal fade" id="modalSelectMounth" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <form id="form_filtro_mes" method="get">
                 <div class="modal-body">
-                    <p class="font-weight-bold">Selecione o mês e ano específicos</p>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <p class="font-weight-bold">Selecione o mês e ano específicos para visualizar um período </p>
                     <input type="hidden" name="periodo" value="mensal"/>
                     <input type="hidden" name="mesReferencia" class="selectedMonth"/>
 					<?php
@@ -1504,6 +1511,42 @@ if (!$results) {
                                 Cancelar
                             </button>
                         </div> -->
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal SELECAO DE MES PADRAO DO USUARIO -->
+<div class="modal fade" id="modalSelectDefaultMounth" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form id="form_default_month" action="<?= base_url('financeiro/lancamentos/mesPadrao'); ?>" method="post">  <!-- adicionar no form a rota para método do controller que irá persistir a config do usuario em DB -->
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <p class="font-weight-bold">Configurações de Lançamentos </p>
+                    <!--                    <p class="font-weight-bold">O mês escolhido será usado como padrão para visualização do módulo de Lançamentos. </p>-->
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="btn-block">
+                            <div class="input-group">
+                                <span class="input-group-addon">Mês padrão:</span>
+                                <select class="form-control" id="mesPadraoSelect" name="mesPadrao">
+                                    <option value="" style="font-style: italic;">
+                                        << Não configurado >>
+                                    </option>
+									<?php if ($monthList) {
+										foreach ($monthList as $index => $month) { ?>
+                                            <option value="<?= $index ?>" <?= ($defaultMonth == $index ? 'selected' : '') ?>>
+												<?= $month['name'] ?>
+                                            </option>
+										<?php }
+									} ?>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -1560,8 +1603,8 @@ if (!$results) {
         $('.provisorio-periodo').toggleClass('hidden');
     });
 
-    $(document).on('change', '#select_periodo, #select_situacao', function () {
-        // $("#form_filtro").submit();
+    $(document).on('change', '#mesPadraoSelect', function () {
+        $("#form_default_month").submit();
     });
 
     $(document).ready(function ($) {

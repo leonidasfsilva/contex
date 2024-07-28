@@ -283,4 +283,31 @@ class Configs_model extends CI_Model
             ->get('logs')
             ->result();
     }
+	
+	public function getMesPadraoUsuario($idUsuario)
+	{
+		return $this->db
+			->where('id_usuario', $idUsuario)
+			->where('mes_padrao IS NOT NULL', null, false)
+			->get('configs_lancamentos')
+			->row('mes_padrao');
+	}
+	
+	public function setMesPadraoUsuario($data)
+	{
+		$this->db->insert('configs_lancamentos', $data);
+		if ($this->db->affected_rows() == 1) {
+			return true;
+		}
+		return false;
+	}
+	
+	public function unsetMesPadraoUsuario($id_usuario)
+	{
+		$this->db
+			->where('id_usuario', $id_usuario)
+			->where('mes_padrao IS NOT NULL', null, false)
+			->delete('configs_lancamentos');
+	}
+	
 }

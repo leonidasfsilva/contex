@@ -14,11 +14,11 @@
 | Format: YYYY.S.R
 |--------------------
 | YYYY  - current year
-| S     - current semester of year (1st or 2nd)
+| S     - current quarter of year (1st, 2nd, 3rd or 4th)
 | R     - current release version of system
 |
 */
-const VERSION_APP = '2024.2.5';
+const VERSION_APP = '2024.3.6';
 
 // previsão de lançamento do modulo de Despesas (segundo semestre de 2023)
 // define('VERSION_APP', '2023.2.?'); 

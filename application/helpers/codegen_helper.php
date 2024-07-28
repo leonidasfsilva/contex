@@ -291,7 +291,7 @@ function translateMonth($referenceMonth, $abbreviate = false, $returnMonthNumber
     return getExtendedMonthName($referenceMonth, $monthFormatString);
 }
 
-function constructStartEndDate($referenceMonth = null, $referenceYear = null)
+function buildStartEndDate($referenceMonth = null, $referenceYear = null)
 {
     $return     = [];
     $todayDate  = date('Y-m-d');

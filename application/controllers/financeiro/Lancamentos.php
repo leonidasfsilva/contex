@@ -107,7 +107,7 @@ class Lancamentos extends CI_Controller
 				break;
 			case 'mensal':
 				if (isset($referenceMonth) && $referenceMonth) {
-					$startEndDate = constructStartEndDate($referenceMonth, ($referenceYear) ? $referenceYear : null);
+					$startEndDate = buildStartEndDate($referenceMonth, ($referenceYear) ? $referenceYear : null);
 					
 					if (!isset($referenceYear) && !$referenceYear) {
 						$referenceYear = $startEndDate['referenceYear'];
@@ -121,7 +121,7 @@ class Lancamentos extends CI_Controller
 				}
 				break;
 			default:
-				$startEndDate   = constructStartEndDate();
+				$startEndDate   = buildStartEndDate();
 				$referenceMonth = $startEndDate['referenceMonth'];
 				
 				if (!isset($referenceYear) && !$referenceYear) {
@@ -194,7 +194,7 @@ class Lancamentos extends CI_Controller
 		}
 		
 		for ($m = 1; $m <= 12; $m++) {
-			$currentMonth                                                             = constructStartEndDate(translateMonth($m, true, true), $referenceYear);
+			$currentMonth                                                             = buildStartEndDate(translateMonth($m, true, true), $referenceYear);
 			$this->data['monthList'][$currentMonth["referenceMonth"]]['name']         = translateMonth($m, true, true) . ' - ' . translateMonth($m, true);
 			$this->data['monthList'][$currentMonth["referenceMonth"]]['notification'] = $this->financeiro_model->getLancamentosPendentes(getUserId(), $currentMonth['startDate'], $currentMonth['endDate']);
 		}
@@ -251,7 +251,8 @@ class Lancamentos extends CI_Controller
 		$this->data['entradas_pendentes'] = $this->financeiro_model->getEntradasPendentes(getUserId());
 		$this->data['total']              = $this->financeiro_model->getTotal(getUserId());
 		$this->data['formasPagamento']    = $this->financeiro_model->getFormasPagamento();
-		$this->data['results']            = $this->financeiro_model->get(
+		$this->data['defaultMonth']       = $this->configs_model->getMesPadraoUsuario(getUserId());
+		$this->data['results']     = $this->financeiro_model->get(
 			'lancamentos',
 			'*',
 			getUserId(),
@@ -262,7 +263,7 @@ class Lancamentos extends CI_Controller
 			$start,
 			$order_by ? $order_by : 'desc'
 		);
-		$this->data['hiddenItems']        = $this->financeiro_model->getHiddenItems(
+		$this->data['hiddenItems'] = $this->financeiro_model->getHiddenItems(
 			'lancamentos',
 			'*',
 			getUserId(),
@@ -273,6 +274,8 @@ class Lancamentos extends CI_Controller
 		$this->data['view'] = 'financeiro/lancamentos';
 		$this->load->view('tema/topo', $this->data);
 	}
+	
+	// CRIAR METODO PARA PERSISTIR CONFIG DE MES PADRAO DO USUARIO EM DB
 	
 	public function entrada()
 	{
@@ -552,13 +555,13 @@ class Lancamentos extends CI_Controller
 			'id_usuario'         => getUserId()
 		);
 		
-		if ($this->financeiro_model->add('lancamentos', $data)) {
-			$this->session->set_flashdata('sucesso', 'Lançamento copiado com sucesso!');
-			redirect($urlAtual);
-		} else {
+		if (!$this->financeiro_model->add('lancamentos', $data)) {
 			$this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar copiar o registro.');
 			redirect($urlAtual);
 		}
+		
+		$this->session->set_flashdata('sucesso', 'Lançamento copiado com sucesso!');
+		redirect($urlAtual);
 	}
 	
 	public function excluir()
@@ -621,6 +624,47 @@ class Lancamentos extends CI_Controller
 		$this->data['results']         = $this->financeiro_model->pesquisa($termo, getUserId());
 		$this->data['view']            = 'financeiro/lancamentos';
 		$this->load->view('tema/topo', $this->data);
+	}
+	
+	public function mesPadrao()
+	{
+		if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
+			$this->session->set_flashdata('erro', 'Você não tem permissão para configurar o módulo de Lançamentos.');
+			redirect(base_url());
+		}
+		
+		if (!$this->input->post()) {
+			$this->session->set_flashdata('erro', 'Método não permitido.');
+			redirect($this->global_url);
+		}
+		
+		if ($this->input->post('urlAtual') != null) {
+			$urlAtual = $this->input->post('urlAtual');
+		} else {
+			$urlAtual = $this->global_url;
+		}
+		
+		$mes = $this->input->post('mesPadrao');
+		
+		$data = array(
+			'mes_padrao' => $mes ?? null,
+			'id_usuario' => getUserId()
+		);
+		
+		if ($this->configs_model->getMesPadraoUsuario(getUserId())) {
+			if ($this->configs_model->edit('configs_lancamentos', $data, 'id_usuario', getUserId())) {
+				$this->session->set_flashdata('sucesso', 'Configurações salvas com sucesso!');
+				redirect($urlAtual);
+			}
+		}
+		
+		if (!$this->configs_model->add('configs_lancamentos', $data)) {
+			$this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar salvar as configurações.');
+			redirect($urlAtual);
+		}
+		
+		$this->session->set_flashdata('sucesso', 'Configurações salvas com sucesso!');
+		redirect($urlAtual);
 	}
 	
 	protected function filterHiddenEntries(array $array)
