@@ -47,10 +47,9 @@
                 </h4>
             </div>
 
-            <form class="form-horizontal floating-labels" id="formLogin" method="post" action="<?php echo base_url() ?>mxcode/verificarLogin">
-
-                <div class="before-loading">
-					<?php if ($this->session->flashdata('error') != null) { ?>
+            <form class="form-horizontal floating-labels before-loading" id="formLogin" method="post" action="<?php echo base_url() ?>mxcode/verificarLogin">
+                <div class="">
+					<?php if ($this->session->flashdata('error')) { ?>
                         <div class="row">
                             <div class="alert alert-danger">
                                 <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -82,20 +81,10 @@
                             </div>
                         </div>
                     </div>
-                    <!--                <div class="row">-->
-                    <!--                    <div class="col-xs-12 col-sm-12 col-md-12 m-t-10 text-center">-->
-                    <!--                        <div class="social">-->
-                    <!--                            <a href="javascript:" class="btn btn-facebook" data-toggle="tooltip" title="Login com sua conta do Facebook"> <i aria-hidden="true" class="fa fa-facebook"></i> </a>-->
-                    <!--                            <a href="javascript:" class="btn btn-googleplus" data-toggle="tooltip" title="Login com sua conta do Google"> <i aria-hidden="true" class="fa fa-google"></i> </a>-->
-                    <!--                        </div>-->
-                    <!--                    </div>-->
-                    <!--                </div>-->
                     <div class="form-group m-b-0">
                         <div class="col-sm-12 text-center">
                             <p>Não tem uma conta? <a href="<?php echo base_url() ?>cadastro" class="text-primary"><b>Crie sua conta</b></a>.</p>
-                            <!--                            <p><a href="--><?php //echo base_url()
-							?>
-                            <!--conecte" class="text-primary"><b>Acesso para clientes</b></a>.</p>-->
+                            <!--<p><a href="--><?php //echo base_url('conecte')?><!--" class="text-primary"><b>Acesso para clientes</b></a>.</p>-->
                         </div>
                     </div>
                 </div>
@@ -164,19 +153,17 @@
     $('#formLogin').submit(function (event) {
         var form = this;
         event.preventDefault();
-        $('#btn-acessar').addClass('disabled');
-        $('#btn-acessar').html('Acessando... <i class="fa fa-spinner fa-pulse fa-fw"></i>');
-        $('#progress-acessar').removeClass('hidden');
-        $(".progress-bar").animate({
-            width: "100%"
-        }, 1000);
+        // $('#btn-acessar').addClass('disabled');
+        // $('#btn-acessar').html('Acessando... <i class="fa fa-spinner fa-pulse fa-fw"></i>');
+        // $('#progress-acessar').removeClass('hidden');
+        // $(".progress-bar").animate({
+        //     width: "100%"
+        // }, 1000);
+        
         if ($(form).valid()) {
-            $(".before-loading").fadeOut();
-            $(".preloader-login").fadeIn();
-
-            setTimeout(function () {
-                form.submit();
-            }, 1000);
+            $(".before-loading").hide();
+            $(".preloader-login").show();
+            form.submit();
         }
     });
 	
