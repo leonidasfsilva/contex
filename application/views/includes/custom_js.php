@@ -192,11 +192,11 @@
         var percentage = Math.round((time * 20) / 100)
         
         setTimeout(function () {
-            $(".preloader").fadeOut()
+            $(".preloader").hide()
         }, (time - percentage));
 
         setTimeout(function () {
-            $(element).fadeIn();
+            $(element).show();
         }, time);
     }
 

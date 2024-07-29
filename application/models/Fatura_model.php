@@ -689,8 +689,9 @@ class Fatura_model extends CI_Model
             $where .= " AND lfa.ano_referencia = $anoReferencia";
         }
 
-        $groupBy = " GROUP BY lf.nome_cliente ASC";
-        $mainQuery .= $where .= $groupBy;
+        $groupBy = " GROUP BY lf.nome_cliente";
+        $orderBy = " ORDER BY lf.nome_cliente ASC";
+        $mainQuery .= $where . $groupBy . $orderBy;
         $resultQuery = $this->db->query($mainQuery);
 
         if ($resultQuery->num_rows() > 0) {
