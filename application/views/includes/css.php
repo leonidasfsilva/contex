@@ -14,12 +14,6 @@
     <!--    CSS CORE-->
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,400italic,600,700' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700' rel='stylesheet' type='text/css'>
-    <!--    Font Awesome 5 CDN-->
-    <!--    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">-->
-    <!--    Font Awesome 6 CDN-->
-    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous">-->
-    <!--    Font Awesome 5 -->
-    <!--    <link href="--><?php //echo base_url(); ?><!--assets/font-awesome5/css/all.css" rel="stylesheet">-->
     <!--    Font Awesome 6 -->
     <link href="<?php echo base_url(); ?>assets/font-awesome-6/css/all.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/font-awesome-6/css/sharp-duotone-solid.css" rel="stylesheet">

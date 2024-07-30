@@ -14,10 +14,15 @@
     <link href="<?php echo base_url(); ?>assets/css/bootstrap-agile.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/agile-style.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,400italic,600,700' rel='stylesheet' type='text/css'>
-    <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/font-awesome5/css/fontawesome5.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.css" type="text/css" rel="stylesheet">
 
+    <!--    Font Awesome 6 -->
+    <link href="<?php echo base_url(); ?>assets/font-awesome-6/css/all.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/font-awesome-6/css/sharp-duotone-solid.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/font-awesome-6/css/sharp-light.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/font-awesome-6/css/sharp-regular.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/font-awesome-6/css/sharp-solid.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/font-awesome-6/css/sharp-thin.css" rel="stylesheet">
 
     <script src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.min.js"></script>                            <!-- Load jQuery -->
     <script src="<?php echo base_url(); ?>assets/js/jqueryui-1.9.2.min.js"></script>                            <!-- Load jQueryUI -->
@@ -116,7 +121,7 @@
                         <a href="javascript:" onclick="verificar_conta()" class="text-primary pull-right">Não recebi o email de verificação</a>
                     </div>
                     <div class="form-group text-center">
-                        <button class="btn btn-login btn-block waves-effect waves-light" type="submit"><i class="far fa-check-circle fa-fw"></i> Cadastrar</button>
+                        <button class="btn btn-login btn-block waves-effect waves-light" type="submit">Cadastrar <i class="fas fa-user-plus fa-fw"></i></button>
                     </div>
                     <div class="form-group m-b-0">
                         <div class="col-sm-12 text-center">

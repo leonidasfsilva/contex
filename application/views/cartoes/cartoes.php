@@ -1,7 +1,7 @@
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h3>
-            <i class="fas fa-credit-card fa-lg fa-fw"></i>
+            <i class="fas fad fa-credit-card fa-swap-opacity fa-lg fa-fw"></i>
             Lista de Cartões
         </h3>
         <div class="panel-ctrls">

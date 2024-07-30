@@ -349,7 +349,7 @@ $this->load->view('includes/custom_js');
                             <ul class="acc-menu">
                                 <!--                                <li class="nav-separator"></li>-->
                                 <li class="<?= (isset($menuPainel)) ? 'active' : ''; ?>">
-                                    <a href="<?= base_url() ?>"><i class="fas fa-th-large fa-fw"></i>
+                                    <a href="<?= base_url() ?>"><i class="fass fa-grid-2 fa-fw"></i>
                                         <span>Painel Inicial</span>
                                     </a>
                                 </li>
@@ -364,7 +364,7 @@ $this->load->view('includes/custom_js');
 								
 								<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vConsumo')) { ?>
                                     <li class="<?= (isset($menuConsumo)) ? 'active' : ''; ?>">
-                                        <a href="<?= base_url('consumo') ?>"><i class="fas fa-lightbulb fa-fw"></i>
+                                        <a href="<?= base_url('consumo') ?>"><i class="fas fa-lightbulb-dollar fa-fw"></i>
                                             <span>Consumo de Energia</span>
                                         </a>
                                     </li>
@@ -412,7 +412,7 @@ $this->load->view('includes/custom_js');
 								
 								<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
                                     <li class="<?= (isset($menuFinanceiro)) ? 'active' : ''; ?>">
-                                        <a href="javascript:"><i class="fas fa-dollar-sign fa-fw"></i>
+                                        <a href="javascript:"><i class="fas fa-dollar-circle fa-fw"></i>
                                             <span>Financeiro</span>
                                         </a>
                                         <ul class="acc-menu">

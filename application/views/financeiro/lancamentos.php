@@ -8,7 +8,7 @@ $fim                 = $this->input->get('dataFinal');
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h3>
-            <i class="fas fa-chart-line fa-lg fa-fw"></i>
+            <i class="fas fa-chart-mixed-up-circle-dollar fa-lg fa-fw"></i>
             Lançamentos
         </h3>
         <div class="row mr5 ml5">
@@ -481,7 +481,7 @@ if (!$results) {
                 </tr>
 				<?php if ($totalOcultosMes) { ?>
                     <tr class="hidden provisorio-ocultos">
-                        <td colspan="2" style="text-align: left; font-weight: bold; color: #a9a9a9">(=) TOTAL OCULTOS DO PERÍODO</td>
+                        <td colspan="2" style="text-align: left; font-weight: bold; color: #a9a9a9">(=) TOTAL DE OCULTOS DO PERÍODO</td>
                         <td colspan="1" style="text-align: right; font-weight: bold; color: #a9a9a9">
 							<?php echo number_format($totalOcultosMes, 2, ',', '.') ?>
                         </td>
@@ -696,46 +696,6 @@ if (!$results) {
 			<?php } ?>
         </div>
     </div>
-
-    <!-- POSIÇAO CONSOLIDADA LANÇAMENTOS OCULTOS-->
-    <!--<div class="panel panel-midnightblue somatorio-ocultos hidden">-->
-    <!--    <div class="panel-heading">-->
-    <!--        <h2>-->
-    <!--            Ocultos-->
-	<!--			--><?php //= (isset($referenceMonth) && $referenceMonth ? " do Período: $month / $referenceYear" : null) ?>
-    <!--        </h2>-->
-    <!--        <div class="panel-ctrls">-->
-    <!--            <a href="#" class="button-icon close-panel">-->
-    <!--                <i class="fas fa-times"></i>-->
-    <!--            </a>-->
-    <!--            <a href="#" class="button-icon expand">-->
-    <!--                <i class="fas fa-expand-arrows-alt expand-icon"></i>-->
-    <!--            </a>-->
-    <!--            <a href="#" class="button-icon panel-collapse">-->
-    <!--                <i class="fas fa-plus"></i>-->
-    <!--            </a>-->
-    <!--        </div>-->
-    <!--    </div>-->
-    <!--    <div class="panel-body panel-no-padding" style="display: none;">-->
-    <!--        <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">-->
-    <!--            <thead>-->
-    <!--            <tr role="row">-->
-    <!--                <th colspan="2" style="text-align: left !important;">Descrição</th>-->
-    <!--                <th colspan="1" style="text-align: right !important;">Valor (R$)</th>-->
-    <!--            </tr>-->
-    <!--            </thead>-->
-	<!--			--><?php //if ($totalOcultosMes) { ?>
-    <!--                <tr>-->
-    <!--                    <td colspan="2" style="text-align: left; font-weight: bold">(=) TOTAL OCULTOS DO PERÍODO</td>-->
-    <!--                    <td colspan="1" style="text-align: right; font-weight: bold">-->
-	<!--						--><?php //echo number_format($totalOcultosMes, 2, ',', '.') ?>
-    <!--                    </td>-->
-    <!--                </tr>-->
-	<!--			--><?php //} ?>
-    <!--        </table>-->
-    <!--    </div>-->
-    <!--</div>-->
-
 <?php } ?>
 
 <!-- Modal FILTRAR -->

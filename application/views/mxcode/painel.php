@@ -96,7 +96,7 @@ if ($direcionados) {
                         </div>
                     </div>
                     <div class="pull-right">
-                        <span><i class="fas fa-chart-line fa-lg fa-fw"></i></span>
+                        <span><i class="fas fa-chart-mixed-up-circle-dollar fa-swap-opacity fa-2x fa-fw"></i></span>
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
@@ -122,7 +122,7 @@ if ($direcionados) {
                         </div>
                     </div>
                     <div class="pull-right">
-                        <span><i class="fas fa-file-invoice-dollar fa-lg fa-fw"></i></span>
+                        <span><i class="fas fa-file-invoice-dollar fa-2x fa-fw"></i></span>
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
@@ -149,7 +149,7 @@ if ($direcionados) {
                         </div>
                     </div>
                     <div class="pull-right">
-                        <span><i class="fas fa-money-check-alt fa-lg fa-fw"></i></span>
+                        <span><i class="fas fa-money-check-dollar-pen fa-2x fa-fw"></i></span>
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
@@ -175,7 +175,7 @@ if ($direcionados) {
                         </div>
                     </div>
                     <div class="pull-right">
-                        <span><i class="fas fa-hand-holding-usd fa-lg fa-fw"></i></span>
+                        <span><i class="fas fa-hand-holding-circle-dollar fa-2x fa-fw"></i></span>
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
@@ -190,13 +190,13 @@ if ($direcionados) {
     <?php } ?>
 </div>
 
-<!--PAINEL DE LINKS-->
+<!--MOSAICO DE LINKS (CARDS)-->
 <div class="row">
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) : ?>
         <div class="col-md-6">
             <a href="<?= base_url('/financeiro/cartoes') ?>" class="shortcut-tile tile-midnightblue">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fas fa-credit-card fa-fw"></i></div>
+                    <div class="pull-left"><i class="fas fad fa-credit-card fa-swap-opacity fa-fw"></i></div>
                     <div class="pull-right"><span class="badge"><?= $this->cartoes_model->countCartoesUsuario(); ?></span></div>
                 </div>
                 <div class="tile-footer">
@@ -257,7 +257,7 @@ if ($direcionados) {
         </div>
     <?php endif ?>
 
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) : ?>
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) : ?>
         <div class="col-md-6">
             <a href="<?= base_url('/usuarios') ?>" class="shortcut-tile tile-inverse">
                 <div class="tile-body">
@@ -265,7 +265,7 @@ if ($direcionados) {
                     <!--                            <div class="pull-right"><span class="badge">10</span></div>-->
                 </div>
                 <div class="tile-footer">
-                    Usuários
+                    Usuários do Sistema
                 </div>
             </a>
         </div>

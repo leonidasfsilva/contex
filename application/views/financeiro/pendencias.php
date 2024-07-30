@@ -10,7 +10,7 @@ $periodo_pendencia = $this->input->get('periodo');
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h3>
-            <i class="fas fa-money-check-alt fa-lg fa-fw"></i>
+            <i class="fas fa-money-check-dollar-pen fa-lg fa-fw"></i>
             Controle de Pendências
         </h3>
         <div class="panel-ctrls">

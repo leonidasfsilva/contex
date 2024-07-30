@@ -16,9 +16,15 @@
     <link href="<?php echo base_url(); ?>assets/css/agile-style.css?v=<?= versionApp() ?>" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/custom.css?v=<?= versionApp() ?>" type="text/css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,400italic,600,700' rel='stylesheet' type='text/css'>
-    <link href="<?php echo base_url(); ?>assets/font-awesome-6/css/all.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.css" type="text/css" rel="stylesheet">
 
+    <!--    Font Awesome 6 -->
+    <link href="<?php echo base_url(); ?>assets/font-awesome-6/css/all.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/font-awesome-6/css/sharp-duotone-solid.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/font-awesome-6/css/sharp-light.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/font-awesome-6/css/sharp-regular.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/font-awesome-6/css/sharp-solid.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/font-awesome-6/css/sharp-thin.css" rel="stylesheet">
 
     <script src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.min.js"></script> <!-- Load jQuery -->
     <script src="<?php echo base_url(); ?>assets/js/jqueryui-1.9.2.min.js"></script> <!-- Load jQueryUI -->
@@ -77,7 +83,7 @@
                     <div class="form-group text-center m-t-20">
                         <div class="row">
                             <div class="col-xs-12">
-                                <button class="btn btn-login btn-block waves-effect waves-light" type="submit"><i class="fas fa-user-lock fa-fw"></i> Acessar</button>
+                                <button class="btn btn-login btn-block waves-effect waves-light" type="submit">Acessar <i class="far fa-arrow-down-to-square fa-rotate-270 fa-fw"></i></button>
                             </div>
                         </div>
                     </div>

@@ -3,7 +3,7 @@
         <div class="col-md-6">
             <a href="<?= base_url() ?>financeiro/lancamentos" class="shortcut-tile tile-blue">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fas fa-chart-line fa-fw"></i></div>
+                    <div class="pull-left"><i class="fas fa-chart-mixed-up-circle-dollar fa-fw"></i></div>
                     <!--                            <div class="pull-right"><span class="badge">2</span></div>-->
                 </div>
                 <div class="tile-footer">
@@ -27,7 +27,7 @@
         <div class="col-md-6">
             <a href="<?= base_url() ?>financeiro/cartoes" class="shortcut-tile tile-midnightblue">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fas fa-credit-card fa-fw"></i></div>
+                    <div class="pull-left"><i class="fas fad fa-credit-card fa-swap-opacity fa-fw"></i></div>
                     <div class="pull-right"><span class="badge"><?= $this->cartoes_model->countCartoesUsuario(); ?></span></div>
                 </div>
                 <div class="tile-footer">
@@ -40,7 +40,7 @@
         <div class="col-md-6">
             <a href="<?= base_url() ?>financeiro/investimentos" class="shortcut-tile tile-green">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fas fa-hand-holding-usd fa-fw"></i></div>
+                    <div class="pull-left"><i class="fas fa-hand-holding-circle-dollar fa-fw"></i></div>
                     <!--                            <div class="pull-right"><span class="badge">3</span></div>-->
                 </div>
                 <div class="tile-footer">
@@ -53,7 +53,7 @@
         <div class="col-md-6">
             <a href="<?= base_url() ?>financeiro/pendencias" class="shortcut-tile tile-danger">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fas fa-money-check-alt fa-fw"></i></div>
+                    <div class="pull-left"><i class="fas fa-money-check-dollar-pen fa-fw"></i></div>
                 </div>
                 <div class="tile-footer">
                     Pendências
