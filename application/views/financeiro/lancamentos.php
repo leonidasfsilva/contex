@@ -313,6 +313,7 @@ if (!$results) {
 						$totalGeralMes += $r->valor;
 					} else {
 						$totalOcultosMes += $r->valor;
+                        continue;
 					}
 					
 					echo '<tr>';
