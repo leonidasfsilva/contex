@@ -504,10 +504,9 @@ $this->load->view('includes/custom_js');
         <!--                    SIDEBAR fim-->
 
         <div class="static-content-wrapper">
-
             <div class="static-content principal-div">
                 <!--DIV PRINCIPAL-->
-                <div class="page-content ">
+                <div class="page-content">
                     <!--BREADCRUMB-->
                     <ol class="breadcrumb">
                         <li class="">
@@ -584,13 +583,23 @@ $this->load->view('includes/custom_js');
 
                     <!--CONTEUDO PRINCIPAL-->
                     <div class="subconteudo-principal">
-						
 						<?php if (isset($view)) {
 							echo $this->load->view($view, null, true);
 						} ?>
                     </div>
                 </div>
             </div>
+            <!--DIV FOOTER-->
+            <footer role="contentinfo">
+                <div class="">
+                    <ul class="list-unstyled list-inline pull-left">
+                        <li>
+                            <h6 style="margin: 0; text-transform: none"><?= sprintf('&copy; 2019 - %s • %s %s • ver. %s', date('Y'), 'CONTEX', '<span class="hidden-xs">- Sistema de Gestão</span>', VERSION_APP); ?> </h6>
+                        </li>
+                    </ul>
+                    <span class="pull-right badge badge-inverse hidden-print" id="back-to-top" style="cursor: pointer;">Voltar ao topo <i class="fa fa-arrow-up"></i></span>
+                </div>
+            </footer>
 
             <!--SPINNER LOADER-->
             <div class="preloader" style="display: none">
@@ -600,18 +609,6 @@ $this->load->view('includes/custom_js');
                     Aguarde...
                 </h4>
             </div>
-
-            <!--DIV FOOTER-->
-            <footer role="contentinfo">
-                <div class="clearfix">
-                    <ul class="list-unstyled list-inline pull-left">
-                        <li>
-                            <h6 style="margin: 0; text-transform: none"><?= sprintf('&copy; 2019 - %s • %s %s • ver. %s', date('Y'), 'CONTEX', '<span class="hidden-xs">- Sistema de Gestão</span>', VERSION_APP); ?> </h6>
-                        </li>
-                    </ul>
-                    <span class="pull-right badge badge-inverse hidden-print" id="back-to-top" style="cursor: pointer;">Voltar ao topo <i class="fa fa-arrow-up"></i></span>
-                </div>
-            </footer>
         </div>
     </div>
 </div>

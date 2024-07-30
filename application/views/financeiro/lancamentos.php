@@ -119,8 +119,10 @@ $entradasEfetivadas = null;
 $totalSaidas        = null;
 $totalEntradas      = null;
 $totalGeralMes      = null;
+$totalOcultosMes    = null;
 $totalGeral         = $total->total;
 $saldoProvisorioMes = null;
+$saldoMesComOculto  = null;
 $prevLink           = null;
 $nextLink           = null;
 $currentMonthText   = null;
@@ -307,7 +309,11 @@ if (!$results) {
 						$valor = number_format($r->valor, 2, ',', '.');
 					}
 					
-					$totalGeralMes += $r->valor;
+					if (!$r->oculto) {
+						$totalGeralMes += $r->valor;
+					} else {
+						$totalOcultosMes += $r->valor;
+					}
 					
 					echo '<tr>';
 					echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
@@ -466,10 +472,29 @@ if (!$results) {
                 <tr class="total-geral">
                     <td colspan="2" style="text-align: left; font-weight: bold">(=) SALDO TOTAL DO PERÍODO</td>
                     <td colspan="1" style="text-align: right; font-weight: bold">
-						<?php echo number_format($totalGeralMes, 2, ',', '.') ?>
+						<?php
+						if ($hiddenItems) echo '<i class="fas fa-lock-keyhole fa-fw vault-icon"></i> ';
+						
+						echo number_format($totalGeralMes, 2, ',', '.')
+						?>
                     </td>
                 </tr>
-				<?php
+				<?php if ($totalOcultosMes) { ?>
+                    <tr class="hidden provisorio-ocultos">
+                        <td colspan="2" style="text-align: left; font-weight: bold; color: #a9a9a9">(=) TOTAL OCULTOS DO PERÍODO</td>
+                        <td colspan="1" style="text-align: right; font-weight: bold; color: #a9a9a9">
+							<?php echo number_format($totalOcultosMes, 2, ',', '.') ?>
+                        </td>
+                    </tr>
+				<?php }
+				if ($hiddenItems) { ?>
+                    <tr class="hidden provisorio-ocultos">
+                        <td colspan="2" style="text-align: left; font-weight: bold">(±) SALDO OCULTO DO PERÍODO</td>
+                        <td colspan="1" style="text-align: right; font-weight: bold">
+							<?php echo number_format(($totalOcultosMes + $totalGeralMes), 2, ',', '.') ?>
+                        </td>
+                    </tr>
+				<?php }
 				if ($totalGeralMes < 0 && $saldoProvisorioMes) {
 					?>
                     <tr class="hidden provisorio-periodo">
@@ -478,29 +503,15 @@ if (!$results) {
 							<?php echo number_format(($saldoProvisorioMes), 2, ',', '.') ?>
                         </td>
                     </tr>
-				<?php } ?>
-			<?php } ?>
+				<?php }
+			} ?>
 
         </table>
     </div>
 </div>
 
-<?php if ($hiddenItems) {
-	$saidasPendentes    = null;
-	$entradasPendentes  = null;
-	$saidasEfetivadas   = null;
-	$entradasEfetivadas = null;
-	$totalSaidas        = null;
-	$totalEntradas      = null;
-	$totalGeralMes      = null;
-	$totalGeral         = $total->total;
-	$saldoProvisorioMes = null;
-	$prevLink           = null;
-	$nextLink           = null;
-	$currentMonthText   = null;
-	
-	?>
-    <div class="panel panel-midnightblue">
+<?php if ($hiddenItems) { ?>
+    <div class="panel panel-midnightblue lancamentos-ocultos hidden">
         <div class="panel-heading">
             <h2>
                 <span style='margin-right: 10px !important;'>Lançamentos Ocultos</span>
@@ -687,120 +698,45 @@ if (!$results) {
     </div>
 
     <!-- POSIÇAO CONSOLIDADA LANÇAMENTOS OCULTOS-->
-    <div class="panel panel-midnightblue">
-        <div class="panel-heading">
-            <h2>
-                Somatório de Ocultos
-				<?= (isset($referenceMonth) && $referenceMonth ? " do Período: $month / $referenceYear" : null) ?>
-            </h2>
-            <div class="panel-ctrls">
-                <a href="#" class="button-icon close-panel">
-                    <i class="fas fa-times"></i>
-                </a>
-                <a href="#" class="button-icon expand">
-                    <i class="fas fa-expand-arrows-alt expand-icon"></i>
-                </a>
-                <a href="#" class="button-icon panel-collapse">
-                    <i class="fas fa-plus"></i>
-                </a>
-            </div>
-        </div>
-        <div class="panel-body panel-no-padding" style="display: none;">
-            <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
-                <thead>
-                <tr role="row">
-                    <th colspan="2" style="text-align: left !important;">Descrição</th>
-                    <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
-                </tr>
-                </thead>
-				<?php if ($entradasPendentes) {
-					$saldoProvisorioMes = $totalGeral + $entradasPendentes;
-					?>
-                    <tr>
-                        <td colspan="2" style="text-align: left; color: #5cb85c">(+) SALDO DE ENTRADAS PENDENTES</td>
-                        <td colspan="1" style="text-align: right; color: #5cb85c">
-							<?php echo number_format($entradasPendentes, 2, ',', '.') ?>
-                        </td>
-                    </tr>
-				<?php } ?>
-				<?php if ($entradasEfetivadas) { ?>
-                    <tr>
-                        <td colspan="2" style="text-align: left; color: green">(+) SALDO DE ENTRADAS EFETIVADAS</td>
-                        <td colspan="1" style="text-align: right;  color: green">
-							<?php echo number_format($entradasEfetivadas, 2, ',', '.') ?>
-                        </td>
-                    </tr>
-				<?php } ?>
-				<?php if ($entradasEfetivadas && $entradasPendentes) {
-					if ($saldoProvisorioMes) {
-						$saldoProvisorioMes = $totalGeral + $entradasPendentes;
-					} else {
-						$saldoProvisorioMes = $totalGeral + $entradasPendentes + $entradasEfetivadas;
-					}
-					?>
-                    <tr>
-                        <td colspan="2" style="text-align: left;">(=) SALDO TOTAL DE ENTRADAS</td>
-                        <td colspan="1" style="text-align: right;">
-							<?php echo number_format($totalEntradas, 2, ',', '.') ?>
-                        </td>
-                    </tr>
-				<?php } ?>
-				
-				<?php if ($saidasPendentes) {
-					if ($saldoProvisorioMes) {
-						$saldoProvisorioMes = $saldoProvisorioMes + ($saidasPendentes);
-					} else {
-						$saldoProvisorioMes = $totalGeral + ($saidasPendentes);
-					}
-					?>
-                    <tr>
-                        <td colspan="2" style="text-align: left; color: red">(-) SALDO DE SAÍDAS PENDENTES</td>
-                        <td colspan="1" style="text-align: right; color: red">
-							<?php echo number_format($saidasPendentes, 2, ',', '.') ?>
-                        </td>
-                    </tr>
-				<?php } ?>
-				<?php if ($saidasEfetivadas) { ?>
-                    <tr>
-                        <td colspan="2" style="text-align: left; color: #d9534f">(-) SALDO DE SAÍDAS EFETIVADAS</td>
-                        <td colspan="1" style="text-align: right; color: #d9534f">
-							<?php echo number_format($saidasEfetivadas, 2, ',', '.') ?>
-                        </td>
-                    </tr>
-				<?php } ?>
-				<?php if ($saidasEfetivadas && $saidasPendentes) { ?>
-                    <tr>
-                        <td colspan="2" style="text-align: left;">(=) SALDO TOTAL DE SAÍDAS</td>
-                        <td colspan="1" style="text-align: right;">
-							<?php echo number_format($totalSaidas, 2, ',', '.') ?>
-                        </td>
-                    </tr>
-				<?php } ?>
-				<?php if ($totalGeralMes) { ?>
-                    <tr class="total-geral">
-                        <td colspan="2" style="text-align: left; font-weight: bold">(=) SALDO TOTAL DO PERÍODO</td>
-                        <td colspan="1" style="text-align: right; font-weight: bold">
-							<?php echo number_format($totalGeralMes, 2, ',', '.') ?>
-                        </td>
-                    </tr>
-					<?php
-					if ($totalGeralMes < 0 && $saldoProvisorioMes) {
-						?>
-                        <tr class="hidden provisorio-periodo">
-                            <td colspan="2" style="text-align: left; font-weight: bold">(±) SALDO PROVISÓRIO DO PERÍODO</td>
-                            <td colspan="1" style="text-align: right; font-weight: bold">
-								<?php echo number_format(($saldoProvisorioMes), 2, ',', '.') ?>
-                            </td>
-                        </tr>
-					<?php } ?>
-				<?php } ?>
-
-            </table>
-        </div>
-    </div>
+    <!--<div class="panel panel-midnightblue somatorio-ocultos hidden">-->
+    <!--    <div class="panel-heading">-->
+    <!--        <h2>-->
+    <!--            Ocultos-->
+	<!--			--><?php //= (isset($referenceMonth) && $referenceMonth ? " do Período: $month / $referenceYear" : null) ?>
+    <!--        </h2>-->
+    <!--        <div class="panel-ctrls">-->
+    <!--            <a href="#" class="button-icon close-panel">-->
+    <!--                <i class="fas fa-times"></i>-->
+    <!--            </a>-->
+    <!--            <a href="#" class="button-icon expand">-->
+    <!--                <i class="fas fa-expand-arrows-alt expand-icon"></i>-->
+    <!--            </a>-->
+    <!--            <a href="#" class="button-icon panel-collapse">-->
+    <!--                <i class="fas fa-plus"></i>-->
+    <!--            </a>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <!--    <div class="panel-body panel-no-padding" style="display: none;">-->
+    <!--        <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">-->
+    <!--            <thead>-->
+    <!--            <tr role="row">-->
+    <!--                <th colspan="2" style="text-align: left !important;">Descrição</th>-->
+    <!--                <th colspan="1" style="text-align: right !important;">Valor (R$)</th>-->
+    <!--            </tr>-->
+    <!--            </thead>-->
+	<!--			--><?php //if ($totalOcultosMes) { ?>
+    <!--                <tr>-->
+    <!--                    <td colspan="2" style="text-align: left; font-weight: bold">(=) TOTAL OCULTOS DO PERÍODO</td>-->
+    <!--                    <td colspan="1" style="text-align: right; font-weight: bold">-->
+	<!--						--><?php //echo number_format($totalOcultosMes, 2, ',', '.') ?>
+    <!--                    </td>-->
+    <!--                </tr>-->
+	<!--			--><?php //} ?>
+    <!--        </table>-->
+    <!--    </div>-->
+    <!--</div>-->
 
 <?php } ?>
-
 
 <!-- Modal FILTRAR -->
 <div class="modal fade" id="modalFiltrar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -1535,7 +1471,7 @@ if (!$results) {
                                 <span class="input-group-addon">Mês padrão:</span>
                                 <select class="form-control" id="mesPadraoSelect" name="mesPadrao">
                                     <option value="" style="font-style: italic;">
-                                        << Não configurado >>
+                                        << Não definido >>
                                     </option>
 									<?php if ($monthList) {
 										foreach ($monthList as $index => $month) { ?>
@@ -1600,7 +1536,8 @@ if (!$results) {
     });
 
     $('.total-geral').click(function (e) {
-        $('.provisorio-periodo').toggleClass('hidden');
+        $('.provisorio-periodo, .lancamentos-ocultos, .somatorio-ocultos, .provisorio-ocultos').toggleClass('hidden');
+        $('.vault-icon').toggleClass('fa-lock-keyhole, fa-lock-keyhole-open');
     });
 
     $(document).on('change', '#mesPadraoSelect', function () {

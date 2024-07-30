@@ -16,9 +16,9 @@ class Financeiro_model extends CI_Model
 		$this->db->limit($perpage, $start);
 		
 		if ($where) {
-			$this->db->where($where . ' AND status = 1 AND oculto IS NULL AND id_usuario = ' . $id_usuario);
+			$this->db->where($where . ' AND status = 1 AND id_usuario = ' . $id_usuario);
 		} else {
-			$this->db->where('status = 1 AND oculto IS NULL AND id_usuario = ' . $id_usuario);
+			$this->db->where('status = 1 AND id_usuario = ' . $id_usuario);
 		}
 		
 		if ($order_by) {

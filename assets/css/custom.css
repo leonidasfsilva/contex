@@ -80,6 +80,10 @@
     }
 }
 
+.principal-div {
+    margin-bottom: 50px !important;
+}
+
 .page-loading::before {
     content: " ";
     display: flex;
