@@ -481,7 +481,7 @@ $this->load->view('includes/custom_js');
                                                 <li><a href="<?= base_url() ?>configuracoes/sistema">Configurações</a></li>
 											<?php } ?>
 											<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) { ?>
-                                                <li><a href="<?= base_url() ?>usuarios">Usuários</a></li>
+                                                <li><a href="<?= base_url() ?>usuarios">#</a></li>
 											<?php } ?>
 											<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) { ?>
                                                 <li><a href="<?= base_url() ?>mxcode/emitente">Emitente</a></li>
@@ -597,7 +597,7 @@ $this->load->view('includes/custom_js');
                             <h6 style="margin: 0; text-transform: none"><?= sprintf('&copy; 2019 - %s • %s %s • ver. %s', date('Y'), 'CONTEX', '<span class="hidden-xs">- Sistema de Gestão</span>', VERSION_APP); ?> </h6>
                         </li>
                     </ul>
-                    <span class="pull-right badge badge-inverse hidden-print" id="back-to-top" style="cursor: pointer;">Voltar ao topo <i class="fa fa-arrow-up"></i></span>
+                    <span class="pull-right badge badge-inverse hidden-print" id="back-to-top" style="cursor: pointer; background: #b2b2b2">Voltar ao topo <i class="fa fa-arrow-up"></i></span>
                 </div>
             </footer>
 
