@@ -282,7 +282,7 @@ $this->load->view('includes/custom_js');
         <li class="dropdown toolbar-icon-bg">
             <a href="<?= base_url('chamados') ?>" class="hasnotifications" title="Chamados de Suporte">
                     <span class="icon-bg">
-                        <i class="fas fa-fw fa-headset"></i>
+                        <i class="fal fa-comments-question-check fa-fw"></i>
                     </span>
                 <!--                numero de notificações-->
 				<?php if ($this->session->userdata('permissao') == 1) {
@@ -321,13 +321,13 @@ $this->load->view('includes/custom_js');
         </li>
         <!--MENU USUARIO-->
     </ul>
-    <!--    TOP NAVBAR-->
+    <!--TOP NAVBAR-->
 
 </header>
 
 <div id="wrapper">
     <div id="layout-static">
-        <!--                    SIDEBAR-->
+        <!--SIDEBAR-->
         <div class="static-sidebar-wrapper <?= (isset($sidebar_color) ? $sidebar_color : 'sidebar-midnightblue') ?>">
             <div class="static-sidebar">
                 <div class="sidebar">
@@ -349,14 +349,14 @@ $this->load->view('includes/custom_js');
                             <ul class="acc-menu">
                                 <!--                                <li class="nav-separator"></li>-->
                                 <li class="<?= (isset($menuPainel)) ? 'active' : ''; ?>">
-                                    <a href="<?= base_url() ?>"><i class="fass fa-grid-2 fa-fw"></i>
+                                    <a href="<?= base_url() ?>"><i class="fasl fa-grid-2 fa-fw"></i>
                                         <span>Painel Inicial</span>
                                     </a>
                                 </li>
 								
 								<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) { ?>
                                     <li class="<?= (isset($menuClientes)) ? 'active' : ''; ?>">
-                                        <a href="<?= base_url('clientes') ?>"><i class="fas fa-users fa-fw"></i>
+                                        <a href="<?= base_url('clientes') ?>"><i class="fal fa-people-group fa-fw"></i>
                                             <span>Clientes</span>
                                         </a>
                                     </li>
@@ -364,7 +364,7 @@ $this->load->view('includes/custom_js');
 								
 								<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vConsumo')) { ?>
                                     <li class="<?= (isset($menuConsumo)) ? 'active' : ''; ?>">
-                                        <a href="<?= base_url('consumo') ?>"><i class="fas fa-lightbulb-dollar fa-fw"></i>
+                                        <a href="<?= base_url('consumo') ?>"><i class="fal fa-lightbulb-dollar fa-fw"></i>
                                             <span>Consumo de Energia</span>
                                         </a>
                                     </li>
@@ -412,7 +412,7 @@ $this->load->view('includes/custom_js');
 								
 								<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
                                     <li class="<?= (isset($menuFinanceiro)) ? 'active' : ''; ?>">
-                                        <a href="javascript:"><i class="fas fa-dollar-circle fa-fw"></i>
+                                        <a href="javascript:"><i class="fal fa-circle-dollar fa-fw"></i>
                                             <span>Financeiro</span>
                                         </a>
                                         <ul class="acc-menu">

@@ -1,7 +1,7 @@
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h3>
-            <i class="fas fa-lightbulb fa-lg fa-fw"></i>
+            <i class="fal fa-lightbulb-dollar fa-lg fa-fw"></i>
             Consumo de Energia
         </h3>
         <div class="panel-ctrls">

@@ -341,10 +341,10 @@ if (!$results) {
 							$r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
 							date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
 							$r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">
-                                <i class="fas fa-copy fa-lg fa-fw"></i></button>';
+                                <i class="fass fa-copy fa-lg fa-fw"></i></button>';
 					}
 					if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
-						echo '<button type="button" href="#modalExcluir" data-toggle="modal" idLancamento="' . $r->id_lancamento . '" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw"></i></button>';
+						echo '<button type="button" href="#modalExcluir" data-toggle="modal" idLancamento="' . $r->id_lancamento . '" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fas fa-trash-can-xmark fa-lg fa-fw"></i></button>';
 					}
 					echo '</td>';
 					echo '</tr>';

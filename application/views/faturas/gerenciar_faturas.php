@@ -120,7 +120,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             </button>
             <button href="#modalConfiguracoes" class="btn btn-default btn-sm" id="configurar_fatura" data-toggle="modal" title="Configurações de fatura" <?= $disabledConfig ?>>
                 <i class="fas fa-cog fa-fw"></i>
-                <text class="visible-lg-inline">Configurações de Fatura</text>
+                <text class="visible-lg-inline">Configurações</text>
             </button>
             <button href="#modalVincularFaturas" id="vincularFaturas" data-toggle="modal" role="button" class="btn btn-primary btn-sm tip-bottom" title="Vínculo de faturas" <?= !isset($cartao) ? 'disabled' : '' ?>>
                 <i class="fas fa-link fa-fw"></i>
@@ -171,9 +171,9 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             $label              = 'inverse';
                             // $disabled        = 'disabled';
                             $hrefFechar         = '#modalReabrir';
-                            $titleFechar        = 'Abrir fatura';
+                            $titleFechar        = 'Reabrir fatura';
                             $colorFechar        = 'inverse';
-                            $iconFechar         = 'fas fa-lock';
+                            $iconFechar         = 'fas fa-lock-keyhole';
                             $iconFaturaAtual    = null;
                         } else if ($r->fatura_aberta == 2) {
                             //FATURA FUTURA
@@ -182,9 +182,9 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             $disabledPagar      = 'disabled';
                             $disabled           = 'disabled';
                             $hrefFechar         = '#modalFechar';
-                            $titleFechar        = 'Abrir fatura';
+                            $titleFechar        = 'Fatura futura';
                             $colorFechar        = 'inverse';
-                            $iconFechar         = 'fas fa-lock';
+                            $iconFechar         = 'fas fa-clock';
                             $iconFaturaAtual    = null;
                         } else {
                             //FATURA ABERTA
@@ -194,7 +194,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             $titleFechar        = 'Fechar fatura';
                             $disabledPagar      = 'disabled';
                             $colorFechar        = 'default';
-                            $iconFechar         = 'fas fa-unlock';
+                            $iconFechar         = 'fas fa-lock-keyhole-open';
                             $iconFaturaAtual    = ' <i class="fas fa-long-arrow-alt-left fa-lg fa-fw" title="Fatura atual"></i>';
                         }
 
@@ -216,24 +216,24 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             $pagamento  = 'PENDENTE';
                             $labelPgto  = 'danger';
                             $color      = 'red';
-                            $iconPagar  = 'far fa-check-square';
+                            $iconPagar  = 'fas fa-circle-dollar-to-slot';
                         } else if ($r->fatura_paga == 1) {
                             $pagamento      = 'PAGA';
                             $labelPgto      = 'success';
                             $color          = 'green';
-                            $iconPagar      = 'fas fa-check-square';
+                            $iconPagar      = 'fas fa-file-check';
                             $disabledPagar  = 'disabled';
                         } else {
                             $pagamento  = '';
                             $labelPgto  = '';
                             $color      = 'red';
-                            $iconPagar  = 'far fa-check-square';
+                            $iconPagar  = 'fal fa-file-check';
                         }
 
                         $valor_total = $this->fatura_model->getValorTotalFatura($r->id_fatura);
 
                         echo '<tr>';
-                        echo '<td><a href="' . base_url('financeiro/faturas/detalhes/' . $r->id_fatura . '/' . $cartaoSelecionado['id_cartao']) . '">' . $mes . ' / ' . $ano . $iconFaturaAtual . '</a></td>';
+                        echo '<td><a href="' . base_url('financeiro/faturas/detalhes/' . $r->id_fatura . '/' . $cartaoSelecionado['id_cartao']) . '" title="Acessar fatura">' . $mes . ' / ' . $ano . $iconFaturaAtual . '</a></td>';
                         echo '<td>' . date(('d/m/Y'), strtotime($r->vencimento)) . $statusVinculo . '</td>';
 
                         echo '<td style="cursor: pointer; color: ' . $color . '" class="i-copy-total"><i class="fas fa-copy fa-fw hidden icon-total"></i> ' . number_format($valor_total, 2, ',', '.') . '</td>';
@@ -251,12 +251,12 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             echo '<button href="' . $hrefVinculo . '" style="margin-right: 1%"  class="btn btn-' . $colorVinculo . ' btn-sm vinculo" data-toggle="modal" title="' . $titleVinculo . '" id_fatura="' . $r->id_fatura . '">
                                 ' . $iconVinculo . '</button>';
 
-                            echo '<a href="' . base_url('financeiro/faturas/detalhes/') . $r->id_fatura . '/' . $cartaoSelecionado['id_cartao'] . '" type="button" id="btn_detalhes" style="margin-right: 1%" class="btn btn-primary btn-sm detalhes" title="Detalhes da Fatura" id_fatura="' .
+                            echo '<a href="' . base_url('financeiro/faturas/detalhes/') . $r->id_fatura . '/' . $cartaoSelecionado['id_cartao'] . '" type="button" id="btn_detalhes" style="margin-right: 1%" class="btn btn-primary btn-sm detalhes" title="Acessar fatura" id_fatura="' .
                                 $r->id_fatura . '">
                                 <i class="fas fa-search-plus fa-lg fa-fw"></i></a>';
                         }
                         if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dFaturas')) {
-                            echo '<a href="#modalExcluir" data-toggle="modal" id_fatura="' . $r->id_fatura . '" class="btn btn-danger btn-sm excluir" title="Excluir Fatura"><i class="fas fa-trash-alt fa-lg fa-fw"></i></a>';
+                            echo '<a href="#modalExcluir" data-toggle="modal" id_fatura="' . $r->id_fatura . '" class="btn btn-danger btn-sm excluir" title="Excluir fatura"><i class="fas fa-trash-can-xmark fa-lg fa-fw"></i></a>';
                         }
                         echo '</td>';
                         echo '</tr>';
@@ -485,7 +485,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 <div class="modal-body">
                     <p class="font-weight-bold">Deseja realmente excluir esta fatura?</p>
                     <?php ?>
-                    <p class="note note-danger"><i class="text-danger fa fa-exclamation-triangle fa-fw fa-lg"></i> Caso esta fatura possua um vínculo ativo em Lançamento, o mesmo será excluído</p>
+                    <p class="note note-danger"><i class="text-danger fa fa-exclamation-triangle fa-fw fa-lg"></i> Caso esta fatura possua um vínculo ativo no módulo de Lançamentos, o mesmo será excluído.</p>
                     <?php ?>
                     <input name="id_fatura" id="idExcluir" type="hidden" value="" />
                     <input id="urlExcluirFatura" type="hidden" name="urlAtual" value="" />
@@ -696,14 +696,14 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 <div class="modal fade" id="modalVincular" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-warning">
+            <div class="modal-header bg-success">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white">Vincular fatura</h4>
             </div>
             <form id="formFechar" action="<?php echo base_url('financeiro/faturas/vincular') ?>" method="post">
                 <div class="modal-body">
                     <p class="font-weight-bold">Confirma o vínculo desta fatura ao módulo de Lançamentos?</p>
-                    <p class="note note-info"><i class="text-info fa fa-info-circle fa-fw fa-lg"></i> Todas as atualizações de valores desta fatura serão refletidas automaticamente no módulo de Lançamentos</p>
+                    <p class="note note-info"><i class="text-info fa fa-info-circle fa-fw fa-lg"></i> Todas as atualizações de valores desta fatura serão refletidas automaticamente no módulo de Lançamentos.</p>
                     <input class="idFatura" type="hidden" name="idFatura" />
                     <input class="urlAtual" type="hidden" name="urlAtual" />
                 </div>
@@ -711,7 +711,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                         <i class="fa fa-times fa-fw"></i> Cancelar
                     </button>
-                    <button class="btn btn-warning btn-sm" id="btnFechar">
+                    <button class="btn btn-success btn-sm" id="btnFechar">
                         <i class="fa fa-check fa-fw"></i> Confirmar
                     </button>
                 </div>
@@ -731,7 +731,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             <form id="formFechar" action="<?php echo base_url('financeiro/faturas/desvincular') ?>" method="post">
                 <div class="modal-body">
                     <p class="font-weight-bold">Confirma o desvinculo desta fatura do módulo de Lançamentos?</p>
-                    <p class="note note-info"><i class="text-info fa fa-info-circle fa-fw fa-lg"></i> Todas as atualizações de valores desta fatura deixarão de ser refletidas automaticamente no módulo de Lançamentos</p>
+                    <p class="note note-info"><i class="text-info fa fa-info-circle fa-fw fa-lg"></i> Todas as atualizações de valores desta fatura deixarão de ser refletidas automaticamente no módulo de Lançamentos.</p>
                     <input class="idFatura" type="hidden" name="idFatura" />
                     <input class="urlAtual" type="hidden" name="urlAtual" />
                 </div>

@@ -248,11 +248,11 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                         date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
                                         '" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '" 
                                     nome_cliente="' . $s->nome_cliente . '" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento_1 . ' ' . $disabled_lancamento_2 . '>
-                                <i class="fas fa-copy fa-lg fa-fw"></i></button>';
+                                <i class="fass fa-copy fa-lg fa-fw"></i></button>';
                                 }
                                 if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
                                     echo '<button type="button" href="#modalExcluir" data-toggle="modal" id_lancamento="' . $s->id_lancamento . '" class="btn btn-danger btn-sm excluir" title="Excluir" ' . $disabled_lancamento_1 . ' ' . $disabled_lancamento_2 . '>
-                                            <i class="fas fa-trash-alt fa-lg fa-fw"></i></button>';
+                                            <i class="fas fa-trash-can-xmark fa-lg fa-fw"></i></button>';
                                 }
                                 echo '</td>';
                                 echo '</tr>';

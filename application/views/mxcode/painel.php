@@ -210,7 +210,7 @@ if ($direcionados) {
         <div class="col-md-6">
             <a href="<?= base_url('/clientes') ?>" class="shortcut-tile tile-green">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fas fa-users fa-fw"></i></div>
+                    <div class="pull-left"><i class="fal fa-people-group fa-fw"></i></div>
                     <div class="pull-right"><span class="badge"><?= $this->clientes_model->countClientesUsuario(); ?></span></div>
                 </div>
                 <div class="tile-footer">
@@ -235,7 +235,7 @@ if ($direcionados) {
     <div class="col-md-6">
         <a href="<?= base_url('/chamados') ?>" class="shortcut-tile tile-alizarin">
             <div class="tile-body">
-                <div class="pull-left"><i class="fas fa-headset fa-fw"></i></div>
+                <div class="pull-left"><i class="fal fa-comments-question-check fa-fw"></i></div>
             </div>
             <div class="tile-footer">
                 Chamados de Suporte
@@ -247,7 +247,7 @@ if ($direcionados) {
         <div class="col-md-6">
             <a href="<?= base_url('/consumo') ?>" class="shortcut-tile tile-info">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fas fa-lightbulb fa-fw"></i></div>
+                    <div class="pull-left"><i class="fal fa-lightbulb-dollar fa-fw"></i></div>
                     <!--                            <div class="pull-right"><span class="badge">16</span></div>-->
                 </div>
                 <div class="tile-footer">
