@@ -291,6 +291,21 @@ function translateMonth($referenceMonth, $abbreviate = false, $returnMonthNumber
 	return getExtendedMonthName($referenceMonth, $monthFormatString);
 }
 
+function getQuarterOfCurrentYear()
+{
+	$dateFormatterExtended = new \IntlDateFormatter(
+		'pt_BR',
+		\IntlDateFormatter::FULL,
+		\IntlDateFormatter::NONE,
+		'America/Sao_Paulo',
+		\IntlDateFormatter::GREGORIAN,
+		'Q'
+	);
+	
+	$dateObj = DateTime::createFromFormat('Y-m-d', date('Y-m-d', time()));
+	return str_replace('.', '', ($dateFormatterExtended->format($dateObj)));
+}
+
 function translateWeekDay($date, $formatter = 'EEEE')
 {
 	$dateFormatterExtended = new \IntlDateFormatter(
