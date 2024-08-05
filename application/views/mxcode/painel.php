@@ -196,7 +196,7 @@ if ($direcionados) {
         <div class="col-md-6">
             <a href="<?= base_url('/financeiro/cartoes') ?>" class="shortcut-tile tile-midnightblue">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fas fad fa-credit-card fa-swap-opacity fa-fw"></i></div>
+                    <div class="pull-left"><i class="fad fa-credit-card fa-swap-opacity fa-fw"></i></div>
                     <div class="pull-right"><span class="badge"><?= $this->cartoes_model->countCartoesUsuario(); ?></span></div>
                 </div>
                 <div class="tile-footer">
@@ -219,30 +219,7 @@ if ($direcionados) {
             </a>
         </div>
     <?php endif ?>
-
-    <div class="col-md-6">
-        <a href="<?= base_url('/notificacoes') ?>" class="shortcut-tile tile-danger">
-            <div class="tile-body">
-                <div class="pull-left"><i class="fas fa-bell fa-fw"></i></div>
-                <!--                            <div class="pull-right"><span class="badge">3</span></div>-->
-            </div>
-            <div class="tile-footer">
-                Notificações
-            </div>
-        </a>
-    </div>
-
-    <div class="col-md-6">
-        <a href="<?= base_url('/chamados') ?>" class="shortcut-tile tile-alizarin">
-            <div class="tile-body">
-                <div class="pull-left"><i class="fal fa-comments-question-check fa-fw"></i></div>
-            </div>
-            <div class="tile-footer">
-                Chamados de Suporte
-            </div>
-        </a>
-    </div>
-
+    
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vConsumo')) : ?>
         <div class="col-md-6">
             <a href="<?= base_url('/consumo') ?>" class="shortcut-tile tile-info">
@@ -261,7 +238,7 @@ if ($direcionados) {
         <div class="col-md-6">
             <a href="<?= base_url('/usuarios') ?>" class="shortcut-tile tile-inverse">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fas fa-users-cog fa-fw"></i></div>
+                    <div class="pull-left"><i class="fal fa-users-cog fa-fw"></i></div>
                     <!--                            <div class="pull-right"><span class="badge">10</span></div>-->
                 </div>
                 <div class="tile-footer">
@@ -270,6 +247,29 @@ if ($direcionados) {
             </a>
         </div>
     <?php endif ?>
+
+    <div class="col-md-6">
+        <a href="<?= base_url('/notificacoes') ?>" class="shortcut-tile tile-danger">
+            <div class="tile-body">
+                <div class="pull-left"><i class="fal fa-bell fa-fw"></i></div>
+                <!--                            <div class="pull-right"><span class="badge">3</span></div>-->
+            </div>
+            <div class="tile-footer">
+                Notificações
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-6">
+        <a href="<?= base_url('/chamados') ?>" class="shortcut-tile tile-alizarin">
+            <div class="tile-body">
+                <div class="pull-left"><i class="fal fa-comments-question-check fa-fw"></i></div>
+            </div>
+            <div class="tile-footer">
+                Suporte
+            </div>
+        </a>
+    </div>
 </div>
 
 <script>

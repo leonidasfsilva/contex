@@ -177,6 +177,7 @@ function returnURL($get = null)
 			'',
 			'mxcode',
 			'mxcode/login',
+			'cadastro',
 			'mxcode/verificarLogin'
 		];
 		
@@ -185,8 +186,6 @@ function returnURL($get = null)
 			$params     = $_SERVER['QUERY_STRING']; //for parameters
 			$fullURL    = $currentURL . '?' . $params; //full URL with parameter
 			$CI->session->set_userdata('last_url', $fullURL);
-		} else {
-			//            $CI->session->unset_userdata('last_url');
 		}
 	}
 }

@@ -58,7 +58,7 @@ $this->load->view('includes/custom_js');
             <div class="col-xs-6 col-sm-2">
                 <a href="<?= base_url('notificacoes') ?>" class="shortcut-tile tile-toyo">
                     <div class="tile-body">
-                        <div class="pull-left"><i class="fas fa-bell fa-fw"></i></div>
+                        <div class="pull-left"><i class="fal fa-bell fa-fw"></i></div>
                     </div>
                     <div class="tile-footer">
                         Notificações
@@ -81,11 +81,11 @@ $this->load->view('includes/custom_js');
 </div>
 <!--    MENU SUSPENSO-->
 <?php if (ENVIRONMENT == 'development') {
-	$topbar_class = 'navbar-development';
-	$dev          = '[ DEVELOPMENT ]';
+	$topbar_class = 'navbar-danger';
+	$dev          = ' DEVELOPMENT';
 } else {
 	$topbar_class = null;
-	$dev          = '';
+	$dev          = null;
 } ?>
 
 <header id="topnav" class="navbar navbar <?= ($topbar_class ?? 'navbar-midnightblue') ?> navbar-fixed-top clearfix" role="banner">
@@ -98,8 +98,13 @@ $this->load->view('includes/custom_js');
             </a>
         </span>
 
-    <a class="navbar-brand" href="javascript:" style="cursor: unset">CONTEX</a>
-
+    <a class="navbar-brand" href="javascript:" style="cursor: unset;">CONTEX</a>
+	<?php if ($dev) { ?>
+        <div class="text-primary m15 font-weight-bold visible-lg-inline-block hidden-xs" style="font-size: 12pt;">
+            <i class="fal fa-rectangle-terminal fa-lg fa-fw"></i>
+            <span href="javascript:"><?= $dev ?></span>
+        </div>
+	<?php } ?>
     <!--    MENU DIREITO-->
     <!--    <span id="trigger-infobar" class="toolbar-trigger toolbar-icon-bg">-->
     <!--		<a data-toggle="tooltips" data-placement="left" title="Toggle Infobar"><span class="icon-bg"><i class="fa fa-fw fa-bars"></i></span></a>-->
@@ -215,7 +220,7 @@ $this->load->view('includes/custom_js');
         <!--        BUSCA-->
         <li class="dropdown toolbar-icon-bg demo-search-hidden">
             <a href="#" class="dropdown-toggle " data-toggle="dropdown" data-placement="bottom" title="Pesquisa">
-                <span class="icon-bg"><i class="fas fa-fw fa-search"></i></span></a>
+                <span class="icon-bg"><i class="fal fa-fw fa-search"></i></span></a>
             <div class="dropdown-menu dropdown-alternate arrow search dropdown-menu-form">
                 <div class="dd-header">
                     <span>Pesquisa</span>
@@ -237,7 +242,7 @@ $this->load->view('includes/custom_js');
         <li class="toolbar-icon-bg hidden-xs demo-headerdrop-hidden">
             <a href="#" id="headerbardropdown" data-placement="bottom" title="Menu suspenso">
                     <span class="icon-bg">
-                        <i class="fas fa-fw fa-level-down-alt"></i>
+                        <i class="fal fa-fw fa-level-down-alt"></i>
                     </span>
             </a>
         </li>
@@ -246,7 +251,7 @@ $this->load->view('includes/custom_js');
         <!--        TELA CHEIA-->
         <li class="toolbar-icon-bg" id="trigger-fullscreen">
             <a href="#" class="toggle-fullscreen" data-toggle="tooltips" data-placement="bottom" title='Ativar/desativar exibição em tela cheia'>
-                <span class="icon-bg"><i class="fas fa-fw fa-expand-arrows-alt"></i></span></i></a>
+                <span class="icon-bg"><i class="fal fa-fw fa-expand-wide"></i></span></i></a>
         </li>
         <!--        TELA CHEIA-->
 
@@ -254,7 +259,7 @@ $this->load->view('includes/custom_js');
         <li class="dropdown toolbar-icon-bg">
             <a href="#" class="hasnotifications dropdown-toggle" data-toggle="dropdown" data-placement="bottom" title="Notificações">
                     <span class="icon-bg">
-                        <i class="fas fa-fw fa-bell"></i>
+                        <i class="fal fa-bell fa-fw"></i>
                     </span>
                 <!--    NUMERO DE NOTIFICACOES-->
                 <span class="badge badge-danger" id="qnt_notificacoes"></span>
@@ -280,7 +285,7 @@ $this->load->view('includes/custom_js');
 
         <!--        CHAMADOS-->
         <li class="dropdown toolbar-icon-bg">
-            <a href="<?= base_url('chamados') ?>" class="hasnotifications" title="Chamados de Suporte">
+            <a href="<?= base_url('chamados') ?>" class="hasnotifications" title="Suporte">
                     <span class="icon-bg">
                         <i class="fal fa-comments-question-check fa-fw"></i>
                     </span>
@@ -301,14 +306,14 @@ $this->load->view('includes/custom_js');
         <!--MENU USUARIO-->
         <li class="dropdown toolbar-icon-bg">
             <a href="#" class="dropdown-toggle " data-toggle='dropdown' data-placement="bottom" title="<?= $this->session->userdata('nome') ?>">
-                <span class="icon-bg"><i class="fas fa-user-circle fa-fw"></i></span></a>
+                <span class="icon-bg"><i class="fal fa-user-circle fa-fw"></i></span></a>
             <ul class="dropdown-menu userinfo arrow">
                 <!--                <li><a href="javascript:" id="btn_teste"><span class="pull-left">Perfil</span> <span class="badge badge-info">80%</span></a></li>-->
                 <li title="Dados da conta">
-                    <a href="<?= base_url(); ?>mxcode/minha-conta"><span class="pull-left">Minha Conta</span> <i class="pull-right fas fa-user fa-lg"></i></a>
+                    <a href="<?= base_url(); ?>mxcode/minha-conta"><span class="pull-left">Minha conta</span> <i class="pull-right fal fa-user fa-lg"></i></a>
                 </li>
                 <li title="Configurações da conta">
-                    <a href="<?= base_url(); ?>configuracoes/usuario"><span class="pull-left">Configurações</span> <i class="pull-right fas fa-cog fa-lg"></i></a>
+                    <a href="<?= base_url(); ?>configuracoes/usuario"><span class="pull-left">Config. conta</span> <i class="pull-right fal fa-cog fa-lg"></i></a>
                 </li>
                 <!--                <li><a href="javascript:"><span class="pull-left">Configurações</span> <i class="pull-right fa fa-cog fa-lg"></i></a></li>-->
                 <!--                <li class="divider"></li>-->
@@ -316,7 +321,7 @@ $this->load->view('includes/custom_js');
                 <!--                <li><a href="#"><span class="pull-left">Statement</span> <i class="pull-right fa fa-list-alt"></i></a></li>-->
                 <!--                <li><a href="#"><span class="pull-left">Withdrawals</span> <i class="pull-right fa fa-dollar"></i></a></li>-->
                 <li class="divider"></li>
-                <li title="Encerrar sessão"><a href="<?= site_url(); ?>mxcode/sair"><span class="pull-left">Sair</span> <i class="pull-right fas fa-power-off fa-lg"></i></a></li>
+                <li title="Encerrar sessão"><a href="<?= site_url(); ?>mxcode/sair"><span class="pull-left">Sair</span> <i class="pull-right fal fa-power-off fa-lg"></i></a></li>
             </ul>
         </li>
         <!--MENU USUARIO-->
@@ -380,7 +385,7 @@ $this->load->view('includes/custom_js');
 								
 								<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vServico')) { ?>
                                     <li class="<?= (isset($menuServicos)) ? 'active' : ''; ?>">
-                                        <a href="<?= base_url('servicos') ?>"><i class="fas fa-wrench fa-fw"></i>
+                                        <a href="<?= base_url('servicos') ?>"><i class="fal fa-wrench fa-fw"></i>
                                             <span>Serviços</span>
                                         </a>
                                     </li>
@@ -388,7 +393,7 @@ $this->load->view('includes/custom_js');
 								
 								<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) { ?>
                                     <li class="<?= (isset($menuOs)) ? 'active' : ''; ?>">
-                                        <a href="<?= base_url('os') ?>"><i class="fas fa-tags fa-fw"></i>
+                                        <a href="<?= base_url('os') ?>"><i class="fal fa-tags fa-fw"></i>
                                             <span>Ordens de Serviço</span>
                                         </a>
                                     </li>
@@ -396,7 +401,7 @@ $this->load->view('includes/custom_js');
 								
 								<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) { ?>
                                     <li class="<?= (isset($menuVendas)) ? 'active' : ''; ?>">
-                                        <a href="<?= base_url('vendas') ?>"><i class="fas fa-shopping-cart fa-fw"></i>
+                                        <a href="<?= base_url('vendas') ?>"><i class="fal fa-shopping-cart fa-fw"></i>
                                             <span>Vendas</span>
                                         </a>
                                     </li>
@@ -404,7 +409,7 @@ $this->load->view('includes/custom_js');
 								
 								<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')) { ?>
                                     <li class="<?= (isset($menuArquivos)) ? 'active' : ''; ?>">
-                                        <a href="<?= base_url('arquivos') ?>"><i class="fas fa-hdd fa-fw"></i>
+                                        <a href="<?= base_url('arquivos') ?>"><i class="fal fa-hard-drive fa-fw"></i>
                                             <span>Arquivos</span>
                                         </a>
                                     </li>
@@ -437,7 +442,7 @@ $this->load->view('includes/custom_js');
 								
 								<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rCliente') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rProduto') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rServico') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rOs') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rVenda')) { ?>
                                     <li class="<?= (isset($menuRelatorios)) ? 'active' : ''; ?>">
-                                        <a href="javascript:"><i class="fas fa-file-alt fa-fw"></i>
+                                        <a href="javascript:"><i class="fal fa-file-alt fa-fw"></i>
                                             <span>Relatórios</span>
                                         </a>
                                         <ul class="acc-menu">
@@ -470,27 +475,27 @@ $this->load->view('includes/custom_js');
 									$this->permission->checkPermission($this->session->userdata('permissao'), 'cBackup')
 								) { ?>
                                     <li class="<?= (isset($menuConfiguracoes)) ? 'active' : ''; ?>">
-                                        <a href="javascript:"><i class="fas fa-cogs fa-fw"></i>
-                                            <span>Config. do Sistema</span>
+                                        <a href="javascript:"><i class="fal fa-cog fa-fw"></i>
+                                            <span>Sistema</span>
                                         </a>
                                         <ul class="acc-menu">
 											<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) { ?>
-                                                <li><a href="<?= base_url() ?>anuncios">Anúncios</a></li>
+                                                <li><a href="<?= base_url('anuncios') ?>"><i class="fat fa-bullhorn pr20"></i> Anúncios</a></li>
 											<?php } ?>
 											<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) { ?>
-                                                <li><a href="<?= base_url() ?>configuracoes/sistema">Configurações</a></li>
+                                                <li><a href="<?= base_url('configuracoes/sistema') ?>"><i class="fat fa-cog pr20"></i> Configurações</a></li>
 											<?php } ?>
 											<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) { ?>
-                                                <li><a href="<?= base_url() ?>usuarios">#</a></li>
+                                                <li><a href="<?= base_url('usuarios') ?>"><i class="fat fa-users pr20"></i> Usuários do Sistema</a></li>
 											<?php } ?>
 											<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) { ?>
-                                                <li><a href="<?= base_url() ?>mxcode/emitente">Emitente</a></li>
+                                                <li><a href="<?= base_url('mxcode/emitente') ?>"><i class="fat fa-building-memo pr20"></i> Emitente</a></li>
 											<?php } ?>
 											<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) { ?>
-                                                <li><a href="<?= base_url() ?>permissoes">Permissões</a></li>
+                                                <li><a href="<?= base_url('permissoes') ?>"><i class="fat fa-key pr20"></i> Permissões</a></li>
 											<?php } ?>
 											<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cBackup')) { ?>
-                                                <li><a href="<?= base_url() ?>mxcode/backup" class="js:">Backup</a></li>
+                                                <li><a href="<?= base_url('mxcode/backup') ?>" class="js:"><i class="fat fa-database pr20"></i> Backup</a></li>
 											<?php } ?>
                                         </ul>
                                     </li>

@@ -83,7 +83,7 @@
                     <div class="form-group text-center m-t-20">
                         <div class="row">
                             <div class="col-xs-12">
-                                <button class="btn btn-login btn-block waves-effect waves-light" type="submit">Acessar <i class="far fa-arrow-down-to-square fa-rotate-270 fa-fw"></i></button>
+                                <button class="btn btn-login btn-block waves-effect waves-light" type="submit">Entrar <i class="far fa-arrow-down-to-square fa-rotate-270 fa-fw"></i></button>
                             </div>
                         </div>
                     </div>
