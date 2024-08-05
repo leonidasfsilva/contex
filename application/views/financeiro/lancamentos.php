@@ -149,7 +149,7 @@ if (!$results) {
             <h2>
                 <span style='margin-right: 10px !important;'>Extrato de Lançamentos</span>
                 <br class="visible-xs-block">
-				<?= $monthFilterButtons ?>
+				<?= $monthFilterButtons ?? null ?>
             </h2>
             <div class="panel-ctrls">
                 <a href="#" class="button-icon close-panel">
@@ -513,7 +513,7 @@ if (!$results) {
     </div>
 </div>
 
-<?php if ($hiddenItems) { ?>
+<?php if (isset($hiddenItems) && $hiddenItems) { ?>
     <div class="panel panel-midnightblue lancamentos-ocultos hidden">
         <div class="panel-heading">
             <h2>
