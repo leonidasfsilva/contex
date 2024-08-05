@@ -8952,6 +8952,9 @@ ul.settings li > span {
     padding: 6px 24px 6px 56px;
     font-weight: 400;
 }
+.sidebar nav.widget-body > ul.acc-menu ul li a i {
+    line-height: normal;
+}
 .sidebar nav.widget-body > ul.acc-menu li.active > a {
     font-weight: 700;
 }

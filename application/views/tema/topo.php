@@ -354,14 +354,14 @@ $this->load->view('includes/custom_js');
                             <ul class="acc-menu">
                                 <!--                                <li class="nav-separator"></li>-->
                                 <li class="<?= (isset($menuPainel)) ? 'active' : ''; ?>">
-                                    <a href="<?= base_url() ?>"><i class="fasl fa-grid-2 fa-fw"></i>
+                                    <a href="<?= base_url() ?>"><i class="fasl fa-grid-2 fa-lg"></i>
                                         <span>Painel Inicial</span>
                                     </a>
                                 </li>
 								
 								<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) { ?>
                                     <li class="<?= (isset($menuClientes)) ? 'active' : ''; ?>">
-                                        <a href="<?= base_url('clientes') ?>"><i class="fal fa-people-group fa-fw"></i>
+                                        <a href="<?= base_url('clientes') ?>"><i class="fal fa-people-group fa-lg"></i>
                                             <span>Clientes</span>
                                         </a>
                                     </li>
@@ -369,7 +369,7 @@ $this->load->view('includes/custom_js');
 								
 								<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vConsumo')) { ?>
                                     <li class="<?= (isset($menuConsumo)) ? 'active' : ''; ?>">
-                                        <a href="<?= base_url('consumo') ?>"><i class="fal fa-lightbulb-dollar fa-fw"></i>
+                                        <a href="<?= base_url('consumo') ?>"><i class="fal fa-lightbulb-dollar fa-lg"></i>
                                             <span>Consumo de Energia</span>
                                         </a>
                                     </li>
@@ -377,7 +377,7 @@ $this->load->view('includes/custom_js');
 								
 								<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) { ?>
                                     <li class="<?= (isset($menuProdutos)) ? 'active' : ''; ?>">
-                                        <a href="<?= base_url('produtos') ?>"><i class="fas fa-barcode fa-fw"></i>
+                                        <a href="<?= base_url('produtos') ?>"><i class="fas fa-barcode fa-lg"></i>
                                             <span>Produtos</span>
                                         </a>
                                     </li>
@@ -385,7 +385,7 @@ $this->load->view('includes/custom_js');
 								
 								<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vServico')) { ?>
                                     <li class="<?= (isset($menuServicos)) ? 'active' : ''; ?>">
-                                        <a href="<?= base_url('servicos') ?>"><i class="fal fa-wrench fa-fw"></i>
+                                        <a href="<?= base_url('servicos') ?>"><i class="fal fa-wrench fa-lg"></i>
                                             <span>Serviços</span>
                                         </a>
                                     </li>
@@ -393,7 +393,7 @@ $this->load->view('includes/custom_js');
 								
 								<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vOs')) { ?>
                                     <li class="<?= (isset($menuOs)) ? 'active' : ''; ?>">
-                                        <a href="<?= base_url('os') ?>"><i class="fal fa-tags fa-fw"></i>
+                                        <a href="<?= base_url('os') ?>"><i class="fal fa-tags fa-lg"></i>
                                             <span>Ordens de Serviço</span>
                                         </a>
                                     </li>
@@ -401,7 +401,7 @@ $this->load->view('includes/custom_js');
 								
 								<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vVenda')) { ?>
                                     <li class="<?= (isset($menuVendas)) ? 'active' : ''; ?>">
-                                        <a href="<?= base_url('vendas') ?>"><i class="fal fa-shopping-cart fa-fw"></i>
+                                        <a href="<?= base_url('vendas') ?>"><i class="fal fa-shopping-cart fa-lg"></i>
                                             <span>Vendas</span>
                                         </a>
                                     </li>
@@ -409,7 +409,7 @@ $this->load->view('includes/custom_js');
 								
 								<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vArquivo')) { ?>
                                     <li class="<?= (isset($menuArquivos)) ? 'active' : ''; ?>">
-                                        <a href="<?= base_url('arquivos') ?>"><i class="fal fa-hard-drive fa-fw"></i>
+                                        <a href="<?= base_url('arquivos') ?>"><i class="fal fa-hard-drive fa-lg"></i>
                                             <span>Arquivos</span>
                                         </a>
                                     </li>
@@ -417,24 +417,24 @@ $this->load->view('includes/custom_js');
 								
 								<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
                                     <li class="<?= (isset($menuFinanceiro)) ? 'active' : ''; ?>">
-                                        <a href="javascript:"><i class="fal fa-circle-dollar fa-fw"></i>
+                                        <a href="javascript:"><i class="fal fa-circle-dollar fa-lg"></i>
                                             <span>Financeiro</span>
                                         </a>
                                         <ul class="acc-menu">
 											<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
-                                                <li><a href="<?= base_url('financeiro/lancamentos') ?>">Lançamentos</a></li>
+                                                <li><a href="<?= base_url('financeiro/lancamentos') ?>"><i class="pull-right fat fa-chart-mixed-up-circle-dollar fa-lg"></i> Lançamentos</a></li>
 											<?php } ?>
 											<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) { ?>
-                                                <li><a href="<?= base_url('financeiro/faturas') ?>">Faturas</a></li>
+                                                <li><a href="<?= base_url('financeiro/faturas') ?>"><i class="pull-right fat fa-file-invoice-dollar fa-lg"></i> Faturas</a></li>
 											<?php } ?>
 											<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) { ?>
-                                                <li><a href="<?= base_url('financeiro/cartoes') ?>">Cartões</a></li>
+                                                <li><a href="<?= base_url('financeiro/cartoes') ?>"><i class="pull-right fat fa-credit-card fa-lg"></i> Cartões</a></li>
 											<?php } ?>
 											<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vInvestimentos')) { ?>
-                                                <li><a href="<?= base_url('financeiro/investimentos') ?>">Investimentos</a></li>
+                                                <li><a href="<?= base_url('financeiro/investimentos') ?>"><i class="pull-right fat fa-hand-holding-circle-dollar fa-lg"></i> Investimentos</a></li>
 											<?php } ?>
 											<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPendencias')) { ?>
-                                                <li><a href="<?= base_url('financeiro/pendencias') ?>">Pendências</a></li>
+                                                <li><a href="<?= base_url('financeiro/pendencias') ?>"><i class="pull-right fat fa-money-check-dollar-pen fa-lg"></i> Pendências</a></li>
 											<?php } ?>
                                         </ul>
                                     </li>
@@ -475,27 +475,27 @@ $this->load->view('includes/custom_js');
 									$this->permission->checkPermission($this->session->userdata('permissao'), 'cBackup')
 								) { ?>
                                     <li class="<?= (isset($menuConfiguracoes)) ? 'active' : ''; ?>">
-                                        <a href="javascript:"><i class="fal fa-cog fa-fw"></i>
+                                        <a href="javascript:"><i class="fal fa-cog fa-lg"></i>
                                             <span>Sistema</span>
                                         </a>
                                         <ul class="acc-menu">
 											<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) { ?>
-                                                <li><a href="<?= base_url('anuncios') ?>"><i class="fat fa-bullhorn pr20"></i> Anúncios</a></li>
+                                                <li><a href="<?= base_url('anuncios') ?>"><i class="fat fa-bullhorn fa-lg pull-right"></i> Anúncios</a></li>
 											<?php } ?>
 											<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) { ?>
-                                                <li><a href="<?= base_url('configuracoes/sistema') ?>"><i class="fat fa-cog pr20"></i> Configurações</a></li>
+                                                <li><a href="<?= base_url('configuracoes/sistema') ?>"><i class="fat fa-cog fa-lg pull-right"></i> Configurações</a></li>
 											<?php } ?>
 											<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) { ?>
-                                                <li><a href="<?= base_url('usuarios') ?>"><i class="fat fa-users pr20"></i> Usuários do Sistema</a></li>
+                                                <li><a href="<?= base_url('usuarios') ?>"><i class="fat fa-users fa-lg pull-right"></i> Usuários do Sistema</a></li>
 											<?php } ?>
 											<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cEmitente')) { ?>
-                                                <li><a href="<?= base_url('mxcode/emitente') ?>"><i class="fat fa-building-memo pr20"></i> Emitente</a></li>
+                                                <li><a href="<?= base_url('mxcode/emitente') ?>"><i class="fat fa-id-card fa-lg pull-right"></i> Emitente</a></li>
 											<?php } ?>
 											<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) { ?>
-                                                <li><a href="<?= base_url('permissoes') ?>"><i class="fat fa-key pr20"></i> Permissões</a></li>
+                                                <li><a href="<?= base_url('permissoes') ?>"><i class="fat fa-key fa-lg pull-right"></i> Permissões</a></li>
 											<?php } ?>
 											<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cBackup')) { ?>
-                                                <li><a href="<?= base_url('mxcode/backup') ?>" class="js:"><i class="fat fa-database pr20"></i> Backup</a></li>
+                                                <li><a href="<?= base_url('mxcode/backup') ?>" class="js:"><i class="fat fa-database fa-lg pull-right"></i> Backup</a></li>
 											<?php } ?>
                                         </ul>
                                     </li>
@@ -525,19 +525,19 @@ $this->load->view('includes/custom_js');
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="link" aria-haspopup="false" aria-expanded="false"><?= ucfirst($this->uri->segment(1)); ?> <span class="caret"></span></a>
                                     <ul class="dropdown-menu dropdown-menu-hover" role="menu">
                                         <li <?= ($this->uri->segment(2) == 'lancamentos' ? 'class="active"' : '') ?>>
-                                            <a href="<?= base_url('financeiro/lancamentos') ?>"><i class="pull-right fas fa-chart-line fa-lg fa-fw"></i> Lançamentos</a>
+                                            <a href="<?= base_url('financeiro/lancamentos') ?>"><i class="pull-right fat fa-chart-mixed-up-circle-dollar fa-lg"></i> Lançamentos</a>
                                         </li>
                                         <li <?= ($this->uri->segment(2) == 'faturas' ? 'class="active"' : '') ?>>
-                                            <a href="<?= base_url('financeiro/faturas') ?>"><i class="pull-right fas fa-file-invoice-dollar fa-lg fa-fw"></i> Faturas</a>
+                                            <a href="<?= base_url('financeiro/faturas') ?>"><i class="pull-right fat fa-file-invoice-dollar fa-lg"></i> Faturas</a>
                                         </li>
                                         <li <?= ($this->uri->segment(2) == 'cartoes' ? 'class="active"' : '') ?>>
-                                            <a href="<?= base_url('financeiro/cartoes') ?>"><i class="pull-right fas fa-credit-card fa-lg fa-fw"></i> Cartões</a>
+                                            <a href="<?= base_url('financeiro/cartoes') ?>"><i class="pull-right fat fa-credit-card fa-lg"></i> Cartões</a>
                                         </li>
                                         <li <?= ($this->uri->segment(2) == 'investimentos' ? 'class="active"' : '') ?>>
-                                            <a href="<?= base_url('financeiro/investimentos') ?>"><i class="pull-right fas fa-hand-holding-usd fa-lg fa-fw"></i> Investimentos</a>
+                                            <a href="<?= base_url('financeiro/investimentos') ?>"><i class="pull-right fat fa-hand-holding-circle-dollar fa-lg"></i> Investimentos</a>
                                         </li>
                                         <li <?= ($this->uri->segment(2) == 'pendencias' ? 'class="active"' : '') ?>>
-                                            <a href="<?= base_url('financeiro/pendencias') ?>"><i class="pull-right fas fa-money-check-alt fa-lg fa-fw"></i> Pendências</a>
+                                            <a href="<?= base_url('financeiro/pendencias') ?>"><i class="pull-right fat fa-money-check-dollar-pen fa-lg"></i> Pendências</a>
                                         </li>
                                     </ul>
                                 </li>
