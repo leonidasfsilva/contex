@@ -581,11 +581,11 @@ if (!$results) {
 						$pendingNotification = 'notification-dot';
 						$status              = 'PENDENTE';
 						$label_status        = 'warning';
-						$iconTipo            = '<i class="fas fa-clock fa-fw"></i>';
+						$iconTipo            = '<i class="far fa-clock fa-fw"></i>';
 					} else {
 						$status       = 'EFETIVADO';
 						$label_status = 'primary';
-						$iconTipo     = '<i class="fas fa-check fa-fw"></i>';
+						$iconTipo     = '<i class="fas fa-check-circle fa-fw"></i>';
 					};
 					
 					if ($r->observacoes) {
@@ -600,12 +600,12 @@ if (!$results) {
 						$color      = 'green';
 						$label_tipo = 'success';
 						$tipo       = 'ENTRADA';
-						$icon       = '<i class="fas fa-arrow-down fa-fw"></i>';
+						$icon       = '<i class="far fa-arrow-left-to-bracket fa-rotate-270 fa-fw"></i>';
 					} else {
 						$color      = 'red';
 						$label_tipo = 'danger';
 						$tipo       = 'SAÍDA';
-						$icon       = '<i class="fas fa-arrow-up fa-fw"></i>';
+						$icon       = '<i class="far fa-arrow-right-from-bracket fa-rotate-270 fa-fw"></i>';
 					}
 					
 					if ($r->cliente_fornecedor) {
