@@ -1,9 +1,7 @@
 <?php if (!defined('BASEPATH')) {
 	exit('No direct script access allowed');
 }
-$include = APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'codegen_helper.php';
-
-include $include;
+include APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'codegen_helper.php';
 
 /**
  * |--------------------------------------------------------------------------
@@ -21,9 +19,9 @@ include $include;
  * | R     - current release version of system
  * |
  */
+$version       = '17';
 $quarterOfYear = getQuarterOfCurrentYear();
 $currentYear   = date('Y');
-$version       = '16';
 define("VERSION_APP", sprintf('%s.%s.%s', $currentYear, $quarterOfYear, $version));
 
 // previsão de lançamento do modulo de Despesas (segundo semestre de 2023)
