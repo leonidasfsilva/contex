@@ -248,17 +248,18 @@ if (!$results) {
 				<?php
 				$pendingNotification = null;
 				foreach ($results as $r) {
-					$vencimento = date(('d/m/y'), strtotime($r->data_lancamento));
+					$vencimento  = date(('d/m/y'), strtotime($r->data_lancamento));
+					$diaDaSemana = getExtendedWeekDayName($r->data_lancamento, true);
 					
 					if ($r->baixado == 0) {
 						$pendingNotification = 'notification-dot';
 						$status              = 'PENDENTE';
 						$label_status        = 'warning';
-						$iconTipo            = '<i class="fas fa-clock fa-fw"></i>';
+						$iconTipo            = '<i class="far fa-clock fa-fw"></i>';
 					} else {
 						$status       = 'EFETIVADO';
 						$label_status = 'primary';
-						$iconTipo     = '<i class="fas fa-check fa-fw"></i>';
+						$iconTipo     = '<i class="fas fa-check-circle fa-fw"></i>';
 					};
 					
 					if ($r->observacoes) {
@@ -273,12 +274,12 @@ if (!$results) {
 						$color      = 'green';
 						$label_tipo = 'success';
 						$tipo       = 'ENTRADA';
-						$icon       = '<i class="fas fa-arrow-down fa-fw"></i>';
+						$icon       = '<i class="far fa-arrow-left-to-bracket fa-rotate-270 fa-fw"></i>';
 					} else {
 						$color      = 'red';
 						$label_tipo = 'danger';
 						$tipo       = 'SAÍDA';
-						$icon       = '<i class="fas fa-arrow-up fa-fw"></i>';
+						$icon       = '<i class="far fa-arrow-right-from-bracket fa-rotate-270 fa-fw"></i>';
 					}
 					
 					if ($r->cliente_fornecedor) {
@@ -313,13 +314,14 @@ if (!$results) {
 						$totalGeralMes += $r->valor;
 					} else {
 						$totalOcultosMes += $r->valor;
-                        continue;
+						continue;
 					}
 					
 					echo '<tr>';
 					echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
 					echo '<td class="idLancamento hidden">' . $r->id_lancamento . '</td>';
-					echo '<td>' . $vencimento . '</td>';
+					echo '<td>' . $vencimento .
+						'<br>' . $diaDaSemana . '</td>';
 					echo '<td><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Detalhes" idLancamento="' .
 						$r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
 						date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .

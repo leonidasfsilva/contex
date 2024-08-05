@@ -291,6 +291,38 @@ function translateMonth($referenceMonth, $abbreviate = false, $returnMonthNumber
 	return getExtendedMonthName($referenceMonth, $monthFormatString);
 }
 
+function translateWeekDay($date, $formatter = 'EEEE')
+{
+	$dateFormatterExtended = new \IntlDateFormatter(
+		'pt_BR',
+		\IntlDateFormatter::FULL,
+		\IntlDateFormatter::NONE,
+		'America/Sao_Paulo',
+		\IntlDateFormatter::GREGORIAN,
+		$formatter
+	);
+	
+	$dateObj = DateTime::createFromFormat('Y-m-d', ($date));
+	return str_replace('.', '', ($dateFormatterExtended->format($dateObj)));
+}
+
+function getExtendedWeekDayName($referenceDate, $abbreviate = false, $uppercase = false)
+{
+	$weekDayFormatString = 'EEEE';
+	
+	if ($abbreviate) {
+		$weekDayFormatString = 'EE';
+	}
+	
+	$weekday = translateWeekDay($referenceDate, $weekDayFormatString);
+	
+	if ($uppercase) {
+		$weekday = mb_strtoupper($weekday);
+	}
+	
+	return $weekday;
+}
+
 function buildStartEndDate($referenceMonth = null, $referenceYear = null)
 {
 	$return     = [];
