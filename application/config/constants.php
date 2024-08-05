@@ -1,7 +1,9 @@
 <?php if (!defined('BASEPATH')) {
 	exit('No direct script access allowed');
 }
-include APPPATH . 'helpers' . '\\codegen_helper.php';
+$include = APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'codegen_helper.php';
+
+include $include;
 
 /**
  * |--------------------------------------------------------------------------
