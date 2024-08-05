@@ -54,7 +54,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         <button type="button" class="form-control btn btn-default dropdown-toggle" data-toggle="dropdown">
                             <?= $cartaoSelecionado['cartaoLabel'] ?> <span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-hover" role="menu">
+                        <ul class="dropdown-menu dropdown-menu-hover arrow" role="menu">
                             <?php foreach ($cartoes as $cartao) {
                                 if ($cartaoSelecionado['id_cartao'] == $cartao->id_cartao) {
                                     $selected = 'active';

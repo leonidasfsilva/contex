@@ -304,10 +304,10 @@ $this->load->view('includes/custom_js');
         <!--        CHAMADOS-->
 
         <!--MENU USUARIO-->
-        <li class="dropdown toolbar-icon-bg">
+        <li class="dropdown dropdown-hover toolbar-icon-bg">
             <a href="#" class="dropdown-toggle " data-toggle='dropdown' data-placement="bottom" title="<?= $this->session->userdata('nome') ?>">
                 <span class="icon-bg"><i class="fal fa-user-circle fa-fw"></i></span></a>
-            <ul class="dropdown-menu userinfo arrow">
+            <ul class="dropdown-menu dropdown-menu-hover userinfo arrow">
                 <!--                <li><a href="javascript:" id="btn_teste"><span class="pull-left">Perfil</span> <span class="badge badge-info">80%</span></a></li>-->
                 <li title="Dados da conta">
                     <a href="<?= base_url(); ?>mxcode/minha-conta"><span class="pull-left">Minha conta</span> <i class="pull-right fal fa-user fa-lg"></i></a>
@@ -523,7 +523,7 @@ $this->load->view('includes/custom_js');
 							if ($this->uri->segment(1) == 'financeiro') { ?>
                                 <li class="dropdown dropdown-hover">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="link" aria-haspopup="false" aria-expanded="false"><?= ucfirst($this->uri->segment(1)); ?> <span class="caret"></span></a>
-                                    <ul class="dropdown-menu dropdown-menu-hover" role="menu">
+                                    <ul class="dropdown-menu dropdown-menu-hover arrow" role="menu">
                                         <li <?= ($this->uri->segment(2) == 'lancamentos' ? 'class="active"' : '') ?>>
                                             <a href="<?= base_url('financeiro/lancamentos') ?>"><i class="pull-right fat fa-chart-mixed-up-circle-dollar fa-lg"></i> Lançamentos</a>
                                         </li>
