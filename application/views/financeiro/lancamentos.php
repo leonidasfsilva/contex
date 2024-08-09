@@ -249,7 +249,7 @@ if (!$results) {
 				$pendingNotification = null;
 				foreach ($results as $r) {
 					$vencimento  = date(('d/m/y'), strtotime($r->data_lancamento));
-					$diaDaSemana = getExtendedWeekDayName($r->data_lancamento, true);
+					$diaDaSemana = getExtendedWeekDayName($r->data_lancamento);
 					
 					if ($r->baixado == 0) {
 						$pendingNotification = 'notification-dot';
@@ -320,9 +320,8 @@ if (!$results) {
 					echo '<tr>';
 					echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
 					echo '<td class="idLancamento hidden">' . $r->id_lancamento . '</td>';
-					echo '<td>' . $vencimento .
-						'<br>' . $diaDaSemana . '</td>';
-					echo '<td><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Detalhes" idLancamento="' .
+					echo '<td title="' . $diaDaSemana . '">' . $vencimento . '</td>';
+					echo '<td><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Ver detalhes" idLancamento="' .
 						$r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
 						date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
 						$r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">' .
@@ -334,7 +333,7 @@ if (!$results) {
                             <span class="text-' . $label_status . '">' . ($iconTipo) . '</span> <span class="badge badge-' . $label_status . '">' . ($status) . '</span></td>';
 					echo '<td>';
 					if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
-						echo '<button type="button" href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Detalhes" idLancamento="' .
+						echo '<button type="button" href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Ver detalhes" idLancamento="' .
 							$r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
 							date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
 							$r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">

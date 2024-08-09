@@ -209,7 +209,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 							}
 							
 							$data_compra  = date(('d/m/y'), strtotime($r->data_compra));
-							$diaDaSemana  = getExtendedWeekDayName($r->data_compra, true);
+							$diaDaSemana  = getExtendedWeekDayName($r->data_compra);
 							$debitoFatura += $r->valor_parcela;
 							
 							if ($r->valor_total < 0) {
@@ -221,8 +221,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 							echo '<tr>';
 							echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
 							echo '<td class="idLancamento hidden">' . $s->id_lancamento . '</td>';
-							echo '<td>' . $data_compra .
-								'<br>' . $diaDaSemana . '</td>';
+							echo '<td title="' . $diaDaSemana . '">' . $data_compra . '</td>';
 							echo '<td><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Detalhes" id_lancamento="' .
 								$s->id_lancamento . '" descricao="' . $s->descricao . '" observacoes="' . nl2br($s->observacoes) . '" valor="' . $valor . '" data_compra="' .
 								date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
