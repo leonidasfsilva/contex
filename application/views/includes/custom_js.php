@@ -272,13 +272,7 @@
         });
         return card;
     }
-
-    $(function () {
-        $('.datepicker').inputmask('date', {
-            placeholder: '__/__/____'
-        });
-    });
-
+    
     $(function () {
         $(".money").maskMoney({
             thousands: '.',
@@ -433,38 +427,22 @@
         });
         // FIM API CEP CORREIOS
 
+        $(function () {
+            $('.datepicker').inputmask('date', {
+                placeholder: '__/__/____'
+            });
+        });
+
         $('.datepicker').datepicker({
             language: 'pt-BR',
             autoclose: true,
             format: 'dd/mm/yyyy',
             todayHighlight: true,
             todayBtn: 'linked'
-        });
+        })
 
         $('.tooltips').tooltip();
-
-        $('.poupanca').click(function () {
-            Swal.fire({
-                position: 'top',
-                type: 'info',
-                // timer: 5000,
-                title: 'Em breve',
-                html: 'O módulo de Poupança encontra-se em desenvolvimento.',
-                showConfirmButton: false,
-                showCancelButton: false,
-                showCloseButton: true,
-                reverseButtons: true,
-                confirmButtonText: '<i class="fa fa-refresh fa-fw"></i> Tentar de novo ',
-                cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
-            }).then((result) => {
-                if (result.value) {
-                    recuperar_senha();
-                } else {
-
-                }
-            });
-        });
-		
+        
 		<?php if ($this->session->flashdata('erro') != null) { ?>
         Swal.fire({
             position: 'top',

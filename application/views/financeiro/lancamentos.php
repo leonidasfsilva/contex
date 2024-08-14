@@ -1932,7 +1932,9 @@ if (!$results) {
             $("#fornecedorEditar, #fornecedorCopiar").val($(this).attr('fornecedor'));
             $("#valorEditar, #valorCopiar").val($(this).attr('valor'));
             $("#vencimentoEditar, #vencimentoCopiar").val($(this).attr('vencimento'));
+            $("#vencimentoEditar, #vencimentoCopiar").datepicker('setDate', $(this).attr('vencimento'));
             $("#pagamentoEditar, #pagamentoCopiar").val($(this).attr('pagamento'));
+            $("#pagamentoEditar, #pagamentoCopiar").datepicker('setDate', $(this).attr('pagamento'));
             $("#formaPgtoEditar, #formaPgtoCopiar").val($(this).attr('formaPgto'));
             $("#tipoEditar, #tipoCopiar").val($(this).attr('tipo'));
             var baixado = $(this).attr('baixado');

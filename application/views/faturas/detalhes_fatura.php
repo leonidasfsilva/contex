@@ -1217,6 +1217,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             $(".descricao").val($(this).attr('descricao'));
             $(".valor").val($(this).attr('valor'));
             $(".dataCompra").val($(this).attr('data_compra'));
+            $(".dataCompra").datepicker('setDate', $(this).attr('data_compra'));
             $(".nomeCliente").val($(this).attr('nome_cliente'));
 
             var estorno = $(this).attr('estorno');
