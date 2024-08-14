@@ -449,7 +449,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         </div>
                         <div id="divParcelamento" class="hidden">
                             <div class="form-group col-lg-4">
-                                <label for="qnt_parcelas" class="font-weight-bold">Nº parcelas</label>
+                                <label for="qnt_parcelas" class="font-weight-bold">Nº parcelas *</label>
                                 <select name="qnt_parcelas" id="qnt_parcelas" class="form-control qnt_parcelas">
                                     <option value="">
                                         << Selecione>>
@@ -1078,15 +1078,39 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             }
         }
 
-        $("#form").validate({
+        $("#formNovoLancamento").validate({
             rules: {
                 descricao: {
+                    required: true
+                },
+                valor: {
+                    required: true
+                },
+                data_compra: {
+                    required: false
+                },
+                qnt_parcelas: {
+                    required: true
+                },
+                valor_parcela: {
                     required: true
                 }
             },
             messages: {
                 descricao: {
-                    required: 'Informe uma descrição'
+                    required: 'Informe a descrição'
+                },
+                valor: {
+                    required: 'Informe o valor da compra'
+                },
+                data_compra: {
+                    required: 'Informe a data da compra'
+                },
+                qnt_parcelas: {
+                    required: 'Informe o número de parcelas'
+                },
+                valor_parcela: {
+                    required: 'Informe o valor da parcela'
                 }
             },
 
@@ -1117,12 +1141,12 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     required: true
                 },
                 valor_parcela: {
-                    required: false
+                    required: true
                 }
             },
             messages: {
                 descricao: {
-                    required: 'Informe uma descrição'
+                    required: 'Informe a descrição'
                 },
                 valor: {
                     required: 'Informe o valor da compra'
@@ -1134,7 +1158,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     required: 'Informe o número de parcelas'
                 },
                 valor_parcela: {
-                    required: 'Informe o valor das parcelas'
+                    required: 'Informe o valor da parcela'
                 }
             },
             errorClass: "help-block",
