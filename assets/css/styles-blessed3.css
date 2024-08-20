@@ -3366,7 +3366,7 @@ input[type="search"] {
         line-height: 45px;
     }
 }
-
+/*form-group 1*/
 .form-group {
     margin-bottom: 15px;
 }
@@ -8487,10 +8487,6 @@ fieldset[disabled] .form-control {
     font-size: 18px;
     height: 40px;
     line-height: 1.33;
-}
-
-.form-group {
-    margin-bottom: 24px;
 }
 
 .row-border .form-group {

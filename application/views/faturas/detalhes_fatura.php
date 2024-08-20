@@ -431,24 +431,24 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-lg-6">
-                            <label for="valor" class="font-weight-bold">Valor do lançamento *</label>
+                        <div class="form-group col-lg-6 col-xs-6">
+                            <label for="valor" class="font-weight-bold">Valor *</label>
                             <input class="form-control money valor" id="valor" type="text" name="valor"/>
                         </div>
-                        <div class="form-group col-lg-6">
-                            <label for="data_compra" class="font-weight-bold">Data do lançamento</label>
+                        <div class="form-group col-lg-6 col-xs-6">
+                            <label for="data_compra" class="font-weight-bold">Data de lançamento</label>
                             <input class="form-control datepicker" id="data_compra" type="text" name="data_compra"/>
                         </div>
                     </div>
                     <div class="row divContainerParcelamento">
-                        <div class="form-group col-lg-4" style="margin-top: -10px;" id="div_parcelada">
+                        <div class="form-group col-lg-4 col-xs-12" style="margin-top: -10px;" id="div_parcelada">
                             <div class="checkbox icheck">
                                 <input type="checkbox" class="form-control parcelada" name="compra_parcelada" value="1">
                             </div>
                             <label for="parcelada" class="font-weight-bold">Compra parcelada?</label>
                         </div>
                         <div id="divParcelamento" class="hidden">
-                            <div class="form-group col-lg-4">
+                            <div class="form-group col-lg-4 col-xs-6">
                                 <label for="qnt_parcelas" class="font-weight-bold">Nº parcelas *</label>
                                 <select name="qnt_parcelas" id="qnt_parcelas" class="form-control qnt_parcelas">
                                     <option value="">
@@ -461,7 +461,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 									} ?>
                                 </select>
                             </div>
-                            <div class="form-group col-lg-4">
+                            <div class="form-group col-lg-4 col-xs-6">
                                 <label for="valor_parcela" class="font-weight-bold">Valor da parcela *</label>
                                 <input class="form-control parcela" id="valor_parcela" type="text" name="valor_parcela" readonly/>
                             </div>
@@ -539,24 +539,24 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-lg-6">
+                        <div class="form-group col-lg-6 col-xs-6">
                             <label class="font-weight-bold">Valor da Compra *</label>
                             <input class="form-control money valor" type="text" name="valor"/>
                         </div>
-                        <div class="form-group col-lg-6">
+                        <div class="form-group col-lg-6 col-xs-6">
                             <label class="font-weight-bold">Data da Compra</label>
                             <input class="form-control datepicker dataCompra" type="text" name="data_compra"/>
                         </div>
                     </div>
                     <div class="row divContainerParcelamento">
-                        <div class="form-group col-lg-4">
+                        <div class="form-group col-lg-4 col-xs-12">
                             <div class="checkbox icheck">
                                 <input type="checkbox" class="form-control parcelada" name="compra_parcelada" value="1">
                             </div>
                             <label class="font-weight-bold">Compra parcelada?</label>
                         </div>
                         <div class="divParcelas hidden">
-                            <div class="form-group col-lg-4">
+                            <div class="form-group col-lg-4 col-xs-6">
                                 <label class="font-weight-bold">Nº Parcelas *</label>
                                 <select name="qnt_parcelas" class="form-control qntParcelas">
                                     <option value="">
@@ -569,7 +569,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 									} ?>
                                 </select>
                             </div>
-                            <div class="form-group col-lg-4">
+                            <div class="form-group col-lg-4 col-xs-6">
                                 <label class="font-weight-bold">Valor da Parcela *</label>
                                 <input class="form-control parcela valorParcela" type="text" name="valor_parcela" readonly/>
                             </div>
@@ -646,24 +646,24 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-lg-6">
+                        <div class="form-group col-lg-6 col-xs-6">
                             <label class="font-weight-bold">Valor da Compra *</label>
                             <input class="form-control money valor" type="text" name="valor"/>
                         </div>
-                        <div class="form-group col-lg-6">
+                        <div class="form-group col-lg-6 col-xs-6">
                             <label class="font-weight-bold">Data da Compra</label>
                             <input class="form-control datepicker dataCompra" type="text" name="data_compra"/>
                         </div>
                     </div>
                     <div class="row divContainerParcelamento">
-                        <div class="form-group col-lg-4">
+                        <div class="form-group col-lg-4 col-xs-12">
                             <div class="checkbox icheck">
                                 <input type="checkbox" class="form-control parcelada" name="compra_parcelada" value="1">
                             </div>
                             <label class="font-weight-bold">Compra parcelada?</label>
                         </div>
                         <div class="divParcelas hidden">
-                            <div class="form-group col-lg-4">
+                            <div class="form-group col-lg-4 col-xs-6">
                                 <label class="font-weight-bold">Nº Parcelas *</label>
                                 <select name="qnt_parcelas" class="form-control qntParcelas">
                                     <option value="">
@@ -676,7 +676,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 									} ?>
                                 </select>
                             </div>
-                            <div class="form-group col-lg-4">
+                            <div class="form-group col-lg-4 col-xs-6">
                                 <label class="font-weight-bold">Valor da Parcela *</label>
                                 <input class="form-control valorParcela" type="text" name="valor_parcela" readonly/>
                             </div>

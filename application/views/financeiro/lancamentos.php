@@ -1073,7 +1073,7 @@ if (!$results) {
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricaoCopiar">Descrição *</label>
                             <input class="form-control descricao" id="descricaoCopiar" type="text" name="descricao"/>
-                            <input type="hidden" id="idCopiar" name="id" value=""/>
+                            <input type="hidden" class="id" id="idCopiar" name="id" value=""/>
                         </div>
                     </div>
                     <div class="row">
@@ -1085,15 +1085,15 @@ if (!$results) {
                     <div class="row">
                         <div class="form-group col-lg-4 col-xs-6">
                             <label for="valorCopiar" class="font-weight-bold">Valor *</label>
-                            <input class="form-control money" id="valorCopiar" type="text" name="valor"/>
+                            <input class="form-control money valor" id="valorCopiar" type="text" name="valor"/>
                         </div>
                         <div class="form-group col-lg-4 col-xs-6">
                             <label for="vencimentoCopiar" class="font-weight-bold">Data de Lançamento</label>
-                            <input class="form-control datepicker" id="vencimentoCopiar" type="text" name="vencimento"/>
+                            <input class="form-control datepicker dataLancamento" id="vencimentoCopiar" type="text" name="vencimento"/>
                         </div>
-                        <div class="form-group col-lg-4">
+                        <div class="form-group col-lg-4 col-xs-12">
                             <label for="tipoCopiar" class="font-weight-bold">Tipo</label>
-                            <select class="form-control" name="tipo" id="tipoCopiar">
+                            <select class="form-control tipo" name="tipo" id="tipoCopiar">
                                 <option value="1">ENTRADA</option>
                                 <option value="2">SAÍDA</option>
                             </select>
@@ -1102,7 +1102,7 @@ if (!$results) {
                     <div class="row">
                         <div class="form-group col-lg-6 col-xs-6">
                             <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control" id="pagoCopiar" name="pago" value="1">
+                                <input type="checkbox" class="form-control pago" id="pagoCopiar" name="pago" value="1">
                             </div>
                             <label for="pagoCopiar" class="font-weight-bold">Pago?</label>
                         </div>
@@ -1115,11 +1115,11 @@ if (!$results) {
                         <div id="divPagamentoCopiar" class="hidden">
                             <div class="form-group col-lg-6 col-xs-5">
                                 <label for="pagamentoCopiar" class="font-weight-bold">Data Pagamento</label>
-                                <input class="form-control datepicker reset-data-pagamento" id="pagamentoCopiar" type="text" name="pagamento"/>
+                                <input class="form-control datepicker dataPagamento" id="pagamentoCopiar" type="text" name="pagamento"/>
                             </div>
                             <div class="form-group col-lg-6 col-xs-7">
                                 <label for="formaPgtoCopiar" class="font-weight-bold">Forma Pagamento *</label>
-                                <select name="formaPgto" id="formaPgtoCopiar" class="form-control">
+                                <select name="formaPgto" id="formaPgtoCopiar" class="form-control formaPgto">
                                     <option value="">
                                         << Selecione>>
                                     </option>
@@ -1175,7 +1175,7 @@ if (!$results) {
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricaoEditar">Descrição *</label>
                             <input class="form-control descricao" id="descricaoEditar" type="text" name="descricao"/>
-                            <input type="hidden" id="idEditar" name="id" value=""/>
+                            <input type="hidden" class="id" id="idEditar" name="id" value=""/>
                         </div>
                     </div>
                     <div class="row">
@@ -1187,15 +1187,15 @@ if (!$results) {
                     <div class="row">
                         <div class="form-group col-lg-4 col-xs-6">
                             <label for="valorEditar" class="font-weight-bold">Valor *</label>
-                            <input class="form-control money" id="valorEditar" type="text" name="valor"/>
+                            <input class="form-control money valor" id="valorEditar" type="text" name="valor"/>
                         </div>
                         <div class="form-group col-lg-4 col-xs-6">
-                            <label for="vencimentoEditar" class="font-weight-bold">Data de Lançamento</label>
-                            <input class="form-control datepicker" id="vencimentoEditar" type="text" name="vencimento"/>
+                            <label for="dataLancamentoEditar" class="font-weight-bold">Data de Lançamento</label>
+                            <input class="form-control datepicker dataLancamento" id="dataLancamentoEditar" type="text" name="vencimento"/>
                         </div>
-                        <div class="form-group col-lg-4">
+                        <div class="form-group col-lg-4 col-xs-12">
                             <label for="tipoEditar" class="font-weight-bold">Tipo</label>
-                            <select class="form-control" name="tipo" id="tipoEditar">
+                            <select class="form-control tipo" name="tipo" id="tipoEditar">
                                 <option value="1">ENTRADA</option>
                                 <option value="2">SAÍDA</option>
                             </select>
@@ -1216,12 +1216,12 @@ if (!$results) {
                         </div>
                         <div id="divPagamentoEditar" class="hidden">
                             <div class="form-group col-lg-6 col-xs-5">
-                                <label for="pagamentoEditar" class="font-weight-bold">Data Pagamento</label>
-                                <input class="form-control datepicker" id="pagamentoEditar" type="text" name="pagamento"/>
+                                <label for="dataPagamentoEditar" class="font-weight-bold">Data Pagamento</label>
+                                <input class="form-control datepicker dataPagamento" id="dataPagamentoEditar" type="text" name="pagamento"/>
                             </div>
                             <div class="form-group col-lg-6 col-xs-7">
                                 <label for="formaPgtoEditar" class="font-weight-bold">Forma Pagamento *</label>
-                                <select name="formaPgto" id="formaPgtoEditar" class="form-control">
+                                <select name="formaPgto" id="formaPgtoEditar" class="form-control formaPgto">
                                     <option value="">
                                         << Selecione>>
                                     </option>
@@ -1665,7 +1665,7 @@ if (!$results) {
             } else {
                 $('#divRecebimento, #divPagamentoEditar, #divPagamentoCopiar, #divPagamento').addClass('hidden');
             }
-            $('.reset-data-pagamento').val('');
+            $('.pagamento').val('');
         }
 
         function calculaValorParcela(parcela, valor) {
@@ -1924,64 +1924,53 @@ if (!$results) {
 
         $(document).on('click', '.excluir', function (event) {
             $("#idExcluir").val($(this).attr('idLancamento'));
-        });
-
-        $(document).on('click', '.editar, .copiar', function (event) {
-            $("#idEditar, #idCopiar").val($(this).attr('idLancamento'));
-            $("#descricaoEditar, #descricaoCopiar").val($(this).attr('descricao'));
-            $("#fornecedorEditar, #fornecedorCopiar").val($(this).attr('fornecedor'));
-            $("#valorEditar, #valorCopiar").val($(this).attr('valor'));
-            $("#vencimentoEditar, #vencimentoCopiar").val($(this).attr('vencimento'));
-            $("#vencimentoEditar, #vencimentoCopiar").datepicker('setDate', $(this).attr('vencimento'));
-            $("#pagamentoEditar, #pagamentoCopiar").val($(this).attr('pagamento'));
-            $("#pagamentoEditar, #pagamentoCopiar").datepicker('setDate', $(this).attr('pagamento'));
-            $("#formaPgtoEditar, #formaPgtoCopiar").val($(this).attr('formaPgto'));
-            $("#tipoEditar, #tipoCopiar").val($(this).attr('tipo'));
-            var baixado = $(this).attr('baixado');
-            var oculto = $(this).attr('oculto');
-
-            if (baixado == 1) {
-                $("#pagoEditar, #pagoCopiar").iCheck('check');
-                $("#divPagamentoEditar, #divPagamentoCopiar").removeClass('hidden');
-            } else {
-                $("#pagoEditar, #pagoCopiar").iCheck('uncheck');
-                $("#divPagamentoEditar, #divPagamentoCopiar").addClass('hidden');
-                $('.reset-data-pagamento').val('');
-            }
-
-            if (oculto == 1) {
-                $(".oculto").iCheck('check');
-            } else {
-                $(".oculto").iCheck('uncheck');
-            }
-
-            var observacoes = $(this).attr('observacoes');
-
-            if (observacoes) {
-                var text = observacoes.replace(/<br \/> /gi, "\n")
-                $("#observacoesEditar, #observacoesCopiar").val(text)
-
-                $(".divObservacoes").removeClass('hidden');
-                var obsIcon = $(".divObservacoes").parent().children('div').children('a').children('i')
-                var obsText = $(".divObservacoes").parent().children('div').children('a').children('span.obsText')
-
-                obsIcon.removeClass('fa-plus')
-                obsIcon.addClass('fa-minus')
-                obsText.text('Remover observações')
-            } else {
-                $("#observacoesEditar, #observacoesCopiar").val('')
-                $(".divObservacoes").addClass('hidden');
-                var obsIcon = $(".divObservacoes").parent().children('div').children('a').children('i')
-                var obsText = $(".divObservacoes").parent().children('div').children('a').children('span.obsText')
-
-                obsIcon.removeClass('fa-minus')
-                obsIcon.addClass('fa-plus')
-                obsText.text('Adicionar observações')
-            }
         })
+    })
+    
+    $(document).on('click', '.editar, .copiar', function (event) {
+        $(".id").val($(this).attr('idLancamento'));
+        $(".descricao").val($(this).attr('descricao'));
+        $(".fornecedor").val($(this).attr('fornecedor'));
+        $(".valor").val($(this).attr('valor'));
+        $(".dataPagamento").val($(this).attr('pagamento'));
+        $(".dataPagamento").datepicker('setDate', $(this).attr('pagamento'));
+        $(".dataLancamento").val($(this).attr('vencimento'));
+        $(".dataLancamento").datepicker('setDate', $(this).attr('vencimento'));
+        $(".formaPgto").val($(this).attr('formaPgto'));
+        $(".tipo").val($(this).attr('tipo'));
+        var baixado = $(this).attr('baixado');
+        var oculto = $(this).attr('oculto');
 
-        $('#novaEntrada, #novaSaida').click(function () {
+        if (baixado == 1) {
+            $("#pagoEditar, #pagoCopiar").iCheck('check');
+            $("#divPagamentoEditar, #divPagamentoCopiar").removeClass('hidden');
+        } else {
+            $("#pagoEditar, #pagoCopiar").iCheck('uncheck');
+            $("#divPagamentoEditar, #divPagamentoCopiar").addClass('hidden');
+            $('.pagamento').val('');
+        }
+
+        if (oculto == 1) {
+            $(".oculto").iCheck('check');
+        } else {
             $(".oculto").iCheck('uncheck');
+        }
+
+        var observacoes = $(this).attr('observacoes');
+
+        if (observacoes) {
+            var text = observacoes.replace(/<br \/> /gi, "\n")
+            $("#observacoesEditar, #observacoesCopiar").val(text)
+
+            $(".divObservacoes").removeClass('hidden');
+            var obsIcon = $(".divObservacoes").parent().children('div').children('a').children('i')
+            var obsText = $(".divObservacoes").parent().children('div').children('a').children('span.obsText')
+
+            obsIcon.removeClass('fa-plus')
+            obsIcon.addClass('fa-minus')
+            obsText.text('Remover observações')
+        } else {
+            $("#observacoesEditar, #observacoesCopiar").val('')
             $(".divObservacoes").addClass('hidden');
             var obsIcon = $(".divObservacoes").parent().children('div').children('a').children('i')
             var obsText = $(".divObservacoes").parent().children('div').children('a').children('span.obsText')
@@ -1989,6 +1978,17 @@ if (!$results) {
             obsIcon.removeClass('fa-minus')
             obsIcon.addClass('fa-plus')
             obsText.text('Adicionar observações')
-        })
+        }
+    })
+
+    $('#novaEntrada, #novaSaida').click(function () {
+        $(".oculto").iCheck('uncheck');
+        $(".divObservacoes").addClass('hidden');
+        var obsIcon = $(".divObservacoes").parent().children('div').children('a').children('i')
+        var obsText = $(".divObservacoes").parent().children('div').children('a').children('span.obsText')
+
+        obsIcon.removeClass('fa-minus')
+        obsIcon.addClass('fa-plus')
+        obsText.text('Adicionar observações')
     })
 </script>
