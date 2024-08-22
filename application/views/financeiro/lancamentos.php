@@ -1214,6 +1214,8 @@ if (!$results) {
                             </div>
                             <label for="ocultoEditar" class="font-weight-bold">Oculto</label>
                         </div>
+                    </div>
+                    <div class="row">
                         <div id="divPagamentoEditar" class="hidden">
                             <div class="form-group col-lg-6 col-xs-5">
                                 <label for="dataPagamentoEditar" class="font-weight-bold">Data Pagamento</label>
@@ -1926,7 +1928,7 @@ if (!$results) {
             $("#idExcluir").val($(this).attr('idLancamento'));
         })
     })
-    
+
     $(document).on('click', '.editar, .copiar', function (event) {
         $(".id").val($(this).attr('idLancamento'));
         $(".descricao").val($(this).attr('descricao'));
