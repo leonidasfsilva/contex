@@ -276,8 +276,6 @@ class Lancamentos extends CI_Controller
 		$this->load->view('tema/topo', $this->data);
 	}
 	
-	// CRIAR METODO PARA PERSISTIR CONFIG DE MES PADRAO DO USUARIO EM DB
-	
 	public function entrada()
 	{
 		if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {

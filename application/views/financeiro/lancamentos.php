@@ -898,7 +898,7 @@ if (!$results) {
                     <div class="row">
                         <div class="form-group col-lg-6 col-xs-6">
                             <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control" id="recebido" name="recebido" value="1">
+                                <input type="checkbox" class="form-control" id="recebido" name="pago" value="1">
                             </div>
                             <label for="recebido" class="font-weight-bold">Pago?</label>
                         </div>

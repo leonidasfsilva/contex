@@ -19,7 +19,7 @@ include APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'codegen_helper.php';
  * | R     - current release version of system
  * |
  */
-$version       = '26';
+$version       = '27';
 $quarterOfYear = getQuarterOfCurrentYear();
 $currentYear   = date('Y');
 define("VERSION_APP", sprintf('%s.%s.%s', $currentYear, $quarterOfYear, $version));
