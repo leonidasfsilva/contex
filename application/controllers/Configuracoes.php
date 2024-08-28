@@ -396,10 +396,10 @@ class Configuracoes extends CI_Controller
 				$this->configs_model->deactivateForcedLogout();
 			}
 			$this->configs_model->deactivateMaintenanceMode();
-			$this->session->set_flashdata('sucesso', 'Modo Manutenção desativado!');
+			$this->session->set_flashdata('sucesso', 'Modo manutenção desativado!');
 			echo true;
 		}
-		$this->session->set_flashdata('erro', 'Não foi possível desativar o Modo Manutenção');
+		$this->session->set_flashdata('erro', 'Não foi possível desativar o modo manutenção');
 		echo false;
 	}
 	
@@ -413,7 +413,7 @@ class Configuracoes extends CI_Controller
 			$this->session->set_flashdata('sucesso', 'Logout força bruta ativado!');
 			echo true;
 		}
-		$this->session->set_flashdata('erro', 'Não foi possível ativar o Modo Manutenção');
+		$this->session->set_flashdata('erro', 'Não foi possível ativar o logout força bruta');
 		echo false;
 	}
 	
