@@ -53,7 +53,7 @@
                 </h4>
             </div>
 
-            <form class="form-horizontal floating-labels before-loading" id="formLogin" method="post" action="<?php echo base_url() ?>mxcode/verificarLogin">
+            <form class="form-horizontal floating-labels before-loading" id="formLogin" method="post" action="<?php echo base_url('mxcode/verificarLogin') ?>">
                 <div class="">
 					<?php if ($this->session->flashdata('error')) { ?>
                         <div class="row">

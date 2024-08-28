@@ -97,17 +97,19 @@ $this->load->view('includes/custom_js');
 
     <!--<a class="navbar-brand blink-text" href="javascript:" style="cursor: unset;"><i class="fat fa-triangle-person-digging"></i></a>-->
 	<?php if (!$maintenanceMode) { ?>
-	<?php if ($developmentText) { ?>
+		<?php if ($developmentText) { ?>
             <div class="text-white font-weight-bold visible-lg-inline-block hidden-xs" style="font-size: 12pt;">
                 <i class="pt10 fa-2x fad fa-rectangle-terminal"></i>
                 <span class="text-uppercase pl10"><?= $developmentText ?></span>
             </div>
 		<?php }
 	} else { ?>
-        <div class="text-white label label-warning blink-text font-weight-bold col-xs-3 col-sm-6" style="font-size: 12pt;">
-            <i class="navbar-brand-alt fad fa-triangle-person-digging"></i>
-            <span class=" text-uppercase pl10 hidden-xs"><?= $developmentText ?></span>
-        </div>
+        <a href="<?= base_url('configuracoes/sistema') ?>">
+            <div class="text-white label label-warning blink-text font-weight-bold col-xs-3 col-sm-6" style="font-size: 12pt;">
+                <i class="navbar-brand-alt fad fa-triangle-person-digging"></i>
+                <span class=" text-uppercase pl10 hidden-xs"><?= $developmentText ?></span>
+            </div>
+        </a>
 	<?php } ?>
     <!--    MENU DIREITO-->
     <!--    <span id="trigger-infobar" class="toolbar-trigger toolbar-icon-bg">-->
