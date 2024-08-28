@@ -20,11 +20,11 @@
         <form action="#" id="form-system-configs">
             <div>
                 <input type="checkbox" id="maintenance-switch" name="maintenanceMode" class="switch-input primary" <?= $maintenanceMode ? 'checked' : '' ?>>
-                <label for="maintenance-switch" class="switch-label primary font-weight-bold">Ativar MODO MANUTENÇÃO</label>
+                <label for="maintenance-switch" class="switch-label primary font-weight-bold">MODO MANUTENÇÃO</label>
             </div>
             <div>
                 <input type="checkbox" id="force-logout-switch" name="forceLogout" class="switch-input primary" <?= $forcedLogout ? 'checked' : '' ?>>
-                <label for="force-logout-switch" class="switch-label primary font-weight-bold">Forçar logout de usuários conectados</label>
+                <label for="force-logout-switch" class="switch-label primary font-weight-bold">Desconectar usuários conectados</label>
             </div>
         </form>
     </div>
