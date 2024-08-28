@@ -8,7 +8,7 @@
                 } else {
                     elem.css('visibility', 'hidden');
                 }
-            }, 200);
+            }, 600);
         });
     })
 
