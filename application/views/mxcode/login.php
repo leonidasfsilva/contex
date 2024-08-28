@@ -63,6 +63,23 @@
                             </div>
                         </div>
 					<?php } ?>
+					
+					<?php if ($maintenanceMode) { ?>
+                        <div class="row">
+                            <div class="alert alert-warning">
+                                <button type="button" class="close text-white" data-dismiss="alert">
+                                    <i class="fad fa-triangle-person-digging text-white fa-2x"></i>
+                                </button>
+                                <strong>SISTEMA EM MANUTENÇÃO</strong>
+                                <br>
+                                Talvez não seja possível acessar sua conta no momento.
+                                <br>
+                                Estamos realizando alguns ajustes e trabalhando para normalizar o sistema o mais breve possível.
+                                <br>
+                                Agradecemos a compreensão.
+                            </div>
+                        </div>
+					<?php } ?>
 
                     <div class="form-group">
                         <h3 class="font-bold m-b-40">Acesse sua conta</h3>
@@ -89,10 +106,11 @@
                     </div>
                     <div class="form-group m-b-0">
                         <div class="col-sm-12 text-center">
-                            <p>Não tem uma conta? <a href="<?php echo base_url() ?>cadastro" class="text-primary"><b>Crie sua conta</b></a>.</p>
+                            <p>Não tem uma conta? <a href="<?php echo base_url('cadastro') ?>" class="text-primary"><b>Crie sua conta</b></a>.</p>
                             <!--<p><a href="--><?php //echo base_url('conecte')?><!--" class="text-primary"><b>Acesso para clientes</b></a>.</p>-->
                         </div>
                     </div>
+
                 </div>
             </form>
         </div>
@@ -165,7 +183,7 @@
         // $(".progress-bar").animate({
         //     width: "100%"
         // }, 1000);
-        
+
         if ($(form).valid()) {
             $(".before-loading").hide();
             $(".preloader-login").show();
