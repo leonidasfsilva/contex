@@ -479,7 +479,7 @@ hr {
 }
 /********** Text colors **********/
 .text-white {
-  color: #ffffff;
+  color: #ffffff !important;
 }
 .text-danger {
   color: rgba(255, 8, 0, 0.74);
@@ -3082,9 +3082,9 @@ Basic List
   border-color: #686868;
 }
 .alert-warning {
-  background: #cbc3ae;
-  color: #ffffff;
-  border-color: #cbc3ae;
+  background: #f8c255;
+  color: #fff;
+  border-color: #f8c255;
 }
 .alert-danger {
   background: #ff4f54;
