@@ -96,8 +96,8 @@ $this->load->view('includes/custom_js');
 	<?php } ?>
 
     <!--<a class="navbar-brand blink-text" href="javascript:" style="cursor: unset;"><i class="fat fa-triangle-person-digging"></i></a>-->
+	<?php if (!$maintenanceMode) { ?>
 	<?php if ($developmentText) { ?>
-		<?php if (!$maintenanceMode) { ?>
             <div class="text-white font-weight-bold visible-lg-inline-block hidden-xs" style="font-size: 12pt;">
                 <i class="pt10 fa-2x fad fa-rectangle-terminal"></i>
                 <span class="text-uppercase pl10"><?= $developmentText ?></span>
