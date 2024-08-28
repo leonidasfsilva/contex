@@ -480,7 +480,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                     <div class="panel pl20">
                         <div class="checkbox icheck">
                             <input type="checkbox" class="form-control" name="atividades[]" value="rVenda" <?= in_array('rVenda', $atividades) ? 'checked' : '' ?>>
@@ -488,7 +488,7 @@
                         <label for="vCliente" class="font-weight-bold">Relatório Venda</label>
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                     <div class="panel pl20">
                         <div class="checkbox icheck">
                             <input type="checkbox" class="form-control" name="atividades[]" value="rLancamentos" <?= in_array('rLancamentos', $atividades) ? 'checked' : '' ?>>
@@ -496,7 +496,7 @@
                         <label for="aCliente" class="font-weight-bold">Relatório Lançamentos</label>
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                     <div class="panel pl20">
                         <div class="checkbox icheck">
                             <input type="checkbox" class="form-control" name="atividades[]" value="rInvestimentos" <?= in_array('rInvestimentos', $atividades) ? 'checked' : '' ?>>
@@ -504,7 +504,7 @@
                         <label for="eCliente" class="font-weight-bold">Relatório Investimentos</label>
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                     <div class="panel pl20">
                         <div class="checkbox icheck">
                             <input type="checkbox" class="form-control" name="atividades[]" value="rFaturas" <?= in_array('rFaturas', $atividades) ? 'checked' : '' ?>>
@@ -512,7 +512,7 @@
                         <label for="dCliente" class="font-weight-bold">Relatório Faturas</label>
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-4">
                     <div class="panel pl20">
                         <div class="checkbox icheck">
                             <input type="checkbox" class="form-control" name="atividades[]" value="rDespesas" <?= in_array('rDespesas', $atividades) ? 'checked' : '' ?>>
@@ -552,6 +552,14 @@
                             <input type="checkbox" class="form-control" name="atividades[]" value="cBackup" <?= in_array('cBackup', $atividades) ? 'checked' : '' ?>>
                         </div>
                         <label for="dCliente" class="font-weight-bold">Backup</label>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="panel pl20">
+                        <div class="checkbox icheck">
+                            <input type="checkbox" class="form-control" name="atividades[]" value="cManutencao" <?= in_array('cManutencao', $atividades) ? 'checked' : '' ?>>
+                        </div>
+                        <label for="dCliente" class="font-weight-bold">Modo Manutenção</label>
                     </div>
                 </div>
             </div>

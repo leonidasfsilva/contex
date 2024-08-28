@@ -1,5 +1,18 @@
 <script>
     $(document).ready(function () {
+        $('.blink-text').each(function () {
+            var elem = $(this);
+            setInterval(function () {
+                if (elem.css('visibility') === 'hidden') {
+                    elem.css('visibility', 'visible');
+                } else {
+                    elem.css('visibility', 'hidden');
+                }
+            }, 200);
+        });
+    })
+
+    $(document).ready(function () {
         // method to close and open one modal after another one
         $('.modal-copy').click(function (e) {
             var parentModal = null
@@ -183,14 +196,22 @@
         });
 
         var element = $(".principal-div")
-        element.hide()
-        $(".preloader").show();
+        showSpinnerLoader(element)
         removeSpinnerLoader(element)
     })
 
+    function showSpinnerLoader(element = null) {
+        if (!element) {
+            element = $(".principal-div")
+        }
+        
+        element.hide()
+        $(".preloader").show();
+    }
+    
     function removeSpinnerLoader(element, time = 600) {
         var percentage = Math.round((time * 20) / 100)
-        
+
         setTimeout(function () {
             $(".preloader").hide()
         }, (time - percentage));
@@ -272,7 +293,7 @@
         });
         return card;
     }
-    
+
     $(function () {
         $(".money").maskMoney({
             thousands: '.',
@@ -285,7 +306,7 @@
     $(function () {
         $('.popover-btn').popover()
     });
-    
+
     $('#telefone').mask("(99) 9999-99990");
     $('#cep').mask("99999-999");
     $('#cpf').mask("999.999.999-99");
@@ -442,7 +463,7 @@
         })
 
         $('.tooltips').tooltip();
-        
+		
 		<?php if ($this->session->flashdata('erro') != null) { ?>
         Swal.fire({
             position: 'top',

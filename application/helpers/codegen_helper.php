@@ -176,6 +176,7 @@ function returnURL($get = null)
 		$notRedirectedUlrs = [
 			'',
 			'mxcode',
+			'phpinfo',
 			'mxcode/login',
 			'cadastro',
 			'mxcode/verificarLogin'
@@ -371,4 +372,30 @@ function dd()
 		var_dump($arg);
 	}
 	exit();
+}
+
+function checkMaintenanceMode()
+{
+	$CI = get_instance();
+	$CI->load->model('configs_model');
+	
+	if ($CI->configs_model->getMaintenanceMode()) {
+		return true;
+	}
+	return false;
+}
+
+function checkForcedLogout()
+{
+	$CI = get_instance();
+	$CI->load->model('configs_model');
+	
+	if ($CI->configs_model->getForcedLogout()) {
+		if ((session_id()) && ($CI->session->userdata('logado')) && ($CI->session->userdata('permissao') != 1)) {
+			gravaLog(getUserId(), getUserName(), getUserEmail(), 'Logout forçado: sistema em manutenção', getenv("REMOTE_ADDR"));
+			$CI->session->sess_destroy();
+		}
+		return true;
+	}
+	return false;
 }

@@ -284,9 +284,9 @@ if ($direcionados) {
     });
 
     $('a.widget-collapse').click(function() {
-        let n = $(this).parents().eq(2).find(".conteudo-widget");
+        let widget = $(this).parents().eq(2).find(".conteudo-widget");
 
-        if (n.css('display') == 'none') {
+        if (widget.css('display') == 'none') {
             $(this).find('.collapse-icon').attr('class', 'fas fa-chevron-up fa-fw collapse-icon');
             $(this).find(".chevron-label").text('ocultar');
 
@@ -359,7 +359,7 @@ if ($direcionados) {
                 });
             }
         }
-        n.slideToggle({
+        widget.slideToggle({
             duration: 200
         });
         return false;

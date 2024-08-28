@@ -1,5 +1,5 @@
-<?php  if (! defined('BASEPATH')) {
-    exit('No direct script access allowed');
+<?php if (!defined('BASEPATH')) {
+	exit('No direct script access allowed');
 }
 /*
 | -------------------------------------------------------------------------
@@ -40,13 +40,14 @@
 |
 */
 
-$route['default_controller'] = "mxcode";
-$route['404_override'] = '';
-$route['financeiro'] = 'financeiro/index';
-$route['mxcode/minha-conta'] = 'mxcode/minhaConta';
-//$route['financeiro/faturas/detalhes'] = 'faturas/detalhes';
-//$route['financeiro/faturas/detalhes/(:any)'] = 'faturas/detalhes/$1';
-$route['editarFotoUsuario'] = "mxcode/editarFotoUsuario";
+$route['default_controller']                 = "mxcode";
+$route['404_override']                       = '';
+$route['financeiro']                         = 'financeiro/index';
+$route['mxcode/minha-conta']                 = 'mxcode/minhaConta';
+$route['phpinfo']                            = 'mxcode/phpinfo';
+$route['editarFotoUsuario']                  = "mxcode/editarFotoUsuario";
+// $route['financeiro/faturas/detalhes']        = 'faturas/detalhes';
+// $route['financeiro/faturas/detalhes/(:any)'] = 'faturas/detalhes/$1';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

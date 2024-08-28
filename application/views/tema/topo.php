@@ -80,15 +80,8 @@ $this->load->view('includes/custom_js');
     </div>
 </div>
 <!--    MENU SUSPENSO-->
-<?php if (ENVIRONMENT == 'development') {
-	$topbar_class = 'navbar-danger';
-	$dev          = ' DEVELOPMENT';
-} else {
-	$topbar_class = null;
-	$dev          = null;
-} ?>
 
-<header id="topnav" class="navbar navbar <?= ($topbar_class ?? 'navbar-midnightblue') ?> navbar-fixed-top clearfix" role="banner">
+<header id="topnav" class="navbar navbar <?= ($topbarClass) ?> navbar-fixed-top clearfix" role="banner">
 
         <span id="trigger-sidebar" class="toolbar-trigger toolbar-icon-bg">
             <a href="javascript:" data-placement="bottom" title="Exibir/Ocultar Menu" id="menu-switcher">
@@ -97,13 +90,25 @@ $this->load->view('includes/custom_js');
                 </span>
             </a>
         </span>
-
-    <a class="navbar-brand" href="javascript:" style="cursor: unset;">CONTEX</a>
-	<?php if ($dev) { ?>
-        <div class="text-primary m15 font-weight-bold visible-lg-inline-block hidden-xs" style="font-size: 12pt;">
-            <i class="fal fa-rectangle-terminal fa-lg fa-fw"></i>
-            <span href="javascript:"><?= $dev ?></span>
-        </div>
+	
+	<?php if (!$maintenanceMode) { ?>
+        <a class="navbar-brand" href="javascript:" style="cursor: unset;">CONTEX</a>
+	<?php } ?>
+	
+	<?php if ($developmentText) { ?>
+        <!--<a class="navbar-brand blink-text" href="javascript:" style="cursor: unset;"><i class="fat fa-triangle-person-digging"></i></a>-->
+		<?php if (!$maintenanceMode) { ?>
+            <div class="text-primary font-weight-bold visible-lg-inline-block hidden-xs" style="font-size: 12pt;">
+                <i class="pt10 fa-2x fad fa-rectangle-terminal text-white"></i>
+                <span class="text-uppercase pl10 text-white"><?= $developmentText ?></span>
+            </div>
+		
+		<?php } else { ?>
+            <div class="text-primary blink-text font-weight-bold col-xs-4 col-sm-6" style="font-size: 12pt;">
+                <i class="navbar-brand-alt fad fa-triangle-person-digging text-white"></i>
+                <span class=" text-uppercase pl10 text-white hidden-xs"><?= $developmentText ?></span>
+            </div>
+		<?php } ?>
 	<?php } ?>
     <!--    MENU DIREITO-->
     <!--    <span id="trigger-infobar" class="toolbar-trigger toolbar-icon-bg">-->
@@ -321,7 +326,7 @@ $this->load->view('includes/custom_js');
                 <!--                <li><a href="#"><span class="pull-left">Statement</span> <i class="pull-right fa fa-list-alt"></i></a></li>-->
                 <!--                <li><a href="#"><span class="pull-left">Withdrawals</span> <i class="pull-right fa fa-dollar"></i></a></li>-->
                 <li class="divider"></li>
-                <li title="Encerrar sessão"><a href="<?= site_url(); ?>mxcode/sair"><span class="pull-left">Sair</span> <i class="pull-right fal fa-power-off fa-lg"></i></a></li>
+                <li title="Encerrar sessão"><a href="<?= site_url('mxcode/logout'); ?>"><span class="pull-left">Sair</span> <i class="pull-right fal fa-power-off fa-lg"></i></a></li>
             </ul>
         </li>
         <!--MENU USUARIO-->
