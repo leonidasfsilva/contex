@@ -159,7 +159,7 @@ class Mxcode extends CI_Controller
 						$this->session
 							->set_flashdata(
 								'erro',
-								'<strong>SISTEMA EM MANUNTEÇÃO</strong><br>Desculpe o transtorno, estamos realizando alguns ajustes e trabalhando para normalizar o sistema o mais rápido possível.');
+								'<strong>SISTEMA EM MANUTENÇÃO</strong><br>Desculpe o transtorno, estamos realizando alguns ajustes e trabalhando para normalizar o sistema o mais rápido possível.');
 						redirect('mxcode/login');
 					}
 				}

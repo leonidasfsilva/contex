@@ -18,7 +18,7 @@ class ConfigLoader
 		$config['forcedLogout']    = false;
 		
 		if (checkMaintenanceMode()) {
-			$config['developmentText'] = 'Modo de manutenção ativado!';
+			$config['developmentText'] = 'Modo de manutenção ativado';
 			$config['maintenanceMode'] = true;
 		}
 		
