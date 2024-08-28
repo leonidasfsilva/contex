@@ -47,7 +47,7 @@
                     echo '<td>' . $r->nome . '</td>';
                     echo '<td>' . $r->email . '</td>';
                     echo '<td>' . $r->permissao . '</td>';
-                    echo '<td><span class="label label-' . $label_status . '">' . strtoupper($status) . '</span></td>';
+                    echo '<td><span class="badge badge-' . $label_status . '">' . strtoupper($status) . '</span></td>';
                     echo '<td style="text-align: center">';
                     echo '<a href="' . base_url() . 'usuarios/visualizar/' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-info btn-sm" title="Detalhes"><i class="fas fa-search-plus fa-lg fa-fw"></i></a>';
                     echo '<a href="' . base_url() . 'usuarios/editar/' . $r->id_usuarios . '" style="margin-right: 1%" class="btn btn-primary btn-sm" title="Editar"><i class="fas fa-edit fa-lg fa-fw"></i></a>';

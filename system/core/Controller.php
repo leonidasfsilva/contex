@@ -85,7 +85,7 @@ class CI_Controller {
 
         //metodo para gravar URL solicitada antes de efetuar autenticacao, e retornar para a URL apos autenticacao
         returnURL();
-    }
+	}
 
 	// --------------------------------------------------------------------
 
