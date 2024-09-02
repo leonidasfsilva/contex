@@ -11,7 +11,6 @@ class ConfigLoader
 		
 		// $data = []; // set here all your vars to views
 		
-		$config['menuPainel']      = true;
 		$config['topbarClass']     = ENVIRONMENT == 'development' ? 'navbar-danger' : 'navbar-midnightblue';
 		$config['developmentText'] = ENVIRONMENT == 'development' ? 'DEVELOPMENT' : null;
 		$config['maintenanceMode'] = false;

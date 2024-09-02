@@ -126,7 +126,7 @@ if (isset($referenceMonth) && $referenceMonth) {
                                                         '</span></td>';
 
                                                     echo '<td>';
-                                                    echo '<a type="button" href="' . base_url('financeiro/faturas/detalhes/' . $r['id_fatura'] . '/' . $result['id_cartao']) . '" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Acessar fatura deste lançamento">
+                                                    echo '<a type="button" href="' . base_url('financeiro/faturas/detalhes/' . $r['id_fatura'] . '/' . $result['id_cartao']) . '" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm editar" title="Visualizar fatura desta compra">
                                                             <i class="fas fa-file-invoice-dollar fa-lg fa-fw"></i>
                                                         </a>';
 

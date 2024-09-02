@@ -42,7 +42,8 @@ class Mxcode extends CI_Controller
 		$data['anuncios']            = $this->anuncios_model->getAnuncios('habilitado = 1 AND direcionado != 1');
 		$data['direcionados']        = $this->anuncios_model->getAnuncios('habilitado = 1 AND direcionado = 1 AND id_usuario = ' . getUserId());
 		
-		$data['view'] = 'mxcode/painel';
+		$data['menuPainel'] = true;
+		$data['view']       = 'mxcode/painel';
 		$this->load->view('tema/topo', $data);
 	}
 	
