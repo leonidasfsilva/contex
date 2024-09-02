@@ -1338,6 +1338,7 @@ class Faturas extends CI_Controller
 		
 		if ($this->fatura_model->edit('faturas', $data, 'id_fatura', $_POST['id_fatura'])) {
 			$vinculoFatura = $this->fatura_model->getVinculoFatura($_POST['id_fatura']);
+			
 			if ($vinculoFatura) {
 				$detalhesFatura       = $this->fatura_model->getDetalhesFatura($_POST['id_fatura']);
 				$valorTotalFatura     = $this->fatura_model->getValorTotalFatura($_POST['id_fatura']);
@@ -1345,25 +1346,26 @@ class Faturas extends CI_Controller
 				$n_cartao             = explode(" ", trim(decriptar($detalhesCartaoFatura->numero)));
 				$final                = $n_cartao[3];
 				$apelido              = $detalhesCartaoFatura->apelido ? ' - ' . $detalhesCartaoFatura->apelido : null;
-				
-				$data = array(
+				$data                 = [
 					'descricao'          => 'FATURA CARTAO DE CREDITO' . $apelido,
 					'valor'              => '-' . $valorTotalFatura,
-					'data_lancamento'    => $detalhesFatura->data_pagamento ?? $detalhesFatura->vencimento,
+					'data_lancamento'    => $detalhesFatura->vencimento,
 					'data_pagamento'     => $detalhesFatura->data_pagamento,
 					'cliente_fornecedor' => $detalhesCartaoFatura->bandeira ? $detalhesCartaoFatura->bandeira . ' - FINAL ' . $final : null,
 					'forma_pgto'         => $detalhesFatura->forma_pgto ?? 5,
 					'baixado'            => 1,
 					'tipo'               => 2,
-				);
+				];
 				$this->fatura_model->edit('lancamentos', $data, 'id_fatura', $_POST['id_fatura']);
 			}
 			$this->session->set_flashdata('sucesso', 'Fatura paga com sucesso!');
 			redirect($urlAtual);
-		} else {
-			$this->session->set_flashdata('erro', 'Erro ao tentar pagar a fatura.');
-			redirect($urlAtual);
+			return true;
 		}
+		
+		$this->session->set_flashdata('erro', 'Erro ao tentar pagar a fatura.');
+		redirect($urlAtual);
+		return false;
 	}
 	
 	public function vincular()
