@@ -472,7 +472,7 @@ if (!$results) {
 			<?php } ?>
 			<?php if ($totalGeralMes) { ?>
                 <tr class="total-geral">
-                    <td colspan="2" style="text-align: left; font-weight: bold">(=) SALDO TOTAL DO PERÍODO</td>
+                    <td colspan="2" style="text-align: left; font-weight: bold">(TP) SALDO TOTAL DO PERÍODO</td>
                     <td colspan="1" style="text-align: right; font-weight: bold">
 						<?php
 						if ($hiddenItems) echo '<i class="fas fa-lock-keyhole fa-fw vault-icon"></i> ';
@@ -483,7 +483,7 @@ if (!$results) {
                 </tr>
 				<?php if ($totalOcultosMes) { ?>
                     <tr class="hidden provisorio-ocultos">
-                        <td colspan="2" style="text-align: left; font-weight: bold; color: #a9a9a9">(=) TOTAL DE OCULTOS DO PERÍODO</td>
+                        <td colspan="2" style="text-align: left; font-weight: bold; color: #a9a9a9">(TO) TOTAL DE OCULTOS DO PERÍODO</td>
                         <td colspan="1" style="text-align: right; font-weight: bold; color: #a9a9a9">
 							<?php echo number_format($totalOcultosMes, 2, ',', '.') ?>
                         </td>
@@ -491,7 +491,7 @@ if (!$results) {
 				<?php }
 				if ($hiddenItems) { ?>
                     <tr class="hidden provisorio-ocultos">
-                        <td colspan="2" style="text-align: left; font-weight: bold">(±) SALDO OCULTO DO PERÍODO</td>
+                        <td colspan="2" style="text-align: left; font-weight: bold">(TP+TO) SALDO TOTAL OCULTO DO PERÍODO</td>
                         <td colspan="1" style="text-align: right; font-weight: bold">
 							<?php echo number_format(($totalOcultosMes + $totalGeralMes), 2, ',', '.') ?>
                         </td>
@@ -499,12 +499,12 @@ if (!$results) {
 				<?php }
 				if ($totalGeralMes < 0 && $saldoProvisorioMes) {
 					?>
-                    <tr class="hidden provisorio-periodo">
-                        <td colspan="2" style="text-align: left; font-weight: bold">(±) SALDO PROVISÓRIO DO PERÍODO</td>
-                        <td colspan="1" style="text-align: right; font-weight: bold">
-							<?php echo number_format(($saldoProvisorioMes), 2, ',', '.') ?>
-                        </td>
-                    </tr>
+                    <!--<tr class="hidden provisorio-periodo">-->
+                    <!--    <td colspan="2" style="text-align: left; font-weight: bold">(±) SALDO PROVISÓRIO DO PERÍODO</td>-->
+                    <!--    <td colspan="1" style="text-align: right; font-weight: bold">-->
+					<!--		--><?php //echo number_format(($saldoProvisorioMes), 2, ',', '.') ?>
+                    <!--    </td>-->
+                    <!--</tr>-->
 				<?php }
 			} ?>
 
