@@ -198,7 +198,7 @@
             timer: 5000,
             timerProgressBar: true,
             icon: 'info',
-            title: 'Versão do Sistema: <?= versionApp() ?>',
+            title: 'Versão do Sistema: <?= getAppVersion() ?>',
             didOpen: (toast) => {
                 toast.addEventListener('mouseenter', Swal.stopTimer)
                 toast.addEventListener('mouseleave', Swal.resumeTimer)

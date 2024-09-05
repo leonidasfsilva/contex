@@ -1,3 +1,19 @@
+.font-12 {
+    font-size: 12px;
+}
+.font-14 {
+    font-size: 14px;
+}
+.font-16 {
+    font-size: 16px;
+}
+.font-18 {
+    font-size: 18px;
+}
+.font-21 {
+    font-size: 21px;
+}
+
 *[disabled], *:disabled {
     pointer-events: all !important;
     cursor: not-allowed;

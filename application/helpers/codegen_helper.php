@@ -14,9 +14,12 @@ function differenceInHours($startdate, $enddate)
 	return $return;
 }
 
-function versionApp()
+function getAppVersion()
 {
-	return VERSION_APP;
+	if (APP_VERSION !== null) {
+		return APP_VERSION;
+	}
+	return false;
 }
 
 function print_array($a)

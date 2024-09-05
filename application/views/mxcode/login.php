@@ -12,9 +12,9 @@
     <meta name="author" content="Leônidas Ferreira">
     <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/contex_logo.png" type="image/x-icon"/>
 
-    <link href="<?php echo base_url(); ?>assets/css/bootstrap-agile.css?v=<?= versionApp() ?>" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/css/agile-style.css?v=<?= versionApp() ?>" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/css/custom.css?v=<?= versionApp() ?>" type="text/css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/bootstrap-agile.css?v=<?= getAppVersion() ?>" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/agile-style.css?v=<?= getAppVersion() ?>" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/custom.css?v=<?= getAppVersion() ?>" type="text/css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,400italic,600,700' rel='stylesheet' type='text/css'>
     <link href="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.css" type="text/css" rel="stylesheet">
 
