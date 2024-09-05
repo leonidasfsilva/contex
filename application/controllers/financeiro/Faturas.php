@@ -379,7 +379,7 @@ class Faturas extends CI_Controller
 			$valor = str_replace(array('.', ','), array('', '.'), $valor);
 		}
 		
-		$faturaExistente = $this->fatura_model->getFaturaUsuario($id_fatura);
+		$faturaExistente = $this->fatura_model->getFaturaUsuario($id_fatura, getUserId());
 		
 		if ($faturaExistente) {
 			$faturaAtual = $this->fatura_model->getFaturaAtual($id_fatura);
@@ -637,7 +637,7 @@ class Faturas extends CI_Controller
 			$valor = str_replace(array('.', ','), array('', '.'), $valor);
 		}
 		
-		$faturaExistente = $this->fatura_model->getFaturaUsuario($id_fatura);
+		$faturaExistente = $this->fatura_model->getFaturaUsuario($id_fatura, getUserId());
 		
 		if ($faturaExistente) {
 			$faturaAtual = $this->fatura_model->getFaturaAtual($id_fatura);
@@ -904,7 +904,7 @@ class Faturas extends CI_Controller
 			$valor = str_replace(array('.', ','), array('', '.'), $valor);
 		}
 		
-		$faturaExistente = $this->fatura_model->getFaturaUsuario($id_fatura);
+		$faturaExistente = $this->fatura_model->getFaturaUsuario($id_fatura, getUserId());
 		
 		if ($faturaExistente) {
 			$faturaAtual = $this->fatura_model->getFaturaAtual($id_fatura);
@@ -1103,7 +1103,7 @@ class Faturas extends CI_Controller
 		}
 	}
 	
-	public function excluirLancamento($id = null, $parameter = false)
+	public function excluirLancamento($idLancamento = null, $parameter = false)
 	{
 		if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dFaturas')) {
 			$this->session->set_flashdata('error', 'Você não tem permissão para excluir lançamentos de faturas.');
@@ -1111,40 +1111,43 @@ class Faturas extends CI_Controller
 		}
 		
 		if (!$parameter) {
-			$urlAtual = $this->input->post('urlAtual');
-			$id       = $this->input->post('id');
+			$urlAtual     = $this->input->post('urlAtual');
+			$idLancamento = $this->input->post('id');
 		}
 		
 		$data = array(
 			'status' => 0,
 		);
 		
-		$faturas = $this->fatura_model->getFaturaByLancamentosAssoc($id);
+		$faturas = $this->fatura_model->getFaturaByLancamentosAssoc($idLancamento);
 		
-		if ($this->fatura_model->delete('lancamentos_faturas', $data, 'id_lancamento', $id) == true) {
-			$this->fatura_model->delete('lancamentos_faturas_assoc', $data, 'id_lancamento', $id);
-			$this->pendencia_model->delete('pendencias', $data, 'id_lancamento_fatura', $id);
+		foreach ($faturas as $fatura) {
+			atualizaValorVinculoFaturas($fatura["id_fatura"]);
+		}
+		
+		if ($this->fatura_model->delete('lancamentos_faturas', $data, 'id_lancamento', $idLancamento)) {
+			$this->fatura_model->delete('lancamentos_faturas_assoc', $data, 'id_lancamento', $idLancamento);
+			$this->pendencia_model->delete('pendencias', $data, 'id_lancamento_fatura', $idLancamento);
 			$this->session->set_flashdata('sucesso', 'Lançamento excluído com sucesso!');
 			
 			if (is_array($faturas) && $faturas) {
 				foreach ($faturas as $fatura) {
-					// atualizaValorVinculoFaturas($lancamentosTerceiros[0]["id_fatura"]);
+					atualizaValorVinculoFaturas($fatura["id_fatura"]);
 				}
 			}
 			
 			if (!$parameter) {
 				redirect($urlAtual);
-			} else {
-				return true;
 			}
-		} else {
-			$this->session->set_flashdata('erro', 'Erro ao tentar excluir lançamento de fatura.');
-			if (!$parameter) {
-				redirect($urlAtual);
-			} else {
-				return false;
-			}
+			return true;
 		}
+		
+		$this->session->set_flashdata('erro', 'Erro ao tentar excluir lançamento de fatura.');
+		
+		if (!$parameter) {
+			redirect($urlAtual);
+		}
+		return false;
 	}
 	
 	public function excluirSerieLancamentos()

@@ -137,11 +137,12 @@ class Fatura_model extends CI_Model
             ->row();
     }
 
-    function getFaturaUsuario($id_fatura)
+    function getFaturaUsuario($id_fatura, $idUser)
     {
         return $this->db
             ->where('status', 1)
             ->where('id_fatura', $id_fatura)
+            ->where('id_usuario', $idUser)
             ->get('faturas')
             ->row();
     }
