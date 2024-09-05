@@ -1708,6 +1708,7 @@ class Faturas extends CI_Controller
 		$data['prevReferenceYear']  = $prevReferenceYear;
 		$data['nextReferenceYear']  = $nextReferenceYear;
 		$data['referenceYear']      = $referenceYear;
+		$data['menuFinanceiro']     = true;
 		$data['view']               = 'faturas/lancamentos_terceiros';
 		$this->load->view('tema/topo', $data);
 	}
