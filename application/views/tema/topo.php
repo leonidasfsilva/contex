@@ -5,7 +5,7 @@ $this->load->view('includes/js');
 $this->load->view('includes/custom_js');
 ?>
 
-<body class="infobar-offcanvas infobar-overlay sidebar-hideon-collapse sidebar-scroll" id="body">
+<body class="infobar-offcanvas infobar-overlay sidebar-scroll" id="body">
 
 <!--    MENU SUSPENSO-->
 <div id="headerbar">
