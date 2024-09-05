@@ -9635,14 +9635,14 @@ nav.navbar {
 }
 
 #topnav .toolbar .dropdown-menu.userinfo li a i {
-    color: #cfd8dc;
+    /*color: #cfd8dc;*/
     margin-left: 0;
     min-width: 16px;
     text-align: center;
 }
 
 .dropdown-menu-hover li a i {
-    color: #cfd8dc;
+    /*color: #cfd8dc;*/
     margin-left: 0;
     min-width: 16px;
     text-align: center;
