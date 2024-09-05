@@ -181,13 +181,12 @@ class Mxcode extends CI_Controller
 				if ($this->session->userdata('last_url')) {
 					header('location:' . $this->session->userdata('last_url'));
 				}
+				redirect('mxcode/login');
 			}
-			
 			gravaLog($usuario->id_usuarios, $usuario->nome, $usuario->email, 'Tentativa de login recusada: senha incorreta', getenv("REMOTE_ADDR"));
 			$this->session->set_flashdata('erro', 'Dados de acesso inválidos, por favor tente novamente.');
 			redirect('mxcode/login');
 		}
-		
 		gravaLog(null, null, $email, 'Tentativa de login recusada: email inexistente', getenv("REMOTE_ADDR"));
 		$this->session->set_flashdata('erro', 'Dados de acesso inválidos, por favor tente novamente.');
 		redirect('mxcode/login');
