@@ -519,14 +519,15 @@ $this->load->view('includes/custom_js');
                 <!--DIV PRINCIPAL-->
                 <div class="page-content">
                     <!--BREADCRUMB-->
-                    <ol class="breadcrumb">
+                    <ol class="breadcrumb top">
+
                         <li class="">
                             <a href=" <?= base_url() ?>" title="Painel Inicial">
                                 Painel Inicial
                             </a>
                         </li>
-						<?php if ($this->uri->segment(1)) {
-							if ($this->uri->segment(1) == 'financeiro') { ?>
+		                <?php if ($this->uri->segment(1)) {
+			                if ($this->uri->segment(1) == 'financeiro') { ?>
                                 <li class="dropdown dropdown-hover">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="link" aria-haspopup="false" aria-expanded="false"><?= ucfirst($this->uri->segment(1)); ?> <span class="caret"></span></a>
                                     <ul class="dropdown-menu dropdown-menu-hover arrow" role="menu">
@@ -547,35 +548,36 @@ $this->load->view('includes/custom_js');
                                         </li>
                                     </ul>
                                 </li>
-							<?php } else { ?>
+			                <?php } else { ?>
                                 <li class="active">
                                     <a href="<?= base_url() . '' . $this->uri->segment(1) ?>" title="<?= ucfirst($this->uri->segment(1)); ?>">
-										<?= ucfirst($this->uri->segment(1)); ?>
+						                <?= ucfirst($this->uri->segment(1)); ?>
                                     </a>
                                 </li>
-							<?php } ?>
-							<?php if ($this->uri->segment(2)) { ?>
+			                <?php } ?>
+			                <?php if ($this->uri->segment(2)) { ?>
                                 <li>
                                     <a href="<?= base_url() . '' . $this->uri->segment(1) . '/' . $this->uri->segment(2) ?>" title="<?= ucfirst($this->uri->segment(2)); ?>">
-										<?= ucfirst($this->uri->segment(2)); ?>
+						                <?= ucfirst($this->uri->segment(2)); ?>
                                     </a>
                                 </li>
-							<?php } ?>
-							<?php if ($this->uri->segment(3)) { ?>
+			                <?php } ?>
+			                <?php if ($this->uri->segment(3)) { ?>
                                 <li>
                                     <a href="<?= base_url() . '' . $this->uri->segment(1) . '/' . $this->uri->segment(2) . '/' . $this->uri->segment(3) ?>" title="<?= ucfirst($this->uri->segment(3)); ?>">
-										<?= ucfirst($this->uri->segment(3)); ?>
+						                <?= ucfirst($this->uri->segment(3)); ?>
                                     </a>
                                 </li>
-							<?php } ?>
-							<?php if ($this->uri->segment(4)) { ?>
+			                <?php } ?>
+			                <?php if ($this->uri->segment(4)) { ?>
                                 <li>
                                     ...
                                 </li>
-							<?php } ?>
-						<?php } ?>
+			                <?php } ?>
+		                <?php } ?>
                     </ol>
 
+                    <div class="pt50"></div>
                     <div class="container-fluid conteudo-principal">
 						<?php if ($this->session->flashdata('error') != null) { ?>
                             <div class="alert alert-danger">
@@ -601,7 +603,7 @@ $this->load->view('includes/custom_js');
                 </div>
             </div>
             <!--DIV FOOTER-->
-            <footer role="contentinfo">
+            <footer role="contentinfo" class="fixed">
                 <div class="">
                     <ul class="list-unstyled list-inline pull-left">
                         <li>

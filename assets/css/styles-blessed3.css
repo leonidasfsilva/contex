@@ -5398,7 +5398,7 @@ button.close {
     margin-bottom: 20px;
     list-style: none;
     background-color: #eeeeee;
-    border-radius: 2px;
+    /*border-radius: 2px;*/
 }
 
 .breadcrumb > li {
