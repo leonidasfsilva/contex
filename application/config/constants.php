@@ -12,14 +12,13 @@ include APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'codegen_helper.php';
  * | to control when new features and bugfixes are released
  * | and to avoid CSS conflicts on mobiles devices
  * |
- * | Format: YYYY.S.R
+ * | Format: YYYY.Q.R
  * |--------------------
  * | YYYY  - current year
- * | S     - current quarter of year (1st, 2nd, 3rd or 4th)
+ * | Q     - current quarter of year (1st, 2nd, 3rd or 4th)
  * | R     - current release version of system
- * |
  */
-$version       = '38';
+$version       = '39';
 $quarterOfYear = getQuarterOfCurrentYear();
 $currentYear   = date('Y');
 define("VERSION_APP", sprintf('%s.%s.%s', $currentYear, $quarterOfYear, $version));

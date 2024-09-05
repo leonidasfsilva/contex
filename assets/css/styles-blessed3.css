@@ -1312,7 +1312,7 @@ html {
 }
 
 body {
-    font-family: "Roboto", "Open Sans", "Droid Sans", Tahoma, Arial, sans-serif;
+    font-family: Inter, sans-serif;
     font-size: 13px;
     line-height: 1.54;
     color: #455a64;
@@ -7999,7 +7999,7 @@ h6,
 .h6 {
     margin-top: 16px;
     margin-bottom: 16px;
-    font-family: "Roboto", "Open Sans", "Droid Sans", Tahoma, Arial, sans-serif;
+    font-family: Inter, sans-serif;
 }
 
 h1,
