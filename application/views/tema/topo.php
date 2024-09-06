@@ -519,65 +519,65 @@ $this->load->view('includes/custom_js');
                 <!--DIV PRINCIPAL-->
                 <div class="page-content">
                     <!--BREADCRUMB-->
-                    <ol class="breadcrumb top">
+                    <div class="pb50">
+                        <ol class="breadcrumb top">
 
-                        <li class="">
-                            <a href=" <?= base_url() ?>" title="Painel Inicial">
-                                Painel Inicial
-                            </a>
-                        </li>
-		                <?php if ($this->uri->segment(1)) {
-			                if ($this->uri->segment(1) == 'financeiro') { ?>
-                                <li class="dropdown dropdown-hover">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="link" aria-haspopup="false" aria-expanded="false"><?= ucfirst($this->uri->segment(1)); ?> <span class="caret"></span></a>
-                                    <ul class="dropdown-menu dropdown-menu-hover arrow" role="menu">
-                                        <li <?= ($this->uri->segment(2) == 'lancamentos' ? 'class="active"' : '') ?>>
-                                            <a href="<?= base_url('financeiro/lancamentos') ?>"><i class="pull-right fal fa-chart-mixed-up-circle-dollar fa-lg"></i> Lançamentos</a>
-                                        </li>
-                                        <li <?= ($this->uri->segment(2) == 'faturas' ? 'class="active"' : '') ?>>
-                                            <a href="<?= base_url('financeiro/faturas') ?>"><i class="pull-right fal fa-file-invoice-dollar fa-lg"></i> Faturas</a>
-                                        </li>
-                                        <li <?= ($this->uri->segment(2) == 'cartoes' ? 'class="active"' : '') ?>>
-                                            <a href="<?= base_url('financeiro/cartoes') ?>"><i class="pull-right fal fa-credit-card fa-lg"></i> Cartões</a>
-                                        </li>
-                                        <li <?= ($this->uri->segment(2) == 'investimentos' ? 'class="active"' : '') ?>>
-                                            <a href="<?= base_url('financeiro/investimentos') ?>"><i class="pull-right fal fa-hand-holding-circle-dollar fa-lg"></i> Investimentos</a>
-                                        </li>
-                                        <li <?= ($this->uri->segment(2) == 'pendencias' ? 'class="active"' : '') ?>>
-                                            <a href="<?= base_url('financeiro/pendencias') ?>"><i class="pull-right fal fa-money-check-dollar-pen fa-lg"></i> Pendências</a>
-                                        </li>
-                                    </ul>
-                                </li>
-			                <?php } else { ?>
-                                <li class="active">
-                                    <a href="<?= base_url() . '' . $this->uri->segment(1) ?>" title="<?= ucfirst($this->uri->segment(1)); ?>">
-						                <?= ucfirst($this->uri->segment(1)); ?>
-                                    </a>
-                                </li>
-			                <?php } ?>
-			                <?php if ($this->uri->segment(2)) { ?>
-                                <li>
-                                    <a href="<?= base_url() . '' . $this->uri->segment(1) . '/' . $this->uri->segment(2) ?>" title="<?= ucfirst($this->uri->segment(2)); ?>">
-						                <?= ucfirst($this->uri->segment(2)); ?>
-                                    </a>
-                                </li>
-			                <?php } ?>
-			                <?php if ($this->uri->segment(3)) { ?>
-                                <li>
-                                    <a href="<?= base_url() . '' . $this->uri->segment(1) . '/' . $this->uri->segment(2) . '/' . $this->uri->segment(3) ?>" title="<?= ucfirst($this->uri->segment(3)); ?>">
-						                <?= ucfirst($this->uri->segment(3)); ?>
-                                    </a>
-                                </li>
-			                <?php } ?>
-			                <?php if ($this->uri->segment(4)) { ?>
-                                <li>
-                                    ...
-                                </li>
-			                <?php } ?>
-		                <?php } ?>
-                    </ol>
-
-                    <div class="pt50"></div>
+                            <li class="">
+                                <a href=" <?= base_url() ?>" title="Painel Inicial">
+                                    Painel Inicial
+                                </a>
+                            </li>
+							<?php if ($this->uri->segment(1)) {
+								if ($this->uri->segment(1) == 'financeiro') { ?>
+                                    <li class="dropdown dropdown-hover">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="link" aria-haspopup="false" aria-expanded="false"><?= ucfirst($this->uri->segment(1)); ?> <span class="caret"></span></a>
+                                        <ul class="dropdown-menu dropdown-menu-hover arrow" role="menu">
+                                            <li <?= ($this->uri->segment(2) == 'lancamentos' ? 'class="active"' : '') ?>>
+                                                <a href="<?= base_url('financeiro/lancamentos') ?>"><i class="pull-right fal fa-chart-mixed-up-circle-dollar fa-lg"></i> Lançamentos</a>
+                                            </li>
+                                            <li <?= ($this->uri->segment(2) == 'faturas' ? 'class="active"' : '') ?>>
+                                                <a href="<?= base_url('financeiro/faturas') ?>"><i class="pull-right fal fa-file-invoice-dollar fa-lg"></i> Faturas</a>
+                                            </li>
+                                            <li <?= ($this->uri->segment(2) == 'cartoes' ? 'class="active"' : '') ?>>
+                                                <a href="<?= base_url('financeiro/cartoes') ?>"><i class="pull-right fal fa-credit-card fa-lg"></i> Cartões</a>
+                                            </li>
+                                            <li <?= ($this->uri->segment(2) == 'investimentos' ? 'class="active"' : '') ?>>
+                                                <a href="<?= base_url('financeiro/investimentos') ?>"><i class="pull-right fal fa-hand-holding-circle-dollar fa-lg"></i> Investimentos</a>
+                                            </li>
+                                            <li <?= ($this->uri->segment(2) == 'pendencias' ? 'class="active"' : '') ?>>
+                                                <a href="<?= base_url('financeiro/pendencias') ?>"><i class="pull-right fal fa-money-check-dollar-pen fa-lg"></i> Pendências</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+								<?php } else { ?>
+                                    <li class="active">
+                                        <a href="<?= base_url() . '' . $this->uri->segment(1) ?>" title="<?= ucfirst($this->uri->segment(1)); ?>">
+											<?= ucfirst($this->uri->segment(1)); ?>
+                                        </a>
+                                    </li>
+								<?php } ?>
+								<?php if ($this->uri->segment(2)) { ?>
+                                    <li>
+                                        <a href="<?= base_url() . '' . $this->uri->segment(1) . '/' . $this->uri->segment(2) ?>" title="<?= ucfirst($this->uri->segment(2)); ?>">
+											<?= ucfirst($this->uri->segment(2)); ?>
+                                        </a>
+                                    </li>
+								<?php } ?>
+								<?php if ($this->uri->segment(3)) { ?>
+                                    <li>
+                                        <a href="<?= base_url() . '' . $this->uri->segment(1) . '/' . $this->uri->segment(2) . '/' . $this->uri->segment(3) ?>" title="<?= ucfirst($this->uri->segment(3)); ?>">
+											<?= ucfirst($this->uri->segment(3)); ?>
+                                        </a>
+                                    </li>
+								<?php } ?>
+								<?php if ($this->uri->segment(4)) { ?>
+                                    <li>
+                                        ...
+                                    </li>
+								<?php } ?>
+							<?php } ?>
+                        </ol>
+                    </div>
                     <div class="container-fluid conteudo-principal">
 						<?php if ($this->session->flashdata('error') != null) { ?>
                             <div class="alert alert-danger">
@@ -600,30 +600,42 @@ $this->load->view('includes/custom_js');
 							echo $this->load->view($view, null, true);
 						} ?>
                     </div>
-                </div>
-            </div>
-            <!--DIV FOOTER-->
-            <footer role="contentinfo" class="fixed">
-                <div class="">
-                    <ul class="list-unstyled list-inline pull-left">
-                        <li>
-                            <h6 style="margin: 0; text-transform: none"><?= sprintf('&copy; 2019 - %s • %s %s • ver. %s', date('Y'), 'CONTEX', '<span class="hidden-xs">- Sistema de Gestão</span>', APP_VERSION); ?> </h6>
-                        </li>
-                    </ul>
-                    <span class="pull-right badge badge-inverse hidden-print" id="back-to-top" style="cursor: pointer; background: #b2b2b2">Voltar ao topo <i class="fas fad fa-circle-arrow-up fa-fw"></i></span>
-                </div>
-            </footer>
+                    <div class="footer">
+                        <div class="row">
+                            <span class="font-11"><?= sprintf('&copy; 2019 - %s • %s %s • ver. %s', date('Y'), 'CONTEX', '<span class="hidden-xs">- Sistema de Gestão</span>', APP_VERSION); ?> </span>
+                            <!--<div class="col-lg-2 pull-right">-->
+                            <!--    <span class="pull-right badge badge-inverse hidden-print" id="back-to-top" style="cursor: pointer; background: #b2b2b2">Voltar ao topo <i class="fas fad fa-circle-arrow-up fa-fw"></i></span>-->
+                            <!--</div>-->
+                        </div>
+                    </div>
+                    <div style='float:right; width: 100px; height: fit-content;'>
+                        <div class="footer">
+                            <div class="row">
+                                <span class="badge badge-inverse hidden-print" id="back-to-top" style="cursor: pointer; background: #b2b2b2">Voltar ao topo <i class="fas fad fa-circle-arrow-up fa-fw"></i></span>
+                            </div>
+                        </div>
+                    </div>
 
-            <!--SPINNER LOADER-->
-            <div class="preloader" style="display: none">
-                <i class="fas fa-duotone fa-spinner-third fa-spin cssload-speeding-wheel"></i>
-                <!--<i class="fas fa-spinner fa-spin-pulse fa-2x cssload-speeding-wheel"></i>-->
-                <h4 class="preloader-text font-weight-bold text-gray">
-                    Aguarde...
-                </h4>
+                </div>
+
             </div>
         </div>
+        <!--DIV FOOTER-->
+        <!--<footer role="contentinfo" class="navbar-fixed-bottom ">-->
+
+        
+
+        <!--</footer>-->
+        <!--SPINNER LOADER-->
+        <div class="preloader" style="display: none">
+            <i class="fas fa-duotone fa-spinner-third fa-spin cssload-speeding-wheel"></i>
+            <!--<i class="fas fa-spinner fa-spin-pulse fa-2x cssload-speeding-wheel"></i>-->
+            <h4 class="preloader-text font-weight-bold text-gray">
+                Aguarde...
+            </h4>
+        </div>
     </div>
+</div>
 </div>
 </body>
 
