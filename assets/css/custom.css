@@ -25,7 +25,13 @@
 .breadcrumb.top {
     position: fixed;
     z-index: 999;
-    width: 100%;
+    width: 85%;
+}
+
+.footer.fixed {
+    position: fixed;
+    z-index: 999;
+    width: 85%;
 }
 
 *[disabled], *:disabled {

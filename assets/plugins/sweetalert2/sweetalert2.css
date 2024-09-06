@@ -273,7 +273,7 @@
   border-radius: 5px;
   background: #fff;
   font-family: inherit;
-  font-size: 1rem;
+  /*font-size: 1.100em;*/
 }
 .swal2-popup:focus {
   outline: none;
@@ -288,7 +288,7 @@
   margin: 0;
   padding: 0.8em 1em 0;
   color: #595959;
-  font-size: 1.875em;
+  font-size: 14pt;
   font-weight: 600;
   text-align: center;
   text-transform: none;
@@ -305,6 +305,7 @@
   width: 100%;
   margin: 1.25em auto 0;
   padding: 0;
+  font-size: 9pt;
 }
 .swal2-actions:not(.swal2-loading) .swal2-styled[disabled] {
   opacity: 0.4;
@@ -345,9 +346,9 @@
   border: 0;
   border-radius: 0.25em;
   background: initial;
-  background-color: #7367f0;
+  background-color: #0f93d5;
   color: #fff;
-  font-size: 1em;
+  /*font-size: 1em;*/
 }
 .swal2-styled.swal2-confirm:focus {
   box-shadow: 0 0 0 3px rgba(115, 103, 240, 0.5);
@@ -367,9 +368,9 @@
   border: 0;
   border-radius: 0.25em;
   background: initial;
-  background-color: #6e7d88;
+  background-color: #a0a6a9;
   color: #fff;
-  font-size: 1em;
+  /*font-size: 1em;*/
 }
 .swal2-styled.swal2-cancel:focus {
   box-shadow: 0 0 0 3px rgba(110, 125, 136, 0.5);
@@ -457,7 +458,7 @@
   margin: 0;
   padding: 1em 1.6em 0.3em;
   color: #545454;
-  font-size: 10pt;
+  font-size: 11pt;
   font-weight: normal;
   line-height: normal;
   text-align: center;

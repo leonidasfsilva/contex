@@ -259,8 +259,12 @@
             input: 'email',
             inputPlaceholder: 'Digite seu email',
             showCancelButton: true,
-            confirmButtonText: '<i class="fas fa-send fa-fw"></i> Enviar ',
+            confirmButtonText: '<i class="fas fa-send fa-fw"></i> Enviar',
             cancelButtonText: '<i class="fas fa-times fa-fw"></i> Fechar ',
+            customClass: {
+                cancelButton: 'col-lg-5',
+                confirmButton: 'col-lg-5'
+            },
             reverseButtons: true,
             showCloseButton: true,
             showLoaderOnConfirm: true,

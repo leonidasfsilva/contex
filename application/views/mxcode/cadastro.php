@@ -68,7 +68,7 @@
 <section id="wrapper" class="login-register">
     <div class="login-box login-sidebar">
         <div class="text-center m-t-40">
-            <img class="contex-words" src="<?php echo base_url() ?>assets/img/contex_brand.png" alt="CONTEX - Sistema de Gestão"/>
+            <img class="contex-words" src="<?php echo base_url('assets/img/contex_brand.png') ?>" alt="CONTEX - Sistema de Gestão"/>
         </div>
         <div class="white-box box-login">
             <form class="form-horizontal floating-labels" id="formCadastro" method="post" action="<?= site_url('cadastro/cadastrar') ?>" autocomplete="off">
@@ -222,12 +222,16 @@
         Swal.fire({
             position: 'top',
             title: 'Não recebeu o email de verificação?',
-            html: '<div>Informe o email que utilizou em seu cadastro e lhe enviaremos um novo email para confirmar sua conta:</div>',
+            html: '<div>Informe o email utilizado em seu cadastro e lhe enviaremos um novo email para confirmar sua conta:</div>',
             input: 'email',
             inputPlaceholder: 'Digite seu email',
             showCancelButton: true,
             confirmButtonText: '<i class="fas fa-send fa-fw"></i> Enviar ',
             cancelButtonText: '<i class="fas fa-times fa-fw"></i> Fechar ',
+            customClass: {
+                cancelButton: 'col-lg-5',
+                confirmButton: 'col-lg-5'
+            },
             reverseButtons: true,
             showCloseButton: true,
             showLoaderOnConfirm: true,
