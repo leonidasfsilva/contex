@@ -50,6 +50,44 @@
     width: 100%;
 }
 
+/*SPINNER LOADER*/
+.cssload-speeding-wheel {
+    font-size: 50pt !important;
+    color: rgb(140, 191, 213);
+    --fa-animation-duration: 0.5s;
+    /*animation: cssload-spin 700ms infinite linear;*/
+}
+
+@media only screen and (max-width: 600px) {
+    .preloader {
+        height: 80%;
+    }
+}
+
+.preloader-text {
+    position: absolute;
+    padding-top: 10px;
+    font-size: 12pt;
+    text-align: center;
+    color: rgb(187, 187, 187);
+}
+
+.preloader-login {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.preloader-login .preloader-text {
+    position: absolute;
+    padding-top: 110px;
+    font-size: 12pt;
+    text-align: center;
+    color: rgb(187, 187, 187);
+    font-weight: bold;
+}
+
 *[disabled], *:disabled {
     pointer-events: all !important;
     cursor: not-allowed;
@@ -200,40 +238,6 @@ table {
     justify-content: center;
     align-items: center;
     background: #eee;
-}
-
-/*SPINNER LOADER*/
-.cssload-speeding-wheel {
-    font-size: 50pt !important;
-    color: rgb(140, 191, 213);
-    --fa-animation-duration: 0.5s;
-    /*animation: cssload-spin 700ms infinite linear;*/
-}
-
-@media only screen and (max-width: 600px) {
-    .preloader {
-        height: 80%;
-    }
-}
-
-.preloader-text {
-    position: absolute;
-    padding-top: 10px;
-    font-size: 12pt;
-    text-align: center;
-    color: rgb(187, 187, 187);
-}
-
-.preloader-login {
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.preloader-login .preloader-text {
-    font-size: 14pt;
-    font-weight: bold;
 }
 
 .user-avatar {

@@ -48,9 +48,9 @@
             <div class="preloader-login" style="display: none">
                 <i class="fas fa-duotone fa-spinner-third fa-spin cssload-speeding-wheel"></i>
                 <!--<i class="fas fa-spinner fa-spin-pulse fa-2x cssload-speeding-wheel"></i>-->
-                <h4 class="preloader-text font-weight-bold text-gray">
+                <p class="preloader-text font-weight-bold text-gray">
                     Aguarde...
-                </h4>
+                </p>
             </div>
 
             <form class="form-horizontal floating-labels before-loading" id="formLogin" method="post" action="<?php echo base_url('mxcode/verificarLogin') ?>">
@@ -113,16 +113,25 @@
 
                 </div>
             </form>
-        </div>
-        <footer role="contentinfo" class="footer">
-            <div class="clearfix text-center">
-                <ul class="list-unstyled list-inline pl-sm">
-                    <li>
-                        <h6 style="margin: 0; text-transform: none"><?= sprintf('&copy; 2019 - %s %s', date('Y'), '• Powered by <a href="https://mxcode.net" >MX CODE SISTEMAS</a>') ?></h6>
-                    </li>
-                </ul>
+            <div class="footer-login">
+                <div class="container-fluid pb0">
+                    <p class="font-12"><?= sprintf('&copy; 2019 - %s %s', date('Y'), '• Powered by <a href="https://mxcode.net" >MX CODE SISTEMAS</a>') ?></p>
+
+                </div>
             </div>
-        </footer>
+
+        </div>
+
+        <!--<footer role="contentinfo" class="footer">-->
+        <!--    <div class="clearfix text-center">-->
+        <!--        <ul class="list-unstyled list-inline pl-sm">-->
+        <!--            <li>-->
+        <!--                <h6 style="margin: 0; text-transform: none">--><?php //= sprintf('&copy; 2019 - %s %s', date('Y'), '• Powered by <a href="https://mxcode.net" >MX CODE SISTEMAS</a>') ?><!--</h6>-->
+        <!--            </li>-->
+        <!--        </ul>-->
+        <!--    </div>-->
+        <!--</footer>-->
+        <!--DIV FOOTER-->
     </div>
 </section>
 

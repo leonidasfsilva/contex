@@ -620,10 +620,7 @@ $this->load->view('includes/custom_js');
                 </div>
             </div>
         </div>
-        <!--<footer role="contentinfo" class="navbar-fixed-bottom ">-->
 
-
-        <!--</footer>-->
         <!--SPINNER LOADER-->
         <div class="preloader" style="display: none">
             <div class="row">
