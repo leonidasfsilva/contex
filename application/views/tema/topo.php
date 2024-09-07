@@ -5,7 +5,7 @@ $this->load->view('includes/js');
 $this->load->view('includes/custom_js');
 ?>
 
-<body class="infobar-offcanvas infobar-overlay sidebar-scroll" id="body">
+<body class="infobar-offcanvas infobar-overlay sidebar-scroll sidebar-hideon-mobile" id="body">
 
 <!--    MENU SUSPENSO-->
 <div id="headerbar">
@@ -512,7 +512,7 @@ $this->load->view('includes/custom_js');
                 </div>
             </div>
         </div>
-        <!--                    SIDEBAR fim-->
+        <!--SIDEBAR-->
 
         <div class="static-content-wrapper">
             <div class="static-content principal-div">
@@ -521,7 +521,6 @@ $this->load->view('includes/custom_js');
                     <!--BREADCRUMB-->
                     <div class="pb50">
                         <ol class="breadcrumb top">
-
                             <li class="">
                                 <a href=" <?= base_url() ?>" title="Painel Inicial">
                                     Painel Inicial
@@ -600,6 +599,8 @@ $this->load->view('includes/custom_js');
 							echo $this->load->view($view, null, true);
 						} ?>
                     </div>
+
+                    <!--DIV FOOTER-->
                     <div class="footer">
                         <div class="row">
                             <span class="font-11"><?= sprintf('&copy; 2019 - %s • %s %s • ver. %s', date('Y'), 'CONTEX', '<span class="hidden-xs">- Sistema de Gestão</span>', APP_VERSION); ?> </span>
@@ -615,24 +616,22 @@ $this->load->view('includes/custom_js');
                             </div>
                         </div>
                     </div>
-
+                    <!--DIV FOOTER-->
                 </div>
-
             </div>
         </div>
-        <!--DIV FOOTER-->
         <!--<footer role="contentinfo" class="navbar-fixed-bottom ">-->
 
-        
 
         <!--</footer>-->
         <!--SPINNER LOADER-->
         <div class="preloader" style="display: none">
-            <i class="fas fa-duotone fa-spinner-third fa-spin cssload-speeding-wheel"></i>
-            <!--<i class="fas fa-spinner fa-spin-pulse fa-2x cssload-speeding-wheel"></i>-->
-            <h4 class="preloader-text font-weight-bold text-gray">
-                Aguarde...
-            </h4>
+            <div class="row">
+
+                <i class="fas fa-duotone fa-spinner-third fa-spin cssload-speeding-wheel"></i>
+                <!--<i class="fas fa-spinner fa-spin-pulse fa-2x cssload-speeding-wheel"></i>-->
+                <p class="preloader-text font-weight-bold text-gray">Aguarde...</p>
+            </div>
         </div>
     </div>
 </div>

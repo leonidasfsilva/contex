@@ -37,7 +37,8 @@
 .breadcrumb.top {
     position: fixed;
     z-index: 999;
-    width: 85%;
+    width: 100%;
+    padding-left: 0;
 }
 
 .footer {
@@ -194,7 +195,8 @@ table {
 
 .preloader {
     height: 100%;
-    display: flex;
+    width: 0 !important;
+    display: inline-grid;
     justify-content: center;
     align-items: center;
     background: #eee;
@@ -216,7 +218,7 @@ table {
 
 .preloader-text {
     position: absolute;
-    padding-top: 110px;
+    padding-top: 10px;
     font-size: 12pt;
     text-align: center;
     color: rgb(187, 187, 187);

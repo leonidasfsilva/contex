@@ -8640,6 +8640,16 @@ footer h6 {
     position: fixed !important;
 }
 
+@media only screen and (max-width: 600px) {
+    body.sidebar-hideon-mobile.sidebar-collapsed .static-sidebar-wrapper {
+        display: none;
+    }
+
+    body.sidebar-hideon-mobile .static-sidebar-wrapper {
+        display: table-cell;
+    }
+}
+
 body.sidebar-hideon-collapse.sidebar-collapsed .static-sidebar-wrapper {
     display: none;
 }
