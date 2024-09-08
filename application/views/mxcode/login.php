@@ -15,7 +15,9 @@
     <link href="<?php echo base_url(); ?>assets/css/bootstrap-agile.css?v=<?= getAppVersion() ?>" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/agile-style.css?v=<?= getAppVersion() ?>" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/custom.css?v=<?= getAppVersion() ?>" type="text/css" rel="stylesheet">
-    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,400italic,600,700' rel='stylesheet' type='text/css'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.css" type="text/css" rel="stylesheet">
 
     <!--    Font Awesome 6 -->
@@ -174,12 +176,6 @@
     $('#formLogin').submit(function (event) {
         var form = this;
         event.preventDefault();
-        // $('#btn-acessar').addClass('disabled');
-        // $('#btn-acessar').html('Acessando... <i class="fa fa-spinner fa-pulse fa-fw"></i>');
-        // $('#progress-acessar').removeClass('hidden');
-        // $(".progress-bar").animate({
-        //     width: "100%"
-        // }, 1000);
 
         if ($(form).valid()) {
             $(".before-loading").hide();
@@ -274,7 +270,7 @@
                         //     )
                         // }
                         resolve();
-                    }, 2000)
+                    }, 1000)
                 })
             },
             allowOutsideClick: () => !swal.isLoading()
@@ -283,7 +279,7 @@
                 $(function () {
                     $.ajax({
                         type: "POST",
-                        url: "<?= site_url('redefinirsenha/gerartoken'); ?>",
+                        url: "<?= site_url('redefinirsenha/gerartoken?XDEBUG_SESSION=1'); ?>",
                         data: {
                             'email': result.value
                         }, // <--- THIS IS THE CHANGE
@@ -336,13 +332,11 @@
                         },
                         error: function () {
                             alert('Erro na função');
-
+                            console.log(res)
                         }
                     });
 
                 });
-
-            } else {
 
             }
         })

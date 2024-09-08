@@ -111,12 +111,12 @@ class Redefinicao_model extends CI_Model
         $this->db->insert('recuperacao_senha', $data);
     }
 
-    function validaTokenById($id)
+    function checkToken($token)
     {
-        $this->db
-            ->where('id_recuperacao_senha', $id)
-            ->where('status', 1);
-        return $this->db->get('recuperacao_senha');
+	    $this->db
+		    ->select('*, TIMESTAMPDIFF(MINUTE , data_solicitacao, CURRENT_TIMESTAMP) AS validade')
+		    ->where('token', $token);
+	    return $this->db->get('recuperacao_senha');
     }
 
     function verificaValidadeToken($id)
@@ -127,11 +127,24 @@ class Redefinicao_model extends CI_Model
         return $this->db->get('recuperacao_senha');
     }
 
-    function invalidaToken($id)
+    function invalidaToken($token)
     {
         $this->db
-            ->set('status', 0)
-            ->where('id_recuperacao_senha', $id)
+	        ->set('status', 0)
+            ->set('invalidado', 1)
+            ->where('token', $token)
+            ->update('recuperacao_senha');
+    }
+	
+    function validaToken($token, $status = null)
+    {
+	    if ($status) {
+		    $this->db->set('status', 0);
+	    }
+	    
+	    $this->db
+            ->set('validado', 1)
+            ->where('token', $token)
             ->update('recuperacao_senha');
     }
 
@@ -141,7 +154,7 @@ class Redefinicao_model extends CI_Model
         return $this->db->get('usuarios');
     }
 
-    function atualizaAdmin($id, $data)
+    function atualizaUsuario($id, $data)
     {
         $this->db->where('id_usuarios', $id);
         $this->db->update('usuarios', $data);

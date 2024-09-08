@@ -11,9 +11,12 @@
     <meta name="author" content="Leônidas Ferreira">
     <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/contex_logo.png" type="image/x-icon"/>
 
-    <link href="<?php echo base_url(); ?>assets/css/bootstrap-agile.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/css/agile-style.css" rel="stylesheet">
-    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,400italic,600,700' rel='stylesheet' type='text/css'>
+    <link href="<?php echo base_url(); ?>assets/css/bootstrap-agile.css?v=<?= getAppVersion() ?>" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/agile-style.css?v=<?= getAppVersion() ?>" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/custom.css?v=<?= getAppVersion() ?>" type="text/css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.css" type="text/css" rel="stylesheet">
 
     <!--    Font Awesome 6 -->
@@ -33,33 +36,6 @@
     <script src="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/jquery.validate.js"></script>
 </head>
-<style>
-    .preloader-login {
-        display: none;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        position: static;
-        z-index: 1;
-        background: #EEEEEE;
-    }
-
-    .preloader-login .cssload-speeding-wheel {
-        position: absolute;
-        top: calc(30%);
-        left: calc(50% - 4%);
-    }
-
-    @media screen and (min-width: 1024px) {
-        .box-login {
-            position: relative;
-            right: 0px;
-            padding-top: calc(30%);
-            height: 100%;
-        }
-    }
-</style>
 <body class="focused-form" style="background-color: #37474f">
 
 <div class="preloader">
@@ -71,6 +47,14 @@
             <img class="contex-words" src="<?php echo base_url('assets/img/contex_brand.png') ?>" alt="CONTEX - Sistema de Gestão"/>
         </div>
         <div class="white-box box-login">
+            <!--SPINNER LOADER-->
+            <div class="preloader-login" style="display: none">
+                <i class="fas fa-duotone fa-spinner-third fa-spin cssload-speeding-wheel"></i>
+                <!--<i class="fas fa-spinner fa-spin-pulse fa-2x cssload-speeding-wheel"></i>-->
+                <p class="preloader-text font-weight-bold text-gray">
+                    Aguarde...
+                </p>
+            </div>
             <form class="form-horizontal floating-labels" id="formCadastro" method="post" action="<?= site_url('cadastro/cadastrar') ?>" autocomplete="off">
                 <div class="preloader-login">
                     <div class="cssload-speeding-wheel"></div>
@@ -130,12 +114,16 @@
                     </div>
                 </div>
             </form>
+            <div class="footer-login">
+                <div class="container-fluid pb0">
+                    <span class="font-12"><?= sprintf('&copy; 2019 - %s %s', date('Y'), 'CONTEX • Sistema de Gestão', '• Powered by <a href="https://mxcode.net" >MX CODE SISTEMAS</a>') ?></span>
+                    <p class="font-12"><?= sprintf('%s', 'Powered by <a href="https://mxcode.net" >MX CODE SISTEMAS</a>') ?></p>
+
+                </div>
+            </div>
         </div>
     </div>
 </section>
-
-<!-- End loading site level scripts -->
-
 
 <script type="text/javascript">
     $('#formCadastro').validate({
@@ -197,12 +185,7 @@
     $('#formCadastro').submit(function (event) {
         var form = this;
         event.preventDefault();
-        $('#btn-acessar').addClass('disabled');
-        $('#btn-acessar').html('Acessando... <i class="fa fa-spinner fa-pulse fa-fw"></i>');
-        $('#progress-acessar').removeClass('hidden');
-        $(".progress-bar").animate({
-            width: "100%"
-        }, 1000);
+
         if ($(form).valid()) {
             $(".before-loading").fadeOut();
             $(".preloader-login").fadeIn();
@@ -284,8 +267,7 @@
 
                                     }
                                 })
-                            }
-                            else if (res.validacao == 'ja_validado') {
+                            } else if (res.validacao == 'ja_validado') {
                                 Swal.fire({
                                     position: 'top',
                                     type: 'success',
@@ -343,9 +325,9 @@
             }
         })
     }
-
-
-    <?php if ($this->session->flashdata('erro') != null) { ?>
+	
+	
+	<?php if ($this->session->flashdata('erro') != null) { ?>
     Swal.fire({
         position: 'top',
         type: 'error',
@@ -365,9 +347,9 @@
 
         }
     });
-    <?php } ?>
-
-    <?php if ($this->session->flashdata('sucesso') != null) { ?>
+	<?php } ?>
+	
+	<?php if ($this->session->flashdata('sucesso') != null) { ?>
     Swal.fire({
         position: 'top',
         type: 'success',
@@ -387,7 +369,7 @@
 
         }
     });
-    <?php } ?>
+	<?php } ?>
 
 </script>
 </body>

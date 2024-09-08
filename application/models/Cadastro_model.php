@@ -208,7 +208,7 @@ class Cadastro_model extends CI_Model
         }
     }
 
-    function atualizaAdmin($id, $data)
+    function atualizaUsuario($id, $data)
     {
         $this->db->where('id_usuarios', $id);
         $this->db->update('usuarios', $data);

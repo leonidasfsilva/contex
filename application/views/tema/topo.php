@@ -612,7 +612,7 @@ $this->load->view('includes/custom_js');
                     <div style='float:right; width: 100px; height: fit-content;'>
                         <div class="footer">
                             <div class="row">
-                                <span class="badge badge-inverse hidden-print" id="back-to-top" style="cursor: pointer; background: #b2b2b2">Voltar ao topo <i class="fas fad fa-circle-arrow-up fa-fw"></i></span>
+                                <span class="badge badge-inverse hidden-print" id="back-to-top" style="cursor: pointer; background: #b2b2b2">Voltar ao topo <i class="fal fa-circle-arrow-up fa-swap-opacity fa-fw"></i></span>
                             </div>
                         </div>
                     </div>
