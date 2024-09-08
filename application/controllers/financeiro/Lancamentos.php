@@ -122,8 +122,8 @@ class Lancamentos extends CI_Controller
 				}
 				break;
 			default:
-				$startEndDate     = buildStartEndDate($defaultMonthUser);
-				$referenceMonth   = $startEndDate['referenceMonth'];
+				$startEndDate   = buildStartEndDate($defaultMonthUser);
+				$referenceMonth = $startEndDate['referenceMonth'];
 				
 				if (!isset($referenceYear) && !$referenceYear) {
 					$referenceYear = $startEndDate['referenceYear'];
@@ -207,9 +207,9 @@ class Lancamentos extends CI_Controller
 			if ($key != 'per_page') {
 				if ($value == $lastElement) {
 					$query_string .= $key . '=' . $value;
-				} else {
-					$query_string .= $key . '=' . $value . '&';
+					continue;
 				}
+				$query_string .= $key . '=' . $value . '&';
 			}
 		}
 		

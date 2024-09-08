@@ -839,8 +839,8 @@ if (!$results) {
                                 </select>
                                 <span class="input-group-addon">ano</span>
                                 <select class="form-control" id="anoReferenciaSelect" name="anoReferencia">
-									<?php if ($monthList) {
-										foreach ($monthList as $year) { ?>
+									<?php if ($yearsList) {
+										foreach ($yearsList as $year) { ?>
                                             <option value="<?= $year ?>" <?= ($referenceYear == $year ? 'selected' : '') ?>>
 												<?= $year ?>
                                             </option>

@@ -110,7 +110,6 @@
                             <!--<p><a href="--><?php //echo base_url('conecte')?><!--" class="text-primary"><b>Acesso para clientes</b></a>.</p>-->
                         </div>
                     </div>
-
                 </div>
             </form>
             <div class="footer-login">
@@ -120,19 +119,7 @@
 
                 </div>
             </div>
-
         </div>
-
-        <!--<footer role="contentinfo" class="footer">-->
-        <!--    <div class="clearfix text-center">-->
-        <!--        <ul class="list-unstyled list-inline pl-sm">-->
-        <!--            <li>-->
-        <!--                <h6 style="margin: 0; text-transform: none">--><?php //= sprintf('&copy; 2019 - %s %s', date('Y'), '• Powered by <a href="https://mxcode.net" >MX CODE SISTEMAS</a>') ?><!--</h6>-->
-        <!--            </li>-->
-        <!--        </ul>-->
-        <!--    </div>-->
-        <!--</footer>-->
-        <!--DIV FOOTER-->
     </div>
 </section>
 
