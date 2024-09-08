@@ -115,7 +115,8 @@
             </form>
             <div class="footer-login">
                 <div class="container-fluid pb0">
-                    <p class="font-12"><?= sprintf('&copy; 2019 - %s %s', date('Y'), '• Powered by <a href="https://mxcode.net" >MX CODE SISTEMAS</a>') ?></p>
+                    <span class="font-12"><?= sprintf('&copy; 2019 - %s %s', date('Y'), 'CONTEX • Sistema de Gestão', '• Powered by <a href="https://mxcode.net" >MX CODE SISTEMAS</a>') ?></span>
+                    <p class="font-12"><?= sprintf('%s', 'Powered by <a href="https://mxcode.net" >MX CODE SISTEMAS</a>') ?></p>
 
                 </div>
             </div>

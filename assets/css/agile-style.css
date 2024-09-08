@@ -5405,7 +5405,7 @@ table.focus-on tbody tr.focused td {
     z-index: 999;
     bottom: 0;
     background: #ffffff;
-    padding: 0 0 0px 15px;
+    padding: 0 0 0px 30px;
     text-align: center;
 }
 
