@@ -414,7 +414,7 @@ function generateToken()
 
 function getResetPasswordMail($nomeRemetente, $ip, $navegador, $link, $date = null)
 {
-	$date = $date ?? date('dd/m/y H:i');
+	$date = $date ?? date('d/m/Y H:i');
 	
 	return
 		'<html>
