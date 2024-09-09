@@ -69,7 +69,7 @@
 					<?php if ($maintenanceMode) { ?>
                         <div class="row">
                             <div class="alert alert-warning">
-                                <button type="button" class="close text-white" data-dismiss="alert">
+                                <button type="button" class="close-i text-white">
                                     <i class="fad fa-triangle-person-digging text-white fa-2x"></i>
                                 </button>
                                 <strong>SISTEMA EM MANUTENÇÃO</strong>
@@ -114,9 +114,10 @@
                     </div>
                 </div>
             </form>
+
             <div class="footer-login">
                 <div class="container-fluid pb0">
-                    <span class="font-12"><?= sprintf('&copy; 2019 - %s %s', date('Y'), 'CONTEX • Sistema de Gestão', '• Powered by <a href="https://mxcode.net" >MX CODE SISTEMAS</a>') ?></span>
+                    <span id="version-link" class="font-12" title="<?= APP_VERSION ?>"><?= sprintf('&copy; 2019 - %s %s', date('Y'), 'CONTEX • Sistema de Gestão', '• Powered by <a href="https://mxcode.net" >MX CODE SISTEMAS</a>') ?></span>
                     <p class="font-12"><?= sprintf('%s', 'Powered by <a href="https://mxcode.net" >MX CODE SISTEMAS</a>') ?></p>
 
                 </div>
@@ -126,6 +127,27 @@
 </section>
 
 <script type="text/javascript">
+    $('#version-link').click(function () {
+        getVersion()
+    })
+    
+    function getVersion() {
+        const Toast = Swal.fire({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            showCloseButton: true,
+            timer: 5000,
+            timerProgressBar: true,
+            icon: 'info',
+            title: 'Versão do Sistema: <?= APP_VERSION ?> (<?= phpversion() ?>)',
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+    }
+
     $('#eye_span').click(function (e) {
         e.preventDefault();
         if ($('#senha').attr('type') == 'password') {
