@@ -180,6 +180,7 @@ class Mxcode extends CI_Controller
 				
 				if ($this->session->userdata('last_url')) {
 					header('location:' . $this->session->userdata('last_url'));
+					return;
 				}
 				redirect('mxcode/login');
 			}
