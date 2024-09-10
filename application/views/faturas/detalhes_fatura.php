@@ -11,7 +11,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 			$disabled_lancamento_1 = '';
 		}
 		$statusFatura = 'ABERTA';
-		$label_status = 'primary';
+		$label_status = 'info';
 	} else if ($status_fatura == 2) {
 		$disabled_lancamento_1 = 'disabled';
 		$statusFatura          = 'FUTURA';
@@ -30,8 +30,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 		$pagamentoFatura = 'PENDENTE';
 		$label_pgto      = 'danger';
 	} else {
-		$pagamentoFatura = '';
-		$label_pgto      = '';
+		$pagamentoFatura = null;
+		$label_pgto      = 'info';
 	}
 	
 	$creditoFatura = 0;
@@ -60,29 +60,40 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             </button>
         </div>
     </div>
-    <div class="panel-body">
-        <div class="col-lg-3">
-            <div class="input-group">
-                <span class="input-group-addon font-weight-bold">Referência:</span>
-                <div class="input-group-addon"><span class="badge badge-info"><?= $nomeMes ?></span></div>
+    <div class="panel-body panel-no-padding">
+        <div class="row">
+            <div class="col-lg-3 col-xs-6">
+                <div class="note note-info mt0 mb0">
+                    <span class="font-weight-bold hidden-xs">Referência:</span>
+                    <span class="font-weight-bold visible-xs">Ref:</span>
+                    <span class="badge badge-info"><?= $nomeMes ?></span>
+                </div>
             </div>
-        </div>
-        <div class="col-lg-3">
-            <div class="input-group">
-                <span class="input-group-addon font-weight-bold">Vencimento:</span>
-                <div class="input-group-addon"><span class="badge badge-info"><?= date(('d/m/Y'), strtotime($fatura->vencimento)) ?></span></div>
+            <div class="col-lg-3 col-xs-6">
+                <div class="note note-info mt0 mb0">
+                    <span class="font-weight-bold hidden-xs">Vencimento:</span>
+                    <span class="font-weight-bold visible-xs">Venc:</span>
+                    <span class="badge badge-info"><?= date(('d/m/Y'), strtotime($fatura->vencimento)) ?></span>
+                </div>
             </div>
-        </div>
-        <div class="col-lg-3">
-            <div class="input-group">
-                <span class="input-group-addon font-weight-bold">Status:</span>
-                <div class="input-group-addon"><span class="badge badge-<?= $label_status ?>"><?= $statusFatura ?></span></div>
-            </div>
-        </div>
-        <div class="col-lg-3">
-            <div class="input-group">
-                <span class="input-group-addon font-weight-bold">Pagamento:</span>
-                <div class="input-group-addon"><span class="badge badge-<?= $label_pgto ?>"><?= $pagamentoFatura ?></span></div>
+            <div class="col-lg-6 col-xs-12">
+                <div class="note note-<?= $label_pgto ?? $label_status ?> p10 mt0 mb0">
+                    <div class="row ">
+                        <div class="col-xs-6 col-lg-4 pr0 pl0">
+                            <span class="font-weight-bold">Status:</span>
+                            <span class=" badge badge-<?= $label_pgto ?>"><?= $statusFatura ?></span>
+                        </div>
+                        <div class="col-xs-6 col-lg-4 pr0 pl0">
+                            <span class="font-weight-bold">Valor:</span>
+                            <span class=" badge badge-<?= $label_pgto ?>" id="valor-fatura">R$ </span>
+                        </div>
+                        <div class="col-xs-12 col-lg-4 pr0 pl0">
+                            <span class="font-weight-bold hidden-xs">Pagamento:</span>
+                            <span class="font-weight-bold visible-xs">Pagto:</span>
+                            <span class="badge badge-<?= $label_pgto ?>"><?= $pagamentoFatura ?></span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -317,7 +328,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     <input type="hidden" id="total-balance" value="<?php echo number_format($creditoFatura - $debitoFatura, 2, ',', '.') ?>">
                     <strong style="cursor: pointer;" title="Copiar para área de transferência" id="i-copy-total">
                         <i class="fas fa-copy fa-fw hidden" id="icon-total"></i>
-						<?php echo number_format($creditoFatura - $debitoFatura, 2, ',', '.') ?>
+						<?php echo number_format($creditoFatura + $debitoFatura, 2, ',', '.') ?>
                     </strong>
                 </td>
             </tr>
@@ -787,6 +798,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 </div>
 
 <script type="text/javascript">
+
     $('.obsLink').click(function () {
         var obsIcon = $(this).children('i')
         var obsText = $(this).children('span.obsText')
@@ -816,6 +828,10 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
     })
 
     $(document).ready(function ($) {
+        var invoiceTotalValue = $('#i-copy-total').text().trim()
+        $('#valor-fatura').append(invoiceTotalValue)
+        console.log(invoiceTotalValue)
+
         $('#novoLancamento').click(function () {
             $(".descricao").val('');
             $(".valor").val('');

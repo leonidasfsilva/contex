@@ -9800,7 +9800,7 @@ svg.peity {
 }
 
 .note > div * {
-    line-height: 34px;
+    /*line-height: 34px;*/
 }
 
 .notes-container .notes-list {
