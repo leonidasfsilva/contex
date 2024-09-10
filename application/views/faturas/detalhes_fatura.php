@@ -723,13 +723,13 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 </div>
                 <div class="modal-footer">
                     <div class="row">
-                        <div class="text-left col-xs-4" style="margin-top: -10px;">
+                        <div class="text-left col-xs-3 pr0" style="margin-top: -10px;">
                             <div class="checkbox icheck">
                                 <input type="checkbox" class="form-control estorno" name="estorno" value="1">
                             </div>
                             <label class="font-weight-bold">Estorno</label>
                         </div>
-                        <div class="col-xs-8">
+                        <div class="col-xs-9">
                             <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                                 <i class="fa fa-times fa-fw"></i> Cancelar
                             </button>
