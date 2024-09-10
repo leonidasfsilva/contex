@@ -84,7 +84,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     </div>
                     <div class="col-xs-6 col-lg-4 pr0 pl0">
                         <span class="font-weight-bold">Valor:</span>
-                        <span class=" badge badge-<?= $label_pgto ?>" id="valor-fatura">R$ </span>
+                        <span class=" badge badge-<?= $label_pgto ?>" id="valor-fatura"></span>
                     </div>
                     <div class="col-xs-12 col-lg-4 pr0 pl0">
                         <span class="font-weight-bold hidden-xs">Pagamento:</span>
@@ -796,6 +796,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 </div>
 
 <script type="text/javascript">
+    var invoiceTotalValue = $('#i-copy-total').text().trim()
+    $('#valor-fatura').append(invoiceTotalValue)
 
     $('.obsLink').click(function () {
         var obsIcon = $(this).children('i')
@@ -826,9 +828,6 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
     })
 
     $(document).ready(function ($) {
-        var invoiceTotalValue = $('#i-copy-total').text().trim()
-        $('#valor-fatura').append(invoiceTotalValue)
-        console.log(invoiceTotalValue)
 
         $('#novoLancamento').click(function () {
             $(".descricao").val('');
