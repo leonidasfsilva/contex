@@ -1692,10 +1692,9 @@ class Faturas extends CI_Controller
 					$monthName = getExtendedMonthName($fatura['mes_referencia'], 'MMM');
 				}
 				
-				$reference                                                    = $monthName . ' / ' . $fatura['ano_referencia'];
 				$result[$lancamentosTerceiros[0]["id_fatura"]]                = $fatura;
 				$result[$lancamentosTerceiros[0]["id_fatura"]]['cartao']      = $this->cartoes_model->getDetalhesCartao($fatura['id_cartao']);
-				$result[$lancamentosTerceiros[0]["id_fatura"]]['reference']   = $reference;
+				$result[$lancamentosTerceiros[0]["id_fatura"]]['reference']   = $monthName . ' / ' . $fatura['ano_referencia'];
 				$result[$lancamentosTerceiros[0]["id_fatura"]]['lancamentos'] = $lancamentosTerceiros;
 			}
 		}

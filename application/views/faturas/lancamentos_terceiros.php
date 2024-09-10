@@ -348,39 +348,39 @@ if (isset($referenceMonth) && $referenceMonth) {
                 <div class="row">
                     <div class="form-group col-lg-12">
                         <label class="font-weight-bold">Descrição:</label>
-                        <input class="form-control descricao" type="text" name="descricao" readonly />
+                        <input class="form-control descricao" type="text" name="descricao" disabled />
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-lg-6">
+                    <div class="form-group col-lg-6 col-xs-6">
                         <label class="font-weight-bold">Valor da Compra *</label>
-                        <input class="form-control money valor" type="text" name="valor" readonly />
+                        <input class="form-control money valor" type="text" name="valor" disabled />
                     </div>
-                    <div class="form-group col-lg-6">
+                    <div class="form-group col-lg-6 col-xs-6">
                         <label class="font-weight-bold">Data da Compra</label>
-                        <input class="form-control datepicker dataCompra" type="text" name="data_compra" readonly />
+                        <input class="form-control datepicker dataCompra" type="text" name="data_compra" disabled />
                     </div>
                 </div>
                 <div class="row divContainerParcelamento">
                     <div>
-                        <div class="form-group col-lg-4">
+                        <div class="form-group col-lg-4 col-xs-6">
                             <label class="font-weight-bold">Parcelas</label>
-                            <input class="form-control qntParcelas" type="text" readonly />
+                            <input class="form-control qntParcelas" type="text" disabled />
                         </div>
-                        <div class="form-group col-lg-4">
+                        <div class="form-group col-lg-4 col-xs-6">
                             <label class="font-weight-bold">Valor da Parcela</label>
-                            <input class="form-control valorParcela" type="text" name="valor_parcela" readonly />
+                            <input class="form-control valorParcela" type="text" name="valor_parcela" disabled />
                         </div>
                         <div class="form-group col-lg-4">
                             <label class="font-weight-bold">Nome do terceiro</label>
-                            <input class="form-control nomeCliente" type="text" name="nome_cliente" readonly />
+                            <input class="form-control nomeCliente" type="text" name="nome_cliente" disabled />
                         </div>
                     </div>
                 </div>
                 <div class="divObservacoes hidden">
                     <div class="form-group mb0">
                         <label for="observacoes" class="font-weight-bold">Observações</label>
-                        <textarea rows="5" class="form-control observacoesTextarea" id="observacoesEditar" name="observacoes" readonly></textarea>
+                        <textarea rows="5" class="form-control observacoesTextarea" id="observacoesEditar" name="observacoes" disabled></textarea>
                     </div>
                 </div>
             </div>
@@ -388,7 +388,7 @@ if (isset($referenceMonth) && $referenceMonth) {
                 <div class="row">
                     <div class="text-left col-xs-4" style="margin-top: -10px;">
                         <div class="checkbox icheck">
-                            <input type="checkbox" class="form-control estorno" name="estorno" value="1">
+                            <input type="checkbox" class="form-control estorno" name="estorno" value="1" disabled>
                         </div>
                         <label class="font-weight-bold">Estorno</label>
                     </div>
