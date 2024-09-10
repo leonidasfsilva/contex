@@ -1687,8 +1687,12 @@ class Faturas extends CI_Controller
 			foreach ($faturasTerceiros as $fatura) {
 				$lancamentosTerceiros = $this->fatura_model->getLancamentosTerceiros(getUserId(), $fatura['id_cartao'], $nome, $referenceMonth, $referenceYear);
 				$monthName            = getExtendedMonthName($fatura['mes_referencia']);
-				$reference            = $monthName . ' / ' . $fatura['ano_referencia'];
 				
+				if (isMobileDevice()) {
+					$monthName = getExtendedMonthName($fatura['mes_referencia'], 'MMM');
+				}
+				
+				$reference                                                    = $monthName . ' / ' . $fatura['ano_referencia'];
 				$result[$lancamentosTerceiros[0]["id_fatura"]]                = $fatura;
 				$result[$lancamentosTerceiros[0]["id_fatura"]]['cartao']      = $this->cartoes_model->getDetalhesCartao($fatura['id_cartao']);
 				$result[$lancamentosTerceiros[0]["id_fatura"]]['reference']   = $reference;

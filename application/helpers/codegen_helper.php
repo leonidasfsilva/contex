@@ -504,3 +504,14 @@ function getResetPasswordMail($nomeRemetente, $ip, $navegador, $link, $date = nu
 </html>';
 
 }
+
+function isMobileDevice()
+{
+	$CI     = get_instance();
+	$mobile = $CI->agent->is_mobile();
+	
+	if ($mobile) {
+		return true;
+	}
+	return false;
+}
