@@ -4,6 +4,36 @@ $tipo_lancamentos    = $this->input->get('tipo');
 $periodo_lancamentos = $this->input->get('periodo');
 $inicio              = $this->input->get('dataInicial');
 $fim                 = $this->input->get('dataFinal');
+$saidasPendentes     = null;
+$entradasPendentes   = null;
+$saidasEfetivadas    = null;
+$entradasEfetivadas  = null;
+$totalSaidas         = null;
+$totalEntradas       = null;
+$totalGeralMes       = null;
+$totalOcultosMes     = null;
+$totalGeral          = $total->total;
+$saldoProvisorioMes  = null;
+$saldoMesComOculto   = null;
+$prevLink            = null;
+$nextLink            = null;
+$currentMonthText    = null;
+$monthFilterButtons  = null;
+
+if (isset($referenceMonth) && $referenceMonth) {
+	if ($prevMonth && $nextMonth) {
+		$prevLinkTitle = sprintf('%s / %s', $prevMonth, $prevReferenceYear);
+		$nextLinkTitle = sprintf('%s / %s', $nextMonth, $nextReferenceYear);
+	}
+	
+	$prevLink         = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $prevReferenceMonth, $prevReferenceYear)) .
+		" title='$prevLinkTitle'><span class='badge badge-primary'><i style='margin: 0 !important;' class='fas fa-angle-double-left'></i></span></a>";
+	$currentMonthText = "<a href='#modalSelectMounth' data-toggle='modal' role='button' title='Clique para selecionar um mes específico'><span class='badge badge-primary' style='margin-left: 10px;'>Período: $month / $referenceYear</span></a>";
+	$nextLink         = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $nextReferenceMonth, $nextReferenceYear)) .
+		" title='$nextLinkTitle'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-right'></i></span></a>";
+	
+	$monthFilterButtons = $referenceMonth ? $prevLink . $currentMonthText . $nextLink : null;
+}
 ?>
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
@@ -16,39 +46,41 @@ $fim                 = $this->input->get('dataFinal');
 				<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
                     <a href="#modalEntrada" id="novaEntrada" data-toggle="modal" role="button" class="btn btn-success btn-sm tip-bottom" title="Registrar nova entrada">
                         <i class="fas fa-plus fa-fw"></i>
-                        Nova Entrada
+                        <span>Entrada</span>
                     </a>
                     <a href="#modalSaida" id="novaSaida" data-toggle="modal" role="button" class="btn btn-danger btn-sm tip-bottom" title="Registrar nova saída">
                         <i class="fas fa-plus fa-fw"></i>
-                        Nova Saída
+                        <span>Saída</span>
                     </a>
 				<?php } ?>
             </div>
             <div class="panel-ctrls">
-                <button href="#modalSelectDefaultMounth" class="btn btn-default btn-sm" data-toggle="modal">
-                    <i class="fas fa-cog fa-fw"></i>
-                    Configurações
-                </button>
-                <div class="btn-group" id="div_pesquisa">
-                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" id="btn_pesquisa">
-                        <i class="fas fa-search fa-fw"></i>
-                        Pesquisar
+                <div class="btn-group dropdown-hover">
+                    <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+                        <i class="fas fa-bars fa-fw"></i>
+                        <span>Opções</span>
                     </button>
-                    <ul class="dropdown-menu">
-                        <form action="<?php echo base_url('financeiro/lancamentos/pesquisa') ?>" style="margin: 0 15px 0 15px" method="get" autocomplete="off">
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="input_pesquisa" name="search" placeholder="Pesquisar" style="margin-top: 6px;" required>
-                                <span class="input-group-btn">
-                                    <button type="submit" class="btn btn-primary"><i class="fas fa-search fa-fw"></i></button>
-                                </span>
-                            </div>
-                        </form>
+                    <ul class="dropdown-menu dropdown-menu-hover arrow" role="menu">
+                        <li>
+                            <a href="#modalFiltrar" data-toggle="modal">
+                                <i class="fas fa-filter fa-fw pull-right"></i>
+                                <span>Filtrar</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#modalSearch" data-toggle="modal">
+                                <i class="fas fa-search fa-fw pull-right"></i>
+                                <span>Pesquisar</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#modalSelectDefaultMounth" data-toggle="modal">
+                                <i class="fas fa-cog fa-fw pull-right"></i>
+                                <span>Configurações</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
-                <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar lançamentos">
-                    <i class="fas fa-filter fa-fw"></i>
-                    Filtrar
-                </button>
             </div>
 
         </div>
@@ -112,36 +144,6 @@ $fim                 = $this->input->get('dataFinal');
 </div>
 
 <?php
-$saidasPendentes    = null;
-$entradasPendentes  = null;
-$saidasEfetivadas   = null;
-$entradasEfetivadas = null;
-$totalSaidas        = null;
-$totalEntradas      = null;
-$totalGeralMes      = null;
-$totalOcultosMes    = null;
-$totalGeral         = $total->total;
-$saldoProvisorioMes = null;
-$saldoMesComOculto  = null;
-$prevLink           = null;
-$nextLink           = null;
-$currentMonthText   = null;
-
-if (isset($referenceMonth) && $referenceMonth) {
-	if ($prevMonth && $nextMonth) {
-		$prevLinkTitle = sprintf('%s / %s', $prevMonth, $prevReferenceYear);
-		$nextLinkTitle = sprintf('%s / %s', $nextMonth, $nextReferenceYear);
-	}
-	
-	$prevLink         = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $prevReferenceMonth, $prevReferenceYear)) .
-		" title='$prevLinkTitle'><span class='badge badge-primary'><i style='margin: 0 !important;' class='fas fa-angle-double-left'></i></span></a>";
-	$currentMonthText = "<a href='#modalSelectMounth' data-toggle='modal' role='button' title='Clique para selecionar um mes específico'><span class='badge badge-primary' style='margin-left: 10px;'>Período: $month / $referenceYear</span></a>";
-	$nextLink         = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $nextReferenceMonth, $nextReferenceYear)) .
-		" title='$nextLinkTitle'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-right'></i></span></a>";
-	
-	$monthFilterButtons = $referenceMonth ? $prevLink . $currentMonthText . $nextLink : null;
-}
-
 if (!$results) {
 	?>
     <div class="panel panel-midnightblue">
@@ -206,11 +208,11 @@ if (!$results) {
             <div class="panel-ctrls">
                 <span class="hidden" id="div_btn_marcar">
                     <button class="btn btn-info btn-sm copiar_serie " id="copiar_serie" title="Copiar todos os lançamentos selecionados" disabled>
-                        <i class="fas fa-copy fa-fw"></i>
+                        <i class="fass fa-copy fa-fw"></i>
                         Copiar
                     </button>
                     <button class="btn btn-danger btn-sm excluir_serie " id="excluir_serie" title="Excluir todos os lançamentos selecionados" disabled>
-                        <i class="fas fa-trash-alt fa-fw"></i>
+                        <i class="fas fa-trash-can-xmark fa-fw"></i>
                         Excluir
                     </button>
                     <button class="btn btn-default btn-sm marcar_desmarcar" id="marcar_todos" title="Marcar todos os lançamentos da fatura">
@@ -248,6 +250,11 @@ if (!$results) {
 				<?php
 				$pendingNotification = null;
 				foreach ($results as $r) {
+					if ($r->oculto) {
+						$totalOcultosMes += $r->valor;
+						continue;
+					}
+					
 					$vencimento  = date(('d/m/y'), strtotime($r->data_lancamento));
 					$diaDaSemana = getExtendedWeekDayName($r->data_lancamento);
 					
@@ -310,12 +317,7 @@ if (!$results) {
 						$valor = number_format($r->valor, 2, ',', '.');
 					}
 					
-					if (!$r->oculto) {
-						$totalGeralMes += $r->valor;
-					} else {
-						$totalOcultosMes += $r->valor;
-						continue;
-					}
+					$totalGeralMes += $r->valor;
 					
 					echo '<tr>';
 					echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
@@ -502,7 +504,7 @@ if (!$results) {
                     <!--<tr class="hidden provisorio-periodo">-->
                     <!--    <td colspan="2" style="text-align: left; font-weight: bold">(±) SALDO PROVISÓRIO DO PERÍODO</td>-->
                     <!--    <td colspan="1" style="text-align: right; font-weight: bold">-->
-					<!--		--><?php //echo number_format(($saldoProvisorioMes), 2, ',', '.') ?>
+                    <!--		--><?php //echo number_format(($saldoProvisorioMes), 2, ',', '.') ?>
                     <!--    </td>-->
                     <!--</tr>-->
 				<?php }
@@ -512,6 +514,7 @@ if (!$results) {
     </div>
 </div>
 
+<!-- LANCAMENTOS OCULTOS-->
 <?php if (isset($hiddenItems) && $hiddenItems) { ?>
     <div class="panel panel-midnightblue lancamentos-ocultos hidden">
         <div class="panel-heading">
@@ -588,9 +591,7 @@ if (!$results) {
 					};
 					
 					if ($r->observacoes) {
-						$iconObs = '
-                                <i class="fas fa-comment-dots fa-fw" title="Observações adicionais"></i>
-                            ';
+						$iconObs = '<i class="fas fa-comment-dots fa-fw" title="Observações adicionais"></i>';
 					} else {
 						$iconObs = '';
 					};
@@ -670,6 +671,7 @@ if (!$results) {
 					echo '</td>';
 					echo '</tr>';
 				}
+				
 				$totalEntradas = $entradasEfetivadas + $entradasPendentes;
 				$totalSaidas   = $saidasEfetivadas + $saidasPendentes;
 				?>
@@ -1454,6 +1456,35 @@ if (!$results) {
     </div>
 </div>
 
+<!-- Modal PESQUISAR -->
+<div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form id="formSearch" action="<?= base_url('financeiro/lancamentos/pesquisa') ?>" method="get">  <!-- adicionar no form a rota para método do controller que irá persistir a config do usuario em DB -->
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <p class="font-weight-bold">Pesquisar por: </p>
+                    <!--                    <p class="font-weight-bold">O mês escolhido será usado como padrão para visualização do módulo de Lançamentos. </p>-->
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <!--<label class="font-weight-bold" for="termo">Termo *</label>-->
+                            <input class="form-control descricao" type="text" name="search"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
+                        Cancelar
+                    </button>
+                    <button class="btn btn-primary btn-sm"><i class="fa fa-search fa-fw"></i>
+                        Pesquisar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
     $('.obsLink').click(function () {
         var obsIcon = $(this).children('i')
@@ -1487,7 +1518,7 @@ if (!$results) {
         }
     });
 
-    $('#modalEntrada, #modalSaida').on('shown.bs.modal', function (e) {
+    $('#modalEntrada, #modalSaida, #modalSearch').on('shown.bs.modal', function (e) {
         $('.descricao').focus();
     })
 
@@ -1909,6 +1940,30 @@ if (!$results) {
             messages: {
                 vencimento: {
                     required: 'Preenchimento obrigatório'
+                }
+            },
+
+            errorClass: "help-block",
+            errorElement: "p",
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
+            }
+        });
+
+        $("#formSearch").validate({
+            rules: {
+                search: {
+                    required: true
+                },
+            },
+            messages: {
+                search: {
+                    required: 'Informe o termo da pesquisa'
                 }
             },
 
