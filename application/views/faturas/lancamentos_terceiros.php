@@ -19,12 +19,13 @@ if (isset($referenceMonth) && $referenceMonth) {
 ?>
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
-        <h2>
-            <span style='margin-right: 10px !important;'>Registro de Compras: <?= $name ?></span>
-            <br class="visible-xs-block">
-			<?= ($referenceMonth ? $prevLink . $currentMonthText . $nextLink : null) ?>
+        <h2 class="pb0">
+            <span class="pr20">Registro de compras de: </span><span class="pr20"><?= $name ?></span>
         </h2>
+        <h2>
+            <span class="pt5"><?= ($referenceMonth ? $prevLink . $currentMonthText . $nextLink : null) ?></span>
 
+        </h2>
         <div class="panel-ctrls">
             <a href="<?= base_url('financeiro/faturas?cartao=') . $idCard ?>" class="btn btn-sm btn-default"><i class="fas fa-arrow-left fa-fw"></i> Faturas</a>
             <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar por período">
@@ -47,7 +48,7 @@ if (isset($referenceMonth) && $referenceMonth) {
 					?>
                     <div class="panel accordion-item">
                         <a class="accordion-title" data-toggle="collapse" data-parent="#accordion" href="#<?= $result['id_fatura'] ?>">
-                            <h2>
+                            <h2 class="bg-midnightblue text-white">
                                 <i class="fas fa-file-invoice-dollar fa-lg fa-fw"></i>
                                 Período: <?= $result['reference'] ?>
 
@@ -59,7 +60,7 @@ if (isset($referenceMonth) && $referenceMonth) {
                         </a>
                         <div id="<?= $result['id_fatura'] ?>" class="collapse">
                             <div class="accordion-body" style="padding: 0 !important;">
-                                <div class="panel panel-midnightblue" style="margin: 0 !important;">
+                                <div class="panel panel-midnightblue no-border" style="margin: 0 !important;">
                                     <div class="panel-body panel-no-padding table-responsive">
                                         <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid">
                                             <thead>
@@ -137,7 +138,7 @@ if (isset($referenceMonth) && $referenceMonth) {
                                         </table>
                                     </div>
                                     <div class="panel " style="margin: 0 !important;">
-                                        <div class="panel-footer bg-midnightblue font-weight-bold text-white panel-no-padding">
+                                        <div class="font-weight-bold panel-no-padding p20 bg-gray">
                                             <span>
                                                 Saldo devedor na fatura <?= $result['id_fatura'] ?>
                                             </span>
@@ -169,7 +170,7 @@ if (isset($referenceMonth) && $referenceMonth) {
                     </div>
 				<?php } ?>
             </div>
-            <div class="panel panel-midnightblue" style="margin: 0 !important;">
+            <div class="panel panel-grape" style="margin: 0 !important;">
                 <div class="panel-heading font-weight-bold">
                     <div class="pull-left">
                         <h2>
@@ -178,7 +179,7 @@ if (isset($referenceMonth) && $referenceMonth) {
                     </div>
                     <div class="pull-right">
                         <h2 class="pull-right">
-                            <?= $referencePeriod ?>
+							<?= $referencePeriod ?>
                         </h2>
                     </div>
                 </div>

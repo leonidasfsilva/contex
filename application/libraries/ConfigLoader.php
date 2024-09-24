@@ -27,5 +27,4 @@ class ConfigLoader
 		
 		$this->CI->load->vars($config);
 	}
-	
 }

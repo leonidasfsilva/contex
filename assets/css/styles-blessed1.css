@@ -1025,7 +1025,7 @@ body.nooverflow {
 }
 
 .panel.panel-midnightblue {
-    border-color: #263238;
+    border-color: #263238 !important;
 }
 
 .panel.panel-midnightblue .panel-heading {

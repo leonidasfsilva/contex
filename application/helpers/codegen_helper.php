@@ -412,7 +412,7 @@ function generateToken()
 		'1234567890');
 }
 
-function getResetPasswordMail($nomeRemetente, $ip, $navegador, $link, $date = null)
+function getResetPasswordEmail($nomeRemetente, $ip, $navegador, $link, $date = null)
 {
 	$date = $date ?? date('d/m/Y H:i');
 	

@@ -89,7 +89,7 @@ class Redefinirsenha extends CI_Controller
 				$headers_         .= "From: nao-responda@mxcode.net\r\n";
 				$assunto_resposta = "CONTEX - Redefinição de Senha";
 				
-				$msg_resposta = getResetPasswordMail($nomeRemetente, $ip, $navegador, $link);
+				$msg_resposta = getResetPasswordEmail($nomeRemetente, $ip, $navegador, $link);
 				
 				if (ENVIRONMENT == 'production') {
 					mail($emailremetente, $assunto_resposta, $msg_resposta, $headers_);
