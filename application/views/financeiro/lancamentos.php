@@ -898,17 +898,17 @@ if (!$results) {
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-lg-6 col-xs-6">
-                            <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control" id="recebido" name="pago" value="1">
+                        <div class="form-group col-lg-6 col-xs-6 ">
+                            <div class="row">
+                                <input type="checkbox" id="recebido" name="pago" class="switch-input primary" value="1">
+                                <label for="recebido" class="switch-label primary font-weight-bold">Pago</label>
                             </div>
-                            <label for="recebido" class="font-weight-bold">Pago?</label>
                         </div>
                         <div class="form-group col-lg-6 col-xs-6">
-                            <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control oculto" name="oculto" value="1">
+                            <div class="row">
+                                <input type="checkbox" id="ocultoEntrada" name="oculto" class="switch-input primary oculto" value="1">
+                                <label for="ocultoEntrada" class="switch-label primary font-weight-bold">Oculto</label>
                             </div>
-                            <label for="ocultoEditar" class="font-weight-bold">Oculto</label>
                         </div>
                         <div id="divRecebimento" class="hidden">
                             <div class="form-group col-lg-6 col-xs-5">
@@ -996,17 +996,17 @@ if (!$results) {
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-lg-6 col-xs-6">
-                            <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control" id="pago" name="pago" value="1">
+                        <div class="form-group col-lg-6 col-xs-6 ">
+                            <div class="row">
+                                <input type="checkbox" id="pago" name="pago" class="switch-input primary" value="1">
+                                <label for="pago" class="switch-label primary font-weight-bold">Pago</label>
                             </div>
-                            <label for="pago" class="font-weight-bold">Pago?</label>
                         </div>
                         <div class="form-group col-lg-6 col-xs-6">
-                            <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control oculto" name="oculto" value="1">
+                            <div class="row">
+                                <input type="checkbox" id="ocultoSaida" name="oculto" class="switch-input primary oculto" value="1">
+                                <label for="ocultoSaida" class="switch-label primary font-weight-bold">Oculto</label>
                             </div>
-                            <label for="ocultoEditar" class="font-weight-bold">Oculto</label>
                         </div>
                         <div id="divRecebimento" class="hidden">
                             <div class="form-group col-lg-6 col-xs-5">
@@ -1102,17 +1102,17 @@ if (!$results) {
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-lg-6 col-xs-6">
-                            <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control pago" id="pagoCopiar" name="pago" value="1">
+                        <div class="form-group col-lg-6 col-xs-6 ">
+                            <div class="row">
+                                <input type="checkbox" id="pagoCopiar" name="pago" class="switch-input primary" value="1">
+                                <label for="pagoCopiar" class="switch-label primary font-weight-bold">Pago</label>
                             </div>
-                            <label for="pagoCopiar" class="font-weight-bold">Pago?</label>
                         </div>
                         <div class="form-group col-lg-6 col-xs-6">
-                            <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control oculto" name="oculto" value="1">
+                            <div class="row">
+                                <input type="checkbox" id="ocultoEditar" name="oculto" class="switch-input primary oculto" value="1">
+                                <label for="ocultoEditar" class="switch-label primary font-weight-bold">Oculto</label>
                             </div>
-                            <label for="ocultoEditar" class="font-weight-bold">Oculto</label>
                         </div>
                         <div id="divPagamentoCopiar" class="hidden">
                             <div class="form-group col-lg-6 col-xs-5">
@@ -1204,17 +1204,17 @@ if (!$results) {
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-lg-6 col-xs-6">
-                            <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control" id="pagoEditar" name="pago" value="1">
+                        <div class="form-group col-lg-6 col-xs-6 ">
+                            <div class="row">
+                                <input type="checkbox" id="pagoEditar" name="pago" class="switch-input primary" value="1">
+                                <label for="pagoEditar" class="switch-label primary font-weight-bold">Pago</label>
                             </div>
-                            <label for="pagoEditar" class="font-weight-bold">Pago?</label>
                         </div>
                         <div class="form-group col-lg-6 col-xs-6">
-                            <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control oculto" name="oculto" value="1">
+                            <div class="row">
+                                <input type="checkbox" id="ocultoEditar" name="oculto" class="switch-input primary oculto" value="1">
+                                <label for="ocultoEditar" class="switch-label primary font-weight-bold">Oculto</label>
                             </div>
-                            <label for="ocultoEditar" class="font-weight-bold">Oculto</label>
                         </div>
                     </div>
                     <div class="row">

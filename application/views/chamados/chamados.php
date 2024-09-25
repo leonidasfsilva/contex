@@ -4,7 +4,7 @@
             <div class="panel-heading">
                 <h3>
                     <i class="fas fa-headset fa-lg fa-fw"></i>
-                    Chamados de Suporte
+                    Tickets de Suporte
                 </h3>
                 <div class="pull-right pr0">
                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" href="#modalAbrirChamado">
