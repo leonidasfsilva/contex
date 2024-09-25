@@ -64,7 +64,7 @@
                             <li style="<?= $notificacao ?>">
                                 <a href="<?= base_url('chamados/detalhes/' . $c->id_chamado) ?>" class="mailbox-msg-list-item">
                                     <span class="time"><?= ($intervalo) ?>
-                                    <small style="display: block;" class="label label-<?= ($cor_status) ?>"><?= ($status) ?></small>
+                                    <small style="display: block;" class="badge badge-<?= ($cor_status) ?>"><?= ($status) ?></small>
                                     </span>
                                     <img src="<?php echo $this->chamados_model->getAvatarUsuario($c->id_usuario) != null ? base_url('assets/uploads/avatars/') .
                                         $this->chamados_model->getAvatarUsuario($c->id_usuario) : base_url('assets/img/avatars/padrao.png'); ?>"
