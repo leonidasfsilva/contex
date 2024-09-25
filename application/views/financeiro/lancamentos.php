@@ -877,14 +877,14 @@ if (!$results) {
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricao">Descrição *</label>
-                            <input class="form-control descricao" id="descricao" type="text" name="descricao"/>
+                            <input class="form-control descricao-autocomplete" id="descricao" type="text" name="descricao"/>
                             <input id="urlEntrada" type="hidden" class="urlAtual" name="urlAtual" value=""/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="fornecedor">Fornecedor</label>
-                            <input class="form-control fornecedor" type="text" name="fornecedor"/>
+                            <input class="form-control fornecedor-autocomplete" type="text" name="fornecedor"/>
                         </div>
                     </div>
                     <div class="row">
@@ -975,14 +975,14 @@ if (!$results) {
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricao">Descrição *</label>
-                            <input class="form-control descricao" type="text" name="descricao"/>
+                            <input class="form-control descricao-autocomplete" type="text" name="descricao"/>
                             <input class="urlAtual" type="hidden" name="urlAtual" value=""/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="fornecedor">Fornecedor</label>
-                            <input class="form-control fornecedor" type="text" name="fornecedor"/>
+                            <input class="form-control fornecedor-autocomplete" type="text" name="fornecedor"/>
                         </div>
                     </div>
                     <div class="row">
@@ -1502,19 +1502,19 @@ if (!$results) {
         }
     })
 
-    $(".descricao").autocomplete({
+    $(".descricao, .descricao-autocomplete").autocomplete({
         source: "<?php echo base_url('financeiro/lancamentos/autoCompleteDescricao'); ?>",
         minLength: 2,
         select: function (event, ui) {
-            $(".descricao").val(ui.item.label);
+            $(".descricao, .descricao-autocomplete").val(ui.item.label);
         }
     });
 
-    $(".fornecedor").autocomplete({
+    $(".fornecedor, .fornecedor-autocomplete").autocomplete({
         source: "<?php echo base_url('financeiro/lancamentos/autoCompleteFornecedor'); ?>",
         minLength: 1,
         select: function (event, ui) {
-            $(".fornecedor").val(ui.item.label);
+            $(".fornecedor, .fornecedor-autocomplete").val(ui.item.label);
         }
     });
 
@@ -1674,7 +1674,7 @@ if (!$results) {
             }
         });
 
-        $('#modalReceita, #modalDespesa').on('hidden.bs.modal', function () {
+        $('#modalDetalhes').on('hidden.bs.modal', function () {
             $('#formReceita, #formDespesa').trigger("reset");
         });
 
