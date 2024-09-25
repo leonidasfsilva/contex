@@ -1,5 +1,25 @@
 <script>
     $(document).ready(function () {
+        function toggleUserMenuIcon() {
+            console.log('toggleUserMenuIcon function')
+            var dropdown = $('#user-menu-dropdown')
+            var menuIcon = $('#user-menu-icon')
+
+            if (menuIcon.hasClass('fa-times')) {
+                console.log('has open class event')
+                menuIcon.addClass('fa-bars')
+                menuIcon.removeClass('fa-times')
+            }
+        }
+        
+        $(document).click(function () {
+            toggleUserMenuIcon()
+        })
+        
+        $('#user-menu-icon').click(function () {
+            $(this).toggleClass('fa-bars fa-times')
+        })
+        
         $('.blink-text').each(function () {
             var elem = $(this);
             setInterval(function () {

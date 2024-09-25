@@ -47,7 +47,7 @@ class Mxcode extends CI_Controller
 		$this->load->view('tema/topo', $data);
 	}
 	
-	public function minhaConta()
+	public function perfil()
 	{
 		if ((!session_id()) || (!$this->session->userdata('logado'))) {
 			redirect('mxcode/login');
@@ -55,7 +55,7 @@ class Mxcode extends CI_Controller
 		
 		$data['dados']      = $this->mxcode_model->getUsuario(getUserId());
 		$data['usuario']    = $this->mxcode_model->getById(getUserId());
-		$data['view']       = 'mxcode/minhaConta';
+		$data['view']       = 'mxcode/perfil';
 		$data['minhaConta'] = 'Conta';
 		$this->load->view('tema/topo', $data);
 	}
@@ -75,14 +75,14 @@ class Mxcode extends CI_Controller
 			$result = $this->mxcode_model->alterarSenha($usuario->id_usuarios, $senha);
 			if ($result == true) {
 				$this->session->set_flashdata('sucesso', 'Senha alterada com sucesso!');
-				redirect(base_url() . 'mxcode/minhaConta');
+				redirect(base_url() . 'mxcode/perfil');
 			} else {
 				$this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar alterar a senha!');
-				redirect(base_url() . 'mxcode/minhaConta');
+				redirect(base_url() . 'mxcode/perfil');
 			}
 		} else {
 			$this->session->set_flashdata('erro', 'Senha atual incorreta!');
-			redirect(base_url() . 'mxcode/minhaConta');
+			redirect(base_url() . 'mxcode/perfil');
 		}
 	}
 	
@@ -461,7 +461,7 @@ class Mxcode extends CI_Controller
 				unlink($dir . '/' . $avatar_atual->avatar);
 			}
 			
-			if ($image = $this->do_upload($_FILES['userfile'], base_url() . 'mxcode/minhaConta', $dir)) {
+			if ($image = $this->do_upload($_FILES['userfile'], base_url() . 'mxcode/perfil', $dir)) {
 				$data = array('upload_data' => $this->upload->data());
 				
 				$config['image_library']  = 'gd2';
@@ -477,7 +477,7 @@ class Mxcode extends CI_Controller
 				}
 			} else {
 				$this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar alterar a foto de perfil.<br>ERRO: do_upload()');
-				//                redirect(base_url() . 'mxcode/minhaConta');
+				//                redirect(base_url() . 'mxcode/perfil');
 			}
 			
 			$retorno = $this->mxcode_model->editAvatarUsuario(getUserId(), $image);
@@ -489,14 +489,14 @@ class Mxcode extends CI_Controller
 				
 				$this->session->set_userdata($session_data);
 				$this->session->set_flashdata('sucesso', 'Foto de perfil alterada com sucesso!');
-				//                redirect(base_url() . 'mxcode/minhaConta');
+				//                redirect(base_url() . 'mxcode/perfil');
 			} else {
 				$this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar alterar a foto de perfil.<br>ERRO: editAvatarUsuario()');
-				//                redirect(base_url() . 'mxcode/minhaConta');
+				//                redirect(base_url() . 'mxcode/perfil');
 			}
 		} else {
 			$this->session->set_flashdata('erro', 'Nenhum arquivo enviado.');
-			redirect(base_url() . 'mxcode/minhaConta');
+			redirect(base_url() . 'mxcode/perfil');
 		}
 	}
 	
@@ -524,10 +524,10 @@ class Mxcode extends CI_Controller
 			$this->session->set_userdata($session_data);
 			
 			$this->session->set_flashdata('sucesso', 'Foto de perfil removida com sucesso!');
-			redirect(base_url() . 'mxcode/minhaConta');
+			redirect(base_url() . 'mxcode/perfil');
 		} else {
 			$this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar excluir a foto de perfil.');
-			redirect(base_url() . 'mxcode/minhaConta');
+			redirect(base_url() . 'mxcode/perfil');
 		}
 	}
 	
@@ -537,13 +537,13 @@ class Mxcode extends CI_Controller
 		if (!$dados_usuario->cpf) {
 			if ($this->mxcode_model->verificaCPF($_POST['cpf'])) {
 				$this->session->set_flashdata('erro', 'O CPF informado pertence a outro usuário');
-				redirect(base_url() . 'mxcode/minhaConta');
+				redirect(base_url() . 'mxcode/perfil');
 			}
 		} else {
 			if ($dados_usuario->cpf != $_POST['cpf']) {
 				if ($this->mxcode_model->verificaCPF($_POST['cpf'])) {
 					$this->session->set_flashdata('erro', 'O CPF informado pertence a outro usuário');
-					redirect(base_url() . 'mxcode/minhaConta');
+					redirect(base_url() . 'mxcode/perfil');
 				}
 			}
 		}
@@ -566,7 +566,7 @@ class Mxcode extends CI_Controller
 		
 		$this->mxcode_model->edit('usuarios', $data, 'id_usuarios', $this->input->post('id_usuarios'));
 		$this->session->set_flashdata('sucesso', 'Conta de usuário atualizada com sucesso!');
-		redirect(base_url() . 'mxcode/minhaConta');
+		redirect(base_url() . 'mxcode/perfil');
 	}
 	
 	public function error_general()

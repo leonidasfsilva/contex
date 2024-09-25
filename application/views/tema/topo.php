@@ -310,16 +310,16 @@ $this->load->view('includes/custom_js');
         <!--        CHAMADOS-->
 
         <!--MENU USUARIO-->
-        <li class="dropdown dropdown-hover toolbar-icon-bg">
+        <li class="dropdown toolbar-icon-bg" id="user-menu-dropdown">
             <a href="#" class="dropdown-toggle " data-toggle='dropdown' data-placement="bottom" title="<?= $this->session->userdata('nome') ?>">
-                <span class="icon-bg"><i class="fal fa-user-circle fa-fw"></i></span></a>
+                <span class="icon-bg"><i class="fal fa-bars fa-fw" id="user-menu-icon"></i></span></a>
             <ul class="dropdown-menu dropdown-menu-hover userinfo arrow">
                 <!--                <li><a href="javascript:" id="btn_teste"><span class="pull-left">Perfil</span> <span class="badge badge-info">80%</span></a></li>-->
                 <li title="Dados da conta">
-                    <a href="<?= base_url(); ?>mxcode/minha-conta"><span class="pull-left">Minha conta</span> <i class="pull-right fal fa-user fa-lg"></i></a>
+                    <a href="<?= base_url('mxcode/perfil'); ?>"><span class="pull-left">Perfil de Usuário</span> <i class="pull-right fal fa-user fa-lg"></i></a>
                 </li>
                 <li title="Configurações da conta">
-                    <a href="<?= base_url(); ?>configuracoes/usuario"><span class="pull-left">Config. conta</span> <i class="pull-right fal fa-cog fa-lg"></i></a>
+                    <a href="<?= base_url('configuracoes/usuario'); ?>"><span class="pull-left">Config. da Conta</span> <i class="pull-right fal fa-cog fa-lg"></i></a>
                 </li>
                 <!--                <li><a href="javascript:"><span class="pull-left">Configurações</span> <i class="pull-right fa fa-cog fa-lg"></i></a></li>-->
                 <!--                <li class="divider"></li>-->
@@ -327,7 +327,7 @@ $this->load->view('includes/custom_js');
                 <!--                <li><a href="#"><span class="pull-left">Statement</span> <i class="pull-right fa fa-list-alt"></i></a></li>-->
                 <!--                <li><a href="#"><span class="pull-left">Withdrawals</span> <i class="pull-right fa fa-dollar"></i></a></li>-->
                 <li class="divider"></li>
-                <li title="Encerrar sessão"><a href="<?= site_url('mxcode/logout'); ?>"><span class="pull-left">Sair</span> <i class="pull-right fal fa-power-off fa-lg"></i></a></li>
+                <li title="Encerrar sessão"><a href="<?= base_url('mxcode/logout'); ?>"><span class="pull-left">Sair</span> <i class="pull-right fal fa-power-off fa-lg"></i></a></li>
             </ul>
         </li>
         <!--MENU USUARIO-->
@@ -345,13 +345,15 @@ $this->load->view('includes/custom_js');
                     <div class="widget stay-on-collapse" id="widget-welcomebox">
                         <div class="widget-body welcome-box tabular">
                             <div class="tabular-row">
-                                <div class="tabular-cell welcome-avatar">
-                                    <img src="<?= $this->session->userdata('avatar') != null ? base_url('assets/uploads/avatars/') . $this->session->userdata('avatar') : base_url('assets/img/avatars/padrao.png'); ?>" class="avatar">
-                                </div>
-                                <div class="tabular-cell welcome-options">
-                                    <!--                                        <span class="welcome-text">Bem-vindo,</span>-->
-                                    <span class="name" style="font-size: 13px; font-weight: 600"><?= $this->session->userdata('nome') ?></span>
-                                </div>
+                                <a href="<?= base_url('mxcode/perfil'); ?>" title="Acessar meu perfil">
+                                    <div class="tabular-cell welcome-avatar">
+                                        <img src="<?= $this->session->userdata('avatar') != null ? base_url('assets/uploads/avatars/') . $this->session->userdata('avatar') : base_url('assets/img/avatars/padrao.png'); ?>" class="avatar">
+                                    </div>
+                                    <div class="tabular-cell welcome-options">
+                                        <!--                                        <span class="welcome-text">Bem-vindo,</span>-->
+                                        <span class="name" style="font-size: 13px; font-weight: 600"><?= $this->session->userdata('nome') ?></span>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                     </div>

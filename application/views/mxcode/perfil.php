@@ -3,17 +3,17 @@
         <div class="panel panel-profile panel-midnightblue">
             <div class="panel-heading">
                 <h3>
-                    <i class="fas fa-user-cog fa-lg fa-fw"></i>
-                    Minha Conta
+                    <i class="fal fa-user fa-lg fa-fw"></i>
+                    Perfil de Usuário
                 </h3>
                 <div class="panel-ctrls">
                     <button href="#modalAlterarSenha" class="btn btn-primary btn-sm" id="alterar_senha" data-toggle="modal" title="Alterar senha de acesso">
                         <i class="fas fa-key fa-fw"></i>
-                        Alterar Senha
+                        Senha
                     </button>
                     <button href="#modalEditarPerfil" class="btn btn-primary btn-sm" id="editar_perfil" data-toggle="modal" title="Alterar dados de usuário">
                         <i class="fas fa-user-edit fa-fw"></i>
-                        Alterar Dados
+                        Editar Perfil
                     </button>
                 </div>
             </div>
