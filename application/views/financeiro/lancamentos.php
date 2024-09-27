@@ -1104,17 +1104,19 @@ if (!$results) {
                     <div class="row">
                         <div class="form-group col-lg-6 col-xs-6 ">
                             <div class="row">
-                                <input type="checkbox" id="pagoCopiar" name="pago" class="switch-input primary" value="1">
+                                <input type="checkbox" id="pagoCopiar" name="pago" class="switch-input primary pago" value="1">
                                 <label for="pagoCopiar" class="switch-label primary font-weight-bold">Pago</label>
                             </div>
                         </div>
                         <div class="form-group col-lg-6 col-xs-6">
                             <div class="row">
-                                <input type="checkbox" id="ocultoEditar" name="oculto" class="switch-input primary oculto" value="1">
-                                <label for="ocultoEditar" class="switch-label primary font-weight-bold">Oculto</label>
+                                <input type="checkbox" id="ocultoCopiar" name="oculto" class="switch-input primary oculto" value="1">
+                                <label for="ocultoCopiar" class="switch-label primary font-weight-bold">Oculto</label>
                             </div>
                         </div>
-                        <div id="divPagamentoCopiar" class="hidden">
+                    </div>
+                    <div class="row">
+                        <div class="divPagamento hidden">
                             <div class="form-group col-lg-6 col-xs-5">
                                 <label for="pagamentoCopiar" class="font-weight-bold">Data Pagamento</label>
                                 <input class="form-control datepicker dataPagamento" id="pagamentoCopiar" type="text" name="pagamento"/>
@@ -1146,7 +1148,7 @@ if (!$results) {
                         <div class="divObservacoes hidden">
                             <div class="form-group col-lg-8 mb0">
                                 <label for="observacoes" class="font-weight-bold">Observações</label>
-                                <textarea rows="5" class="form-control" id="observacoesCopiar" type="text" name="observacoes"></textarea>
+                                <textarea rows="5" class="form-control observacoesTextarea" id="observacoesCopiar" type="text" name="observacoes"></textarea>
                             </div>
                         </div>
                     </div>
@@ -1206,7 +1208,7 @@ if (!$results) {
                     <div class="row">
                         <div class="form-group col-lg-6 col-xs-6 ">
                             <div class="row">
-                                <input type="checkbox" id="pagoEditar" name="pago" class="switch-input primary" value="1">
+                                <input type="checkbox" id="pagoEditar" name="pago" class="switch-input pago primary" value="1">
                                 <label for="pagoEditar" class="switch-label primary font-weight-bold">Pago</label>
                             </div>
                         </div>
@@ -1218,7 +1220,7 @@ if (!$results) {
                         </div>
                     </div>
                     <div class="row">
-                        <div id="divPagamentoEditar" class="hidden">
+                        <div class="divPagamento hidden">
                             <div class="form-group col-lg-6 col-xs-5">
                                 <label for="dataPagamentoEditar" class="font-weight-bold">Data Pagamento</label>
                                 <input class="form-control datepicker dataPagamento" id="dataPagamentoEditar" type="text" name="pagamento"/>
@@ -1250,7 +1252,7 @@ if (!$results) {
                         <div class="divObservacoes hidden">
                             <div class="form-group col-lg-8 mb0">
                                 <label for="observacoes" class="font-weight-bold">Observações</label>
-                                <textarea rows="5" class="form-control" id="observacoesEditar" name="observacoes"></textarea>
+                                <textarea rows="5" class="form-control observacoesTextarea" id="observacoesEditar" name="observacoes"></textarea>
                             </div>
                         </div>
                     </div>
@@ -1559,7 +1561,6 @@ if (!$results) {
         });
 
         $('.soma_parcelas').on('ifChanged', function (event) {
-            const icheck = event.target.checked;
             somaValorParcelas();
         });
 
@@ -1570,7 +1571,6 @@ if (!$results) {
         $('.copiar_serie').click(function () {
             $('#modalCopiarSerie').modal('show')
         });
-
 
         // Calculate the total invoice amount from selected items only
         function somaValorParcelas() {
@@ -1678,33 +1678,21 @@ if (!$results) {
             $('#formReceita, #formDespesa').trigger("reset");
         });
 
-        var recebido = $('#recebido').iCheck('update')[0].checked;
-        $.each($(recebido), function (key, value) {
-            if (recebido == true) {
-                $('#divRecebimento').removeClass('hidden');
-            } else {
-                $('#divRecebimento').addClass('hidden');
-            }
+        $('.pago').on('change', function (event) {
+            togglePaymentDiv(event);
         });
 
-        $('#pago, #recebido, #pagoEditar, #pagoCopiar').on('ifChanged', function (event) {
-            mudaICheck(event);
-        });
-
-        function mudaICheck(event) {
+        function togglePaymentDiv(event) {
             const checked = event.target.checked;
-            if (checked == true) {
-                $('#divRecebimento, #divPagamentoEditar, #divPagamentoCopiar, #divPagamento').removeClass('hidden');
+            if (checked === true) {
+                $('.divPagamento').removeClass('hidden');
             } else {
-                $('#divRecebimento, #divPagamentoEditar, #divPagamentoCopiar, #divPagamento').addClass('hidden');
+                $('.divPagamento').addClass('hidden');
             }
             $('.pagamento').val('');
         }
 
-        function calculaValorParcela(parcela, valor) {
-            var parcelas = parcela;
-            var valor = valor;
-
+        function calculaValorParcela(parcelas, valor) {
             valor = jquery_format(valor);
 
             var valor_parcela = valor / parcelas;
@@ -1998,26 +1986,26 @@ if (!$results) {
         var baixado = $(this).attr('baixado');
         var oculto = $(this).attr('oculto');
 
-        if (baixado == 1) {
-            $("#pagoEditar, #pagoCopiar").iCheck('check');
-            $("#divPagamentoEditar, #divPagamentoCopiar").removeClass('hidden');
+        if (baixado == true) {
+            $(".pago").prop('checked', true)
+            $(".divPagamento").removeClass('hidden');
         } else {
-            $("#pagoEditar, #pagoCopiar").iCheck('uncheck');
-            $("#divPagamentoEditar, #divPagamentoCopiar").addClass('hidden');
+            $(".pago").prop('checked', false)
+            $(".divPagamento").addClass('hidden');
             $('.pagamento').val('');
         }
 
-        if (oculto == 1) {
-            $(".oculto").iCheck('check');
+        if (oculto == true) {
+            $(".oculto").prop('checked', true)
         } else {
-            $(".oculto").iCheck('uncheck');
+            $(".oculto").prop('checked', false)
         }
 
         var observacoes = $(this).attr('observacoes');
 
         if (observacoes) {
             var text = observacoes.replace(/<br \/> /gi, "\n")
-            $("#observacoesEditar, #observacoesCopiar").val(text)
+            $(".observacoesTextarea").val(text)
 
             $(".divObservacoes").removeClass('hidden');
             var obsIcon = $(".divObservacoes").parent().children('div').children('a').children('i')
@@ -2039,8 +2027,9 @@ if (!$results) {
     })
 
     $('#novaEntrada, #novaSaida').click(function () {
-        $(".oculto").iCheck('uncheck');
+        $('.oculto').prop('checked', false)
         $(".divObservacoes").addClass('hidden');
+        $(".observacoesTextarea").val('');
         var obsIcon = $(".divObservacoes").parent().children('div').children('a').children('i')
         var obsText = $(".divObservacoes").parent().children('div').children('a').children('span.obsText')
 
