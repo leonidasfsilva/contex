@@ -80,11 +80,11 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 <div class="row ">
                     <div class="col-xs-6 col-lg-4 pr0 pl0">
                         <span class="font-weight-bold">Status:</span>
-                        <span class=" badge badge-<?= $label_pgto ?>"><?= $statusFatura ?></span>
+                        <span class="badge badge-<?= $label_pgto ?>"><?= $statusFatura ?></span>
                     </div>
                     <div class="col-xs-6 col-lg-4 pr0 pl0">
                         <span class="font-weight-bold">Valor:</span>
-                        <span class=" badge badge-<?= $label_pgto ?>" id="valor-fatura"></span>
+                        <span class="font-weight-bold badge badge-<?= $label_pgto ?>" id="valor-fatura"></span>
                     </div>
                     <div class="col-xs-12 col-lg-4 pr0 pl0">
                         <span class="font-weight-bold hidden-xs">Pagamento:</span>
@@ -450,13 +450,13 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         </div>
                     </div>
                     <div class="row divContainerParcelamento">
-                        <div class="form-group col-lg-4 col-xs-12" style="margin-top: -10px;" id="div_parcelada">
-                            <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control parcelada" name="compra_parcelada" value="1">
+                        <div class="form-group col-lg-4 col-xs-12">
+                            <div class="row">
+                                <input type="checkbox" class="switch-input primary parcelada" id="parceladaNovo" name="compra_parcelada" value="1">
+                                <label for="parceladaNovo" class="switch-label primary font-weight-bold">Compra parcelada</label>
                             </div>
-                            <label for="parcelada" class="font-weight-bold">Compra parcelada?</label>
                         </div>
-                        <div id="divParcelamento" class="hidden">
+                        <div class="divParcelas hidden">
                             <div class="form-group col-lg-4 col-xs-6">
                                 <label for="qnt_parcelas" class="font-weight-bold">Nº parcelas *</label>
                                 <select name="qnt_parcelas" id="qnt_parcelas" class="form-control qnt_parcelas">
@@ -477,13 +477,13 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         </div>
                     </div>
                     <div class="row divContainerTerceiros">
-                        <div class="form-group col-lg-6" style="margin-top: -10px;" id="div_terceiros">
-                            <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control terceiros" name="compra_terceiros" value="1">
+                        <div class="form-group col-lg-6">
+                            <div class="row">
+                                <input type="checkbox" class="switch-input primary terceiros" id="terceirosNovo" name="compra_terceiros" value="1">
+                                <label for="terceirosNovo" class="switch-label primary font-weight-bold">Compra de terceiros</label>
                             </div>
-                            <label for="terceiros" class="font-weight-bold">Compra de terceiros?</label>
                         </div>
-                        <div id="divTerceiros" class="hidden">
+                        <div class="divTerceiros hidden">
                             <div class="form-group col-lg-6">
                                 <label for="nome_cliente" class="font-weight-bold">Nome do terceiro</label>
                                 <input class="form-control" id="nome_cliente" type="text" name="nome_cliente"/>
@@ -508,11 +508,11 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 </div>
                 <div class="modal-footer">
                     <div class="row">
-                        <div class="text-left col-xs-4" style="margin-top: -10px;">
-                            <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control estorno" name="estorno" value="1">
+                        <div class="text-left col-xs-4">
+                            <div class="row">
+                                <input type="checkbox" class="switch-input primary estorno" id="estornoNovo" name="estorno" value="1">
+                                <label for="estornoNovo" class="switch-label primary font-weight-bold">Estorno</label>
                             </div>
-                            <label for="estorno" class="font-weight-bold">Estorno</label>
                         </div>
                         <div class="col-xs-8">
                             <button id="btnCancelLancamento" class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
@@ -559,10 +559,10 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     </div>
                     <div class="row divContainerParcelamento">
                         <div class="form-group col-lg-4 col-xs-12">
-                            <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control parcelada" name="compra_parcelada" value="1">
+                            <div class="row">
+                                <input type="checkbox" class="switch-input primary parcelada" id="parceladaCopiar" name="compra_parcelada" value="1">
+                                <label for="parceladaCopiar" class="switch-label primary font-weight-bold">Compra parcelada</label>
                             </div>
-                            <label class="font-weight-bold">Compra parcelada?</label>
                         </div>
                         <div class="divParcelas hidden">
                             <div class="form-group col-lg-4 col-xs-6">
@@ -585,11 +585,11 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         </div>
                     </div>
                     <div class="row divContainerTerceiros">
-                        <div class="form-group col-lg-6" style="margin-top: -10px;">
-                            <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control terceiros" name="compra_terceiros" value="1">
+                        <div class="form-group col-lg-6">
+                            <div class="row">
+                                <input type="checkbox" class="switch-input primary terceiros" id="terceirosCopiar" name="compra_terceiros" value="1">
+                                <label for="terceirosCopiar" class="switch-label primary font-weight-bold">Compra de terceiros</label>
                             </div>
-                            <label class="font-weight-bold">Compra de terceiros?</label>
                         </div>
                         <div class="divTerceiros hidden">
                             <div class="form-group col-lg-6">
@@ -616,11 +616,11 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 </div>
                 <div class="modal-footer">
                     <div class="row">
-                        <div class="text-left col-xs-4" style="margin-top: -10px;">
-                            <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control estorno" name="estorno" value="1">
+                        <div class="text-left col-xs-4">
+                            <div class="row">
+                                <input type="checkbox" class="switch-input primary estorno" id="estornoCopiar" name="estorno" value="1">
+                                <label for="estornoCopiar" class="switch-label primary font-weight-bold">Estorno</label>
                             </div>
-                            <label class="font-weight-bold">Estorno</label>
                         </div>
                         <div class="col-xs-8">
                             <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
@@ -666,10 +666,10 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     </div>
                     <div class="row divContainerParcelamento">
                         <div class="form-group col-lg-4 col-xs-12">
-                            <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control parcelada" name="compra_parcelada" value="1">
+                            <div class="row">
+                                <input type="checkbox" class="switch-input primary parcelada" id="parceladaDetalhes" name="compra_parcelada" value="1">
+                                <label for="parceladaDetalhes" class="switch-label primary font-weight-bold">Compra parcelada</label>
                             </div>
-                            <label class="font-weight-bold">Compra parcelada?</label>
                         </div>
                         <div class="divParcelas hidden">
                             <div class="form-group col-lg-4 col-xs-6">
@@ -692,11 +692,11 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         </div>
                     </div>
                     <div class="row divContainerTerceiros">
-                        <div class="form-group col-lg-6" style="margin-top: -10px;">
-                            <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control terceiros" name="compra_terceiros" value="1">
+                        <div class="form-group col-lg-6">
+                            <div class="row">
+                                <input type="checkbox" class="switch-input primary terceiros" id="terceirosDetalhes" name="compra_terceiros" value="1">
+                                <label for="terceirosDetalhes" class="switch-label primary font-weight-bold">Compra de terceiros</label>
                             </div>
-                            <label class="font-weight-bold">Compra de terceiros?</label>
                         </div>
                         <div class="divTerceiros hidden">
                             <div class="form-group col-lg-6">
@@ -723,11 +723,11 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 </div>
                 <div class="modal-footer">
                     <div class="row">
-                        <div class="text-left col-xs-3 pr0" style="margin-top: -10px;">
-                            <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control estorno" name="estorno" value="1">
+                        <div class="text-left col-xs-3 pr0">
+                            <div class="row">
+                                <input type="checkbox" class="switch-input primary estorno" id="estornoDetalhes" name="estorno" value="1">
+                                <label for="estornoDetalhes" class="switch-label primary font-weight-bold">Estorno</label>
                             </div>
-                            <label class="font-weight-bold">Estorno</label>
                         </div>
                         <div class="col-xs-9">
                             <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
@@ -836,9 +836,9 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             $(".dataCompra").val('');
             $(".nomeCliente").val('');
             $(".qntParcelas").val('');
-            $('.parcelada').iCheck('uncheck');
-            $('.terceiros').iCheck('uncheck');
-            $('.estorno').iCheck('uncheck');
+            $('.parcelada').attr('checked', false);
+            $('.terceiros').attr('checked', false);
+            $('.estorno').attr('checked', false);
         })
 
         $("#i-copy-total").hover(function () {
@@ -901,7 +901,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         })
 
         $("#nome_cliente, .nomeCliente").autocomplete({
-            source: "<?php echo base_url(); ?>financeiro/faturas/autoCompleteTerceiros",
+            source: "<?php echo base_url('financeiro/faturas/autoCompleteTerceiros'); ?>",
             minLength: 1,
             select: function (event, ui) {
                 $("#id_cliente, .idCliente").val(ui.item.label);
@@ -999,7 +999,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             }
         });
 
-        $('.qntParcelas, .valor').on('change', function () {
+        $('.qntParcelas, .valor').keyup(function () {
             var parcelas = undefined;
             var valor = undefined;
             var result = null;
@@ -1007,7 +1007,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             $('.modal-body').each(function () {
                 parcelas = $(this).find('.qntParcelas').val();
                 valor = $(this).find('.valor').val();
-                valorParcela = $(this).find('.valorParcela');
+                var valorParcela = $(this).find('.valorParcela');
 
                 if ((parcelas != '' && valor != '') && (parcelas != undefined && valor != undefined)) {
                     result = calculaValorParcela(parcelas, valor)
@@ -1015,16 +1015,11 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 } else {
                     valorParcela.val('');
                 }
-                console.log({
-                    // 'qntParcela': parcelas
-                })
             });
         });
 
         function calculaValorParcela(parcela, valor) {
             var parcelas = parcela;
-            var valor = valor;
-
             valor = jquery_format(valor);
 
             var valor_parcela = valor / parcelas;
@@ -1052,20 +1047,29 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
         }
 
-        $('#parcelada, .parcelada').on('ifChanged', function (event) {
-            mudaICheckParcelamento(event);
+        $('#parcelada, .parcelada').on('change', function (event) {
+            mudaCheckboxParcelamento(event);
         });
 
-        $('#estorno, .estorno').on('ifChanged', function (event) {
-            mudaICheckEstorno(event);
+        $('#estorno, .estorno').on('change', function (event) {
+            mudaCheckboxEstorno(event);
         });
 
-        $('#terceiros, .terceiros').on('ifChanged', function (event) {
-            mudaICheckTerceiros(event);
+        $('#terceiros, .terceiros').on('change', function (event) {
+            mudaCheckboxTerceiros(event);
         });
 
-        function mudaICheckParcelamento(event) {
-            const checked = event.target.checked;
+        function mudaCheckboxParcelamento(event = null) {
+            let checked
+            
+            $('#parcelada, .parcelada').on('change', function (e) {
+                checked = e
+            })
+            
+            if (event) {
+                checked = event.target.checked;
+            }
+            
             if (checked == true) {
                 $('#divParcelamento, .divParcelas').removeClass('hidden');
             } else {
@@ -1073,8 +1077,17 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             }
         }
 
-        function mudaICheckEstorno(event) {
-            const checked = event.target.checked;
+        function mudaCheckboxEstorno(event) {
+            let checked
+
+            $('#estorno, .estorno').on('change', function (e) {
+                checked = e
+            })
+
+            if (event) {
+                checked = event.target.checked;
+            }
+
             if (checked == true) {
                 $('.divContainerTerceiros, .divContainerParcelamento').addClass('hidden');
             } else {
@@ -1082,8 +1095,17 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             }
         }
 
-        function mudaICheckTerceiros(event) {
-            const checked = event.target.checked;
+        function mudaCheckboxTerceiros(event) {
+            let checked
+
+            $('#terceiros, .terceiros').on('change', function (e) {
+                checked = e
+            })
+
+            if (event) {
+                checked = event.target.checked;
+            }
+
             if (checked == true) {
                 $('#divTerceiros, .divTerceiros').removeClass('hidden');
             } else {
@@ -1263,26 +1285,29 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             if (parcelada == 1) {
                 $(".qntParcelas").val($(this).attr('n_parcelas'));
                 $(".valorParcela").val($(this).attr('valor_parcela'));
-                $('.parcelada').iCheck('check');
-                $(".divParcelamento").removeClass('hidden');
+                $('.parcelada').prop('checked', true);
+                $(".divParcelas").removeClass('hidden');
             } else {
                 // $(".qntParcelas").val($(this).attr('n_parcelas'));
                 $(".valorParcela").val('');
-                $('.parcelada').iCheck('uncheck');
-                $(".divParcelamento").addClass('hidden');
+                $('.parcelada').prop('checked', false);
+                $(".divParcelas").addClass('hidden');
             }
             if (estorno == 1) {
-                $('.estorno').iCheck('check');
-                $(".div_parcelada").addClass('hidden');
+                $('.estorno').prop('checked', true);
+                $(".divContainerParcelamento").addClass('hidden');
+                $(".divContainerTerceiros").addClass('hidden');
             } else {
-                $('.estorno').iCheck('uncheck');
-                $(".div_parcelada").removeClass('hidden');
+                $('.estorno').prop('checked', false);
+                $(".divContainerParcelamento").removeClass('hidden');
+                $(".divContainerTerceiros").removeClass('hidden');
+
             }
             if (terceiros == 1) {
-                $('.terceiros').iCheck('check');
+                $('.terceiros').prop('checked', true);
                 $(".divTerceiros").removeClass('hidden');
             } else {
-                $('.terceiros').iCheck('uncheck');
+                $('.terceiros').prop('checked', false);
                 $(".divTerceiros").addClass('hidden');
             }
 
@@ -1313,6 +1338,10 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
         $('#novoLancamento').click(function () {
             $(".divObservacoes").addClass('hidden');
+            mudaCheckboxTerceiros()
+            mudaCheckboxParcelamento()
+            mudaCheckboxEstorno()
+            
             var obsIcon = $(".divObservacoes").parent().children('div').children('a').children('i')
             var obsText = $(".divObservacoes").parent().children('div').children('a').children('span.obsText')
 

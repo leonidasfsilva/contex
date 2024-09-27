@@ -311,9 +311,9 @@ $this->load->view('includes/custom_js');
 
         <!--MENU USUARIO-->
         <li class="dropdown toolbar-icon-bg" id="user-menu-dropdown">
-            <a href="#" class="dropdown-toggle " data-toggle='dropdown' data-placement="bottom" title="<?= $this->session->userdata('nome') ?>">
+            <a href="#" class="dropdown-toggle" id="user-menu-dropdown-button" data-toggle='dropdown' data-placement="bottom" title="<?= $this->session->userdata('nome') ?>">
                 <span class="icon-bg"><i class="fal fa-bars fa-fw" id="user-menu-icon"></i></span></a>
-            <ul class="dropdown-menu dropdown-menu-hover userinfo arrow">
+            <ul class="dropdown-menu userinfo arrow">
                 <!--                <li><a href="javascript:" id="btn_teste"><span class="pull-left">Perfil</span> <span class="badge badge-info">80%</span></a></li>-->
                 <li title="Dados da conta">
                     <a href="<?= base_url('mxcode/perfil'); ?>"><span class="pull-left">Perfil de Usuário</span> <i class="pull-right fal fa-user fa-lg"></i></a>

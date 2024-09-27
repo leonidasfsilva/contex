@@ -1,25 +1,26 @@
 <script>
     $(document).ready(function () {
         function toggleUserMenuIcon() {
-            console.log('toggleUserMenuIcon function')
-            var dropdown = $('#user-menu-dropdown')
             var menuIcon = $('#user-menu-icon')
 
             if (menuIcon.hasClass('fa-times')) {
-                console.log('has open class event')
                 menuIcon.addClass('fa-bars')
                 menuIcon.removeClass('fa-times')
             }
         }
-        
+
         $(document).click(function () {
             toggleUserMenuIcon()
         })
-        
-        $('#user-menu-icon').click(function () {
-            $(this).toggleClass('fa-bars fa-times')
+
+        $(document).keydown(function () {
+            toggleUserMenuIcon()
         })
-        
+
+        $('#user-menu-dropdown-button').click(function () {
+            $('#user-menu-icon').toggleClass('fa-bars fa-times')
+        })
+
         $('.blink-text').each(function () {
             var elem = $(this);
             setInterval(function () {
@@ -30,9 +31,7 @@
                 }
             }, 600);
         });
-    })
 
-    $(document).ready(function () {
         // method to close and open one modal after another one
         $('.modal-copy').click(function (e) {
             var parentModal = null
@@ -224,11 +223,11 @@
         if (!element) {
             element = $(".principal-div")
         }
-        
+
         element.hide()
         $(".preloader").show();
     }
-    
+
     function removeSpinnerLoader(element, time = 600) {
         var percentage = Math.round((time * 20) / 100)
 
