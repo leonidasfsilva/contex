@@ -44,10 +44,10 @@
                             <input class="form-control" id="apelido" name="apelido" placeholder="Apelido do cartão" type="text">
                         </div>
                         <div class="form-group col-xs-6">
-                            <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control" id="principal" name="principal" value="1">
+                            <div class="row">
+                                <input type="checkbox" class="switch-input primary" id="principal" name="principal" value="1">
+                                <label for="principal" class="switch-label primary font-weight-bold">Cartão principal</label>
                             </div>
-                            <label for="principal" class="font-weight-bold">Cartão Principal</label>
                         </div>
                     </div>
                     <input type="hidden" name="bandeira" id="bandeira">
