@@ -6,20 +6,20 @@ $cliente  = $this->input->get('cliente');
 if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
 	if ($status_fatura == 1) {
 		if ($id_usuario != getUserId()) {
-			$disabled_lancamento_1 = 'disabled';
+			$disabled_lancamento = 'disabled';
 		} else {
-			$disabled_lancamento_1 = '';
+			$disabled_lancamento = '';
 		}
 		$statusFatura = 'ABERTA';
 		$label_status = 'info';
 	} else if ($status_fatura == 2) {
-		$disabled_lancamento_1 = 'disabled';
-		$statusFatura          = 'FUTURA';
+		$disabled_lancamento = 'disabled';
+		$statusFatura        = 'FUTURA';
 		$label_status          = 'inverse';
 	} else {
-		$disabledFatura        = '';
-		$disabled_lancamento_1 = 'disabled';
-		$statusFatura          = 'FECHADA';
+		$disabledFatura      = '';
+		$disabled_lancamento = 'disabled';
+		$statusFatura        = 'FECHADA';
 		$label_status          = 'inverse';
 	}
 	
@@ -55,7 +55,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 <i class="fas fa-filter fa-fw"></i>
                 Filtrar
             </button>
-            <button href="#modalLancamento" id="novoLancamento" data-toggle="modal" class="btn btn-primary btn-sm" title="Registrar novo lançamento" <?= $disabled_lancamento_1 ?>>
+            <button href="#modalLancamento" id="novoLancamento" data-toggle="modal" class="btn btn-primary btn-sm" title="Registrar novo lançamento" <?= $disabled_lancamento ?>>
                 <i class="fas fa-plus fa-fw"></i>
                 Novo Lançamento
             </button>
@@ -77,7 +77,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             </div>
         </div>
         <div class="col-lg-6 col-xs-12 p0">
-            <div class="note note-<?= $label_note ?? $label_status ?> p10 mt0 mb0">
+            <div class="note note-<?= $label_note ?? $label_pgto ?> p10 mt0 mb0">
                 <div class="row ">
                     <div class="col-xs-6 col-lg-4 pr0 pl0">
                         <span class="font-weight-bold">Status:</span>
@@ -236,7 +236,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 								$s->id_lancamento . '" descricao="' . $s->descricao . '" observacoes="' . nl2br($s->observacoes) . '" valor="' . $valor . '" data_compra="' .
 								date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
 								'" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '" nome_cliente="' . $s->nome_cliente .
-								'" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento_1 . ' ' . $disabled_lancamento_2 . '>' .
+								'" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento . ' ' . $disabled_lancamento_2 . '>' .
 								strtoupper($s->descricao) . $iconObs .
 								'</a></td>';
 							echo '<td><a href="' . sprintf(base_url('financeiro/faturas/terceiros?mesReferencia=%s&anoReferencia=%s&cartao=%s&nome=%s'), $mes_referencia, $s->ano_referencia, $cartao['id_cartao'], $s->nome_cliente) . '">' . strtoupper($s->nome_cliente) . '</a></td>';
@@ -252,17 +252,17 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 									$s->id_lancamento . '" descricao="' . $s->descricao . '" observacoes="' . nl2br($s->observacoes) . '" valor="' . $valor . '" data_compra="' .
 									date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
 									'" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '"
-                                    nome_cliente="' . $s->nome_cliente . '" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento_1 . ' ' . $disabled_lancamento_2 . '>
+                                    nome_cliente="' . $s->nome_cliente . '" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento . ' ' . $disabled_lancamento_2 . '>
                                 <i class="fas fa-search-plus fa-lg fa-fw"></i></button>';
 								echo '<button type="button" href="#modalCopiar" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm copiar" title="Copiar" id_lancamento="' .
 									$s->id_lancamento . '" descricao="' . $s->descricao . '" observacoes="' . nl2br($s->observacoes) . '" valor="' . $valor . '" data_compra="' .
 									date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
 									'" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '"
-                                    nome_cliente="' . $s->nome_cliente . '" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento_1 . ' ' . $disabled_lancamento_2 . '>
+                                    nome_cliente="' . $s->nome_cliente . '" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento . ' ' . $disabled_lancamento_2 . '>
                                 <i class="fass fa-copy fa-lg fa-fw"></i></button>';
 							}
 							if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
-								echo '<button type="button" href="#modalExcluir" data-toggle="modal" id_lancamento="' . $s->id_lancamento . '" class="btn btn-danger btn-sm excluir" title="Excluir" ' . $disabled_lancamento_1 . ' ' . $disabled_lancamento_2 . '>
+								echo '<button type="button" href="#modalExcluir" data-toggle="modal" id_lancamento="' . $s->id_lancamento . '" class="btn btn-danger btn-sm excluir" title="Excluir" ' . $disabled_lancamento . ' ' . $disabled_lancamento_2 . '>
                                             <i class="fas fa-trash-can-xmark fa-lg fa-fw"></i></button>';
 							}
 							echo '</td>';

@@ -1742,20 +1742,12 @@ a.bg-warning:hover {
     background-color: #e6eaef !important;
 }
 
-.bg-inverse {
-    background-color: #3e4d6c !important;
-}
-
 .bg-white {
     background-color: #fff !important;
 }
 
 .bg-megna {
     background-color: #00b5c2 !important;
-}
-
-.bg-midnightblue {
-    background-color: #37474f !important;
 }
 
 a.bg-danger:hover {
