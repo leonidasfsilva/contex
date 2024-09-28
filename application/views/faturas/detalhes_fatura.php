@@ -442,7 +442,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     <div class="row">
                         <div class="form-group col-lg-6 col-xs-6">
                             <label for="valor" class="font-weight-bold">Valor *</label>
-                            <input class="form-control money valor" id="valor" type="text" name="valor"/>
+                            <input class="form-control money valor" type="text" name="valor"/>
                         </div>
                         <div class="form-group col-lg-6 col-xs-6">
                             <label for="data_compra" class="font-weight-bold">Data de lançamento</label>
@@ -459,7 +459,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         <div class="divParcelas hidden">
                             <div class="form-group col-lg-4 col-xs-6">
                                 <label for="qnt_parcelas" class="font-weight-bold">Nº parcelas *</label>
-                                <select name="qnt_parcelas" id="qnt_parcelas" class="form-control qnt_parcelas">
+                                <select name="qnt_parcelas" class="form-control qntParcelas">
                                     <option value="">
                                         << Selecione>>
                                     </option>
@@ -472,7 +472,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </div>
                             <div class="form-group col-lg-4 col-xs-6">
                                 <label for="valor_parcela" class="font-weight-bold">Valor da parcela *</label>
-                                <input class="form-control parcela" id="valor_parcela" type="text" name="valor_parcela" readonly/>
+                                <input class="form-control valorParcela" type="text" name="valor_parcela" readonly/>
                             </div>
                         </div>
                     </div>
@@ -928,7 +928,6 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         });
 
         $('.soma_parcelas').on('ifChanged', function (event) {
-            const icheck = event.target.checked;
             somaValorParcelas();
         });
 
@@ -951,7 +950,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     idLancamento = $(this).closest('tr').find('.idLancamento').html()
                     deleteSerie.push(idLancamento)
                     var value = $('span', this).text();
-                    value = jquery_format(value);
+                    value = jqueryFormat(value);
                     // add only if the value is number
                     if (!isNaN(value) && value.length != 0) {
                         Soma += parseFloat(value);
@@ -987,49 +986,39 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         }
 
         // Metodos para função de parcelamento
-        $('#qnt_parcelas, #valor').on('change', function () {
-            var parcelas = $('#qnt_parcelas').val();
-            var valor = $('#valor').val();
+        $('.qntParcelas').on('change', function (event) {
+            var parcelas = event.target.value
+            var form = event.target.form
+            var valorCompra = $(form).find('.valor').val()
+            var result = calculaValorParcela(parcelas, valorCompra)
 
-            var result = calculaValorParcela(parcelas, valor);
-            if (parcelas != '' && valor != '') {
-                $('.parcela').val(result);
-            } else {
-                $('.parcela').val('');
+            if (parcelas != '' && valorCompra != '' && parcelas != undefined && valorCompra != undefined) {
+                $('.valorParcela').val(result)
             }
-        });
+        })
 
-        $('.qntParcelas, .valor').keyup(function () {
-            var parcelas = undefined;
-            var valor = undefined;
-            var result = null;
+        $('.valor').keyup(function (event) {
+            var valorCompra = event.target.value
+            var form = event.target.form
+            var parcelas = $(form).find('.qntParcelas').val()
+            var result = calculaValorParcela(parcelas, valorCompra)
 
-            $('.modal-body').each(function () {
-                parcelas = $(this).find('.qntParcelas').val();
-                valor = $(this).find('.valor').val();
-                var valorParcela = $(this).find('.valorParcela');
-
-                if ((parcelas != '' && valor != '') && (parcelas != undefined && valor != undefined)) {
-                    result = calculaValorParcela(parcelas, valor)
-                    valorParcela.val(result);
-                } else {
-                    valorParcela.val('');
-                }
-            });
-        });
+            if (parcelas != '' && valorCompra != '' && parcelas != undefined && valorCompra != undefined) {
+                $('.valorParcela').val(result)
+            }
+        })
 
         function calculaValorParcela(parcela, valor) {
-            var parcelas = parcela;
-            valor = jquery_format(valor);
+            var parcelas = parcela
+            valor = jqueryFormat(valor)
 
-            var valor_parcela = valor / parcelas;
+            var valor_parcela = valor / parcelas
+            valor_parcela = adjustFloatResult(valor_parcela)
 
-            valor_parcela = br_format(valor_parcela);
-
-            return (valor_parcela);
+            return valor_parcela
         }
 
-        function jquery_format(valor) {
+        function jqueryFormat(valor) {
             // Remove todos os .
             valor = valor.replace(/\./g, "");
 
@@ -1047,6 +1036,12 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
         }
 
+        function adjustFloatResult(value) {
+            const orderOfMagnitude = Math.pow(10, 2)
+            var result = Math.trunc(value * orderOfMagnitude) / orderOfMagnitude
+            return br_format(result)
+        }
+
         $('#parcelada, .parcelada').on('change', function (event) {
             mudaCheckboxParcelamento(event);
         });
@@ -1061,15 +1056,15 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
         function mudaCheckboxParcelamento(event = null) {
             let checked
-            
+
             $('#parcelada, .parcelada').on('change', function (e) {
                 checked = e
             })
-            
+
             if (event) {
                 checked = event.target.checked;
             }
-            
+
             if (checked == true) {
                 $('#divParcelamento, .divParcelas').removeClass('hidden');
             } else {
@@ -1341,7 +1336,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             mudaCheckboxTerceiros()
             mudaCheckboxParcelamento()
             mudaCheckboxEstorno()
-            
+
             var obsIcon = $(".divObservacoes").parent().children('div').children('a').children('i')
             var obsText = $(".divObservacoes").parent().children('div').children('a').children('span.obsText')
 
