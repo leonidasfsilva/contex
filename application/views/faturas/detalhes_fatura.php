@@ -623,7 +623,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </div>
                         </div>
                         <div class="col-xs-8">
-                            <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                            <button class="btn btn-default btn-sm" data-dismiss="modal">
                                 <i class="fa fa-times fa-fw"></i> Cancelar
                             </button>
                             <button type="submit" class="btn btn-info btn-sm"><i class="fa fa-check fa-fw"></i> Copiar</button>
@@ -730,10 +730,10 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             </div>
                         </div>
                         <div class="col-xs-9">
-                            <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                            <button class="btn btn-default btn-sm" data-dismiss="modal">
                                 <i class="fa fa-times fa-fw"></i> Cancelar
                             </button>
-                            <button type="button" id="modalCopiar" class="btn btn-info btn-sm modal-copy"><i class="fa fa-copy fa-fw"></i> Copiar</button>
+                            <button type="button" id="modalCopiar" class="btn btn-info btn-sm modal-copy copiar"><i class="fa fa-copy fa-fw"></i> Copiar</button>
                             <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
                         </div>
                     </div>
@@ -816,48 +816,48 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
     })
 
     $(".descricao").autocomplete({
-        source: "<?php echo base_url('financeiro/faturas/autoCompleteDescricao'); ?>",
+        source: "<?php echo base_url('financeiro/faturas/autoCompleteDescricao') ?>",
         minLength: 3,
         select: function (event, ui) {
-            $(".descricao").val(ui.item.label);
+            $(".descricao").val(ui.item.label)
         }
-    });
+    })
 
     $('#modalLancamento').on('shown.bs.modal', function (e) {
-        $('#descricao').focus();
+        $('#descricao').focus()
     })
 
     $(document).ready(function ($) {
 
         $('#novoLancamento').click(function () {
-            $(".descricao").val('');
-            $(".valor").val('');
-            $(".valorParcela").val('');
-            $(".dataCompra").val('');
-            $(".nomeCliente").val('');
-            $(".qntParcelas").val('');
-            $('.parcelada').attr('checked', false);
-            $('.terceiros').attr('checked', false);
-            $('.estorno').attr('checked', false);
+            $(".descricao").val('')
+            $(".valor").val('')
+            $(".valorParcela").val('')
+            $(".dataCompra").val('')
+            $(".nomeCliente").val('')
+            $(".qntParcelas").val('')
+            $('.parcelada').attr('checked', false)
+            $('.terceiros').attr('checked', false)
+            $('.estorno').attr('checked', false)
         })
 
         $("#i-copy-total").hover(function () {
             $('#icon-total').toggleClass('hidden')
-        });
+        })
 
         $("#i-copy-debit").hover(function () {
             $('#icon-debit').toggleClass('hidden')
-        });
+        })
 
 
         $("#i-copy-total").click(function () {
-            var copyText = document.getElementById("i-copy-total");
-            var textArea = document.createElement("textarea");
-            textArea.value = copyText.textContent.trim();
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand("Copy");
-            textArea.remove();
+            var copyText = document.getElementById("i-copy-total")
+            var textArea = document.createElement("textarea")
+            textArea.value = copyText.textContent.trim()
+            document.body.appendChild(textArea)
+            textArea.select()
+            document.execCommand("Copy")
+            textArea.remove()
 
             Swal.fire({
                 toast: true,
@@ -876,13 +876,13 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         })
 
         $("#i-copy-debit").click(function (element) {
-            var copyText = document.getElementById("i-copy-debit");
-            var textArea = document.createElement("textarea");
-            textArea.value = copyText.textContent.trim();
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand("Copy");
-            textArea.remove();
+            var copyText = document.getElementById("i-copy-debit")
+            var textArea = document.createElement("textarea")
+            textArea.value = copyText.textContent.trim()
+            document.body.appendChild(textArea)
+            textArea.select()
+            document.execCommand("Copy")
+            textArea.remove()
 
             Swal.fire({
                 toast: true,
@@ -901,43 +901,43 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         })
 
         $("#nome_cliente, .nomeCliente").autocomplete({
-            source: "<?php echo base_url('financeiro/faturas/autoCompleteTerceiros'); ?>",
+            source: "<?php echo base_url('financeiro/faturas/autoCompleteTerceiros') ?>",
             minLength: 1,
             select: function (event, ui) {
-                $("#id_cliente, .idCliente").val(ui.item.label);
+                $("#id_cliente, .idCliente").val(ui.item.label)
             }
-        });
+        })
 
-        var marcados = false;
+        var marcados = false
 
-        somaValorParcelas();
+        somaValorParcelas()
 
         $('#marcar_todos, #desmarcar_todos').click(function () {
-            marcarTodosiCheck();
-            $('#marcar_todos').toggleClass('hidden');
-            $('#desmarcar_todos').toggleClass('hidden');
-        });
+            marcarTodosiCheck()
+            $('#marcar_todos').toggleClass('hidden')
+            $('#desmarcar_todos').toggleClass('hidden')
+        })
 
         $('.habilita_desabilita_soma').click(function () {
-            $('.th_soma').toggleClass('hidden');
-            $('.td_soma').toggleClass('hidden');
-            $('#div_btn_marcar').toggleClass('hidden');
-            $('#somatorio_lancamentos').toggleClass('hidden');
-            $('#exibir_soma').toggleClass('hidden');
-            $('#esconder_soma').toggleClass('hidden');
-        });
+            $('.th_soma').toggleClass('hidden')
+            $('.td_soma').toggleClass('hidden')
+            $('#div_btn_marcar').toggleClass('hidden')
+            $('#somatorio_lancamentos').toggleClass('hidden')
+            $('#exibir_soma').toggleClass('hidden')
+            $('#esconder_soma').toggleClass('hidden')
+        })
 
         $('.soma_parcelas').on('ifChanged', function (event) {
-            somaValorParcelas();
-        });
+            somaValorParcelas()
+        })
 
         $('.excluir_serie').click(function () {
             $('#modalExcluirSerie').modal('show')
-        });
+        })
 
         // Calculate the total invoice amount from selected items only
         function somaValorParcelas() {
-            var Soma = 0;
+            var Soma = 0
             var deleteSerie = []
             var idLancamento = null
 
@@ -949,39 +949,39 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 if ($(this).closest('tr').find('.soma_parcelas').is(':checked')) {
                     idLancamento = $(this).closest('tr').find('.idLancamento').html()
                     deleteSerie.push(idLancamento)
-                    var value = $('span', this).text();
-                    value = jqueryFormat(value);
+                    var value = $('span', this).text()
+                    value = jqueryFormat(value)
                     // add only if the value is number
                     if (!isNaN(value) && value.length != 0) {
-                        Soma += parseFloat(value);
+                        Soma += parseFloat(value)
                     }
                 }
-            });
-            var Sum = br_format(Soma);
+            })
+            var Sum = br_format(Soma)
 
             if (deleteSerie.length > 1) {
                 $('#excluir_serie').attr('disabled', false)
                 deleteSerie.forEach(function (item) {
                     $('#deleteSerieFormBody').append('<input type="hidden" name="id[]" value="' + item + '"/>')
-                });
+                })
             } else {
                 $('#excluir_serie').attr('disabled', true)
             }
 
-            $('#valor_soma_parcelas').text(Sum);
+            $('#valor_soma_parcelas').text(Sum)
         }
 
         function marcarTodosiCheck() {
             if (marcados == false) {
                 $(".soma_parcelas").each(function () {
-                    $('.soma_parcelas').iCheck('check');
-                    marcados = true;
-                });
+                    $('.soma_parcelas').iCheck('check')
+                    marcados = true
+                })
             } else {
                 $(".soma_parcelas").each(function () {
-                    $('.soma_parcelas').iCheck('uncheck');
-                    marcados = false;
-                });
+                    $('.soma_parcelas').iCheck('uncheck')
+                    marcados = false
+                })
             }
         }
 
@@ -1020,20 +1020,20 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
         function jqueryFormat(valor) {
             // Remove todos os .
-            valor = valor.replace(/\./g, "");
+            valor = valor.replace(/\./g, "")
 
             // Troca todas as , por .
-            valor = valor.replace(",", ".");
+            valor = valor.replace(",", ".")
 
             // Converte para float
-            valor = parseFloat(valor);
-            valor = parseFloat(valor) || 0.0;
+            valor = parseFloat(valor)
+            valor = parseFloat(valor) || 0.0
 
-            return valor;
+            return valor
         }
 
         function br_format(n) {
-            return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
+            return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.")
         }
 
         function adjustFloatResult(value) {
@@ -1043,16 +1043,16 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         }
 
         $('#parcelada, .parcelada').on('change', function (event) {
-            mudaCheckboxParcelamento(event);
-        });
+            mudaCheckboxParcelamento(event)
+        })
 
         $('#estorno, .estorno').on('change', function (event) {
-            mudaCheckboxEstorno(event);
-        });
+            mudaCheckboxEstorno(event)
+        })
 
         $('#terceiros, .terceiros').on('change', function (event) {
-            mudaCheckboxTerceiros(event);
-        });
+            mudaCheckboxTerceiros(event)
+        })
 
         function mudaCheckboxParcelamento(event = null) {
             let checked
@@ -1062,13 +1062,13 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             })
 
             if (event) {
-                checked = event.target.checked;
+                checked = event.target.checked
             }
 
             if (checked == true) {
-                $('#divParcelamento, .divParcelas').removeClass('hidden');
+                $('#divParcelamento, .divParcelas').removeClass('hidden')
             } else {
-                $('#divParcelamento, .divParcelas').addClass('hidden');
+                $('#divParcelamento, .divParcelas').addClass('hidden')
             }
         }
 
@@ -1080,13 +1080,13 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             })
 
             if (event) {
-                checked = event.target.checked;
+                checked = event.target.checked
             }
 
             if (checked == true) {
-                $('.divContainerTerceiros, .divContainerParcelamento').addClass('hidden');
+                $('.divContainerTerceiros, .divContainerParcelamento').addClass('hidden')
             } else {
-                $('.divContainerTerceiros, .divContainerParcelamento').removeClass('hidden');
+                $('.divContainerTerceiros, .divContainerParcelamento').removeClass('hidden')
             }
         }
 
@@ -1098,13 +1098,13 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             })
 
             if (event) {
-                checked = event.target.checked;
+                checked = event.target.checked
             }
 
             if (checked == true) {
-                $('#divTerceiros, .divTerceiros').removeClass('hidden');
+                $('#divTerceiros, .divTerceiros').removeClass('hidden')
             } else {
-                $('#divTerceiros, .divTerceiros').addClass('hidden');
+                $('#divTerceiros, .divTerceiros').addClass('hidden')
             }
         }
 
@@ -1147,14 +1147,14 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             errorClass: "help-block",
             errorElement: "p",
             highlight: function (element, errorClass, validClass) {
-                $(element).parents('.form-group').addClass('has-error');
-                $(element).parents('.form-group').removeClass('has-success');
+                $(element).parents('.form-group').addClass('has-error')
+                $(element).parents('.form-group').removeClass('has-success')
             },
             unhighlight: function (element, errorClass, validClass) {
-                $(element).parents('.form-group').removeClass('has-error');
-                $(element).parents('.form-group').addClass('has-success');
+                $(element).parents('.form-group').removeClass('has-error')
+                $(element).parents('.form-group').addClass('has-success')
             }
-        });
+        })
 
         $("#formEditarLancamento").validate({
             rules: {
@@ -1194,16 +1194,16 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             errorClass: "help-block",
             errorElement: "p",
             highlight: function (element, errorClass, validClass) {
-                $(element).parents('.form-group').addClass('has-error');
-                $(element).parents('.form-group').removeClass('has-success');
+                $(element).parents('.form-group').addClass('has-error')
+                $(element).parents('.form-group').removeClass('has-success')
             },
             unhighlight: function (element, errorClass, validClass) {
-                $(element).parents('.form-group').removeClass('has-error');
-                $(element).parents('.form-group').addClass('has-success');
+                $(element).parents('.form-group').removeClass('has-error')
+                $(element).parents('.form-group').addClass('has-success')
             }
 
 
-        });
+        })
 
         $("#formCopiar").validate({
             rules: {
@@ -1245,74 +1245,76 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             errorClass: "help-block",
             errorElement: "p",
             highlight: function (element, errorClass, validClass) {
-                $(element).parents('.form-group').addClass('has-error');
-                $(element).parents('.form-group').removeClass('has-success');
+                $(element).parents('.form-group').addClass('has-error')
+                $(element).parents('.form-group').removeClass('has-success')
             },
             unhighlight: function (element, errorClass, validClass) {
-                $(element).parents('.form-group').removeClass('has-error');
-                $(element).parents('.form-group').addClass('has-success');
+                $(element).parents('.form-group').removeClass('has-error')
+                $(element).parents('.form-group').addClass('has-success')
             }
 
 
-        });
+        })
 
         $(document).on('click', '.excluir', function (event) {
-            $("#idExcluir").val($(this).attr('id_lancamento'));
-            $("#urlExcluirLancamento").val($(location).attr('href'));
-        });
+            $("#idExcluir").val($(this).attr('id_lancamento'))
+            $("#urlExcluirLancamento").val($(location).attr('href'))
+        })
 
         $(document).on('click', '#novoLancamento', function () {
-            $("#urlLancamento").val($(location).attr('href'));
-        });
+            $("#urlLancamento").val($(location).attr('href'))
+        })
 
         $(document).on('click', '.editar, .copiar', function (event) {
-            $(".id_lancamento").val($(this).attr('id_lancamento'));
-            $(".idCliente").val($(this).attr('id_cliente'));
-            $(".descricao").val($(this).attr('descricao'));
-            $(".valor").val($(this).attr('valor'));
-            $(".dataCompra").val($(this).attr('data_compra'));
-            $(".dataCompra").datepicker('setDate', $(this).attr('data_compra'));
-            $(".nomeCliente").val($(this).attr('nome_cliente'));
+            $(".id_lancamento").val($(this).attr('id_lancamento'))
+            $(".idCliente").val($(this).attr('id_cliente'))
+            $(".descricao").val($(this).attr('descricao'))
+            $(".valor").val($(this).attr('valor'))
+            $(".dataCompra").val($(this).attr('data_compra'))
+            $(".dataCompra").datepicker('setDate', $(this).attr('data_compra'))
+            $(".nomeCliente").val($(this).attr('nome_cliente'))
 
-            var estorno = $(this).attr('estorno');
-            var terceiros = $(this).attr('terceiros');
-            var parcelada = $(this).attr('parcelada');
+            var estorno = $(this).attr('estorno')
+            var terceiros = $(this).attr('terceiros')
+            var parcelada = $(this).attr('parcelada')
+            var observacoes = $(this).attr('observacoes')
+
             if (parcelada == 1) {
-                $(".qntParcelas").val($(this).attr('n_parcelas'));
-                $(".valorParcela").val($(this).attr('valor_parcela'));
-                $('.parcelada').prop('checked', true);
-                $(".divParcelas").removeClass('hidden');
+                $(".qntParcelas").val($(this).attr('n_parcelas'))
+                $(".valorParcela").val($(this).attr('valor_parcela'))
+                $('.parcelada').prop('checked', true)
+                $(".divParcelas").removeClass('hidden')
             } else {
-                // $(".qntParcelas").val($(this).attr('n_parcelas'));
-                $(".valorParcela").val('');
-                $('.parcelada').prop('checked', false);
-                $(".divParcelas").addClass('hidden');
+                $(".qntParcelas").val('')
+                $(".valorParcela").val('')
+                $('.parcelada').prop('checked', false)
+                $(".divParcelas").addClass('hidden')
             }
+            
             if (estorno == 1) {
-                $('.estorno').prop('checked', true);
-                $(".divContainerParcelamento").addClass('hidden');
-                $(".divContainerTerceiros").addClass('hidden');
+                $('.estorno').prop('checked', true)
+                $(".divContainerParcelamento").addClass('hidden')
+                $(".divContainerTerceiros").addClass('hidden')
             } else {
-                $('.estorno').prop('checked', false);
-                $(".divContainerParcelamento").removeClass('hidden');
-                $(".divContainerTerceiros").removeClass('hidden');
+                $('.estorno').prop('checked', false)
+                $(".divContainerParcelamento").removeClass('hidden')
+                $(".divContainerTerceiros").removeClass('hidden')
 
             }
+            
             if (terceiros == 1) {
-                $('.terceiros').prop('checked', true);
-                $(".divTerceiros").removeClass('hidden');
+                $('.terceiros').prop('checked', true)
+                $(".divTerceiros").removeClass('hidden')
             } else {
-                $('.terceiros').prop('checked', false);
-                $(".divTerceiros").addClass('hidden');
+                $('.terceiros').prop('checked', false)
+                $(".divTerceiros").addClass('hidden')
             }
-
-            var observacoes = $(this).attr('observacoes');
 
             if (observacoes) {
                 var text = observacoes.replace(/<br \/> /gi, "\n")
                 $("#observacoesEditar, #observacoesCopiar").val(text)
 
-                $(".divObservacoes").removeClass('hidden');
+                $(".divObservacoes").removeClass('hidden')
                 var obsIcon = $(".divObservacoes").parent().children('div').children('a').children('i')
                 var obsText = $(".divObservacoes").parent().children('div').children('a').children('span.obsText')
 
@@ -1321,7 +1323,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 obsText.text('Remover observações')
             } else {
                 $("#observacoesEditar, #observacoesCopiar").val('')
-                $(".divObservacoes").addClass('hidden');
+                $(".divObservacoes").addClass('hidden')
                 var obsIcon = $(".divObservacoes").parent().children('div').children('a').children('i')
                 var obsText = $(".divObservacoes").parent().children('div').children('a').children('span.obsText')
 
@@ -1332,7 +1334,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         })
 
         $('#novoLancamento').click(function () {
-            $(".divObservacoes").addClass('hidden');
+            $(".divObservacoes").addClass('hidden')
             mudaCheckboxTerceiros()
             mudaCheckboxParcelamento()
             mudaCheckboxEstorno()
