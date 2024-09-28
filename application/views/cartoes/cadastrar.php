@@ -13,9 +13,10 @@
         </div>
     </div>
     <div class="panel-body">
-        <div class="note note-warning mb40">
+        <div class="note note-success mb40">
             Todos os dados inseridos neste formulário são armazenados em nosso banco de dados de forma segura.
-            Caso não se sinta à vontade para fornecer todos os dados do seu cartão, apenas o número do cartão é obrigatório.
+            <br>
+            Caso não se sinta à vontade em fornecer os dados sensíveis do seu cartão, apenas o número do cartão é obrigatório.
         </div>
         <div class="row">
             <div class="col-md-6">
@@ -103,7 +104,7 @@
                     minlength: 19
                 },
                 apelido: {
-                    maxlength: 13
+                    maxlength: 15
                 },
             },
             messages: {

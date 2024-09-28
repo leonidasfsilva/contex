@@ -31,7 +31,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 		$label_pgto      = 'danger';
 	} else {
 		$pagamentoFatura = null;
-		$label_pgto      = 'info';
+		$label_pgto      = 'primary';
+		$label_note      = 'info';
 	}
 	
 	$creditoFatura = 0;
@@ -65,18 +66,18 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             <div class="note note-info mt0 mb0">
                 <span class="font-weight-bold hidden-xs">Referência:</span>
                 <span class="font-weight-bold visible-xs">Ref:</span>
-                <span class="badge badge-info"><?= $nomeMes ?></span>
+                <span class="badge badge-primary"><?= $nomeMes ?></span>
             </div>
         </div>
         <div class="col-lg-3 col-xs-6 p0">
             <div class="note note-info mt0 mb0">
                 <span class="font-weight-bold hidden-xs">Vencimento:</span>
                 <span class="font-weight-bold visible-xs">Venc:</span>
-                <span class="badge badge-info"><?= date(('d/m/Y'), strtotime($fatura->vencimento)) ?></span>
+                <span class="badge badge-primary"><?= date(('d/m/Y'), strtotime($fatura->vencimento)) ?></span>
             </div>
         </div>
         <div class="col-lg-6 col-xs-12 p0">
-            <div class="note note-<?= $label_pgto ?? $label_status ?> p10 mt0 mb0">
+            <div class="note note-<?= $label_note ?? $label_status ?> p10 mt0 mb0">
                 <div class="row ">
                     <div class="col-xs-6 col-lg-4 pr0 pl0">
                         <span class="font-weight-bold">Status:</span>
