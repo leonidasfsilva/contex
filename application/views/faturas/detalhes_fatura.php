@@ -412,10 +412,12 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
-                        <i class="fas fa-times fa-fw"></i> Cancelar
-                    </button>
-                    <button class="btn btn-primary btn-sm"><i class="fas fa-check fa-fw"></i> Filtrar</button>
+                    <div class="modal-form-buttons">
+                        <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                            <i class="fas fa-times fa-fw"></i> Cancelar
+                        </button>
+                        <button class="btn btn-primary btn-sm"><i class="fas fa-check fa-fw"></i> Filtrar</button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -514,7 +516,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                 <label for="estornoNovo" class="switch-label primary font-weight-bold">Estorno</label>
                             </div>
                         </div>
-                        <div class="col-xs-8">
+                        <div class="col-xs-8 modal-form-buttons">
                             <button id="btnCancelLancamento" class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                                 <i class="fa fa-times fa-fw"></i> Cancelar
                             </button>
@@ -622,7 +624,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                 <label for="estornoCopiar" class="switch-label primary font-weight-bold">Estorno</label>
                             </div>
                         </div>
-                        <div class="col-xs-8">
+                        <div class="col-xs-8 modal-form-buttons">
                             <button class="btn btn-default btn-sm" data-dismiss="modal">
                                 <i class="fa fa-times fa-fw"></i> Cancelar
                             </button>
@@ -729,7 +731,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                 <label for="estornoDetalhes" class="switch-label primary font-weight-bold">Estorno</label>
                             </div>
                         </div>
-                        <div class="col-xs-9">
+                        <div class="col-xs-9 modal-form-buttons">
                             <button class="btn btn-default btn-sm" data-dismiss="modal">
                                 <i class="fa fa-times fa-fw"></i> Cancelar
                             </button>
@@ -783,12 +785,14 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 </div>
                 <div id="deleteSerieFormBody"></div>
                 <div class="modal-footer">
-                    <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
-                        Cancelar
-                    </button>
-                    <button class="btn btn-danger btn-sm"><i class="fa fa-check fa-fw"></i>
-                        Excluir
-                    </button>
+                    <div class="modal-form-buttons">
+                        <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
+                            Cancelar
+                        </button>
+                        <button class="btn btn-danger btn-sm"><i class="fa fa-check fa-fw"></i>
+                            Excluir
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -1290,7 +1294,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 $('.parcelada').prop('checked', false)
                 $(".divParcelas").addClass('hidden')
             }
-            
+
             if (estorno == 1) {
                 $('.estorno').prop('checked', true)
                 $(".divContainerParcelamento").addClass('hidden')
@@ -1301,7 +1305,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 $(".divContainerTerceiros").removeClass('hidden')
 
             }
-            
+
             if (terceiros == 1) {
                 $('.terceiros').prop('checked', true)
                 $(".divTerceiros").removeClass('hidden')
