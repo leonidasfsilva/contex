@@ -109,10 +109,11 @@
                 <h4 class="modal-title">Usuário do Cartão Adicional</h4>
             </div>
             <div class="modal-body">
-                <p>O cartão adicional deve estar vinculado a um usuário do sistema, para atribuir o cartão adicional a um usuário, informe o CPF do usuário desejado.</p>
-                <p>Caso o CPF informado corresponda a algum usuário, o sistema irá preencher o nome do usuário selecionado automaticamente.</p>
-                <p>Caso o sistema não encontre nenhum usuário para o CPF informado, verifique o CPF informado e tente novamente ou verifique se o usuário para qual você quer atribuir o cartão possui o CPF cadastrado corretamente no sistema.</p>
-                <p class="note note-danger font-weight-bold"><i style="color: #f44336" class="fas fa-exclamation-circle fa-lg fa-fw"></i> Não é possível gerar um cartão adicional sem nenhum usuário atribuído.</p>
+                <p>O cartão adicional deve estar vinculado a um usuário do sistema.</p>
+                <p>Para atribuir o cartão adicional a um usuário, informe o CPF do usuário desejado.</p>
+                <p>Caso o CPF informado corresponda a algum usuário cadastrado, o sistema irá preencher automaticamente o nome do usuário encontrado.</p>
+                <p>Caso o sistema não encontre nenhum usuário para o CPF informado, verifique a numeração do CPF informado e tente novamente ou verifique se o usuário para o qual deseja atribuir o cartão possui o CPF cadastrado no sistema corretamente.</p>
+                <p class="note note-danger font-weight-bold"><i style="color: #f44336" class="fas fa-exclamation-circle fa-lg fa-fw"></i> Não é possível gerar um cartão adicional sem um usuário atribuído.</p>
             </div>
         </div>
     </div>

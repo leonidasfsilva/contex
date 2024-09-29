@@ -4,7 +4,7 @@ $periodo = $this->input->get('periodo');
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h3>
-            <i class="fas fa-hand-holding-usd fa-lg fa-fw"></i>
+            <i class="fas fa-hand-holding-circle-dollar fa-lg fa-fw"></i>
             Investimentos
         </h3>
         <div class="panel-ctrls">

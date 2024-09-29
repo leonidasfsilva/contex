@@ -1,25 +1,30 @@
 <?php if (!defined('BASEPATH')) {
-    exit('No direct script access allowed');
+	exit('No direct script access allowed');
 }
+include APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'codegen_helper.php';
 
-/*
-|--------------------------------------------------------------------------
-| Version of system
-|--------------------------------------------------------------------------
-|
-| Definition of system version
-| to control when new features and bugfixes are released
-| and to avoid CSS conflicts on mobiles devices
-|
-| Format: YYYY.S.R
-|--------------------
-| YYYY  - current year
-| S     - current semester of year (1st or 2nd)
-| R     - current release version of system
-|
-*/
-define('VERSION_APP', '2023.1.5'); // versao atual em produçao
-// define('VERSION_APP', '2023.2.?'); // versao de lançamento do modulo de Despesas 
+/**
+ * |--------------------------------------------------------------------------
+ * | Version of system
+ * |--------------------------------------------------------------------------
+ * |
+ * | Definition of system version
+ * | to control when new features and bugfixes are released
+ * | and to avoid CSS conflicts on mobiles devices
+ * |
+ * | Format: YYYY.Q.R
+ * |--------------------
+ * | YYYY  - current year
+ * | Q     - current quarter of year (1st, 2nd, 3rd or 4th)
+ * | R     - current release version of system
+ */
+$version       = '79';
+$quarterOfYear = getQuarterOfCurrentYear();
+$currentYear   = date('Y');
+define("APP_VERSION", sprintf('%s.%s.%s', $currentYear, $quarterOfYear, $version));
+
+// previsão de lançamento do modulo de Despesas (segundo semestre de 2023)
+// define('APP_VERSION', '2023.2.?');
 
 /*
 |--------------------------------------------------------------------------

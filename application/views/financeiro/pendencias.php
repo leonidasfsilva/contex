@@ -10,7 +10,7 @@ $periodo_pendencia = $this->input->get('periodo');
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h3>
-            <i class="fas fa-money-check-alt fa-lg fa-fw"></i>
+            <i class="fas fa-money-check-dollar-pen fa-lg fa-fw"></i>
             Controle de Pendências
         </h3>
         <div class="panel-ctrls">
@@ -536,7 +536,7 @@ $periodo_pendencia = $this->input->get('periodo');
 <script type="text/javascript">
     $(document).ready(function($) {
         $("#nome_cliente, #nome_clienteEditar").autocomplete({
-            source: "<?php echo base_url(); ?>financeiro/faturas/autoCompleteCliente",
+            source: "<?php echo base_url(); ?>financeiro/pendencias/autoCompleteCliente",
             minLength: 1,
             select: function(event, ui) {
                 $("#id_cliente, #id_clienteEditar").val(ui.item.id);

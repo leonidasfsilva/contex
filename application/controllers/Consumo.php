@@ -25,6 +25,45 @@ class Consumo extends CI_Controller
         $mes = $inicio_medicao[1] + 1;
         $dia = $inicio_medicao[2];
 
+        $query_string   = null;
+        $lastElement    = end($_GET);
+
+        foreach ($_GET as $key => $value) {
+            if ($key != 'per_page') {
+                if ($value == $lastElement) {
+                    $query_string .= $key . '=' . $value;
+                } else {
+                    $query_string .= $key . '=' . $value . '&';
+                }
+            }
+        }
+
+        $config['base_url']             = base_url('consumo');
+        $config['suffix']               = '&' . $query_string;
+        $config['first_url']            = $config['base_url'] . '?' . $query_string;
+        $config['total_rows']           = $this->consumo_model->countConsumoUsuario(getUserId());
+        $config['per_page']             = 10;
+        $config['page_query_string']    = true;
+        $config['next_link']            = false;
+        $config['prev_link']            = false;
+        $config['full_tag_open']        = '<ul class="pagination pagination-sm">';
+        $config['full_tag_close']       = '</ul>';
+        $config['num_tag_open']         = '<li>';
+        $config['num_tag_close']        = '</li>';
+        $config['cur_tag_open']         = '<li class="disabled"><a style="background-color:#337ab7; color: white" class="js:"><b>';
+        $config['cur_tag_close']        = '</b></a></li>';
+        $config['prev_tag_open']        = '<li>';
+        $config['prev_tag_close']       = '</li>';
+        $config['next_tag_open']        = '<li>';
+        $config['next_tag_close']       = '</li>';
+        $config['first_link']           = 'Primeira';
+        $config['last_link']            = 'Última';
+        $config['first_tag_open']       = '<li>';
+        $config['first_tag_close']      = '</li>';
+        $config['last_tag_open']        = '<li>';
+        $config['last_tag_close']       = '</li>';
+
+        $this->pagination->initialize($config);
 
         $data['referencia'] = padronizarString(strftime('%B / %Y', strtotime($dia . '-' . $mes . '-' . $ano)));
         $data['configs'] = $configs;
@@ -83,9 +122,10 @@ class Consumo extends CI_Controller
 
     public function registrar()
     {
-        $leitura = $_POST['leitura'];
-        $data_leitura = $_POST['data_leitura'];
-        $configs = $this->consumo_model->getConfigsConsumo(getUserId());
+        $leitura_atual      = $_POST['leitura_atual'];
+        $leitura_anterior   = $_POST['leitura_anterior'];
+        $data_leitura       = $_POST['data_leitura'];
+        $configs            = $this->consumo_model->getConfigsConsumo(getUserId());
 
         if ($consumo_usuario = $this->consumo_model->getConsumoUsuario(getUserId())) {
             $ultima_leitura = $consumo_usuario->leitura_atual;
@@ -94,33 +134,37 @@ class Consumo extends CI_Controller
         }
 
         if ($_POST['data_leitura']) {
-            $data_leitura = explode('/', $_POST['data_leitura']);
-            $ano = $data_leitura[2];
-            $mes = $data_leitura[1];
-            $dia = $data_leitura[0];
-            $data_leitura = $data_leitura[2] . '-' . $data_leitura[1] . '-' . $data_leitura[0];
+            $data_leitura   = explode('/', $_POST['data_leitura']);
+            $ano            = $data_leitura[2];
+            $mes            = $data_leitura[1];
+            $dia            = $data_leitura[0];
+            $data_leitura   = $ano . '-' . $mes . '-' . $dia;
         } else {
-            $data_leitura = date('Y-m-d');
-            $data_leitura = explode('-', $data_leitura);
-            $ano = $data_leitura[0];
-            $mes = $data_leitura[1];
-            $dia = $data_leitura[2];
-            $data_leitura = $data_leitura[0] . '-' . $data_leitura[1] . '-' . $data_leitura[2];
+            $data_leitura   = date('Y-m-d');
+            $data_leitura   = explode('-', $data_leitura);
+            $ano            = $data_leitura[0];
+            $mes            = $data_leitura[1];
+            $dia            = $data_leitura[2];
+            $data_leitura   = $ano . '-' . $mes . '-' . $dia;
+        }
+
+        if ($leitura_anterior) {
+            $ultima_leitura = $leitura_anterior;
         }
 
         //formula de calculo para obter o valor da conta de luz
-        $consumo = $leitura - $ultima_leitura;
+        $consumo = $leitura_atual - $ultima_leitura;
         $valor = $configs->valor_kwh * $consumo;
 
         $data = array(
-            'valor' => $valor,
-            'leitura_atual' => $leitura,
-            'leitura_anterior' => $ultima_leitura,
-            'id_usuario' => getUserId(),
-            'consumo' => $consumo,
-            'data_leitura' => $data_leitura,
-            'mes_referencia' => $mes,
-            'ano_referencia' => $ano,
+            'valor'             => $valor,
+            'leitura_atual'     => $leitura_atual,
+            'leitura_anterior'  => $ultima_leitura,
+            'id_usuario'        => getUserId(),
+            'consumo'           => $consumo,
+            'data_leitura'      => $data_leitura,
+            'mes_referencia'    => $mes,
+            'ano_referencia'    => $ano,
         );
 
         if ($this->consumo_model->add('consumo', $data)) {
@@ -134,40 +178,41 @@ class Consumo extends CI_Controller
 
     public function editar()
     {
-        $id = $_POST['id'];
-        $leitura = $_POST['leitura'];
-        $data_leitura = $_POST['data_leitura'];
-        $configs = $this->consumo_model->getConfigsConsumo(getUserId());
-        $consumo_atual = $this->consumo_model->getConsumoByID($id);
+        $id                 = $_POST['id'];
+        $leitura_atual      = $_POST['leitura_atual'];
+        $leitura_anterior   = $_POST['leitura_anterior'];
+        $data_leitura       = $_POST['data_leitura'];
+        $configs            = $this->consumo_model->getConfigsConsumo(getUserId());
+        $consumo_atual      = $this->consumo_model->getConsumoByID($id);
 
         if ($_POST['data_leitura']) {
             $data_leitura = explode('/', $_POST['data_leitura']);
             $ano = $data_leitura[2];
             $mes = $data_leitura[1];
             $dia = $data_leitura[0];
-            $data_leitura = $data_leitura[2] . '-' . $data_leitura[1] . '-' . $data_leitura[0];
+            $data_leitura   = $ano . '-' . $mes . '-' . $dia;
         } else {
             $data_leitura = date('Y-m-d');
             $data_leitura = explode('-', $data_leitura);
             $ano = $data_leitura[0];
             $mes = $data_leitura[1];
             $dia = $data_leitura[2];
-            $data_leitura = $data_leitura[0] . '-' . $data_leitura[1] . '-' . $data_leitura[2];
+            $data_leitura   = $ano . '-' . $mes . '-' . $dia;
         }
 
         //formula de calculo para obter o valor da conta de luz
-        $consumo = $leitura - $consumo_atual->leitura_anterior;
+        $consumo = $leitura_atual - $leitura_anterior;
         $valor = $configs->valor_kwh * $consumo;
 
         $data = array(
-            'valor' => $valor,
-            'leitura_atual' => $leitura,
-            'leitura_anterior' => $consumo_atual->leitura_anterior,
-            'id_usuario' => getUserId(),
-            'consumo' => $consumo,
-            'data_leitura' => $data_leitura,
-            'mes_referencia' => $mes,
-            'ano_referencia' => $ano,
+            'valor'             => $valor,
+            'leitura_atual'     => $leitura_atual,
+            'leitura_anterior'  => $leitura_anterior,
+            'id_usuario'        => getUserId(),
+            'consumo'           => $consumo,
+            'data_leitura'      => $data_leitura,
+            'mes_referencia'    => $mes,
+            'ano_referencia'    => $ano,
         );
 
         if ($this->consumo_model->edit('consumo', $data, 'id', $id)) {

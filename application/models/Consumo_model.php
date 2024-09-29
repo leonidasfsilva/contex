@@ -8,7 +8,6 @@ class Consumo_model extends CI_Model
     {
         parent::__construct();
         $this->load->helper(array('codegen_helper'));
-
     }
 
     function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
@@ -58,9 +57,12 @@ class Consumo_model extends CI_Model
         return false;
     }
 
-    function count($table)
+    function countConsumoUsuario($id_usuario)
     {
-        return $this->db->count_all($table);
+        return $this->db
+            ->where('id_usuario', $id_usuario)
+            ->where('status', 1)
+            ->count_all_results('consumo');
     }
 
     function getConfigsConsumo($id_usuario)
@@ -87,7 +89,6 @@ class Consumo_model extends CI_Model
         return $this->db
             ->where('id_usuario', $id_usuario)
             ->where('status', 1)
-            ->order_by('id', 'asc')
             ->order_by('data_leitura', 'desc')
             ->get('consumo')
             ->result();

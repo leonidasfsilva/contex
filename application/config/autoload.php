@@ -58,6 +58,9 @@ $autoload['libraries'] = array(
     'database',
     'session',
     'permission',
+    'pagination',
+	'user_agent',
+	'ConfigLoader'
 );
 
 

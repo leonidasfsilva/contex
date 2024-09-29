@@ -1,4 +1,68 @@
 <script>
+    $(document).ready(function () {
+        function toggleUserMenuIcon() {
+            var menuIcon = $('#user-menu-icon')
+
+            if (menuIcon.hasClass('fa-times')) {
+                menuIcon.addClass('fa-bars')
+                menuIcon.removeClass('fa-times')
+            }
+        }
+
+        $(document).click(function () {
+            toggleUserMenuIcon()
+        })
+
+        $(document).keydown(function () {
+            toggleUserMenuIcon()
+        })
+
+        $('#user-menu-dropdown-button').click(function () {
+            $('#user-menu-icon').toggleClass('fa-bars fa-times')
+        })
+
+        $('.blink-text').each(function () {
+            var elem = $(this);
+            setInterval(function () {
+                if (elem.css('visibility') === 'hidden') {
+                    elem.css('visibility', 'visible');
+                } else {
+                    elem.css('visibility', 'hidden');
+                }
+            }, 600);
+        });
+
+        // method to close and open one modal after another one
+        $('.modal-copy').click(function (e) {
+            var parentModal = null
+            var parentElement = $(this)
+
+            for (var i = 0; i < 20; i++) {
+                if (parentModal != null && parentModal.attr('id') == "modalEditar") {
+                    toggleModals(parentModal, parentElement, true)
+                    return false;
+                }
+
+                if (parentModal != null) {
+                    parentModal = parentModal.parent()
+                } else {
+                    parentModal = parentElement.parent()
+                }
+            }
+        })
+    })
+
+    function toggleModals(discardModal, targetModal, trigger = false) {
+        $(discardModal).modal('hide')
+        $(discardModal).on('hidden.bs.modal', function () {
+            // get the ID button clicked to invoke the target modal
+            if (trigger) {
+                $('#' + targetModal.attr('id')).modal('show')
+                trigger = false
+            }
+        })
+    }
+
     let conectado = false;
 
     function lerTodasNotificacoes() {
@@ -9,7 +73,7 @@
                 post: true
             },
             dataType: 'html',
-            success: function() {
+            success: function () {
                 atualizaNotificacoesUsuario()
             }
         });
@@ -23,15 +87,15 @@
                 id: id
             },
             dataType: 'html',
-            success: function() {
+            success: function () {
                 atualizaNotificacoesUsuario()
                 window.location.replace('<?= base_url('notificacoes'); ?>')
             }
         });
     }
 
-    $(document).ready(function() {
-        setInterval(function() {
+    $(document).ready(function () {
+        setInterval(function () {
             if (conectado === true) {
                 // atualizaNotificacoesUsuario();
             }
@@ -46,8 +110,9 @@
             data: {
                 request: true
             },
-            success: function(data) {
+            success: function (data) {
                 if (data.result === true) {
+                    let target = '';
                     let link;
                     let icone;
                     let height = 0;
@@ -79,7 +144,7 @@
                             cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
                         }).then((result) => {
                             if (result.value) {
-                                window.location.reload(true)
+                                window.location.reload()
                             } else {
 
                             }
@@ -89,7 +154,7 @@
                     if (data.retorno !== null) {
                         // console.log('atualizaNotificacoesUsuario(): usuario possui novas notificacoes')
                         $('#notifications-panel-footer').removeClass('hidden')
-                        $(data.retorno).each(function(index, item) {
+                        $(data.retorno).each(function (index, item) {
                             if (height < 210) {
                                 height = height + 72;
                             }
@@ -97,6 +162,10 @@
                             if (item.link) {
                                 base_url = '<?= base_url() ?>'
                                 link = base_url + item.link
+                                if (item.link.includes('http')) {
+                                    link = item.link
+                                    target = '_blank'
+                                }
                             } else {
                                 link = 'notificacoes'
                             }
@@ -107,9 +176,9 @@
                             }
                             $('#notifications-panel').append(
                                 '<li>' +
-                                '<a href="' + link + '" class="notification-info">' +
+                                '<a href="' + link + '" class="notification-info" target="' + target + '">' +
                                 '<div class="notification-icon"><i class="' + icone + '"></i></div>' +
-                                '<div class="notification-content ajax-notification font-weight-bold">' + (item.titulo) + '</div>' +
+                                '<div class="notification-content ajax-notification ">' + (item.descricao) + '</div>' +
                                 '</a>' +
                                 '</li>'
                             )
@@ -132,23 +201,79 @@
         });
     }
 
-    $(document).on('ready', function(event) {
+    $(document).on('ready', function (event) {
         atualizaNotificacoesUsuario();
 
         $("#urlAtual, .urlAtual").val($(location).attr('href'));
 
-        $('.modal_anuncio').each(function(key, value) {
+        $('.modal_anuncio').each(function (key, value) {
             $('.modal_anuncio').modal('show');
         });
 
-        $('[disabled="disabled"]').click(function(e) {
+        $('[disabled="disabled"]').click(function (e) {
             e.preventDefault();
         });
 
+        var element = $(".principal-div")
+        showSpinnerLoader(element)
+        removeSpinnerLoader(element)
+    })
+
+    function showSpinnerLoader(element = null) {
+        if (!element) {
+            element = $(".principal-div")
+        }
+
+        element.hide()
         $(".preloader").show();
-        setTimeout(function() {
-            hidePreLoader();
-        }, 500);
+    }
+
+    function removeSpinnerLoader(element, time = 600) {
+        var percentage = Math.round((time * 20) / 100)
+
+        setTimeout(function () {
+            $(".preloader").hide()
+        }, (time - percentage));
+
+        setTimeout(function () {
+            $(element).show();
+        }, time);
+    }
+
+    $(document).on('click', 'a:not([href="javascript:"],' +
+        '[target="_blank"], ' +
+        '[disabled="disabled"], ' +
+        '[class="js:"], ' +
+        '[class="ui-corner-all"], ' +
+        '[href="#"], ' +
+        '[data-toggle="modal"], ' +
+        '[data-toggle="collapse"], ' +
+        '[data-toggle="tab"])',
+        function () {
+            var element = $(".principal-div")
+            element.hide()
+            $(".preloader").show();
+            // removeSpinnerLoader(element)
+        });
+
+    $(document).on('submit', 'form', function (event) {
+        var form = this;
+        event.preventDefault();
+
+        if ($(form).valid()) {
+            // console.log('executou preloader');
+            $(".principal-div").hide();
+            $(".preloader").show();
+            form.submit();
+        }
+    });
+
+    $(document).on('click', '#teste-btn', function () {
+        // console.log('teste ok!');
+        $(".preloader").fadeIn();
+        setTimeout(function () {
+            $(".preloader").fadeOut();
+        }, 1000);
     });
 
     function mountCard(form, container, timeout) {
@@ -188,17 +313,7 @@
         return card;
     }
 
-    function hidePreLoader() {
-        if ($(".preloader").fadeOut()) {}
-    }
-
-    $(function() {
-        $('.datepicker').inputmask('date', {
-            placeholder: '__/__/____'
-        });
-    });
-
-    $(function() {
+    $(function () {
         $(".money").maskMoney({
             thousands: '.',
             decimal: ',',
@@ -207,50 +322,8 @@
         $('.money').prop('type', 'tel');
     });
 
-    $(function() {
+    $(function () {
         $('.popover-btn').popover()
-    });
-
-    $(document).on('click', 'a:not([href="javascript:"],' +
-        '[target="_blank"], ' +
-        '[disabled="disabled"], ' +
-        '[class="js:"], ' +
-        '[class="ui-corner-all"], ' +
-        '[href="#"], ' +
-        '[data-toggle="modal"], ' +
-        '[data-toggle="collapse"], ' +
-        '[data-toggle="tab"])',
-        function() {
-            $(".subconteudo-principal").hide();
-            $(".preloader").show();
-        });
-
-    $(document).on('submit', 'form', function(event) {
-        var form = this;
-        event.preventDefault();
-        // $('#btn-acessar').addClass('disabled');
-        // $('#btn-acessar').html('Acessando... <i class="fa fa-spinner fa-pulse fa-fw"></i>');
-        // $('#progress-acessar').removeClass('hidden');
-        // $(".progress-bar").animate({
-        //     width: "100%"
-        // }, 1000);
-        if ($(form).valid()) {
-            // console.log('executou preloader');
-            $(".subconteudo-principal").fadeOut();
-            $(".preloader").fadeIn();
-
-            setTimeout(function() {
-                form.submit();
-            }, 1000);
-        }
-    });
-
-    $(document).on('click', '#teste-btn', function() {
-        // console.log('teste ok!');
-        $(".preloader").fadeIn();
-        setTimeout(function() {
-            $(".preloader").fadeOut();
-        }, 1000);
     });
 
     $('#telefone').mask("(99) 9999-99990");
@@ -258,29 +331,29 @@
     $('#cpf').mask("999.999.999-99");
     $('#rg').mask("99.999.999-9");
     $('#expiry').mask("99 / 99");
+	
+	<?php
+	$url = current_url();
+	$segments = explode("/", $url);
+	$bloqueados = array(
+		'login',
+		'redefinirsenha',
+	);
+	
+	if (!count(array_intersect($segments, $bloqueados)) > 0) { ?>
+    window.onload = function () {
+        // var wrapper = document.body;
+        // wrapper.className += " page-loading";
+        // setTimeout(function () {
+        //     wrapper.classList.remove('page-loading');
+        // }, 2000);
+    };
+	<?php
+	} ?>
 
-    <?php
-    $url = current_url();
-    $segments = explode("/", $url);
-    $bloqueados = array(
-        'login',
-        'redefinirsenha',
-    );
+    $(document).ready(function () {
 
-    if (!count(array_intersect($segments, $bloqueados)) > 0) { ?>
-        window.onload = function() {
-            // var wrapper = document.body;
-            // wrapper.className += " page-loading";
-            // setTimeout(function () {
-            //     wrapper.classList.remove('page-loading');
-            // }, 2000);
-        };
-    <?php
-    } ?>
-
-    $(document).ready(function() {
-
-        $('#body').each(function() {
+        $('#body').each(function () {
             if ($(this).hasClass('sidebar-collapsed')) {
                 // SIDEBAR OCULTO
                 $('#menu-toggle-icon').addClass('fa-ellipsis-v')
@@ -292,7 +365,7 @@
             }
         });
 
-        $('#menu-switcher').click(function() {
+        $('#menu-switcher').click(function () {
             if ($('#body').hasClass('sidebar-collapsed')) {
                 // SIDEBAR OCULTO
                 $('#menu-toggle-icon').toggleClass('fa-chevron-left fa-ellipsis-v')
@@ -305,7 +378,7 @@
         });
 
         // API CEP DOS CORREIOS (viacep.com.br)
-        function limpa_formulário_cep() {
+        function limpaFormCep() {
             // Limpa valores do formulário de cep.
             $("#logradouro").val("");
             $("#bairro").val("");
@@ -315,7 +388,7 @@
         }
 
         //Quando o campo cep possui algum caracter digitado.
-        $("#cep").keyup(function() {
+        $("#cep").keyup(function () {
 
             //Nova variável "cep" somente com dígitos.
             var cep = $(this).val().replace(/\D/g, '');
@@ -338,7 +411,7 @@
                     $("#ibge").val("aguarde...");
 
                     //Consulta o webservice viacep.com.br/
-                    $.getJSON("https://viacep.com.br/ws/" + cep + "/json/", function(dados) {
+                    $.getJSON("https://viacep.com.br/ws/" + cep + "/json/", function (dados) {
 
                         if (!("erro" in dados)) {
                             //Atualiza os campos com os valores da consulta.
@@ -350,7 +423,7 @@
                         } //end if.
                         else {
                             //CEP pesquisado não foi encontrado.
-                            limpa_formulário_cep();
+                            limpaFormCep();
                             // alert("CEP não encontrado.");
                             Swal.fire({
                                 position: 'top',
@@ -370,7 +443,7 @@
                 } //end if.
                 else {
                     //cep é inválido.
-                    limpa_formulário_cep();
+                    limpaFormCep();
                     // alert("Formato de CEP inválido.");
                     Swal.fire({
                         position: 'top',
@@ -389,10 +462,16 @@
             } //end if.
             else {
                 //cep sem valor, limpa formulário.
-                limpa_formulário_cep();
+                limpaFormCep();
             }
         });
         // FIM API CEP CORREIOS
+
+        $(function () {
+            $('.datepicker').inputmask('date', {
+                placeholder: '__/__/____'
+            });
+        });
 
         $('.datepicker').datepicker({
             language: 'pt-BR',
@@ -400,88 +479,66 @@
             format: 'dd/mm/yyyy',
             todayHighlight: true,
             todayBtn: 'linked'
-        });
+        })
 
         $('.tooltips').tooltip();
+		
+		<?php if ($this->session->flashdata('erro') != null) { ?>
+        Swal.fire({
+            position: 'top',
+            icon: 'error',
+            // timer: 3000,
+            title: 'Erro!',
+            html: '<?= $this->session->flashdata('erro') ?>',
+            showConfirmButton: false,
+            showCancelButton: false,
+            showCloseButton: true,
+            reverseButtons: true,
+            confirmButtonText: '<i class="fa fa-refresh fa-fw"></i> Tentar de novo ',
+            cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
+        }).then((result) => {
+            if (result.value) {
+                recuperar_senha();
+            } else {
 
-        $('.poupanca').click(function() {
-            Swal.fire({
-                position: 'top',
-                type: 'info',
-                // timer: 5000,
-                title: 'Em breve',
-                html: 'O módulo de Poupança encontra-se em desenvolvimento.',
-                showConfirmButton: false,
-                showCancelButton: false,
-                showCloseButton: true,
-                reverseButtons: true,
-                confirmButtonText: '<i class="fa fa-refresh fa-fw"></i> Tentar de novo ',
-                cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
-            }).then((result) => {
-                if (result.value) {
-                    recuperar_senha();
-                } else {
-
-                }
-            });
+            }
         });
+		<?php } ?>
+		
+		<?php if ($this->session->flashdata('sucesso') != null) { ?>
+        Swal.fire({
+            position: 'top',
+            icon: 'success',
+            title: 'Feito!',
+            timer: 1200,
+            html: '<?= $this->session->flashdata('sucesso') ?>',
+            showConfirmButton: false,
+            showCancelButton: false,
+            showCloseButton: true,
+            confirmButtonText: '<i class="fa fa-check fa-fw"></i> OK ',
+            cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
+            reverseButtons: true,
+        }).then((result) => {
+            if (result.value) {
 
-        <?php if ($this->session->flashdata('erro') != null) { ?>
-            Swal.fire({
-                position: 'top',
-                icon: 'error',
-                // timer: 3000,
-                title: 'Erro!',
-                html: '<?= $this->session->flashdata('erro') ?>',
-                showConfirmButton: false,
-                showCancelButton: false,
-                showCloseButton: true,
-                reverseButtons: true,
-                confirmButtonText: '<i class="fa fa-refresh fa-fw"></i> Tentar de novo ',
-                cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
-            }).then((result) => {
-                if (result.value) {
-                    recuperar_senha();
-                } else {
+            } else {
 
-                }
-            });
-        <?php } ?>
-
-        <?php if ($this->session->flashdata('sucesso') != null) { ?>
-            Swal.fire({
-                position: 'top',
-                icon: 'success',
-                title: 'Feito!',
-                timer: 3000,
-                html: '<?= $this->session->flashdata('sucesso') ?>',
-                showConfirmButton: false,
-                showCancelButton: false,
-                showCloseButton: true,
-                confirmButtonText: '<i class="fa fa-check fa-fw"></i> OK ',
-                cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
-                reverseButtons: true,
-            }).then((result) => {
-                if (result.value) {
-
-                } else {
-
-                }
-            });
-        <?php } ?>
+            }
+        });
+		<?php } ?>
 
         $.fn.extend({
-            toggleText: function(a, b) {
+            toggleText: function (a, b) {
                 return this.text(this.text() == b ? a : b);
             }
         });
 
-        $.each($('.expand-icon'), function(key, value) {
+        $.each($('.expand-icon'), function (key, value) {
             $(this).attr('class', 'fas fa-expand expand-icon');
             $(this).attr('title', 'Expandir');
         });
 
-        $(".panel .expand").click(function() {
+        $(".panel .expand").click(function () {
             var n = $(this).closest(".panel");
             var m = $(this).find(".expand-icon");
             n.toggleClass("widget-fullscreen");
@@ -495,14 +552,14 @@
             }
         });
 
-        $(".panel .close-panel").click(function() {
+        $(".panel .close-panel").click(function () {
             $(this).closest(".panel").hide();
         });
 
         // -------------------------------
         // Panel Collapses
         // -------------------------------
-        $('.panel-collapse').click(function() {
+        $('.panel-collapse').click(function () {
             if ($(this).children().hasClass('fa-chevron-up') || $(this).children().hasClass('fa-chevron-down')) {
                 $(this).children().toggleClass("fa-chevron-up fa-chevron-down");
             } else {
@@ -517,7 +574,7 @@
     });
 
     // Function to make the dropdown shows on mouse hover - 27/11/2022
-    $(function() {
+    $(function () {
         function is_touch_device() {
             return 'ontouchstart' in window // works on most browsers 
                 ||
@@ -526,11 +583,23 @@
 
         if (!is_touch_device() && $('.navbar-toggle:hidden')) {
             $('.dropdown-menu-hover', this).css('margin-top', 0);
-            $('.dropdown-hover').hover(function() {
+            $('.dropdown-hover').hover(function () {
                 $('.dropdown-toggle', this).trigger('click');
-                //uncomment below to make the parent item clickable
+                // uncomment below to make the parent item clickable
                 // $('.dropdown-toggle', this).toggleClass("disabled");
             });
         }
-    });
+    })
+
+    // JS to control the select mounths modals - 25/06/2023
+    $(document).ready(function () {
+        $('.selectMonth').click(function () {
+            var value = $(this).val()
+            var target = $(':input.selectedMonth')
+            var form = $(this).parent()
+
+            target.val(value)
+            form.submit()
+        })
+    })
 </script>

@@ -36,13 +36,12 @@
                                 break;
                         }
 
+                        $cor = '';
                         if ($notificacao->lida == 0) {
 //                            $cor = 'background-color: #00c5de2e;';
-                        } else {
-                            $cor = '';
                         }
 
-                        $date_time = new DateTime($notificacao->data_abertura);
+                        $date_time = new DateTime($notificacao->criado_em);
                         $hoje = new DateTime('now');
                         $interval = $hoje->diff($date_time);
                         $dataformatada = $date_time->format('d/m/Y H:i:s');
@@ -199,7 +198,7 @@
             timer: 5000,
             timerProgressBar: true,
             icon: 'info',
-            title: 'Versão do Sistema: <?= versionApp() ?>',
+            title: 'Versão do Sistema: <?= getAppVersion() ?>',
             didOpen: (toast) => {
                 toast.addEventListener('mouseenter', Swal.stopTimer)
                 toast.addEventListener('mouseleave', Swal.resumeTimer)

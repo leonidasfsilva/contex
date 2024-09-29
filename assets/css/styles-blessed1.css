@@ -1025,7 +1025,7 @@ body.nooverflow {
 }
 
 .panel.panel-midnightblue {
-    border-color: #263238;
+    border-color: #263238 !important;
 }
 
 .panel.panel-midnightblue .panel-heading {
@@ -1618,7 +1618,7 @@ body.nooverflow {
 }
 
 .panel-group .panel-heading a:after {
-    font-family: 'Font Awesome 5 Free 900';
+    font-family: 'Font Awesome 6 Pro';
     content: "\f107";
     float: right;
     color: grey;
@@ -5826,7 +5826,7 @@ ul.mailbox-msg-list li a.mailbox-msg-list-item div .msg {
     opacity: 0.5;
     filter: alpha(opacity=50);
     content: "\f107";
-    font-family: 'Font Awesome 5 Free 900';
+    font-family: 'Font Awesome 6 Pro';
     font-style: normal;
     font-weight: normal;
     float: right;
@@ -7842,7 +7842,7 @@ select.tt-hint {
 }
 
 .form-group.has-success .form-control {
-    background-color: #ffffff;
+    /* background-color: #ffffff; */
 }
 
 .form-group.has-success .form-control::-moz-placeholder {
@@ -8504,7 +8504,7 @@ label.icheck.checkbox {
 .dd3-handle:before {
     content: '\f142' !important;
     color: #90a4ae !important;
-    font-family: 'Font Awesome 5 Free 900' !important;
+    font-family: 'Font Awesome 6 Pro' !important;
     top: 7px !important;
     font-size: 14px !important;
 }
@@ -9800,7 +9800,7 @@ svg.peity {
 }
 
 .note > div * {
-    line-height: 34px;
+    /*line-height: 34px;*/
 }
 
 .notes-container .notes-list {
@@ -11746,13 +11746,13 @@ ul.demo-btns > li {
 }
 
 .datepicker-dropdown.datepicker-orient-bottom:before {
-    bottom: -7px;
+    /*bottom: -7px;*/
     border-bottom: 0;
     border-top: 7px solid #999;
 }
 
 .datepicker-dropdown.datepicker-orient-bottom:after {
-    bottom: -6px;
+    /*bottom: -6px;*/
     border-bottom: 0;
     border-top: 6px solid #fff;
 }

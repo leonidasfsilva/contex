@@ -1,7 +1,7 @@
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h3>
-            <i class="fas fa-users fa-lg fa-fw"></i>
+            <i class="fal fa-people-group fa-lg fa-fw"></i>
             Cadastro de Clientes
         </h3>
         <div class="panel-ctrls">

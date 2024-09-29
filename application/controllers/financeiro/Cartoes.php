@@ -144,7 +144,6 @@ class Cartoes extends CI_Controller
         if ($this->cartoes_model->delete('cartoes', $data, 'id_cartao', $id) == true) {
             $this->session->set_flashdata('sucesso', 'Cartão desativado com sucesso');
             redirect(base_url() . 'financeiro/cartoes');
-
         } else {
             $this->session->set_flashdata('erro', 'Erro ao tentar desativar cartão solicitado');
             redirect(base_url() . 'financeiro/cartoes');
@@ -162,7 +161,6 @@ class Cartoes extends CI_Controller
         if ($this->cartoes_model->delete('cartoes', $data, 'id_cartao', $id) == true) {
             $this->session->set_flashdata('sucesso', 'Cartão ativado com sucesso');
             redirect(base_url() . 'financeiro/cartoes');
-
         } else {
             $this->session->set_flashdata('erro', 'Erro ao tentar ativar cartão solicitado');
             redirect(base_url() . 'financeiro/cartoes');
@@ -243,13 +241,13 @@ class Cartoes extends CI_Controller
 
         $cartao = $this->cartoes_model->cartaoExistente($id_cartao);
         if ($cartao) {
-            if ($cartao['adicional'] == 1) {
-                if ($cartao['id_usuario_titular'] != getUserId()) {
+            if ($cartao->adicional == 1) {
+                if ($cartao->id_usuario_titular != getUserId()) {
                     $this->session->set_flashdata('erro', 'Você não pode excluir este cartão, apenas o titular emissor pode exclui-lo.');
                     redirect('financeiro/cartoes');
                 }
             } else {
-                if ($cartao['possui_adicional'] == 1) {
+                if ($cartao->possui_adicional == 1) {
                     $this->session->set_flashdata('erro', 'Não é possível excluir cartões que possuam cartões adicionais associados.');
                     redirect('financeiro/cartoes');
                 }

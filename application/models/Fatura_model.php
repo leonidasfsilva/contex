@@ -15,22 +15,40 @@ class Fatura_model extends CI_Model
         parent::__construct();
     }
 
-    function get($table, $fields, $where = null, $id_usuario, $id_cartao, $perpage = 0, $start = 0, $one = false, $array = 'array')
+    function get($table, $fields, $id_cartao, $id_usuario = null, $where = null, $limit = null, $rows, $perpage = 0, $start = 0, $order_by = null, $one = false, $array = 'array')
     {
 
         $this->db->select($fields);
         $this->db->from($table);
-        $this->db->order_by('vencimento', 'asc');
         $this->db->limit($perpage, $start);
+
         if ($where) {
             $this->db->where($where);
         }
         $this->db->where('status', 1);
-        // este trecho do codigo foi comentado para tornar visivel aos titulares as faturas do cartoes adicionais
+        // este trecho do codigo foi comentado para tornar visivel aos titulares as faturas dos cartoes adicionais
         // $this->db->where('id_usuario', $id_usuario);
         $this->db->where('id_cartao', $id_cartao);
-        $query = $this->db->get();
 
+        if ($order_by) {
+            if (is_array($order_by)) {
+                foreach ($order_by as $key => $value) {
+                    $this->db->order_by($key, $value);
+                }
+            } else {
+                $this->db->order_by('vencimento', $order_by);
+            }
+        }
+
+        if ($limit) {
+            if ($rows > $limit) {
+                $this->db->limit($limit, ($rows - $limit));
+            } else {
+                $this->db->limit($limit, $start);
+            }
+        }
+
+        $query = $this->db->get();
         $result = !$one ? $query->result() : $query->row();
         return $result;
     }
@@ -119,11 +137,12 @@ class Fatura_model extends CI_Model
             ->row();
     }
 
-    function getFaturaUsuario($id_fatura)
+    function getFaturaUsuario($id_fatura, $idUser)
     {
         return $this->db
             ->where('status', 1)
             ->where('id_fatura', $id_fatura)
+            ->where('id_usuario', $idUser)
             ->get('faturas')
             ->row();
     }
@@ -221,19 +240,23 @@ class Fatura_model extends CI_Model
     {
         $this->db->where($fieldID, $ID);
         $this->db->delete($table);
-        
+
         if ($this->db->affected_rows() == 1) {
             return true;
         }
         return false;
     }
 
-    function count($table, $where)
+    function count($table, $where, $idCartao)
     {
-
         $this->db->from($table);
+
         if ($where) {
             $this->db->where($where);
+        }
+
+        if ($idCartao) {
+            $this->db->where('id_cartao', $idCartao);
         }
         return $this->db->count_all_results();
     }
@@ -504,6 +527,13 @@ class Fatura_model extends CI_Model
         return $this->db->get()->row('id_fatura');
     }
 
+    function getFaturaByLancamentosAssoc($idLancamento)
+    {
+        $this->db->from('lancamentos_faturas_assoc');
+        $this->db->where('id_lancamento', $idLancamento);
+        return $this->db->get()->result_array('id_fatura');
+    }
+
     function getFaturasTerceiros($idUsuario, $nome, $mesReferencia, $anoReferencia)
     {
         if (!is_string($nome) || is_numeric($nome)) {
@@ -517,10 +547,12 @@ class Fatura_model extends CI_Model
             ON lf.id_fatura = f.id_fatura
             INNER JOIN lancamentos_faturas_assoc lfa
             ON lfa.id_lancamento = lf.id_lancamento
-            WHERE lf.nome_cliente LIKE '$nome'
+            WHERE lf.nome_cliente LIKE '%$nome%'
             AND lfa.mes_referencia = $mesReferencia
             AND lfa.ano_referencia = $anoReferencia
             AND f.id_usuario = $idUsuario
+            AND lf.status = 1
+            AND lfa.status = 1
             GROUP BY f.id_cartao
             ORDER BY lf.criado_em DESC";
 
@@ -533,25 +565,25 @@ class Fatura_model extends CI_Model
         return $result;
     }
 
-    function getLancamentosTerceiros($idUsuario, $idCartao, $nome, $mesReferencia)
+    function getLancamentosTerceiros($idUsuario, $idCartao, $nome, $mesReferencia, $anoReferencia)
     {
         if (!is_string($nome) || is_numeric($nome)) {
             return false;
         }
 
-        $query = "SELECT lfa.*,
-            lf.nome_cliente,
-            lf.descricao,
+        $query = "SELECT lf.*,
+            lfa.*,
             f.id_cartao
             FROM lancamentos_faturas lf
             INNER JOIN faturas f
             ON lf.id_fatura = f.id_fatura
             INNER JOIN lancamentos_faturas_assoc lfa
             ON lfa.id_lancamento = lf.id_lancamento
-            WHERE lf.nome_cliente LIKE '$nome'
+            WHERE lf.nome_cliente LIKE '%$nome%'
             AND f.id_usuario = $idUsuario
             AND f.id_cartao = $idCartao
             AND lfa.mes_referencia = $mesReferencia
+            AND lfa.ano_referencia = $anoReferencia
             AND lf.status = 1
             AND lfa.status = 1
             ORDER BY lf.criado_em DESC";
@@ -574,6 +606,7 @@ class Fatura_model extends CI_Model
             ->where('id_usuario', $id_usuario)
             ->where('status', 1)
             ->group_by('nome_cliente')
+            ->order_by('id_lancamento', 'desc')
             ->get('lancamentos_faturas');
 
         if ($query->num_rows() > 0) {
@@ -584,7 +617,7 @@ class Fatura_model extends CI_Model
                     'label' => $row['nome_cliente']
                 ];
             }
-            echo json_encode($row_set);
+            return json_encode($row_set);
         }
     }
 
@@ -596,7 +629,7 @@ class Fatura_model extends CI_Model
             ->where('id_usuario', $idUsuario)
             ->where('status', 1)
             ->group_by('descricao')
-            ->order_by('id_lancamento')
+            ->order_by('id_lancamento', 'desc')
             ->get('lancamentos_faturas');
 
         if ($query->num_rows() > 0) {
@@ -607,8 +640,21 @@ class Fatura_model extends CI_Model
                     'label' => $row['descricao']
                 ];
             }
-            echo json_encode($row_set);
+            return json_encode($row_set);
         }
+    }
+
+    function atualizaDescricao($term, $dataList)
+    {
+        $this->db->where('descricao', $term);
+        $this->db->where('id_usuario', getUserId());
+        $this->db->where('status', 1);
+        $this->db->update('lancamentos_faturas', $dataList);
+
+        if ($this->db->affected_rows()) {
+            return true;
+        }
+        return false;
     }
 
     function getAllTerceiros($idCartao = null, $mesReferencia = null, $anoReferencia = null, $idUsuario = null)
@@ -617,38 +663,37 @@ class Fatura_model extends CI_Model
             $idUsuario = getUserId();
         }
 
-        if ($idCartao && $mesReferencia && $anoReferencia) {
-            $query = "SELECT
-                lf.*
-                FROM lancamentos_faturas lf
-                INNER JOIN faturas f
-                ON lf.id_fatura = f.id_fatura
-                INNER JOIN lancamentos_faturas_assoc lfa
-                ON lfa.id_lancamento = lf.id_lancamento
-                WHERE f.id_usuario = $idUsuario
-                AND f.id_cartao = $idCartao
-                AND lfa.mes_referencia = $mesReferencia
-                AND lfa.ano_referencia = $anoReferencia
-                AND lfa.status = 1
-                AND lf.nome_cliente IS NOT NULL
-                GROUP BY lf.nome_cliente ASC
-            ";
-        } else {
-            $query = "SELECT
-                lf.*
-                FROM lancamentos_faturas lf
-                INNER JOIN faturas f
-                ON lf.id_fatura = f.id_fatura
-                INNER JOIN lancamentos_faturas_assoc lfa
-                ON lfa.id_lancamento = lf.id_lancamento
-                WHERE f.id_usuario = $idUsuario
-                AND lfa.status = 1
-                AND lf.nome_cliente IS NOT NULL
-                GROUP BY lf.nome_cliente ASC
-            ";
+        $mainQuery = "SELECT
+            lf.*
+            FROM lancamentos_faturas lf
+            INNER JOIN faturas f
+            ON lf.id_fatura = f.id_fatura
+            INNER JOIN lancamentos_faturas_assoc lfa
+            ON lfa.id_lancamento = lf.id_lancamento
+            WHERE f.id_usuario = $idUsuario
+            AND lfa.status = 1
+            AND lf.nome_cliente IS NOT NULL
+            AND lf.nome_cliente != ''
+        ";
+
+        $where = "";
+
+        if ($idCartao) {
+            $where .= " AND f.id_cartao = $idCartao ";
         }
 
-        $resultQuery = $this->db->query($query);
+        if ($mesReferencia) {
+            $where .= " AND lfa.mes_referencia = $mesReferencia";
+        }
+
+        if ($anoReferencia) {
+            $where .= " AND lfa.ano_referencia = $anoReferencia";
+        }
+
+        $groupBy = " GROUP BY lf.nome_cliente";
+        $orderBy = " ORDER BY lf.nome_cliente ASC";
+        $mainQuery .= $where . $groupBy . $orderBy;
+        $resultQuery = $this->db->query($mainQuery);
 
         if ($resultQuery->num_rows() > 0) {
             $row_set = [];
@@ -689,5 +734,31 @@ class Fatura_model extends CI_Model
             return true;
         }
         return false;
+    }
+
+    function getLancamentosPendentesTerceiros($id_usuario, $referenceMonth, $referenceYear, $terceiro)
+    {
+        $query = "SELECT lf.id_lancamento, lfa.mes_referencia
+            FROM lancamentos_faturas lf
+            JOIN lancamentos_faturas_assoc lfa
+            ON lf.id_lancamento = lfa.id_lancamento
+            JOIN faturas f
+            ON lfa.id_fatura = f.id_fatura
+            WHERE lf.id_usuario = $id_usuario
+            AND f.fatura_aberta IN (1, 2)
+            AND lf.nome_cliente LIKE '%$terceiro%'
+            AND lfa.mes_referencia = $referenceMonth
+            AND lfa.ano_referencia = $referenceYear
+            GROUP BY lfa.mes_referencia
+        ";
+
+        $resultQuery = $this->db->query($query);
+        $result = $resultQuery->result_array();
+
+        if (!$result) {
+            return false;
+        }
+
+        return $result;
     }
 }

@@ -13,9 +13,10 @@
         </div>
     </div>
     <div class="panel-body">
-        <div class="note note-warning mb40">
+        <div class="note note-success mb40">
             Todos os dados inseridos neste formulário são armazenados em nosso banco de dados de forma segura.
-            Caso não se sinta à vontade para fornecer todos os dados do seu cartão, apenas o número do cartão é obrigatório.
+            <br>
+            Caso não se sinta à vontade em fornecer os dados sensíveis do seu cartão, apenas o número do cartão é obrigatório.
         </div>
         <?php if ($cartao['adicional']) { ?>
             <div class="note note-info mb40">
@@ -54,11 +55,11 @@
                         <div class="form-group col-xs-6">
                             <input class="form-control" id="apelido" name="apelido" placeholder="Apelido do cartão" type="text" value="<?= $cartao['apelido'] ?>">
                         </div>
-                        <div class="form-group col-lg-6">
-                            <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control" id="principal" name="principal" value="1" <?php echo $cartao['principal'] == 1 ? 'checked' : '' ?>>
+                        <div class="form-group col-xs-6">
+                            <div class="row">
+                                <input type="checkbox" class="switch-input primary" id="principal" name="principal" value="1" <?php echo $cartao['principal'] == 1 ? 'checked' : '' ?>>
+                                <label for="principal" class="switch-label primary font-weight-bold">Cartão principal</label>
                             </div>
-                            <label for="principal" class="font-weight-bold">Cartão Principal</label>
                         </div>
                     </div>
                     <input type="hidden" name="id_cartao" id="id_cartao" value="<?= $cartao['id_cartao'] ?>">
@@ -118,7 +119,7 @@
                     minlength: 19
                 },
                 apelido: {
-                    maxlength: 12
+                    maxlength: 15
                 },
             },
             messages: {

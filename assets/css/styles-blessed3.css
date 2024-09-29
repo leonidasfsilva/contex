@@ -911,18 +911,18 @@ table.table-vab > tfoot > tr > th {
 
 .scrollbar-custom::-webkit-scrollbar,
 #topnav
-    .toolbar
-    .dropdown-menu.dropdown-alternate
-    .scrollthis::-webkit-scrollbar,
+.toolbar
+.dropdown-menu.dropdown-alternate
+.scrollthis::-webkit-scrollbar,
 .infobar-wrapper::-webkit-scrollbar {
     width: 6px;
 }
 
 .scrollbar-custom::-webkit-scrollbar-thumb,
 #topnav
-    .toolbar
-    .dropdown-menu.dropdown-alternate
-    .scrollthis::-webkit-scrollbar-thumb,
+.toolbar
+.dropdown-menu.dropdown-alternate
+.scrollthis::-webkit-scrollbar-thumb,
 .infobar-wrapper::-webkit-scrollbar-thumb {
     background-color: #c4c4c4;
     border-radius: 0;
@@ -930,18 +930,18 @@ table.table-vab > tfoot > tr > th {
 
 .scrollbar-custom::-webkit-scrollbar-thumb:hover,
 #topnav
-    .toolbar
-    .dropdown-menu.dropdown-alternate
-    .scrollthis::-webkit-scrollbar-thumb:hover,
+.toolbar
+.dropdown-menu.dropdown-alternate
+.scrollthis::-webkit-scrollbar-thumb:hover,
 .infobar-wrapper::-webkit-scrollbar-thumb:hover {
     background-color: #c4c4c4;
 }
 
 .scrollbar-custom::-webkit-scrollbar-track,
 #topnav
-    .toolbar
-    .dropdown-menu.dropdown-alternate
-    .scrollthis::-webkit-scrollbar-track,
+.toolbar
+.dropdown-menu.dropdown-alternate
+.scrollthis::-webkit-scrollbar-track,
 .infobar-wrapper::-webkit-scrollbar-track {
     background-color: #ededed;
 }
@@ -1312,7 +1312,7 @@ html {
 }
 
 body {
-    font-family: "Roboto", "Open Sans", "Droid Sans", Tahoma, Arial, sans-serif;
+    font-family: Inter, sans-serif;
     font-size: 13px;
     line-height: 1.54;
     color: #455a64;
@@ -1730,8 +1730,24 @@ a.bg-warning:hover {
     background-color: #ff524d;
 }
 
+.bg-dark {
+    background-color: #3e4d6c !important;
+}
+
 .bg-midnightblue {
     background-color: #37474f !important;
+}
+
+.bg-gray {
+    background-color: #e6eaef !important;
+}
+
+.bg-white {
+    background-color: #fff !important;
+}
+
+.bg-megna {
+    background-color: #00b5c2 !important;
 }
 
 a.bg-danger:hover {
@@ -1765,7 +1781,7 @@ ol ol {
 .list-inline {
     padding-left: 0;
     list-style: none;
-    margin-left: -5px;
+    /*margin-left: -5px;*/
 }
 
 .list-inline > li {
@@ -3297,7 +3313,7 @@ output {
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
     -webkit-transition: border-color ease-in-out 0.15s,
-        box-shadow ease-in-out 0.15s;
+    box-shadow ease-in-out 0.15s;
     -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
     transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
 }
@@ -3306,9 +3322,9 @@ output {
     border-color: #90a4ae;
     outline: 0;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
-        0 0 8px rgba(144, 164, 174, 0.6);
+    0 0 8px rgba(144, 164, 174, 0.6);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
-        0 0 8px rgba(144, 164, 174, 0.6);
+    0 0 8px rgba(144, 164, 174, 0.6);
 }
 
 .form-control::-moz-placeholder {
@@ -3363,6 +3379,7 @@ input[type="search"] {
     }
 }
 
+/*form-group 1*/
 .form-group {
     margin-bottom: 15px;
 }
@@ -5345,15 +5362,15 @@ button.close {
 
 .btn-group-vertical > .btn-group:first-child:not(:last-child) > .btn:last-child,
 .btn-group-vertical
-    > .btn-group:first-child:not(:last-child)
-    > .dropdown-toggle {
+> .btn-group:first-child:not(:last-child)
+> .dropdown-toggle {
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
 }
 
 .btn-group-vertical
-    > .btn-group:last-child:not(:first-child)
-    > .btn:first-child {
+> .btn-group:last-child:not(:first-child)
+> .btn:first-child {
     border-top-right-radius: 0;
     border-top-left-radius: 0;
 }
@@ -5394,7 +5411,7 @@ button.close {
     margin-bottom: 20px;
     list-style: none;
     background-color: #eeeeee;
-    border-radius: 2px;
+    /*border-radius: 2px;*/
 }
 
 .breadcrumb > li {
@@ -6404,34 +6421,34 @@ a.badge:focus {
 .progress-striped .progress-bar,
 .progress-bar-striped {
     background-image: -webkit-linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
     background-image: -o-linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
     background-image: linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
     background-size: 40px 40px;
 }
@@ -6451,34 +6468,34 @@ a.badge:focus {
 
 .progress-striped .progress-bar-success {
     background-image: -webkit-linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
     background-image: -o-linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
     background-image: linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
 }
 
@@ -6488,34 +6505,34 @@ a.badge:focus {
 
 .progress-striped .progress-bar-info {
     background-image: -webkit-linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
     background-image: -o-linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
     background-image: linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
 }
 
@@ -6525,34 +6542,34 @@ a.badge:focus {
 
 .progress-striped .progress-bar-warning {
     background-image: -webkit-linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
     background-image: -o-linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
     background-image: linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
 }
 
@@ -6562,34 +6579,34 @@ a.badge:focus {
 
 .progress-striped .progress-bar-danger {
     background-image: -webkit-linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
     background-image: -o-linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
     background-image: linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
 }
 
@@ -6707,19 +6724,19 @@ a.badge:focus {
 
 .carousel-control.left {
     background-image: -webkit-linear-gradient(
-        left,
-        rgba(0, 0, 0, 0.5) 0%,
-        rgba(0, 0, 0, 0.0001) 100%
+            left,
+            rgba(0, 0, 0, 0.5) 0%,
+            rgba(0, 0, 0, 0.0001) 100%
     );
     background-image: -o-linear-gradient(
-        left,
-        rgba(0, 0, 0, 0.5) 0%,
-        rgba(0, 0, 0, 0.0001) 100%
+            left,
+            rgba(0, 0, 0, 0.5) 0%,
+            rgba(0, 0, 0, 0.0001) 100%
     );
     background-image: linear-gradient(
-        to right,
-        rgba(0, 0, 0, 0.5) 0%,
-        rgba(0, 0, 0, 0.0001) 100%
+            to right,
+            rgba(0, 0, 0, 0.5) 0%,
+            rgba(0, 0, 0, 0.0001) 100%
     );
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#80000000', endColorstr='#00000000', GradientType=1);
@@ -6729,19 +6746,19 @@ a.badge:focus {
     left: auto;
     right: 0;
     background-image: -webkit-linear-gradient(
-        left,
-        rgba(0, 0, 0, 0.0001) 0%,
-        rgba(0, 0, 0, 0.5) 100%
+            left,
+            rgba(0, 0, 0, 0.0001) 0%,
+            rgba(0, 0, 0, 0.5) 100%
     );
     background-image: -o-linear-gradient(
-        left,
-        rgba(0, 0, 0, 0.0001) 0%,
-        rgba(0, 0, 0, 0.5) 100%
+            left,
+            rgba(0, 0, 0, 0.0001) 0%,
+            rgba(0, 0, 0, 0.5) 100%
     );
     background-image: linear-gradient(
-        to right,
-        rgba(0, 0, 0, 0.0001) 0%,
-        rgba(0, 0, 0, 0.5) 100%
+            to right,
+            rgba(0, 0, 0, 0.0001) 0%,
+            rgba(0, 0, 0, 0.5) 100%
     );
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#80000000', GradientType=1);
@@ -7995,7 +8012,7 @@ h6,
 .h6 {
     margin-top: 16px;
     margin-bottom: 16px;
-    font-family: "Roboto", "Open Sans", "Droid Sans", Tahoma, Arial, sans-serif;
+    font-family: Inter, sans-serif;
 }
 
 h1,
@@ -8209,20 +8226,20 @@ table > thead > tr > th:last-child {
 }
 
 .panel-heading
-    + .panel-body.panel-no-padding
-    table
-    > tbody
-    > tr:last-child
-    > th {
++ .panel-body.panel-no-padding
+table
+> tbody
+> tr:last-child
+> th {
     border-bottom: 0;
 }
 
 .panel-heading
-    + .panel-body.panel-no-padding
-    table
-    > tfoot
-    > tr:last-child
-    > th {
++ .panel-body.panel-no-padding
+table
+> tfoot
+> tr:last-child
+> th {
     border-bottom: 0;
 }
 
@@ -8234,20 +8251,20 @@ table > thead > tr > th:last-child {
 }
 
 .panel-heading
-    + .panel-body.panel-no-padding
-    table
-    > thead
-    > tr
-    > th:first-child {
++ .panel-body.panel-no-padding
+table
+> thead
+> tr
+> th:first-child {
     border-top-left-radius: 0;
 }
 
 .panel-heading
-    + .panel-body.panel-no-padding
-    table
-    > thead
-    > tr
-    > th:last-child {
++ .panel-body.panel-no-padding
+table
+> thead
+> tr
+> th:last-child {
     border-top-right-radius: 0;
 }
 
@@ -8483,10 +8500,6 @@ fieldset[disabled] .form-control {
     font-size: 18px;
     height: 40px;
     line-height: 1.33;
-}
-
-.form-group {
-    margin-bottom: 24px;
 }
 
 .row-border .form-group {

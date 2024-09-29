@@ -1,7 +1,7 @@
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h3>
-            <i class="fas fa-credit-card fa-lg fa-fw"></i>
+            <i class="fas fad fa-credit-card fa-swap-opacity fa-lg fa-fw"></i>
             Lista de Cartões
         </h3>
         <div class="panel-ctrls">
@@ -19,8 +19,8 @@
         <table class="table table-condensed table-striped table-bordeless table-hover" role="grid" style="width: 100%;">
             <thead>
                 <tr role="row">
+                    <th style="text-align: left !important; width: 300px">Final Cartão</th>
                     <th style="text-align: left !important;">Bandeira</th>
-                    <th style="text-align: left !important;">Final Cartão</th>
                     <th style="text-align: left !important;">Nome Impresso</th>
                     <th style="text-align: left !important;">Apelido Cartão</th>
                     <th style="text-align: left !important;">Tipo Cartão</th>
@@ -34,6 +34,7 @@
                     </tr>
                     <?php } else {
                     foreach ($results as $r) {
+                        $labelPrincipal = null;
                         $n_cartao = explode(" ", trim(decriptar($r->numero)));
                         $final = $n_cartao[3];
                         $mascara = preg_replace('/\d/', '*', $n_cartao);
@@ -71,7 +72,7 @@
                         if ($r->ativo == 1) {
                             $status = 'Ativo';
                             $label_status = 'success';
-                            $btn_status = '<a href="#modalDesativar" role="button" data-toggle="modal" cartao="' . $r->id_cartao . '"class="btn btn-success btn-sm desativar" title="Cartão ativo"><i class="fas fa-check-circle fa-lg fa-fw" ></i></a>';
+                            $btn_status = '<a href="#modalDesativar" role="button" data-toggle="modal" cartao="' . $r->id_cartao .'"class="btn btn-success btn-sm desativar" title="Cartão ativo"><i class="fas fa-check-circle fa-lg fa-fw" ></i></a>';
                         } else {
                             $status = 'Inativo';
                             $label_status = 'warning';
@@ -79,11 +80,13 @@
                         }
                     ?>
                         <tr>
+                            <td><?= '<a href="#modalVisualizarCartao" role="button" data-toggle="modal" numero="'.decriptar($r->numero).'" validade="'.$r->validade.'" bandeira="'.$r->bandeira.'" cvc="'.decriptar($r->cvc).'" 
+                            nome="'.$r->nome.'" class="visualizar" title="Visualizar cartão"> **** **** **** ' . $final .'</a> <span class="badge badge-'.$labelPrincipal.'"> '.$cartaoPrincipal.' </span>' ?>
+                            </td>
                             <td><?= $r->bandeira ?></td>
-                            <td><?= '**** **** **** ' . $final ?> <span class="label label-<?= $labelPrincipal ?? null ?>"><?= $cartaoPrincipal ?></span></td>
                             <td><?= $r->nome ?></td>
                             <td><?= $r->apelido ?></td>
-                            <td><span class="label label-<?= $label_cartao ?>"><?= $tipo_cartao ?></span></td>
+                            <td><span class="badge badge-<?= $label_cartao ?>"><?= $tipo_cartao ?></span></td>
                             <?=
                             '<td>
                             <button href="#modalVisualizarCartao" role="button" data-toggle="modal" numero="' . decriptar($r->numero) . '" validade="' . $r->validade . '" bandeira="' . $r->bandeira . '" cvc="' . decriptar($r->cvc) .

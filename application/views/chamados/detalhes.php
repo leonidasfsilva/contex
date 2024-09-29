@@ -50,7 +50,7 @@ switch ($status_chamado) {
             </div>
             <div class="panel-body mailbox-panel">
                 <div class="pull-right panel p5">
-                    <strong>Status do chamado: <span style="margin-top: 2px" class="ml5 pull-right label label-<?= ($cor_status) ?>"> <?= ($status) ?></span></strong>
+                    <strong>Status do chamado: <span style="margin-top: 2px" class="ml5 pull-right badge badge-<?= ($cor_status) ?>"> <?= strtoupper($status) ?></span></strong>
                 </div>
                 <section class="tabular">
                     <div class="message tabular-row">

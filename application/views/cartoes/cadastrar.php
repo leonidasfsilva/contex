@@ -13,9 +13,10 @@
         </div>
     </div>
     <div class="panel-body">
-        <div class="note note-warning mb40">
+        <div class="note note-success mb40">
             Todos os dados inseridos neste formulário são armazenados em nosso banco de dados de forma segura.
-            Caso não se sinta à vontade para fornecer todos os dados do seu cartão, apenas o número do cartão é obrigatório.
+            <br>
+            Caso não se sinta à vontade em fornecer os dados sensíveis do seu cartão, apenas o número do cartão é obrigatório.
         </div>
         <div class="row">
             <div class="col-md-6">
@@ -43,10 +44,10 @@
                             <input class="form-control" id="apelido" name="apelido" placeholder="Apelido do cartão" type="text">
                         </div>
                         <div class="form-group col-xs-6">
-                            <div class="checkbox icheck">
-                                <input type="checkbox" class="form-control" id="principal" name="principal" value="1">
+                            <div class="row">
+                                <input type="checkbox" class="switch-input primary" id="principal" name="principal" value="1">
+                                <label for="principal" class="switch-label primary font-weight-bold">Cartão principal</label>
                             </div>
-                            <label for="principal" class="font-weight-bold">Cartão Principal</label>
                         </div>
                     </div>
                     <input type="hidden" name="bandeira" id="bandeira">
@@ -70,7 +71,6 @@
             if ($(this).val().length >= 4) {
                 setTimeout(function() {
                     $('#bandeira').val(bandeira.cardType);
-                    console.log(bandeira.cardType)
                 }, 100);
             }
         });
@@ -104,7 +104,7 @@
                     minlength: 19
                 },
                 apelido: {
-                    maxlength: 13
+                    maxlength: 15
                 },
             },
             messages: {

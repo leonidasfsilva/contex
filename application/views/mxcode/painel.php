@@ -218,12 +218,45 @@ if ($direcionados) {
                 </div>
             </a>
         </div>
-    <?php endif ?>
-
-    <div class="col-md-6">
+	<?php endif ?>
+</div>
+<div class="row">
+	<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vConsumo')) : ?>
+        <div class="col-md-6 col-sm-6 col-xs-6">
+            <a href="<?= base_url('/consumo') ?>" class="shortcut-tile tile-info">
+                <div class="tile-body">
+                    <div class="pull-left"><i class="fal fa-lightbulb-dollar fa-fw"></i></div>
+                    <!--                            <div class="pull-right"><span class="badge">16</span></div>-->
+                </div>
+                <div class="tile-footer">
+                    Consumo de Energia
+                </div>
+            </a>
+        </div>
+	<?php endif ?>
+	
+	<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) : ?>
+        <div class="col-md-6 col-sm-6 col-xs-6">
+            <a href="<?= base_url('/usuarios') ?>" class="shortcut-tile tile-inverse">
+                <div class="tile-body">
+                    <div class="pull-left"><i class="fal fa-users-cog fa-fw"></i></div>
+                    <!--                            <div class="pull-right"><span class="badge">10</span></div>-->
+                </div>
+                <div class="tile-footer hidden-xs">
+                    Usuários do Sistema
+                </div>
+                <div class="tile-footer visible-xs">
+                    Usuários
+                </div>
+            </a>
+        </div>
+	<?php endif ?>
+</div>
+<div class="row">
+    <div class="col-md-6 col-sm-6 col-xs-6">
         <a href="<?= base_url('/notificacoes') ?>" class="shortcut-tile tile-danger">
             <div class="tile-body">
-                <div class="pull-left"><i class="fas fa-bell fa-fw"></i></div>
+                <div class="pull-left"><i class="fal fa-bell fa-fw"></i></div>
                 <!--                            <div class="pull-right"><span class="badge">3</span></div>-->
             </div>
             <div class="tile-footer">
@@ -231,49 +264,20 @@ if ($direcionados) {
             </div>
         </a>
     </div>
-
-    <div class="col-md-6">
+    <div class="col-md-6 col-sm-6 col-xs-6">
         <a href="<?= base_url('/chamados') ?>" class="shortcut-tile tile-alizarin">
             <div class="tile-body">
-                <div class="pull-left"><i class="fas fa-headset fa-fw"></i></div>
+                <div class="pull-left"><i class="fal fa-comments-question-check fa-fw"></i></div>
             </div>
             <div class="tile-footer">
-                Chamados de Suporte
+                Suporte
             </div>
         </a>
     </div>
-
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vDespesas')) : ?>
-        <div class="col-md-6">
-            <a href="<?= base_url('financeiro/despesas') ?>" class="shortcut-tile tile-info">
-                <div class="tile-body">
-                    <div class="pull-left"><i class="fas fa-receipt fa-fw"></i></div>
-                    <!--                            <div class="pull-right"><span class="badge">16</span></div>-->
-                </div>
-                <div class="tile-footer">
-                    Despesas
-                </div>
-            </a>
-        </div>
-    <?php endif ?>
-
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) : ?>
-        <div class="col-md-6">
-            <a href="<?= base_url('/usuarios') ?>" class="shortcut-tile tile-inverse">
-                <div class="tile-body">
-                    <div class="pull-left"><i class="fas fa-users-cog fa-fw"></i></div>
-                    <!--                            <div class="pull-right"><span class="badge">10</span></div>-->
-                </div>
-                <div class="tile-footer">
-                    Usuários
-                </div>
-            </a>
-        </div>
-    <?php endif ?>
 </div>
 
 <script>
-    $.each($('.conteudo-widget'), function(key, value) {
+    $.each($('.conteudo-widget'), function (key, value) {
         if ($(this).css('display') == 'none') {
             $(this).parents().eq(3).find('.collapse-icon').attr('class', 'fas fa-chevron-down fa-fw collapse-icon');
             $(this).parents().eq(3).find(".chevron-label").text('exibir');
@@ -283,10 +287,10 @@ if ($direcionados) {
         }
     });
 
-    $('a.widget-collapse').click(function() {
-        let n = $(this).parents().eq(2).find(".conteudo-widget");
+    $('a.widget-collapse').click(function () {
+        let widget = $(this).parents().eq(2).find(".conteudo-widget");
 
-        if (n.css('display') == 'none') {
+        if (widget.css('display') == 'none') {
             $(this).find('.collapse-icon').attr('class', 'fas fa-chevron-up fa-fw collapse-icon');
             $(this).find(".chevron-label").text('ocultar');
 
@@ -359,7 +363,7 @@ if ($direcionados) {
                 });
             }
         }
-        n.slideToggle({
+        widget.slideToggle({
             duration: 200
         });
         return false;
