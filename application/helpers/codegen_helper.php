@@ -126,6 +126,12 @@ function padronizarString($str)
 	return strtoupper($str);
 }
 
+function sanitizarString($str)
+{
+	$str = preg_replace('/"/', '\'', $str);
+	return ($str);
+}
+
 function capsLock($str)
 {
 	return mb_convert_case($str, MB_CASE_UPPER, 'UTF-8');
