@@ -1,19 +1,19 @@
-<?php if (isset($anuncios) && $anuncios) {
-	foreach ($anuncios as $a) {
-		$format    = "d-m-Y";
-		$hoje      = DateTime::createFromFormat($format, date('d-m-Y'));
-		$expiracao = DateTime::createFromFormat($format, date(('d-m-Y'), strtotime($a->data_expiracao)));
-		$validade  = $expiracao > $hoje;
-		
-		if ($validade) {
-			if ($a->estilo != 'bg-default') {
-				$estilo     = $a->estilo;
-				$text_white = 'text-white';
-			} else {
-				$estilo     = $a->estilo;
-				$text_white = '';
-			}
-			?>
+<?php if ($anuncios) {
+    foreach ($anuncios as $a) {
+        $format     = "d-m-Y";
+        $hoje       = DateTime::createFromFormat($format, date('d-m-Y'));
+        $expiracao  = DateTime::createFromFormat($format, date(('d-m-Y'), strtotime($a->data_expiracao)));
+        $validade   = $expiracao > $hoje;
+
+        if ($validade == true) {
+            if ($a->estilo != 'bg-default') {
+                $estilo     = $a->estilo;
+                $text_white = 'text-white';
+            } else {
+                $estilo     = $a->estilo;
+                $text_white = '';
+            }
+?>
             <div class="modal fade modal_anuncio" id="anuncio_<?= $a->id_anuncio ?>">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -22,9 +22,9 @@
                             <h4 class="modal-title <?= $text_white ?>" id="cabecalho_modal"><?= $a->cabecalho ?></h4>
                         </div>
                         <div class="modal-body">
-							<?php if ($a->titulo) { ?>
+                            <?php if ($a->titulo) { ?>
                                 <h5 class="mt0 pt0" id="titulo_anuncio"><?= $a->titulo ?></h5>
-							<?php } ?>
+                            <?php } ?>
                             <p class="p0" style="font-size: 13px; border: none; background-color: unset; font-family:'Roboto', sans-serif" id="descricao_anuncio"><?= nl2br($a->descricao) ?></p>
                         </div>
                         <div class="modal-footer <?= $a->exibir_rodape == 1 ? '' : 'hidden' ?>" id="div_rodape">
@@ -36,26 +36,26 @@
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
-		<?php }
-	}
+        <?php }
+    }
 }
 
-if (isset($direcionados) && $direcionados) {
-	foreach ($direcionados as $d) {
-		$format    = "d-m-Y";
-		$hoje      = DateTime::createFromFormat($format, date('d-m-Y'));
-		$expiracao = DateTime::createFromFormat($format, date(('d-m-Y'), strtotime($d->data_expiracao)));
-		$validade  = $expiracao > $hoje;
-		
-		if ($validade == true) {
-			if ($d->estilo != 'bg-default') {
-				$estilo     = $d->estilo;
-				$text_white = 'text-white';
-			} else {
-				$estilo     = $d->estilo;
-				$text_white = '';
-			}
-			?>
+if ($direcionados) {
+    foreach ($direcionados as $d) {
+        $format = "d-m-Y";
+        $hoje       = DateTime::createFromFormat($format, date('d-m-Y'));
+        $expiracao  = DateTime::createFromFormat($format, date(('d-m-Y'), strtotime($d->data_expiracao)));
+        $validade   = $expiracao > $hoje;
+
+        if ($validade == true) {
+            if ($d->estilo != 'bg-default') {
+                $estilo     = $d->estilo;
+                $text_white = 'text-white';
+            } else {
+                $estilo     = $d->estilo;
+                $text_white = '';
+            }
+        ?>
             <div class="modal fade modal_anuncio" id="anuncio_<?= $d->id_anuncio ?>">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -64,9 +64,9 @@ if (isset($direcionados) && $direcionados) {
                             <h4 class="modal-title <?= $text_white ?>" id="cabecalho_modal"><?= $d->cabecalho ?></h4>
                         </div>
                         <div class="modal-body">
-							<?php if ($d->titulo) { ?>
+                            <?php if ($d->titulo) { ?>
                                 <h5 class="mt0 pt0" id="titulo_anuncio"><?= $d->titulo ?></h5>
-							<?php } ?>
+                            <?php } ?>
                             <p class="p0" style="font-size: 13px; border: none; background-color: unset; font-family:'Roboto', sans-serif" id="descricao_anuncio"><?= nl2br($d->descricao) ?></p>
                         </div>
                         <div class="modal-footer <?= $d->exibir_rodape == 1 ? '' : 'hidden' ?>" id="div_rodape">
@@ -78,29 +78,29 @@ if (isset($direcionados) && $direcionados) {
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
-		<?php }
-	}
+<?php }
+    }
 } ?>
 
 <!--WIDGETS-->
 <div class="row">
-	<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
-        <div class="col-lg-6 col-md-6 col-sm-6">
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
+        <div class="col-lg-6">
             <div class="tile-sparkline">
                 <div class="tile-sparkline-heading clearfix">
                     <div class="pull-left">
                         <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Lançamentos</span>
                         <div class="conteudo-widget " style="<?= ($widgetLancamentos == 1 ? '' : 'display: none;') ?>">
                             <span class="tile-sparkline-subheading block mb10">Saldo disponível</span>
-                            <h2 class="block"><span class="font-16">R$ </span><?= number_format($lancamentos->total, 2, ',', '.') ?></h2>
+                            <h2 class="block">R$ <?= number_format($lancamentos->total, 2, ',', '.') ?></h2>
                         </div>
                     </div>
                     <div class="pull-right">
-                        <span><i class="fas fa-chart-mixed-up-circle-dollar fa-swap-opacity fa-2x fa-fw"></i></span>
+                        <span><i class="fas fa-chart-line fa-lg fa-fw"></i></span>
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
-                    <a href="<?= base_url() ?>financeiro/lancamentos" class="font-weight-bold">ver detalhes </a>
+                    <a href="<?= base_url('financeiro/lancamentos') ?>" class="font-weight-bold">ver detalhes</a>
                     <a href="#" style="color: #607d8b" class="pull-right widget-collapse" id="widget_lancamentos">
                         <span class="chevron-label">ocultar</span>
                         <i class="fas fa-chevron-up fa-fw collapse-icon"></i>
@@ -108,26 +108,25 @@ if (isset($direcionados) && $direcionados) {
                 </div>
             </div>
         </div>
-	<?php } ?>
-	
-	<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) { ?>
-        <div class="col-lg-6 col-md-6 col-sm-6">
+    <?php } ?>
+
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) { ?>
+        <div class="col-lg-6">
             <div class="tile-sparkline">
                 <div class="tile-sparkline-heading clearfix">
                     <div class="pull-left">
                         <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Faturas</span>
                         <div class="conteudo-widget " style="<?= ($widgetCartaoCredito == 1 ? '' : 'display: none;') ?>e">
                             <span class="tile-sparkline-subheading block mb10">Saldo de faturas em aberto</span>
-                            
-                            <h2 class="block"><span class="font-16">R$ </span><?= number_format($fatura, 2, ',', '.') ?></h2>
+                            <h2 class="block">R$ <?= number_format($fatura, 2, ',', '.') ?></h2>
                         </div>
                     </div>
                     <div class="pull-right">
-                        <span><i class="fas fa-file-invoice-dollar fa-2x fa-fw"></i></span>
+                        <span><i class="fas fa-credit-card fa-lg fa-fw"></i></span>
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
-                    <a href="<?= base_url('financeiro/faturas') ?>" class="font-weight-bold">ver detalhes </a>
+                    <a href="<?= base_url('financeiro/faturas') ?>" class="font-weight-bold">ver detalhes</a>
                     <a href="#" style="color: #607d8b" class="pull-right widget-collapse" id="widget_credito">
                         <span class="chevron-label">ocultar</span>
                         <i class="fas fa-chevron-up fa-fw collapse-icon"></i>
@@ -135,26 +134,26 @@ if (isset($direcionados) && $direcionados) {
                 </div>
             </div>
         </div>
-	<?php } ?>
+    <?php } ?>
 </div>
 <div class="row">
-	<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPendencias')) { ?>
-        <div class="col-lg-6 col-md-6 col-sm-6">
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vPendencias')) { ?>
+        <div class="col-lg-6">
             <div class="tile-sparkline">
                 <div class="tile-sparkline-heading clearfix">
                     <div class="pull-left">
                         <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Pendências</span>
                         <div class="conteudo-widget " style="<?= ($widgetPendencias == 1 ? '' : 'display: none;') ?>">
                             <span class="tile-sparkline-subheading block mb10">Pendências a pagar</span>
-                            <h2 class="block"><span class="font-16">R$ </span><?= number_format($pendencias->total, 2, ',', '.') ?></h2>
+                            <h2 class="block">R$ <?= number_format($pendencias->total, 2, ',', '.') ?></h2>
                         </div>
                     </div>
                     <div class="pull-right">
-                        <span><i class="fas fa-money-check-dollar-pen fa-2x fa-fw"></i></span>
+                        <span><i class="fas fa-file-invoice-dollar fa-lg fa-fw"></i></span>
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
-                    <a href="<?= base_url() ?>financeiro/pendencias" class="font-weight-bold">ver detalhes </a>
+                    <a href="<?= base_url('financeiro/pendencias') ?>" class="font-weight-bold">ver detalhes</a>
                     <a href="#" style="color: #607d8b" class="pull-right widget-collapse" id="widget_pendencias">
                         <span class="chevron-label">ocultar</span>
                         <i class="fas fa-chevron-up fa-fw collapse-icon"></i>
@@ -162,25 +161,25 @@ if (isset($direcionados) && $direcionados) {
                 </div>
             </div>
         </div>
-	<?php } ?>
-	
-	<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vInvestimentos')) { ?>
-        <div class="col-lg-6 col-md-6 col-sm-6">
+    <?php } ?>
+
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vInvestimentos')) { ?>
+        <div class="col-lg-6">
             <div class="tile-sparkline">
                 <div class="tile-sparkline-heading clearfix">
                     <div class="pull-left">
                         <span class="tile-sparkline-subheading font-weight-bold mb10" style="font-size: 12pt">Investimentos</span>
                         <div class="conteudo-widget " style="<?= ($widgetInvestimentos == 1 ? '' : 'display: none;') ?>">
                             <span class="tile-sparkline-subheading block mb10">Valor total investido</span>
-                            <h2 class="block"><span class="font-16">R$ </span><?= number_format($investimentos->total, 2, ',', '.') ?></h2>
+                            <h2 class="block">R$ <?= number_format($investimentos->total, 2, ',', '.') ?></h2>
                         </div>
                     </div>
                     <div class="pull-right">
-                        <span><i class="fas fa-hand-holding-circle-dollar fa-2x fa-fw"></i></span>
+                        <span><i class="fas fa-hand-holding-usd fa-lg fa-fw"></i></span>
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
-                    <a href="<?= base_url() ?>financeiro/investimentos" class="font-weight-bold">ver detalhes </a>
+                    <a href="<?= base_url('financeiro/investimentos') ?>" class="font-weight-bold">ver detalhes</a>
                     <a href="#" style="color: #607d8b" class="pull-right widget-collapse" id="widget_investimentos">
                         <span class="chevron-label">ocultar</span>
                         <i class="fas fa-chevron-up fa-fw collapse-icon"></i>
@@ -188,16 +187,16 @@ if (isset($direcionados) && $direcionados) {
                 </div>
             </div>
         </div>
-	<?php } ?>
+    <?php } ?>
 </div>
 
-<!--MOSAICO DE LINKS (CARDS)-->
+<!--PAINEL DE LINKS-->
 <div class="row">
-	<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) : ?>
-        <div class="col-md-6 col-sm-6 col-xs-6">
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) : ?>
+        <div class="col-md-6">
             <a href="<?= base_url('/financeiro/cartoes') ?>" class="shortcut-tile tile-midnightblue">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fad fa-credit-card fa-swap-opacity fa-fw"></i></div>
+                    <div class="pull-left"><i class="fas fa-credit-card fa-fw"></i></div>
                     <div class="pull-right"><span class="badge"><?= $this->cartoes_model->countCartoesUsuario(); ?></span></div>
                 </div>
                 <div class="tile-footer">
@@ -205,13 +204,13 @@ if (isset($direcionados) && $direcionados) {
                 </div>
             </a>
         </div>
-	<?php endif ?>
-	
-	<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) : ?>
-        <div class="col-md-6 col-sm-6 col-xs-6">
+    <?php endif ?>
+
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) : ?>
+        <div class="col-md-6">
             <a href="<?= base_url('/clientes') ?>" class="shortcut-tile tile-green">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fal fa-people-group fa-fw"></i></div>
+                    <div class="pull-left"><i class="fas fa-users fa-fw"></i></div>
                     <div class="pull-right"><span class="badge"><?= $this->clientes_model->countClientesUsuario(); ?></span></div>
                 </div>
                 <div class="tile-footer">

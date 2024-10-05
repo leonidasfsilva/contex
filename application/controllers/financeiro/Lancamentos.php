@@ -291,7 +291,7 @@ class Lancamentos extends CI_Controller
 		
 		$vencimento  = $this->input->post('vencimento');
 		$recebimento = $this->input->post('recebimento');
-		$observacoes = $this->input->post('observacoes');
+		$observacoes = sanitizarString($this->input->post('observacoes')) ?? null;
 		
 		if ($vencimento) {
 			$vencimento = explode('/', $vencimento);
@@ -313,7 +313,7 @@ class Lancamentos extends CI_Controller
 		
 		$data = array(
 			'descricao'          => padronizarString($this->input->post('descricao')),
-			'observacoes'        => $observacoes ?? null,
+			'observacoes'        => $observacoes,
 			'valor'              => $valor,
 			'id_usuario'         => getUserId(),
 			'data_lancamento'    => $vencimento,
@@ -352,7 +352,7 @@ class Lancamentos extends CI_Controller
 		
 		$vencimento  = $this->input->post('vencimento');
 		$pagamento   = $this->input->post('pagamento');
-		$observacoes = $this->input->post('observacoes');
+		$observacoes = sanitizarString($this->input->post('observacoes')) ?? null;
 		
 		
 		if ($vencimento != null) {
@@ -376,7 +376,7 @@ class Lancamentos extends CI_Controller
 		
 		$data = array(
 			'descricao'          => padronizarString($this->input->post('descricao')),
-			'observacoes'        => $observacoes ?? null,
+			'observacoes'        => $observacoes,
 			'valor'              => $valor,
 			'id_usuario'         => getUserId(),
 			'data_lancamento'    => $vencimento,
@@ -419,7 +419,7 @@ class Lancamentos extends CI_Controller
 		
 		$vencimento  = $this->input->post('vencimento');
 		$pagamento   = $this->input->post('pagamento');
-		$observacoes = $this->input->post('observacoes');
+		$observacoes = sanitizarString($this->input->post('observacoes')) ?? null;
 		
 		if ($vencimento != null) {
 			$vencimento = explode('/', $vencimento);
@@ -444,7 +444,7 @@ class Lancamentos extends CI_Controller
 		
 		$data = array(
 			'descricao'          => padronizarString($this->input->post('descricao')),
-			'observacoes'        => $observacoes ?? null,
+			'observacoes'        => $observacoes,
 			'valor'              => $valor,
 			'data_lancamento'    => $vencimento,
 			'data_pagamento'     => $pagamento != null ? $pagamento : $vencimento,
@@ -458,10 +458,10 @@ class Lancamentos extends CI_Controller
 		if ($this->financeiro_model->edit('lancamentos', $data, 'id_lancamento', $this->input->post('id'))) {
 			$this->session->set_flashdata('sucesso', 'Lançamento alterado com sucesso!');
 			redirect($urlAtual);
-		} else {
-			$this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar alterar o registro.');
-			redirect($urlAtual);
 		}
+		
+		$this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar alterar o registro.');
+		redirect($urlAtual);
 	}
 	
 	public function copiar()
@@ -485,7 +485,7 @@ class Lancamentos extends CI_Controller
 		$id          = $this->input->post('id');
 		$vencimento  = $this->input->post('vencimento');
 		$pagamento   = $this->input->post('pagamento');
-		$observacoes = $this->input->post('observacoes');
+		$observacoes = sanitizarString($this->input->post('observacoes')) ?? null;
 		
 		if ($vencimento != null) {
 			$vencimento = explode('/', $vencimento);
@@ -542,7 +542,7 @@ class Lancamentos extends CI_Controller
 		
 		$data = array(
 			'descricao'          => padronizarString($this->input->post('descricao')),
-			'observacoes'        => $observacoes ?? null,
+			'observacoes'        => $observacoes,
 			'valor'              => $valor,
 			'data_lancamento'    => $vencimento,
 			'data_pagamento'     => $pagamento != null ? $pagamento : $vencimento,
