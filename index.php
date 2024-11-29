@@ -57,8 +57,13 @@
 
 //set the environment to production after installation
 
-$developHosts = ['localhost', '10.0.1.200'];
-define('ENVIRONMENT', in_array($_SERVER['SERVER_NAME'], $developHosts) ? 'development' : 'production');
+$developmentHosts = [
+    'localhost',
+    '10.0.1.200',
+    'contex.test',
+];
+
+define('ENVIRONMENT', in_array($_SERVER['SERVER_NAME'], $developmentHosts) ? 'development' : 'production');
 
 // we don't want to access the main project before installation. redirect to installation page
 if (ENVIRONMENT === 'pre_installation') {

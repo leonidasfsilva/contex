@@ -19,10 +19,10 @@
         <table class="table table-condensed table-striped table-bordeless table-hover" role="grid" style="width: 100%;">
             <thead>
                 <tr role="row">
-                    <th style="text-align: left !important; width: 300px">Final Cartão</th>
+                    <th style="text-align: left !important;">Final Cartão</th>
+                    <th style="text-align: left !important;">Apelido Cartão</th>
                     <th style="text-align: left !important;">Bandeira</th>
                     <th style="text-align: left !important;">Nome Impresso</th>
-                    <th style="text-align: left !important;">Apelido Cartão</th>
                     <th style="text-align: left !important;">Tipo Cartão</th>
                     <th style="text-align: left !important; width: 210px">Ações</th>
                 </tr>
@@ -83,9 +83,9 @@
                             <td><?= '<a href="#modalVisualizarCartao" role="button" data-toggle="modal" numero="'.decriptar($r->numero).'" validade="'.$r->validade.'" bandeira="'.$r->bandeira.'" cvc="'.decriptar($r->cvc).'" 
                             nome="'.$r->nome.'" class="visualizar" title="Visualizar cartão"> **** **** **** ' . $final .'</a> <span class="badge badge-'.$labelPrincipal.'"> '.$cartaoPrincipal.' </span>' ?>
                             </td>
+                            <td><?= $r->apelido ?></td>
                             <td><?= $r->bandeira ?></td>
                             <td><?= $r->nome ?></td>
-                            <td><?= $r->apelido ?></td>
                             <td><span class="badge badge-<?= $label_cartao ?>"><?= $tipo_cartao ?></span></td>
                             <?=
                             '<td>

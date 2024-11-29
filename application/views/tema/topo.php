@@ -81,7 +81,7 @@ $this->load->view('includes/custom_js');
 </div>
 <!--    MENU SUSPENSO-->
 
-<header id="topnav" class="navbar navbar <?= ($topbarClass) ?> navbar-fixed-top clearfix" role="banner">
+<header id="topnav" class="navbar <?= $navbarClass ?> navbar-fixed-top clearfix" role="banner">
 
         <span id="trigger-sidebar" class="toolbar-trigger toolbar-icon-bg">
             <a href="javascript:" data-placement="bottom" title="Exibir/Ocultar Menu" id="menu-switcher">
@@ -339,7 +339,7 @@ $this->load->view('includes/custom_js');
 <div id="wrapper">
     <div id="layout-static">
         <!--SIDEBAR-->
-        <div class="static-sidebar-wrapper <?= (isset($sidebar_color) ? $sidebar_color : 'sidebar-midnightblue') ?>">
+        <div class="static-sidebar-wrapper <?= $sidebarClass ?>">
             <div class="static-sidebar">
                 <div class="sidebar">
                     <div class="widget stay-on-collapse" id="widget-welcomebox">
