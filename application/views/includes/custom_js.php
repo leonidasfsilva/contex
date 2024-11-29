@@ -326,11 +326,11 @@
         $('.popover-btn').popover()
     });
 
-    $('#telefone').mask("(99) 9999-99990");
-    $('#cep').mask("99999-999");
-    $('#cpf').mask("999.999.999-99");
-    $('#rg').mask("99.999.999-9");
-    $('#expiry').mask("99 / 99");
+    $('#telefone, .telefone').mask("(99) 9999-99990");
+    $('#cep, .cep').mask("99999-999");
+    $('#cpf, .cpf').mask("999.999.999-99");
+    $('#rg, .rg').mask("99.999.999-9");
+    $('#expiry, .expiry').mask("99 / 99");
 	
 	<?php
 	$url = current_url();
@@ -510,7 +510,7 @@
             position: 'top',
             icon: 'success',
             title: 'Feito!',
-            timer: 1200,
+            timer: 2000,
             html: '<?= $this->session->flashdata('sucesso') ?>',
             showConfirmButton: false,
             showCancelButton: false,

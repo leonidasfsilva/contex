@@ -170,7 +170,7 @@ if (isset($referenceMonth) && $referenceMonth) {
                     </div>
 				<?php } ?>
             </div>
-            <div class="panel panel-grape" style="margin: 0 !important;">
+            <div class="panel panel-alizarin" style="margin: 0 !important;">
                 <div class="panel-heading font-weight-bold">
                     <div class="pull-left">
                         <h2>
@@ -209,7 +209,7 @@ if (isset($referenceMonth) && $referenceMonth) {
                 Nenhum registro encontrado para o período de referência solicitado
             </div>
 		<?php } ?>
-        <div class="panel-footer note note-inverse font-weight-bold p0 mt10">
+        <div class="panel-footer note note-alizarin font-weight-bold p0 mt10">
             <div class="pull-left">
                 <span>
                     Vencimento:

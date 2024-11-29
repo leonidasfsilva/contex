@@ -446,7 +446,7 @@
 }
 .swal2-close:focus {
   outline: none;
-  box-shadow: inset 0 0 0 3px rgba(100, 150, 200, 0.5);
+  /*box-shadow: inset 0 0 0 3px rgba(100, 150, 200, 0.5);*/
 }
 .swal2-close::-moz-focus-inner {
   border: 0;

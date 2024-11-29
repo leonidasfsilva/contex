@@ -196,13 +196,17 @@ class Financeiro_model extends CI_Model
 		return $this->db->get()->row();
 	}
 	
-	function getFormasPagamento()
+	function getFormasPagamento($id = null)
 	{
 		$one = false;
 		$this->db->where('status = 1');
+		if ($id) {
+			$one = true;
+			$this->db->where('id_forma', $id);
+		}
 		$query = $this->db->get('formas_pagamento');
 		
-		$result = !$one ? $query->result() : $query->row();
+		$result = !$one ? $query->result() : $query->row('nome');
 		return $result;
 	}
 	

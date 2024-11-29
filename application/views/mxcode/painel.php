@@ -206,15 +206,15 @@ if ($direcionados) {
         </div>
     <?php endif ?>
 
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) : ?>
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vDespesas')) : ?>
         <div class="col-md-6">
-            <a href="<?= base_url('/clientes') ?>" class="shortcut-tile tile-green">
+            <a href="<?= base_url('/financeiro/despesas') ?>" class="shortcut-tile tile-green">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fas fa-users fa-fw"></i></div>
-                    <div class="pull-right"><span class="badge"><?= $this->clientes_model->countClientesUsuario(); ?></span></div>
+                    <div class="pull-left"><i class="fas fa-money-bill-transfer fa-fw"></i></div>
+                    <div class="pull-right"><span class="badge"><?= $this->despesa_model->countDespesasFromUser(); ?></span></div>
                 </div>
                 <div class="tile-footer">
-                    Clientes
+                    Despesas
                 </div>
             </a>
         </div>

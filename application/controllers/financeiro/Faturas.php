@@ -59,7 +59,7 @@ class Faturas extends CI_Controller
 			}
 		}
 		
-		$config['base_url']          = base_url('financeiro/faturas/');
+		$config['base_url']          = base_url('financeiro/faturas');
 		$config['suffix']            = '&' . $query_string;
 		$config['first_url']         = $config['base_url'] . '?' . $query_string;
 		$config['total_rows']        = $this->fatura_model->count('faturas', 'status = 1 AND id_usuario = ' . getUserId(), $idCartao);
@@ -133,7 +133,7 @@ class Faturas extends CI_Controller
 			$final                                    = $n_cartao[3];
 			$cartao_config                            = $cartaoSelecionado['apelido'] ? $cartaoSelecionado['apelido'] : $cartaoSelecionado['bandeira'];
 			$data['cartaoSelecionado']                = $cartaoSelecionado;
-			$data['cartaoSelecionado']['cartaoLabel'] = $cartao_config . ' - FINAL ' . $final;
+			$data['cartaoSelecionado']['cartaoLabel'] = sprintf('%s - %s', $cartao_config, $final);
 			
 			
 			$data['yearsList']           = $this->yearsList;
@@ -254,15 +254,6 @@ class Faturas extends CI_Controller
 			}
 		}
 		
-		$dateFormatter = new \IntlDateFormatter(
-			'pt_BR',
-			\IntlDateFormatter::FULL,
-			\IntlDateFormatter::NONE,
-			'America/Sao_Paulo',
-			\IntlDateFormatter::GREGORIAN,
-			"MMM"
-		);
-		
 		$dateFormatterExtended = new \IntlDateFormatter(
 			'pt_BR',
 			\IntlDateFormatter::FULL,
@@ -308,7 +299,7 @@ class Faturas extends CI_Controller
 			$data['formasPagamento']    = $this->financeiro_model->getFormasPagamento();
 			$data['fatura_paga']        = ($data['fatura']->fatura_paga);
 			$data['lancamentoEditavel'] = $this->fatura_model->getLancamentoEditavel($data['mes_referencia'], $data['ano_referencia']);
-			$data['subresults']         = $this->fatura_model->getLancamentos('lancamentos_faturas', '*', $fatura_selecionada->id_usuario, $where, $config['per_page'], $this->input->get('per_page'), $orderByLancamentos);
+			$data['subresults']         = $this->fatura_model->getLancamentos('lancamentos_faturas', '*', getUserId(), $where, $config['per_page'], $this->input->get('per_page'), $orderByLancamentos);
 			$data['results']            = $this->fatura_model->getLancamentosAssoc('lancamentos_faturas_assoc', '*', $id_fatura, $where = null, $config['per_page'], $this->input->get('per_page'), $orderByLancamentosAssoc);
 			$data['menuFinanceiro']     = true;
 			$data['menuFaturas']        = true;

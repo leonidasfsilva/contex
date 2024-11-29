@@ -1236,30 +1236,6 @@ hr {
     background-color: #becfa6;
 }
 
-.badge-info {
-    background-color: #85b4d0;
-}
-
-.badge-warning {
-    background-color: #cbc3ae;
-}
-
-.badge-danger {
-    background-color: #cbb2ae;
-}
-
-.badge-purple {
-    background-color: #b5a8b9;
-}
-
-.badge-red {
-    background-color: #fb3a3a;
-}
-
-.badge-inverse {
-    background-color: #b6b9a8;
-}
-
 /**********notify**********/
 .notify {
     position: relative;
@@ -4472,7 +4448,7 @@ Basic List
 }
 
 .alert-danger {
-    background: #ff4f54;
+    background-color: #ee3900;
     color: #ffffff;
     border-color: #b73e42;
 }

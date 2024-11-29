@@ -63,8 +63,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 								}
 								$n_cartao      = explode(" ", trim(decriptar($cartao->numero)));
 								$final         = $n_cartao[3];
-								$cartao_config = $cartao->apelido ? $cartao->apelido : $cartao->bandeira;
-								$cartao_config = $cartao_config . ' - FINAL ' . $final; ?>
+								$cartao_config = $cartao->apelido ?: $cartao->bandeira;
+								$cartao_config = sprintf('%s - %s', $cartao_config, $final); ?>
                                 <li class="<?= $selected ?>"><a href="<?= sprintf(base_url('financeiro/faturas?cartao=%s'), $cartao->id_cartao) ?>"><?= $cartao_config ?></a></li>
 							<?php } ?>
                         </ul>
@@ -87,21 +87,21 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             </tr>
             </thead>
             <tr>
-                <td colspan="2" style="text-align: left; color: green">SALDO DE FATURAS QUITADAS</td>
-                <td colspan="1" style="text-align: right; color: green">
+                <td colspan="2" style="text-align: left; color: green" class="font-weight-bold">SALDO DE FATURAS QUITADAS</td>
+                <td colspan="1" style="text-align: right; color: green" class="font-weight-bold">
 					<?php if (isset($saldoQuitado)) echo number_format($saldoQuitado->total, 2, ',', '.');
 					else echo '0,00' ?></td>
             </tr>
 			<?php if (isset($saldoVencidas) && $saldoVencidas->total > 0) { ?>
                 <tr>
-                    <td colspan="2" style="text-align: left; color: red">SALDO DE FATURAS VENCIDAS</td>
-                    <td colspan="1" style="text-align: right; color: red">
+                    <td colspan="2" style="text-align: left; color: red" class="font-weight-bold">SALDO DE FATURAS VENCIDAS</td>
+                    <td colspan="1" style="text-align: right; color: red" class="font-weight-bold">
 						<?php echo number_format($saldoVencidas->total, 2, ',', '.') ?></td>
                 </tr>
 			<?php } ?>
             <tr>
-                <td colspan="2" style="text-align: left">SALDO DE FATURAS A VENCER</td>
-                <td colspan="1" style="text-align: right">
+                <td colspan="2" style="text-align: left" class="font-weight-bold">SALDO DE FATURAS A VENCER</td>
+                <td colspan="1" style="text-align: right" class="font-weight-bold">
 					<?php if (isset($saldoPendente)) echo number_format($saldoPendente->total, 2, ',', '.');
 					else echo '0,00' ?></td>
             </tr>
@@ -214,7 +214,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 					
 					if ($r->fatura_paga == 2) {
 						$pagamento = 'PENDENTE';
-						$labelPgto = 'danger';
+						$labelPgto = 'alizarin';
 						$color     = 'red';
 						$iconPagar = 'fas fa-circle-dollar-to-slot';
 					} else if ($r->fatura_paga == 1) {
@@ -233,10 +233,10 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 					$valor_total = $this->fatura_model->getValorTotalFatura($r->id_fatura);
 					
 					echo '<tr>';
-					echo '<td><a href="' . base_url('financeiro/faturas/detalhes/' . $r->id_fatura . '/' . $cartaoSelecionado['id_cartao']) . '" title="Acessar fatura">' . $mes . ' / ' . $ano . $iconFaturaAtual . '</a></td>';
+					echo '<td class="font-weight-bold"><a href="' . base_url('financeiro/faturas/detalhes/' . $r->id_fatura . '/' . $cartaoSelecionado['id_cartao']) . '" title="Acessar fatura">' . $mes . ' / ' . $ano . $iconFaturaAtual . '</a></td>';
 					echo '<td>' . date(('d/m/Y'), strtotime($r->vencimento)) . $statusVinculo . '</td>';
 					
-					echo '<td style="cursor: pointer; color: ' . $color . '" class="i-copy-total"><i class="fas fa-copy fa-fw hidden icon-total"></i> ' . number_format($valor_total, 2, ',', '.') . '</td>';
+					echo '<td style="cursor: pointer; color: ' . $color . '" class="i-copy-total font-weight-bold"><i class="fas fa-copy fa-fw hidden icon-total"></i> ' . number_format($valor_total, 2, ',', '.') . '</td>';
 					echo '<td><span class="badge badge-' . $label . '">' . strtoupper($status) . '</span></td>';
 					echo '<td><span class="badge badge-' . $labelPgto . '">' . strtoupper($pagamento) . '</span></td>';
 					

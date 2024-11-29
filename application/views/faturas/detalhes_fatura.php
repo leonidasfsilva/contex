@@ -181,9 +181,11 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 </thead>
                 <tbody>
 				<?php
+                $content = false;
 				foreach ($results as $r) {
 					foreach ($subresults as $s) {
 						if ($s->id_lancamento == $r->id_lancamento) {
+                            $content = true;
 							if (is_array($lancamentoEditavel)) {
 								if (in_array($r->id_lancamento, $lancamentoEditavel, true)) {
 									$disabled_lancamento_2 = '';
@@ -269,7 +271,11 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 							echo '</tr>';
 						}
 					}
-				} ?>
+				}
+                if (!$content) {
+                    echo '<tr><td colspan="5">Nenhum registro encontrado</td></tr>';
+                }
+                ?>
                 </tbody>
             </table>
             <div id="somatorio_lancamentos" class="panel-footer hidden">
@@ -439,7 +445,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricao">Descrição *</label>
                             <input class="form-control descricao" type="text" name="descricao" id="descricao"/>
-                            <input id="urlLancamento" type="hidden" name="urlAtual" value=""/>
+                            <input type="hidden" class="urlAtual" name="urlAtual" />
                         </div>
                     </div>
                     <div class="row">
@@ -1257,19 +1263,13 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 $(element).parents('.form-group').removeClass('has-error')
                 $(element).parents('.form-group').addClass('has-success')
             }
-
-
         })
 
         $(document).on('click', '.excluir', function (event) {
             $("#idExcluir").val($(this).attr('id_lancamento'))
             $("#urlExcluirLancamento").val($(location).attr('href'))
         })
-
-        $(document).on('click', '#novoLancamento', function () {
-            $("#urlLancamento").val($(location).attr('href'))
-        })
-
+        
         $(document).on('click', '.editar, .copiar', function (event) {
             $(".id_lancamento").val($(this).attr('id_lancamento'))
             $(".idCliente").val($(this).attr('id_cliente'))

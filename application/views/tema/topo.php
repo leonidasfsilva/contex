@@ -435,6 +435,9 @@ $this->load->view('includes/custom_js');
 											<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) { ?>
                                                 <li><a href="<?= base_url('financeiro/faturas') ?>"><i class="pull-right fat fa-file-invoice-dollar fa-lg"></i> Faturas</a></li>
 											<?php } ?>
+											<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vDespesas')) { ?>
+                                                <li><a href="<?= base_url('financeiro/despesas') ?>"><i class="pull-right fat fa-money-bill-transfer fa-lg"></i> Despesas</a></li>
+											<?php } ?>
 											<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) { ?>
                                                 <li><a href="<?= base_url('financeiro/cartoes') ?>"><i class="pull-right fat fa-credit-card fa-lg"></i> Cartões</a></li>
 											<?php } ?>
@@ -539,6 +542,9 @@ $this->load->view('includes/custom_js');
                                             <li <?= ($this->uri->segment(2) == 'faturas' ? 'class="active"' : '') ?>>
                                                 <a href="<?= base_url('financeiro/faturas') ?>"><i class="pull-right fal fa-file-invoice-dollar fa-lg"></i> Faturas</a>
                                             </li>
+                                            <li <?= ($this->uri->segment(2) == 'despesas' ? 'class="active"' : '') ?>>
+                                                <a href="<?= base_url('financeiro/despesas') ?>"><i class="pull-right fal fa-money-bill-transfer fa-lg"></i> Despesas</a>
+                                            </li>
                                             <li <?= ($this->uri->segment(2) == 'cartoes' ? 'class="active"' : '') ?>>
                                                 <a href="<?= base_url('financeiro/cartoes') ?>"><i class="pull-right fal fa-credit-card fa-lg"></i> Cartões</a>
                                             </li>
@@ -573,7 +579,7 @@ $this->load->view('includes/custom_js');
 								<?php } ?>
 								<?php if ($this->uri->segment(4)) { ?>
                                     <li>
-                                        ...
+										<?= ucfirst($this->uri->segment(4)); ?>
                                     </li>
 								<?php } ?>
 							<?php } ?>

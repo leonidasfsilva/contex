@@ -11,7 +11,7 @@ class ConfigLoader
 		
 		// $data = []; // set here all your vars to views
 		
-		$config['topbarClass']     = ENVIRONMENT == 'development' ? 'navbar-danger' : 'navbar-midnightblue';
+		$config['topbarClass']     = ENVIRONMENT == 'development' ? 'navbar-green' : 'navbar-midnightblue';
 		$config['developmentText'] = ENVIRONMENT == 'development' ? 'DEVELOPMENT' : null;
 		$config['maintenanceMode'] = false;
 		$config['forcedLogout']    = false;

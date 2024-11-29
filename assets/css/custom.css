@@ -283,6 +283,11 @@ table {
     padding: 15px;
 }
 
+.note-alizarin {
+    background-color: #ffdfd4;
+    border-left: 6px solid #ef4f1d;
+}
+
 .note-danger {
     background-color: #ffdddd;
     border-left: 6px solid #f44336;

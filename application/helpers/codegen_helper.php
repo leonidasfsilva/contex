@@ -111,8 +111,10 @@ function validate_money($valor)
 	return false;
 }
 
-function padronizarString($str)
+function padronizarString($str = null)
 {
+	if (!$str) return null;
+	
 	$str = preg_replace('/[áàãâä]/ui', 'a', $str);
 	$str = preg_replace('/[éèêë]/ui', 'e', $str);
 	$str = preg_replace('/[íìîï]/ui', 'i', $str);
@@ -178,7 +180,7 @@ function getUserEmail()
 	return $CI->session->userdata('email');
 }
 
-function returnURL($get = null)
+function getLastUserURL($get = null)
 {
 	$CI = get_instance();
 	if ((!session_id()) || (!$CI->session->userdata('logado'))) {
@@ -194,7 +196,10 @@ function returnURL($get = null)
 		if (!in_array(uri_string(), $notRedirectedUlrs, true) && !$get) {
 			$currentURL = current_url(); //for simple URL
 			$params     = $_SERVER['QUERY_STRING']; //for parameters
-			$fullURL    = $currentURL . '?' . $params; //full URL with parameter
+			$fullURL    = $currentURL;
+			if ($params) {
+				$fullURL = $currentURL . '?' . $params; //full URL with parameter
+			}
 			$CI->session->set_userdata('last_url', $fullURL);
 		}
 	}
@@ -377,9 +382,11 @@ function buildStartEndDate($referenceMonth = null, $referenceYear = null)
 
 function dd()
 {
+	echo '<pre>';
 	foreach (func_get_args() as $arg) {
 		var_dump($arg);
 	}
+	echo '</pre>';
 	exit();
 }
 

@@ -84,7 +84,7 @@ class CI_Controller {
         date_default_timezone_set('America/Sao_Paulo');
 
         //metodo para gravar URL solicitada antes de efetuar autenticacao, e retornar para a URL apos autenticacao
-        returnURL();
+        getLastUserURL();
 	}
 
 	// --------------------------------------------------------------------

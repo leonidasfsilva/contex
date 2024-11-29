@@ -5499,11 +5499,11 @@ a.thumbnail.active, a.thumbnail:focus, a.thumbnail:hover {
     color: #66512c
 }
 
-.alert-danger {
-    color: #a94442;
-    background-color: #f2dede;
-    border-color: #ebccd1
-}
+/*.alert-danger {*/
+/*    color: #a94442;*/
+/*    background-color: #f2dede;*/
+/*    border-color: #ebccd1*/
+/*}*/
 
 .alert-danger hr {
     border-top-color: #e4b9c0

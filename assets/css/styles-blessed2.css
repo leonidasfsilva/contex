@@ -3561,6 +3561,15 @@ fieldset[disabled] .btn.btn-social.btn-windows-alt.active {
     background-color: #b9151b;
 }
 
+.badge-red {
+    background-color: #e51c23;
+}
+
+.badge-red[href]:hover,
+.badge-red[href]:focus {
+    background-color: #b9151b;
+}
+
 .badge-orange {
     background-color: #ff9800;
 }
@@ -3595,6 +3604,15 @@ fieldset[disabled] .btn.btn-social.btn-windows-alt.active {
 .badge-green[href]:hover,
 .badge-green[href]:focus {
     background-color: #3d8b40;
+}
+
+.badge-indigo {
+    background-color: #0080ff;
+}
+
+.badge-indigo[href]:hover,
+.badge-indigo[href]:focus {
+    background-color: #0057b5;
 }
 
 .badge-inverse {
