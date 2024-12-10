@@ -52,7 +52,13 @@ class Lancamentos extends CI_Controller
 		$year             = date('Y');
 		$keys             = range(2019, $year + 3);
 		$yearsList        = $keys;
-		$defaultMonthUser = $this->configs_model->getMesPadraoUsuario(getUserId());
+		$defaultMonthUser = $this->configs_model->getMesPadraoUsuario(getUserId()) ?? null;
+
+        if (isset($defaultMonthUser) && $defaultMonthUser) {
+            if (date('m') > $defaultMonthUser) {
+                $referenceYear = $year + 1;
+            }
+        }
 		
 		$order_by = [
 			'data_lancamento' => 'desc',
@@ -61,7 +67,6 @@ class Lancamentos extends CI_Controller
 		
 		switch ($periodo) {
 			case 'todos':
-				$limit = null;
 				break;
 			case '3dias':
 				$semana = $this->getLastThreeDays();
@@ -122,7 +127,7 @@ class Lancamentos extends CI_Controller
 				}
 				break;
 			default:
-				$startEndDate   = buildStartEndDate($defaultMonthUser);
+				$startEndDate   = buildStartEndDate($defaultMonthUser, ($referenceYear) ?: null);
 				$referenceMonth = $startEndDate['referenceMonth'];
 				
 				if (!isset($referenceYear) && !$referenceYear) {
