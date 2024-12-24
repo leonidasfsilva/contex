@@ -20,3 +20,4 @@ bitbucket-pipelines.yml
 application/config/config.php
 application/config/database.php
 /assets/uploads/
+/vendor
