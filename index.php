@@ -36,6 +36,18 @@
  * @filesource
  */
 
+// Path to the front controller (this file) directory
+define('FCPATH', dirname(__FILE__) . DIRECTORY_SEPARATOR);
+
+
+// ...at the bottom of index.php
+require FCPATH . 'vendor/autoload.php'; // composer installing into application/vendor
+
+// Use FCPATH If your .env is in the same directory as index.php
+// Use APPATH If your .env is in your application/ directory
+$dotenv = Dotenv\Dotenv::createImmutable(FCPATH);
+$dotenv->load();
+
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT
@@ -57,14 +69,7 @@
 
 //set the environment to production after installation
 
-define('DEVELOP_HOSTS', [
-	'localhost',
-	'10.0.1.200',
-	'contex.test',
-	'mxcode.local',
-]);
-
-define('ENVIRONMENT', in_array($_SERVER['SERVER_NAME'], DEVELOP_HOSTS) ? 'development' : 'production');
+define('ENVIRONMENT', $_ENV['ENVIRONMENT']);
 
 // we don't want to access the main project before installation. redirect to installation page
 if (ENVIRONMENT === 'pre_installation') {
@@ -94,7 +99,6 @@ switch (ENVIRONMENT) {
 		error_reporting(-1);
 		ini_set('display_errors', 1);
 		break;
-	
 	case 'testing':
 		ini_set('display_errors', 1);
 		if (version_compare(PHP_VERSION, '5.3', '>=')) {
@@ -111,7 +115,6 @@ switch (ENVIRONMENT) {
 			error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_USER_NOTICE);
 		}
 		break;
-	
 	default:
 		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
 		echo 'The application environment is not set correctly.';
@@ -251,9 +254,6 @@ define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
 
 // Path to the system directory
 define('BASEPATH', $system_path);
-
-// Path to the front controller (this file) directory
-define('FCPATH', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 
 // Name of the "system" directory
 define('SYSDIR', basename(BASEPATH));

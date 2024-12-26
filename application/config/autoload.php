@@ -60,7 +60,8 @@ $autoload['libraries'] = array(
     'permission',
     'pagination',
 	'user_agent',
-	'ConfigLoader'
+	'ConfigLoader',
+    'Env'
 );
 
 
@@ -77,6 +78,8 @@ $autoload['helper'] = [
     'url',
     'codegen_helper',
     'fatura_helper',
+    // 'despesa_helper',
+    'general_helper',
     'mpdf_helper'
 ];
 
