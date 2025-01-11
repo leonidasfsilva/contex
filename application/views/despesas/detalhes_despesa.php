@@ -32,12 +32,12 @@ $periodo  = $this->input->get('periodo');
                     <label class="font-weight-bold" for="descricaoEditar">Descrição</label>
                     <input class="form-control" type="text" value="<?= $despesa->descricao ?>" disabled/>
                 </div>
-				<?php if ($despesa->fornecedor) { ?>
+                <?php if ($despesa->fornecedor) { ?>
                     <div class="form-group col-lg-6 col-xs-12">
                         <label class="font-weight-bold" for="fornecedorEditar">Fornecedor</label>
                         <input class="form-control" type="text" value="<?= $despesa->fornecedor ?>" disabled/>
                     </div>
-				<?php } ?>
+                <?php } ?>
             </div>
             <div class="row">
                 <div class="form-group col-lg-3 col-xs-6">
@@ -58,35 +58,35 @@ $periodo  = $this->input->get('periodo');
                 </div>
             </div>
             <div class="row">
-				<?php if ($despesa->despesa_parcelada) { ?>
+                <?php if ($despesa->despesa_parcelada) { ?>
                     <div class="form-group col-lg-3 col-xs-6">
                         <label class="font-weight-bold">Parcelamento</label>
                         <input class="form-control" type="text" value="<?= $despesa->total_parcelas ?>x" disabled/>
                     </div>
                     <div class="form-group col-lg-3 col-xs-6">
                         <label class="font-weight-bold">Status das Parcelas</label>
-                        <input class="form-control" type="text" value="<?= $parcelasPagas . ' pagas | ' . ($despesa->total_parcelas - $parcelasPagas). ' restantes' ?>" disabled/>
+                        <input class="form-control" type="text" value="<?= ($parcelasRestantes = $despesa->total_parcelas - $parcelasPagas) > 1 ? $parcelasRestantes . ' restantes' : $parcelasRestantes . 'restante'?>" disabled/>
                     </div>
                     <div class="form-group col-lg-3 col-xs-6">
                         <label class="font-weight-bold">Valor da Parcela</label>
                         <input class="form-control font-weight-bold text-alizarin" type="text" value="<?= number_format($despesa->valor_parcela, 2, ',', '.') ?>" disabled/>
                     </div>
-				<?php }
-				if ($despesa->despesa_terceiros) { ?>
+                <?php }
+                if ($despesa->despesa_terceiros) { ?>
                     <div class="form-group col-lg-3 col-xs-12">
                         <label class="font-weight-bold">Terceiro</label>
                         <input class="form-control" type="text" value="<?= $despesa->nome_terceiro ?>" disabled/>
                     </div>
-				<?php } ?>
+                <?php } ?>
             </div>
-			<?php if ($despesa->observacoes) { ?>
+            <?php if ($despesa->observacoes) { ?>
                 <div class="row">
                     <div class="form-group col-lg-12 col-xs-12 mb0">
                         <label for="observacoesEditar" class="font-weight-bold">Observações</label>
                         <textarea rows="5" class="form-control" disabled><?= $despesa->observacoes ?></textarea>
                     </div>
                 </div>
-			<?php } ?>
+            <?php } ?>
         </div>
 
     </div>
@@ -125,541 +125,69 @@ $periodo  = $this->input->get('periodo');
             </tr>
             </thead>
             <tbody>
-			<?php if (isset($results) && $results) {
-				foreach ($results as $r) {
-					$value                = number_format($despesa->valor, 2, ',', '.');
-					$installmentValue     = null;
-					$thirdName            = null;
-					$installments         = null;
-					$link                 = null;
-					$aditionalDescription = $despesa->fornecedor;
-					$linkDate             = null;
-					$referenceDate        = null;
-					$colorValue           = 'text-alizarin';
-					$linkStatus           = '<i class="far fa-link-slash fa-fw text-orange"></i> <span class="badge badge-orange">SEM VÍNCULO</span>';
-					$paymentStatus        = '<i class="far fa-times fa-fw text-danger"></i> <span class="badge badge-red">PENDENTE</span>';
-					
-					if ($despesa->valor_parcela) {
-						$value = number_format($despesa->valor_parcela, 2, ',', '.');
-					}
-					
-					if ($despesa->despesa_parcelada) {
-						$aditionalDescription = sprintf('PARCELA %s / %s', $r->num_parcela, $despesa->total_parcelas);
-						$installments         = '<span class="badge badge-alizarin font-weight-bold">' . $r->num_parcela . '/' . $despesa->total_parcelas . '</span>';
-					}
-					
-					if ($despesa->despesa_terceiros == 1) {
-						$thirdName = $despesa->nome_terceiro;
-					}
-					
-					if ($r->despesa_vinculada == 1) {
-						$referenceDate = sprintf('%s / %s', $r->mes_descricao, $r->ano_referencia);
-						$link          = '<a href="' . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $r->mes_referencia, $r->ano_referencia)) . '" title="Acessar período de referência">' . $referenceDate . '</span></a>';
-						$linkStatus    = '<i class="far fa-link fa-fw text-primary"></i> <span class="badge badge-primary">VINCULADA</span>';
-					}
-					
-					if ($r->despesa_paga == 1) {
-						$paymentStatus = '<i class="far fa-check fa-fw text-success"></i> <span class="badge badge-green">EFETIVADO</span>';
-					}
-					
-					echo '<tr>';
-					echo '<td class="font-weight-bold">' . $link . '</td>';
-					
-					echo '<td>' . strtoupper($despesa->descricao) . '<br><span class="small text-muted" >' . ($aditionalDescription) . '</td>';
-					
-					echo '<td><span class="font-11 font-weight-bold ' . $colorValue . '">' . ($value) . '</span><br><span class="small text-muted">' . ($despesa->descricao_pagamento) . '</span></td>';
-					
-					echo '<td>' . $linkStatus . '<br>' . $paymentStatus . '</td>';
-					
-					echo '</tr>';
-				}
-			} else { ?>
+            <?php if (isset($results) && $results) {
+                foreach ($results as $r) {
+                    $value                = number_format($despesa->valor, 2, ',', '.');
+                    $installmentValue     = null;
+                    $thirdName            = null;
+                    $installments         = null;
+                    $link                 = null;
+                    $aditionalDescription = $despesa->fornecedor;
+                    $linkDate             = null;
+                    $referenceDate        = null;
+                    $colorValue           = 'text-alizarin';
+                    $linkStatus           = '<i class="far fa-link-slash fa-fw text-orange"></i> <span class="badge badge-orange">SEM VÍNCULO</span>';
+                    $paymentStatus        = '<i class="far fa-times fa-fw text-danger"></i> <span class="badge badge-red">PENDENTE</span>';
+
+                    if ($despesa->valor_parcela) {
+                        $value = number_format($despesa->valor_parcela, 2, ',', '.');
+                    }
+
+                    if ($despesa->despesa_parcelada) {
+                        $aditionalDescription = sprintf('PARCELA %s/%s', $r->num_parcela, $despesa->total_parcelas);
+                        $installments         = '<span class="badge badge-alizarin font-weight-bold">' . $r->num_parcela . '/' . $despesa->total_parcelas . '</span>';
+                    }
+
+                    if ($despesa->despesa_terceiros == 1) {
+                        $thirdName = $despesa->nome_terceiro;
+                    }
+
+                    if ($r->despesa_vinculada == 1) {
+                        $referenceDate = sprintf('%s/%s', $r->mes_descricao, $r->ano_referencia);
+                        $link          = '<a href="' . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $r->mes_referencia, $r->ano_referencia)) . '" title="Acessar período de referência">' . $referenceDate . '</span></a>';
+                        $linkStatus    = '<i class="far fa-link fa-fw text-primary"></i> <span class="badge badge-primary">VINCULADA</span>';
+                    }
+
+                    if ($r->despesa_paga == 1) {
+                        $paymentStatus = '<i class="far fa-check fa-fw text-success"></i> <span class="badge badge-green">EFETIVADO</span>';
+                    }
+
+                    echo '<tr>';
+                    echo '<td class="font-weight-bold">' . $link . '</td>';
+
+                    echo '<td>' . strtoupper($despesa->descricao) . '<br><span class="small text-muted" >' . ($aditionalDescription) . '</td>';
+
+                    echo '<td><span class="font-11 font-weight-bold ' . $colorValue . '">' . ($value) . '</span><br><span class="small text-muted">' . ($despesa->descricao_pagamento) . '</span></td>';
+
+                    echo '<td>' . $linkStatus . '<br>' . $paymentStatus . '</td>';
+
+                    echo '</tr>';
+                }
+            } else { ?>
                 <tr>
                     <td colspan="6">Nenhum registro encontrado</td>
                 </tr>
-			<?php } ?>
+            <?php } ?>
             </tbody>
         </table>
-		<?php if ($this->pagination->create_links()) { ?>
+        <?php if ($this->pagination->create_links()) { ?>
             <div class="panel-footer">
-				<?= $this->pagination->create_links() ?>
+                <?= $this->pagination->create_links() ?>
             </div>
-		<?php } ?>
+        <?php } ?>
     </div>
 </div>
 
-<!-- Modal FILTRAR -->
-<div class="modal fade" id="modalFiltrar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title">Filtrar faturas</h4>
-            </div>
-            <form action="<?php echo current_url(); ?>" method="get" id="form_filtro">
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="form-group col-lg-6" style="margin-left: 0">
-                            <label class="tip-top" title="Filtrar faturas por período específico">Período <i class="fa fa-info-circle fa-fw"></i></label>
-                            <select name="periodo" id="select_periodos" class="form-control">
-                                <option value="">Selecione o período</option>
-                                <option value="3dias" <?php if ($periodo == '3dias') {
-									echo 'selected';
-								} ?>>Últimos 3 dias
-                                </option>
-                                <option value="5dias" <?php if ($periodo == '5dias') {
-									echo 'selected';
-								} ?>>Últimos 5 dias
-                                </option>
-                                <option value="7dias" <?php if ($periodo == '7dias') {
-									echo 'selected';
-								} ?>>Últimos 7 dias
-                                </option>
-                                <option value="15dias" <?php if ($periodo == '15dias') {
-									echo 'selected';
-								} ?>>Últimos 15 dias
-                                </option>
-                                <option value="30dias" <?php if ($periodo == '30dias') {
-									echo 'selected';
-								} ?>>Últimos 30 dias
-                                </option>
-                                <option value="60dias" <?php if ($periodo == '60dias') {
-									echo 'selected';
-								} ?>>Últimos 60 dias
-                                </option>
-                                <option value="90dias" <?php if ($periodo == '90dias') {
-									echo 'selected';
-								} ?>>Últimos 90 dias
-                                </option>
-                                <option value="todos" <?php if ($periodo == 'todos') {
-									echo 'selected';
-								} ?>>Todos
-                                </option>
-                            </select>
-                        </div>
-                        <div class="col-lg-6">
-                            <label class="tip-top" title="Filtrar faturas por status">Status <i class="fa fa-info-circle fa-fw"></i></label>
-                            <select class="form-control" id="select_status" name="status">
-                                <option value="">Selecione o status</option>
-                                <option value="aberta" <?php if ($periodo == 'aberta') {
-									echo 'selected';
-								} ?>>Aberta
-                                </option>
-                                <option value="fechada" <?php if ($periodo == 'fechada') {
-									echo 'selected';
-								} ?>>Fechada
-                                </option>
-                                <option value="futura" <?php if ($periodo == 'futura') {
-									echo 'selected';
-								} ?>>Futura
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
-                        <i class="fa fa-times fa-fw"></i> Cancelar
-                    </button>
-                    <button class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Filtrar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Modal RESUMO DESPESA -->
-<div class="modal fade" id="modalResumoDespesa" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white ">Resumo da despesa</h4>
-            </div>
-            <form id="formResumoDespesa" action="<?= base_url('financeiro/despesas/editar') ?>" method="post" autocomplete="off">
-                <input class="urlAtual" type="hidden" name="urlAtual"/>
-                <input class="expenseId" type="hidden" name="id_despesa"/>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label class="font-weight-bold" for="descricaoEditar">Descrição *</label>
-                            <input class="form-control description" id="descricaoEditar" type="text" name="descricao"/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-3 col-xs-4">
-                            <label class="font-weight-bold">Valor *</label>
-                            <input class="form-control money value" type="text" name="valor"/>
-                        </div>
-                        <div class="form-group col-lg-9 col-xs-8">
-                            <label class="font-weight-bold" for="fornecedorEditar">Fornecedor</label>
-                            <input class="form-control supplier" id="fornecedorEditar" type="text" name="fornecedor"/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-4 col-xs-6">
-                            <label for="forma_pagamento" class="font-weight-bold">Forma Pagamento *</label>
-                            <select name="forma_pagamento" class="form-control paymentForm">
-                                <option value="">
-                                    << Selecione >>
-                                </option>
-								<?php if ($formasPagamento) {
-									foreach ($formasPagamento as $f) { ?>
-                                        <option value="<?= $f->id_forma ?>">
-											<?= $f->nome ?>
-                                        </option>
-									<?php }
-								} ?>
-                            </select>
-                        </div>
-                        <div class="form-group col-lg-4 col-xs-6">
-                            <label for="tipoEditar" class="font-weight-bold">Tipo *</label>
-                            <select class="form-control expenseType" name="tipo" id="tipoEditar">
-                                <option value=""><< Selecione >></option>
-                                <option value="unica">ÚNICA</option>
-                                <option value="recorrente">RECORRENTE</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-lg-4 col-xs-6 divDiaVencimento">
-                            <label class="font-weight-bold">Dia de Vencimento</label>
-                            <input class="form-control datepicker expirationDay" type="text" name="dia_vencimento"/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class=" divContainerParcelamento hidden">
-                            <div class="form-group col-lg-4 col-xs-12 mt20 pb5">
-                                <div class="row">
-                                    <input type="checkbox" class="switch-input primary installmentExpense" id="despesaParceladaEditar" name="despesa_parcelada" value="1">
-                                    <label for="despesaParceladaEditar" class="switch-label primary font-weight-bold">Despesa parcelada</label>
-                                </div>
-                            </div>
-                            <div class="divParcelas hidden">
-                                <div class="form-group col-lg-4 col-xs-6">
-                                    <label class="font-weight-bold">Nº Parcelas *</label>
-                                    <input class="form-control installments" type="tel" name="qnt_parcelas"/>
-                                </div>
-                                <div class="form-group col-lg-4 col-xs-6">
-                                    <label class="font-weight-bold">Valor da Parcela *</label>
-                                    <input class="form-control installmentValue" type="text" name="valor_parcela" readonly/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-4 col-xs-5 mt20">
-                            <div class="row">
-                                <input type="checkbox" class="switch-input primary thirdPartyExpense" id="despesaTerceirosEditar" name="despesa_terceiros" value="1">
-                                <label for="despesaTerceirosEditar" class="switch-label primary font-weight-bold">Despesa de terceiros</label>
-                            </div>
-                        </div>
-                        <div class="divTerceiros hidden">
-                            <div class="form-group col-lg-8 col-xs-7">
-                                <label class="font-weight-bold">Nome do terceiro *</label>
-                                <input class="form-control thirdName" type="text" name="nome_terceiro"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-4" style="margin-bottom: 0;">
-                            <a href="javascript:" class="font-weight-bold obsLink">
-                                <i class="fas fa-plus fa-fw obsIcon"></i>
-                                <span class="obsText">Adicionar observações</span>
-                            </a>
-                        </div>
-                        <div class="divObservacoes hidden">
-                            <div class="form-group col-lg-8 mb0">
-                                <label for="observacoesEditar" class="font-weight-bold">Observações</label>
-                                <textarea rows="5" class="form-control observationsTextarea" id="observacoesEditar" name="observacoes"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a type="button" class="btn btn-default-alt btn-sm expenseDetailsLink pull-left">
-                        <i class="fa fa-search-plus fa-fw"></i>
-                        Detalhes
-                    </a>
-                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
-                        <i class="fa fa-times fa-fw"></i>
-                        Fechar
-                    </button>
-                    <button type="submit" class="btn btn-primary btn-sm">
-                        <i class="fa fa-check fa-fw"></i>
-                        Salvar
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Modal COPIAR DESPESA -->
-<div class="modal fade" id="modalCopiarDespesa" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-info">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white ">Copiar despesa</h4>
-            </div>
-            <form id="formCopiarDespesa" action="<?= base_url('financeiro/despesas/copiar') ?>" method="post" autocomplete="off">
-                <input class="urlAtual" type="hidden" name="urlAtual"/>
-                <input class="expenseId" type="hidden" name="id_despesa"/>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label class="font-weight-bold">Descrição *</label>
-                            <input class="form-control description" type="text" name="descricao"/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-3 col-xs-4">
-                            <label class="font-weight-bold">Valor *</label>
-                            <input class="form-control money value" type="text" name="valor"/>
-                        </div>
-                        <div class="form-group col-lg-9 col-xs-8">
-                            <label class="font-weight-bold">Fornecedor</label>
-                            <input class="form-control supplier" type="text" name="fornecedor"/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-4 col-xs-6">
-                            <label class="font-weight-bold">Forma Pagamento *</label>
-                            <select name="forma_pagamento" class="form-control paymentForm">
-                                <option value="">
-                                    << Selecione >>
-                                </option>
-								<?php if ($formasPagamento) {
-									foreach ($formasPagamento as $f) { ?>
-                                        <option value="<?= $f->id_forma ?>">
-											<?= $f->nome ?>
-                                        </option>
-									<?php }
-								} ?>
-                            </select>
-                        </div>
-                        <div class="form-group col-lg-4 col-xs-6">
-                            <label class="font-weight-bold">Tipo *</label>
-                            <select class="form-control expenseType" name="tipo">
-                                <option value=""><< Selecione >></option>
-                                <option value="unica">ÚNICA</option>
-                                <option value="recorrente">RECORRENTE</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-lg-4 col-xs-6 divDiaVencimento">
-                            <label class="font-weight-bold">Dia de Vencimento</label>
-                            <input class="form-control datepicker expirationDay" type="text" name="dia_vencimento"/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class=" divContainerParcelamento hidden">
-                            <div class="form-group col-lg-4 col-xs-12 mt20 pb5">
-                                <div class="row">
-                                    <input type="checkbox" class="switch-input primary installmentExpense" id="despesaParceladaCopiar" name="despesa_parcelada" value="1">
-                                    <label for="despesaParceladaCopiar" class="switch-label primary font-weight-bold">Despesa parcelada</label>
-                                </div>
-                            </div>
-                            <div class="divParcelas hidden">
-                                <div class="form-group col-lg-4 col-xs-6">
-                                    <label class="font-weight-bold">Nº Parcelas *</label>
-                                    <input class="form-control installments" type="tel" name="qnt_parcelas"/>
-                                </div>
-                                <div class="form-group col-lg-4 col-xs-6">
-                                    <label class="font-weight-bold">Valor da Parcela *</label>
-                                    <input class="form-control installmentValue" type="text" name="valor_parcela" readonly/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-4 col-xs-5 mt20">
-                            <div class="row">
-                                <input type="checkbox" class="switch-input primary thirdPartyExpense" id="despesaTerceirosCopiar" name="despesa_terceiros" value="1">
-                                <label for="despesaTerceirosCopiar" class="switch-label primary font-weight-bold">Despesa de terceiros</label>
-                            </div>
-                        </div>
-                        <div class="divTerceiros hidden">
-                            <div class="form-group col-lg-8 col-xs-7">
-                                <label class="font-weight-bold">Nome do terceiro *</label>
-                                <input class="form-control thirdName" type="text" name="nome_terceiro"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-4" style="margin-bottom: 0;">
-                            <a href="javascript:" class="font-weight-bold obsLink">
-                                <i class="fas fa-plus fa-fw obsIcon"></i>
-                                <span class="obsText">Adicionar observações</span>
-                            </a>
-                        </div>
-                        <div class="divObservacoes hidden">
-                            <div class="form-group col-lg-8 mb0">
-                                <label for="observacoesEditar" class="font-weight-bold">Observações</label>
-                                <textarea rows="5" class="form-control observationsTextarea" id="observacoesEditar" name="observacoes"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
-                        <i class="fa fa-times fa-fw"></i>
-                        Fechar
-                    </button>
-                    <button type="submit" class="btn btn-info btn-sm">
-                        <i class="fa fa-check fa-fw"></i>
-                        Salvar
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Modal NOVA DESPESA -->
-<div class="modal fade" id="modalNovaDespesa" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white ">Registrar nova despesa</h4>
-            </div>
-            <form id="formDespesa" action="<?= base_url('financeiro/despesas/registrar') ?>" method="post" autocomplete="off">
-                <input class="urlAtual" type="hidden" name="urlAtual"/>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label class="font-weight-bold" for="descricao">Descrição *</label>
-                            <input class="form-control description" id="descricao" type="text" name="descricao"/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-3 col-xs-4">
-                            <label class="font-weight-bold">Valor *</label>
-                            <input class="form-control money value" type="text" name="valor"/>
-                        </div>
-                        <div class="form-group col-lg-9 col-xs-8">
-                            <label class="font-weight-bold" for="fornecedor">Fornecedor</label>
-                            <input class="form-control supplier" id="fornecedor" type="text" name="fornecedor"/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-4 col-xs-6">
-                            <label for="forma_pagamento" class="font-weight-bold">Forma Pagamento *</label>
-                            <select name="forma_pagamento" class="form-control paymentForm">
-                                <option value="">
-                                    << Selecione >>
-                                </option>
-								<?php if ($formasPagamento) {
-									foreach ($formasPagamento as $f) { ?>
-                                        <option value="<?= $f->id_forma ?>">
-											<?= $f->nome ?>
-                                        </option>
-									<?php }
-								} ?>
-                            </select>
-                        </div>
-                        <div class="form-group col-lg-4 col-xs-6">
-                            <label for="tipo" class="font-weight-bold">Tipo *</label>
-                            <select class="form-control expenseType" name="tipo" id="tipo">
-                                <option value=""><< Selecione >></option>
-                                <option value="unica">ÚNICA</option>
-                                <option value="recorrente">RECORRENTE</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-lg-4 col-xs-6 divDiaVencimento">
-                            <label class="font-weight-bold">Dia de Vencimento</label>
-                            <input class="form-control datepicker expirationDay" type="text" name="dia_vencimento"/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class=" divContainerParcelamento hidden">
-                            <div class="form-group col-lg-4 col-xs-12 mt20 pb5">
-                                <div class="row">
-                                    <input type="checkbox" class="switch-input primary installmentExpense" id="despesaParcelada" name="despesa_parcelada" value="1">
-                                    <label for="despesaParcelada" class="switch-label primary font-weight-bold">Despesa parcelada</label>
-                                </div>
-                            </div>
-                            <div class="divParcelas hidden">
-                                <div class="form-group col-lg-4 col-xs-6">
-                                    <label class="font-weight-bold">Nº Parcelas *</label>
-                                    <input class="form-control qntParcelas installments" type="tel" name="qnt_parcelas"/>
-                                </div>
-                                <div class="form-group col-lg-4 col-xs-6">
-                                    <label class="font-weight-bold">Valor da Parcela *</label>
-                                    <input class="form-control installmentValue" type="text" name="valor_parcela" readonly/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group col-lg-4 col-xs-5 mt20">
-                            <div class="row">
-                                <input type="checkbox" class="switch-input primary thirdPartyExpense" id="despesaTerceiros" name="despesa_terceiros" value="1">
-                                <label for="despesaTerceiros" class="switch-label primary font-weight-bold">Despesa de terceiros</label>
-                            </div>
-                        </div>
-                        <div class="divTerceiros hidden">
-                            <div class="form-group col-lg-8 col-xs-7">
-                                <label class="font-weight-bold">Nome do terceiro *</label>
-                                <input class="form-control thirdName" type="text" name="nome_terceiro"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-4" style="margin-bottom: 0;">
-                            <a href="javascript:" class="font-weight-bold obsLink">
-                                <i class="fas fa-plus fa-fw obsIcon"></i>
-                                <span class="obsText">Adicionar observações</span>
-                            </a>
-                        </div>
-                        <div class="divObservacoes hidden">
-                            <div class="form-group col-lg-8 mb0">
-                                <label for="observacoes" class="font-weight-bold">Observações</label>
-                                <textarea rows="5" class="form-control observationsTextarea" id="observacoes" name="observacoes"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
-                        <i class="fa fa-times fa-fw"></i>
-                        Cancelar
-                    </button>
-                    <button type="submit" class="btn btn-primary btn-sm">
-                        <i class="fa fa-check fa-fw"></i>
-                        Salvar
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Modal EXCLUIR -->
-<div class="modal fade" id="modalExcluir" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-danger">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white ">Excluir despesa</h4>
-            </div>
-            <form action="<?php echo base_url('financeiro/despesas/excluir') ?>" method="post">
-                <div class="modal-body">
-                    <p class="font-weight-bold">Deseja realmente excluir esta despesa?</p>
-                    <input name="id_despesa" class="id_despesa" type="hidden"/>
-                    <input class="urlAtual" type="hidden" name="urlAtual"/>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
-                        <i class="fa fa-times fa-fw"></i> Cancelar
-                    </button>
-                    <button class="btn btn-danger btn-sm"><i class="fa fa-check fa-fw"></i> Excluir
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 <!-- Modal ALERTA CONFIGURACAO -->
 <?php if (isset($cartao) && !$existe_configuracao) { ?>
@@ -733,14 +261,16 @@ $periodo  = $this->input->get('periodo');
             </div>
             <form id="formGerenciarVinculos" action="<?php echo base_url('financeiro/despesas/gerenciarVinculos') ?>" method="post">
                 <div class="modal-body">
-                    <p class="font-weight-bold">Defina o mês e ano de referência para vincular ou desvincular todos os registros da despesa para o período solicitado:</p>
+                    <p class="font-weight-bold">
+                        Defina o mês e ano de referência para vincular ou desvincular todos os registros desta despesa para o período solicitado:
+                    </p>
                     <div class="row">
                         <div class="col-lg-6 form-group">
                             <label class="control-label font-weight-bold" for="select_mes">
                                 Mês de referência *
                             </label>
                             <select class="form-control" id="mes_referencia" name="mesReferencia">
-								<?php $mesAtual = date('m'); ?>
+                                <?php $mesAtual = date('m'); ?>
                                 <option value="">
                                     << Selecione >>
                                 </option>
@@ -763,17 +293,18 @@ $periodo  = $this->input->get('periodo');
                                 Ano de referência *
                             </label>
                             <select class="form-control" id="anoReferenciaSelect" name="anoReferencia">
-								<?php if ($yearsList) {
-									foreach ($yearsList as $year) { ?>
+                                <?php if ($yearsList) {
+                                    foreach ($yearsList as $year) { ?>
                                         <option value="<?= $year ?>" <?= (date('Y') == $year ? 'selected' : '') ?>><?= $year ?></option>
-									<?php }
-								} ?>
+                                    <?php }
+                                } ?>
                             </select>
                         </div>
                     </div>
 
-                    <p class="note note-info"><i class="text-info fa fa-info-circle fa-fw fa-lg"></i>
-                        Esta ação irá vincular/desvincular do módulo de Lançamentos todos os registros desta despesa referentes ao mês e ano selecionados.
+                    <p class="note note-info">
+                        <i class="text-info fa fa-info-circle fa-fw fa-lg"></i>
+                        Esta ação irá vincular/desvincular do módulo de Lançamentos o registro desta despesa referente ao mês e ano selecionados.
                     </p>
                     <!-- <p class="note note-info"><i class="text-info fa fa-info-circle fa-fw fa-lg"></i>
                         Todas as atualizações de valores das faturas serão refletidas automaticamente no módulo de Lançamentos
@@ -877,11 +408,11 @@ $periodo  = $this->input->get('periodo');
                                 <option value="">
                                     << Selecione >>
                                 </option>
-								<?php if ($formasPagamento) {
-									foreach ($formasPagamento as $cartao) { ?>
+                                <?php if ($formasPagamento) {
+                                    foreach ($formasPagamento as $cartao) { ?>
                                         <option value="<?= $cartao->id_forma ?>"><?= $cartao->nome ?></option>
-									<?php }
-								} ?>
+                                    <?php }
+                                } ?>
                             </select>
                         </div>
                     </div>

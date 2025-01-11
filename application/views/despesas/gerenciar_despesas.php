@@ -39,21 +39,21 @@ $periodo  = $this->input->get('periodo');
             <tr class="font-weight-bold">
                 <td colspan="2" style="text-align: left; color: green">SALDO DE DESPESAS QUITADAS</td>
                 <td colspan="1" style="text-align: right; color: green">
-					<?php if (isset($saldoQuitado)) echo number_format($saldoQuitado->total, 2, ',', '.');
-					else echo '0,00' ?></td>
+                    <?php if (isset($saldoQuitado)) echo number_format($saldoQuitado->total, 2, ',', '.');
+                    else echo '0,00' ?></td>
             </tr>
-			<?php if (isset($saldoVencidas) && $saldoVencidas->total > 0) { ?>
+            <?php if (isset($saldoVencidas) && $saldoVencidas->total > 0) { ?>
                 <tr class="font-weight-bold">
                     <td colspan="2" style="text-align: left; color: red">SALDO DE DESPESAS VENCIDAS</td>
                     <td colspan="1" style="text-align: right; color: red">
-						<?php echo number_format($saldoVencidas->total, 2, ',', '.') ?></td>
+                        <?php echo number_format($saldoVencidas->total, 2, ',', '.') ?></td>
                 </tr>
-			<?php } ?>
+            <?php } ?>
             <tr class="font-weight-bold">
                 <td colspan="2" style="text-align: left">SALDO DE FATURAS A VENCER</td>
                 <td colspan="1" style="text-align: right">
-					<?php if (isset($saldoPendente)) echo number_format($saldoPendente->total, 2, ',', '.');
-					else echo '0,00' ?></td>
+                    <?php if (isset($saldoPendente)) echo number_format($saldoPendente->total, 2, ',', '.');
+                    else echo '0,00' ?></td>
             </tr>
         </table>
     </div>
@@ -73,93 +73,104 @@ $periodo  = $this->input->get('periodo');
                 <th>Valor (R$)<br>Forma Pagamento</th>
                 <th>Parcelamento<br>Terceiro</th>
                 <th>Tipo<br>Status</th>
-                <th style="width: 130px">Ações<br><br></th>
+                <th style="width: 170px">Ações<br><br></th>
             </tr>
             </thead>
             <tbody>
-			<?php if (isset($results) && $results) {
-				foreach ($results as $r) {
-					$valor         = number_format($r->valor, 2, ',', '.');
-					$valor_parcela = null;
-					$terceiro      = null;
-					$parcelas      = null;
-					$colorValue    = 'text-alizarin';
-					
-					if ($r->observacoes) {
-						$iconObs = '
+            <?php if (isset($results) && $results) {
+                foreach ($results as $r) {
+                    $valor         = number_format($r->valor, 2, ',', '.');
+                    $valor_parcela = null;
+                    $terceiro      = null;
+                    $parcelas      = null;
+                    $colorValue    = 'text-alizarin';
+
+                    if ($r->observacoes) {
+                        $iconObs = '
                                 <i class="fas fa-comment-dots fa-fw" title="Observações adicionais"></i>
                             ';
-					} else {
-						$iconObs = '';
-					};
-					
-					
-					if ($r->valor_parcela) {
-						$valor_parcela = number_format($r->valor_parcela, 2, ',', '.');
-					}
-					
-					if ($r->despesa_parcelada) {
-						$parcelas = '<span class="text-orange font-weight-bold">' . $r->total_parcelas . ' x ' . $valor_parcela . '</span>';
-					}
-					
-					if ($r->despesa_terceiros == 1) {
-						$terceiro   = $r->nome_terceiro;
-						$colorValue = 'text-green';
-					}
-					
-					if ($r->tipo_despesa == 1) {
-						$tipo = '<i class="far fa-circle-1 fa-fw text-warning"></i> <span class="badge badge-orange">ÚNICA</span>';
-					} else {
-						$tipo = '<i class="far fa-arrows-rotate fa-fw text-primary"></i> <span class="badge badge-primary">RECORRENTE</span>';
-					}
-					
-					if ($r->ativo == 1) {
-						$ativo = '<i class="far fa-play-circle fa-fw text-success"></i> <span class="badge badge-green">ATIVA</span>';
-					} else {
-						$ativo = '<i class="far fa-stop-circle fa-fw text-danger"></i> <span class="badge badge-red">INATIVA</span>';
-					}
-					echo '<tr>';
-					// echo '<td>' . date(('d/m/Y'), strtotime($r->criado_em)) . '</td>';
-					
-					echo '<td><a href="#modalResumoDespesa" style="margin-right: 1%" data-toggle="modal" class="editar" title="#' . $r->id . '" id_despesa="' .
-						$r->id . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor_parcela="' . $valor_parcela . '" valor="' . $valor .
-						'" dia_vencimento="' . $r->dia_vencimento . '" data_pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" total_parcelas="' . $r->total_parcelas .
-						'" fornecedor="' . $r->fornecedor . '" despesa_parcelada="' . $r->despesa_parcelada . '" despesa_terceiros="' . $r->despesa_terceiros . '" nome_terceiro="' . $r->nome_terceiro .
-						'" forma_pagamento="' . $r->id_forma_pagamento . '" tipo="' . $r->tipo_despesa . '">' . strtoupper($r->descricao) . $iconObs . '<br><span class="small text-muted" >' . ($r->fornecedor) . '</span></a></td>';
-					
-					echo '<td><span class="font-11 font-weight-bold ' . $colorValue . '">' . ($valor) . '</span><br><span class="small text-muted">' . ($r->descricao_pagamento) . '</span></td>';
-					
-					echo '<td>' . $parcelas . '
+                    } else {
+                        $iconObs = '';
+                    };
+
+
+                    if ($r->valor_parcela) {
+                        $valor_parcela = number_format($r->valor_parcela, 2, ',', '.');
+                    }
+
+                    if ($r->despesa_parcelada) {
+                        $parcelas = '<span class="text-orange font-weight-bold">' . $r->total_parcelas . ' x ' . $valor_parcela . '</span>';
+                    }
+
+                    if ($r->despesa_terceiros == 1) {
+                        $terceiro   = $r->nome_terceiro;
+                        $colorValue = 'text-green';
+                    }
+
+                    if ($r->tipo_despesa == 1) {
+                        $tipo = '<i class="far fa-circle-1 fa-fw text-warning"></i> <span class="badge badge-orange">ÚNICA</span>';
+                    } else {
+                        $tipo = '<i class="far fa-arrows-rotate fa-fw text-primary"></i> <span class="badge badge-primary">RECORRENTE</span>';
+                    }
+
+                    if ($r->ativo == 1) {
+                        $activateBtnTitle = 'Desativar despesa';
+                        $ativo            = '<i class="far fa-play-circle fa-fw text-success"></i> <span class="badge badge-green">ATIVA</span>';
+                    } else {
+                        $activateBtnTitle = 'Ativar despesa';
+                        $ativo            = '<i class="far fa-stop-circle fa-fw text-danger"></i> <span class="badge badge-red">DESATIVADA</span>';
+                    }
+                    echo '<tr>';
+                    // echo '<td>' . date(('d/m/Y'), strtotime($r->criado_em)) . '</td>';
+
+                    echo '<td><a href="#modalResumoDespesa" style="margin-right: 1%" data-toggle="modal" class="editar" title="#' . $r->id . '" id_despesa="' .
+                        $r->id . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor_parcela="' . $valor_parcela . '" valor="' . $valor .
+                        '" dia_vencimento="' . $r->dia_vencimento . '" data_pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" total_parcelas="' . $r->total_parcelas .
+                        '" fornecedor="' . $r->fornecedor . '" despesa_parcelada="' . $r->despesa_parcelada . '" despesa_terceiros="' . $r->despesa_terceiros . '" nome_terceiro="' . $r->nome_terceiro .
+                        '" forma_pagamento="' . $r->id_forma_pagamento . '" tipo="' . $r->tipo_despesa . '">' . strtoupper($r->descricao) . $iconObs . '<br><span class="small text-muted" >' . ($r->fornecedor) . '</span></a></td>';
+
+                    echo '<td><span class="font-11 font-weight-bold ' . $colorValue . '">' . ($valor) . '</span><br><span class="small text-muted">' . ($r->descricao_pagamento) . '</span></td>';
+
+                    echo '<td>' . $parcelas . '
                             <br><span class="small text-muted">' . $terceiro . '</span></td>';
-					
-					echo '<td>' . $tipo . '<br>' . $ativo . '</td>';
-					
-					echo '<td>';
-					if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eFaturas')) {
-						echo '<button href="#" style="margin-right: 1%"  class="btn btn-success btn-sm vinculo" data-toggle="modal" title="Vínculo" id_despesa="' . $r->id . '"><i class="fas fa-link"></i></button>';
-						
-						echo '<a href="' . base_url('financeiro/despesas/detalhes/') . $r->id . '" type="button" id="btn_detalhes" style="margin-right: 1%" class="btn btn-primary btn-sm detalhes" title="Acessar fatura" id_despesa="' .
-							$r->id . '">
-                                <i class="fas fa-search-plus fa-lg fa-fw"></i></a>';
-					}
-					if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dFaturas')) {
-						echo '<a href="#modalExcluir" data-toggle="modal" id_despesa="' . $r->id . '" class="btn btn-danger btn-sm excluir" title="Excluir fatura"><i class="fas fa-trash-can-xmark fa-lg fa-fw"></i></a>';
-					}
-					echo '</td>';
-					echo '</tr>';
-				}
-			} else { ?>
+
+                    echo '<td>' . $tipo . '<br>' . $ativo . '</td>';
+
+                    echo '<td>';
+                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eFaturas')) {
+                        echo '<button href="#" style="margin-right: 1%"  class="btn btn-success btn-sm vinculo" data-toggle="modal" title="Vincular despesa" id_despesa="' . $r->id . '">
+                                <i class="fas fa-link fa-lg fa-fw"></i>
+                                </button>';
+
+                        echo '<button href="#" style="margin-right: 1%"  class="btn btn-inverse btn-sm" data-toggle="modal" title="' . $activateBtnTitle . '" id_despesa="' . $r->id . '">
+                                <i class="fas fa-power-off fa-lg fa-fw"></i>
+                                </button>';
+
+                        echo '<a href="' . base_url('financeiro/despesas/detalhes/') . $r->id . '" type="button" id="btn_detalhes" style="margin-right: 1%" class="btn btn-primary btn-sm detalhes" title="Acessar vínculos da despesa" id_despesa="' .
+                            $r->id . '">
+                                <i class="fas fa-search-plus fa-lg fa-fw"></i>
+                                </a>';
+                    }
+                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dFaturas')) {
+                        echo '<a href="#modalExcluir" data-toggle="modal" id_despesa="' . $r->id . '" class="btn btn-danger btn-sm excluir" title="Excluir despesa">
+                                <i class="fas fa-trash-can-xmark fa-lg fa-fw"></i>
+                                </a>';
+                    }
+                    echo '</td>';
+                    echo '</tr>';
+                }
+            } else { ?>
                 <tr>
                     <td colspan="6">Nenhum registro encontrado</td>
                 </tr>
-			<?php } ?>
+            <?php } ?>
             </tbody>
         </table>
-		<?php if ($this->pagination->create_links()) { ?>
+        <?php if ($this->pagination->create_links()) { ?>
             <div class="panel-footer">
-				<?= $this->pagination->create_links() ?>
+                <?= $this->pagination->create_links() ?>
             </div>
-		<?php } ?>
+        <?php } ?>
     </div>
 </div>
 
@@ -179,36 +190,36 @@ $periodo  = $this->input->get('periodo');
                             <select name="periodo" id="select_periodos" class="form-control">
                                 <option value="">Selecione o período</option>
                                 <option value="3dias" <?php if ($periodo == '3dias') {
-									echo 'selected';
-								} ?>>Últimos 3 dias
+                                    echo 'selected';
+                                } ?>>Últimos 3 dias
                                 </option>
                                 <option value="5dias" <?php if ($periodo == '5dias') {
-									echo 'selected';
-								} ?>>Últimos 5 dias
+                                    echo 'selected';
+                                } ?>>Últimos 5 dias
                                 </option>
                                 <option value="7dias" <?php if ($periodo == '7dias') {
-									echo 'selected';
-								} ?>>Últimos 7 dias
+                                    echo 'selected';
+                                } ?>>Últimos 7 dias
                                 </option>
                                 <option value="15dias" <?php if ($periodo == '15dias') {
-									echo 'selected';
-								} ?>>Últimos 15 dias
+                                    echo 'selected';
+                                } ?>>Últimos 15 dias
                                 </option>
                                 <option value="30dias" <?php if ($periodo == '30dias') {
-									echo 'selected';
-								} ?>>Últimos 30 dias
+                                    echo 'selected';
+                                } ?>>Últimos 30 dias
                                 </option>
                                 <option value="60dias" <?php if ($periodo == '60dias') {
-									echo 'selected';
-								} ?>>Últimos 60 dias
+                                    echo 'selected';
+                                } ?>>Últimos 60 dias
                                 </option>
                                 <option value="90dias" <?php if ($periodo == '90dias') {
-									echo 'selected';
-								} ?>>Últimos 90 dias
+                                    echo 'selected';
+                                } ?>>Últimos 90 dias
                                 </option>
                                 <option value="todos" <?php if ($periodo == 'todos') {
-									echo 'selected';
-								} ?>>Todos
+                                    echo 'selected';
+                                } ?>>Todos
                                 </option>
                             </select>
                         </div>
@@ -217,16 +228,16 @@ $periodo  = $this->input->get('periodo');
                             <select class="form-control" id="select_status" name="status">
                                 <option value="">Selecione o status</option>
                                 <option value="aberta" <?php if ($periodo == 'aberta') {
-									echo 'selected';
-								} ?>>Aberta
+                                    echo 'selected';
+                                } ?>>Aberta
                                 </option>
                                 <option value="fechada" <?php if ($periodo == 'fechada') {
-									echo 'selected';
-								} ?>>Fechada
+                                    echo 'selected';
+                                } ?>>Fechada
                                 </option>
                                 <option value="futura" <?php if ($periodo == 'futura') {
-									echo 'selected';
-								} ?>>Futura
+                                    echo 'selected';
+                                } ?>>Futura
                                 </option>
                             </select>
                         </div>
@@ -278,13 +289,13 @@ $periodo  = $this->input->get('periodo');
                                 <option value="">
                                     << Selecione >>
                                 </option>
-								<?php if ($formasPagamento) {
-									foreach ($formasPagamento as $f) { ?>
+                                <?php if ($formasPagamento) {
+                                    foreach ($formasPagamento as $f) { ?>
                                         <option value="<?= $f->id_forma ?>">
-											<?= $f->nome ?>
+                                            <?= $f->nome ?>
                                         </option>
-									<?php }
-								} ?>
+                                    <?php }
+                                } ?>
                             </select>
                         </div>
                         <div class="form-group col-lg-4 col-xs-6">
@@ -403,13 +414,13 @@ $periodo  = $this->input->get('periodo');
                                 <option value="">
                                     << Selecione >>
                                 </option>
-								<?php if ($formasPagamento) {
-									foreach ($formasPagamento as $f) { ?>
+                                <?php if ($formasPagamento) {
+                                    foreach ($formasPagamento as $f) { ?>
                                         <option value="<?= $f->id_forma ?>">
-											<?= $f->nome ?>
+                                            <?= $f->nome ?>
                                         </option>
-									<?php }
-								} ?>
+                                    <?php }
+                                } ?>
                             </select>
                         </div>
                         <div class="form-group col-lg-4 col-xs-6">
@@ -523,13 +534,13 @@ $periodo  = $this->input->get('periodo');
                                 <option value="">
                                     << Selecione >>
                                 </option>
-								<?php if ($formasPagamento) {
-									foreach ($formasPagamento as $f) { ?>
+                                <?php if ($formasPagamento) {
+                                    foreach ($formasPagamento as $f) { ?>
                                         <option value="<?= $f->id_forma ?>">
-											<?= $f->nome ?>
+                                            <?= $f->nome ?>
                                         </option>
-									<?php }
-								} ?>
+                                    <?php }
+                                } ?>
                             </select>
                         </div>
                         <div class="form-group col-lg-4 col-xs-6">
@@ -716,7 +727,7 @@ $periodo  = $this->input->get('periodo');
                                 Mês de referência *
                             </label>
                             <select class="form-control" id="mes_referencia" name="mesReferencia">
-								<?php $mesAtual = date('m'); ?>
+                                <?php $mesAtual = date('m'); ?>
                                 <option value="">
                                     << Selecione >>
                                 </option>
@@ -739,11 +750,11 @@ $periodo  = $this->input->get('periodo');
                                 Ano de referência *
                             </label>
                             <select class="form-control" id="anoReferenciaSelect" name="anoReferencia">
-								<?php if ($yearsList) {
-									foreach ($yearsList as $year) { ?>
+                                <?php if ($yearsList) {
+                                    foreach ($yearsList as $year) { ?>
                                         <option value="<?= $year ?>" <?= (date('Y') == $year ? 'selected' : '') ?>><?= $year ?></option>
-									<?php }
-								} ?>
+                                    <?php }
+                                } ?>
                             </select>
                         </div>
                     </div>
@@ -853,11 +864,11 @@ $periodo  = $this->input->get('periodo');
                                 <option value="">
                                     << Selecione >>
                                 </option>
-								<?php if ($formasPagamento) {
-									foreach ($formasPagamento as $cartao) { ?>
+                                <?php if ($formasPagamento) {
+                                    foreach ($formasPagamento as $cartao) { ?>
                                         <option value="<?= $cartao->id_forma ?>"><?= $cartao->nome ?></option>
-									<?php }
-								} ?>
+                                    <?php }
+                                } ?>
                             </select>
                         </div>
                     </div>
@@ -1050,6 +1061,88 @@ $periodo  = $this->input->get('periodo');
         })
 
         $("#formDespesa").validate({
+            rules: {
+                descricao: {
+                    required: true
+                },
+                tipo: {
+                    required: true
+                },
+                fornecedor: {
+                    required: false
+                },
+                valor: {
+                    required: true
+                },
+                qnt_parcelas: {
+                    required: true,
+                    max: 48,
+                    min: 2
+                },
+                valor_parcela: {
+                    required: true
+                },
+                data_vencimento: {
+                    required: false
+                },
+                dia_vencimento: {
+                    required: false
+                },
+                forma_pagamento: {
+                    required: true
+                },
+                nome_terceiro: {
+                    required: true
+                },
+            },
+            messages: {
+                descricao: {
+                    required: 'Informe a descrição'
+                },
+                tipo: {
+                    required: 'Selecione o tipo'
+                },
+                fornecedor: {
+                    required: 'Campo obrigatório'
+                },
+                valor: {
+                    required: 'Informe o valor'
+                },
+                qnt_parcelas: {
+                    required: 'Informe o número de parcelas',
+                    max: 'Máximo de parcelas: 48x ',
+                    min: 'Mínimo de parcelas: 2x '
+                },
+                valor_parcela: {
+                    required: 'Informe o valor da parcela'
+                },
+                data_vencimento: {
+                    required: 'Campo obrigatório'
+                },
+                dia_vencimento: {
+                    required: 'Informe o dia do vencimento'
+                },
+                forma_pagamento: {
+                    required: 'Selecione a forma de pagamento'
+                },
+                nome_terceiro: {
+                    required: 'Informe o nome do terceiro'
+                },
+            },
+
+            errorClass: "help-block",
+            errorElement: "p",
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
+            }
+        })
+
+        $("#formResumoDespesa").validate({
             rules: {
                 descricao: {
                     required: true

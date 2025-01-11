@@ -50,6 +50,8 @@
                 }
             }
         })
+
+        $("#urlAtual, .urlAtual").val($(location).attr('href'));
     })
 
     function toggleModals(discardModal, targetModal, trigger = false) {
@@ -203,8 +205,6 @@
 
     $(document).on('ready', function (event) {
         atualizaNotificacoesUsuario();
-
-        $("#urlAtual, .urlAtual").val($(location).attr('href'));
 
         $('.modal_anuncio').each(function (key, value) {
             $('.modal_anuncio').modal('show');
