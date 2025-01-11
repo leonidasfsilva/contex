@@ -301,7 +301,7 @@ class Faturas extends CI_Controller
             'faturas',
             '*',
             $idCartao,
-            'fatura_aberta NOT IN (0, 1)',
+            'fatura_aberta != 0',
         );
 
         $data['terceiros']          = $this->fatura_model->getAllTerceiros($idCartao, $fatura_selecionada->mes_referencia, $fatura_selecionada->ano_referencia);
@@ -864,6 +864,11 @@ class Faturas extends CI_Controller
             $idFatura = $_POST['id_fatura'];
         }
 
+        if (!$idFatura) {
+            $this->session->set_flashdata('erro', 'Método não permitido.');
+            redirect('financeiro/faturas');
+        }
+
         $urlAtual      = $this->input->post('urlAtual');
         $valor         = $this->input->post('valor');
         $valor_parcela = $this->input->post('valor_parcela');
@@ -895,11 +900,11 @@ class Faturas extends CI_Controller
         }
 
         if ($this->input->post('data_compra')) {
-            $data_compra = $this->input->post('data_compra');
-            $data_compra = explode('/', $data_compra);
-            $data_compra = $data_compra[2] . '-' . $data_compra[1] . '-' . $data_compra[0];
+            $data_compra          = $this->input->post('data_compra');
+            $data_compra_exploded = explode('/', $data_compra);
+            $data_compra          = sprintf('%s-%s-%s', $data_compra_exploded[2], $data_compra_exploded[1], $data_compra_exploded[0]);
         } else {
-            $data_compra = date('Y/m/d');
+            $data_compra = date('Y-m-d');
         }
 
         if (!validate_money($valor_parcela)) {
@@ -916,6 +921,14 @@ class Faturas extends CI_Controller
             $faturaAtual = $this->fatura_model->getFaturaAtual($idFatura);
             $mes         = $faturaAtual->mes_referencia;
             $ano         = $faturaAtual->ano_referencia;
+
+            if ($this->input->post('para_outra_fatura')) {
+                // implementar substituiçao do mes da compra para o mesmo mes referencia da fatura alvo da copia
+                // modo mais facil: obter os detalhes da fatura atraves do id_fatura oriundo do request
+                $data_compra_exploded = explode('-', $data_compra);
+                $data_compra          = sprintf('%s-%s-%s', $data_compra_exploded[0], $mes, $data_compra_exploded[2]);
+            }
+
 
             // ARRAY LANCAMENTOS_FATURAS
             $data = array(

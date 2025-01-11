@@ -612,7 +612,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         <div class="divFaturas hidden">
                             <div class="form-group col-lg-6">
                                 <label class="font-weight-bold">Fatura alvo *</label>
-                                <select name="id_fatura" class="form-control">
+                                <select name="id_fatura" class="form-control idOutraFatura" disabled="disabled">
                                     <option value="">
                                         << Selecione >>
                                     </option>
@@ -1154,9 +1154,11 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             if (checked == true) {
                 $('#divFaturas, .divFaturas').removeClass('hidden')
                 $('.idFatura').attr("disabled", true)
+                $('.idOutraFatura').attr("disabled", false)
             } else {
                 $('#divFaturas, .divFaturas').addClass('hidden')
                 $('.idFatura').attr("disabled", false)
+                $('.idOutraFatura').attr("disabled", true)
             }
         }
 
