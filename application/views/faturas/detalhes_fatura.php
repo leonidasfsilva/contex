@@ -4,39 +4,39 @@ $periodo  = $this->input->get('periodo');
 $cliente  = $this->input->get('cliente');
 
 if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
-	if ($status_fatura == 1) {
-		if ($id_usuario != getUserId()) {
-			$disabled_lancamento = 'disabled';
-		} else {
-			$disabled_lancamento = '';
-		}
-		$statusFatura = 'ABERTA';
-		$label_status = 'info';
-	} else if ($status_fatura == 2) {
-		$disabled_lancamento = 'disabled';
-		$statusFatura        = 'FUTURA';
-		$label_status          = 'inverse';
-	} else {
-		$disabledFatura      = '';
-		$disabled_lancamento = 'disabled';
-		$statusFatura        = 'FECHADA';
-		$label_status          = 'inverse';
-	}
-	
-	if ($fatura_paga == 1) {
-		$pagamentoFatura = 'PAGA';
-		$label_pgto      = 'success';
-	} else if ($fatura_paga == 2) {
-		$pagamentoFatura = 'PENDENTE';
-		$label_pgto      = 'danger';
-	} else {
-		$pagamentoFatura = null;
-		$label_pgto      = 'primary';
-		$label_note      = 'info';
-	}
-	
-	$creditoFatura = 0;
-	$debitoFatura  = 0;
+    if ($status_fatura == 1) {
+        if ($id_usuario != getUserId()) {
+            $disabled_lancamento = 'disabled';
+        } else {
+            $disabled_lancamento = '';
+        }
+        $statusFatura = 'ABERTA';
+        $label_status = 'info';
+    } else if ($status_fatura == 2) {
+        $disabled_lancamento = 'disabled';
+        $statusFatura        = 'FUTURA';
+        $label_status        = 'inverse';
+    } else {
+        $disabledFatura      = '';
+        $disabled_lancamento = 'disabled';
+        $statusFatura        = 'FECHADA';
+        $label_status        = 'inverse';
+    }
+
+    if ($fatura_paga == 1) {
+        $pagamentoFatura = 'PAGA';
+        $label_pgto      = 'success';
+    } else if ($fatura_paga == 2) {
+        $pagamentoFatura = 'PENDENTE';
+        $label_pgto      = 'danger';
+    } else {
+        $pagamentoFatura = null;
+        $label_pgto      = 'primary';
+        $label_note      = 'info';
+    }
+
+    $creditoFatura = 0;
+    $debitoFatura  = 0;
 } ?>
 
 <div class="panel panel-midnightblue">
@@ -47,7 +47,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         </h3>
         <h3>
             <i class="fas fa-credit-card fa-lg fa-fw"></i>
-			<?= $cartao['apelido'] ? $cartao['apelido'] : $alternativeLabel ?>
+            <?= $cartao['apelido'] ? $cartao['apelido'] : $alternativeLabel ?>
         </h3>
         <div class="panel-ctrls">
             <a href="<?= base_url('financeiro/faturas?cartao=') . $id_cartao ?>" class="btn btn-sm btn-default"><i class="fas fa-arrow-left fa-fw"></i> Faturas</a>
@@ -180,96 +180,96 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 </tr>
                 </thead>
                 <tbody>
-				<?php
-				foreach ($results as $r) {
-					foreach ($subresults as $s) {
-						if ($s->id_lancamento == $r->id_lancamento) {
-							if (is_array($lancamentoEditavel)) {
-								if (in_array($r->id_lancamento, $lancamentoEditavel, true)) {
-									$disabled_lancamento_2 = '';
-								} else {
-									$disabled_lancamento_2 = 'disabled';
-								}
-							}
-							
-							if ($r->n_parcela < 10) {
-								$n_parcela = str_pad($r->n_parcela, 2, '0', STR_PAD_LEFT);
-							} else {
-								$n_parcela = $r->n_parcela;
-							}
-							
-							if ($r->total_parcelas < 10) {
-								$total_parcelas = str_pad($r->total_parcelas, 2, '0', STR_PAD_LEFT);
-							} else {
-								$total_parcelas = $r->total_parcelas;
-							}
-							
-							if ($s->observacoes) {
-								$iconObs = '
+                <?php
+                foreach ($results as $r) {
+                    foreach ($subresults as $s) {
+                        if ($s->id_lancamento == $r->id_lancamento) {
+                            if (is_array($lancamentoEditavel)) {
+                                if (in_array($r->id_lancamento, $lancamentoEditavel, true)) {
+                                    $disabled_lancamento_2 = '';
+                                } else {
+                                    $disabled_lancamento_2 = 'disabled';
+                                }
+                            }
+
+                            if ($r->n_parcela < 10) {
+                                $n_parcela = str_pad($r->n_parcela, 2, '0', STR_PAD_LEFT);
+                            } else {
+                                $n_parcela = $r->n_parcela;
+                            }
+
+                            if ($r->total_parcelas < 10) {
+                                $total_parcelas = str_pad($r->total_parcelas, 2, '0', STR_PAD_LEFT);
+                            } else {
+                                $total_parcelas = $r->total_parcelas;
+                            }
+
+                            if ($s->observacoes) {
+                                $iconObs = '
                                         <i class="fas fa-comment-dots fa-fw" title="Observações adicionais"></i>
                                     ';
-							} else {
-								$iconObs = '';
-							};
-							
-							if ($s->estorno == 1) {
-								$color = 'green';
-							} else {
-								$color = 'black';
-							}
-							
-							$data_compra  = date(('d/m/y'), strtotime($r->data_compra));
-							$diaDaSemana  = getExtendedWeekDayName($r->data_compra);
-							$debitoFatura += $r->valor_parcela;
-							
-							if ($r->valor_total < 0) {
-								$valor = number_format(abs($r->valor_total), 2, ',', '.');
-							} else {
-								$valor = number_format($r->valor_total, 2, ',', '.');
-							}
-							
-							echo '<tr>';
-							echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
-							echo '<td class="idLancamento hidden">' . $s->id_lancamento . '</td>';
-							echo '<td title="' . $diaDaSemana . '">' . $data_compra . '</td>';
-							echo '<td><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Detalhes" id_lancamento="' .
-								$s->id_lancamento . '" descricao="' . $s->descricao . '" observacoes="' . nl2br($s->observacoes) . '" valor="' . $valor . '" data_compra="' .
-								date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
-								'" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '" nome_cliente="' . $s->nome_cliente .
-								'" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento . ' ' . $disabled_lancamento_2 . '>' .
-								strtoupper($s->descricao) . $iconObs .
-								'</a></td>';
-							echo '<td><a href="' . sprintf(base_url('financeiro/faturas/terceiros?mesReferencia=%s&anoReferencia=%s&cartao=%s&nome=%s'), $mes_referencia, $s->ano_referencia, $cartao['id_cartao'], $s->nome_cliente) . '">' . strtoupper($s->nome_cliente) . '</a></td>';
-							echo '<td>' . $n_parcela . '/' . $total_parcelas . '</td>';
-							echo '<td class="valor_parcela" style=" color: ' . $color .
-								'"><span>' . number_format($r->valor_parcela, 2, ',', '.') .
-								'</span><br><span style="color: grey">' . number_format($r->valor_total, 2, ',', '.') .
-								'</span></td>';
-							
-							echo '<td>';
-							if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
-								echo '<button type="button" href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Detalhes" id_lancamento="' .
-									$s->id_lancamento . '" descricao="' . $s->descricao . '" observacoes="' . nl2br($s->observacoes) . '" valor="' . $valor . '" data_compra="' .
-									date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
-									'" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '"
+                            } else {
+                                $iconObs = '';
+                            };
+
+                            if ($s->estorno == 1) {
+                                $color = 'green';
+                            } else {
+                                $color = 'black';
+                            }
+
+                            $data_compra  = date(('d/m/y'), strtotime($r->data_compra));
+                            $diaDaSemana  = getExtendedWeekDayName($r->data_compra);
+                            $debitoFatura += $r->valor_parcela;
+
+                            if ($r->valor_total < 0) {
+                                $valor = number_format(abs($r->valor_total), 2, ',', '.');
+                            } else {
+                                $valor = number_format($r->valor_total, 2, ',', '.');
+                            }
+
+                            echo '<tr>';
+                            echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
+                            echo '<td class="idLancamento hidden">' . $s->id_lancamento . '</td>';
+                            echo '<td title="' . $diaDaSemana . '">' . $data_compra . '</td>';
+                            echo '<td><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Detalhes" id_lancamento="' .
+                                $s->id_lancamento . '" descricao="' . $s->descricao . '" observacoes="' . nl2br($s->observacoes) . '" valor="' . $valor . '" data_compra="' .
+                                date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
+                                '" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '" nome_cliente="' . $s->nome_cliente .
+                                '" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento . ' ' . $disabled_lancamento_2 . '>' .
+                                strtoupper($s->descricao) . $iconObs .
+                                '</a></td>';
+                            echo '<td><a href="' . sprintf(base_url('financeiro/faturas/terceiros?mesReferencia=%s&anoReferencia=%s&cartao=%s&nome=%s'), $mes_referencia, $s->ano_referencia, $cartao['id_cartao'], $s->nome_cliente) . '">' . strtoupper($s->nome_cliente) . '</a></td>';
+                            echo '<td>' . $n_parcela . '/' . $total_parcelas . '</td>';
+                            echo '<td class="valor_parcela" style=" color: ' . $color .
+                                '"><span>' . number_format($r->valor_parcela, 2, ',', '.') .
+                                '</span><br><span style="color: grey">' . number_format($r->valor_total, 2, ',', '.') .
+                                '</span></td>';
+
+                            echo '<td>';
+                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
+                                echo '<button type="button" href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Detalhes" id_lancamento="' .
+                                    $s->id_lancamento . '" descricao="' . $s->descricao . '" observacoes="' . nl2br($s->observacoes) . '" valor="' . $valor . '" data_compra="' .
+                                    date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
+                                    '" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '"
                                     nome_cliente="' . $s->nome_cliente . '" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento . ' ' . $disabled_lancamento_2 . '>
                                 <i class="fas fa-search-plus fa-lg fa-fw"></i></button>';
-								echo '<button type="button" href="#modalCopiar" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm copiar" title="Copiar" id_lancamento="' .
-									$s->id_lancamento . '" descricao="' . $s->descricao . '" observacoes="' . nl2br($s->observacoes) . '" valor="' . $valor . '" data_compra="' .
-									date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
-									'" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '"
+                                echo '<button type="button" href="#modalCopiar" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm copiar" title="Copiar" id_lancamento="' .
+                                    $s->id_lancamento . '" descricao="' . $s->descricao . '" observacoes="' . nl2br($s->observacoes) . '" valor="' . $valor . '" data_compra="' .
+                                    date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
+                                    '" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '"
                                     nome_cliente="' . $s->nome_cliente . '" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento . ' ' . $disabled_lancamento_2 . '>
                                 <i class="fass fa-copy fa-lg fa-fw"></i></button>';
-							}
-							if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
-								echo '<button type="button" href="#modalExcluir" data-toggle="modal" id_lancamento="' . $s->id_lancamento . '" class="btn btn-danger btn-sm excluir" title="Excluir" ' . $disabled_lancamento . ' ' . $disabled_lancamento_2 . '>
+                            }
+                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
+                                echo '<button type="button" href="#modalExcluir" data-toggle="modal" id_lancamento="' . $s->id_lancamento . '" class="btn btn-danger btn-sm excluir" title="Excluir" ' . $disabled_lancamento . ' ' . $disabled_lancamento_2 . '>
                                             <i class="fas fa-trash-can-xmark fa-lg fa-fw"></i></button>';
-							}
-							echo '</td>';
-							echo '</tr>';
-						}
-					}
-				} ?>
+                            }
+                            echo '</td>';
+                            echo '</tr>';
+                        }
+                    }
+                } ?>
                 </tbody>
             </table>
             <div id="somatorio_lancamentos" class="panel-footer hidden">
@@ -290,7 +290,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             </div>
         </div>
     </div>
-	<?php echo $this->pagination->create_links();
+    <?php echo $this->pagination->create_links();
 } ?>
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
@@ -309,7 +309,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             <tr>
                 <td colspan="2" style="text-align: left; color: green">(+) SALDO DE PAGAMENTO DA FATURA</td>
                 <td colspan="1" style="text-align: right; color: green">
-					<?php echo number_format($creditoFatura, 2, ',', '.') ?></td>
+                    <?php echo number_format($creditoFatura, 2, ',', '.') ?></td>
             </tr>
             <tr>
                 <td colspan="2" style="text-align: left; color: red">(-) SALDO DE DÉBITO DA FATURA</td>
@@ -327,7 +327,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     <input type="hidden" id="total-balance" value="<?php echo number_format($creditoFatura - $debitoFatura, 2, ',', '.') ?>">
                     <strong style="cursor: pointer;" title="Copiar para área de transferência" id="i-copy-total">
                         <i class="fas fa-copy fa-fw hidden" id="icon-total"></i>
-						<?php echo number_format($creditoFatura + $debitoFatura, 2, ',', '.') ?>
+                        <?php echo number_format($creditoFatura + $debitoFatura, 2, ',', '.') ?>
                     </strong>
                 </td>
             </tr>
@@ -351,36 +351,36 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             <select name="periodo" id="select_periodos" class="form-control">
                                 <option value="">Selecione o período</option>
                                 <option value="3dias" <?php if ($periodo == '3dias') {
-									echo 'selected';
-								} ?>>Últimos 3 dias
+                                    echo 'selected';
+                                } ?>>Últimos 3 dias
                                 </option>
                                 <option value="5dias" <?php if ($periodo == '5dias') {
-									echo 'selected';
-								} ?>>Últimos 5 dias
+                                    echo 'selected';
+                                } ?>>Últimos 5 dias
                                 </option>
                                 <option value="7dias" <?php if ($periodo == '7dias') {
-									echo 'selected';
-								} ?>>Últimos 7 dias
+                                    echo 'selected';
+                                } ?>>Últimos 7 dias
                                 </option>
                                 <option value="15dias" <?php if ($periodo == '15dias') {
-									echo 'selected';
-								} ?>>Últimos 15 dias
+                                    echo 'selected';
+                                } ?>>Últimos 15 dias
                                 </option>
                                 <option value="30dias" <?php if ($periodo == '30dias') {
-									echo 'selected';
-								} ?>>Últimos 30 dias
+                                    echo 'selected';
+                                } ?>>Últimos 30 dias
                                 </option>
                                 <option value="60dias" <?php if ($periodo == '60dias') {
-									echo 'selected';
-								} ?>>Últimos 60 dias
+                                    echo 'selected';
+                                } ?>>Últimos 60 dias
                                 </option>
                                 <option value="90dias" <?php if ($periodo == '90dias') {
-									echo 'selected';
-								} ?>>Últimos 90 dias
+                                    echo 'selected';
+                                } ?>>Últimos 90 dias
                                 </option>
                                 <option value="todos" <?php if ($periodo == 'todos') {
-									echo 'selected';
-								} ?>>Todos
+                                    echo 'selected';
+                                } ?>>Todos
                                 </option>
                             </select>
                         </div>
@@ -391,23 +391,23 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                     << Sem filtro>>
                                 </option>
                                 <option value="nenhum" <?php if ($selectedTerceiro == 'nenhum') {
-									echo 'selected';
-								} ?>>
+                                    echo 'selected';
+                                } ?>>
                                     [ Apenas meus gastos ]
                                 </option>
                                 <option value="todos" <?php if ($selectedTerceiro == 'todos') {
-									echo 'selected';
-								} ?>>
+                                    echo 'selected';
+                                } ?>>
                                     [ Apenas gastos de terceiros ]
                                 </option>
-								<?php if ($terceiros) {
-									foreach ($terceiros as $terceiro) { ?>
+                                <?php if ($terceiros) {
+                                    foreach ($terceiros as $terceiro) { ?>
                                         <option value="<?= $terceiro['nome'] ?>" <?php if ($selectedTerceiro == $terceiro['nome']) {
-											echo 'selected';
-										} ?>><?= $terceiro['nome'] ?>
+                                            echo 'selected';
+                                        } ?>><?= $terceiro['nome'] ?>
                                         </option>
-									<?php }
-								} ?>
+                                    <?php }
+                                } ?>
                             </select>
                         </div>
                     </div>
@@ -466,11 +466,11 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                     <option value="">
                                         << Selecione>>
                                     </option>
-									<?php if ($parcelas) {
-										foreach ($parcelas as $k => $v) { ?>
-                                            <option value="<?= $k ?>"><?= $v ?></option>
-										<?php }
-									} ?>
+                                    <?php if ($parcelas) {
+                                        foreach ($parcelas as $key => $value) { ?>
+                                            <option value="<?= $key ?>"><?= $value ?></option>
+                                        <?php }
+                                    } ?>
                                 </select>
                             </div>
                             <div class="form-group col-lg-4 col-xs-6">
@@ -488,7 +488,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         </div>
                         <div class="divTerceiros hidden">
                             <div class="form-group col-lg-6">
-                                <label for="nome_cliente" class="font-weight-bold">Nome do terceiro</label>
+                                <label for="nome_cliente" class="font-weight-bold">Nome do terceiro *</label>
                                 <input class="form-control" id="nome_cliente" type="text" name="nome_cliente"/>
                                 <input id="id_cliente" type="hidden" name="id_cliente"/>
                             </div>
@@ -547,7 +547,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                             <input class="form-control descricao" type="text" name="descricao"/>
                             <input class="urlAtual" type="hidden" name="urlAtual"/>
                             <input class="id_lancamento" type="hidden" name="id_lancamento"/>
-                            <input type="hidden" name="id_fatura" value="<?= $id_fatura ?>"/>
+                            <input type="hidden" name="id_fatura" class="idFatura" value="<?= $id_fatura ?>"/>
                         </div>
                     </div>
                     <div class="row">
@@ -572,13 +572,13 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                 <label class="font-weight-bold">Nº Parcelas *</label>
                                 <select name="qnt_parcelas" class="form-control qntParcelas">
                                     <option value="">
-                                        << Selecione>>
+                                        << Selecione >>
                                     </option>
-									<?php if ($parcelas) {
-										foreach ($parcelas as $k => $v) { ?>
+                                    <?php if ($parcelas) {
+                                        foreach ($parcelas as $k => $v) { ?>
                                             <option value="<?= $k ?>"><?= $v ?></option>
-										<?php }
-									} ?>
+                                        <?php }
+                                    } ?>
                                 </select>
                             </div>
                             <div class="form-group col-lg-4 col-xs-6">
@@ -596,9 +596,32 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         </div>
                         <div class="divTerceiros hidden">
                             <div class="form-group col-lg-6">
-                                <label class="font-weight-bold">Nome do terceiro</label>
+                                <label class="font-weight-bold">Nome do terceiro *</label>
                                 <input class="form-control nomeCliente" type="text" name="nome_cliente"/>
                                 <input class="idCliente" type="hidden" name="id_cliente"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row divContainerOutraFatura">
+                        <div class="form-group col-lg-6">
+                            <div class="row">
+                                <input type="checkbox" class="switch-input primary outraFatura" id="outraFatura" name="para_outra_fatura" value="1">
+                                <label for="outraFatura" class="switch-label primary font-weight-bold">Copiar para outra fatura</label>
+                            </div>
+                        </div>
+                        <div class="divFaturas hidden">
+                            <div class="form-group col-lg-6">
+                                <label class="font-weight-bold">Fatura alvo *</label>
+                                <select name="id_fatura" class="form-control">
+                                    <option value="">
+                                        << Selecione >>
+                                    </option>
+                                    <?php if ($faturasLancaveis) {
+                                        foreach ($faturasLancaveis as $fatura) { ?>
+                                            <option value="<?= $fatura->id_fatura ?>"><?= sprintf('%s/%s', $fatura->mes_descricao, $fatura->ano_referencia) ?></option>
+                                        <?php }
+                                    } ?>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -681,11 +704,11 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                     <option value="">
                                         << Selecione>>
                                     </option>
-									<?php if ($parcelas) {
-										foreach ($parcelas as $k => $v) { ?>
-                                            <option value="<?= $k ?>"><?= $v ?></option>
-										<?php }
-									} ?>
+                                    <?php if ($parcelas) {
+                                        foreach ($parcelas as $key => $value) { ?>
+                                            <option value="<?= $key ?>"><?= $value ?></option>
+                                        <?php }
+                                    } ?>
                                 </select>
                             </div>
                             <div class="form-group col-lg-4 col-xs-6">
@@ -703,7 +726,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         </div>
                         <div class="divTerceiros hidden">
                             <div class="form-group col-lg-6">
-                                <label class="font-weight-bold">Nome do terceiro</label>
+                                <label class="font-weight-bold">Nome do terceiro *</label>
                                 <input class="form-control nomeCliente" type="text" name="nome_cliente"/>
                                 <input class="idCliente" type="hidden" name="id_cliente"/>
                             </div>
@@ -1059,6 +1082,10 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             mudaCheckboxTerceiros(event)
         })
 
+        $('#outraFatura, .outraFatura').on('change', function (event) {
+            mudaCheckboxOutraFatura(event)
+        })
+
         function mudaCheckboxParcelamento(event = null) {
             let checked
 
@@ -1113,6 +1140,26 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             }
         }
 
+        function mudaCheckboxOutraFatura(event) {
+            let checked
+
+            $('#outraFatura, .outraFatura').on('change', function (e) {
+                checked = e
+            })
+
+            if (event) {
+                checked = event.target.checked
+            }
+
+            if (checked == true) {
+                $('#divFaturas, .divFaturas').removeClass('hidden')
+                $('.idFatura').attr("disabled", true)
+            } else {
+                $('#divFaturas, .divFaturas').addClass('hidden')
+                $('.idFatura').attr("disabled", false)
+            }
+        }
+
         $("#formNovoLancamento").validate({
             rules: {
                 descricao: {
@@ -1125,6 +1172,9 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     required: false
                 },
                 qnt_parcelas: {
+                    required: true
+                },
+                nome_cliente: {
                     required: true
                 },
                 valor_parcela: {
@@ -1143,6 +1193,9 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 },
                 qnt_parcelas: {
                     required: 'Informe o número de parcelas'
+                },
+                nome_cliente: {
+                    required: 'Informe o nome do terceiro'
                 },
                 valor_parcela: {
                     required: 'Informe o valor da parcela'
@@ -1175,6 +1228,9 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 qnt_parcelas: {
                     required: true
                 },
+                nome_cliente: {
+                    required: true
+                },
                 valor_parcela: {
                     required: true
                 }
@@ -1192,6 +1248,9 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 qnt_parcelas: {
                     required: 'Informe o número de parcelas'
                 },
+                nome_cliente: {
+                    required: 'Informe o nome do terceiro'
+                },
                 valor_parcela: {
                     required: 'Informe o valor da parcela'
                 }
@@ -1206,8 +1265,6 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 $(element).parents('.form-group').removeClass('has-error')
                 $(element).parents('.form-group').addClass('has-success')
             }
-
-
         })
 
         $("#formCopiar").validate({
@@ -1222,6 +1279,12 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     required: false
                 },
                 qnt_parcelas: {
+                    required: true
+                },
+                id_fatura: {
+                    required: true
+                },
+                nome_cliente: {
                     required: true
                 },
                 valor_parcela: {
@@ -1242,6 +1305,12 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 qnt_parcelas: {
                     required: 'Informe o número de parcelas'
                 },
+                id_fatura: {
+                    required: 'Selecione a fatura alvo'
+                },
+                nome_cliente: {
+                    required: 'Informe o nome do terceiro'
+                },
                 valor_parcela: {
                     required: 'Informe o valor das parcelas'
                 },
@@ -1257,8 +1326,6 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 $(element).parents('.form-group').removeClass('has-error')
                 $(element).parents('.form-group').addClass('has-success')
             }
-
-
         })
 
         $(document).on('click', '.excluir', function (event) {
@@ -1336,6 +1403,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 obsIcon.addClass('fa-plus')
                 obsText.text('Adicionar observações')
             }
+            mudaCheckboxOutraFatura()
         })
 
         $('#novoLancamento').click(function () {

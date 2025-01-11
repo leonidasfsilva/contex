@@ -15,7 +15,7 @@ class Fatura_model extends CI_Model
         parent::__construct();
     }
 
-    function get($table, $fields, $id_cartao, $id_usuario = null, $where = null, $limit = null, $rows, $perpage = 0, $start = 0, $order_by = null, $one = false, $array = 'array')
+    function get($table, $fields, $id_cartao, $where = null, $limit = null, $rows = 0, $perpage = 0, $start = 0, $order_by = null, $one = false, $array = 'array')
     {
 
         $this->db->select($fields);
@@ -26,9 +26,9 @@ class Fatura_model extends CI_Model
             $this->db->where($where);
         }
         $this->db->where('status', 1);
+        $this->db->where('id_cartao', $id_cartao);
         // este trecho do codigo foi comentado para tornar visivel aos titulares as faturas dos cartoes adicionais
         // $this->db->where('id_usuario', $id_usuario);
-        $this->db->where('id_cartao', $id_cartao);
 
         if ($order_by) {
             if (is_array($order_by)) {
@@ -50,6 +50,7 @@ class Fatura_model extends CI_Model
 
         $query = $this->db->get();
         $result = !$one ? $query->result() : $query->row();
+        // getSqlStatement();
         return $result;
     }
 
