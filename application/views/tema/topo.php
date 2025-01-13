@@ -82,7 +82,6 @@ $this->load->view('includes/custom_js');
 <!--    MENU SUSPENSO-->
 
 <header id="topnav" class="navbar <?= $navbarClass ?> navbar-fixed-top clearfix" role="banner">
-
         <span id="trigger-sidebar" class="toolbar-trigger toolbar-icon-bg">
             <a href="javascript:" data-placement="bottom" title="Exibir/Ocultar Menu" id="menu-switcher">
                 <span class="icon-bg menu-toggle">
@@ -90,7 +89,6 @@ $this->load->view('includes/custom_js');
                 </span>
             </a>
         </span>
-	
 	<?php if (!$maintenanceMode) { ?>
         <a class="navbar-brand" href="javascript:" style="cursor: unset;">CONTEX</a>
 	<?php } ?>
@@ -101,6 +99,7 @@ $this->load->view('includes/custom_js');
             <div class="text-white font-weight-bold visible-lg-inline-block hidden-xs" style="font-size: 12pt;">
                 <i class="pt10 fa-2x fad fa-rectangle-terminal"></i>
                 <span class="text-uppercase pl10"><?= $developmentText ?></span>
+            <span class="pl10" style="font-family: 'Consolas', Courier, monospace">~ <?= $this->config->item('branchName') ?></span>
             </div>
 		<?php }
 	} else { ?>
