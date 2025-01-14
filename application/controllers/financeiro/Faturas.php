@@ -861,7 +861,7 @@ class Faturas extends CI_Controller
         }
 
         if (!empty($_POST['id_fatura'])) {
-            $idFatura = $_POST['id_fatura'];
+            $idFatura = $this->input->post('id_fatura');
         }
 
         if (!$idFatura) {
@@ -869,257 +869,251 @@ class Faturas extends CI_Controller
             redirect('financeiro/faturas');
         }
 
-        $urlAtual      = $this->input->post('urlAtual');
-        $valor         = $this->input->post('valor');
-        $valor_parcela = $this->input->post('valor_parcela');
-        $observacoes   = $this->input->post('observacoes');
+        $request                      = $this->input->post();
+        $request['id_fatura']         = $idFatura;
+        $request['para_outra_fatura'] = $this->input->post('para_outra_fatura');
+        $data_compra                  = $this->input->post('data_compra');
+        $urlAtual                     = $this->input->post('urlAtual');
+        $valor                        = $this->input->post('valor');
+        $valor_parcela                = $this->input->post('valor_parcela');
+
+        if ($this->input->post('data_compra')) {
+            $data_compra_exploded   = explode('/', $data_compra);
+            $request['data_compra'] = sprintf('%s-%s-%s', $data_compra_exploded[2], $data_compra_exploded[1], $data_compra_exploded[0]);
+        } else {
+            $request['data_compra'] = date('Y-m-d');
+        }
 
         if ($this->input->post('qnt_parcelas')) {
-            $qnt_parcelas = $this->input->post('qnt_parcelas');
+            $request['qnt_parcelas'] = $this->input->post('qnt_parcelas');
         } else {
-            $qnt_parcelas = 1;
+            $request['qnt_parcelas'] = 1;
         }
 
         if ($this->input->post('compra_parcelada')) {
-            $compra_parcelada = 1;
+            $request['compra_parcelada'] = 1;
         } else {
-            $compra_parcelada = 0;
+            $request['compra_parcelada'] = 0;
         }
 
         if ($this->input->post('compra_terceiros')) {
-            $compra_terceiros = 1;
+            $request['compra_terceiros'] = 1;
         } else {
-            $compra_terceiros = 0;
+            $request['compra_terceiros'] = 0;
         }
 
         if ($this->input->post('estorno')) {
-            $estorno = 1;
-            $valor   = '-' . $valor;
+            $request['estorno'] = 1;
+            $request['valor']   = '-' . $valor;
         } else {
-            $estorno = 0;
-        }
-
-        if ($this->input->post('data_compra')) {
-            $data_compra          = $this->input->post('data_compra');
-            $data_compra_exploded = explode('/', $data_compra);
-            $data_compra          = sprintf('%s-%s-%s', $data_compra_exploded[2], $data_compra_exploded[1], $data_compra_exploded[0]);
-        } else {
-            $data_compra = date('Y-m-d');
+            $request['estorno'] = 0;
         }
 
         if (!validate_money($valor_parcela)) {
-            $valor_parcela = str_replace(array('.', ','), array('', '.'), $valor_parcela);
+            $request['valor_parcela'] = str_replace(array('.', ','), array('', '.'), $valor_parcela);
         }
 
-        if (!validate_money($valor)) {
-            $valor = str_replace(array('.', ','), array('', '.'), $valor);
+        if (!validate_money($request['valor'])) {
+            $request['valor'] = str_replace(array('.', ','), array('', '.'), $request['valor']);
         }
 
-        $faturaExistente = $this->fatura_model->getFaturaUsuario($idFatura, getUserId());
+        if (!$this->gravaCopia($request)) {
+            $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar efetuar a cópia.');
+            redirect($urlAtual);
+        }
 
-        if ($faturaExistente) {
-            $faturaAtual = $this->fatura_model->getFaturaAtual($idFatura);
-            $mes         = $faturaAtual->mes_referencia;
-            $ano         = $faturaAtual->ano_referencia;
+        $this->session->set_flashdata('sucesso', 'Cópia efetuada com sucesso!');
+        redirect($urlAtual);
+    }
 
-            if ($this->input->post('para_outra_fatura')) {
-                // implementar substituiçao do mes da compra para o mesmo mes referencia da fatura alvo da copia
-                // modo mais facil: obter os detalhes da fatura atraves do id_fatura oriundo do request
-                $data_compra_exploded = explode('-', $data_compra);
-                $data_compra          = sprintf('%s-%s-%s', $data_compra_exploded[0], $mes, $data_compra_exploded[2]);
-            }
+    private function gravaCopia($request): bool
+    {
+        $id                           = $request['id'];
+        $idFatura                     = $request['id_fatura'];
+        $faturaExistente              = $this->fatura_model->getFaturaUsuario($idFatura, getUserId());
+        $faturaAlvo                   = $this->fatura_model->getFaturaAtual($idFatura);
+        $faturaReferencia             = null;
+        $lancamentosFaturasAssocArray = [];
+        $data_compra                  = $request['data_compra'];
+        $valor                        = $request['valor'];
+        $valor_parcela                = $request['valor_parcela'];
+        $observacoes                  = $request['observacoes'];
+        $compra_parcelada             = $request['compra_parcelada'];
+        $compra_terceiros             = $request['compra_terceiros'];
+        $qnt_parcelas                 = $request['qnt_parcelas'];
+        $estorno                      = $request['estorno'];
+
+        if (!$faturaAlvo) return false;
+
+        $mes_referencia = $faturaAlvo->mes_referencia;
+        $ano_referencia = $faturaAlvo->ano_referencia;
 
 
-            // ARRAY LANCAMENTOS_FATURAS
-            $data = array(
-                'id_fatura'        => $faturaAtual->id_fatura,
-                // 'id_cliente'        => $this->input->post('id_cliente') ?: null,
-                'id_usuario'       => $faturaAtual->id_usuario,
-                'descricao'        => padronizarString($this->input->post('descricao')),
-                'observacoes'      => $observacoes ?? null,
-                'nome_cliente'     => $compra_terceiros ? padronizarString($this->input->post('nome_cliente')) : null,
-                'valor_total'      => $valor,
-                'total_parcelas'   => $qnt_parcelas,
-                'compra_parcelada' => $compra_parcelada,
-                'compra_terceiros' => $compra_terceiros,
-                'estorno'          => $estorno,
-                'data_compra'      => $data_compra,
-                'mes_referencia'   => $mes,
-                'ano_referencia'   => $ano,
-            );
+        if (!$faturaExistente) return false;
 
-            if ($this->fatura_model->add('lancamentos_faturas', $data)) {
+        if (is_array($id) && count($id) > 0) {
+            $id   = array_reverse($id);
+            $data = [];
+
+            foreach ($id as $value) {
+                $lancamento = $this->fatura_model->getLancamentoFaturaById($value, getUserId());
+
+                $data_compra_exploded = explode('-', $lancamento->data_compra);
+                $data_compra          = sprintf('%s-%s-%s', $data_compra_exploded[0], $mes_referencia, $data_compra_exploded[2]);
+
+                if ($lancamento) {
+                    $data = [
+                        'id_fatura'        => $faturaAlvo->id_fatura,
+                        'id_usuario'       => $faturaAlvo->id_usuario,
+                        'descricao'        => $lancamento->descricao,
+                        'observacoes'      => $lancamento->observacoes,
+                        'nome_cliente'     => $lancamento->nome_cliente,
+                        'valor_total'      => $lancamento->valor_total,
+                        'total_parcelas'   => $lancamento->total_parcelas,
+                        'compra_parcelada' => $lancamento->compra_parcelada,
+                        'compra_terceiros' => $lancamento->compra_terceiros,
+                        'estorno'          => $lancamento->estorno,
+                        'data_compra'      => $data_compra,
+                        'mes_referencia'   => $lancamento->mes_referencia,
+                        'ano_referencia'   => $lancamento->ano_referencia,
+                    ];
+                }
+
+                if (!$this->fatura_model->add('lancamentos_faturas', $data)) return false;
+
                 $last_id = $this->fatura_model->insert_id('lancamentos_faturas');
 
-                // COMPRA PARCELADA
-                if ($this->input->post('compra_parcelada') == 1) {
-                    for ($x = 1; $x <= $qnt_parcelas; $x++) {
+                $lancamentosFaturasAssocArray = [
+                    'id_lancamento'  => $last_id,
+                    'id_fatura'      => $faturaAlvo->id_fatura,
+                    'valor_parcela'  => $lancamento->valor_total,
+                    'valor_total'    => $lancamento->valor_total,
+                    'mes_referencia' => $lancamento->mes_referencia,
+                    'ano_referencia' => $lancamento->ano_referencia,
+                    'data_compra'    => $data_compra,
+                    'n_parcela'      => 1,
+                    'total_parcelas' => 1,
+                ];
 
-                        // CONSULTA SE EXISTE FATURA REFERENTE AO MES DE LANÇAMENTO DA PARCELA
-                        $faturaReferencia = $this->fatura_model->getFaturaReferencia($faturaAtual->id_cartao, $mes, $ano);
+                if (!$this->fatura_model->add('lancamentos_faturas_assoc', $lancamentosFaturasAssocArray)) {
+                    return false;
+                }
+            }
+            atualizaValorVinculoFaturas($idFatura);
+            return true;
+        }
 
-                        // CASO NÃO EXISTA, O SISTEMA CRIA A FATURA REFERENTE AO MES DE LANÇAMENTO DA PARCELA
-                        if (!$faturaReferencia) {
-                            $ultimaFatura = $this->fatura_model->getUltimaFatura($faturaAtual->id_cartao);
+        if ($request['para_outra_fatura']) {
+            $data_compra_exploded = explode('-', $data_compra);
+            $data_compra          = sprintf('%s-%s-%s', $data_compra_exploded[0], $mes_referencia, $data_compra_exploded[2]);
+        }
 
-                            $vencimento = $ultimaFatura->vencimento;
-                            $vencimento = explode('-', $vencimento);
-                            $dia_venc   = $vencimento[2];
-                            $mes_venc   = $vencimento[1] + 1;
-                            $ano_venc   = $vencimento[0];
+        // ARRAY LANCAMENTOS_FATURAS
+        $data = [
+            'id_fatura'        => $faturaAlvo->id_fatura,
+            'id_usuario'       => $faturaAlvo->id_usuario,
+            'descricao'        => padronizarString($request['descricao']),
+            'observacoes'      => $observacoes ?? null,
+            'nome_cliente'     => $compra_terceiros ? padronizarString($request['nome_cliente']) : null,
+            'valor_total'      => $valor,
+            'total_parcelas'   => $qnt_parcelas,
+            'compra_parcelada' => $compra_parcelada,
+            'compra_terceiros' => $compra_terceiros,
+            'estorno'          => $estorno,
+            'data_compra'      => $data_compra,
+            'mes_referencia'   => $mes_referencia,
+            'ano_referencia'   => $ano_referencia,
+        ];
 
-                            if ($mes_venc == 13) {
-                                $mes_venc = 01;
-                                $ano_venc++;
-                            }
-                            $vencimentoFormatado = ($ano_venc . '-' . $mes_venc . '-' . $dia_venc);
+        if (!$this->fatura_model->add('lancamentos_faturas', $data)) return false;
 
-                            // ARRAY ABRIR NOVA FATURA
-                            $data = array(
-                                'id_usuario'     => $ultimaFatura->id_usuario,
-                                'id_cartao'      => $ultimaFatura->id_cartao,
-                                'mes_referencia' => $mes,
-                                'ano_referencia' => $ano,
-                                'vencimento'     => $vencimentoFormatado,
-                                'fatura_aberta'  => 2,
-                            );
+        $last_id = $this->fatura_model->insert_id('lancamentos_faturas');
 
-                            if (!$this->fatura_model->abrirFatura($data)) {
-                                $this->session->set_flashdata('erro', 'Erro ao tentar abrir nova fatura.');
-                                redirect($urlAtual);
-                            }
-                            $faturaReferencia = $this->fatura_model->getFaturaReferencia($faturaAtual->id_cartao, $mes, $ano);
-                        }
+        // COMPRA PARCELADA
+        if ($compra_parcelada) {
+            for ($x = 1; $x <= $qnt_parcelas; $x++) {
+                // CONSULTA SE EXISTE FATURA REFERENTE AO MES DE LANÇAMENTO DA PARCELA
+                $faturaReferencia = $this->fatura_model->getFaturaReferencia($faturaAlvo->id_cartao, $mes_referencia, $ano_referencia);
 
-                        // ARRAY LANCAMENTOS_FATURAS_ASSOC
-                        $lancamentosFaturasAssocArray = array(
-                            'id_lancamento'  => $last_id,
-                            'id_fatura'      => $faturaReferencia->id_fatura,
-                            'valor_parcela'  => $valor_parcela,
-                            'valor_total'    => $valor,
-                            'mes_referencia' => $mes,
-                            'ano_referencia' => $ano,
-                            'data_compra'    => $data_compra,
-                            'n_parcela'      => $x,
-                            'total_parcelas' => $qnt_parcelas,
-                        );
+                // CASO NÃO EXISTA, O SISTEMA CRIA A FATURA REFERENTE AO MES DE LANÇAMENTO DA PARCELA
+                if (!$faturaReferencia) {
+                    $ultimaFatura = $this->fatura_model->getUltimaFatura($faturaAlvo->id_cartao);
 
-                        // COMPRA DE TERCEIROS
-                        if ($compra_terceiros == 1) {
+                    $vencimento = $ultimaFatura->vencimento;
+                    $vencimento = explode('-', $vencimento);
+                    $dia_venc   = $vencimento[2];
+                    $mes_venc   = $vencimento[1] + 1;
+                    $ano_venc   = $vencimento[0];
 
-                            $vencimento = $faturaReferencia->vencimento;
-                            $vencimento = explode('-', $vencimento);
-                            $dia_venc   = $vencimento[2];
-                            $mes_venc   = $vencimento[1];
-                            $ano_venc   = $vencimento[0];
-
-                            if ($mes_venc == 13) {
-                                $mes_venc = 01;
-                                $ano_venc++;
-                            }
-                            $vencimentoFormatado = ($ano_venc . '-' . $mes_venc . '-' . $dia_venc);
-
-                            if ($x > 9) {
-                                $parcela_atual = $x;
-                            } else {
-                                $parcela_atual = '0' . $x;
-                            }
-
-                            if ($qnt_parcelas > 9) {
-                                $total_parcelas = $qnt_parcelas;
-                            } else {
-                                $total_parcelas = '0' . $qnt_parcelas;
-                            }
-
-                            // MONTA ARRAY DE PENDENCIAS
-                            $data2 = array(
-                                'id_lancamento_fatura' => $last_id,
-                                'id_usuario'           => getUserId(),
-                                'id_cliente'           => $this->input->post('id_cliente'),
-                                'descricao'            => padronizarString($this->input->post('descricao')) . ' - ' . $parcela_atual . '/' . $total_parcelas,
-                                'tipo'                 => 1,
-                                'valor'                => $valor_parcela,
-                                'data_vencimento'      => $vencimentoFormatado,
-                            );
-                            // removendo adicao de compras parceladas de terceiros em Pendencias
-                            //$this->pendencia_model->add('pendencias', $data2);
-                        }
-
-                        $mes++;
-                        if ($mes == 13) {
-                            $mes = 01;
-                            $ano++;
-                        }
-
-                        if ($this->fatura_model->add('lancamentos_faturas_assoc', $lancamentosFaturasAssocArray)) {
-                            atualizaValorVinculoFaturas($faturaReferencia->id_fatura);
-                            $this->session->set_flashdata('sucesso', 'Lançamento copiado com sucesso!');
-                        } else {
-                            $this->session->set_flashdata('erro', 'Erro ao tentar adicionar lançamentos_assoc!');
-                            redirect($urlAtual);
-                        }
+                    if ($mes_venc == 13) {
+                        $mes_venc = 01;
+                        $ano_venc++;
                     }
-                    redirect($urlAtual);
-                } else {
-                    // COMPRA A VISTA
-                    // ARRAY LANCAMENTOS_FATURA_ASSOC
-                    $lancamentosFaturasAssocArray = array(
-                        'id_lancamento'  => $last_id,
-                        'id_fatura'      => $faturaAtual->id_fatura,
-                        'valor_parcela'  => $valor,
-                        'valor_total'    => $valor,
-                        'mes_referencia' => $mes,
-                        'ano_referencia' => $ano,
-                        'data_compra'    => $data_compra,
-                        'n_parcela'      => 1,
-                        'total_parcelas' => 1,
+                    $vencimentoFormatado = ($ano_venc . '-' . $mes_venc . '-' . $dia_venc);
+
+                    // ARRAY ABRIR NOVA FATURA
+                    $data = array(
+                        'id_usuario'     => $ultimaFatura->id_usuario,
+                        'id_cartao'      => $ultimaFatura->id_cartao,
+                        'mes_referencia' => $mes_referencia,
+                        'ano_referencia' => $ano_referencia,
+                        'vencimento'     => $vencimentoFormatado,
+                        'fatura_aberta'  => 2,
                     );
 
-                    // MONTA ARRAY DE PENDENCIA, NO CASO DE COMPRA DE TERCEIROS
-                    if ($compra_terceiros == 1) {
+                    if (!$this->fatura_model->abrirFatura($data)) return false;
 
-                        $vencimento = $faturaAtual->vencimento;
-                        $vencimento = explode('-', $vencimento);
-                        $dia_venc   = $vencimento[2];
-                        $mes_venc   = $vencimento[1];
-                        $ano_venc   = $vencimento[0];
-
-                        if ($mes_venc == 13) {
-                            $mes_venc = 01;
-                            $ano_venc++;
-                        }
-                        $vencimentoFormatado = ($ano_venc . '-' . $mes_venc . '-' . $dia_venc);
-
-                        $data2 = array(
-                            'id_lancamento_fatura' => $last_id,
-                            'id_usuario'           => getUserId(),
-                            'id_cliente'           => $this->input->post('id_cliente'),
-                            'descricao'            => padronizarString($this->input->post('descricao')),
-                            'tipo'                 => 1,
-                            'valor'                => $valor,
-                            'data_vencimento'      => $vencimentoFormatado,
-                        );
-                        // removendo adicao de compras a vista de terceiros em Pendencias
-                        //$this->pendencia_model->add('pendencias', $data2);
-                    }
-
-                    if ($this->fatura_model->add('lancamentos_faturas_assoc', $lancamentosFaturasAssocArray)) {
-                        atualizaValorVinculoFaturas($idFatura);
-                        $this->session->set_flashdata('sucesso', 'Lançamento copiado com sucesso!');
-                    } else {
-                        $this->session->set_flashdata('erro', 'Erro ao tentar adicionar lançamentos_assoc!');
-                        redirect($urlAtual);
-                    }
+                    $faturaReferencia = $this->fatura_model->getFaturaReferencia($faturaAlvo->id_cartao, $mes_referencia, $ano_referencia);
                 }
-                redirect($urlAtual);
-            } else {
-                $this->session->set_flashdata('erro', 'Erro ao tentar copiar lançamento de fatura.');
-                redirect($urlAtual);
+
+                // ARRAY LANCAMENTOS_FATURAS_ASSOC
+                $lancamentosFaturasAssocArray = [
+                    'id_lancamento'  => $last_id,
+                    'id_fatura'      => $faturaReferencia->id_fatura,
+                    'valor_parcela'  => $valor_parcela,
+                    'valor_total'    => $valor,
+                    'mes_referencia' => $mes_referencia,
+                    'ano_referencia' => $ano_referencia,
+                    'data_compra'    => $data_compra,
+                    'n_parcela'      => $x,
+                    'total_parcelas' => $qnt_parcelas,
+                ];
+
+                if (!$this->fatura_model->add('lancamentos_faturas_assoc', $lancamentosFaturasAssocArray)) {
+                    return false;
+                }
+
+                $mes_referencia++;
+
+                if ($mes_referencia == 13) {
+                    $mes_referencia = 1;
+                    $ano_referencia++;
+                }
             }
-        } else {
-            $this->session->set_flashdata('erro', 'Não existem faturas abertas, não é possível copiar esta compra.');
-            redirect('financeiro/faturas');
+
+            atualizaValorVinculoFaturas($faturaReferencia->id_fatura);
+            return true;
         }
+
+        // COMPRA A VISTA
+        // ARRAY LANCAMENTOS_FATURA_ASSOC
+        $lancamentosFaturasAssocArray = [
+            'id_lancamento'  => $last_id,
+            'id_fatura'      => $faturaAlvo->id_fatura,
+            'valor_parcela'  => $valor,
+            'valor_total'    => $valor,
+            'mes_referencia' => $mes_referencia,
+            'ano_referencia' => $ano_referencia,
+            'data_compra'    => $data_compra,
+            'n_parcela'      => 1,
+            'total_parcelas' => 1,
+        ];
+
+        if ($this->fatura_model->add('lancamentos_faturas_assoc', $lancamentosFaturasAssocArray)) {
+            atualizaValorVinculoFaturas($idFatura);
+            return true;
+        }
+        return false;
     }
 
     public function excluirLancamento($idLancamento = null, $parameter = false)

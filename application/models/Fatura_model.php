@@ -48,7 +48,7 @@ class Fatura_model extends CI_Model
             }
         }
 
-        $query = $this->db->get();
+        $query  = $this->db->get();
         $result = !$one ? $query->result() : $query->row();
         // getSqlStatement();
         return $result;
@@ -80,7 +80,7 @@ class Fatura_model extends CI_Model
             }
         }
 
-        $query = $this->db->get();
+        $query  = $this->db->get();
         $result = !$one ? $query->result() : $query->row();
         return $result;
     }
@@ -111,7 +111,7 @@ class Fatura_model extends CI_Model
             }
         }
 
-        $query = $this->db->get();
+        $query  = $this->db->get();
         $result = !$one ? $query->result() : $query->row();
         return $result;
     }
@@ -123,7 +123,7 @@ class Fatura_model extends CI_Model
         $this->db->where(
             'id_fatura = ' . $id_fatura
         );
-        $query = $this->db->get();
+        $query  = $this->db->get();
         $result = $query->row();
 
         return $result;
@@ -355,7 +355,7 @@ class Fatura_model extends CI_Model
         $this->db->where('id_cartao', $id_cartao);
         $this->db->order_by('vencimento', 'desc');
         $this->db->limit(1);
-        $query = $this->db->get();
+        $query  = $this->db->get();
         $result = $query->row();
 
         return $result;
@@ -410,7 +410,7 @@ class Fatura_model extends CI_Model
 
         if (isset($faturas) && $faturas) {
             $results = [];
-            $total = null;
+            $total   = null;
 
             foreach ($faturas as $f) {
                 if ($f != null) {
@@ -528,6 +528,20 @@ class Fatura_model extends CI_Model
         return $this->db->get()->row('id_fatura');
     }
 
+    function getLancamentoFaturaById($idLancamento, $idUser = null)
+    {
+        $this->db->from('lancamentos_faturas AS lf');
+        $this->db->join('lancamentos_faturas_assoc AS lfa', 'lf.id_lancamento = lfa.id_lancamento AND lf.status = lfa.status');
+
+        $this->db->where('lf.id_lancamento', $idLancamento);
+        $this->db->where('lf.status', 1);
+
+        if ($idUser) {
+            $this->db->where('lf.id_usuario', $idUser);
+        }
+        return $this->db->get()->result()[0];
+    }
+
     function getFaturaByLancamentosAssoc($idLancamento)
     {
         $this->db->from('lancamentos_faturas_assoc');
@@ -558,7 +572,7 @@ class Fatura_model extends CI_Model
             ORDER BY lf.criado_em DESC";
 
         $resultQuery = $this->db->query($query);
-        $result = $resultQuery->result_array();
+        $result      = $resultQuery->result_array();
 
         if (!$result) {
             return false;
@@ -590,7 +604,7 @@ class Fatura_model extends CI_Model
             ORDER BY lf.criado_em DESC";
 
         $resultQuery = $this->db->query($query);
-        $result = $resultQuery->result_array();
+        $result      = $resultQuery->result_array();
 
         if (!$result) {
             return false;
@@ -691,9 +705,9 @@ class Fatura_model extends CI_Model
             $where .= " AND lfa.ano_referencia = $anoReferencia";
         }
 
-        $groupBy = " GROUP BY lf.nome_cliente";
-        $orderBy = " ORDER BY lf.nome_cliente ASC";
-        $mainQuery .= $where . $groupBy . $orderBy;
+        $groupBy     = " GROUP BY lf.nome_cliente";
+        $orderBy     = " ORDER BY lf.nome_cliente ASC";
+        $mainQuery   .= $where . $groupBy . $orderBy;
         $resultQuery = $this->db->query($mainQuery);
 
         if ($resultQuery->num_rows() > 0) {
@@ -754,7 +768,7 @@ class Fatura_model extends CI_Model
         ";
 
         $resultQuery = $this->db->query($query);
-        $result = $resultQuery->result_array();
+        $result      = $resultQuery->result_array();
 
         if (!$result) {
             return false;
