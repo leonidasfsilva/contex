@@ -143,6 +143,10 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             </div>
             <div class="panel-ctrls">
                 <span class="hidden" id="div_btn_marcar">
+                    <button class="btn btn-info btn-sm copiar_serie " id="copiar_serie" title="Copiar todos os lançamentos selecionados" disabled>
+                        <i class="fas fa-copy fa-fw"></i>
+                        Copiar
+                    </button>
                     <button class="btn btn-danger btn-sm excluir_serie" id="excluir_serie" title="Excluir todos os lançamentos selecionados" disabled>
                         <i class="fas fa-trash-alt fa-fw"></i>
                         Excluir
@@ -794,6 +798,51 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
     </div>
 </div>
 
+<!-- Modal COPIAR SERIE -->
+<div class="modal fade" id="modalCopiarSerie" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-white ">Copiar série de lançamentos</h4>
+            </div>
+            <form id="formCopiarSerie" action="<?= base_url('financeiro/faturas/copiarLancamento') ?>" method="post" autocomplete="off">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-lg-5 col-xs-7">
+                            <label for="id_fatura" class="font-weight-bold">Selecione a fatura alvo para cópia</label>
+                            <select name="id_fatura" class="form-control">
+                                <option value="">
+                                    << Selecione >>
+                                </option>
+                                <?php if ($faturasLancaveis) {
+                                    foreach ($faturasLancaveis as $fatura) { ?>
+                                        <option value="<?= $fatura->id_fatura ?>"><?= sprintf('%s/%s', $fatura->mes_descricao, $fatura->ano_referencia) ?></option>
+                                    <?php }
+                                } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <p class="note note-info"><i class="text-info fa fa-info-circle fa-fw fa-lg"></i>
+                        A cópia em série é destinada apenas para lançamentos únicos, isto é, compras à vista (em 1x), não é possível copiar compras parceladas.
+                    </p>
+                    <p class="font-weight-bold">Confirma a cópia da série de lançamentos selecionados para a fatura alvo?</p>
+                    <input class="urlAtual" type="hidden" name="urlAtual" value=""/>
+                </div>
+                <div id="copiaSerieFormBody"></div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
+                        Cancelar
+                    </button>
+                    <button class="btn btn-info btn-sm"><i class="fa fa-check fa-fw"></i>
+                        Copiar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Modal EXCLUIR SERIE -->
 <div class="modal fade" id="modalExcluirSerie" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -856,7 +905,6 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
     })
 
     $(document).ready(function ($) {
-
         $('#novoLancamento').click(function () {
             $(".descricao").val('')
             $(".valor").val('')
@@ -963,13 +1011,19 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             $('#modalExcluirSerie').modal('show')
         })
 
+        $('.copiar_serie').click(function () {
+            $('#modalCopiarSerie').modal('show')
+        });
+
         // Calculate the total invoice amount from selected items only
         function somaValorParcelas() {
             var Soma = 0
             var deleteSerie = []
+            var copiaSerie = []
             var idLancamento = null
 
             $('#deleteSerieFormBody').html('')
+            $('#copiaSerieFormBody').html('')
 
             // iterate through each td based on class and add the values
             $(".valor_parcela").each(function () {
@@ -977,6 +1031,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 if ($(this).closest('tr').find('.soma_parcelas').is(':checked')) {
                     idLancamento = $(this).closest('tr').find('.idLancamento').html()
                     deleteSerie.push(idLancamento)
+                    copiaSerie.push(idLancamento)
                     var value = $('span', this).text()
                     value = jqueryFormat(value)
                     // add only if the value is number
@@ -994,6 +1049,15 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 })
             } else {
                 $('#excluir_serie').attr('disabled', true)
+            }
+
+            if (copiaSerie.length > 1) {
+                $('#copiar_serie').attr('disabled', false)
+                deleteSerie.forEach(function (item) {
+                    $('#copiaSerieFormBody').append('<input type="hidden" name="id[]" value="' + item + '"/>')
+                });
+            } else {
+                $('#copiar_serie').attr('disabled', true)
             }
 
             $('#valor_soma_parcelas').text(Sum)
@@ -1329,6 +1393,29 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 $(element).parents('.form-group').addClass('has-success')
             }
         })
+
+        $("#formCopiarSerie").validate({
+            rules: {
+                id_fatura: {
+                    required: true
+                },
+            },
+            messages: {
+                id_fatura: {
+                    required: 'Selecione a fatura alvo'
+                }
+            },
+            errorClass: "help-block",
+            errorElement: "p",
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
+            }
+        });
 
         $(document).on('click', '.excluir', function (event) {
             $("#idExcluir").val($(this).attr('id_lancamento'))
