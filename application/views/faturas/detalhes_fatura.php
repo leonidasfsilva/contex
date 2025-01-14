@@ -238,16 +238,16 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 							echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
 							echo '<td class="idLancamento hidden">' . $s->id_lancamento . '</td>';
 							echo '<td title="' . $diaDaSemana . '">' . $data_compra . '</td>';
-							echo '<td><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Detalhes" id_lancamento="' .
+							echo '<td><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar font-weight-bold" title="Detalhes" id_lancamento="' .
 								$s->id_lancamento . '" descricao="' . $s->descricao . '" observacoes="' . nl2br($s->observacoes) . '" valor="' . $valor . '" data_compra="' .
 								date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
 								'" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '" nome_cliente="' . $s->nome_cliente .
 								'" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento . ' ' . $disabled_lancamento_2 . '>' .
 								strtoupper($s->descricao) . $iconObs .
 								'</a></td>';
-							echo '<td><a href="' . sprintf(base_url('financeiro/faturas/terceiros?mesReferencia=%s&anoReferencia=%s&cartao=%s&nome=%s'), $mes_referencia, $s->ano_referencia, $cartao['id_cartao'], $s->nome_cliente) . '">' . strtoupper($s->nome_cliente) . '</a></td>';
+							echo '<td><a class="font-weight-bold" href="' . sprintf(base_url('financeiro/faturas/terceiros?mesReferencia=%s&anoReferencia=%s&cartao=%s&nome=%s'), $mes_referencia, $s->ano_referencia, $cartao['id_cartao'], $s->nome_cliente) . '">' . strtoupper($s->nome_cliente) . '</a></td>';
 							echo '<td>' . $n_parcela . '/' . $total_parcelas . '</td>';
-							echo '<td class="valor_parcela" style=" color: ' . $color .
+							echo '<td class="valor_parcela font-weight-bold" style=" color: ' . $color .
 								'"><span>' . number_format($r->valor_parcela, 2, ',', '.') .
 								'</span><br><span style="color: grey">' . number_format($r->valor_total, 2, ',', '.') .
 								'</span></td>';
