@@ -934,6 +934,19 @@ class Faturas extends CI_Controller
         $faturaAlvo                   = $this->fatura_model->getFaturaAtual($idFatura);
         $faturaReferencia             = null;
         $lancamentosFaturasAssocArray = [];
+        $data_compra                  = $request['data_compra'];
+        $valor                        = $request['valor'];
+        $valor_parcela                = $request['valor_parcela'];
+        $observacoes                  = $request['observacoes'];
+        $compra_parcelada             = $request['compra_parcelada'];
+        $compra_terceiros             = $request['compra_terceiros'];
+        $qnt_parcelas                 = $request['qnt_parcelas'];
+        $estorno                      = $request['estorno'];
+
+        if (!$faturaAlvo) return false;
+
+        $mes_referencia = $faturaAlvo->mes_referencia;
+        $ano_referencia = $faturaAlvo->ano_referencia;
 
 
         if (!$faturaExistente) return false;
@@ -944,6 +957,9 @@ class Faturas extends CI_Controller
 
             foreach ($id as $value) {
                 $lancamento = $this->fatura_model->getLancamentoFaturaById($value, getUserId());
+
+                $data_compra_exploded = explode('-', $lancamento->data_compra);
+                $data_compra          = sprintf('%s-%s-%s', $data_compra_exploded[0], $mes_referencia, $data_compra_exploded[2]);
 
                 if ($lancamento) {
                     $data = [
@@ -957,7 +973,7 @@ class Faturas extends CI_Controller
                         'compra_parcelada' => $lancamento->compra_parcelada,
                         'compra_terceiros' => $lancamento->compra_terceiros,
                         'estorno'          => $lancamento->estorno,
-                        'data_compra'      => $lancamento->data_compra,
+                        'data_compra'      => $data_compra,
                         'mes_referencia'   => $lancamento->mes_referencia,
                         'ano_referencia'   => $lancamento->ano_referencia,
                     ];
@@ -974,7 +990,7 @@ class Faturas extends CI_Controller
                     'valor_total'    => $lancamento->valor_total,
                     'mes_referencia' => $lancamento->mes_referencia,
                     'ano_referencia' => $lancamento->ano_referencia,
-                    'data_compra'    => $lancamento->data_compra,
+                    'data_compra'    => $data_compra,
                     'n_parcela'      => 1,
                     'total_parcelas' => 1,
                 ];
@@ -986,17 +1002,6 @@ class Faturas extends CI_Controller
             atualizaValorVinculoFaturas($idFatura);
             return true;
         }
-
-        $data_compra      = $request['data_compra'];
-        $valor            = $request['valor'];
-        $valor_parcela    = $request['valor_parcela'];
-        $observacoes      = $request['observacoes'];
-        $compra_parcelada = $request['compra_parcelada'];
-        $compra_terceiros = $request['compra_terceiros'];
-        $qnt_parcelas     = $request['qnt_parcelas'];
-        $estorno          = $request['estorno'];
-        $mes_referencia   = $faturaAlvo->mes_referencia;
-        $ano_referencia   = $faturaAlvo->ano_referencia;
 
         if ($request['para_outra_fatura']) {
             $data_compra_exploded = explode('-', $data_compra);
