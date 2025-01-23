@@ -21,18 +21,18 @@ $currentMonthText    = null;
 $monthFilterButtons  = null;
 
 if (isset($referenceMonth) && $referenceMonth) {
-	if ($prevMonth && $nextMonth) {
-		$prevLinkTitle = sprintf('%s / %s', $prevMonth, $prevReferenceYear);
-		$nextLinkTitle = sprintf('%s / %s', $nextMonth, $nextReferenceYear);
-	}
-	
-	$prevLink         = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $prevReferenceMonth, $prevReferenceYear)) .
-		" title='$prevLinkTitle'><span class='badge badge-primary'><i style='margin: 0 !important;' class='fas fa-angle-double-left'></i></span></a>";
-	$currentMonthText = "<a href='#modalSelectMounth' data-toggle='modal' role='button' title='Clique para selecionar um mes específico'><span class='badge badge-primary' style='margin-left: 10px;'>Período: $month / $referenceYear</span></a>";
-	$nextLink         = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $nextReferenceMonth, $nextReferenceYear)) .
-		" title='$nextLinkTitle'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-right'></i></span></a>";
-	
-	$monthFilterButtons = $referenceMonth ? $prevLink . $currentMonthText . $nextLink : null;
+    if ($prevMonth && $nextMonth) {
+        $prevLinkTitle = sprintf('%s / %s', $prevMonth, $prevReferenceYear);
+        $nextLinkTitle = sprintf('%s / %s', $nextMonth, $nextReferenceYear);
+    }
+
+    $prevLink         = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $prevReferenceMonth, $prevReferenceYear)) .
+        " title='$prevLinkTitle'><span class='badge badge-primary'><i style='margin: 0 !important;' class='fas fa-angle-double-left'></i></span></a>";
+    $currentMonthText = "<a href='#modalSelectMounth' data-toggle='modal' role='button' title='Clique para selecionar um mes específico'><span class='badge badge-primary' style='margin-left: 10px;'>Período: $month / $referenceYear</span></a>";
+    $nextLink         = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $nextReferenceMonth, $nextReferenceYear)) .
+        " title='$nextLinkTitle'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-right'></i></span></a>";
+
+    $monthFilterButtons = $referenceMonth ? $prevLink . $currentMonthText . $nextLink : null;
 }
 ?>
 <div class="panel panel-midnightblue">
@@ -43,7 +43,7 @@ if (isset($referenceMonth) && $referenceMonth) {
         </h3>
         <div class="row mr5 ml5">
             <div class="panel-ctrls ml5">
-				<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
+                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
                     <a href="#modalEntrada" id="novaEntrada" data-toggle="modal" role="button" class="btn btn-success btn-sm tip-bottom" title="Registrar nova entrada">
                         <i class="fas fa-plus fa-fw"></i>
                         <span>Entrada</span>
@@ -52,7 +52,7 @@ if (isset($referenceMonth) && $referenceMonth) {
                         <i class="fas fa-plus fa-fw"></i>
                         <span>Saída</span>
                     </a>
-				<?php } ?>
+                <?php } ?>
             </div>
             <div class="panel-ctrls">
                 <div class="btn-group dropdown-hover">
@@ -112,30 +112,30 @@ if (isset($referenceMonth) && $referenceMonth) {
             <tr>
                 <td colspan="2" style="text-align: left;">(±) SALDO PROVISÓRIO EM CONTA</td>
                 <td colspan="1" style="text-align: right;">
-					<?php echo number_format($total_provisorio->total, 2, ',', '.') ?>
+                    <?php echo number_format($total_provisorio->total, 2, ',', '.') ?>
                 </td>
             </tr>
-			<?php if ($saidas_pendentes->total) { ?>
+            <?php if ($saidas_pendentes->total) { ?>
                 <tr>
                     <td colspan="2" style="text-align: left; color: red">(-) SALDO DE SAÍDAS A CONFIRMAR</td>
                     <td colspan="1" style="text-align: right; color: red">
-						<?php echo number_format($saidas_pendentes->total, 2, ',', '.') ?>
+                        <?php echo number_format($saidas_pendentes->total, 2, ',', '.') ?>
                     </td>
                 </tr>
-			<?php } ?>
-			<?php if ($entradas_pendentes->total) { ?>
+            <?php } ?>
+            <?php if ($entradas_pendentes->total) { ?>
                 <tr>
                     <td colspan="2" style="text-align: left; color: green">(+) SALDO DE ENTRADAS A CONFIRMAR</td>
                     <td colspan="1" style="text-align: right; color: green">
-						<?php echo number_format($entradas_pendentes->total, 2, ',', '.') ?>
+                        <?php echo number_format($entradas_pendentes->total, 2, ',', '.') ?>
                     </td>
                 </tr>
-			<?php } ?>
+            <?php } ?>
             <tr>
                 <td colspan="2" style="text-align: left; font-weight: bold">(=) SALDO DISPONÍVEL EM CONTA</td>
                 <td colspan="1" style="text-align: right; font-weight: bold">
                     <strong>
-						<?php echo number_format($total->total, 2, ',', '.') ?>
+                        <?php echo number_format($total->total, 2, ',', '.') ?>
                     </strong>
                 </td>
             </tr>
@@ -145,13 +145,13 @@ if (isset($referenceMonth) && $referenceMonth) {
 
 <?php
 if (!$results) {
-	?>
+    ?>
     <div class="panel panel-midnightblue">
         <div class="panel-heading">
             <h2>
                 <span style='margin-right: 10px !important;'>Extrato de Lançamentos</span>
                 <br class="visible-xs-block">
-				<?= $monthFilterButtons ?? null ?>
+                <?= $monthFilterButtons ?? null ?>
             </h2>
             <div class="panel-ctrls">
                 <a href="#" class="button-icon close-panel">
@@ -192,7 +192,7 @@ if (!$results) {
             <h2>
                 <span style='margin-right: 10px !important;'>Extrato de Lançamentos</span>
                 <br class="visible-xs-block">
-				<?= $monthFilterButtons ?>
+                <?= $monthFilterButtons ?>
             </h2>
             <div class="panel-ctrls">
                 <a href="#" class="button-icon close-panel">
@@ -249,8 +249,6 @@ if (!$results) {
                 <tbody>
 				<?php
 				$pendingNotification = null;
-				$forma_pgto          = null;
-				
 				foreach ($results as $r) {
 					if ($r->oculto) {
 						$totalOcultosMes += $r->valor;
@@ -263,12 +261,12 @@ if (!$results) {
 					if ($r->baixado == 0) {
 						$pendingNotification = 'notification-dot';
 						$status              = 'PENDENTE';
-						$labelStatus         = 'red';
-						$iconStatus          = '<i class="far fa-clock fa-fw text-danger"></i>';
+						$label_status        = 'warning';
+						$iconTipo            = '<i class="far fa-clock fa-fw"></i>';
 					} else {
-						$status      = 'EFETIVADO';
-						$labelStatus = 'green';
-						$iconStatus  = '<i class="fas fa-check-circle fa-fw text-green"></i>';
+						$status       = 'EFETIVADO';
+						$label_status = 'primary';
+						$iconTipo     = '<i class="fas fa-check-circle fa-fw"></i>';
 					};
 					
 					if ($r->observacoes) {
@@ -280,15 +278,15 @@ if (!$results) {
 					};
 					
 					if ($r->tipo == 1) {
-						$color_value = 'text-green';
-						$label_tipo  = 'primary';
-						$tipo        = 'ENTRADA';
-						$icon        = '<i class="far fa-arrow-left-to-bracket fa-rotate-270 fa-fw"></i>';
+						$color      = 'green';
+						$label_tipo = 'success';
+						$tipo       = 'ENTRADA';
+						$icon       = '<i class="far fa-arrow-left-to-bracket fa-rotate-270 fa-fw"></i>';
 					} else {
-						$color_value = 'text-alizarin';
-						$label_tipo  = 'orange';
-						$tipo        = 'SAÍDA';
-						$icon        = '<i class="far fa-arrow-right-from-bracket fa-rotate-270 fa-fw"></i>';
+						$color      = 'red';
+						$label_tipo = 'danger';
+						$tipo       = 'SAÍDA';
+						$icon       = '<i class="far fa-arrow-right-from-bracket fa-rotate-270 fa-fw"></i>';
 					}
 					
 					if ($r->cliente_fornecedor) {
@@ -297,11 +295,9 @@ if (!$results) {
 						$fornecedor = "&nbsp;";
 					}
 					
-					if ($formasPagamento) {
-						foreach ($formasPagamento as $f) {
-							if ($f->id_forma == $r->forma_pgto) {
-								$forma_pgto = $f->nome;
-							}
+					foreach ($formasPagamento as $f) {
+						if ($f->id_forma == $r->forma_pgto) {
+							$forma_pgto = $f->nome;
 						}
 					}
 					
@@ -324,49 +320,41 @@ if (!$results) {
 					$totalGeralMes += $r->valor;
 					
 					echo '<tr>';
-					
 					echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
-					
 					echo '<td class="idLancamento hidden">' . $r->id_lancamento . '</td>';
-					
 					echo '<td title="' . $diaDaSemana . '">' . $vencimento . '</td>';
-					
 					echo '<td><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Ver detalhes" idLancamento="' .
 						$r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
 						date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
 						$r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">' .
 						strtoupper($r->descricao) . $iconObs .
-						'<br><span class="small text-muted">' . ($fornecedor) . '</span></a></td>';
-					
-					echo '<td><span class="valor_parcela font-weight-bold ' . $color_value . '"><span>' . number_format($r->valor, 2, ',', '.') .
-						'</span></span><br><span class="small text-muted">' . ($forma_pgto) . '</td>';
-					
+						'<br><span class="small" style="color: grey;">' . ($fornecedor) . '</span></a></td>';
+					echo '<td><span class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small" style="color: grey;">' . ($forma_pgto) . '</td>';
 					echo '<td><span class="text-' . $label_tipo . '">' . ($icon) . '</span> <span class="badge badge-' . $label_tipo . '">' . ($tipo) . '</span>
-                            <br><span class="text-' . '">' . ($iconStatus) . '</span> <span class="badge badge-' . $labelStatus . '">' . ($status) . '</span></td>';
-					
+                            <br>
+                            <span class="text-' . $label_status . '">' . ($iconTipo) . '</span> <span class="badge badge-' . $label_status . '">' . ($status) . '</span></td>';
 					echo '<td>';
-					
 					if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
 						echo '<button type="button" href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Ver detalhes" idLancamento="' .
 							$r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
 							date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
 							$r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">
                                 <i class="fas fa-search-plus fa-lg fa-fw"></i></button>';
-						echo '<button type="button" href="#modalCopiar" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm copiar" title="Copiar" idLancamento="' .
-							$r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
-							date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
-							$r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">
+                        echo '<button type="button" href="#modalCopiar" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm copiar" title="Copiar" idLancamento="' .
+                            $r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
+                            date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
+                            $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">
                                 <i class="fass fa-copy fa-lg fa-fw"></i></button>';
-					}
-					if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
-						echo '<button type="button" href="#modalExcluir" data-toggle="modal" idLancamento="' . $r->id_lancamento . '" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fas fa-trash-can-xmark fa-lg fa-fw"></i></button>';
-					}
-					echo '</td>';
-					echo '</tr>';
-				}
-				$totalEntradas = $entradasEfetivadas + $entradasPendentes;
-				$totalSaidas   = $saidasEfetivadas + $saidasPendentes;
-				?>
+                    }
+                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
+                        echo '<button type="button" href="#modalExcluir" data-toggle="modal" idLancamento="' . $r->id_lancamento . '" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fas fa-trash-can-xmark fa-lg fa-fw"></i></button>';
+                    }
+                    echo '</td>';
+                    echo '</tr>';
+                }
+                $totalEntradas = $entradasEfetivadas + $entradasPendentes;
+                $totalSaidas   = $saidasEfetivadas + $saidasPendentes;
+                ?>
                 </tbody>
             </table>
             <div id="somatorio_lancamentos" class="panel-footer hidden">
@@ -385,11 +373,11 @@ if (!$results) {
                     </tr>
                 </table>
             </div>
-			<?php if ($this->pagination->create_links()) { ?>
+            <?php if ($this->pagination->create_links()) { ?>
                 <div class="panel-footer">
-					<?= $this->pagination->create_links() ?>
+                    <?= $this->pagination->create_links() ?>
                 </div>
-			<?php } ?>
+            <?php } ?>
         </div>
     </div>
 <?php } ?>
@@ -399,7 +387,7 @@ if (!$results) {
     <div class="panel-heading">
         <h2>
             Posição Consolidada
-			<?= (isset($referenceMonth) && $referenceMonth ? " do Período: $month / $referenceYear" : null) ?>
+            <?= (isset($referenceMonth) && $referenceMonth ? " do Período: $month / $referenceYear" : null) ?>
         </h2>
         <div class="panel-ctrls">
             <a href="#" class="button-icon close-panel">
@@ -421,106 +409,106 @@ if (!$results) {
                 <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
             </tr>
             </thead>
-			<?php if ($entradasPendentes) {
-				$saldoProvisorioMes = $totalGeral + $entradasPendentes;
-				?>
+            <?php if ($entradasPendentes) {
+                $saldoProvisorioMes = $totalGeral + $entradasPendentes;
+                ?>
                 <tr>
                     <td colspan="2" style="text-align: left; color: #5cb85c">(+) SALDO DE ENTRADAS PENDENTES</td>
                     <td colspan="1" style="text-align: right; color: #5cb85c">
-						<?php echo number_format($entradasPendentes, 2, ',', '.') ?>
+                        <?php echo number_format($entradasPendentes, 2, ',', '.') ?>
                     </td>
                 </tr>
-			<?php } ?>
-			<?php if ($entradasEfetivadas) { ?>
+            <?php } ?>
+            <?php if ($entradasEfetivadas) { ?>
                 <tr>
                     <td colspan="2" style="text-align: left; color: green">(+) SALDO DE ENTRADAS EFETIVADAS</td>
                     <td colspan="1" style="text-align: right;  color: green">
-						<?php echo number_format($entradasEfetivadas, 2, ',', '.') ?>
+                        <?php echo number_format($entradasEfetivadas, 2, ',', '.') ?>
                     </td>
                 </tr>
-			<?php } ?>
-			<?php if ($entradasEfetivadas && $entradasPendentes) {
-				if ($saldoProvisorioMes) {
-					$saldoProvisorioMes = $totalGeral + $entradasPendentes;
-				} else {
-					$saldoProvisorioMes = $totalGeral + $entradasPendentes + $entradasEfetivadas;
-				}
-				?>
+            <?php } ?>
+            <?php if ($entradasEfetivadas && $entradasPendentes) {
+                if ($saldoProvisorioMes) {
+                    $saldoProvisorioMes = $totalGeral + $entradasPendentes;
+                } else {
+                    $saldoProvisorioMes = $totalGeral + $entradasPendentes + $entradasEfetivadas;
+                }
+                ?>
                 <tr>
                     <td colspan="2" style="text-align: left;">(=) SALDO TOTAL DE ENTRADAS</td>
                     <td colspan="1" style="text-align: right;">
-						<?php echo number_format($totalEntradas, 2, ',', '.') ?>
+                        <?php echo number_format($totalEntradas, 2, ',', '.') ?>
                     </td>
                 </tr>
-			<?php } ?>
-			
-			<?php if ($saidasPendentes) {
-				if ($saldoProvisorioMes) {
-					$saldoProvisorioMes = $saldoProvisorioMes + ($saidasPendentes);
-				} else {
-					$saldoProvisorioMes = $totalGeral + ($saidasPendentes);
-				}
-				?>
+            <?php } ?>
+
+            <?php if ($saidasPendentes) {
+                if ($saldoProvisorioMes) {
+                    $saldoProvisorioMes = $saldoProvisorioMes + ($saidasPendentes);
+                } else {
+                    $saldoProvisorioMes = $totalGeral + ($saidasPendentes);
+                }
+                ?>
                 <tr>
                     <td colspan="2" style="text-align: left; color: red">(-) SALDO DE SAÍDAS PENDENTES</td>
                     <td colspan="1" style="text-align: right; color: red">
-						<?php echo number_format($saidasPendentes, 2, ',', '.') ?>
+                        <?php echo number_format($saidasPendentes, 2, ',', '.') ?>
                     </td>
                 </tr>
-			<?php } ?>
-			<?php if ($saidasEfetivadas) { ?>
+            <?php } ?>
+            <?php if ($saidasEfetivadas) { ?>
                 <tr>
                     <td colspan="2" style="text-align: left; color: #d9534f">(-) SALDO DE SAÍDAS EFETIVADAS</td>
                     <td colspan="1" style="text-align: right; color: #d9534f">
-						<?php echo number_format($saidasEfetivadas, 2, ',', '.') ?>
+                        <?php echo number_format($saidasEfetivadas, 2, ',', '.') ?>
                     </td>
                 </tr>
-			<?php } ?>
-			<?php if ($saidasEfetivadas && $saidasPendentes) { ?>
+            <?php } ?>
+            <?php if ($saidasEfetivadas && $saidasPendentes) { ?>
                 <tr>
                     <td colspan="2" style="text-align: left;">(=) SALDO TOTAL DE SAÍDAS</td>
                     <td colspan="1" style="text-align: right;">
-						<?php echo number_format($totalSaidas, 2, ',', '.') ?>
+                        <?php echo number_format($totalSaidas, 2, ',', '.') ?>
                     </td>
                 </tr>
-			<?php } ?>
-			<?php if ($totalGeralMes) { ?>
+            <?php } ?>
+            <?php if ($totalGeralMes) { ?>
                 <tr class="total-geral">
                     <td colspan="2" style="text-align: left; font-weight: bold">(TP) SALDO TOTAL DO PERÍODO</td>
                     <td colspan="1" style="text-align: right; font-weight: bold">
-						<?php
-						if ($hiddenItems) echo '<i class="fas fa-lock-keyhole fa-fw vault-icon"></i> ';
-						
-						echo number_format($totalGeralMes, 2, ',', '.')
-						?>
+                        <?php
+                        if ($hiddenItems) echo '<i class="fas fa-lock-keyhole fa-fw vault-icon"></i> ';
+
+                        echo number_format($totalGeralMes, 2, ',', '.')
+                        ?>
                     </td>
                 </tr>
-				<?php if ($totalOcultosMes) { ?>
+                <?php if ($totalOcultosMes) { ?>
                     <tr class="hidden provisorio-ocultos">
                         <td colspan="2" style="text-align: left; font-weight: bold; color: #a9a9a9">(TO) TOTAL DE OCULTOS DO PERÍODO</td>
                         <td colspan="1" style="text-align: right; font-weight: bold; color: #a9a9a9">
-							<?php echo number_format($totalOcultosMes, 2, ',', '.') ?>
+                            <?php echo number_format($totalOcultosMes, 2, ',', '.') ?>
                         </td>
                     </tr>
-				<?php }
-				if ($hiddenItems) { ?>
+                <?php }
+                if ($hiddenItems) { ?>
                     <tr class="hidden provisorio-ocultos">
                         <td colspan="2" style="text-align: left; font-weight: bold">(TP+TO) SALDO TOTAL OCULTO DO PERÍODO</td>
                         <td colspan="1" style="text-align: right; font-weight: bold">
-							<?php echo number_format(($totalOcultosMes + $totalGeralMes), 2, ',', '.') ?>
+                            <?php echo number_format(($totalOcultosMes + $totalGeralMes), 2, ',', '.') ?>
                         </td>
                     </tr>
-				<?php }
-				if ($totalGeralMes < 0 && $saldoProvisorioMes) {
-					?>
+                <?php }
+                if ($totalGeralMes < 0 && $saldoProvisorioMes) {
+                    ?>
                     <!--<tr class="hidden provisorio-periodo">-->
                     <!--    <td colspan="2" style="text-align: left; font-weight: bold">(±) SALDO PROVISÓRIO DO PERÍODO</td>-->
                     <!--    <td colspan="1" style="text-align: right; font-weight: bold">-->
                     <!--		--><?php //echo number_format(($saldoProvisorioMes), 2, ',', '.') ?>
                     <!--    </td>-->
                     <!--</tr>-->
-				<?php }
-			} ?>
+                <?php }
+            } ?>
 
         </table>
     </div>
@@ -594,12 +582,12 @@ if (!$results) {
 					if ($r->baixado == 0) {
 						$pendingNotification = 'notification-dot';
 						$status              = 'PENDENTE';
-						$labelStatus         = 'warning';
-						$iconStatus          = '<i class="far fa-clock fa-fw"></i>';
+						$label_status        = 'warning';
+						$iconTipo            = '<i class="far fa-clock fa-fw"></i>';
 					} else {
-						$status      = 'EFETIVADO';
-						$labelStatus = 'primary';
-						$iconStatus  = '<i class="fas fa-check-circle fa-fw"></i>';
+						$status       = 'EFETIVADO';
+						$label_status = 'primary';
+						$iconTipo     = '<i class="fas fa-check-circle fa-fw"></i>';
 					};
 					
 					if ($r->observacoes) {
@@ -609,15 +597,15 @@ if (!$results) {
 					};
 					
 					if ($r->tipo == 1) {
-						$color_value = 'green';
-						$label_tipo  = 'success';
-						$tipo        = 'ENTRADA';
-						$icon        = '<i class="far fa-arrow-left-to-bracket fa-rotate-270 fa-fw"></i>';
+						$color      = 'green';
+						$label_tipo = 'success';
+						$tipo       = 'ENTRADA';
+						$icon       = '<i class="far fa-arrow-left-to-bracket fa-rotate-270 fa-fw"></i>';
 					} else {
-						$color_value = 'red';
-						$label_tipo  = 'danger';
-						$tipo        = 'SAÍDA';
-						$icon        = '<i class="far fa-arrow-right-from-bracket fa-rotate-270 fa-fw"></i>';
+						$color      = 'red';
+						$label_tipo = 'danger';
+						$tipo       = 'SAÍDA';
+						$icon       = '<i class="far fa-arrow-right-from-bracket fa-rotate-270 fa-fw"></i>';
 					}
 					
 					if ($r->cliente_fornecedor) {
@@ -660,10 +648,10 @@ if (!$results) {
 						$r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">' .
 						strtoupper($r->descricao) . $iconObs .
 						'<br><span class="small" style="color: grey;">' . ($fornecedor) . '</span></a></td>';
-					echo '<td><span class="valor_parcela" style=" color: ' . $color_value . '"><span>' . number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small" style="color: grey;">' . ($forma_pgto) . '</td>';
+					echo '<td><span class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small" style="color: grey;">' . ($forma_pgto) . '</td>';
 					echo '<td><span class="text-' . $label_tipo . '">' . ($icon) . '</span> <span class="badge badge-' . $label_tipo . '">' . ($tipo) . '</span>
                             <br>
-                            <span class="text-' . $labelStatus . '">' . ($iconStatus) . '</span> <span class="badge badge-' . $labelStatus . '">' . ($status) . '</span></td>';
+                            <span class="text-' . $label_status . '">' . ($iconTipo) . '</span> <span class="badge badge-' . $label_status . '">' . ($status) . '</span></td>';
 					echo '<td>';
 					if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
 						echo '<button type="button" href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Detalhes" idLancamento="' .
@@ -671,22 +659,22 @@ if (!$results) {
 							date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
 							$r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">
                                 <i class="fas fa-search-plus fa-lg fa-fw"></i></button>';
-						echo '<button type="button" href="#modalCopiar" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm copiar" title="Copiar" idLancamento="' .
-							$r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
-							date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
-							$r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">
+                        echo '<button type="button" href="#modalCopiar" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm copiar" title="Copiar" idLancamento="' .
+                            $r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
+                            date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
+                            $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">
                                 <i class="fas fa-copy fa-lg fa-fw"></i></button>';
-					}
-					if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
-						echo '<button type="button" href="#modalExcluir" data-toggle="modal" idLancamento="' . $r->id_lancamento . '" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw"></i></button>';
-					}
-					echo '</td>';
-					echo '</tr>';
-				}
-				
-				$totalEntradas = $entradasEfetivadas + $entradasPendentes;
-				$totalSaidas   = $saidasEfetivadas + $saidasPendentes;
-				?>
+                    }
+                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
+                        echo '<button type="button" href="#modalExcluir" data-toggle="modal" idLancamento="' . $r->id_lancamento . '" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw"></i></button>';
+                    }
+                    echo '</td>';
+                    echo '</tr>';
+                }
+
+                $totalEntradas = $entradasEfetivadas + $entradasPendentes;
+                $totalSaidas   = $saidasEfetivadas + $saidasPendentes;
+                ?>
                 </tbody>
             </table>
             <div id="somatorio_lancamentos" class="panel-footer hidden">
@@ -705,11 +693,11 @@ if (!$results) {
                     </tr>
                 </table>
             </div>
-			<?php if ($this->pagination->create_links()) { ?>
+            <?php if ($this->pagination->create_links()) { ?>
                 <div class="panel-footer">
-					<?= $this->pagination->create_links() ?>
+                    <?= $this->pagination->create_links() ?>
                 </div>
-			<?php } ?>
+            <?php } ?>
         </div>
     </div>
 <?php } ?>
@@ -732,12 +720,12 @@ if (!$results) {
                                     << Todos>>
                                 </option>
                                 <option value="entrada" <?php if ($tipo_lancamentos == 'entrada') {
-									echo 'selected';
-								} ?>>ENTRADA
+                                    echo 'selected';
+                                } ?>>ENTRADA
                                 </option>
                                 <option value="saida" <?php if ($tipo_lancamentos == 'saida') {
-									echo 'selected';
-								} ?>>SAÍDA
+                                    echo 'selected';
+                                } ?>>SAÍDA
                                 </option>
                             </select>
                         </div>
@@ -762,48 +750,48 @@ if (!$results) {
                                     << Selecione>>
                                 </option>
                                 <option value="todos" <?php if ($periodo_lancamentos == 'todos') {
-									echo 'selected';
-								} ?>>Todos
+                                    echo 'selected';
+                                } ?>>Todos
                                 </option>
                                 <option value="3dias" <?php if ($periodo_lancamentos == '3dias') {
-									echo 'selected';
-								} ?>>Últimos 3 dias
+                                    echo 'selected';
+                                } ?>>Últimos 3 dias
                                 </option>
                                 <option value="5dias" <?php if ($periodo_lancamentos == '5dias') {
-									echo 'selected';
-								} ?>>Últimos 5 dias
+                                    echo 'selected';
+                                } ?>>Últimos 5 dias
                                 </option>
                                 <option value="7dias" <?php if ($periodo_lancamentos == '7dias') {
-									echo 'selected';
-								} ?>>Últimos 7 dias
+                                    echo 'selected';
+                                } ?>>Últimos 7 dias
                                 </option>
                                 <option value="15dias" <?php if ($periodo_lancamentos == '15dias') {
-									echo 'selected';
-								} ?>>Últimos 15 dias
+                                    echo 'selected';
+                                } ?>>Últimos 15 dias
                                 </option>
                                 <option value="30dias" <?php if ($periodo_lancamentos == '30dias') {
-									echo 'selected';
-								} ?>>Últimos 30 dias
+                                    echo 'selected';
+                                } ?>>Últimos 30 dias
                                 </option>
                                 <option value="60dias" <?php if ($periodo_lancamentos == '60dias') {
-									echo 'selected';
-								} ?>>Últimos 60 dias
+                                    echo 'selected';
+                                } ?>>Últimos 60 dias
                                 </option>
                                 <option value="90dias" <?php if ($periodo_lancamentos == '90dias') {
-									echo 'selected';
-								} ?>>Últimos 90 dias
+                                    echo 'selected';
+                                } ?>>Últimos 90 dias
                                 </option>
                                 <option value="mensal" <?php if (
-									$periodo_lancamentos == 'mensal' ||
-									!$periodo_lancamentos
-								) {
-									echo 'selected';
-								} ?>>MÊS/ANO ESPECÍFICOS
+                                    $periodo_lancamentos == 'mensal' ||
+                                    !$periodo_lancamentos
+                                ) {
+                                    echo 'selected';
+                                } ?>>MÊS/ANO ESPECÍFICOS
                                 </option>
                                 <option value="especifico" <?php if ($periodo_lancamentos == 'especifico') {
-									echo
-									'selected';
-								} ?>>PERÍODO ESPECÍFICO
+                                    echo
+                                    'selected';
+                                } ?>>PERÍODO ESPECÍFICO
                                 </option>
                             </select>
                         </div>
@@ -853,13 +841,13 @@ if (!$results) {
                                 </select>
                                 <span class="input-group-addon">ano</span>
                                 <select class="form-control" id="anoReferenciaSelect" name="anoReferencia">
-									<?php if ($yearsList) {
-										foreach ($yearsList as $year) { ?>
+                                    <?php if ($yearsList) {
+                                        foreach ($yearsList as $year) { ?>
                                             <option value="<?= $year ?>" <?= ($referenceYear == $year ? 'selected' : '') ?>>
-												<?= $year ?>
+                                                <?= $year ?>
                                             </option>
-										<?php }
-									} ?>
+                                        <?php }
+                                    } ?>
                                 </select>
                             </div>
                         </div>
@@ -889,7 +877,7 @@ if (!$results) {
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricao">Descrição *</label>
-                            <input class="form-control descricao" id="descricao" type="text" name="descricao"/>
+                            <input class="form-control descricao-autocomplete" id="descricao" type="text" name="descricao"/>
                             <input id="urlEntrada" type="hidden" class="urlAtual" name="urlAtual" value=""/>
                         </div>
                     </div>
@@ -912,7 +900,7 @@ if (!$results) {
                     <div class="row">
                         <div class="form-group col-lg-6 col-xs-6 ">
                             <div class="row">
-                                <input type="checkbox" id="recebido" name="pago" class="switch-input primary" value="1">
+                                <input type="checkbox" id="recebido" name="pago" class="switch-input pago primary" value="1">
                                 <label for="recebido" class="switch-label primary font-weight-bold">Pago</label>
                             </div>
                         </div>
@@ -922,7 +910,7 @@ if (!$results) {
                                 <label for="ocultoEntrada" class="switch-label primary font-weight-bold">Oculto</label>
                             </div>
                         </div>
-                        <div id="divRecebimento" class="hidden">
+                        <div id="divRecebimento" class="divPagamento hidden">
                             <div class="form-group col-lg-6 col-xs-5">
                                 <label for="recebimento" class="font-weight-bold">Data de Pagamento</label>
                                 <input class="form-control datepicker" id="recebimento" type="text" name="recebimento"/>
@@ -931,15 +919,15 @@ if (!$results) {
                                 <label for="formaPgto" class="font-weight-bold">Forma Pagamento *</label>
                                 <select name="formaPgto" class="form-control">
                                     <option value="">
-                                        << Selecione >>
+                                        << Selecione>>
                                     </option>
-									<?php if ($formasPagamento) {
-										foreach ($formasPagamento as $f) { ?>
+                                    <?php if ($formasPagamento) {
+                                        foreach ($formasPagamento as $f) { ?>
                                             <option value="<?= $f->id_forma ?>">
-												<?= $f->nome ?>
+                                                <?= $f->nome ?>
                                             </option>
-										<?php }
-									} ?>
+                                        <?php }
+                                    } ?>
                                 </select>
                             </div>
                         </div>
@@ -987,7 +975,7 @@ if (!$results) {
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricao">Descrição *</label>
-                            <input class="form-control descricao" type="text" name="descricao"/>
+                            <input class="form-control descricao-autocomplete" type="text" name="descricao"/>
                             <input class="urlAtual" type="hidden" name="urlAtual" value=""/>
                         </div>
                     </div>
@@ -1010,7 +998,7 @@ if (!$results) {
                     <div class="row">
                         <div class="form-group col-lg-6 col-xs-6 ">
                             <div class="row">
-                                <input type="checkbox" id="pago" name="pago" class="switch-input primary" value="1">
+                                <input type="checkbox" id="pago" name="pago" class="switch-input pago primary" value="1">
                                 <label for="pago" class="switch-label primary font-weight-bold">Pago</label>
                             </div>
                         </div>
@@ -1020,7 +1008,7 @@ if (!$results) {
                                 <label for="ocultoSaida" class="switch-label primary font-weight-bold">Oculto</label>
                             </div>
                         </div>
-                        <div id="divRecebimento" class="hidden">
+                        <div id="divPagamento" class="divPagamento hidden">
                             <div class="form-group col-lg-6 col-xs-5">
                                 <label for="pagamento" class="font-weight-bold">Data de Pagamento</label>
                                 <input class="form-control datepicker" id="pagamento" type="text" name="pagamento"/>
@@ -1031,13 +1019,13 @@ if (!$results) {
                                     <option value="">
                                         << Selecione>>
                                     </option>
-									<?php if ($formasPagamento) {
-										foreach ($formasPagamento as $f) { ?>
+                                    <?php if ($formasPagamento) {
+                                        foreach ($formasPagamento as $f) { ?>
                                             <option value="<?= $f->id_forma ?>">
-												<?= $f->nome ?>
+                                                <?= $f->nome ?>
                                             </option>
-										<?php }
-									} ?>
+                                        <?php }
+                                    } ?>
                                 </select>
                             </div>
                         </div>
@@ -1139,13 +1127,13 @@ if (!$results) {
                                     <option value="">
                                         << Selecione>>
                                     </option>
-									<?php if ($formasPagamento) {
-										foreach ($formasPagamento as $f) { ?>
+                                    <?php if ($formasPagamento) {
+                                        foreach ($formasPagamento as $f) { ?>
                                             <option value="<?= $f->id_forma ?>">
-												<?= $f->nome ?>
+                                                <?= $f->nome ?>
                                             </option>
-										<?php }
-									} ?>
+                                        <?php }
+                                    } ?>
                                 </select>
                             </div>
                         </div>
@@ -1243,13 +1231,13 @@ if (!$results) {
                                     <option value="">
                                         << Selecione>>
                                     </option>
-									<?php if ($formasPagamento) {
-										foreach ($formasPagamento as $f) { ?>
+                                    <?php if ($formasPagamento) {
+                                        foreach ($formasPagamento as $f) { ?>
                                             <option value="<?= $f->id_forma ?>">
-												<?= $f->nome ?>
+                                                <?= $f->nome ?>
                                             </option>
-										<?php }
-									} ?>
+                                        <?php }
+                                    } ?>
                                 </select>
                             </div>
                         </div>
@@ -1385,26 +1373,26 @@ if (!$results) {
                     <p class="font-weight-bold">Selecione o mês e ano específicos para visualizar um período </p>
                     <input type="hidden" name="periodo" value="mensal"/>
                     <input type="hidden" name="mesReferencia" class="selectedMonth"/>
-					<?php
-					$count = 0;
-					foreach ($monthList as $index => $month) {
-						$count++;
-						if ($referenceMonth == $index) {
-							$active = 'active';
-						} else {
-							$active = null;
-						}
-						?>
+                    <?php
+                    $count = 0;
+                    foreach ($monthList as $index => $month) {
+                        $count++;
+                        if ($referenceMonth == $index) {
+                            $active = 'active';
+                        } else {
+                            $active = null;
+                        }
+                        ?>
                         <button type="button" style="width: 60px;" class="btn btn-info btn-sm selectMonth <?= $active ?> <?= $month['notification'] ? 'notification-dot' : null ?>" value="<?= $index ?>">
-							<?= $month['name'] ?>
+                            <?= $month['name'] ?>
                         </button>
-						<?php if ($count == 4 && $index != 12) {
-							$count = 0;
-							?>
+                        <?php if ($count == 4 && $index != 12) {
+                            $count = 0;
+                            ?>
                             <br>
                             <br>
-						<?php }
-					} ?>
+                        <?php }
+                    } ?>
                 </div>
                 <div class="modal-footer">
                     <div class="row">
@@ -1412,13 +1400,13 @@ if (!$results) {
                             <div class="input-group">
                                 <span class="input-group-addon">Ano</span>
                                 <select class="form-control" id="anoReferenciaSelect" name="anoReferencia">
-									<?php if ($yearsList) {
-										foreach ($yearsList as $year) { ?>
+                                    <?php if ($yearsList) {
+                                        foreach ($yearsList as $year) { ?>
                                             <option value="<?= $year ?>" <?= ($referenceYear == $year ? 'selected' : '') ?>>
-												<?= $year ?>
+                                                <?= $year ?>
                                             </option>
-										<?php }
-									} ?>
+                                        <?php }
+                                    } ?>
                                 </select>
                             </div>
                         </div>
@@ -1453,13 +1441,13 @@ if (!$results) {
                                     <option value="" style="font-style: italic;">
                                         << Não definido >>
                                     </option>
-									<?php if ($monthList) {
-										foreach ($monthList as $index => $month) { ?>
+                                    <?php if ($monthList) {
+                                        foreach ($monthList as $index => $month) { ?>
                                             <option value="<?= $index ?>" <?= ($defaultMonth == $index ? 'selected' : '') ?>>
-												<?= $month['name'] ?>
+                                                <?= $month['name'] ?>
                                             </option>
-										<?php }
-									} ?>
+                                        <?php }
+                                    } ?>
                                 </select>
                             </div>
                         </div>
@@ -1482,7 +1470,7 @@ if (!$results) {
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <!--<label class="font-weight-bold" for="termo">Termo *</label>-->
-                            <input class="form-control" type="text" name="search"/>
+                            <input class="form-control descricao" type="text" name="search"/>
                         </div>
                     </div>
                 </div>
@@ -1520,7 +1508,7 @@ if (!$results) {
         source: "<?php echo base_url('financeiro/lancamentos/autoCompleteDescricao'); ?>",
         minLength: 2,
         select: function (event, ui) {
-            $(event.target).val(ui.item.label);
+            $(".descricao, .descricao-autocomplete").val(ui.item.label);
         }
     });
 
@@ -1528,7 +1516,7 @@ if (!$results) {
         source: "<?php echo base_url('financeiro/lancamentos/autoCompleteFornecedor'); ?>",
         minLength: 1,
         select: function (event, ui) {
-            $(event.target).val(ui.item.label);
+            $(".fornecedor, .fornecedor-autocomplete").val(ui.item.label);
         }
     });
 
@@ -2038,7 +2026,7 @@ if (!$results) {
         }
     })
 
-    $('#novaEntrada, #novaSaida').click(function (event) {
+    $('#novaEntrada, #novaSaida').click(function () {
         $('.oculto').prop('checked', false)
         $(".divObservacoes").addClass('hidden');
         $(".observacoesTextarea").val('');
