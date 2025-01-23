@@ -1,5 +1,5 @@
 <?php if (!defined('BASEPATH')) {
-	exit('No direct script access allowed');
+    exit('No direct script access allowed');
 }
 include APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'codegen_helper.php';
 
@@ -18,7 +18,7 @@ include APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'codegen_helper.php';
  * | Q     - current quarter of year (1st, 2nd, 3rd or 4th)
  * | R     - current release version of system
  */
-$version       = '87';
+$version       = '88';
 $quarterOfYear = getQuarterOfCurrentYear();
 $currentYear   = date('Y');
 define("APP_VERSION", sprintf('%s.%s.%s', $currentYear, $quarterOfYear, $version));
@@ -55,7 +55,7 @@ define('DIR_WRITE_MODE', 0777);
 
 define('FOPEN_READ', 'rb');
 define('FOPEN_READ_WRITE', 'r+b');
-define('FOPEN_WRITE_CREATE_DESTRUCTIVE', 'wb'); // truncates existing file data, use with care
+define('FOPEN_WRITE_CREATE_DESTRUCTIVE', 'wb');       // truncates existing file data, use with care
 define('FOPEN_READ_WRITE_CREATE_DESTRUCTIVE', 'w+b'); // truncates existing file data, use with care
 define('FOPEN_WRITE_CREATE', 'ab');
 define('FOPEN_READ_WRITE_CREATE', 'a+b');
