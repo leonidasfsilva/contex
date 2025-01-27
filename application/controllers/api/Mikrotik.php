@@ -115,7 +115,6 @@ class Mikrotik extends CI_Controller
             $email   = $request['to'];
             $subject = $request['subject'];
 
-            gravaLog(null, null, 'mikrokit@mxcode.net', 'Email de relatório Mikrotik enviado com sucesso', getenv("REMOTE_ADDR"));
 
             $template = $this->buildEmailTemplate($request);
             $_headers = "MIME-Version: 1.0\r\n";
@@ -128,6 +127,7 @@ class Mikrotik extends CI_Controller
                 ['response' => '200 OK']
             ];
 
+            gravaLog(null, null, $email, 'Email de relatório Mikrotik enviado com sucesso', getenv("REMOTE_ADDR"));
             return $this->response($response);
         } catch (Exception $e) {
             return $this->response(
