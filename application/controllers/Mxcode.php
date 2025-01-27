@@ -116,7 +116,7 @@ class Mxcode extends CI_Controller
 		$this->load->view('mxcode/login');
 	}
 	
-	public function logout($forcedLogout = false)
+	public function logout()
 	{
 		if ((session_id()) && ($this->session->userdata('logado'))) {
 			gravaLog(getUserId(), getUserName(), getUserEmail(), 'Logout no sistema', getenv("REMOTE_ADDR"));
