@@ -121,7 +121,12 @@ class Mikrotik extends CI_Controller
             // $_headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
             $_headers .= "X-Priority: 1\r\n";
 
-            mail($email, $subject, $template, $_headers);
+            $success = mail($email, $subject, $template, $_headers);
+            if (!$success) {
+                print_r(error_get_last()['message']);
+            }
+
+            // mail($email, $subject, $template, $_headers);
 
             $response = ['response' => '200 OK'];
 
