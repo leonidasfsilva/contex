@@ -31,6 +31,8 @@ class Mikrotik extends CI_Controller
         }
 
         $this->request = json_decode(file_get_contents('php://input'), true);
+        gravaLog(null, null, null, 'Request API: ' . $this->request, getenv("REMOTE_ADDR"));
+
 
         if ($this->request && is_array($this->request)) {
             if (isset($this->request['token'])) {
