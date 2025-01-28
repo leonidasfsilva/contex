@@ -130,7 +130,7 @@ class Mikrotik extends CI_Controller
 
             $response = ['response' => '200 OK'];
 
-            gravaLog(null, null, $email, 'Email de relatório Mikrotik enviado com sucesso', getenv("REMOTE_ADDR"));
+            gravaLog(null, null, $email, sprintf('%s: %s', $success, 'Email de relatório Mikrotik enviado com sucesso'), getenv("REMOTE_ADDR"));
             return $this->response($response);
         } catch (Exception $e) {
             return $this->response(
