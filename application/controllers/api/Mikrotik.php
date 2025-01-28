@@ -119,26 +119,16 @@ class Mikrotik extends CI_Controller
             $_headers = "MIME-Version: 1.0\r\n";
             $_headers .= "Content-type: text/html; charset=utf-8\r\n";
             $_headers .= "From: " . $_from . "\r\n";
-            // $_headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-            $_headers .= "X-Priority: 1\r\n";
+            // $_headers .= "X-Priority: 1\r\n";
 
-            $success = mail($email, $subject, $template, $_headers, "-f " . $_from);
-            if (!$success) {
-                print_r(error_get_last()['message']);
-            }
-
-            if ($_SERVER['REMOTE_ADDR'] == '179.97.60.38') {
-                $_SERVER['REMOTE_ADDR'] = '177.154.5.205';
-            }
-            // mail($email, $subject, $template, $_headers);
+            mail($email, $subject, $template, $_headers, "-f " . $_from);
 
             $response = [
                 'response'      => '200 OK',
                 'remoteAddress' => $_SERVER['REMOTE_ADDR'] ?? null,
-                'remoteHost'    => $_SERVER['REMOTE_HOST'] ?? null,
             ];
 
-            gravaLog(null, null, $email, sprintf('%s: %s', $success, 'Email de relatório Mikrotik enviado com sucesso'), getenv("REMOTE_ADDR"));
+            gravaLog(null, null, $email, 'Email de relatório Mikrotik enviado com sucesso', getenv("REMOTE_ADDR"));
             return $this->response($response);
         } catch (Exception $e) {
             return $this->response(
