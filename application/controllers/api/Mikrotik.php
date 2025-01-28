@@ -41,6 +41,7 @@ class Mikrotik extends CI_Controller
         if ($this->token) {
             if ($this->checkToken($this->token)) {
                 $this->authenticated = true;
+                gravaLog(null, null, null, 'User agent autenticado com sucesso', getenv("REMOTE_ADDR"));
             }
         }
     }
