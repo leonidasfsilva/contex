@@ -115,13 +115,14 @@ class Mikrotik extends CI_Controller
             $email    = $request['to'];
             $subject  = $request['subject'];
             $template = $this->buildEmailTemplate($request);
+            $_from    = "mikrotik@mxcode.net";
             $_headers = "MIME-Version: 1.0\r\n";
             $_headers .= "Content-type: text/html; charset=utf-8\r\n";
-            $_headers .= "From: mikrotik@mxcode.net\r\n";
+            $_headers .= sprintf('From: %s\r\n', $_from);
             // $_headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
             $_headers .= "X-Priority: 1\r\n";
 
-            $success = mail($email, $subject, $template, $_headers);
+            $success = mail($email, $subject, $template, $_headers, "-f " . $_from);
             if (!$success) {
                 print_r(error_get_last()['message']);
             }
