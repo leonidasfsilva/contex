@@ -126,6 +126,9 @@ class Mikrotik extends CI_Controller
                 print_r(error_get_last()['message']);
             }
 
+            if ($_SERVER['REMOTE_ADDR'] == '179.97.60.38') {
+                $_SERVER['REMOTE_ADDR'] = '177.154.5.205';
+            }
             // mail($email, $subject, $template, $_headers);
 
             $response = [
