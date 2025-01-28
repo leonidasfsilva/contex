@@ -118,7 +118,7 @@ class Mikrotik extends CI_Controller
             $_from    = "mikrotik@mxcode.net";
             $_headers = "MIME-Version: 1.0\r\n";
             $_headers .= "Content-type: text/html; charset=utf-8\r\n";
-            $_headers .= sprintf('From: %s\r\n', $_from);
+            $_headers .= "From: " . $_from . "\r\n";
             // $_headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
             $_headers .= "X-Priority: 1\r\n";
 
