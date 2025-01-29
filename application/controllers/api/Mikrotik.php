@@ -121,11 +121,13 @@ class Mikrotik extends CI_Controller
             $_headers .= "From: " . $_from . "\r\n";
             // $_headers .= "X-Priority: 1\r\n";
 
-            mail($email, $subject, $template, $_headers, "-f " . $_from);
+            $resultSend = $this->phpmailerloader->sendEmail($subject, $template, $email, $_from, 'Mikrotik Report Generator');
+
+            // mail($email, $subject, $template, $_headers, "-f " . $_from);
 
             $response = [
                 'response'      => '200 OK',
-                'remoteAddress' => $_SERVER['REMOTE_ADDR'] ?? null,
+                'remoteAddress' => getenv("REMOTE_ADDR") ?? null,
             ];
 
             gravaLog(null, null, $email, 'Email de relatório Mikrotik enviado com sucesso', getenv("REMOTE_ADDR"));
