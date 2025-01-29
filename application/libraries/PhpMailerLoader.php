@@ -19,14 +19,15 @@ class PhpMailerLoader
     {
         try {
             //Server settings
-            $this->mailer->SMTPDebug = SMTP::DEBUG_SERVER;            //Enable verbose debug output
-            $this->mailer->isSMTP();                                  //Send using SMTP
-            $this->mailer->Host       = 'mail.mxcode.net';            //Set the SMTP server to send through
-            $this->mailer->SMTPAuth = true;                           //Enable SMTP authentication
-            $this->mailer->Username = $_ENV['SMTP_USERNAME'];         //SMTP username
-            $this->mailer->Password = $_ENV['SMTP_PASSWORD'];         //SMTP password
-            $this->mailer->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;  //Enable implicit TLS encryption
-            $this->mailer->Port       = 465;                          //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+            // $this->mailer->SMTPDebug = SMTP::DEBUG_SERVER;
+            $this->mailer->isSMTP();
+            $this->mailer->Host       = 'mail.mxcode.net';
+            $this->mailer->SMTPAuth   = true;
+            $this->mailer->Username   = $_ENV['SMTP_USERNAME'];
+            $this->mailer->Password   = $_ENV['SMTP_PASSWORD'];
+            $this->mailer->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+            $this->mailer->Port       = 465;
+            $this->mailer->CharSet    = "UTF-8";
 
             //Recipients
             $this->mailer->setFrom($from, $fromName ?? $from);
