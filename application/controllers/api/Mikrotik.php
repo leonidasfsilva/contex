@@ -217,19 +217,17 @@ class Mikrotik extends CI_Controller
                             </tr>
                             <tr>
                                 <td>
+                                <span style="font-size: 12pt"><strong>Mikrotik Report Generator</strong></span>
+                                </td>
+                            </tr>
+                                                        <tr>
+                                <td>
                                     <span style="font-weight: bold">IP:</span> <a target="_blank" href="https://whatismyipaddress.com/ip/' . $ip . '"> ' . $ip . '</a>
                                     <br />
                                     <span style="font-weight: bold">User Agent:</span> ' . $navegador . '
                                     <br />
                                     <span style="font-weight: bold">Data e hora:</span> ' . $formattedDateTime . '
                                     <br /> 
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                <span style="font-size: 12pt"><strong>Mikrotik Report Generator</strong></span>
-                                <br>
-                                <a href="' . base_url() . '" target="_blank"><p><strong>' . base_url() . '</strong></a><br>CONTEX - Sistema de Gestão</p>
                                 </td>
                             </tr>
                             <tr>
