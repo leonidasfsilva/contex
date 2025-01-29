@@ -15,7 +15,7 @@ class PhpMailerLoader
         $this->mailer = new PHPMailer(true);
     }
 
-    public function sendMail(string $subject, string $message, string $to, string $from, string $toName = null, string $fromName = null)
+    public function sendEmail(string $subject, string $message, string $to, string $from, string $toName = null, string $fromName = null)
     {
         try {
             //Server settings
