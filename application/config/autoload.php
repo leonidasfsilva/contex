@@ -60,7 +60,8 @@ $autoload['libraries'] = array(
     'permission',
     'pagination',
 	'user_agent',
-	'ConfigLoader'
+	'ConfigLoader',
+	'PhpMailerLoader',
 );
 
 
