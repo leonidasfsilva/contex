@@ -53,7 +53,5 @@ class PhpMailerLoader
         } catch (Exception $e) {
             return "Message could not be sent. Mailer Error: {$this->mailer->ErrorInfo}";
         }
-
     }
-
 }

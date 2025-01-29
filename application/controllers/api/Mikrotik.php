@@ -227,6 +227,7 @@ class Mikrotik extends CI_Controller
                                 </td>
                             </tr>
                             <tr>
+                                <td>
                                 <span style="font-size: 12pt"><strong>Mikrotik Report Generator</strong></span>
                                 <br>
                                 <a href="' . base_url() . '" target="_blank"><p><strong>' . base_url() . '</strong></a><br>CONTEX - Sistema de Gestão</p>
