@@ -227,10 +227,7 @@ class Mikrotik extends CI_Controller
                                 </td>
                             </tr>
                             <tr>
-                                <td>
-                                <span>Atenciosamente,</span>
-                                <br>
-                                <span style="font-size: 12pt"><strong>Equipe MXCODE Sistemas</strong></span>
+                                <span style="font-size: 12pt"><strong>Mikrotik Report Generator</strong></span>
                                 <br>
                                 <a href="' . base_url() . '" target="_blank"><p><strong>' . base_url() . '</strong></a><br>CONTEX - Sistema de Gestão</p>
                                 </td>
