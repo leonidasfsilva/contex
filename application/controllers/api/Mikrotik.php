@@ -217,7 +217,6 @@ class Mikrotik extends CI_Controller
                             </tr>
                             <tr>
                                 <td>
-                                    <h4 style="font-weight: bold">Localização e horário do evento</h4>
                                     <span style="font-weight: bold">IP:</span> <a target="_blank" href="https://whatismyipaddress.com/ip/' . $ip . '"> ' . $ip . '</a>
                                     <br />
                                     <span style="font-weight: bold">User Agent:</span> ' . $navegador . '
@@ -236,7 +235,7 @@ class Mikrotik extends CI_Controller
                             <tr>
                                 <td style="border-top: 2px dotted #0098da; padding-top: 20px">
                                 <p style="font-size:10pt; color: gray">
-                                Não é necessário responder este e-mail, mensagem automática.
+                                Não responda este e-mail, esta é uma mensagem automática.
                                 <p>
                                 </td>
                             </tr>
