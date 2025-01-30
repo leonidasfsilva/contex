@@ -62,7 +62,6 @@ $autoload['libraries'] = array(
 	'user_agent',
 	'ConfigLoader',
     'Env',
-	'ConfigLoader',
 	'PhpMailerLoader',
 );
 
@@ -80,7 +79,7 @@ $autoload['helper'] = [
     'url',
     'codegen_helper',
     'fatura_helper',
-    // 'despesa_helper',
+    'despesa_helper',
     'general_helper',
     'mpdf_helper'
 ];

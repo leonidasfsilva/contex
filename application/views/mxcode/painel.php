@@ -204,17 +204,17 @@ if ($direcionados) {
                 </div>
             </a>
         </div>
-    <?php endif ?>
+	<?php endif ?>
 
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vDespesas')) : ?>
-        <div class="col-md-6">
-            <a href="<?= base_url('/financeiro/despesas') ?>" class="shortcut-tile tile-green">
+	<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) : ?>
+        <div class="col-md-6 col-sm-6 col-xs-6">
+            <a href="<?= base_url('/clientes') ?>" class="shortcut-tile tile-green">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fas fa-money-bill-transfer fa-fw"></i></div>
-                    <div class="pull-right"><span class="badge"><?= $this->despesa_model->countDespesasFromUser(); ?></span></div>
+                    <div class="pull-left"><i class="fal fa-people-group fa-fw"></i></div>
+                    <div class="pull-right"><span class="badge"><?= $this->clientes_model->countClientesUsuario(); ?></span></div>
                 </div>
                 <div class="tile-footer">
-                    Despesas
+                    Clientes
                 </div>
             </a>
         </div>
