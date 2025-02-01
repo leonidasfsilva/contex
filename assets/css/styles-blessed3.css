@@ -1641,6 +1641,10 @@ mark,
     text-transform: capitalize;
 }
 
+.text-black {
+    color: black !important;
+}
+
 .text-white {
     color: white !important;
 }

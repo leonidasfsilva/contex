@@ -322,14 +322,14 @@ if (!$results) {
 					echo '<tr>';
 					echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
 					echo '<td class="idLancamento hidden">' . $r->id_lancamento . '</td>';
-					echo '<td title="' . $diaDaSemana . '">' . $vencimento . '</td>';
-					echo '<td><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Ver detalhes" idLancamento="' .
+					echo '<td class="font-weight-bold" title="' . $diaDaSemana . '">' . $vencimento . '</td>';
+					echo '<td class="font-weight-bold"><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Ver detalhes" idLancamento="' .
 						$r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
 						date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
 						$r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">' .
 						strtoupper($r->descricao) . $iconObs .
 						'<br><span class="small" style="color: grey;">' . ($fornecedor) . '</span></a></td>';
-					echo '<td><span class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small" style="color: grey;">' . ($forma_pgto) . '</td>';
+					echo '<td class="font-weight-bold"><span class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small" style="color: grey;">' . ($forma_pgto) . '</td>';
 					echo '<td><span class="text-' . $label_tipo . '">' . ($icon) . '</span> <span class="badge badge-' . $label_tipo . '">' . ($tipo) . '</span>
                             <br>
                             <span class="text-' . $label_status . '">' . ($iconTipo) . '</span> <span class="badge badge-' . $label_status . '">' . ($status) . '</span></td>';
@@ -413,16 +413,16 @@ if (!$results) {
                 $saldoProvisorioMes = $totalGeral + $entradasPendentes;
                 ?>
                 <tr>
-                    <td colspan="2" style="text-align: left; color: #5cb85c">(+) SALDO DE ENTRADAS PENDENTES</td>
-                    <td colspan="1" style="text-align: right; color: #5cb85c">
+                    <td class="font-weight-bold" colspan="2" style="text-align: left; color: #5cb85c">(+) SALDO DE ENTRADAS PENDENTES</td>
+                    <td class="font-weight-bold" colspan="1" style="text-align: right; color: #5cb85c">
                         <?php echo number_format($entradasPendentes, 2, ',', '.') ?>
                     </td>
                 </tr>
             <?php } ?>
             <?php if ($entradasEfetivadas) { ?>
                 <tr>
-                    <td colspan="2" style="text-align: left; color: green">(+) SALDO DE ENTRADAS EFETIVADAS</td>
-                    <td colspan="1" style="text-align: right;  color: green">
+                    <td class="font-weight-bold" colspan="2" style="text-align: left; color: green">(+) SALDO DE ENTRADAS EFETIVADAS</td>
+                    <td class="font-weight-bold" colspan="1" style="text-align: right;  color: green">
                         <?php echo number_format($entradasEfetivadas, 2, ',', '.') ?>
                     </td>
                 </tr>
@@ -435,8 +435,8 @@ if (!$results) {
                 }
                 ?>
                 <tr>
-                    <td colspan="2" style="text-align: left;">(=) SALDO TOTAL DE ENTRADAS</td>
-                    <td colspan="1" style="text-align: right;">
+                    <td class="font-weight-bold" colspan="2" style="text-align: left;">(=) SALDO TOTAL DE ENTRADAS</td>
+                    <td class="font-weight-bold" colspan="1" style="text-align: right;">
                         <?php echo number_format($totalEntradas, 2, ',', '.') ?>
                     </td>
                 </tr>
@@ -450,51 +450,50 @@ if (!$results) {
                 }
                 ?>
                 <tr>
-                    <td colspan="2" style="text-align: left; color: red">(-) SALDO DE SAÍDAS PENDENTES</td>
-                    <td colspan="1" style="text-align: right; color: red">
+                    <td class="font-weight-bold" colspan="2" style="text-align: left; color: red">(-) SALDO DE SAÍDAS PENDENTES</td>
+                    <td class="font-weight-bold" colspan="1" style="text-align: right; color: red">
                         <?php echo number_format($saidasPendentes, 2, ',', '.') ?>
                     </td>
                 </tr>
             <?php } ?>
             <?php if ($saidasEfetivadas) { ?>
                 <tr>
-                    <td colspan="2" style="text-align: left; color: #d9534f">(-) SALDO DE SAÍDAS EFETIVADAS</td>
-                    <td colspan="1" style="text-align: right; color: #d9534f">
+                    <td class="font-weight-bold" colspan="2" style="text-align: left; color: #d9534f">(-) SALDO DE SAÍDAS EFETIVADAS</td>
+                    <td class="font-weight-bold" colspan="1" style="text-align: right; color: #d9534f">
                         <?php echo number_format($saidasEfetivadas, 2, ',', '.') ?>
                     </td>
                 </tr>
             <?php } ?>
             <?php if ($saidasEfetivadas && $saidasPendentes) { ?>
                 <tr>
-                    <td colspan="2" style="text-align: left;">(=) SALDO TOTAL DE SAÍDAS</td>
-                    <td colspan="1" style="text-align: right;">
+                    <td class="font-weight-bold" colspan="2" style="text-align: left;">(=) SALDO TOTAL DE SAÍDAS</td>
+                    <td class="font-weight-bold" colspan="1" style="text-align: right;">
                         <?php echo number_format($totalSaidas, 2, ',', '.') ?>
                     </td>
                 </tr>
             <?php } ?>
             <?php if ($totalGeralMes) { ?>
                 <tr class="total-geral">
-                    <td colspan="2" style="text-align: left; font-weight: bold">(TP) SALDO TOTAL DO PERÍODO</td>
-                    <td colspan="1" style="text-align: right; font-weight: bold">
+                    <td class="font-weight-bold text-black" colspan="2" style="text-align: left;">(TP) SALDO TOTAL DO PERÍODO</td>
+                    <td class="font-weight-bold text-black" colspan="1" style="text-align: right;">
                         <?php
                         if ($hiddenItems) echo '<i class="fas fa-lock-keyhole fa-fw vault-icon"></i> ';
-
                         echo number_format($totalGeralMes, 2, ',', '.')
                         ?>
                     </td>
                 </tr>
                 <?php if ($totalOcultosMes) { ?>
                     <tr class="hidden provisorio-ocultos">
-                        <td colspan="2" style="text-align: left; font-weight: bold; color: #a9a9a9">(TO) TOTAL DE OCULTOS DO PERÍODO</td>
-                        <td colspan="1" style="text-align: right; font-weight: bold; color: #a9a9a9">
+                        <td class="font-weight-bold text-muted" colspan="2" style="text-align: left;">(TO) TOTAL DE OCULTOS DO PERÍODO</td>
+                        <td class="font-weight-bold text-muted" colspan="1" style="text-align: right;">
                             <?php echo number_format($totalOcultosMes, 2, ',', '.') ?>
                         </td>
                     </tr>
                 <?php }
                 if ($hiddenItems) { ?>
                     <tr class="hidden provisorio-ocultos">
-                        <td colspan="2" style="text-align: left; font-weight: bold">(TP+TO) SALDO TOTAL OCULTO DO PERÍODO</td>
-                        <td colspan="1" style="text-align: right; font-weight: bold">
+                        <td class="font-weight-bold text-gray" colspan="2" style="text-align: left;">(TP+TO) SALDO TOTAL OCULTO DO PERÍODO</td>
+                        <td class="font-weight-bold text-inverse" colspan="1" style="text-align: right;">
                             <?php echo number_format(($totalOcultosMes + $totalGeralMes), 2, ',', '.') ?>
                         </td>
                     </tr>
@@ -641,14 +640,14 @@ if (!$results) {
 					echo '<tr>';
 					// echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
 					echo '<td class="idLancamento hidden">' . $r->id_lancamento . '</td>';
-					echo '<td>' . $vencimento . '</td>';
-					echo '<td><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Detalhes" idLancamento="' .
+					echo '<td class="font-weight-bold">' . $vencimento . '</td>';
+					echo '<td class="font-weight-bold"><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Detalhes" idLancamento="' .
 						$r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
 						date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
 						$r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">' .
 						strtoupper($r->descricao) . $iconObs .
 						'<br><span class="small" style="color: grey;">' . ($fornecedor) . '</span></a></td>';
-					echo '<td><span class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small" style="color: grey;">' . ($forma_pgto) . '</td>';
+					echo '<td class="font-weight-bold"><span class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small" style="color: grey;">' . ($forma_pgto) . '</td>';
 					echo '<td><span class="text-' . $label_tipo . '">' . ($icon) . '</span> <span class="badge badge-' . $label_tipo . '">' . ($tipo) . '</span>
                             <br>
                             <span class="text-' . $label_status . '">' . ($iconTipo) . '</span> <span class="badge badge-' . $label_status . '">' . ($status) . '</span></td>';
