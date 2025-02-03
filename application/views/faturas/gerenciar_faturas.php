@@ -195,7 +195,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 						$disabledPagar   = 'disabled';
 						$colorFechar     = 'default';
 						$iconFechar      = 'fas fa-lock-keyhole-open';
-						$iconFaturaAtual = ' <i class="text-alizarin far fa-hand-point-left fa-lg fa-fw" title="Fatura atual"></i>';
+						$iconFaturaAtual = ' <i class="text-alizarin fas fa-long-arrow-alt-left fa-lg fa-fw" title="Fatura atual"></i>';
 					}
 					
 					if (!getVinculoFatura($r->id_fatura)) {

@@ -261,7 +261,7 @@ if (!$results) {
 					if ($r->baixado == 0) {
 						$pendingNotification = 'notification-dot';
 						$status              = 'PENDENTE';
-						$label_status        = 'warning';
+						$label_status        = 'orange';
 						$iconTipo            = '<i class="far fa-clock fa-fw"></i>';
 					} else {
 						$status       = 'EFETIVADO';
@@ -279,12 +279,12 @@ if (!$results) {
 					
 					if ($r->tipo == 1) {
 						$color      = 'green';
-						$label_tipo = 'success';
+						$label_tipo = 'green';
 						$tipo       = 'ENTRADA';
 						$icon       = '<i class="far fa-arrow-left-to-bracket fa-rotate-270 fa-fw"></i>';
 					} else {
 						$color      = 'red';
-						$label_tipo = 'danger';
+						$label_tipo = 'alizarin';
 						$tipo       = 'SAÍDA';
 						$icon       = '<i class="far fa-arrow-right-from-bracket fa-rotate-270 fa-fw"></i>';
 					}

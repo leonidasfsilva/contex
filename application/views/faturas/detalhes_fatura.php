@@ -291,8 +291,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     </tr>
                     </thead>
                     <tr>
-                        <td colspan="2" style="text-align: left; font-weight: bold">(=) LANÇAMENTOS SELECIONADOS</td>
-                        <td colspan="1" style="text-align: right; font-weight: bold" id="valor_soma_parcelas">
+                        <td class="font-weight-bold" colspan="2" style="text-align: left;">(=) LANÇAMENTOS SELECIONADOS</td>
+                        <td class="font-weight-bold" colspan="1" style="text-align: right;" id="valor_soma_parcelas">
                             0,00
                         </td>
                     </tr>
@@ -317,13 +317,13 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             </tr>
             </thead>
             <tr>
-                <td colspan="2" style="text-align: left; color: green">(+) SALDO DE PAGAMENTO DA FATURA</td>
-                <td colspan="1" style="text-align: right; color: green">
+                <td class="font-weight-bold" colspan="2" style="text-align: left; color: green">(+) SALDO DE PAGAMENTO DA FATURA</td>
+                <td class="font-weight-bold" colspan="1" style="text-align: right; color: green">
                     <?php echo number_format($creditoFatura, 2, ',', '.') ?></td>
             </tr>
             <tr>
-                <td colspan="2" style="text-align: left; color: red">(-) SALDO DE DÉBITO DA FATURA</td>
-                <td colspan="1" style="text-align: right; color: red">
+                <td class="font-weight-bold" colspan="2" style="text-align: left; color: red">(-) SALDO DE DÉBITO DA FATURA</td>
+                <td class="font-weight-bold" colspan="1" style="text-align: right; color: red">
                     <input type="hidden" id="debit-balance" value="<?php echo number_format($debitoFatura, 2, ',', '.') ?>">
                     <span style="cursor: pointer;" title="Copiar para área de transferência" id="i-copy-debit">
                         <i class="fas fa-copy fa-fw hidden" id="icon-debit"></i>
@@ -332,8 +332,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 </td>
             </tr>
             <tr>
-                <td colspan="2" style="text-align: left; font-weight: bold">(=) SALDO TOTAL DA FATURA</td>
-                <td colspan="1" style="text-align: right; font-weight: bold">
+                <td class="font-weight-bold" colspan="2" style="text-align: left; font-weight: bold">(=) SALDO TOTAL DA FATURA</td>
+                <td class="font-weight-bold" colspan="1" style="text-align: right; font-weight: bold">
                     <input type="hidden" id="total-balance" value="<?php echo number_format($creditoFatura - $debitoFatura, 2, ',', '.') ?>">
                     <strong style="cursor: pointer;" title="Copiar para área de transferência" id="i-copy-total">
                         <i class="fas fa-copy fa-fw hidden" id="icon-total"></i>
