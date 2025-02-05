@@ -4447,6 +4447,12 @@ Basic List
     border-color: #f8c255;
 }
 
+.alert-alizarin {
+    background-color: #ef4f1d;
+    color: #fff;
+    border-color: #c13f15;
+}
+
 .alert-danger {
     background-color: #ee3900;
     color: #ffffff;

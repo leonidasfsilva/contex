@@ -68,15 +68,14 @@
 					
 					<?php if ($maintenanceMode) { ?>
                         <div class="row">
-                            <div class="alert alert-warning">
+                            <div class="alert alert-alizarin">
                                 <button type="button" class="close-i text-white">
                                     <i class="fad fa-triangle-person-digging text-white fa-2x"></i>
                                 </button>
                                 <strong>SISTEMA EM MANUTENÇÃO</strong>
                                 <br>
-                                Talvez não seja possível acessar sua conta no momento.
-                                <br>
-                                Estamos realizando alguns ajustes e trabalhando para normalizar o sistema o mais breve possível.
+                                Talvez não seja possível acessar sua conta no momento,
+                                estamos trabalhando para normalizar o sistema o mais breve possível.
                                 <br>
                                 Agradecemos a compreensão.
                             </div>

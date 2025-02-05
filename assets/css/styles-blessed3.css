@@ -6156,6 +6156,31 @@ button.close {
     color: #e59006;
 }
 
+.alert-alizarin {
+    color: #ef4f1d;
+    background-color: #fde0dc;
+    border-color: #f4a58c;
+}
+
+.alert-alizarin hr {
+    border-top-color: #f48570;
+}
+
+.alert-alizarin .alert-link {
+    color: #972d0c;
+}
+
+.alert-alizarin,
+.alert-alizarin h1,
+.alert-alizarin h2,
+.alert-alizarin h3,
+.alert-alizarin h4,
+.alert-alizarin h5,
+.alert-alizarin h6,
+.alert-alizarin small {
+    color: #ef4f1d;
+}
+
 .alert-danger {
     color: #c41411;
     background-color: #fde0dc;
@@ -6179,14 +6204,6 @@ button.close {
 .alert-danger h6,
 .alert-danger small {
     color: #c41411;
-}
-
-.alert-danger hr {
-    border-top-color: #f48570;
-}
-
-.alert-danger .alert-link {
-    color: #950f0d;
 }
 
 .thumbnail {
