@@ -133,7 +133,7 @@ class Faturas extends CI_Controller
             $final                                    = $n_cartao[3];
             $cartao_config                            = $cartaoSelecionado['apelido'] ? $cartaoSelecionado['apelido'] : $cartaoSelecionado['bandeira'];
             $data['cartaoSelecionado']                = $cartaoSelecionado;
-            $data['cartaoSelecionado']['cartaoLabel'] = $cartao_config . ' - FINAL ' . $final;
+            $data['cartaoSelecionado']['cartaoLabel'] = sprintf('%s - %s', $cartao_config, $final);
 
 
             $data['yearsList']           = $this->yearsList;
