@@ -18,7 +18,7 @@ include APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'codegen_helper.php';
  * | Q     - current quarter of year (1st, 2nd, 3rd or 4th)
  * | R     - current release version of system
  */
-$version       = '104';
+$version       = '105';
 $quarterOfYear = getQuarterOfCurrentYear();
 $currentYear   = date('y');
 define("APP_VERSION", sprintf('%s.%s.%s', $currentYear, $quarterOfYear, $version));

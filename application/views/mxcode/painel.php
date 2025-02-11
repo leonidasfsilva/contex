@@ -193,7 +193,7 @@ if ($direcionados) {
 <!--PAINEL DE LINKS-->
 <div class="row">
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) : ?>
-        <div class="col-md-6">
+        <div class="col-md-6 col-xs-6">
             <a href="<?= base_url('/financeiro/cartoes') ?>" class="shortcut-tile tile-midnightblue">
                 <div class="tile-body">
                     <div class="pull-left"><i class="fas fa-credit-card fa-fw"></i></div>
