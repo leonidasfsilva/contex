@@ -4,7 +4,7 @@
             <div class="panel-heading">
                 <h3>
                     <i class="fas fa-headset fa-lg fa-fw"></i>
-                    Chamados de Suporte
+                    Tickets de Suporte
                 </h3>
                 <div class="pull-right pr0">
                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" href="#modalAbrirChamado">
@@ -64,7 +64,7 @@
                             <li style="<?= $notificacao ?>">
                                 <a href="<?= base_url('chamados/detalhes/' . $c->id_chamado) ?>" class="mailbox-msg-list-item">
                                     <span class="time"><?= ($intervalo) ?>
-                                    <small style="display: block;" class="label label-<?= ($cor_status) ?>"><?= ($status) ?></small>
+                                    <small style="display: block;" class="badge badge-<?= ($cor_status) ?>"><?= strtoupper($status) ?></small>
                                     </span>
                                     <img src="<?php echo $this->chamados_model->getAvatarUsuario($c->id_usuario) != null ? base_url('assets/uploads/avatars/') .
                                         $this->chamados_model->getAvatarUsuario($c->id_usuario) : base_url('assets/img/avatars/padrao.png'); ?>"

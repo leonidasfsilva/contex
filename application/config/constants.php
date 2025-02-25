@@ -1,5 +1,5 @@
 <?php if (!defined('BASEPATH')) {
-	exit('No direct script access allowed');
+    exit('No direct script access allowed');
 }
 include APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'codegen_helper.php';
 
@@ -12,20 +12,19 @@ include APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'codegen_helper.php';
  * | to control when new features and bugfixes are released
  * | and to avoid CSS conflicts on mobiles devices
  * |
- * | Format: YYYY.S.R
+ * | Format: YYYY.Q.R
  * |--------------------
  * | YYYY  - current year
- * | S     - current quarter of year (1st, 2nd, 3rd or 4th)
+ * | Q     - current quarter of year (1st, 2nd, 3rd or 4th)
  * | R     - current release version of system
- * |
  */
-$version       = '21';
+$version       = '105';
 $quarterOfYear = getQuarterOfCurrentYear();
-$currentYear   = date('Y');
-define("VERSION_APP", sprintf('%s.%s.%s', $currentYear, $quarterOfYear, $version));
+$currentYear   = date('y');
+define("APP_VERSION", sprintf('%s.%s.%s', $currentYear, $quarterOfYear, $version));
 
 // previsão de lançamento do modulo de Despesas (segundo semestre de 2023)
-// define('VERSION_APP', '2023.2.?'); 
+// define('APP_VERSION', '2023.2.?');
 
 /*
 |--------------------------------------------------------------------------
@@ -56,7 +55,7 @@ define('DIR_WRITE_MODE', 0777);
 
 define('FOPEN_READ', 'rb');
 define('FOPEN_READ_WRITE', 'r+b');
-define('FOPEN_WRITE_CREATE_DESTRUCTIVE', 'wb'); // truncates existing file data, use with care
+define('FOPEN_WRITE_CREATE_DESTRUCTIVE', 'wb');       // truncates existing file data, use with care
 define('FOPEN_READ_WRITE_CREATE_DESTRUCTIVE', 'w+b'); // truncates existing file data, use with care
 define('FOPEN_WRITE_CREATE', 'ab');
 define('FOPEN_READ_WRITE_CREATE', 'a+b');

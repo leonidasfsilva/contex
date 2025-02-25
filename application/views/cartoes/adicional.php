@@ -73,19 +73,20 @@
                             </button>
                         </div>
                     </div>
-                    <div class="alert alert-danger alert-result" style="display: none" id="usuario_inexistente">
+                    <div class="alert alert-danger alert-result font-weight-bold" style="display: none" id="usuario_inexistente">
                         <a href="#" style="font-size: 12px" class="close" onclick="$('#usuario_inexistente').hide()"><i class="fas fa-times fa-fw"></i></a>
-                        <i class="fas fa-exclamation-triangle fa-lg fa-fw"></i> Nenhum usuário encontrado para o CPF informado.
+                        <i class="fas fa-hexagon-exclamation fa-lg fa-fw"></i> Nenhum usuário encontrado para o CPF informado.
                     </div>
 
-                    <div class="alert alert-danger mt0 hidden" id="carregando">
-                        <i class="fas fa-spinner fa-pulse fa-lg fa-fw"></i> Consultando, por favor, aguarde...
+                    <div class="alert alert-inverse mt0 hidden" id="carregando">
+                        <i class="fas fa-duotone fa-spinner-third fa-spin fa-fw" style="--fa-animation-duration: 0.5s;"></i> Consultando, por favor aguarde...
                     </div>
 
                     <div class="alert alert-success alert-result" style="display: none" id="usuario_selecionado">
-                        <a href="#" style="font-size: 12px" class="pull-right" onclick="$('#usuario_selecionado').hide(); $('#nome_usuario').val(''); $('#id_usuario').val(''); "><span class="label label-default"><i class="fas fa-times fa-fw"></i> Remover</span></a>
+                        <a href="#" style="font-size: 12px" class="pull-right" onclick="$('#usuario_selecionado').hide(); $('#nome_usuario').val(''); $('#id_usuario').val(''); ">
+                            <span class="badge badge-danger"><i class="fas fa-trash-can-xmark fa-fw"></i> Remover</span></a>
                         <p class="font-weight-bold">
-                            <i class="fas fa-check-square fa-fw"></i>
+                            <i class="fas fa-badge-check fa-fw"></i>
                             <span id="alert_usuario"></span>
                         </p>
                     </div>

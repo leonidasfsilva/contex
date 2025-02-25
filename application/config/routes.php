@@ -1,4 +1,4 @@
-<?php  if (! defined('BASEPATH')) {
+<?php if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 /*
@@ -40,13 +40,17 @@
 |
 */
 
-$route['default_controller'] = "mxcode";
-$route['404_override'] = '';
-$route['financeiro'] = 'financeiro/index';
-$route['mxcode/minha-conta'] = 'mxcode/minhaConta';
-//$route['financeiro/faturas/detalhes'] = 'faturas/detalhes';
-//$route['financeiro/faturas/detalhes/(:any)'] = 'faturas/detalhes/$1';
-$route['editarFotoUsuario'] = "mxcode/editarFotoUsuario";
+$route['default_controller']           = "mxcode";
+$route['404_override']                 = '';
+$route['financeiro']                   = 'financeiro/index';
+$route['mxcode/perfil']                = 'mxcode/perfil';
+$route['phpinfo']                      = 'mxcode/phpinfo';
+$route['editarFotoUsuario']            = "mxcode/editarFotoUsuario";
+$route['api/mikrotik/get-info/(:any)'] = 'api/mikrotik/getInfo/$1';
+$route['api/mikrotik/get-info']        = 'api/mikrotik/getInfo';
+
+// $route['financeiro/faturas/detalhes']        = 'faturas/detalhes';
+// $route['financeiro/faturas/detalhes/(:any)'] = 'faturas/detalhes/$1';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

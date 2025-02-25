@@ -1,5 +1,37 @@
 <script>
     $(document).ready(function () {
+        function toggleUserMenuIcon() {
+            var menuIcon = $('#user-menu-icon')
+
+            if (menuIcon.hasClass('fa-times')) {
+                menuIcon.addClass('fa-bars')
+                menuIcon.removeClass('fa-times')
+            }
+        }
+
+        $(document).click(function () {
+            toggleUserMenuIcon()
+        })
+
+        $(document).keydown(function () {
+            toggleUserMenuIcon()
+        })
+
+        $('#user-menu-dropdown-button').click(function () {
+            $('#user-menu-icon').toggleClass('fa-bars fa-times')
+        })
+
+        $('.blink-text').each(function () {
+            var elem = $(this);
+            setInterval(function () {
+                if (elem.css('visibility') === 'hidden') {
+                    elem.css('visibility', 'visible');
+                } else {
+                    elem.css('visibility', 'hidden');
+                }
+            }, 600);
+        });
+
         // method to close and open one modal after another one
         $('.modal-copy').click(function (e) {
             var parentModal = null
@@ -18,6 +50,8 @@
                 }
             }
         })
+
+        $("#urlAtual, .urlAtual").val($(location).attr('href'));
     })
 
     function toggleModals(discardModal, targetModal, trigger = false) {
@@ -172,8 +206,6 @@
     $(document).on('ready', function (event) {
         atualizaNotificacoesUsuario();
 
-        $("#urlAtual, .urlAtual").val($(location).attr('href'));
-
         $('.modal_anuncio').each(function (key, value) {
             $('.modal_anuncio').modal('show');
         });
@@ -183,14 +215,22 @@
         });
 
         var element = $(".principal-div")
-        element.hide()
-        $(".preloader").show();
+        showSpinnerLoader(element)
         removeSpinnerLoader(element)
     })
 
+    function showSpinnerLoader(element = null) {
+        if (!element) {
+            element = $(".principal-div")
+        }
+
+        element.hide()
+        $(".preloader").show();
+    }
+
     function removeSpinnerLoader(element, time = 600) {
         var percentage = Math.round((time * 20) / 100)
-        
+
         setTimeout(function () {
             $(".preloader").hide()
         }, (time - percentage));
@@ -274,12 +314,6 @@
     }
 
     $(function () {
-        $('.datepicker').inputmask('date', {
-            placeholder: '__/__/____'
-        });
-    });
-
-    $(function () {
         $(".money").maskMoney({
             thousands: '.',
             decimal: ',',
@@ -291,12 +325,12 @@
     $(function () {
         $('.popover-btn').popover()
     });
-    
-    $('#telefone').mask("(99) 9999-99990");
-    $('#cep').mask("99999-999");
-    $('#cpf').mask("999.999.999-99");
-    $('#rg').mask("99.999.999-9");
-    $('#expiry').mask("99 / 99");
+
+    $('#telefone, .telefone').mask("(99) 9999-99990");
+    $('#cep, .cep').mask("99999-999");
+    $('#cpf, .cpf').mask("999.999.999-99");
+    $('#rg, .rg').mask("99.999.999-9");
+    $('#expiry, .expiry').mask("99 / 99");
 	
 	<?php
 	$url = current_url();
@@ -433,37 +467,21 @@
         });
         // FIM API CEP CORREIOS
 
+        $(function () {
+            $('.datepicker').inputmask('date', {
+                placeholder: '__/__/____'
+            });
+        });
+
         $('.datepicker').datepicker({
             language: 'pt-BR',
             autoclose: true,
             format: 'dd/mm/yyyy',
             todayHighlight: true,
             todayBtn: 'linked'
-        });
+        })
 
         $('.tooltips').tooltip();
-
-        $('.poupanca').click(function () {
-            Swal.fire({
-                position: 'top',
-                type: 'info',
-                // timer: 5000,
-                title: 'Em breve',
-                html: 'O módulo de Poupança encontra-se em desenvolvimento.',
-                showConfirmButton: false,
-                showCancelButton: false,
-                showCloseButton: true,
-                reverseButtons: true,
-                confirmButtonText: '<i class="fa fa-refresh fa-fw"></i> Tentar de novo ',
-                cancelButtonText: '<i class="fa fa-times fa-fw"></i> Fechar ',
-            }).then((result) => {
-                if (result.value) {
-                    recuperar_senha();
-                } else {
-
-                }
-            });
-        });
 		
 		<?php if ($this->session->flashdata('erro') != null) { ?>
         Swal.fire({
@@ -492,7 +510,7 @@
             position: 'top',
             icon: 'success',
             title: 'Feito!',
-            timer: 1200,
+            timer: 2000,
             html: '<?= $this->session->flashdata('sucesso') ?>',
             showConfirmButton: false,
             showCancelButton: false,

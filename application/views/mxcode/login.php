@@ -12,10 +12,12 @@
     <meta name="author" content="Leônidas Ferreira">
     <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/contex_logo.png" type="image/x-icon"/>
 
-    <link href="<?php echo base_url(); ?>assets/css/bootstrap-agile.css?v=<?= versionApp() ?>" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/css/agile-style.css?v=<?= versionApp() ?>" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/css/custom.css?v=<?= versionApp() ?>" type="text/css" rel="stylesheet">
-    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,400italic,600,700' rel='stylesheet' type='text/css'>
+    <link href="<?php echo base_url(); ?>assets/css/bootstrap-agile.css?v=<?= getAppVersion() ?>" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/agile-style.css?v=<?= getAppVersion() ?>" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/custom.css?v=<?= getAppVersion() ?>" type="text/css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.css" type="text/css" rel="stylesheet">
 
     <!--    Font Awesome 6 -->
@@ -48,18 +50,34 @@
             <div class="preloader-login" style="display: none">
                 <i class="fas fa-duotone fa-spinner-third fa-spin cssload-speeding-wheel"></i>
                 <!--<i class="fas fa-spinner fa-spin-pulse fa-2x cssload-speeding-wheel"></i>-->
-                <h4 class="preloader-text font-weight-bold text-gray">
+                <p class="preloader-text font-weight-bold text-gray">
                     Aguarde...
-                </h4>
+                </p>
             </div>
 
-            <form class="form-horizontal floating-labels before-loading" id="formLogin" method="post" action="<?php echo base_url() ?>mxcode/verificarLogin">
+            <form class="form-horizontal floating-labels before-loading" id="formLogin" method="post" action="<?php echo base_url('mxcode/verificarLogin') ?>">
                 <div class="">
 					<?php if ($this->session->flashdata('error')) { ?>
                         <div class="row">
                             <div class="alert alert-danger">
                                 <button type="button" class="close" data-dismiss="alert">&times;</button>
 								<?php echo $this->session->flashdata('error'); ?>
+                            </div>
+                        </div>
+					<?php } ?>
+					
+					<?php if ($maintenanceMode) { ?>
+                        <div class="row">
+                            <div class="alert alert-alizarin">
+                                <button type="button" class="close-i text-white">
+                                    <i class="fad fa-triangle-person-digging text-white fa-2x"></i>
+                                </button>
+                                <strong>SISTEMA EM MANUTENÇÃO</strong>
+                                <br>
+                                Talvez não seja possível acessar sua conta no momento,
+                                estamos trabalhando para normalizar o sistema o mais breve possível.
+                                <br>
+                                Agradecemos a compreensão.
                             </div>
                         </div>
 					<?php } ?>
@@ -89,26 +107,46 @@
                     </div>
                     <div class="form-group m-b-0">
                         <div class="col-sm-12 text-center">
-                            <p>Não tem uma conta? <a href="<?php echo base_url() ?>cadastro" class="text-primary"><b>Crie sua conta</b></a>.</p>
+                            <p>Não tem uma conta? <a href="<?php echo base_url('cadastro') ?>" class="text-primary"><b>Crie sua conta</b></a>.</p>
                             <!--<p><a href="--><?php //echo base_url('conecte')?><!--" class="text-primary"><b>Acesso para clientes</b></a>.</p>-->
                         </div>
                     </div>
                 </div>
             </form>
-        </div>
-        <footer role="contentinfo" class="footer">
-            <div class="clearfix text-center">
-                <ul class="list-unstyled list-inline pl-sm">
-                    <li>
-                        <h6 style="margin: 0; text-transform: none"><?= sprintf('&copy; 2019 - %s %s', date('Y'), '• Powered by <a href="https://mxcode.net" >MX CODE SISTEMAS</a>') ?></h6>
-                    </li>
-                </ul>
+
+            <div class="footer-login">
+                <div class="container-fluid pb0">
+                    <span id="version-link" class="font-12" title="<?= APP_VERSION ?>"><?= sprintf('&copy; 2019 - %s %s', date('Y'), 'CONTEX • Sistema de Gestão', '• Powered by <a href="https://mxcode.net" >MX CODE SISTEMAS</a>') ?></span>
+                    <p class="font-12"><?= sprintf('%s', 'Powered by <a href="https://mxcode.net" >MX CODE SISTEMAS</a>') ?></p>
+
+                </div>
             </div>
-        </footer>
+        </div>
     </div>
 </section>
 
 <script type="text/javascript">
+    $('#version-link').click(function () {
+        getVersion()
+    })
+    
+    function getVersion() {
+        const Toast = Swal.fire({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            showCloseButton: true,
+            timer: 5000,
+            timerProgressBar: true,
+            icon: 'info',
+            title: 'Versão do Sistema: <?= APP_VERSION ?> (<?= phpversion() ?>)',
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+    }
+
     $('#eye_span').click(function (e) {
         e.preventDefault();
         if ($('#senha').attr('type') == 'password') {
@@ -159,13 +197,7 @@
     $('#formLogin').submit(function (event) {
         var form = this;
         event.preventDefault();
-        // $('#btn-acessar').addClass('disabled');
-        // $('#btn-acessar').html('Acessando... <i class="fa fa-spinner fa-pulse fa-fw"></i>');
-        // $('#progress-acessar').removeClass('hidden');
-        // $(".progress-bar").animate({
-        //     width: "100%"
-        // }, 1000);
-        
+
         if ($(form).valid()) {
             $(".before-loading").hide();
             $(".preloader-login").show();
@@ -241,8 +273,12 @@
             input: 'email',
             inputPlaceholder: 'Digite seu email',
             showCancelButton: true,
-            confirmButtonText: '<i class="fas fa-send fa-fw"></i> Enviar ',
+            confirmButtonText: '<i class="fas fa-send fa-fw"></i> Enviar',
             cancelButtonText: '<i class="fas fa-times fa-fw"></i> Fechar ',
+            customClass: {
+                cancelButton: 'col-lg-5',
+                confirmButton: 'col-lg-5'
+            },
             reverseButtons: true,
             showCloseButton: true,
             showLoaderOnConfirm: true,
@@ -255,7 +291,7 @@
                         //     )
                         // }
                         resolve();
-                    }, 2000)
+                    }, 1000)
                 })
             },
             allowOutsideClick: () => !swal.isLoading()
@@ -264,7 +300,7 @@
                 $(function () {
                     $.ajax({
                         type: "POST",
-                        url: "<?= site_url('redefinirsenha/gerartoken'); ?>",
+                        url: "<?= site_url('redefinirsenha/gerartoken?XDEBUG_SESSION=1'); ?>",
                         data: {
                             'email': result.value
                         }, // <--- THIS IS THE CHANGE
@@ -317,13 +353,11 @@
                         },
                         error: function () {
                             alert('Erro na função');
-
+                            console.log(res)
                         }
                     });
 
                 });
-
-            } else {
 
             }
         })

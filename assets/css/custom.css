@@ -1,3 +1,116 @@
+.modal-form-buttons {
+    padding-top: 10px !important;
+}
+
+.no-border {
+    border: none !important;
+}
+
+.line-height-0 {
+    line-height: 0 !important;
+}
+
+.font-8 {
+    font-size: 8px;
+}
+
+.font-10 {
+    font-size: 10px;
+}
+
+.font-11 {
+    font-size: 11px;
+}
+
+.font-12 {
+    font-size: 12px;
+}
+
+.font-14 {
+    font-size: 14px;
+}
+
+.font-16 {
+    font-size: 16px;
+}
+
+.font-18 {
+    font-size: 18px;
+}
+
+.font-21 {
+    font-size: 21px;
+}
+
+.fixed {
+    position: fixed !important;
+}
+
+.breadcrumb.top {
+    position: fixed;
+    z-index: 999;
+    width: 100%;
+    padding-left: 0;
+}
+
+.footer {
+    position: fixed;
+    z-index: 999;
+    bottom: 0;
+    background: #eeeeee;
+    padding: 10px 12px;
+    width: 100%;
+}
+
+/*SPINNER LOADER*/
+.cssload-speeding-wheel {
+    font-size: 50pt !important;
+    color: rgb(140, 191, 213);
+    --fa-animation-duration: 0.5s;
+    /*animation: cssload-spin 700ms infinite linear;*/
+}
+
+@media only screen and (max-width: 600px) {
+    .preloader {
+        height: 80%;
+    }
+}
+
+.preloader-text {
+    position: absolute;
+    padding-top: 10px;
+    font-size: 12pt;
+    text-align: center;
+    color: rgb(187, 187, 187);
+}
+
+.preloader-login {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.preloader-login .preloader-text {
+    position: absolute;
+    padding-top: 110px;
+    font-size: 12pt;
+    text-align: center;
+    color: rgb(187, 187, 187);
+    font-weight: bold;
+}
+
+*[disabled], *:disabled {
+    pointer-events: all !important;
+    cursor: not-allowed;
+}
+
+input:disabled + label {
+    color: #ccc;
+    pointer-events: all !important;
+    cursor: not-allowed;
+}
+
 .switch-input {
     display: none;
 }
@@ -51,15 +164,26 @@
     display: inline-block;
 }
 
-.switch-input:checked + .switch-label:before {
-    background-color: #a6d3cf;
-}
-
 .switch-input:checked + .switch-label:after {
     background-color: #009385;
     -ms-transform: translate(80%, -50%);
     -webkit-transform: translate(80%, -50%);
     transform: translate(80%, -50%);
+}
+
+.switch-input:checked + .switch-label:before {
+    background-color: #a6d3cf;
+}
+
+.switch-input.primary:checked + .switch-label.primary:after {
+    background-color: #17a2dc;
+    -ms-transform: translate(80%, -50%);
+    -webkit-transform: translate(80%, -50%);
+    transform: translate(80%, -50%);
+}
+
+.switch-input.primary:checked + .switch-label.primary:before {
+    background-color: #a4e2ff;
 }
 
 .switch-input:checked + .switch-label .toggle--on {
@@ -115,49 +239,17 @@ input.valid {
 }
 
 table {
-    font-family: Arial;
+    /*font-family: Arial;*/
     font-size: 11px;
 }
 
 .preloader {
     height: 100%;
-    display: flex;
+    width: 0 !important;
+    display: inline-grid;
     justify-content: center;
     align-items: center;
     background: #eee;
-}
-
-.cssload-speeding-wheel {
-    font-size: 50pt !important;
-    color: rgb(140, 191, 213);
-    --fa-animation-duration: 0.6s;
-    /*animation: cssload-spin 700ms infinite linear;*/
-}
-
-@media only screen and (max-width: 600px) {
-    .preloader {
-        height: 80%;
-    }
-}
-
-.preloader-text {
-    position: absolute;
-    padding-top: 110px;
-    font-size: 12pt;
-    text-align: center;
-    color: rgb(187, 187, 187);
-}
-
-.preloader-login {
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.preloader-login .preloader-text {
-    font-size: 14pt;
-    font-weight: bold;
 }
 
 .user-avatar {
@@ -189,6 +281,11 @@ table {
     margin-top: 10px;
     margin-bottom: 10px;
     padding: 15px;
+}
+
+.note-alizarin {
+    background-color: #ffdfd4;
+    border-left: 6px solid #ef4f1d;
 }
 
 .note-danger {

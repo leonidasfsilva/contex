@@ -58,7 +58,11 @@ $autoload['libraries'] = array(
     'database',
     'session',
     'permission',
-    'pagination'
+    'pagination',
+	'user_agent',
+	'ConfigLoader',
+    'Env',
+	'PhpMailerLoader',
 );
 
 
@@ -75,6 +79,8 @@ $autoload['helper'] = [
     'url',
     'codegen_helper',
     'fatura_helper',
+    'despesa_helper',
+    'general_helper',
     'mpdf_helper'
 ];
 
@@ -136,6 +142,7 @@ $autoload['model'] = array(
     'financeiro_model',
     'investimentos_model',
     'fatura_model',
+    'despesa_model',
     'pendencia_model',
     'usuarios_model',
     'redefinicao_model',

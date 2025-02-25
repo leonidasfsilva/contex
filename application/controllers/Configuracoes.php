@@ -46,10 +46,12 @@ class Configuracoes extends CI_Controller
 			'PRODUTOS',
 			'RELATÓRIOS',
 			'SERVIÇOS',
+			'SISTEMA',
 			'USUÁRIOS',
 			'VENDAS',
 		);
 		
+		// $data['maintenanceMode']   = $this->load->get_var('maintenanceMode');
 		$data['menuConfiguracoes'] = true;
 		$data['results']           = $this->configs_model->getConfigs();
 		$data['view']              = 'configuracoes/sistema';
@@ -184,13 +186,52 @@ class Configuracoes extends CI_Controller
 			redirect(base_url('configuracoes/sistema'));
 		}
 		
-		if ($this->configs_model->delete('configs_opcoes', 'id_opcao', $_POST['id_opcao'])) {
+		$id   = $this->input->post('id');
+		$data = [
+			'status' => 0
+		];
+		
+		if ($this->configs_model->delete('configs_opcoes', $data, 'id', $id)) {
 			$this->session->set_flashdata('sucesso', 'Opção excluída com sucesso!');
-			redirect(base_url() . 'configuracoes/sistema');
-		} else {
-			$this->session->set_flashdata('erro', 'Erro ao tentar excluir opção!');
-			redirect(base_url() . 'configuracoes/sistema');
+			redirect(base_url('configuracoes/sistema'));
 		}
+		
+		$this->session->set_flashdata('erro', 'Erro ao tentar excluir opção!');
+		redirect(base_url('configuracoes/sistema'));
+	}
+	
+	function desativar()
+	{
+		$id = $this->input->post('id');
+		
+		$data = [
+			'ativo' => 0
+		];
+		
+		if ($this->configs_model->delete('configs_opcoes', $data, 'id', $id)) {
+			$this->session->set_flashdata('sucesso', 'Opção desativada com sucesso!');
+			redirect(base_url('configuracoes/sistema'));
+		}
+		
+		$this->session->set_flashdata('erro', 'Erro ao tentar desativar opção do sistema.');
+		redirect(base_url('configuracoes/sistema'));
+	}
+	
+	function ativar()
+	{
+		$id = $this->input->post('id');
+		
+		$data = array(
+			'ativo' => 1
+		);
+		
+		if ($this->configs_model->delete('configs_opcoes', $data, 'id', $id)) {
+			$this->session->set_flashdata('sucesso', 'Opção ativada com sucesso!');
+			redirect(base_url('configuracoes/sistema'));
+		}
+		
+		$this->session->set_flashdata('erro', 'Erro ao tentar ativar opção do sistema.');
+		redirect(base_url('configuracoes/sistema'));
 	}
 	
 	public function pesquisar()
@@ -335,5 +376,55 @@ class Configuracoes extends CI_Controller
 			return;
 		}
 		$this->configs_model->unsetWidgetPendencias(getUserId());
+	}
+	
+	public function activateMaintenanceMode()
+	{
+		if ($_POST['maintenanceMode'] == 1) {
+			$this->configs_model->activateMaintenanceMode(getUserId());
+			$this->session->set_flashdata('sucesso', 'Modo Manutenção ativado!');
+			echo true;
+		}
+		$this->session->set_flashdata('erro', 'Não foi possível ativar o Modo Manutenção');
+		echo false;
+	}
+	
+	public function deactivateMaintenanceMode()
+	{
+		if ($_POST['maintenanceMode'] == 0) {
+			if (checkForcedLogout()) {
+				$this->configs_model->deactivateForcedLogout();
+			}
+			$this->configs_model->deactivateMaintenanceMode();
+			$this->session->set_flashdata('sucesso', 'Modo manutenção desativado!');
+			echo true;
+		}
+		$this->session->set_flashdata('erro', 'Não foi possível desativar o modo manutenção');
+		echo false;
+	}
+	
+	public function activateForcedLogout()
+	{
+		if ($_POST['forceLogout'] == 1) {
+			if (!checkMaintenanceMode()) {
+				$this->configs_model->activateMaintenanceMode(getUserId());
+			}
+			$this->configs_model->activateForcedLogout(getUserId());
+			$this->session->set_flashdata('sucesso', 'Logout força bruta ativado!');
+			echo true;
+		}
+		$this->session->set_flashdata('erro', 'Não foi possível ativar o logout força bruta');
+		echo false;
+	}
+	
+	public function deactivateForcedLogout()
+	{
+		if ($_POST['forceLogout'] == 0) {
+			$this->configs_model->deactivateForcedLogout();
+			$this->session->set_flashdata('sucesso', 'Logout força bruta desativado!');
+			echo true;
+		}
+		$this->session->set_flashdata('erro', 'Não foi possível desativar o logout força bruta');
+		echo false;
 	}
 }

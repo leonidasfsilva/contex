@@ -96,11 +96,11 @@ if ($direcionados) {
                         </div>
                     </div>
                     <div class="pull-right">
-                        <span><i class="fas fa-chart-mixed-up-circle-dollar fa-swap-opacity fa-2x fa-fw"></i></span>
+                        <span><i class="fas fa-chart-line fa-lg fa-fw"></i></span>
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
-                    <a href="<?= base_url() ?>financeiro/lancamentos" class="font-weight-bold">ver detalhes </a>
+                    <a href="<?= base_url('financeiro/lancamentos') ?>" class="font-weight-bold">ver detalhes</a>
                     <a href="#" style="color: #607d8b" class="pull-right widget-collapse" id="widget_lancamentos">
                         <span class="chevron-label">ocultar</span>
                         <i class="fas fa-chevron-up fa-fw collapse-icon"></i>
@@ -122,11 +122,11 @@ if ($direcionados) {
                         </div>
                     </div>
                     <div class="pull-right">
-                        <span><i class="fas fa-file-invoice-dollar fa-2x fa-fw"></i></span>
+                        <span><i class="fas fa-credit-card fa-lg fa-fw"></i></span>
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
-                    <a href="<?= base_url('financeiro/faturas') ?>" class="font-weight-bold">ver detalhes </a>
+                    <a href="<?= base_url('financeiro/faturas') ?>" class="font-weight-bold">ver detalhes</a>
                     <a href="#" style="color: #607d8b" class="pull-right widget-collapse" id="widget_credito">
                         <span class="chevron-label">ocultar</span>
                         <i class="fas fa-chevron-up fa-fw collapse-icon"></i>
@@ -149,11 +149,11 @@ if ($direcionados) {
                         </div>
                     </div>
                     <div class="pull-right">
-                        <span><i class="fas fa-money-check-dollar-pen fa-2x fa-fw"></i></span>
+                        <span><i class="fas fa-file-invoice-dollar fa-lg fa-fw"></i></span>
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
-                    <a href="<?= base_url() ?>financeiro/pendencias" class="font-weight-bold">ver detalhes </a>
+                    <a href="<?= base_url('financeiro/pendencias') ?>" class="font-weight-bold">ver detalhes</a>
                     <a href="#" style="color: #607d8b" class="pull-right widget-collapse" id="widget_pendencias">
                         <span class="chevron-label">ocultar</span>
                         <i class="fas fa-chevron-up fa-fw collapse-icon"></i>
@@ -175,11 +175,11 @@ if ($direcionados) {
                         </div>
                     </div>
                     <div class="pull-right">
-                        <span><i class="fas fa-hand-holding-circle-dollar fa-2x fa-fw"></i></span>
+                        <span><i class="fas fa-hand-holding-usd fa-lg fa-fw"></i></span>
                     </div>
                 </div>
                 <div class="tile-sparkline-footer-clean">
-                    <a href="<?= base_url() ?>financeiro/investimentos" class="font-weight-bold">ver detalhes </a>
+                    <a href="<?= base_url('financeiro/investimentos') ?>" class="font-weight-bold">ver detalhes</a>
                     <a href="#" style="color: #607d8b" class="pull-right widget-collapse" id="widget_investimentos">
                         <span class="chevron-label">ocultar</span>
                         <i class="fas fa-chevron-up fa-fw collapse-icon"></i>
@@ -190,13 +190,13 @@ if ($direcionados) {
     <?php } ?>
 </div>
 
-<!--MOSAICO DE LINKS (CARDS)-->
+<!--PAINEL DE LINKS-->
 <div class="row">
     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) : ?>
-        <div class="col-md-6">
+        <div class="col-md-6 col-xs-6">
             <a href="<?= base_url('/financeiro/cartoes') ?>" class="shortcut-tile tile-midnightblue">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fad fa-credit-card fa-swap-opacity fa-fw"></i></div>
+                    <div class="pull-left"><i class="fas fa-credit-card fa-fw"></i></div>
                     <div class="pull-right"><span class="badge"><?= $this->cartoes_model->countCartoesUsuario(); ?></span></div>
                 </div>
                 <div class="tile-footer">
@@ -204,10 +204,10 @@ if ($direcionados) {
                 </div>
             </a>
         </div>
-    <?php endif ?>
+	<?php endif ?>
 
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) : ?>
-        <div class="col-md-6">
+	<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) : ?>
+        <div class="col-md-6 col-sm-6 col-xs-6">
             <a href="<?= base_url('/clientes') ?>" class="shortcut-tile tile-green">
                 <div class="tile-body">
                     <div class="pull-left"><i class="fal fa-people-group fa-fw"></i></div>
@@ -218,10 +218,11 @@ if ($direcionados) {
                 </div>
             </a>
         </div>
-    <?php endif ?>
-    
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vConsumo')) : ?>
-        <div class="col-md-6">
+	<?php endif ?>
+</div>
+<div class="row">
+	<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vConsumo')) : ?>
+        <div class="col-md-6 col-sm-6 col-xs-6">
             <a href="<?= base_url('/consumo') ?>" class="shortcut-tile tile-info">
                 <div class="tile-body">
                     <div class="pull-left"><i class="fal fa-lightbulb-dollar fa-fw"></i></div>
@@ -232,23 +233,27 @@ if ($direcionados) {
                 </div>
             </a>
         </div>
-    <?php endif ?>
-
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) : ?>
-        <div class="col-md-6">
+	<?php endif ?>
+	
+	<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) : ?>
+        <div class="col-md-6 col-sm-6 col-xs-6">
             <a href="<?= base_url('/usuarios') ?>" class="shortcut-tile tile-inverse">
                 <div class="tile-body">
                     <div class="pull-left"><i class="fal fa-users-cog fa-fw"></i></div>
                     <!--                            <div class="pull-right"><span class="badge">10</span></div>-->
                 </div>
-                <div class="tile-footer">
+                <div class="tile-footer hidden-xs">
                     Usuários do Sistema
+                </div>
+                <div class="tile-footer visible-xs">
+                    Usuários
                 </div>
             </a>
         </div>
-    <?php endif ?>
-
-    <div class="col-md-6">
+	<?php endif ?>
+</div>
+<div class="row">
+    <div class="col-md-6 col-sm-6 col-xs-6">
         <a href="<?= base_url('/notificacoes') ?>" class="shortcut-tile tile-danger">
             <div class="tile-body">
                 <div class="pull-left"><i class="fal fa-bell fa-fw"></i></div>
@@ -259,8 +264,7 @@ if ($direcionados) {
             </div>
         </a>
     </div>
-
-    <div class="col-md-6">
+    <div class="col-md-6 col-sm-6 col-xs-6">
         <a href="<?= base_url('/chamados') ?>" class="shortcut-tile tile-alizarin">
             <div class="tile-body">
                 <div class="pull-left"><i class="fal fa-comments-question-check fa-fw"></i></div>
@@ -273,7 +277,7 @@ if ($direcionados) {
 </div>
 
 <script>
-    $.each($('.conteudo-widget'), function(key, value) {
+    $.each($('.conteudo-widget'), function (key, value) {
         if ($(this).css('display') == 'none') {
             $(this).parents().eq(3).find('.collapse-icon').attr('class', 'fas fa-chevron-down fa-fw collapse-icon');
             $(this).parents().eq(3).find(".chevron-label").text('exibir');
@@ -283,10 +287,10 @@ if ($direcionados) {
         }
     });
 
-    $('a.widget-collapse').click(function() {
-        let n = $(this).parents().eq(2).find(".conteudo-widget");
+    $('a.widget-collapse').click(function () {
+        let widget = $(this).parents().eq(2).find(".conteudo-widget");
 
-        if (n.css('display') == 'none') {
+        if (widget.css('display') == 'none') {
             $(this).find('.collapse-icon').attr('class', 'fas fa-chevron-up fa-fw collapse-icon');
             $(this).find(".chevron-label").text('ocultar');
 
@@ -359,7 +363,7 @@ if ($direcionados) {
                 });
             }
         }
-        n.slideToggle({
+        widget.slideToggle({
             duration: 200
         });
         return false;

@@ -911,18 +911,18 @@ table.table-vab > tfoot > tr > th {
 
 .scrollbar-custom::-webkit-scrollbar,
 #topnav
-    .toolbar
-    .dropdown-menu.dropdown-alternate
-    .scrollthis::-webkit-scrollbar,
+.toolbar
+.dropdown-menu.dropdown-alternate
+.scrollthis::-webkit-scrollbar,
 .infobar-wrapper::-webkit-scrollbar {
     width: 6px;
 }
 
 .scrollbar-custom::-webkit-scrollbar-thumb,
 #topnav
-    .toolbar
-    .dropdown-menu.dropdown-alternate
-    .scrollthis::-webkit-scrollbar-thumb,
+.toolbar
+.dropdown-menu.dropdown-alternate
+.scrollthis::-webkit-scrollbar-thumb,
 .infobar-wrapper::-webkit-scrollbar-thumb {
     background-color: #c4c4c4;
     border-radius: 0;
@@ -930,18 +930,18 @@ table.table-vab > tfoot > tr > th {
 
 .scrollbar-custom::-webkit-scrollbar-thumb:hover,
 #topnav
-    .toolbar
-    .dropdown-menu.dropdown-alternate
-    .scrollthis::-webkit-scrollbar-thumb:hover,
+.toolbar
+.dropdown-menu.dropdown-alternate
+.scrollthis::-webkit-scrollbar-thumb:hover,
 .infobar-wrapper::-webkit-scrollbar-thumb:hover {
     background-color: #c4c4c4;
 }
 
 .scrollbar-custom::-webkit-scrollbar-track,
 #topnav
-    .toolbar
-    .dropdown-menu.dropdown-alternate
-    .scrollthis::-webkit-scrollbar-track,
+.toolbar
+.dropdown-menu.dropdown-alternate
+.scrollthis::-webkit-scrollbar-track,
 .infobar-wrapper::-webkit-scrollbar-track {
     background-color: #ededed;
 }
@@ -1312,7 +1312,7 @@ html {
 }
 
 body {
-    font-family: "Roboto", "Open Sans", "Droid Sans", Tahoma, Arial, sans-serif;
+    font-family: Inter, sans-serif;
     font-size: 13px;
     line-height: 1.54;
     color: #455a64;
@@ -1641,8 +1641,16 @@ mark,
     text-transform: capitalize;
 }
 
+.text-black {
+    color: black !important;
+}
+
 .text-white {
     color: white !important;
+}
+
+.text-gray {
+    color: #607d8b;
 }
 
 .text-muted {
@@ -1655,6 +1663,10 @@ mark,
 
 a.text-primary:hover {
     color: #0286c2;
+}
+
+.text-green {
+    color: #4caf50;
 }
 
 .text-success {
@@ -1673,12 +1685,20 @@ a.text-info:hover {
     color: #00545c;
 }
 
+.text-orange {
+    color: #ff9800;
+}
+
 .text-warning {
     color: #f9a825;
 }
 
 a.text-warning:hover {
     color: #e59006;
+}
+
+.text-alizarin {
+    color: #ee3900;
 }
 
 .text-danger {
@@ -1736,6 +1756,18 @@ a.bg-warning:hover {
 
 .bg-midnightblue {
     background-color: #37474f !important;
+}
+
+.bg-gray {
+    background-color: #e6eaef !important;
+}
+
+.bg-white {
+    background-color: #fff !important;
+}
+
+.bg-megna {
+    background-color: #00b5c2 !important;
 }
 
 a.bg-danger:hover {
@@ -3293,7 +3325,7 @@ output {
     padding: 5px 10px;
     font-size: 13px;
     line-height: 1.54;
-    color: #263238;
+    /*color: #263238;*/
     background-color: #ffffff;
     background-image: none;
     border: 1px solid #e0e0e0;
@@ -3301,7 +3333,7 @@ output {
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
     -webkit-transition: border-color ease-in-out 0.15s,
-        box-shadow ease-in-out 0.15s;
+    box-shadow ease-in-out 0.15s;
     -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
     transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
 }
@@ -3310,9 +3342,9 @@ output {
     border-color: #90a4ae;
     outline: 0;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
-        0 0 8px rgba(144, 164, 174, 0.6);
+    0 0 8px rgba(144, 164, 174, 0.6);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
-        0 0 8px rgba(144, 164, 174, 0.6);
+    0 0 8px rgba(144, 164, 174, 0.6);
 }
 
 .form-control::-moz-placeholder {
@@ -3367,6 +3399,7 @@ input[type="search"] {
     }
 }
 
+/*form-group 1*/
 .form-group {
     margin-bottom: 15px;
 }
@@ -5349,15 +5382,15 @@ button.close {
 
 .btn-group-vertical > .btn-group:first-child:not(:last-child) > .btn:last-child,
 .btn-group-vertical
-    > .btn-group:first-child:not(:last-child)
-    > .dropdown-toggle {
+> .btn-group:first-child:not(:last-child)
+> .dropdown-toggle {
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
 }
 
 .btn-group-vertical
-    > .btn-group:last-child:not(:first-child)
-    > .btn:first-child {
+> .btn-group:last-child:not(:first-child)
+> .btn:first-child {
     border-top-right-radius: 0;
     border-top-left-radius: 0;
 }
@@ -5398,7 +5431,7 @@ button.close {
     margin-bottom: 20px;
     list-style: none;
     background-color: #eeeeee;
-    border-radius: 2px;
+    /*border-radius: 2px;*/
 }
 
 .breadcrumb > li {
@@ -6123,6 +6156,31 @@ button.close {
     color: #e59006;
 }
 
+.alert-alizarin {
+    color: #ef4f1d;
+    background-color: #fde0dc;
+    border-color: #f4a58c;
+}
+
+.alert-alizarin hr {
+    border-top-color: #f48570;
+}
+
+.alert-alizarin .alert-link {
+    color: #972d0c;
+}
+
+.alert-alizarin,
+.alert-alizarin h1,
+.alert-alizarin h2,
+.alert-alizarin h3,
+.alert-alizarin h4,
+.alert-alizarin h5,
+.alert-alizarin h6,
+.alert-alizarin small {
+    color: #ef4f1d;
+}
+
 .alert-danger {
     color: #c41411;
     background-color: #fde0dc;
@@ -6146,14 +6204,6 @@ button.close {
 .alert-danger h6,
 .alert-danger small {
     color: #c41411;
-}
-
-.alert-danger hr {
-    border-top-color: #f48570;
-}
-
-.alert-danger .alert-link {
-    color: #950f0d;
 }
 
 .thumbnail {
@@ -6408,34 +6458,34 @@ a.badge:focus {
 .progress-striped .progress-bar,
 .progress-bar-striped {
     background-image: -webkit-linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
     background-image: -o-linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
     background-image: linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
     background-size: 40px 40px;
 }
@@ -6455,34 +6505,34 @@ a.badge:focus {
 
 .progress-striped .progress-bar-success {
     background-image: -webkit-linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
     background-image: -o-linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
     background-image: linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
 }
 
@@ -6492,34 +6542,34 @@ a.badge:focus {
 
 .progress-striped .progress-bar-info {
     background-image: -webkit-linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
     background-image: -o-linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
     background-image: linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
 }
 
@@ -6529,34 +6579,34 @@ a.badge:focus {
 
 .progress-striped .progress-bar-warning {
     background-image: -webkit-linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
     background-image: -o-linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
     background-image: linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
 }
 
@@ -6566,34 +6616,34 @@ a.badge:focus {
 
 .progress-striped .progress-bar-danger {
     background-image: -webkit-linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
     background-image: -o-linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
     background-image: linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
     );
 }
 
@@ -6711,19 +6761,19 @@ a.badge:focus {
 
 .carousel-control.left {
     background-image: -webkit-linear-gradient(
-        left,
-        rgba(0, 0, 0, 0.5) 0%,
-        rgba(0, 0, 0, 0.0001) 100%
+            left,
+            rgba(0, 0, 0, 0.5) 0%,
+            rgba(0, 0, 0, 0.0001) 100%
     );
     background-image: -o-linear-gradient(
-        left,
-        rgba(0, 0, 0, 0.5) 0%,
-        rgba(0, 0, 0, 0.0001) 100%
+            left,
+            rgba(0, 0, 0, 0.5) 0%,
+            rgba(0, 0, 0, 0.0001) 100%
     );
     background-image: linear-gradient(
-        to right,
-        rgba(0, 0, 0, 0.5) 0%,
-        rgba(0, 0, 0, 0.0001) 100%
+            to right,
+            rgba(0, 0, 0, 0.5) 0%,
+            rgba(0, 0, 0, 0.0001) 100%
     );
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#80000000', endColorstr='#00000000', GradientType=1);
@@ -6733,19 +6783,19 @@ a.badge:focus {
     left: auto;
     right: 0;
     background-image: -webkit-linear-gradient(
-        left,
-        rgba(0, 0, 0, 0.0001) 0%,
-        rgba(0, 0, 0, 0.5) 100%
+            left,
+            rgba(0, 0, 0, 0.0001) 0%,
+            rgba(0, 0, 0, 0.5) 100%
     );
     background-image: -o-linear-gradient(
-        left,
-        rgba(0, 0, 0, 0.0001) 0%,
-        rgba(0, 0, 0, 0.5) 100%
+            left,
+            rgba(0, 0, 0, 0.0001) 0%,
+            rgba(0, 0, 0, 0.5) 100%
     );
     background-image: linear-gradient(
-        to right,
-        rgba(0, 0, 0, 0.0001) 0%,
-        rgba(0, 0, 0, 0.5) 100%
+            to right,
+            rgba(0, 0, 0, 0.0001) 0%,
+            rgba(0, 0, 0, 0.5) 100%
     );
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#80000000', GradientType=1);
@@ -7380,7 +7430,7 @@ ul.mailbox-msg-list li a.mailbox-msg-list-item:after,
 
 .hidden {
     display: none !important;
-    visibility: hidden !important;
+    /*visibility: hidden !important;*/
 }
 
 .affix {
@@ -7981,10 +8031,6 @@ hr.dashed {
     color: inherit;
 }
 
-.text-gray {
-    color: #607d8b;
-}
-
 h1,
 h2,
 h3,
@@ -7999,7 +8045,7 @@ h6,
 .h6 {
     margin-top: 16px;
     margin-bottom: 16px;
-    font-family: "Roboto", "Open Sans", "Droid Sans", Tahoma, Arial, sans-serif;
+    font-family: Inter, sans-serif;
 }
 
 h1,
@@ -8213,20 +8259,20 @@ table > thead > tr > th:last-child {
 }
 
 .panel-heading
-    + .panel-body.panel-no-padding
-    table
-    > tbody
-    > tr:last-child
-    > th {
++ .panel-body.panel-no-padding
+table
+> tbody
+> tr:last-child
+> th {
     border-bottom: 0;
 }
 
 .panel-heading
-    + .panel-body.panel-no-padding
-    table
-    > tfoot
-    > tr:last-child
-    > th {
++ .panel-body.panel-no-padding
+table
+> tfoot
+> tr:last-child
+> th {
     border-bottom: 0;
 }
 
@@ -8238,20 +8284,20 @@ table > thead > tr > th:last-child {
 }
 
 .panel-heading
-    + .panel-body.panel-no-padding
-    table
-    > thead
-    > tr
-    > th:first-child {
++ .panel-body.panel-no-padding
+table
+> thead
+> tr
+> th:first-child {
     border-top-left-radius: 0;
 }
 
 .panel-heading
-    + .panel-body.panel-no-padding
-    table
-    > thead
-    > tr
-    > th:last-child {
++ .panel-body.panel-no-padding
+table
+> thead
+> tr
+> th:last-child {
     border-top-right-radius: 0;
 }
 
@@ -8430,7 +8476,7 @@ select[multiple] {
     border: 1px solid #e0e0e0;
     border-top: 1px solid #dbdbdb;
     padding: 6px 10px;
-    color: #455a64;
+    /*color: #455a64;*/
     background: #fafafa;
     -webkit-box-shadow: inset 0 1px 0px rgba(0, 0, 0, 0.01) !important;
     box-shadow: inset 0 1px 0px rgba(0, 0, 0, 0.01) !important;
@@ -8487,10 +8533,6 @@ fieldset[disabled] .form-control {
     font-size: 18px;
     height: 40px;
     line-height: 1.33;
-}
-
-.form-group {
-    margin-bottom: 24px;
 }
 
 .row-border .form-group {
@@ -9654,8 +9696,8 @@ fieldset[disabled] .btn-deeporange.active {
 }
 
 .btn-default-alt {
-    color: #cfd8dc;
-    background-color: rgba(255, 255, 255, 0);
+    /*color: #cfd8dc;*/
+    background-color: #cfd8dc;
     border-color: #cfd8dc;
     border-width: 1px;
     border-style: solid;
@@ -9669,7 +9711,7 @@ fieldset[disabled] .btn-deeporange.active {
 .btn-default-alt:active,
 .btn-default-alt.active {
     border-color: #cfd8dc;
-    background-color: #cfd8dc;
+    background-color: #b0b7ba;
     color: #fff;
 }
 

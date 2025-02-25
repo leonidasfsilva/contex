@@ -16,7 +16,8 @@ class Index extends CI_Controller
 
     public function index()
     {
-        $data['view'] = 'financeiro/painel';
+        $data['menuFinanceiro'] = true;
+        $data['view']           = 'financeiro/painel';
         $this->load->view('tema/topo', $data);
     }
 

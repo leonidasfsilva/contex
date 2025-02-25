@@ -18,14 +18,13 @@ class Cartoes extends CI_Controller
         $this->cartoes();
     }
 
-    //MODULO DE CARTOES
     public function cartoes()
     {
         $cartoes = $this->cartoes_model->getCartoesUsuario(getUserId());
 
-        $data['results'] = $cartoes;
+        $data['results']        = $cartoes;
         $data['menuFinanceiro'] = true;
-        $data['view'] = 'cartoes/cartoes';
+        $data['view']           = 'cartoes/cartoes';
         $this->load->view('tema/topo', $data);
     }
 
@@ -37,16 +36,16 @@ class Cartoes extends CI_Controller
             $validade = str_replace(' ', '', $_POST['expiry']);
 
             $bandeira = padronizarString($_POST['bandeira']);
-            $final = $n_cartao[3];
+            $final    = $n_cartao[3];
             //            print_array_exit($_POST);
 
-            $data = array(
-                'numero' => encriptar($_POST['number']),
-                'nome' => padronizarString($_POST['name']),
-                'apelido' => padronizarString($_POST['apelido']),
-                'validade' => $validade,
-                'cvc' => encriptar($_POST['cvc']),
-                'bandeira' => padronizarString($_POST['bandeira']),
+            $data          = array(
+                'numero'     => encriptar($_POST['number']),
+                'nome'       => padronizarString($_POST['name']),
+                'apelido'    => padronizarString($_POST['apelido']),
+                'validade'   => $validade,
+                'cvc'        => encriptar($_POST['cvc']),
+                'bandeira'   => padronizarString($_POST['bandeira']),
                 'id_usuario' => getUserId()
             );
             $existe_cartao = $this->consultaCartoesUsuario();
@@ -64,7 +63,7 @@ class Cartoes extends CI_Controller
             }
         } else {
             $data['menuFinanceiro'] = true;
-            $data['view'] = 'cartoes/cadastrar';
+            $data['view']           = 'cartoes/cadastrar';
             $this->load->view('tema/topo', $data);
         }
     }
@@ -76,18 +75,18 @@ class Cartoes extends CI_Controller
             $validade = str_replace(' ', '', $_POST['expiry']);
 
             $bandeira = padronizarString($_POST['bandeira']);
-            $final = $n_cartao[3];
+            $final    = $n_cartao[3];
 
-            $data = array(
-                'numero' => encriptar($_POST['number']),
-                'nome' => padronizarString($_POST['name']),
-                'validade' => $validade,
-                'cvc' => encriptar($_POST['cvc']),
-                'bandeira' => padronizarString($_POST['bandeira']),
+            $data          = array(
+                'numero'             => encriptar($_POST['number']),
+                'nome'               => padronizarString($_POST['name']),
+                'validade'           => $validade,
+                'cvc'                => encriptar($_POST['cvc']),
+                'bandeira'           => padronizarString($_POST['bandeira']),
                 'id_usuario_titular' => getUserId(),
-                'id_usuario' => $_POST['id_usuario'],
-                'id_cartao_titular' => $_POST['id_cartao'],
-                'adicional' => 1,
+                'id_usuario'         => $_POST['id_usuario'],
+                'id_cartao_titular'  => $_POST['id_cartao'],
+                'adicional'          => 1,
             );
             $existe_cartao = $this->consultaCartoesUsuario();
 
@@ -122,9 +121,9 @@ class Cartoes extends CI_Controller
                     $this->session->set_flashdata('erro', 'Este cartão não é elegível para gerar um cartão adicional, apenas cartões titulares podem gerar cartões adicionais.');
                     redirect('financeiro/cartoes');
                 }
-                $data['cartao'] = $cartao_titular;
+                $data['cartao']         = $cartao_titular;
                 $data['menuFinanceiro'] = true;
-                $data['view'] = 'cartoes/adicional';
+                $data['view']           = 'cartoes/adicional';
                 $this->load->view('tema/topo', $data);
             } else {
                 $this->session->set_flashdata('erro', 'Cartão informado não pertence ao usuário.');
@@ -167,62 +166,69 @@ class Cartoes extends CI_Controller
         }
     }
 
-    public function editar($id_cartao = null, $adicional = null)
+    public function editar($id_cartao = null)
     {
+        $withoutParameter = false;
+
         if (!$id_cartao) {
-            $this->session->set_flashdata('erro', 'Método não permitido.');
-            redirect('financeiro/cartoes');
+            $withoutParameter = true;
         }
 
         if ($_POST) {
-            $n_cartao = str_replace(' ', '', $_POST['number']);
-            $validade = str_replace(' ', '', $_POST['expiry']);
+            if ($withoutParameter) {
+                $id_cartao = $this->input->post('cardId') ?? null;
 
-            $bandeira = padronizarString($_POST['bandeira']);
-            $final = $n_cartao[3];
+                if (!$id_cartao) {
+                    $this->session->set_flashdata('erro', 'Método não permitido.');
+                    redirect('financeiro/cartoes');
+                }
+                redirect('financeiro/cartoes/editar/' . $id_cartao);
+            }
+
+            $validade = str_replace(' ', '', $_POST['expiry']);
 
             if ($_POST['principal'] == 1) {
                 $this->cartoes_model->removerCartaoPrincipal($_POST['id_usuario']);
             }
 
             $data = array(
-                'numero' => encriptar($_POST['number']),
-                'nome' => padronizarString($_POST['name']),
-                'apelido' => padronizarString($_POST['apelido']),
-                'validade' => $validade,
-                'cvc' => encriptar($_POST['cvc']),
-                'bandeira' => padronizarString($_POST['bandeira']),
+                'numero'    => encriptar($_POST['number']),
+                'nome'      => padronizarString($_POST['name']),
+                'apelido'   => padronizarString($_POST['apelido']),
+                'validade'  => $validade,
+                'cvc'       => encriptar($_POST['cvc']),
+                'bandeira'  => padronizarString($_POST['bandeira']),
                 'principal' => $_POST['principal'] == 1 ? 1 : null
             );
 
             if ($this->cartoes_model->edit('cartoes', $data, 'id_cartao', $_POST['id_cartao'])) {
                 $this->session->set_flashdata('sucesso', 'Dados do cartão alterados com sucesso!');
                 redirect('financeiro/cartoes');
-            } else {
-                $this->session->set_flashdata('erro', 'Erro ao tentar alterar dados do cartão');
-                redirect('financeiro/cartoes');
-            }
-        } else {
-            $cartao = $this->cartoes_model->getDetalhesCartao($id_cartao);
-
-            if (!$this->cartoes_model->verificaCartaoAtivo($id_cartao)) {
-                $this->session->set_flashdata('erro', 'Cartão não encontrado');
-                redirect('financeiro/cartoes');
             }
 
-            if ($cartao['adicional']) {
-                if ($cartao['id_usuario_titular'] != getUserId()) {
-                    $this->session->set_flashdata('erro', 'Você não tem permissão para editar os dados deste cartão, solicite a alteração dos dados ao titular.');
-                    redirect('financeiro/cartoes');
-                }
-                $usuario = $this->usuarios_model->getById($cartao['id_usuario'])->nome;
-            }
-            $data['usuario'] = $usuario ?? null;
-            $data['cartao'] = $cartao;
-            $data['menuFinanceiro'] = true;
-            $data['view'] = 'cartoes/editar';
-            $this->load->view('tema/topo', $data);
+            $this->session->set_flashdata('erro', 'Erro ao tentar alterar dados do cartão');
+            redirect('financeiro/cartoes');
         }
+
+        $cartao = $this->cartoes_model->getDetalhesCartao($id_cartao);
+
+        if (!$this->cartoes_model->verificaCartaoAtivo($id_cartao)) {
+            $this->session->set_flashdata('erro', 'Cartão não encontrado');
+            redirect('financeiro/cartoes');
+        }
+
+        if ($cartao['adicional']) {
+            if ($cartao['id_usuario_titular'] != getUserId()) {
+                $this->session->set_flashdata('erro', 'Você não tem permissão para editar os dados deste cartão, solicite a alteração dos dados ao titular.');
+                redirect('financeiro/cartoes');
+            }
+            $usuario = $this->usuarios_model->getById($cartao['id_usuario'])->nome;
+        }
+        $data['usuario']        = $usuario ?? null;
+        $data['cartao']         = $cartao;
+        $data['menuFinanceiro'] = true;
+        $data['view']           = 'cartoes/editar';
+        $this->load->view('tema/topo', $data);
     }
 
     public function excluir()
@@ -315,13 +321,13 @@ class Cartoes extends CI_Controller
 
         if ($usuario) {
             $data = array(
-                'result' => true,
+                'result'  => true,
                 'retorno' => $usuario
             );
             echo json_encode($data);
         } else {
             $data = array(
-                'result' => false,
+                'result'  => false,
                 'retorno' => $_POST['cpf']
             );
             echo json_encode($data);

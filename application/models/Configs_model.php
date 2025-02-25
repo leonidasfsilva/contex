@@ -1,288 +1,289 @@
 <?php if (!defined('BASEPATH')) {
-    exit('No direct script access allowed');
+	exit('No direct script access allowed');
 }
 
 class Configs_model extends CI_Model
 {
-    function __construct()
-    {
-        parent::__construct();
-        $this->load->helper(array('codegen_helper'));
-    }
-
-    function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
-    {
-        $this->db->select($fields);
-        $this->db->from($table);
-        $this->db->limit($perpage, $start);
-        if ($where) {
-            $this->db->where($where);
-        }
-
-        $query = $this->db->get();
-
-        $result = !$one ? $query->result() : $query->row();
-        return $result;
-    }
-
-    function getById($id)
-    {
-        $this->db->from('usuarios');
-        $this->db->select('usuarios.*, permissoes.nome as permissao');
-        $this->db->join('permissoes', 'permissoes.idPermissao = usuarios.permissoes_id', 'left');
-        $this->db->where('id_usuarios', $id);
-        $this->db->limit(1);
-        return $this->db->get()->row();
-    }
-
-    public function getNotificacoesUsuario($id)
-    {
-        return $this->db
-            ->where('id_usuarios', $id)
-            ->get('notificacoes')
-            ->result();
-    }
-
-    function pesquisar($termo, $id)
-    {
-        $data = array();
-        // buscando clientes
-        $this->db->like('nome', $termo);
-        $this->db->where('id_usuario', $id);
-        $this->db->limit(5);
-        $data['clientes'] = $this->db->get('clientes')->result();
-
-        // buscando os
-        $this->db->like('idOs', $termo);
-        $this->db->where('id_usuario', $id);
-        $this->db->limit(5);
-        $data['os'] = $this->db->get('os')->result();
-
-        // buscando produtos
-        $this->db->like('descricao', $termo);
-        $this->db->where('id_usuario', $id);
-        $this->db->limit(5);
-        $data['produtos'] = $this->db->get('produtos')->result();
-
-        //buscando serviços
-        $this->db->like('nome', $termo);
-        $this->db->where('id_usuario', $id);
-        $this->db->limit(5);
-        $data['servicos'] = $this->db->get('servicos')->result();
-
-        return $data;
-    }
-
-    function add($table, $data)
-    {
-        $this->db->insert($table, $data);
-        if ($this->db->affected_rows() == '1') {
-            return true;
-        }
-
-        return false;
-    }
-
-    function edit($table, $data, $fieldID, $ID)
-    {
-        $this->db->where($fieldID, $ID);
-        $this->db->update($table, $data);
-
-        if ($this->db->affected_rows() > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    function delete($table, $fieldID, $ID)
-    {
-        $this->db->where($fieldID, $ID);
-        $this->db->delete($table);
-        if ($this->db->affected_rows() == '1') {
-            return true;
-        }
-
-        return false;
-    }
-
-    function count($table)
-    {
-        return $this->db->count_all($table);
-    }
-
-    public function getAvatarUsuario($id_usuario)
-    {
-        $this->db->select('avatar');
-        $this->db->from('usuarios');
-        $this->db->where('id_usuarios = ' . $id_usuario . ' AND status = ' . 1);
-        $this->db->limit(1);
-        return $this->db->get()->row();
-    }
-
-    public function editAvatarUsuario($id, $logo)
-    {
-        $this->db->set('avatar', $logo);
-        $this->db->where('id_usuarios', $id);
-        return $this->db->update('usuarios');
-    }
-
-    public function excluirAvatarUsuario($id)
-    {
-        $this->db->set('avatar', null);
-        $this->db->where('id_usuarios', $id);
-        return $this->db->update('usuarios');
-    }
-
-    public function getConfigs()
-    {
-        return $this->db
-            ->get('configs_opcoes')
-            ->result();
-    }
-
-    function registraConfigsUsuario($data)
-    {
-        $this->db->insert('configs_usuario_assoc', $data);
-        if ($this->db->affected_rows() == 1) {
-            return true;
-        }
-        return false;
-    }
-
-    public function getConfigsUsuario($id_usuario)
-    {
-        return $this->db
-            ->where('id_usuario', $id_usuario)
-            ->limit(1)
-            ->get('configs_usuario_assoc')
-            ->row();
-    }
-
-
-    public function getWidgetLancamentos($id_usuario)
-    {
-        return $this->db
-            ->where('id_usuario', $id_usuario)
-            ->where('id_config_opcao', 3)
-            ->get('configs_usuario_assoc')
-            ->num_rows();
-    }
-
-    public function getWidgetCartaoCredito($id_usuario)
-    {
-        return $this->db
-            ->where('id_usuario', $id_usuario)
-            ->where('id_config_opcao', 4)
-            ->get('configs_usuario_assoc')
-            ->num_rows();
-    }
-
-    public function getWidgetInvestimentos($id_usuario)
-    {
-        return $this->db
-            ->where('id_usuario', $id_usuario)
-            ->where('id_config_opcao', 5)
-            ->get('configs_usuario_assoc')
-            ->num_rows();
-    }
-
-    public function getWidgetPendencias($id_usuario)
-    {
-        return $this->db
-            ->where('id_usuario', $id_usuario)
-            ->where('id_config_opcao', 6)
-            ->get('configs_usuario_assoc')
-            ->num_rows();
-    }
-
-    public function setWidgetLancamentos($id_usuario)
-    {
-        $this->db
-            ->insert(
-                'configs_usuario_assoc',
-                array(
-                    'id_config_opcao' => 3,
-                    'id_usuario' => $id_usuario
-                )
-            );
-    }
-
-    public function unsetWidgetLancamentos($id_usuario)
-    {
-        $this->db
-            ->where('id_usuario', $id_usuario)
-            ->where('id_config_opcao', 3)
-            ->delete('configs_usuario_assoc');
-    }
-
-    public function setWidgetCartaoCredito($id_usuario)
-    {
-        $this->db
-            ->insert(
-                'configs_usuario_assoc',
-                array(
-                    'id_config_opcao' => 4,
-                    'id_usuario' => $id_usuario
-                )
-            );
-    }
-
-    public function unsetWidgetCartaoCredito($id_usuario)
-    {
-        $this->db
-            ->where('id_usuario', $id_usuario)
-            ->where('id_config_opcao', 4)
-            ->delete('configs_usuario_assoc');
-    }
-
-    public function setWidgetInvestimentos($id_usuario)
-    {
-        $this->db
-            ->insert(
-                'configs_usuario_assoc',
-                array(
-                    'id_config_opcao' => 5,
-                    'id_usuario' => $id_usuario
-                )
-            );
-    }
-
-    public function unsetWidgetInvestimentos($id_usuario)
-    {
-        $this->db
-            ->where('id_usuario', $id_usuario)
-            ->where('id_config_opcao', 5)
-            ->delete('configs_usuario_assoc');
-    }
-
-    public function setWidgetPendencias($id_usuario)
-    {
-        $this->db
-            ->insert(
-                'configs_usuario_assoc',
-                array(
-                    'id_config_opcao' => 6,
-                    'id_usuario' => $id_usuario
-                )
-            );
-    }
-
-    public function unsetWidgetPendencias($id_usuario)
-    {
-        $this->db
-            ->where('id_usuario', $id_usuario)
-            ->where('id_config_opcao', 6)
-            ->delete('configs_usuario_assoc');
-    }
-
-    public function getLogsSistema($perpage, $start)
-    {
-        return $this->db
-            ->limit($perpage, $start)
-            ->order_by('data_registro', 'desc')
-            ->get('logs')
-            ->result();
-    }
+	function __construct()
+	{
+		parent::__construct();
+		$this->load->helper(array('codegen_helper'));
+	}
+	
+	function get($table, $fields, $where = '', $perpage = 0, $start = 0, $one = false, $array = 'array')
+	{
+		$this->db->select($fields);
+		$this->db->from($table);
+		$this->db->limit($perpage, $start);
+		if ($where) {
+			$this->db->where($where);
+		}
+		
+		$query = $this->db->get();
+		
+		$result = !$one ? $query->result() : $query->row();
+		return $result;
+	}
+	
+	function getById($id)
+	{
+		$this->db->from('usuarios');
+		$this->db->select('usuarios.*, permissoes.nome as permissao');
+		$this->db->join('permissoes', 'permissoes.idPermissao = usuarios.permissoes_id', 'left');
+		$this->db->where('id_usuarios', $id);
+		$this->db->limit(1);
+		return $this->db->get()->row();
+	}
+	
+	public function getNotificacoesUsuario($id)
+	{
+		return $this->db
+			->where('id_usuarios', $id)
+			->get('notificacoes')
+			->result();
+	}
+	
+	function pesquisar($termo, $id)
+	{
+		$data = array();
+		// buscando clientes
+		$this->db->like('nome', $termo);
+		$this->db->where('id_usuario', $id);
+		$this->db->limit(5);
+		$data['clientes'] = $this->db->get('clientes')->result();
+		
+		// buscando os
+		$this->db->like('idOs', $termo);
+		$this->db->where('id_usuario', $id);
+		$this->db->limit(5);
+		$data['os'] = $this->db->get('os')->result();
+		
+		// buscando produtos
+		$this->db->like('descricao', $termo);
+		$this->db->where('id_usuario', $id);
+		$this->db->limit(5);
+		$data['produtos'] = $this->db->get('produtos')->result();
+		
+		//buscando serviços
+		$this->db->like('nome', $termo);
+		$this->db->where('id_usuario', $id);
+		$this->db->limit(5);
+		$data['servicos'] = $this->db->get('servicos')->result();
+		
+		return $data;
+	}
+	
+	function add($table, $data)
+	{
+		$this->db->insert($table, $data);
+		if ($this->db->affected_rows() == '1') {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	function edit($table, $data, $fieldID, $ID)
+	{
+		$this->db->where($fieldID, $ID);
+		$this->db->update($table, $data);
+		
+		if ($this->db->affected_rows() > 0) {
+			return true;
+		}
+		return false;
+	}
+	
+	function delete($table, $data, $fieldID, $ID)
+	{
+		$this->db->where($fieldID, $ID);
+		$this->db->update($table, $data);
+		if ($this->db->affected_rows()) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	function count($table)
+	{
+		return $this->db->count_all($table);
+	}
+	
+	public function getAvatarUsuario($id_usuario)
+	{
+		$this->db->select('avatar');
+		$this->db->from('usuarios');
+		$this->db->where('id_usuarios = ' . $id_usuario . ' AND status = ' . 1);
+		$this->db->limit(1);
+		return $this->db->get()->row();
+	}
+	
+	public function editAvatarUsuario($id, $logo)
+	{
+		$this->db->set('avatar', $logo);
+		$this->db->where('id_usuarios', $id);
+		return $this->db->update('usuarios');
+	}
+	
+	public function excluirAvatarUsuario($id)
+	{
+		$this->db->set('avatar', null);
+		$this->db->where('id_usuarios', $id);
+		return $this->db->update('usuarios');
+	}
+	
+	public function getConfigs()
+	{
+		return $this->db
+			->where('status', 1)
+			->get('configs_opcoes')
+			->result();
+	}
+	
+	function registraConfigsUsuario($data)
+	{
+		$this->db->insert('configs_usuario_assoc', $data);
+		if ($this->db->affected_rows() == 1) {
+			return true;
+		}
+		return false;
+	}
+	
+	public function getConfigsUsuario($id_usuario)
+	{
+		return $this->db
+			->where('id_usuario', $id_usuario)
+			->limit(1)
+			->get('configs_usuario_assoc')
+			->row();
+	}
+	
+	
+	public function getWidgetLancamentos($id_usuario)
+	{
+		return $this->db
+			->where('id_usuario', $id_usuario)
+			->where('id_config_opcao', 3)
+			->get('configs_usuario_assoc')
+			->num_rows();
+	}
+	
+	public function getWidgetCartaoCredito($id_usuario)
+	{
+		return $this->db
+			->where('id_usuario', $id_usuario)
+			->where('id_config_opcao', 4)
+			->get('configs_usuario_assoc')
+			->num_rows();
+	}
+	
+	public function getWidgetInvestimentos($id_usuario)
+	{
+		return $this->db
+			->where('id_usuario', $id_usuario)
+			->where('id_config_opcao', 5)
+			->get('configs_usuario_assoc')
+			->num_rows();
+	}
+	
+	public function getWidgetPendencias($id_usuario)
+	{
+		return $this->db
+			->where('id_usuario', $id_usuario)
+			->where('id_config_opcao', 6)
+			->get('configs_usuario_assoc')
+			->num_rows();
+	}
+	
+	public function setWidgetLancamentos($id_usuario)
+	{
+		$this->db
+			->insert(
+				'configs_usuario_assoc',
+				array(
+					'id_config_opcao' => 3,
+					'id_usuario'      => $id_usuario
+				)
+			);
+	}
+	
+	public function unsetWidgetLancamentos($id_usuario)
+	{
+		$this->db
+			->where('id_usuario', $id_usuario)
+			->where('id_config_opcao', 3)
+			->delete('configs_usuario_assoc');
+	}
+	
+	public function setWidgetCartaoCredito($id_usuario)
+	{
+		$this->db
+			->insert(
+				'configs_usuario_assoc',
+				array(
+					'id_config_opcao' => 4,
+					'id_usuario'      => $id_usuario
+				)
+			);
+	}
+	
+	public function unsetWidgetCartaoCredito($id_usuario)
+	{
+		$this->db
+			->where('id_usuario', $id_usuario)
+			->where('id_config_opcao', 4)
+			->delete('configs_usuario_assoc');
+	}
+	
+	public function setWidgetInvestimentos($id_usuario)
+	{
+		$this->db
+			->insert(
+				'configs_usuario_assoc',
+				array(
+					'id_config_opcao' => 5,
+					'id_usuario'      => $id_usuario
+				)
+			);
+	}
+	
+	public function unsetWidgetInvestimentos($id_usuario)
+	{
+		$this->db
+			->where('id_usuario', $id_usuario)
+			->where('id_config_opcao', 5)
+			->delete('configs_usuario_assoc');
+	}
+	
+	public function setWidgetPendencias($id_usuario)
+	{
+		$this->db
+			->insert(
+				'configs_usuario_assoc',
+				array(
+					'id_config_opcao' => 6,
+					'id_usuario'      => $id_usuario
+				)
+			);
+	}
+	
+	public function unsetWidgetPendencias($id_usuario)
+	{
+		$this->db
+			->where('id_usuario', $id_usuario)
+			->where('id_config_opcao', 6)
+			->delete('configs_usuario_assoc');
+	}
+	
+	public function getLogsSistema($perpage, $start)
+	{
+		return $this->db
+			->limit($perpage, $start)
+			->order_by('data_registro', 'desc')
+			->get('logs')
+			->result();
+	}
 	
 	public function getMesPadraoUsuario($idUsuario)
 	{
@@ -309,4 +310,57 @@ class Configs_model extends CI_Model
 			->delete('configs_lancamentos');
 	}
 	
+	public function getMaintenanceMode()
+	{
+		return (bool)$this->db
+			->where('id_config_opcao', 99)
+			->get('configs_usuario_assoc')
+			->row();
+	}
+	
+	public function getForcedLogout()
+	{
+		return (bool)$this->db
+			->where('id_config_opcao', 98)
+			->get('configs_usuario_assoc')
+			->row();
+	}
+	
+	public function activateMaintenanceMode($id_usuario)
+	{
+		$this->db
+			->insert(
+				'configs_usuario_assoc',
+				array(
+					'id_config_opcao' => 99,
+					'id_usuario'      => $id_usuario
+				)
+			);
+	}
+	
+	public function deactivateMaintenanceMode()
+	{
+		$this->db
+			->where('id_config_opcao', 99)
+			->delete('configs_usuario_assoc');
+	}
+	
+	public function activateForcedLogout($id_usuario)
+	{
+		$this->db
+			->insert(
+				'configs_usuario_assoc',
+				array(
+					'id_config_opcao' => 98,
+					'id_usuario'      => $id_usuario
+				)
+			);
+	}
+	
+	public function deactivateForcedLogout()
+	{
+		$this->db
+			->where('id_config_opcao', 98)
+			->delete('configs_usuario_assoc');
+	}
 }

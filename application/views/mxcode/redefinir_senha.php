@@ -11,15 +11,24 @@
     <meta name="author" content="Leônidas Ferreira">
     <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/contex_logo.png" type="image/x-icon"/>
 
-    <link href="<?php echo base_url(); ?>assets/css/bootstrap-agile.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/css/agile-style.css" rel="stylesheet">
-    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,400italic,600,700' rel='stylesheet' type='text/css'>
-    <link href="<?php echo base_url(); ?>assets/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/bootstrap-agile.css?v=<?= getAppVersion() ?>" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/agile-style.css?v=<?= getAppVersion() ?>" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/custom.css?v=<?= getAppVersion() ?>" type="text/css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.css" type="text/css" rel="stylesheet">
 
+    <!--    Font Awesome 6 -->
+    <link href="<?php echo base_url(); ?>assets/font-awesome-6/css/all.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/font-awesome-6/css/sharp-duotone-solid.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/font-awesome-6/css/sharp-light.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/font-awesome-6/css/sharp-regular.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/font-awesome-6/css/sharp-solid.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/font-awesome-6/css/sharp-thin.css" rel="stylesheet">
 
-    <script src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.min.js"></script>                            <!-- Load jQuery -->
-    <script src="<?php echo base_url(); ?>assets/js/jqueryui-1.9.2.min.js"></script>                            <!-- Load jQueryUI -->
+    <script src="<?php echo base_url(); ?>assets/js/jquery-1.10.2.min.js"></script> <!-- Load jQuery -->
+    <script src="<?php echo base_url(); ?>assets/js/jqueryui-1.9.2.min.js"></script> <!-- Load jQueryUI -->
     <script src="<?php echo base_url(); ?>assets/js/bootstrap3.3.7.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/agile-custom.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/agile-waves.js"></script>
@@ -27,33 +36,6 @@
     <script src="<?php echo base_url(); ?>assets/plugins/sweetalert2/sweetalert2.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/jquery.validate.js"></script>
 </head>
-<style>
-    .preloader-login {
-        display: none;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        position: static;
-        z-index: 1;
-        background: #EEEEEE;
-    }
-
-    .preloader-login .cssload-speeding-wheel {
-        position: absolute;
-        top: calc(30%);
-        left: calc(50% - 4%);
-    }
-
-    @media screen and (min-width: 1024px) {
-        .box-login {
-            position: relative;
-            right: 0px;
-            padding-top: calc(30%);
-            height: 100%;
-        }
-    }
-</style>
 <body class="focused-form" style="background-color: #37474f">
 
 <div class="preloader">
@@ -62,24 +44,31 @@
 <section id="wrapper" class="login-register">
     <div class="login-box login-sidebar">
         <div class="text-center m-t-40">
-            <img class="contex-words" src="<?php echo base_url() ?>assets/img/contex_brand.png" alt="CONTEX - Sistema de Gestão"/>
+            <img class="contex-words" src="<?php echo base_url('assets/img/contex_brand.png') ?>" alt="CONTEX - Sistema de Gestão"/>
         </div>
         <div class="white-box box-login">
+            <div class="preloader-login" style="display: none">
+                <i class="fas fa-duotone fa-spinner-third fa-spin cssload-speeding-wheel"></i>
+                <!--<i class="fas fa-spinner fa-spin-pulse fa-2x cssload-speeding-wheel"></i>-->
+                <p class="preloader-text font-weight-bold text-gray">
+                    Aguarde...
+                </p>
+            </div>
+
             <form class="form-horizontal floating-labels" id="formLogin" method="post" action="<?= site_url('redefinirsenha/alterarsenha') ?>" autocomplete="off">
                 <div class="preloader-login">
                     <div class="cssload-speeding-wheel"></div>
                 </div>
                 <div class="before-loading">
                     <div class="form-group p-b-0 m-t-0">
-                        <h4 class="font-bold">Olá, <?= $nome ?>!</h4>
-                        <p class="font-bold">Cadastre uma nova senha para sua conta:</p>
+                        <h3 class="font-bold">Olá, <?= $nome ?>!</h3>
+                        <p class="font-bold font-16">Cadastre uma nova senha para sua conta:</p>
                     </div>
                     <div class="form-group p-b-0 m-t-0">
-                        <?php echo validation_errors(); ?>
+						<?php echo validation_errors(); ?>
                     </div>
                     <div class="form-group ">
                         <input type="hidden" id="token" name="token" value="<?= $token ?>"/>
-                        <input type="hidden" id="id" name="id" value="<?= $id ?>"/>
                         <input type="password" class="form-control" id="novaSenha" name="novaSenha" required/>
                         <span class="highlight"></span> <span class="bar"></span>
                         <label for="novasenha">Nova senha</label>
@@ -95,19 +84,26 @@
                                 <button id="cancelToken" class="btn btn-default btn-block waves-effect waves-light" type="button"><i class="fa fa-times fa-fw"></i> Cancelar</button>
                             </div>
                             <div class="col-xs-6">
-                                <button class="btn btn-login btn-block waves-effect waves-light" type="submit"><i class="fa fa-refresh fa-fw"></i> Alterar Senha</button>
+                                <button class="btn btn-login btn-block waves-effect waves-light" type="submit"><i class="fa fa-check fa-fw"></i> Alterar Senha</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
+            <div class="footer-login">
+                <div class="container-fluid pb0">
+                    <span class="font-12"><?= sprintf('&copy; 2019 - %s %s', date('Y'), 'CONTEX • Sistema de Gestão', '• Powered by <a href="https://mxcode.net" >MX CODE SISTEMAS</a>') ?></span>
+                    <p class="font-12"><?= sprintf('%s', 'Powered by <a href="https://mxcode.net" >MX CODE SISTEMAS</a>') ?></p>
+
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
-<div id="form_notice" class="hidden">
+<div class="hidden">
     <form id="form_invalidar_token" method="post" action="<?= site_url('redefinirsenha/invalidatoken') ?>">
-        <input type="hidden" id="id_token" name="id" value="<?= $id ?>"/>
+        <input type="hidden" id="id_token" name="token" value="<?= $token ?>"/>
     </form>
 </div>
 <!-- End loading site level scripts -->
@@ -152,15 +148,10 @@
     $('#formLogin').submit(function (event) {
         var form = this;
         event.preventDefault();
-        $('#btn-acessar').addClass('disabled');
-        $('#btn-acessar').html('Acessando... <i class="fa fa-spinner fa-pulse fa-fw"></i>');
-        $('#progress-acessar').removeClass('hidden');
-        $(".progress-bar").animate({
-            width: "100%"
-        }, 1000);
+
         if ($(form).valid()) {
-            $(".before-loading").fadeOut();
-            $(".preloader-login").fadeIn();
+            $(".before-loading").hide();
+            $(".preloader-login").show();
 
             setTimeout(function () {
                 form.submit();
@@ -172,8 +163,8 @@
         var form = $('#form_invalidar_token');
         form.submit();
     });
-
-    <?php if ($this->session->flashdata('erro') != null) { ?>
+	
+	<?php if ($this->session->flashdata('erro') != null) { ?>
     Swal.fire({
         position: 'top',
         type: 'error',
@@ -193,9 +184,9 @@
 
         }
     });
-    <?php } ?>
-
-    <?php if ($this->session->flashdata('sucesso') != null) { ?>
+	<?php } ?>
+	
+	<?php if ($this->session->flashdata('sucesso') != null) { ?>
     Swal.fire({
         position: 'top',
         type: 'success',
@@ -215,7 +206,7 @@
 
         }
     });
-    <?php } ?>
+	<?php } ?>
 
 </script>
 

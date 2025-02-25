@@ -1,4 +1,4 @@
-name: Starting contex.mxcode.net deployment...
+name: Starting project deployment on prod...
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
   
 jobs:
   run_pull:
-    name: Running git reset hard on prod...
+    name: Running application deploy...
     runs-on: ubuntu-latest
     
     steps:        
@@ -18,8 +18,10 @@ jobs:
       run: |
         install -m 600 -D /dev/null ~/.ssh/id_rsa
         echo "${{ secrets.SERVER_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa 
-        ssh-keyscan -H ${{ secrets.SERVER_SSH_HOST }} > ~/.ssh/known_hosts
-    - name: connecting and git reset on master...
+        ssh-keyscan -H ${{ secrets.SERVER_SSH_HOST }} > ~/.ssh/known_hosts 
+    - name: Connecting to MXCODE server and proceeding to git reset on master...
       run: ssh -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && git config user.name 'GitHub Action' && git config user.email 'leonidas.f.silva@hotmail.com' && git remote set-url origin git@github.com:leonidasfsilva/contex.git && git --work-tree=${{ secrets.WORK_DIR }} remote update && git --work-tree=${{ secrets.WORK_DIR }} reset --hard origin/master && exit"
-    - name: cleanup
+    - name: Connecting to DEVPLY server and proceeding to git reset on master...
+      run: ssh -p 65002 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ${{ secrets.DEVPLY_USER }}@${{ secrets.DEVPLY_HOST }} "cd ${{ secrets.DEVPLY_WORK_DIR }} && git config user.name 'GitHub Action' && git config user.email 'leonidas.f.silva@hotmail.com' && git remote set-url origin git@github.com:leonidasfsilva/contex.git && git --work-tree=${{ secrets.DEVPLY_WORK_DIR }} remote update && git --work-tree=${{ secrets.DEVPLY_WORK_DIR }} reset --hard origin/master && exit"
+    - name: Cleaning up the things...
       run: rm -rf ~/.ssh

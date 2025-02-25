@@ -1,4 +1,4 @@
-# See https://help.github.com/ignore-files/ for more about ignoring files.
+# See https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
 # production
 /install/files
@@ -7,6 +7,7 @@
 .DS_Store
 .vscode
 
+.env
 .env.local
 .env.development.local
 .env.test.local
@@ -20,3 +21,4 @@ bitbucket-pipelines.yml
 application/config/config.php
 application/config/database.php
 /assets/uploads/
+/vendor

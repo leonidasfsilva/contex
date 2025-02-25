@@ -414,6 +414,67 @@ body.nooverflow {
     border-radius: 0;
 }
 
+.panel.panel-midnightblue {
+    border-color: #263238 !important;
+}
+
+.panel.panel-midnightblue .panel-heading {
+    color: #eceff1;
+    background-color: #37474f;
+    border-color: #263238;
+}
+
+.panel.panel-midnightblue .panel-heading h2, h3 {
+    color: #eceff1;
+}
+
+.panel.panel-midnightblue .panel-heading .nav-tabs li > a {
+    color: #fff !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.panel.panel-midnightblue .panel-heading .nav-tabs li:hover > a {
+    color: #fff !important;
+}
+
+.panel.panel-midnightblue .panel-heading .nav-tabs li.active > a {
+    color: #263238 !important;
+    background: #fff;
+}
+
+.panel.panel-midnightblue .panel-heading .nav-tabs li.active:hover > a {
+    color: #263238 !important;
+    background: #fff;
+}
+
+.panel.panel-midnightblue .panel-heading .panel-ctrls .button-icon {
+    color: #eceff1;
+    color: rgba(236, 239, 241, 0.5);
+}
+
+.panel.panel-midnightblue .panel-heading .panel-ctrls .button-icon:hover {
+    color: #eceff1;
+}
+
+.panel.panel-midnightblue .panel-heading .panel-ctrls.button-icon-bg .has-bg {
+    background-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.2);
+    zoom: 1;
+    background-color: transparent \9;
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#33ffffff, endColorstr=#33ffffff)";
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#33ffffff, endColorstr=#33ffffff);
+    border-radius: 2px;
+}
+
+.panel.panel-midnightblue .panel-heading .panel-ctrls.button-icon-bg .has-bg:hover {
+    background-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.4);
+    zoom: 1;
+    background-color: transparent \9;
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#66ffffff, endColorstr=#66ffffff)";
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#66ffffff, endColorstr=#66ffffff);
+}
+
 .panel.panel-primary {
     border-color: #039be5;
 }
@@ -1016,67 +1077,6 @@ body.nooverflow {
 }
 
 .panel.panel-sky .panel-heading .panel-ctrls.button-icon-bg .has-bg:hover {
-    background-color: #ffffff;
-    background-color: rgba(255, 255, 255, 0.4);
-    zoom: 1;
-    background-color: transparent \9;
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#66ffffff, endColorstr=#66ffffff)";
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#66ffffff, endColorstr=#66ffffff);
-}
-
-.panel.panel-midnightblue {
-    border-color: #263238;
-}
-
-.panel.panel-midnightblue .panel-heading {
-    color: #eceff1;
-    background-color: #37474f;
-    border-color: #263238;
-}
-
-.panel.panel-midnightblue .panel-heading h2, h3 {
-    color: #eceff1;
-}
-
-.panel.panel-midnightblue .panel-heading .nav-tabs li > a {
-    color: #fff !important;
-    color: rgba(255, 255, 255, 0.5) !important;
-}
-
-.panel.panel-midnightblue .panel-heading .nav-tabs li:hover > a {
-    color: #fff !important;
-}
-
-.panel.panel-midnightblue .panel-heading .nav-tabs li.active > a {
-    color: #263238 !important;
-    background: #fff;
-}
-
-.panel.panel-midnightblue .panel-heading .nav-tabs li.active:hover > a {
-    color: #263238 !important;
-    background: #fff;
-}
-
-.panel.panel-midnightblue .panel-heading .panel-ctrls .button-icon {
-    color: #eceff1;
-    color: rgba(236, 239, 241, 0.5);
-}
-
-.panel.panel-midnightblue .panel-heading .panel-ctrls .button-icon:hover {
-    color: #eceff1;
-}
-
-.panel.panel-midnightblue .panel-heading .panel-ctrls.button-icon-bg .has-bg {
-    background-color: #ffffff;
-    background-color: rgba(255, 255, 255, 0.2);
-    zoom: 1;
-    background-color: transparent \9;
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#33ffffff, endColorstr=#33ffffff)";
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#33ffffff, endColorstr=#33ffffff);
-    border-radius: 2px;
-}
-
-.panel.panel-midnightblue .panel-heading .panel-ctrls.button-icon-bg .has-bg:hover {
     background-color: #ffffff;
     background-color: rgba(255, 255, 255, 0.4);
     zoom: 1;
@@ -9800,7 +9800,7 @@ svg.peity {
 }
 
 .note > div * {
-    line-height: 34px;
+    /*line-height: 34px;*/
 }
 
 .notes-container .notes-list {
@@ -11746,13 +11746,13 @@ ul.demo-btns > li {
 }
 
 .datepicker-dropdown.datepicker-orient-bottom:before {
-    bottom: -7px;
+    /*bottom: -7px;*/
     border-bottom: 0;
     border-top: 7px solid #999;
 }
 
 .datepicker-dropdown.datepicker-orient-bottom:after {
-    bottom: -6px;
+    /*bottom: -6px;*/
     border-bottom: 0;
     border-top: 6px solid #fff;
 }

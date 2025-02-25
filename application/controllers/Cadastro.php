@@ -11,6 +11,7 @@ class Cadastro extends CI_Controller
      *
      */
 
+
     public function __construct()
     {
         parent::__construct();
@@ -440,7 +441,7 @@ class Cadastro extends CI_Controller
 
         if (($token != null) && ($id != null)) {
 
-            $queryToken = $this->cadastro_model->validaTokenById($id);
+            $queryToken = $this->cadastro_model->checkTokenById($id);
             $resultToken = $queryToken->row();
             $tokenReal = $resultToken->token;
 
@@ -462,7 +463,7 @@ class Cadastro extends CI_Controller
                             'senha' => password_hash($repitasenha, PASSWORD_DEFAULT)
                         );
 
-                        $this->cadastro_model->atualizaAdmin($resultToken->id_usuario, $data);
+                        $this->cadastro_model->atualizaUsuario($resultToken->id_usuario, $data);
                         $this->cadastro_model->invalidaToken($id);
                         $this->session->set_flashdata('sucesso', 'Senha alterada com sucesso!');
                         redirect('mxcode/login');

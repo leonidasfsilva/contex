@@ -14,9 +14,12 @@ function differenceInHours($startdate, $enddate)
 	return $return;
 }
 
-function versionApp()
+function getAppVersion()
 {
-	return VERSION_APP;
+	if (APP_VERSION !== null) {
+		return APP_VERSION;
+	}
+	return false;
 }
 
 function print_array($a)
@@ -108,8 +111,10 @@ function validate_money($valor)
 	return false;
 }
 
-function padronizarString($str)
+function padronizarString($str = null)
 {
+	if (!$str) return null;
+	
 	$str = preg_replace('/[áàãâä]/ui', 'a', $str);
 	$str = preg_replace('/[éèêë]/ui', 'e', $str);
 	$str = preg_replace('/[íìîï]/ui', 'i', $str);
@@ -121,6 +126,12 @@ function padronizarString($str)
 	$str = preg_replace('/[,]/', '.', $str);
 	// $str = preg_replace('/_+/', '_', $str); // ideia do Bacco :)
 	return strtoupper($str);
+}
+
+function sanitizarString($str)
+{
+	$str = preg_replace('/"/', '\'', $str);
+	return ($str);
 }
 
 function capsLock($str)
@@ -169,13 +180,14 @@ function getUserEmail()
 	return $CI->session->userdata('email');
 }
 
-function returnURL($get = null)
+function getLastUserURL($get = null)
 {
 	$CI = get_instance();
 	if ((!session_id()) || (!$CI->session->userdata('logado'))) {
 		$notRedirectedUlrs = [
 			'',
 			'mxcode',
+			'phpinfo',
 			'mxcode/login',
 			'cadastro',
 			'mxcode/verificarLogin'
@@ -184,7 +196,10 @@ function returnURL($get = null)
 		if (!in_array(uri_string(), $notRedirectedUlrs, true) && !$get) {
 			$currentURL = current_url(); //for simple URL
 			$params     = $_SERVER['QUERY_STRING']; //for parameters
-			$fullURL    = $currentURL . '?' . $params; //full URL with parameter
+			$fullURL    = $currentURL;
+			if ($params) {
+				$fullURL = $currentURL . '?' . $params; //full URL with parameter
+			}
 			$CI->session->set_userdata('last_url', $fullURL);
 		}
 	}
@@ -367,8 +382,149 @@ function buildStartEndDate($referenceMonth = null, $referenceYear = null)
 
 function dd()
 {
+	echo '<pre>';
 	foreach (func_get_args() as $arg) {
 		var_dump($arg);
 	}
+	echo '</pre>';
 	exit();
+}
+
+function checkMaintenanceMode()
+{
+	$CI = get_instance();
+	$CI->load->model('configs_model');
+	
+	if ($CI->configs_model->getMaintenanceMode()) {
+		return true;
+	}
+	return false;
+}
+
+function checkForcedLogout()
+{
+	$CI = get_instance();
+	$CI->load->model('configs_model');
+	
+	if ($CI->configs_model->getForcedLogout()) {
+		if ((session_id()) && ($CI->session->userdata('logado')) && ($CI->session->userdata('permissao') != 1)) {
+			gravaLog(getUserId(), getUserName(), getUserEmail(), 'Logout forçado: sistema em manutenção', getenv("REMOTE_ADDR"));
+			$CI->session->sess_destroy();
+		}
+		return true;
+	}
+	return false;
+}
+
+function generateToken()
+{
+	return str_shuffle(
+		'1234567890' .
+		'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvXxYyWwZz' .
+		'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvXxYyWwZz' .
+		'1234567890');
+}
+
+function getResetPasswordEmail($nomeRemetente, $ip, $navegador, $link, $date = null)
+{
+	$date = $date ?? date('d/m/Y H:i');
+	
+	return
+		'<html>
+			<head>
+			<style>
+			#inner_table {
+			  border: 2px solid lightgray;
+			  border-radius: 10px;
+			}
+			td {
+			  padding: 0px 20px 20px 20px;
+			  text-align: left;
+			}
+			</style>
+			</head>
+			<body>
+				<table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="white">
+				<tbody>
+					<tr>
+			          <td valign="top" width="100%">
+			            <table id="inner_table" align="center" cellpadding="0" cellspacing="0" border="0" align="center">
+			              <tr>
+			                <td colspan="2" style="border-bottom: 4px solid #0098da; padding: 20px 20px 20px 20px;">
+			                  <img src="' . base_url() . '/assets/img/contex_brand.png" alt="CONTEX - Sistema de Gestão" style="width:120px;">
+			                </td>
+			              </tr>
+			              <tr>
+			                <td style="padding-top: 20px">
+			                  <span style="font-size: 16pt;">Olá, ' . $nomeRemetente . '!</span>
+			                </td>
+			              </tr>
+			              <tr>
+			                <td>
+			                  <span>Recebemos uma solicitação de alteração de senha para seu cadastro em nosso sistema.</span>
+			                </td>
+			              </tr>
+			              <tr>
+			                <td>
+			                  <span>Origem da solicitação:
+			                    <br />
+			                    IP: ' . $ip . '
+			                    <br />
+			                    Navegador: ' . $navegador . '
+			                    <br />
+			                    Data e hora: ' . $date . '
+			                    <br />
+			                    <br />
+			                    Caso você tenha solicitado a troca de sua senha, clique no botão abaixo:</span>
+			                </td>
+			              </tr>
+			              <tr>
+			                <td style="border-radius: 3px; padding: 20px 20px 40px 20px; text-align: left">
+			                  <a href="' . $link . '" target="_blank" style="padding: 10px 30px; background-color:#0098da; border: 1px solid #0098da;border-radius: 3px;font-family: Helvetica, Arial, sans-serif;font-size: 14px; color: #ffffff;text-decoration: none;font-weight:bold;display: inline-block;">
+			                    REDEFINIR SENHA
+			                  </a>
+			                </td>
+			              </tr>
+			              <tr>
+			                <td>
+			                  <p>Por questões de segurança, este link só estará válido por alguns minutos, caso este link já tenha expirado, efetue uma nova solicitação clicando no botão <strong>Esqueci minha senha</strong> na página inicial do sistema.</p>
+			                  <p>Caso não tenha solicitado a troca de sua senha, por favor, desconsidere e exclua este email, nenhuma outra ação é necessária. Não se preocupe, sua conta está segura.</p>
+			                  <p>Caso necessite de suporte para o sistema Contex, contate-nos em <a href="mailto:suporte@mxcode.net?Subject=Solicitação de suporte" target="_top"><strong>suporte@mxcode.net</strong></a>
+			                </td>
+			              </tr>
+							<tr>
+								<td>
+								  <span>Atenciosamente,</span>
+								  <br>
+								  <span style="font-size: 14pt"><strong>Equipe MXCODE Sistemas</strong></span>
+								  <br>
+								  <a href="https://mxcode.net/contex" target="_blank"><p><strong>https://mxcode.net/contex</strong></a><br>CONTEX - Sistema de Gestão</p>
+								</td>
+							</tr>
+			                <tr>
+				                <td style="border-top: 2px dotted #0098da; padding-top: 20px">
+				                  <p style="font-size:10pt; color: gray">
+				                  Não é necessário responder este e-mail, mensagem automática.
+				                  <p>
+				                </td>
+	                        </tr>
+            			</table>
+          				</td>
+					</tr>
+				</tbody>
+  			</table>
+		</body>
+</html>';
+
+}
+
+function isMobileDevice()
+{
+	$CI     = get_instance();
+	$mobile = $CI->agent->is_mobile();
+	
+	if ($mobile) {
+		return true;
+	}
+	return false;
 }
