@@ -206,10 +206,12 @@
     });
 
     $('.loader-spinner').click(function (event) {
-        // event.preventDefault();
+        event.preventDefault();
+        var href = $(this).attr('href');
 
         $(".before-loading").hide();
         $(".preloader-login").show();
+        window.location.href = href;
     });
 
     <?php if ($this->session->flashdata('erro') != null) { ?>
