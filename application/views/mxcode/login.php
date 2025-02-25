@@ -57,16 +57,16 @@
 
             <form class="form-horizontal floating-labels before-loading" id="formLogin" method="post" action="<?php echo base_url('mxcode/verificarLogin') ?>">
                 <div class="">
-					<?php if ($this->session->flashdata('error')) { ?>
+                    <?php if ($this->session->flashdata('error')) { ?>
                         <div class="row">
                             <div class="alert alert-danger">
                                 <button type="button" class="close" data-dismiss="alert">&times;</button>
-								<?php echo $this->session->flashdata('error'); ?>
+                                <?php echo $this->session->flashdata('error'); ?>
                             </div>
                         </div>
-					<?php } ?>
-					
-					<?php if ($maintenanceMode) { ?>
+                    <?php } ?>
+
+                    <?php if ($maintenanceMode) { ?>
                         <div class="row">
                             <div class="alert alert-alizarin">
                                 <button type="button" class="close-i text-white">
@@ -80,7 +80,7 @@
                                 Agradecemos a compreensão.
                             </div>
                         </div>
-					<?php } ?>
+                    <?php } ?>
 
                     <div class="form-group">
                         <h3 class="font-bold m-b-40">Acesse sua conta</h3>
@@ -107,7 +107,7 @@
                     </div>
                     <div class="form-group m-b-0">
                         <div class="col-sm-12 text-center">
-                            <p>Não tem uma conta? <a href="<?php echo base_url('cadastro') ?>" class="text-primary"><b>Crie sua conta</b></a>.</p>
+                            <p>Não tem uma conta? <a href="<?php echo base_url('cadastro') ?>" class="text-primary loader-spinner"><b>Crie sua conta</b></a>.</p>
                             <!--<p><a href="--><?php //echo base_url('conecte')?><!--" class="text-primary"><b>Acesso para clientes</b></a>.</p>-->
                         </div>
                     </div>
@@ -129,7 +129,7 @@
     $('#version-link').click(function () {
         getVersion()
     })
-    
+
     function getVersion() {
         const Toast = Swal.fire({
             toast: true,
@@ -204,8 +204,15 @@
             form.submit();
         }
     });
-	
-	<?php if ($this->session->flashdata('erro') != null) { ?>
+
+    $('.loader-spinner').click(function (event) {
+        // event.preventDefault();
+
+        $(".before-loading").hide();
+        $(".preloader-login").show();
+    });
+
+    <?php if ($this->session->flashdata('erro') != null) { ?>
     Swal.fire({
         position: 'top',
         type: 'error',
@@ -225,9 +232,9 @@
 
         }
     });
-	<?php } ?>
-	
-	<?php if ($this->session->flashdata('sucesso') != null) { ?>
+    <?php } ?>
+
+    <?php if ($this->session->flashdata('sucesso') != null) { ?>
     Swal.fire({
         position: 'top',
         type: 'success',
@@ -247,7 +254,7 @@
 
         }
     });
-	<?php } ?>
+    <?php } ?>
 
     $('#registro').click(function () {
         Swal.fire({

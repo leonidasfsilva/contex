@@ -38,9 +38,6 @@
 </head>
 <body class="focused-form" style="background-color: #37474f">
 
-<div class="preloader">
-    <div class="cssload-speeding-wheel"></div>
-</div>
 <section id="wrapper" class="login-register">
     <div class="login-box login-sidebar">
         <div class="text-center m-t-40">
@@ -187,13 +184,20 @@
         event.preventDefault();
 
         if ($(form).valid()) {
-            $(".before-loading").fadeOut();
-            $(".preloader-login").fadeIn();
+            $(".before-loading").hide();
+            $(".preloader-login").show();
 
             setTimeout(function () {
                 form.submit();
             }, 1000);
         }
+    });
+
+    $('.loader-spinner').click(function (event) {
+        // event.preventDefault();
+
+        $(".before-loading").hide();
+        $(".preloader-login").show();
     });
 
     $('#cancelToken').click(function () {
