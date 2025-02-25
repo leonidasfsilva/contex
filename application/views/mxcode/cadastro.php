@@ -199,7 +199,10 @@
 
         $(".before-loading").hide();
         $(".preloader-login").show();
-        window.location.href = href;
+
+        setTimeout(function () {
+            window.location.href = href;
+        }, 1000)
     });
 
     $('#cancelToken').click(function () {
