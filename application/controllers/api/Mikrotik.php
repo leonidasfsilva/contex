@@ -111,6 +111,13 @@ class Mikrotik extends CI_Controller
 
         $request = $this->request;
 
+        if (!$request) {
+            return $this->response(
+                ['response' => 'Error 401 Bad Request'],
+                400
+            );
+        }
+
         try {
             $email    = $request['to'];
             $subject  = $request['subject'];
