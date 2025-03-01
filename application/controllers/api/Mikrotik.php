@@ -113,7 +113,7 @@ class Mikrotik extends CI_Controller
 
         if (!$request) {
             return $this->response(
-                ['response' => 'Error 401 Bad Request'],
+                ['response' => 'Error 400 Bad Request'],
                 400
             );
         }
