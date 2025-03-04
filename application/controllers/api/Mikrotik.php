@@ -122,13 +122,13 @@ class Mikrotik extends CI_Controller
             $email    = $request['to'];
             $subject  = $request['subject'];
             $template = $this->buildEmailTemplate($request);
-            $_from    = "mikrotik@mxcode.net";
+            $_from    = $_ENV['smtp_username'];
             $_headers = "MIME-Version: 1.0\r\n";
             $_headers .= "Content-type: text/html; charset=utf-8\r\n";
             $_headers .= "From: " . $_from . "\r\n";
             // $_headers .= "X-Priority: 1\r\n";
 
-            $resultSend = $this->phpmailerloader->sendEmail($subject, $template, $email, $_from, null, 'Mikrotik Report Generator');
+            $this->phpmailerloader->sendEmail($subject, $template, $email, $_from, null, 'Mikrotik Report Generator');
 
             // mail($email, $subject, $template, $_headers, "-f " . $_from);
 
