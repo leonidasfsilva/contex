@@ -21,7 +21,7 @@ class PhpMailerLoader
             //Server settings
             // $this->mailer->SMTPDebug = SMTP::DEBUG_SERVER;
             $this->mailer->isSMTP();
-            $this->mailer->Host       = 'mail.mxcode.net';
+            $this->mailer->Host       = 'smtp.hostinger.com';
             $this->mailer->SMTPAuth   = true;
             $this->mailer->Username   = $_ENV['SMTP_USERNAME'];
             $this->mailer->Password   = $_ENV['SMTP_PASSWORD'];
@@ -32,7 +32,7 @@ class PhpMailerLoader
             //Recipients
             $this->mailer->setFrom($from, $fromName ?? $from);
             $this->mailer->addAddress($to, $toName ?? $to);               //Add a recipient, Name is optional
-            $this->mailer->addReplyTo('mikrotik@mxcode.net', 'Mikrotik Report Generator');
+            $this->mailer->addReplyTo($_ENV['SMTP_USERNAME'], 'Mikrotik Report Generator');
             // $this->mailer->addCC('cc@example.com');
             // $this->mailer->addBCC('bcc@example.com');
 
