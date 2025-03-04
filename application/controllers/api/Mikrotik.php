@@ -128,9 +128,9 @@ class Mikrotik extends CI_Controller
             $_headers .= "From: " . $_from . "\r\n";
             // $_headers .= "X-Priority: 1\r\n";
 
-            // $this->phpmailerloader->sendEmail($subject, $template, $email, $_from, null, 'Mikrotik Report Generator');
+            $this->phpmailerloader->sendEmail($subject, $template, $email, $_from, null, 'Mikrotik Report Generator');
 
-            mail($email, $subject, $template, $_headers, "-f " . $_from);
+            // mail($email, $subject, $template, $_headers, "-f " . $_from);
 
             $response = [
                 'response'      => '200 OK',
