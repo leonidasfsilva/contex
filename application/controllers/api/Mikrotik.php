@@ -122,7 +122,7 @@ class Mikrotik extends CI_Controller
             $email    = $request['to'];
             $subject  = $request['subject'];
             $template = $this->buildEmailTemplate($request);
-            $_from    = $_ENV['smtp_username'];
+            $_from    = $_ENV['SMTP_USERNAME'];
             $_headers = "MIME-Version: 1.0\r\n";
             $_headers .= "Content-type: text/html; charset=utf-8\r\n";
             $_headers .= "From: " . $_from . "\r\n";
