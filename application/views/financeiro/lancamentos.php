@@ -82,7 +82,6 @@ if (isset($referenceMonth) && $referenceMonth) {
                     </ul>
                 </div>
             </div>
-
         </div>
     </div>
     <div class="panel-heading">
@@ -1522,10 +1521,6 @@ if (!$results) {
     $('#modalEntrada, #modalSaida, #modalSearch').on('shown.bs.modal', function (e) {
         $('.descricao').focus();
     })
-
-    $('#div_pesquisa').on('shown.bs.dropdown', function (e) {
-        $('#input_pesquisa').focus();
-    });
 
     $('.dropdown-menu>form').click(function (e) {
         e.stopPropagation();

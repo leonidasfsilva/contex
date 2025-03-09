@@ -114,21 +114,40 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             Registro de Faturas
         </h2>
         <div class="panel-ctrls">
-            <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar faturas">
-                <i class="fas fa-filter fa-fw"></i>
-                Filtrar
-            </button>
-            <button href="#modalConfiguracoes" class="btn btn-default btn-sm" id="configurar_fatura" data-toggle="modal" title="Configurações de fatura" <?= $disabledConfig ?>>
-                <i class="fas fa-cog fa-fw"></i>
-                <text class="visible-lg-inline">Configurações</text>
-            </button>
+            <div class="btn-group dropdown-hover">
+                <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+                    <i class="fas fa-bars fa-fw"></i>
+                    <text class="visible-lg-inline">Opções</text>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-hover arrow" role="menu">
+                    <li>
+                        <a href="#modalSearch" data-toggle="modal">
+                            <i class="fas fa-search fa-fw pull-right"></i>
+                            <span>Pesquisar</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#modalFiltrar" data-toggle="modal">
+                            <i class="fas fa-filter fa-fw pull-right"></i>
+                            <span>Filtrar</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#modalConfiguracoes" data-toggle="modal">
+                            <i class="fas fa-cog fa-fw pull-right"></i>
+                            <span>Configurações</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
             <button href="#modalVincularFaturas" id="vincularFaturas" data-toggle="modal" role="button" class="btn btn-primary btn-sm tip-bottom" title="Vínculo de faturas" <?= !isset($cartao) ? 'disabled' : '' ?>>
                 <i class="fas fa-link fa-fw"></i>
                 <text class="visible-lg-inline">Vínculo de Faturas</text>
             </button>
             <button href="#modalNovaFatura" id="novaFatura" data-toggle="modal" role="button" class="btn btn-primary btn-sm tip-bottom" title="Abrir nova fatura" <?= $disabledFatura ?>>
                 <i class="fas fa-plus fa-fw"></i>
-                Nova Fatura
+                <text class="visible-lg-inline">Nova Fatura</text>
             </button>
         </div>
     </div>
@@ -279,6 +298,34 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 <form id="form_cartao" action="<?php echo base_url('financeiro/faturas'); ?>" method="get">
     <input type="hidden" id="id_cartao" name="cartao">
 </form>
+
+<!-- Modal PESQUISAR -->
+<div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form id="formSearch" action="<?= base_url('financeiro/faturas/pesquisa') ?>" method="get">
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <p class="font-weight-bold">Pesquisar por: </p>
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <!--<label class="font-weight-bold" for="termo">Termo *</label>-->
+                            <input class="form-control descricao" type="text" name="busca"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-search fa-fw"></i>
+                        Pesquisar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <!-- Modal FILTRAR -->
 <div class="modal fade" id="modalFiltrar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -797,6 +844,10 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
 <script type="text/javascript">
     $(document).ready(function () {
+        $('#modalSearch').on('shown.bs.modal', function (e) {
+            $('.descricao').focus();
+        })
+
         $('#btnDesvincular').click(function (event) {
             var form = this;
             event.preventDefault();

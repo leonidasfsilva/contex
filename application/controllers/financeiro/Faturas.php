@@ -1,7 +1,7 @@
 <?php
 
 if (!defined('BASEPATH')) {
-	exit('No direct script access allowed');
+    exit('No direct script access allowed');
 }
 
 class Faturas extends CI_Controller
@@ -1726,6 +1726,29 @@ class Faturas extends CI_Controller
         $data['referenceYear']      = $referenceYear;
         $data['menuFinanceiro']     = true;
         $data['view']               = 'faturas/lancamentos_terceiros';
+        $this->load->view('tema/topo', $data);
+    }
+
+    public function pesquisa()
+    {
+        if (!isset($_GET['busca'])) {
+            $this->session->set_flashdata('erro', 'Método não permitido');
+            redirect('financeiro/faturas');
+        }
+
+        $termo = $_GET['busca'] ?? null;
+
+        if (!is_string($termo) || is_numeric($termo)) {
+            $this->session->set_flashdata('erro', 'O termo pesquisado é inválido');
+            redirect('financeiro/faturas');
+        }
+
+        $searchResult = $this->fatura_model->pesquisaLancamentosFaturas($termo);
+
+        $data['results']        = $searchResult;
+        $data['busca']          = $termo;
+        $data['menuFinanceiro'] = true;
+        $data['view']           = 'faturas/pesquisa';
         $this->load->view('tema/topo', $data);
     }
 
