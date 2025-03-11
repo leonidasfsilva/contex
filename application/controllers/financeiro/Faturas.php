@@ -16,6 +16,7 @@ class Faturas extends CI_Controller
         }
         $this->load->library('pagination');
         $this->yearsList = range(2018, date('Y') + 3);
+        vinculoAutomaticoFaturas();
     }
 
     public function index()
@@ -137,6 +138,7 @@ class Faturas extends CI_Controller
 
 
             $data['yearsList']           = $this->yearsList;
+            $data['autoLinkInvoices']    = $this->fatura_model->getAutoLinkUser();
             $data['existe_configuracao'] = $this->fatura_model->existeConfiguracao($idCartao);
             $data['dia_vencimento']      = $this->fatura_model->getDiaVencimentoFatura($idCartao);
             $data['cartoes']             = $this->cartoes_model->getCartoesUsuarioFatura(getUserId());
@@ -154,7 +156,7 @@ class Faturas extends CI_Controller
                 $config['total_rows'],
                 $config['per_page'],
                 $start,
-                $order_by ? $order_by : 'desc'
+                $order_by ?: 'desc'
             );
         }
 
@@ -1471,21 +1473,21 @@ class Faturas extends CI_Controller
                 if ($vinculoFatura) {
                     desvinculaFatura($faturaReferencia->id_fatura);
                 }
-            } else {
-                if ($vinculoFatura) {
-                    atualizaValorVinculoFaturas($faturaReferencia->id_fatura);
-                } else {
-                    vinculaFatura($faturaReferencia->id_fatura);
-                }
+                continue;
             }
+
+            if ($vinculoFatura) {
+                atualizaValorVinculoFaturas($faturaReferencia->id_fatura);
+            }
+            vinculaFatura($faturaReferencia->id_fatura);
         }
 
         if ($_POST) {
             if ($desvincularFaturas) {
                 $this->session->set_flashdata('sucesso', 'Faturas de cartões ativos desvinculadas com sucesso');
-            } else {
-                $this->session->set_flashdata('sucesso', 'Faturas de cartões ativos vinculadas com sucesso');
+                redirect($urlAtual);
             }
+            $this->session->set_flashdata('sucesso', 'Faturas de cartões ativos vinculadas com sucesso');
             redirect($urlAtual);
         }
     }
@@ -1525,15 +1527,29 @@ class Faturas extends CI_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para configurar faturas.');
             redirect(base_url());
         }
-        $urlAtual  = $_POST['urlAtual'];
-        $id_cartao = $_POST['id_cartao'];
-        $dia       = $_POST['dia_vencimento'];
+        $urlAtual  = $this->input->post('urlAtual');
+        $id_cartao = $this->input->post('id_cartao');
+        $dia       = $this->input->post('dia_vencimento');
+        $autoLink  = $this->input->post('invoiceAutoLink');
+
+        if (!$id_cartao) {
+            $this->session->set_flashdata('erro', 'Método não permitido');
+            redirect($urlAtual);
+        }
 
         $data = array(
             'id_usuario'     => getUserId(),
             'id_cartao'      => $id_cartao,
-            'dia_vencimento' => $dia
+            'dia_vencimento' => $dia,
         );
+
+        if ($autoLink == 'on') {
+            $this->fatura_model->setAutoLinkToAllUserActiveCards();
+        }
+
+        if (!$autoLink) {
+            $this->fatura_model->unsetAutoLinkToAllUserActiveCards();
+        }
 
         if ($this->fatura_model->existeConfiguracao($id_cartao)) {
             $this->fatura_model->edit('configs_faturas', $data, 'id_cartao', $id_cartao);
@@ -1562,21 +1578,35 @@ class Faturas extends CI_Controller
                     $this->fatura_model->edit('faturas', $data, 'id_fatura', $fatura->id_fatura);
                 }
 
-                $data_adicional = array(
+                $data = array(
                     'id_usuario'        => $adicional->id_usuario,
                     'id_cartao'         => $adicional->id_cartao,
                     'id_cartao_titular' => $id_cartao,
                     'dia_vencimento'    => $dia,
                     'adicional'         => 1
                 );
-                $this->fatura_model->edit('configs_faturas', $data_adicional, 'id_cartao', $adicional->id_cartao);
+                $this->fatura_model->edit('configs_faturas', $data, 'id_cartao', $adicional->id_cartao);
             }
             $this->session->set_flashdata('sucesso', 'Configurações alteradas com sucesso!');
-        } else {
-            $this->fatura_model->add('configs_faturas', $data);
-            $adicionais = $this->cartoes_model->getCartoesAdicionais($id_cartao);
+            redirect($urlAtual);
+        }
 
-            $faturas = $this->fatura_model->getFaturasAbertasCartao($id_cartao);
+        $this->fatura_model->add('configs_faturas', $data);
+        $adicionais = $this->cartoes_model->getCartoesAdicionais($id_cartao);
+
+        $faturas = $this->fatura_model->getFaturasAbertasCartao($id_cartao);
+        foreach ($faturas as $fatura) {
+            $vencimento = explode('-', $fatura->vencimento);
+            $vencimento = $vencimento[0] . '-' . $vencimento[1] . '-' . $dia;
+
+            $data = array(
+                'vencimento' => $vencimento
+            );
+            $this->fatura_model->edit('faturas', $data, 'id_fatura', $fatura->id_fatura);
+        }
+
+        foreach ($adicionais as $adicional) {
+            $faturas = $this->fatura_model->getFaturasAbertasCartao($adicional->id_cartao);
             foreach ($faturas as $fatura) {
                 $vencimento = explode('-', $fatura->vencimento);
                 $vencimento = $vencimento[0] . '-' . $vencimento[1] . '-' . $dia;
@@ -1587,29 +1617,17 @@ class Faturas extends CI_Controller
                 $this->fatura_model->edit('faturas', $data, 'id_fatura', $fatura->id_fatura);
             }
 
-            foreach ($adicionais as $adicional) {
-                $faturas = $this->fatura_model->getFaturasAbertasCartao($adicional->id_cartao);
-                foreach ($faturas as $fatura) {
-                    $vencimento = explode('-', $fatura->vencimento);
-                    $vencimento = $vencimento[0] . '-' . $vencimento[1] . '-' . $dia;
-
-                    $data = array(
-                        'vencimento' => $vencimento
-                    );
-                    $this->fatura_model->edit('faturas', $data, 'id_fatura', $fatura->id_fatura);
-                }
-
-                $data_adicional = array(
-                    'id_usuario'        => $adicional->id_usuario,
-                    'id_cartao'         => $adicional->id_cartao,
-                    'id_cartao_titular' => $id_cartao,
-                    'dia_vencimento'    => $dia,
-                    'adicional'         => 1
-                );
-                $this->fatura_model->add('configs_faturas', $data_adicional);
-            }
-            $this->session->set_flashdata('sucesso', 'Configurações salvas com sucesso!');
+            $data = array(
+                'id_usuario'        => $adicional->id_usuario,
+                'id_cartao'         => $adicional->id_cartao,
+                'id_cartao_titular' => $id_cartao,
+                'dia_vencimento'    => $dia,
+                'adicional'         => 1
+            );
+            $this->fatura_model->add('configs_faturas', $data);
         }
+        $this->session->set_flashdata('sucesso', 'Configurações salvas com sucesso!');
+
         redirect($urlAtual);
     }
 
@@ -1794,4 +1812,5 @@ class Faturas extends CI_Controller
 
         return $request;
     }
+
 }

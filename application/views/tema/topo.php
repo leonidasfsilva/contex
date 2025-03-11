@@ -604,7 +604,7 @@ $this->load->view('includes/custom_js');
                     <!--DIV FOOTER-->
                     <div class="footer">
                         <div class="row">
-                            <span class="font-11"><?= sprintf('&copy; 2019 - %s • %s %s • ver. %s', date('Y'), 'CONTEX', '<span class="hidden-xs">- Sistema de Gestão</span>', APP_VERSION); ?> </span>
+                            <span class="font-11"><?= sprintf('&copy; 2019 - %s • %s %s • v<b>%s</b>', date('Y'), 'CONTEX', '<span class="hidden-xs">- Sistema de Gestão</span>', APP_VERSION); ?> </span>
                             <!--<div class="col-lg-2 pull-right">-->
                             <!--    <span class="pull-right badge badge-inverse hidden-print" id="back-to-top" style="cursor: pointer; background: #b2b2b2">Voltar ao topo <i class="fas fad fa-circle-arrow-up fa-fw"></i></span>-->
                             <!--</div>-->

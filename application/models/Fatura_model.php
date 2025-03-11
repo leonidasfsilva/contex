@@ -440,9 +440,8 @@ class Fatura_model extends CI_Model
 
         if ($this->db->count_all_results()) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     function getDiaVencimentoFatura($id_cartao)
@@ -505,14 +504,13 @@ class Fatura_model extends CI_Model
 
     function getVinculoFatura($idFatura)
     {
-        $count = $this->db->select('*')
+        $count = $this->db
             ->from('lancamentos')
             ->where('status', 1)
             ->where('id_fatura', $idFatura);
 
         if ($count->count_all_results() > 0) {
             $this->db
-                ->select('*')
                 ->from('lancamentos')
                 ->where('status', 1)
                 ->where('id_fatura', $idFatura);
@@ -668,6 +666,7 @@ class Fatura_model extends CI_Model
             }
             return json_encode($row_set);
         }
+        return false;
     }
 
     function autoCompleteDescricao($query, $idUsuario)
@@ -691,6 +690,7 @@ class Fatura_model extends CI_Model
             }
             return json_encode($row_set);
         }
+        return false;
     }
 
     function atualizaDescricao($term, $dataList)
@@ -809,5 +809,40 @@ class Fatura_model extends CI_Model
         }
 
         return $result;
+    }
+
+    function setAutoLinkToAllUserActiveCards()
+    {
+        $this->db->where('id_usuario', getUserId());
+        $this->db->update('configs_faturas', ['auto_vinculo' => 1]);
+
+        if (($this->db->error()['code'] != 0)) {
+            return $this->db->error()['code']['message']; // Or do whatever you gotta do here to raise an error
+        }
+        return true;
+    }
+
+    function unsetAutoLinkToAllUserActiveCards()
+    {
+        $this->db->where('id_usuario', getUserId());
+        $this->db->update('configs_faturas', ['auto_vinculo' => null]);
+
+        if (($this->db->error()['code'] != 0)) {
+            return $this->db->error()['code']['message']; // Or do whatever you gotta do here to raise an error
+        }
+        return true;
+    }
+
+    function getAutoLinkUser()
+    {
+        $this->db
+            ->from('configs_faturas')
+            ->where('id_usuario', getUserId())
+            ->where('auto_vinculo', 1);
+
+        if ($this->db->count_all_results()) {
+            return true;
+        }
+        return false;
     }
 }
