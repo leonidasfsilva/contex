@@ -303,7 +303,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
-            <form id="formSearch" action="<?= base_url('financeiro/faturas/pesquisa') ?>" method="get">
+            <form id="formSearch" action="<?= base_url('financeiro/faturas/pesquisa') ?>" method="get" autocomplete="off">
                 <div class="modal-body">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                     <p class="font-weight-bold">Pesquisar por: </p>

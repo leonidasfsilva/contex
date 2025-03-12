@@ -600,6 +600,7 @@ class Fatura_model extends CI_Model
             AND f.id_usuario = $idUser
             AND f.status = 1
             AND lf.status = 1
+            GROUP BY lf.id_lancamento
             ORDER BY lf.criado_em DESC
             LIMIT $start, $perpage
             ";
@@ -643,6 +644,7 @@ class Fatura_model extends CI_Model
             AND f.id_usuario = $idUser
             AND f.status = 1
             AND lf.status = 1
+            GROUP BY lf.id_lancamento
             ORDER BY lf.criado_em DESC";
 
         $resultQuery = $this->db->query($query);
