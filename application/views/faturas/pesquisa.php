@@ -6,403 +6,106 @@ $currentMonthText = null;
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h2 class="pb0">
-            <span class="pr20">Resultados da busca para: </span><span class="pr20"><?= $busca ?></span>
+            <span class="pr20">Resultados de busca para: </span><span class="pr20"><?= $busca ?></span>
         </h2>
         <div class="panel-ctrls">
-            <a href="<?= base_url('financeiro/faturas')?>" class="btn btn-sm btn-default"><i class="fas fa-arrow-left fa-fw"></i> Faturas</a>
+            <a href="<?= base_url('financeiro/faturas') ?>" class="btn btn-sm btn-default"><i class="fas fa-arrow-left fa-fw"></i> Faturas</a>
         </div>
     </div>
-    <div class="panel-body">
+    <div class="panel-body panel-no-padding table-responsive">
         <?php
         if ($results) { ?>
-            <div class="panel panel-midnightblue">
-                <div class="panel-body panel-no-padding table-responsive">
-                    <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid">
-                        <thead>
-                        <tr role="row">
-                            <th class="th_soma hidden" style="width: 10px !important;">Soma</th>
-                            <th style="width: 100px !important;">Data Compra</th>
-                            <th style="width: 300px !important;">Descrição</th>
-                            <th style="width: 200px !important;">Terceiro</th>
-                            <th>Parcela</th>
-                            <th>Valor Parcela (R$) <br> Valor Compra (R$)</th>
-                            <th style="width: 100px !important;">Ações</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php
-                        $creditoFatura = 0;
-                        $debitoFatura  = 0;
-
-                        foreach ($results as $r) {
-                            if ($r['n_parcela'] < 10) {
-                                $n_parcela = str_pad($r['n_parcela'], 2, '0', STR_PAD_LEFT);
-                            } else {
-                                $n_parcela = $r['n_parcela'];
-                            }
-
-                            if ($r['total_parcelas'] < 10) {
-                                $total_parcelas = str_pad($r['total_parcelas'], 2, '0', STR_PAD_LEFT);
-                            } else {
-                                $total_parcelas = $r['total_parcelas'];
-                            }
-
-                            $data_compra  = date(('d/m/y'), strtotime($r['data_compra']));
-                            $debitoFatura += $r['valor_parcela'];
-                            $totalSum     += $r['valor_parcela'];
-
-                            if ($r['valor_total'] < 0) {
-                                $valor = number_format(abs($r['valor_total']), 2, ',', '.');
-                            } else {
-                                $valor = number_format($r['valor_total'], 2, ',', '.');
-                            }
-
-                            if (isset($r['observacoes']) && $r['observacoes']) {
-                                $iconObs = '
-                                                            <i class="fas fa-comment-dots fa-fw" title="Observações adicionais"></i>
-                                                        ';
-                            } else {
-                                $iconObs = '';
-                            };
-
-                            echo '<tr>';
-                            echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
-                            echo '<td>' . $data_compra . '</td>';
-                            echo '<td><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Detalhes" id_lancamento="' .
-                                $r['id_lancamento'] . '" descricao="' . $r['descricao'] . '" observacoes="' . nl2br($r['observacoes']) . '" valor="' . $valor . '" data_compra="' .
-                                date('d/m/Y', strtotime($r['data_compra'])) . '" parcelada="' . $r['compra_parcelada'] . '" estorno="' . $r['estorno'] . '" n_parcelas="' . $r['total_parcelas'] .
-                                '" valor_parcela="' . number_format($r['valor_parcela'], 2, ',', '.') . '" terceiros="' . $r['compra_terceiros'] . '" nome_cliente="' . $r['nome_cliente'] .
-                                '" id_cliente="' . $r['id_cliente'] . '">' . strtoupper($r['descricao']) . $iconObs .
-                                '</a></td>';
-                            echo '<td>' . strtoupper($r['nome_cliente']) . '</td>';
-                            echo '<td>' . $n_parcela . '/' . $total_parcelas . '</td>';
-                            echo '<td class="valor_parcela" style=" color: ' . $color = null .
-                                    '"><span>' . number_format($r['valor_parcela'], 2, ',', '.') .
-                                    '</span><br><span style="color: grey">' . number_format($r['valor_total'], 2, ',', '.') .
-                                    '</span></td>';
-
-                            echo '<td>';
-                            echo '<a type="button" href="' . base_url('financeiro/faturas/detalhes/' . $r['id_fatura'] . '/' . $result['id_cartao']) . '" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm editar" title="Visualizar fatura desta compra">
-                                                            <i class="fas fa-file-invoice-dollar fa-lg fa-fw"></i>
-                                                        </a>';
-
-                            echo '</td>';
-                            echo '</tr>';
-                        } ?>
-                        </tbody>
-                    </table>
-                </div>
-
+            <table class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
+                <thead>
+                <tr role="row">
+                    <th class="th_soma hidden" style="width: 10px !important;">Soma</th>
+                    <th style="width: 100px !important;">Data Compra</th>
+                    <th style="width: 300px !important;">Descrição</th>
+                    <th style="width: 200px !important;">Terceiro</th>
+                    <th>Qnt Parcelas</th>
+                    <th>Valor Parcela (R$) <br> Valor Compra (R$)</th>
+                    <th style="width: 100px !important;">Ações</th>
+                </tr>
+                </thead>
+                <tbody>
                 <?php
+                $creditoFatura = 0;
+                $debitoFatura  = 0;
+                $totalSum      = 0;
 
-                foreach ($results as $result) {
-                    $n_cartao               = explode(" ", trim(decriptar($result['cartao']['numero'])));
-                    $final                  = $n_cartao[3];
-                    $cartaoAlternativeLabel = $result['cartao']['bandeira'] . ' - FINAL ' . $final;
-                    ?>
-                    <div class="panel accordion-item">
-                        <a class="accordion-title" data-toggle="collapse" data-parent="#accordion" href="#<?= $result['id_fatura'] ?>">
-                            <h2 class="bg-midnightblue text-white">
-                                <i class="fas fa-file-invoice-dollar fa-lg fa-fw"></i>
-                                Período: <?= $result['reference'] ?>
+                foreach ($results as $r) {
+                    if ($r['n_parcela'] < 10) {
+                        $n_parcela = str_pad($r['n_parcela'], 2, '0', STR_PAD_LEFT);
+                    } else {
+                        $n_parcela = $r['n_parcela'];
+                    }
 
-                                <span style="padding-left: 10px;">
-                                    <i class="fas fa-credit-card fa-lg fa-fw"></i>
-                                    <?= $result['cartao']['apelido'] ?: $cartaoAlternativeLabel ?>
-                                </span>
-                            </h2>
-                        </a>
-                        <div id="<?= $result['id_fatura'] ?>" class="collapse">
-                            <div class="accordion-body" style="padding: 0 !important;">
-                                <div class="panel panel-midnightblue no-border" style="margin: 0 !important;">
-                                    <div class="panel-body panel-no-padding table-responsive">
-                                        <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid">
-                                            <thead>
-                                            <tr role="row">
-                                                <th class="th_soma hidden" style="width: 10px !important;">Soma</th>
-                                                <th style="width: 100px !important;">Data Compra</th>
-                                                <th style="width: 300px !important;">Descrição</th>
-                                                <th style="width: 200px !important;">Terceiro</th>
-                                                <th>Parcela</th>
-                                                <th>Valor Parcela (R$) <br> Valor Compra (R$)</th>
-                                                <th style="width: 100px !important;">Ações</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <?php
-                                            $creditoFatura = 0;
-                                            $debitoFatura  = 0;
+                    if ($r['total_parcelas'] < 10) {
+                        $total_parcelas = str_pad($r['total_parcelas'], 2, '0', STR_PAD_LEFT);
+                    } else {
+                        $total_parcelas = $r['total_parcelas'];
+                    }
 
-                                            foreach ($result['lancamentos'] as $r) {
-                                                if ($r['n_parcela'] < 10) {
-                                                    $n_parcela = str_pad($r['n_parcela'], 2, '0', STR_PAD_LEFT);
-                                                } else {
-                                                    $n_parcela = $r['n_parcela'];
-                                                }
+                    $data_compra  = date(('d/m/y'), strtotime($r['data_compra']));
+                    $debitoFatura += $r['valor_parcela'];
+                    $totalSum     += $r['valor_parcela'];
 
-                                                if ($r['total_parcelas'] < 10) {
-                                                    $total_parcelas = str_pad($r['total_parcelas'], 2, '0', STR_PAD_LEFT);
-                                                } else {
-                                                    $total_parcelas = $r['total_parcelas'];
-                                                }
+                    if ($r['valor_total'] < 0) {
+                        $valor = number_format(abs($r['valor_total']), 2, ',', '.');
+                    } else {
+                        $valor = number_format($r['valor_total'], 2, ',', '.');
+                    }
 
-                                                $data_compra  = date(('d/m/y'), strtotime($r['data_compra']));
-                                                $debitoFatura += $r['valor_parcela'];
-                                                $totalSum     += $r['valor_parcela'];
-
-                                                if ($r['valor_total'] < 0) {
-                                                    $valor = number_format(abs($r['valor_total']), 2, ',', '.');
-                                                } else {
-                                                    $valor = number_format($r['valor_total'], 2, ',', '.');
-                                                }
-
-                                                if (isset($r['observacoes']) && $r['observacoes']) {
-                                                    $iconObs = '
+                    if (isset($r['observacoes']) && $r['observacoes']) {
+                        $iconObs = '
                                                             <i class="fas fa-comment-dots fa-fw" title="Observações adicionais"></i>
                                                         ';
-                                                } else {
-                                                    $iconObs = '';
-                                                };
+                    } else {
+                        $iconObs = '';
+                    };
 
-                                                echo '<tr>';
-                                                echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
-                                                echo '<td>' . $data_compra . '</td>';
-                                                echo '<td><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Detalhes" id_lancamento="' .
-                                                    $r['id_lancamento'] . '" descricao="' . $r['descricao'] . '" observacoes="' . nl2br($r['observacoes']) . '" valor="' . $valor . '" data_compra="' .
-                                                    date('d/m/Y', strtotime($r['data_compra'])) . '" parcelada="' . $r['compra_parcelada'] . '" estorno="' . $r['estorno'] . '" n_parcelas="' . $r['total_parcelas'] .
-                                                    '" valor_parcela="' . number_format($r['valor_parcela'], 2, ',', '.') . '" terceiros="' . $r['compra_terceiros'] . '" nome_cliente="' . $r['nome_cliente'] .
-                                                    '" id_cliente="' . $r['id_cliente'] . '">' . strtoupper($r['descricao']) . $iconObs .
-                                                    '</a></td>';
-                                                echo '<td>' . strtoupper($r['nome_cliente']) . '</td>';
-                                                echo '<td>' . $n_parcela . '/' . $total_parcelas . '</td>';
-                                                echo '<td class="valor_parcela" style=" color: ' . $color = null .
-                                                        '"><span>' . number_format($r['valor_parcela'], 2, ',', '.') .
-                                                        '</span><br><span style="color: grey">' . number_format($r['valor_total'], 2, ',', '.') .
-                                                        '</span></td>';
+                    echo '<tr>';
+                    echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
+                    echo '<td class="font-weight-bold">' . $data_compra . '</td>';
+                    echo '<td class="font-weight-bold"><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Detalhes" id_lancamento="' .
+                        $r['id_lancamento'] . '" descricao="' . $r['descricao'] . '" observacoes="' . nl2br($r['observacoes']) . '" valor="' . $valor . '" data_compra="' .
+                        date('d/m/Y', strtotime($r['data_compra'])) . '" parcelada="' . $r['compra_parcelada'] . '" estorno="' . $r['estorno'] . '" n_parcelas="' . $r['total_parcelas'] .
+                        '" valor_parcela="' . number_format($r['valor_parcela'], 2, ',', '.') . '" terceiros="' . $r['compra_terceiros'] . '" nome_cliente="' . $r['nome_cliente'] .
+                        '" id_cliente="' . $r['id_cliente'] . '">' . strtoupper($r['descricao']) . $iconObs .
+                        '</a></td>';
+                    echo '<td class="font-weight-bold">' . strtoupper($r['nome_cliente']) . '</td>';
+                    echo '<td class="font-weight-bold">' . $total_parcelas . '</td>';
+                    echo '<td class="valor_parcela font-weight-bold" style=" color: ' . $color = null .
+                            '"><span>' . number_format($r['valor_parcela'], 2, ',', '.') .
+                            '</span><br><span style="color: grey">' . number_format($r['valor_total'], 2, ',', '.') .
+                            '</span></td>';
 
-                                                echo '<td>';
-                                                echo '<a type="button" href="' . base_url('financeiro/faturas/detalhes/' . $r['id_fatura'] . '/' . $result['id_cartao']) . '" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm editar" title="Visualizar fatura desta compra">
+                    echo '<td>';
+                    echo '<a type="button" href="' . base_url('financeiro/faturas/detalhes/' . $r['id_fatura'] . '/' . $r['id_cartao']) . '" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm editar" title="Visualizar fatura desta compra">
                                                             <i class="fas fa-file-invoice-dollar fa-lg fa-fw"></i>
                                                         </a>';
 
-                                                echo '</td>';
-                                                echo '</tr>';
-                                            } ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="panel " style="margin: 0 !important;">
-                                        <div class="font-weight-bold panel-no-padding p20 bg-gray">
-                                            <span>
-                                                Saldo devedor na fatura <?= $result['id_fatura'] ?>
-                                            </span>
-                                        </div>
-                                        <div class="panel-body panel-no-padding">
-                                            <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
-                                                <thead>
-                                                <tr>
-                                                    <th colspan="2" style="text-align: left !important;">Descrição</th>
-                                                    <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
-                                                </tr>
-                                                </thead>
-                                                <tr>
-                                                    <td colspan="2" style="text-align: left; color: red">(-) SALDO DEVEDOR NA FATURA</td>
-                                                    <td colspan="1" style="text-align: right; color: red">
-                                                        <input type="hidden" id="debit-balance" value="<?php echo number_format($debitoFatura, 2, ',', '.') ?>">
-                                                        <span style="cursor: pointer;" title="Copiar para área de transferência" class="i-copy-debit">
-                                                            <i class="fas fa-copy fa-fw hidden" id="icon-debit"></i>
-                                                            <?php echo number_format($debitoFatura, 2, ',', '.') ?>
-                                                        </span>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                <?php } ?>
-            </div>
-            <div class="panel panel-alizarin" style="margin: 0 !important;">
-                <div class="panel-heading font-weight-bold">
-                    <div class="pull-left">
-                        <h2>
-                            Resumo do período:
-                        </h2>
-                    </div>
-                    <div class="pull-right">
-                        <h2 class="pull-right">
-                            <?= $referencePeriod ?>
-                        </h2>
-                    </div>
-                </div>
-                <div class="panel-body panel-no-padding">
-                    <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
-                        <thead>
-                        <tr>
-                            <th colspan="2" style="text-align: left !important;">Descrição</th>
-                            <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
-                        </tr>
-                        </thead>
-                        <tr>
-                            <td colspan="2" style="text-align: left; color: red">(-) SALDO DEVEDOR TOTAL</td>
-                            <td colspan="1" style="text-align: right; color: red">
-                                <input type="hidden" id="debit-balance" value="<?php echo number_format($totalSum, 2, ',', '.') ?>">
-                                <span style="cursor: pointer;" title="Copiar para área de transferência" class="i-copy-debit">
-                                    <i class="fas fa-copy fa-fw hidden"></i>
-                                    <?php echo number_format($totalSum, 2, ',', '.') ?>
-                                </span>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+                    echo '</td>';
+                    echo '</tr>';
+                } ?>
+                </tbody>
+            </table>
         <?php } else { ?>
-            <div class="note note-info font-weight-bold">
-                Nenhum registro encontrado para o período de referência solicitado
+            <div class="m20 note note-info font-weight-bold">
+                Nenhum registro encontrado
             </div>
         <?php } ?>
-        <div class="panel-footer note note-alizarin font-weight-bold p0 mt10">
-            <div class="pull-left">
-                <span>
-                    Vencimento:
-                </span>
+
+        <?php if ($this->pagination->create_links()) { ?>
+            <div class="panel-footer">
+                <?= $this->pagination->create_links() ?>
             </div>
-            <div class="pull-right">
-                <span class="pull-right">
-			        <?= $dueDatePeriod ?>
-                </span>
-            </div>
-        </div>
+        <?php } ?>
+
     </div>
 </div>
 
-<!-- Modal FILTRAR -->
-<div class="modal fade" id="modalFiltrar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title">Filtrar por período</h4>
-            </div>
-            <form action="<?php echo current_url(); ?>" method="get" id="form_filtro" autocomplete="off">
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="form-group col-lg-4" id="div_periodo_mensal">
-                            <label class="control-label font-weight-bold" for="select_mes">
-                                Mês específico
-                            </label>
-                            <select class="form-control" id="mesReferenciaSelect" name="mesReferencia">
-                                <option value="01" <?= ($referenceMonth == '01') ? 'selected' : null ?>>01 - JANEIRO</option>
-                                <option value="02" <?= ($referenceMonth == '02') ? 'selected' : null ?>>02 - FEVEREIRO</option>
-                                <option value="03" <?= ($referenceMonth == '03') ? 'selected' : null ?>>03 - MARÇO</option>
-                                <option value="04" <?= ($referenceMonth == '04') ? 'selected' : null ?>>04 - ABRIL</option>
-                                <option value="05" <?= ($referenceMonth == '05') ? 'selected' : null ?>>05 - MAIO</option>
-                                <option value="06" <?= ($referenceMonth == '06') ? 'selected' : null ?>>06 - JUNHO</option>
-                                <option value="07" <?= ($referenceMonth == '07') ? 'selected' : null ?>>07 - JULHO</option>
-                                <option value="08" <?= ($referenceMonth == '08') ? 'selected' : null ?>>08 - AGOSTO</option>
-                                <option value="09" <?= ($referenceMonth == '09') ? 'selected' : null ?>>09 - SETEMBRO</option>
-                                <option value="10" <?= ($referenceMonth == '10') ? 'selected' : null ?>>10 - OUTUBRO</option>
-                                <option value="11" <?= ($referenceMonth == '11') ? 'selected' : null ?>>11 - NOVEMBRO</option>
-                                <option value="12" <?= ($referenceMonth == '12') ? 'selected' : null ?>>12 - DEZEMBRO</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-lg-4" id="div_periodo_anual">
-                            <label class="control-label font-weight-bold" for="select_ano">
-                                Ano específico
-                            </label>
-                            <select class="form-control" id="anoReferenciaSelect" name="anoReferencia">
-                                <?php if ($yearsList) {
-                                    foreach ($yearsList as $year) { ?>
-                                        <option value="<?= $year ?>" <?= ($referenceYear == $year ? 'selected' : '') ?>><?= $year ?></option>
-                                    <?php }
-                                } ?>
-                            </select>
-                        </div>
-                        <input type="hidden" name="cartao" value="<?= $idCard ?>">
-                        <div class="form-group col-lg-4">
-                            <label class="tooltips font-weight-bold" title="Filtrar lançamentos por terceiros">Terceiros <i class="fa fa-info-circle fa-fw"></i></label>
-                            <select class="form-control" name="nome">
-                                <?php if ($terceiros) {
-                                    foreach ($terceiros as $terceiro) { ?>
-                                        <option value="<?= $terceiro['nome'] ?>" <?php if ($name == $terceiro['nome']) {
-                                            echo 'selected';
-                                        } ?>><?= $terceiro['nome'] ?>
-                                        </option>
-                                    <?php }
-                                } ?>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true" id="btnCancelExcluir">
-                        <i class="fa fa-times fa-fw"></i> Cancelar
-                    </button>
-                    <button class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Filtrar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
-<!-- Modal SELECAO DE MES -->
-<div class="modal fade" id="modalSelectMounth" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <form id="form_filtro_mes" method="get">
-                <div class="modal-body">
-                    <p class="font-weight-bold">Selecione o mês e ano específicos</p>
-                    <input type="hidden" name="mesReferencia" class="selectedMonth" value="<?= $referenceMonth ?>"/>
-                    <?php
-                    $count = 0;
-                    foreach ($monthList as $index => $month) {
-                        $count++;
-                        if ($referenceMonth == $index) {
-                            $active = 'active';
-                        } else {
-                            $active = null;
-                        }
-                        ?>
-                        <button type="button" style="width: 60px;" class="btn btn-info btn-sm selectMonth <?= $active ?> <?= $month['notification'] ? 'notification-dot' : null ?>" value="<?= $index ?>">
-                            <?= $month['name'] ?>
-                        </button>
-                        <?php if ($count == 4 && $index != 12) {
-                            $count = 0;
-                            ?>
-                            <br>
-                            <br>
-                        <?php }
-                    } ?>
-                </div>
-                <div class="modal-footer">
-                    <div class="row">
-                        <div class="btn-block">
-                            <div class="input-group">
-                                <span class="input-group-addon">Ano: </span>
-                                <select class="form-control" id="anoReferenciaSelect" name="anoReferencia">
-                                    <?php if ($yearsList) {
-                                        foreach ($yearsList as $year) { ?>
-                                            <option value="<?= $year ?>" <?= ($referenceYear == $year ? 'selected' : '') ?>>
-                                                <?= $year ?>
-                                            </option>
-                                        <?php }
-                                    } ?>
-                                </select>
-                            </div>
-                        </div>
-                        <!-- <div class="col-xs-6">
-                            <button class="btn btn-default btn-sm" data-dismiss="modal" title="Cancelar"><i class="fa fa-times fa-fw"></i>Cancelar</button>
-                        </div> -->
-                    </div>
-                    <input type="hidden" name="cartao" value="<?= $idCard ?>"/>
-                    <input type="hidden" name="nome" value="<?= $name ?>"/>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 <!-- Modal DETALHES LANÇAMENTO-->
 <div class="modal fade" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

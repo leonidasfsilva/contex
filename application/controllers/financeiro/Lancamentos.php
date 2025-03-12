@@ -229,8 +229,8 @@ class Lancamentos extends CI_Controller
         $config['total_rows']        = $this->financeiro_model->countLancamentos(getUserId(), $where ?? null);
         $config['per_page']          = 30;
         $config['page_query_string'] = true;
-        $config['next_link']         = false;
-        $config['prev_link']         = false;
+        $config['next_link']         = '<i class="fa-solid fa-forward"></i>';
+        $config['prev_link']         = '<i class="fa-solid fa-backward"></i>';
         $config['full_tag_open']     = '<ul class="pagination pagination-sm">';
         $config['full_tag_close']    = '</ul>';
         $config['num_tag_open']      = '<li>';

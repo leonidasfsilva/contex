@@ -171,7 +171,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             </div>
         </div>
         <div class="panel-body panel-no-padding table-responsive">
-            <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
+            <table class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
                 <thead>
                 <tr role="row">
                     <th class="th_soma hidden" style="width: 10px !important;">Soma</th>

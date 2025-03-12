@@ -578,7 +578,7 @@ class Fatura_model extends CI_Model
         return $result;
     }
 
-    function pesquisaLancamentosFaturas($term, $idUser = null)
+    function pesquisaLancamentosFaturas($term, $limit = null, $rows = 0, $perpage = 0, $start = null, $idUser = null)
     {
         if (!$idUser) $idUser = getUserId();
 
@@ -587,24 +587,66 @@ class Fatura_model extends CI_Model
         }
         $term = $this->db->escape_like_str($term);
 
-        $query = "SELECT f.*,
-            lf.*
+        $start = $start ?? '0';
+        $query = "SELECT f.*, lf.*, lfa.*
             FROM faturas f
             INNER JOIN lancamentos_faturas lf
             ON lf.id_fatura = f.id_fatura
             INNER JOIN lancamentos_faturas_assoc lfa
             ON lfa.id_lancamento = lf.id_lancamento
-            WHERE lf.nome_cliente LIKE '%$term%'
-            OR lf.descricao LIKE '%$term%'
+            WHERE lf.descricao LIKE '%$term%'
             OR lf.observacoes LIKE '%$term%'
+            OR lf.nome_cliente LIKE '%$term%'
             AND f.id_usuario = $idUser
             AND f.status = 1
             AND lf.status = 1
-            GROUP BY f.id_cartao
-            ORDER BY lf.criado_em DESC";
+            ORDER BY lf.criado_em DESC
+            LIMIT $start, $perpage
+            ";
+
+
+        if ($limit) {
+            if ($rows > $limit) {
+                $this->db->limit($limit, ($rows - $limit));
+            } else {
+                $this->db->limit($limit, $start);
+            }
+        }
 
         $resultQuery = $this->db->query($query);
         $result      = $resultQuery->result_array();
+
+        if (!$result) {
+            return false;
+        }
+        return $result;
+    }
+
+    function countPesquisaLancamentosFaturas($term, $idUser = null)
+    {
+        if (!$idUser) $idUser = getUserId();
+
+        if (!is_string($term) || is_numeric($term)) {
+            return false;
+        }
+        $term = $this->db->escape_like_str($term);
+
+        $query = "SELECT f.*, lf.*, lfa.*
+            FROM faturas f
+            INNER JOIN lancamentos_faturas lf
+            ON lf.id_fatura = f.id_fatura
+            INNER JOIN lancamentos_faturas_assoc lfa
+            ON lfa.id_lancamento = lf.id_lancamento
+            WHERE lf.descricao LIKE '%$term%'
+            OR lf.observacoes LIKE '%$term%'
+            OR lf.nome_cliente LIKE '%$term%'
+            AND f.id_usuario = $idUser
+            AND f.status = 1
+            AND lf.status = 1
+            ORDER BY lf.criado_em DESC";
+
+        $resultQuery = $this->db->query($query);
+        $result      = $resultQuery->num_rows();
 
         if (!$result) {
             return false;

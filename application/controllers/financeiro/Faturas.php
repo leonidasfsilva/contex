@@ -43,8 +43,8 @@ class Faturas extends CI_Controller
             'mes_referencia' => 'desc',
         ];
 
-        if (isset($_GET['cartao'])) {
-            $idCartao = $_GET['cartao'];
+        if ($this->input->get('cartao')) {
+            $idCartao = $this->input->get('cartao');
         }
 
         $query_string = null;
@@ -1755,13 +1755,61 @@ class Faturas extends CI_Controller
         }
 
         $termo = $_GET['busca'] ?? null;
+        $start = $_GET['per_page'] ?? null;
+
 
         if (!is_string($termo) || is_numeric($termo)) {
             $this->session->set_flashdata('erro', 'O termo pesquisado é inválido');
             redirect('financeiro/faturas');
         }
 
-        $searchResult = $this->fatura_model->pesquisaLancamentosFaturas($termo);
+        $query_string = null;
+        $lastElement  = end($_GET);
+
+        foreach ($_GET as $key => $value) {
+            if ($key != 'per_page') {
+                if ($value == $lastElement) {
+                    $query_string .= $key . '=' . $value;
+                } else {
+                    $query_string .= $key . '=' . $value . '&';
+                }
+            }
+        }
+
+        $config['base_url']          = base_url('financeiro/faturas/pesquisa');
+        $config['suffix']            = '&' . $query_string;
+        $config['first_url']         = $config['base_url'] . '?' . $query_string;
+        $config['total_rows']        = $this->fatura_model->countPesquisaLancamentosFaturas($termo);
+        $config['per_page']          = 20;
+        $config['page_query_string'] = true;
+        $config['next_link']         = '<i class="fa-solid fa-forward"></i>';
+        $config['prev_link']         = '<i class="fa-solid fa-backward"></i>';
+        $config['full_tag_open']     = '<ul class="pagination pagination-sm">';
+        $config['full_tag_close']    = '</ul>';
+        $config['num_tag_open']      = '<li>';
+        $config['num_tag_close']     = '</li>';
+        $config['cur_tag_open']      = '<li class="disabled"><a style="background-color:#337ab7; color: white" class="js:"><b>';
+        $config['cur_tag_close']     = '</b></a></li>';
+        $config['prev_tag_open']     = '<li>';
+        $config['prev_tag_close']    = '</li>';
+        $config['next_tag_open']     = '<li>';
+        $config['next_tag_close']    = '</li>';
+        $config['first_link']        = 'Primeira';
+        $config['last_link']         = 'Última';
+        $config['first_tag_open']    = '<li>';
+        $config['first_tag_close']   = '</li>';
+        $config['last_tag_open']     = '<li>';
+        $config['last_tag_close']    = '</li>';
+
+        $this->pagination->initialize($config);
+
+        $searchResult = $this->fatura_model->pesquisaLancamentosFaturas(
+            $termo,
+            $limit = null,
+            $config['total_rows'],
+            $config['per_page'],
+            $start
+        );
 
         $data['results']        = $searchResult;
         $data['busca']          = $termo;
