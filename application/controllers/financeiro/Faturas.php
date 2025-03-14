@@ -815,18 +815,6 @@ class Faturas extends CI_Controller
                             $ano_venc++;
                         }
                         $vencimentoFormatado = ($ano_venc . '-' . $mes_venc . '-' . $dia_venc);
-
-                        $data2 = array(
-                            'id_lancamento_fatura' => $id_lancamento,
-                            'id_usuario'           => getUserId(),
-                            'id_cliente'           => $this->input->post('id_cliente'),
-                            'descricao'            => padronizarString($this->input->post('descricao')),
-                            'tipo'                 => 1,
-                            'valor'                => $valor,
-                            'data_vencimento'      => $vencimentoFormatado,
-                        );
-                        // removendo edicao de compras a vista de terceiros em Pendencias
-                        // $this->pendencia_model->add('pendencias', $data2);
                     }
 
                     if ($this->fatura_model->add('lancamentos_faturas_assoc', $data1)) {
@@ -1085,6 +1073,7 @@ class Faturas extends CI_Controller
                     return false;
                 }
 
+                atualizaValorVinculoFaturas($faturaReferencia->id_fatura);
                 $mes_referencia++;
 
                 if ($mes_referencia == 13) {
@@ -1093,7 +1082,6 @@ class Faturas extends CI_Controller
                 }
             }
 
-            atualizaValorVinculoFaturas($faturaReferencia->id_fatura);
             return true;
         }
 
