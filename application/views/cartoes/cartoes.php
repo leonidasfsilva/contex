@@ -19,8 +19,8 @@
         <table class="table table-condensed table-striped table-bordeless table-hover" role="grid" style="width: 100%;">
             <thead>
             <tr role="row">
-                <th style="text-align: left !important;">Final Cartão<br>Apelido Cartão</th>
-                <!--<th style="text-align: left !important;"></th>-->
+                <th style="text-align: left !important;">Final Cartão</th>
+                <th style="text-align: left !important;">Apelido Cartão</th>
                 <th style="text-align: left !important;">Nome Impresso</th>
                 <th style="text-align: left !important;">Bandeira</th>
                 <th style="text-align: left !important;">Tipo Cartão</th>
@@ -81,8 +81,11 @@
                     ?>
                     <tr>
                         <td><?= '<a href="#modalVisualizarCartao" role="button" data-toggle="modal" idCard="' . $r->id_cartao . '" numero="' . decriptar($r->numero) . '" validade="' . $r->validade . '" bandeira="' . $r->bandeira . '" cvc="' . decriptar($r->cvc) . '" 
-                            nome="' . $r->nome . '" class="visualizar font-weight-bold" title="Visualizar cartão"> **** **** **** ' . $final . '<br>' . $r->apelido . '</a> 
+                            nome="' . $r->nome . '" class="visualizar font-weight-bold" title="Visualizar cartão"> **** **** **** ' . $final . '</a> 
                             <span class="ml5 font-weight-bold badge badge-' . $labelPrincipal . '"> ' . $cartaoPrincipal . ' </span>' ?>
+                        </td>
+                        <td><?= '<a href="#modalVisualizarCartao" role="button" data-toggle="modal" idCard="' . $r->id_cartao . '" numero="' . decriptar($r->numero) . '" validade="' . $r->validade . '" bandeira="' . $r->bandeira . '" cvc="' . decriptar($r->cvc) . '" 
+                            nome="' . $r->nome . '" class="visualizar font-weight-bold" title="Visualizar cartão">' . $r->apelido . '</a>' ?>
                         </td>
                         <td class="font-weight-bold"><?= $r->nome ?></td>
                         <td><?= $r->bandeira ?></td>
