@@ -210,7 +210,7 @@ class Mxcode extends CI_Controller
 		$prefs = array(
 			'format'             => 'zip',
 			'foreign_key_checks' => false,
-			'filename'           => 'backup' . date('d-m-Y') . '.sql',
+            'filename'           => sprintf('dump_contex_%s-%s.sql', ENVIRONMENT, date('d-m-Y')),
 		);
 		
 		try {
