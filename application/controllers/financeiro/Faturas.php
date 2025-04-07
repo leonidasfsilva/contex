@@ -866,37 +866,32 @@ class Faturas extends CI_Controller
         $urlAtual                     = $this->input->post('urlAtual');
         $valor                        = $this->input->post('valor');
         $valor_parcela                = $this->input->post('valor_parcela');
+        $request['data_compra']       = date('Y-m-d');
+        $request['qnt_parcelas']      = 1;
+        $request['compra_parcelada']  = 0;
+        $request['compra_terceiros']  = 0;
+        $request['estorno']           = 0;
 
         if ($this->input->post('data_compra')) {
             $data_compra_exploded   = explode('/', $data_compra);
             $request['data_compra'] = sprintf('%s-%s-%s', $data_compra_exploded[2], $data_compra_exploded[1], $data_compra_exploded[0]);
-        } else {
-            $request['data_compra'] = date('Y-m-d');
         }
 
         if ($this->input->post('qnt_parcelas')) {
             $request['qnt_parcelas'] = $this->input->post('qnt_parcelas');
-        } else {
-            $request['qnt_parcelas'] = 1;
         }
 
         if ($this->input->post('compra_parcelada')) {
             $request['compra_parcelada'] = 1;
-        } else {
-            $request['compra_parcelada'] = 0;
         }
 
         if ($this->input->post('compra_terceiros')) {
             $request['compra_terceiros'] = 1;
-        } else {
-            $request['compra_terceiros'] = 0;
         }
 
         if ($this->input->post('estorno')) {
             $request['estorno'] = 1;
             $request['valor']   = '-' . $valor;
-        } else {
-            $request['estorno'] = 0;
         }
 
         if (!validate_money($valor_parcela)) {

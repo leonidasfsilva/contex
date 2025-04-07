@@ -3,7 +3,7 @@ $situacao = $this->input->get('situacao');
 $periodo  = $this->input->get('periodo');
 $cliente  = $this->input->get('cliente');
 
-if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
+if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aFaturas')) {
 	if ($status_fatura == 1) {
 		if ($id_usuario != getUserId()) {
 			$disabled_lancamento = 'disabled';
@@ -253,7 +253,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 								'</span></td>';
 							
 							echo '<td>';
-							if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
+							if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eFaturas')) {
 								echo '<button type="button" href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Detalhes" id_lancamento="' .
 									$s->id_lancamento . '" descricao="' . $s->descricao . '" observacoes="' . nl2br($s->observacoes) . '" valor="' . $valor . '" data_compra="' .
 									date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
@@ -267,7 +267,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                                     nome_cliente="' . $s->nome_cliente . '" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento . ' ' . $disabled_lancamento_2 . '>
                                 <i class="fass fa-copy fa-lg fa-fw"></i></button>';
 							}
-							if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
+							if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dFaturas')) {
 								echo '<button type="button" href="#modalExcluir" data-toggle="modal" id_lancamento="' . $s->id_lancamento . '" class="btn btn-danger btn-sm excluir" title="Excluir" ' . $disabled_lancamento . ' ' . $disabled_lancamento_2 . '>
                                             <i class="fas fa-trash-can-xmark fa-lg fa-fw"></i></button>';
 							}
