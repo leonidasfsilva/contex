@@ -62,7 +62,7 @@
                     <div class="panel accordion-item">
                         <a class="accordion-title" data-toggle="collapse" data-parent="#accordionB" href="#collapseaTwo">
                             <h2>
-                                <i class="fas fa-phone-alt fa-lg fa-fw"></i>
+                                <i class="fas fa-phone fa-lg fa-fw"></i>
                                 Contatos
                             </h2>
                         </a>

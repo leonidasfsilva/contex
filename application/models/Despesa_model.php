@@ -10,8 +10,8 @@ class Despesa_model extends CI_Model
 	 * email: leonidas.f.silva@hotmail.com
 	 */
 	
-	protected string $mainTable  = 'despesas';
-	protected string $assocTable = 'lancamentos_despesas';
+	protected string $despesasTable            = 'despesas';
+	protected string $lancamentosDespesasTable = 'lancamentos_despesas';
 	protected        $userId;
 	
 	function __construct()
@@ -23,7 +23,7 @@ class Despesa_model extends CI_Model
 	function get($where = null, $limit = null, $rows = 0, $perpage = 0, $start = 0, $order_by = null, $one = false)
 	{
 		$this->db->select('*');
-		$this->db->from($this->mainTable);
+		$this->db->from($this->despesasTable);
 		$this->db->limit($perpage, $start);
 		$this->db->where('status', 1);
 		$this->db->where('id_usuario', getUserId());
@@ -57,23 +57,19 @@ class Despesa_model extends CI_Model
 	
 	function getDespesas($where = '', $perpage = 0, $start = 0, $order_by = null, $one = false)
 	{
-		
-		$this->db->select('*');
-		$this->db->from($this->mainTable);
+		$this->db->from($this->despesasTable);
 		$this->db->limit($perpage, $start);
 		
 		$idUsuario = getUserId();
 		
 		if ($where) {
 			$this->db->where($where);
-			$this->db->where('status', 1);
-			$this->db->where('id_usuario', $idUsuario);
-		} else {
-			$this->db->where('status', 1);
-			$this->db->where('id_usuario', $idUsuario);
-		}
-		
-		if ($order_by) {
+        }
+
+        $this->db->where('status', 1);
+        $this->db->where('id_usuario', $idUsuario);
+
+        if ($order_by) {
 			if (is_array($order_by)) {
 				foreach ($order_by as $key => $value) {
 					$this->db->order_by($key, $value);
@@ -87,49 +83,41 @@ class Despesa_model extends CI_Model
 		$result = !$one ? $query->result() : $query->row();
 		return $result;
 	}
-	
-	function getLancamentosDespesa($idDespesa, $fields = null, $where = null, $limit = null, $rows = 0, $perpage = 0, $start = 0, $order_by = null, $one = false)
+
+	function getLancamentosDespesa($idDespesa, $where = '', $perpage = 0, $start = 0, $order_by = null, $one = false)
 	{
-		$this->db->select();
-		if ($fields) $this->db->select($fields);
-		
-		$this->db->from($this->assocTable);
-		$this->db->limit($perpage, $start);
-		$this->db->where('status', 1);
-		$this->db->where('id_despesa', $idDespesa);
-		
-		if ($where) $this->db->where($where);
-		
-		if ($order_by) {
+		$this->db->from($this->lancamentosDespesasTable);
+		// $this->db->limit($perpage, $start);
+
+		if ($where) {
+			$this->db->where($where);
+        }
+
+        $this->db->where('status', 1);
+        $this->db->where('id_despesa', $idDespesa);
+
+        if ($order_by) {
 			if (is_array($order_by)) {
 				foreach ($order_by as $key => $value) {
 					$this->db->order_by($key, $value);
 				}
 			} else {
-				$this->db->order_by('criado_em', $order_by);
+				$this->db->order_by('id', $order_by);
 			}
 		}
-		
-		if ($limit) {
-			if ($rows > $limit) {
-				$this->db->limit($limit, ($rows - $limit));
-			} else {
-				$this->db->limit($limit, $start);
-			}
-		}
-		
+
 		$query  = $this->db->get();
 		$result = !$one ? $query->result() : $query->row();
-		// getSqlStatement();
-		return $result ?? false;
+		return $result;
 	}
-	
+
+
 	function getLancamentosVinculadosDespesa($idDespesa, $fields = null, $where = null, $limit = null, $rows = 0, $perpage = 0, $start = 0, $one = false)
 	{
 		$this->db->select();
 		if ($fields) $this->db->select($fields);
 		
-		$this->db->from($this->assocTable);
+		$this->db->from($this->lancamentosDespesasTable);
 		$this->db->limit($perpage, $start);
 		$this->db->where('status', 1);
 		$this->db->where('despesa_vinculada', 1);
@@ -213,7 +201,7 @@ class Despesa_model extends CI_Model
 		}
 		
 		$this->db
-			->from($this->mainTable)
+			->from($this->despesasTable)
 			->where('id_usuario', $this->userId)
 			->where('id', $idDespesa)
 			->where('status', 1);
@@ -260,7 +248,7 @@ class Despesa_model extends CI_Model
 	
 	function add($data)
 	{
-		$this->db->insert($this->mainTable, $data);
+		$this->db->insert($this->despesasTable, $data);
 		
 		if ($this->db->affected_rows()) {
 			return true;
@@ -270,18 +258,29 @@ class Despesa_model extends CI_Model
 	
 	function addLancamentoDespesa($data)
 	{
-		$this->db->insert($this->assocTable, $data);
+		$this->db->insert($this->lancamentosDespesasTable, $data);
 		
-		if ($this->db->affected_rows()) {
-			return true;
-		}
+		if ($this->db->affected_rows()) return true;
+
 		return false;
 	}
-	
+
+	function editLancamentoDespesa($data)
+	{
+        if (!isset($data['id_despesa']) || !$data['id_despesa']) return false;
+
+        $this->db->where('id_despesa', $data['id_despesa']);
+        $this->db->update($this->lancamentosDespesasTable, $data);
+
+        if ($this->db->affected_rows()) return true;
+
+		return false;
+	}
+
 	function lastInsertedId($table = null)
 	{
 		if (!$table) {
-			$table = $this->mainTable;
+			$table = $this->despesasTable;
 		}
 		return $this->db->insert_id($table);
 	}
@@ -290,7 +289,7 @@ class Despesa_model extends CI_Model
 	{
 		try {
 			$this->db->where($fieldID, $id);
-			$this->db->update($this->mainTable, $dataToUpdate);
+			$this->db->update($this->despesasTable, $dataToUpdate);
 		} catch (\Exception $e) {
 			return $this->db->error()['code']['message']; // Or do whatever you gotta do here to raise an error
 		}
@@ -300,18 +299,7 @@ class Despesa_model extends CI_Model
 		}
 		return true;
 	}
-	
-	function editLancamentoDespesa($data, $fieldID, $id)
-	{
-		$this->db->where($fieldID, $id);
-		$this->db->update($this->assocTable, $data);
-		
-		if (($this->db->error()['code'] != 0)) {
-			return $this->db->error()['code']['message']; // Or do whatever you gotta do here to raise an error
-		}
-		return true;
-	}
-	
+
 	function deleteDespesa($id)
 	{
 		$data = [
@@ -319,7 +307,7 @@ class Despesa_model extends CI_Model
 		];
 		
 		$this->db->where('id', $id);
-		$this->db->update($this->mainTable, $data);
+		$this->db->update($this->despesasTable, $data);
 		
 		if ($this->db->affected_rows() == 1) {
 			return true;
@@ -334,7 +322,7 @@ class Despesa_model extends CI_Model
 		];
 		
 		$this->db->where('id', $id);
-		$this->db->update($this->assocTable, $data);
+		$this->db->update($this->lancamentosDespesasTable, $data);
 		
 		if ($this->db->affected_rows() == 1) {
 			return true;
@@ -345,7 +333,7 @@ class Despesa_model extends CI_Model
 	function deleteLancamentosDespesa($idDespesa)
 	{
 		$this->db->where('id_despesa', $idDespesa);
-		$this->db->delete($this->assocTable);
+		$this->db->delete($this->lancamentosDespesasTable);
 		
 		if ($this->db->affected_rows() == 1) {
 			return true;
@@ -355,7 +343,7 @@ class Despesa_model extends CI_Model
 	
 	function countDespesasFromUser($where = null)
 	{
-		$this->db->from($this->mainTable);
+		$this->db->from($this->despesasTable);
 		$this->db->where('id_usuario', $this->userId);
 		$this->db->where('status', 1);
 		
@@ -367,7 +355,7 @@ class Despesa_model extends CI_Model
 	
 	function countLancamentosFromDespesa($idDespesa, $where = null)
 	{
-		$this->db->from($this->assocTable);
+		$this->db->from($this->lancamentosDespesasTable);
 		
 		$this->db->where('id_despesa', $idDespesa);
 		
@@ -393,97 +381,8 @@ class Despesa_model extends CI_Model
 		return $this->db->get()->row();
 	}
 	
-	function getTotalPendencias($id_usuario, $id_cliente = null)
-	{
-		if (!$id_cliente == null) {
-			$this->db
-				->select('SUM(valor) AS total')
-				->from('pendencias')
-				->where('status = 1 AND quitado = 0 AND id_usuario = ' . $id_usuario . ' AND id_cliente = ' . $id_cliente);
-		} else {
-			$this->db
-				->select('SUM(valor) AS total')
-				->from('pendencias')
-				->where('status = 1 AND quitado = 0 AND id_usuario = ' . $id_usuario);
-		}
-		return $this->db->get()->row();
-	}
-	
-	function getTotal($id_usuario)
-	{
-		$this->db
-			->select('SUM(valor) AS total')
-			->from('pendencias')
-			->where('status = 1 AND id_usuario = ' . $id_usuario);
-		return $this->db->get()->row();
-	}
-	
-	function getFaturaAbertaUsuario($id_usuario, $id_cartao)
-	{
-		
-		$this->db->select('*');
-		$this->db->from('faturas');
-		$this->db->where('fatura_aberta = 1 AND status = 1 AND id_usuario = ' . $id_usuario);
-		$this->db->where('id_cartao', $id_cartao);
-		
-		return $this->db->count_all_results();
-	}
-	
-	function getFaturaAberta($id)
-	{
-		
-		$this->db->select('*');
-		$this->db->from('faturas');
-		$this->db->where(
-			'status = 1 AND fatura_aberta = 1 AND id_usuario = ' . $id
-		);
-		
-		return $this->db->count_all_results();
-	}
-	
-	function getFaturaPaga($id)
-	{
-		$this->db->select('*');
-		$this->db->from('faturas');
-		$this->db->where(
-			'fatura_paga = 1 AND id_fatura = ' . $id
-		);
-		
-		return $this->db->count_all_results();
-	}
-	
-	function getFaturaAtual($id_fatura)
-	{
-		return $this->db
-			->where('id_fatura', $id_fatura)
-			->get('faturas')
-			->row();
-	}
-	
-	function getUltimaFatura($id_cartao)
-	{
-		$one = false;
-		$this->db->select('*');
-		$this->db->from('faturas');
-		$this->db->where('status', 1);
-		$this->db->where('id_cartao', $id_cartao);
-		$this->db->order_by('vencimento', 'desc');
-		$this->db->limit(1);
-		$query  = $this->db->get();
-		$result = $query->row();
-		
-		return $result;
-	}
-	
-	function abrirFatura($data)
-	{
-		$this->db->insert('faturas', $data);
-		if ($this->db->affected_rows() == '1') {
-			return true;
-		}
-		return false;
-	}
-	
+
+
 	function getFaturaReferencia($id_cartao, $mes, $ano)
 	{
 		return $this->db
@@ -558,119 +457,7 @@ class Despesa_model extends CI_Model
 			return false;
 		}
 	}
-	
-	function getDiaVencimentoFatura($id_cartao)
-	{
-		return $this->db
-			->where('id_cartao', $id_cartao)
-			->get('configs_faturas')
-			->row('dia_vencimento');
-	}
-	
-	function getSaldoFaturasPendentes($id_cartao)
-	{
-		$this->db
-			->select('SUM(a.valor_parcela) AS total')
-			->from('lancamentos_faturas_assoc AS a')
-			->join('faturas AS b', 'b.id_fatura = a.id_fatura AND b.status = a.status')
-			->where('b.fatura_paga != 1 AND a.status = 1')
-			->where('id_cartao', $id_cartao)
-			->where('date(b.vencimento) > date(now())');
-		return $this->db->get()->row();
-	}
-	
-	function getSaldoFaturasVencidas($id_cartao)
-	{
-		$this->db
-			->select('SUM(a.valor_parcela) AS total')
-			->from('lancamentos_faturas_assoc AS a')
-			->join('faturas AS b', 'b.id_fatura = a.id_fatura AND b.status = a.status')
-			->where('b.fatura_paga != 1 AND a.status = 1')
-			->where('id_cartao', $id_cartao)
-			->where('date(b.vencimento) < date(now())');
-		return $this->db->get()->row();
-	}
-	
-	function getSaldoFaturasPagas($id_cartao)
-	{
-		$this->db
-			->select('SUM(a.valor_parcela) AS total')
-			->from('lancamentos_faturas_assoc AS a')
-			->join('faturas AS b', 'b.id_fatura = a.id_fatura AND b.status = a.status')
-			->where('id_cartao', $id_cartao)
-			->where('b.fatura_paga = 1 AND a.status = 1');
-		return $this->db->get()->row();
-	}
-	
-	function getClientesPorFatura($idFatura)
-	{
-		return $this->db
-			->select('c.id_clientes, c.nome')
-			->join('lancamentos_faturas AS lf', 'lf.id_cliente = c.id_clientes', 'inner')
-			->join('lancamentos_faturas_assoc AS lfa', 'lfa.id_lancamento = lf.id_lancamento', 'inner')
-			->join('faturas AS f', 'f.id_fatura = lfa.id_fatura', 'inner')
-			->where('lfa.status', 1)
-			->where('f.id_fatura', $idFatura)
-			->group_by('c.id_clientes')
-			->order_by('c.nome')
-			->get('clientes AS c')
-			->result();
-	}
-	
-	function getVinculoFatura($idFatura)
-	{
-		$count = $this->db->select('*')
-			->from('lancamentos')
-			->where('status', 1)
-			->where('id_fatura', $idFatura);
-		
-		if ($count->count_all_results() > 0) {
-			$this->db
-				->select('*')
-				->from('lancamentos')
-				->where('status', 1)
-				->where('id_fatura', $idFatura);
-			return $this->db->get()->row();
-		}
-		return false;
-	}
-	
-	function getFaturaByLancamento($idLancamento)
-	{
-		$this->db->from('lancamentos_faturas');
-		$this->db->where('id_lancamento', $idLancamento);
-		return $this->db->get()->row('id_fatura');
-	}
-	
-	function getFaturasTerceiros($idUsuario, $nome, $mesReferencia, $anoReferencia)
-	{
-		if (!is_string($nome) || is_numeric($nome)) {
-			return false;
-		}
-		
-		$query = "SELECT f.*,
-            lfa.mes_referencia
-            FROM faturas f
-            INNER JOIN lancamentos_faturas lf
-            ON lf.id_fatura = f.id_fatura
-            INNER JOIN lancamentos_faturas_assoc lfa
-            ON lfa.id_lancamento = lf.id_lancamento
-            WHERE lf.nome_cliente LIKE '$nome'
-            AND lfa.mes_referencia = $mesReferencia
-            AND lfa.ano_referencia = $anoReferencia
-            AND f.id_usuario = $idUsuario
-            GROUP BY f.id_cartao
-            ORDER BY lf.criado_em DESC";
-		
-		$resultQuery = $this->db->query($query);
-		$result      = $resultQuery->result_array();
-		
-		if (!$result) {
-			return false;
-		}
-		return $result;
-	}
-	
+
 	function getLancamentosTerceiros($idUsuario, $idCartao, $nome, $mesReferencia)
 	{
 		if (!is_string($nome) || is_numeric($nome)) {
@@ -704,28 +491,7 @@ class Despesa_model extends CI_Model
 		return $result;
 	}
 	
-	function autoCompleteTerceiros_($q, $id_usuario)
-	{
-		$query = $this->db->select('*')
-			->limit(5)
-			->like('nome_cliente', $q)
-			->where('id_usuario', $id_usuario)
-			->where('status', 1)
-			->group_by('nome_cliente')
-			->get('lancamentos_faturas');
-		
-		if ($query->num_rows() > 0) {
-			$row_set = [];
-			
-			foreach ($query->result_array() as $row) {
-				$row_set[] = [
-					'label' => $row['nome_cliente']
-				];
-			}
-			echo json_encode($row_set);
-		}
-	}
-	
+
 	function autoCompleteTerceiros($term, int $idUsuario)
 	{
 		$resultQuery = $this->db->query("
@@ -858,31 +624,119 @@ class Despesa_model extends CI_Model
 		return false;
 	}
 	
-	function fecharTodasFaturasAbertas($id_cartao, $id_usuario)
-	{
-		$this->db->select('*');
-		$this->db->where('fatura_aberta', 1);
-		$this->db->where('status', 1);
-		$this->db->where('id_usuario', $id_usuario);
-		$this->db->where('id_cartao', $id_cartao);
-		$query = $this->db->get('faturas');
-		
-		$results = $query->result_array();
-		
-		if ($results) {
-			foreach ($results as $result) {
-				try {
-					$update = [
-						'fatura_aberta' => 0
-					];
-					
-					$this->edit('faturas', $update, 'id_fatura', $result['id_fatura']);
-				} catch (\Exception $e) {
-					return false;
-				}
-			}
-			return true;
-		}
-		return false;
-	}
+
+    function getLancamentoDespesaById($id)
+    {
+        $count = $this->db->select('*')
+            ->from($this->lancamentosDespesasTable)
+            ->where('status', 1)
+            ->where('id', $id);
+
+        if ($count->count_all_results() > 0) {
+            $this->db
+                ->select('*')
+                ->from($this->lancamentosDespesasTable)
+                ->where('status', 1)
+                ->where('id', $id);
+            return $this->db->get()->row();
+        }
+        return false;
+    }
+
+    function getDespesasAtivas()
+    {
+        $count = $this->db
+            ->from($this->despesasTable)
+            ->where('ativo', 1)
+            ->where('status', 1);
+
+        if ($count->count_all_results() > 0) {
+            $this->db
+                ->from($this->despesasTable)
+                ->where('ativo', 1)
+                ->where('status', 1);
+            return $this->db->get()->result();
+        }
+        return false;
+    }
+
+    function _getLancamentosDespesa($idDespesa)
+    {
+        $count = $this->db
+            ->from($this->lancamentosDespesasTable)
+            ->where('status', 1)
+            ->where('id_despesa', $idDespesa);
+
+        if ($count->count_all_results() > 0) {
+            $this->db
+                ->from($this->lancamentosDespesasTable)
+                ->where('status', 1)
+                ->where('id_despesa', $idDespesa);
+            return $this->db->get()->result();
+        }
+        return false;
+    }
+
+    function getVinculoLancamentoDespesa($id)
+    {
+        if (!$id) return false;
+
+        $count = $this->db
+            ->from('lancamentos')
+            ->where('status', 1)
+            ->where('id_lancamento_despesa', $id);
+
+        if ($count->count_all_results() > 0) {
+            $this->db
+                ->from('lancamentos')
+                ->where('status', 1)
+                ->where('id_lancamento_despesa', $id);
+            return $this->db->get()->row();
+        }
+        return false;
+    }
+
+    function ativaDespesa($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->update($this->despesasTable, ['ativo' => 1]);
+
+        if ($this->db->affected_rows() == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    function desativaDespesa($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->update($this->despesasTable, ['ativo' => 0]);
+
+        if ($this->db->affected_rows() == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    function vinculaDespesa($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->update($this->despesasTable, ['vinculada' => 1]);
+
+        if ($this->db->affected_rows() == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    function desvinculaDespesa($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->update($this->despesasTable, ['vinculada' => 0]);
+
+        if ($this->db->affected_rows() == 1) {
+            return true;
+        }
+        return false;
+    }
 }

@@ -11,6 +11,7 @@ class Mikrotik extends CI_Controller
      */
 
     protected ?string $token         = null;
+    protected ?string $username      = null;
     protected ?array  $request       = null;
     protected bool    $authenticated = false;
 
@@ -22,11 +23,17 @@ class Mikrotik extends CI_Controller
             if ($this->input->get('token')) {
                 $this->token = $this->input->get('token');
             }
+            if ($this->input->get('username')) {
+                $this->username = $this->input->get('username');
+            }
         }
 
         if ($_POST) {
             if ($this->input->post('token')) {
                 $this->token = $this->input->post('token');
+            }
+            if ($this->input->post('username')) {
+                $this->username = $this->input->post('username');
             }
         }
 
@@ -36,10 +43,13 @@ class Mikrotik extends CI_Controller
             if (isset($this->request['token'])) {
                 $this->token = $this->request['token'];
             }
+            if (isset($this->request['username'])) {
+                $this->username = $this->request['username'];
+            }
         }
 
         if ($this->token) {
-            if ($this->checkToken($this->token)) {
+            if ($this->checkToken($this->username, $this->token)) {
                 $this->authenticated = true;
             }
         }
@@ -147,9 +157,9 @@ class Mikrotik extends CI_Controller
         }
     }
 
-    private function checkToken($token)
+    private function checkToken($username, $token)
     {
-        $storagedToken = $this->mxcode_model->getTokenByToken($token)->result();
+        $storagedToken = $this->mxcode_model->getTokenByToken($username, $token)->result();
 
         if ($storagedToken) {
             return $storagedToken;

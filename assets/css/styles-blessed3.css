@@ -1730,6 +1730,14 @@ a.bg-success:hover {
     background-color: rgba(76, 175, 80, 0.51);
 }
 
+.bg-alizarin {
+    background-color: #ef4f1d;
+}
+
+a.bg-alizarin:hover {
+    background-color: rgba(239, 79, 29, 0.51);
+}
+
 .bg-info {
     background-color: #5bc0de;
 }

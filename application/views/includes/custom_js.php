@@ -39,6 +39,7 @@
 
             for (var i = 0; i < 20; i++) {
                 if (parentModal != null && parentModal.attr('id') == "modalEditar") {
+                    console.log('parentModal: '+parentModal.attr('id'), 'parentElement: '+ parentElement.attr('id'))
                     toggleModals(parentModal, parentElement, true)
                     return false;
                 }

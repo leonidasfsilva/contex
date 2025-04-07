@@ -279,7 +279,7 @@
                 <div class="col-lg-3">
                     <div class="panel pl20">
                         <div class="checkbox icheck">
-                            <input type="checkbox" class="form-control" name="atividades[]" value="vLancamento" <?= in_array('vLancamento', $atividades) ? 'checked' : '' ?>>
+                            <input type="checkbox" class="form-control" name="atividades[]" value="vLancamentos" <?= in_array('vLancamentos', $atividades) ? 'checked' : '' ?>>
                         </div>
                         <label for="vCliente" class="font-weight-bold">Visualizar Lançamentos</label>
                     </div>
@@ -287,7 +287,7 @@
                 <div class="col-lg-3">
                     <div class="panel pl20">
                         <div class="checkbox icheck">
-                            <input type="checkbox" class="form-control" name="atividades[]" value="aLancamento" <?= in_array('aLancamento', $atividades) ? 'checked' : '' ?>>
+                            <input type="checkbox" class="form-control" name="atividades[]" value="aLancamentos" <?= in_array('aLancamentos', $atividades) ? 'checked' : '' ?>>
                         </div>
                         <label for="aCliente" class="font-weight-bold">Adicionar Lançamentos</label>
                     </div>
@@ -295,7 +295,7 @@
                 <div class="col-lg-3">
                     <div class="panel pl20">
                         <div class="checkbox icheck">
-                            <input type="checkbox" class="form-control" name="atividades[]" value="eLancamento" <?= in_array('eLancamento', $atividades) ? 'checked' : '' ?>>
+                            <input type="checkbox" class="form-control" name="atividades[]" value="eLancamentos" <?= in_array('eLancamentos', $atividades) ? 'checked' : '' ?>>
                         </div>
                         <label for="eCliente" class="font-weight-bold">Editar Lançamentos</label>
                     </div>
@@ -303,7 +303,7 @@
                 <div class="col-lg-3">
                     <div class="panel pl20">
                         <div class="checkbox icheck">
-                            <input type="checkbox" class="form-control" name="atividades[]" value="dLancamento" <?= in_array('dLancamento', $atividades) ? 'checked' : '' ?>>
+                            <input type="checkbox" class="form-control" name="atividades[]" value="dLancamentos" <?= in_array('dLancamentos', $atividades) ? 'checked' : '' ?>>
                         </div>
                         <label for="dCliente" class="font-weight-bold">Excluir Lançamentos</label>
                     </div>

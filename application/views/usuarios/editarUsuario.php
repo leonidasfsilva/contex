@@ -11,7 +11,7 @@
         </div>
     </div>
     <div class="panel-body">
-        <?php if ($custom_error != '') {
+        <?php if (isset($custom_error)) {
             echo '<div class="alert alert-danger alert-dismissible"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' . $custom_error . '</div>';
         } ?>
         <form action="<?php echo current_url(); ?>" id="formUsuario" method="post" autocomplete="off">
@@ -93,7 +93,7 @@
             <div class="row">
                 <div class="form-group col-md-6">
                     <label for="permissoes_id" class="control-label font-weight-bold">Permissão</label>
-                    <select class="form-control" name="permissoes_id" id="permissoes_id">
+                    <select class="form-control" name="permissoes_id" id="permissoes_id" <?php  if ($result->id_usuarios == 1) echo 'disabled' ?>>
                         <?php foreach ($permissoes as $p) {
                             if ($p->id_permissao == $result->permissoes_id) {
                                 $selected = 'selected';

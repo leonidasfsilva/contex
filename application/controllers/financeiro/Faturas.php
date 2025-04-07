@@ -513,7 +513,7 @@ class Faturas extends CI_Controller
 
                         if ($this->fatura_model->add('lancamentos_faturas_assoc', $lancamentosFaturasAssocArray)) {
                             atualizaValorVinculoFaturas($faturaReferencia->id_fatura);
-                            $this->session->set_flashdata('sucesso', 'Lançamento adicionado com sucesso!');
+                            $this->session->set_flashdata('sucesso', 'Lançamento adicionado com sucesso');
                         } else {
                             $this->session->set_flashdata('erro', 'Erro ao tentar adicionar lançamentos_assoc!');
                             redirect($urlAtual);
@@ -571,7 +571,7 @@ class Faturas extends CI_Controller
 
                     if ($this->fatura_model->add('lancamentos_faturas_assoc', $lancamentosFaturasAssocArray)) {
                         atualizaValorVinculoFaturas($id_fatura);
-                        $this->session->set_flashdata('sucesso', 'Lançamento adicionado com sucesso!');
+                        $this->session->set_flashdata('sucesso', 'Lançamento adicionado com sucesso');
                     } else {
                         $this->session->set_flashdata('erro', 'Erro ao tentar adicionar lançamentos_assoc!');
                         redirect($urlAtual);
@@ -779,7 +779,7 @@ class Faturas extends CI_Controller
 
                         if ($this->fatura_model->add('lancamentos_faturas_assoc', $dataLancFaturaAssoc)) {
                             atualizaValorVinculoFaturas($faturaReferencia->id_fatura);
-                            $this->session->set_flashdata('sucesso', 'Lançamento alterado com sucesso!');
+                            $this->session->set_flashdata('sucesso', 'Lançamento alterado com sucesso');
                         } else {
                             $this->session->set_flashdata('erro', 'Erro ao tentar adicionar lançamentos_assoc!');
                             redirect($urlAtual);
@@ -819,7 +819,7 @@ class Faturas extends CI_Controller
 
                     if ($this->fatura_model->add('lancamentos_faturas_assoc', $data1)) {
                         atualizaValorVinculoFaturas($id_fatura);
-                        $this->session->set_flashdata('sucesso', 'Lançamento alterado com sucesso!');
+                        $this->session->set_flashdata('sucesso', 'Lançamento alterado com sucesso');
                     } else {
                         $this->session->set_flashdata('erro', 'Erro ao tentar alterar lançamentos_assoc!');
                         redirect($urlAtual);
@@ -907,7 +907,7 @@ class Faturas extends CI_Controller
             redirect($urlAtual);
         }
 
-        $this->session->set_flashdata('sucesso', 'Cópia efetuada com sucesso!');
+        $this->session->set_flashdata('sucesso', 'Cópia efetuada com sucesso');
         redirect($urlAtual);
     }
 
@@ -932,7 +932,6 @@ class Faturas extends CI_Controller
 
         $mes_referencia = $faturaAlvo->mes_referencia;
         $ano_referencia = $faturaAlvo->ano_referencia;
-
 
         if (!$faturaExistente) return false;
 
@@ -959,8 +958,8 @@ class Faturas extends CI_Controller
                         'compra_terceiros' => $lancamento->compra_terceiros,
                         'estorno'          => $lancamento->estorno,
                         'data_compra'      => $data_compra,
-                        'mes_referencia'   => $lancamento->mes_referencia,
-                        'ano_referencia'   => $lancamento->ano_referencia,
+                        'mes_referencia'   => $mes_referencia,
+                        'ano_referencia'   => $ano_referencia,
                     ];
                 }
 
@@ -973,8 +972,8 @@ class Faturas extends CI_Controller
                     'id_fatura'      => $faturaAlvo->id_fatura,
                     'valor_parcela'  => $lancamento->valor_total,
                     'valor_total'    => $lancamento->valor_total,
-                    'mes_referencia' => $lancamento->mes_referencia,
-                    'ano_referencia' => $lancamento->ano_referencia,
+                    'mes_referencia' => $mes_referencia,
+                    'ano_referencia' => $ano_referencia,
                     'data_compra'    => $data_compra,
                     'n_parcela'      => 1,
                     'total_parcelas' => 1,
@@ -1126,7 +1125,7 @@ class Faturas extends CI_Controller
         if ($this->fatura_model->delete('lancamentos_faturas', $data, 'id_lancamento', $idLancamento)) {
             $this->fatura_model->delete('lancamentos_faturas_assoc', $data, 'id_lancamento', $idLancamento);
             $this->pendencia_model->delete('pendencias', $data, 'id_lancamento_fatura', $idLancamento);
-            $this->session->set_flashdata('sucesso', 'Lançamento excluído com sucesso!');
+            $this->session->set_flashdata('sucesso', 'Lançamento excluído com sucesso');
 
             if (is_array($faturas) && $faturas) {
                 foreach ($faturas as $fatura) {
@@ -1168,14 +1167,14 @@ class Faturas extends CI_Controller
                 $this->session->set_flashdata('erro', 'Erro ao tentar excluir série de lançamentos');
                 redirect($urlAtual);
             }
-            $this->session->set_flashdata('sucesso', 'Lançamentos excluídos com sucesso!');
+            $this->session->set_flashdata('sucesso', 'Lançamentos excluídos com sucesso');
             redirect($urlAtual);
         }
     }
 
     public function abrir()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aFaturas')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para abrir novas faturas.');
             redirect(base_url());
         }
@@ -1205,7 +1204,7 @@ class Faturas extends CI_Controller
         );
 
         if ($this->fatura_model->abrirFatura($data)) {
-            $this->session->set_flashdata('sucesso', 'Fatura aberta com sucesso!');
+            $this->session->set_flashdata('sucesso', 'Fatura aberta com sucesso');
             redirect($urlAtual);
         } else {
             $this->session->set_flashdata('erro', 'Erro ao tentar abrir nova fatura.');
@@ -1245,7 +1244,7 @@ class Faturas extends CI_Controller
             );
 
             if ($this->fatura_model->edit('faturas', $data, 'id_fatura', $_POST['id_fatura'])) {
-                $this->session->set_flashdata('sucesso', 'Fatura fechada com sucesso!');
+                $this->session->set_flashdata('sucesso', 'Fatura fechada com sucesso');
                 redirect($urlAtual);
             } else {
                 $this->session->set_flashdata('erro', 'Erro ao tentar fechar a fatura.');
@@ -1275,7 +1274,7 @@ class Faturas extends CI_Controller
                     'fatura_aberta' => 1,
                 ];
                 $this->fatura_model->edit('faturas', $update, 'id_fatura', $_POST['id_fatura']);
-                $this->session->set_flashdata('sucesso', 'Fatura reaberta com sucesso!');
+                $this->session->set_flashdata('sucesso', 'Fatura reaberta com sucesso');
                 redirect($urlAtual);
             } catch (\Exception $e) {
                 $this->session->set_flashdata('erro', 'Erro ao tentar reabrir a fatura');
@@ -1306,7 +1305,7 @@ class Faturas extends CI_Controller
         );
 
         if ($this->fatura_model->edit('faturas', $data, 'id_fatura', $id_fatura) == true) {
-            $this->session->set_flashdata('sucesso', 'Fatura excluída com sucesso!');
+            $this->session->set_flashdata('sucesso', 'Fatura excluída com sucesso');
             desvinculaFatura($id_fatura);
             redirect($urlAtual);
         } else {
@@ -1359,7 +1358,7 @@ class Faturas extends CI_Controller
                 ];
                 $this->fatura_model->edit('lancamentos', $data, 'id_fatura', $_POST['id_fatura']);
             }
-            $this->session->set_flashdata('sucesso', 'Fatura paga com sucesso!');
+            $this->session->set_flashdata('sucesso', 'Fatura paga com sucesso');
             redirect($urlAtual);
             return true;
         }
@@ -1570,7 +1569,7 @@ class Faturas extends CI_Controller
                 );
                 $this->fatura_model->edit('configs_faturas', $data, 'id_cartao', $adicional->id_cartao);
             }
-            $this->session->set_flashdata('sucesso', 'Configurações alteradas com sucesso!');
+            $this->session->set_flashdata('sucesso', 'Configurações alteradas com sucesso');
             redirect($urlAtual);
         }
 
@@ -1609,7 +1608,7 @@ class Faturas extends CI_Controller
             );
             $this->fatura_model->add('configs_faturas', $data);
         }
-        $this->session->set_flashdata('sucesso', 'Configurações salvas com sucesso!');
+        $this->session->set_flashdata('sucesso', 'Configurações salvas com sucesso');
 
         redirect($urlAtual);
     }

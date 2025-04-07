@@ -1,7 +1,7 @@
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h3>
-            <i class="fas fa-user-plus fa-lg fa-fw"></i>
+            <i class="fal fa-user-plus fa-lg fa-fw"></i>
             Adicionar Novo Usuário
         </h3>
         <div class="panel-ctrls">
@@ -12,7 +12,10 @@
     </div>
     <div class="panel-body">
         <?php if (isset($custom_error)) {
-            echo '<div class="alert alert-danger alert-dismissible"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' . $custom_error . '</div>';
+            echo '<div class="alert alert-danger alert-dismissible">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    ' . $custom_error . '
+                </div>';
         } ?>
         <form action="<?php echo current_url(); ?>" id="formUsuario" method="post" autocomplete="off">
             <div class="row">

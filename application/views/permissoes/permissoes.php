@@ -45,7 +45,7 @@
                         <td><?= $r->id_permissao ?></td>
                         <td><?= $r->nome ?></td>
                         <td><?= date('d/m/Y', strtotime($r->criado_em)) ?></td>
-                        <td><span class="label label-<?= $label_status ?>"><?= $status ?></span></td>
+                        <td><span class="badge badge-<?= $label_status ?>"><?= $status ?></span></td>
                         <?=
                         '<td>
                             <a href="' . base_url('permissoes/editar/') . $r->id_permissao . '" class="btn btn-primary btn-sm" title="Editar"><i class="fas fa-edit fa-lg fa-fw"></i></a>

@@ -56,15 +56,18 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         </button>
                         <ul class="dropdown-menu dropdown-menu-hover arrow" role="menu">
                             <?php foreach ($cartoes as $cartao) {
-                                if ($cartaoSelecionado['id_cartao'] == $cartao->id_cartao) {
-                                    $selected = 'active';
-                                } else {
-                                    $selected = '';
-                                }
                                 $n_cartao      = explode(" ", trim(decriptar($cartao->numero)));
                                 $final         = $n_cartao[3];
                                 $cartao_config = $cartao->apelido ?: $cartao->bandeira;
-                                $cartao_config = sprintf('%s - %s', $cartao_config, $final); ?>
+                                $cartao_config = sprintf('%s - %s', $cartao_config, $final);
+
+                                if ($cartaoSelecionado['id_cartao'] == $cartao->id_cartao) {
+                                    $selected                  = 'active';
+                                    $cartaoSemFaturaencontrada = $cartao_config;
+                                } else {
+                                    $selected = '';
+                                }
+                                ?>
                                 <li class="<?= $selected ?>"><a href="<?= sprintf(base_url('financeiro/faturas?cartao=%s'), $cartao->id_cartao) ?>"><?= $cartao_config ?></a></li>
                             <?php } ?>
                         </ul>
@@ -141,9 +144,10 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 </ul>
             </div>
 
-            <button href="#modalVincularFaturas" id="vincularFaturas" data-toggle="modal" role="button" class="btn btn-primary btn-sm tip-bottom" title=Gerenciar vínculo de faturas" <?= !isset($cartao) ? 'disabled' : '' ?>>
-                <i class="fas fa-link fa-fw"></i>
-                <text class="visible-lg-inline">Gerenciar Vínculo</text>
+            <button href="#modalVincularFaturas" id="vincularFaturas" data-toggle="modal" role="button" class="btn btn-primary btn-sm tip-bottom" title=Gerenciar vínculo de faturas
+            " <?= !isset($cartao) ? 'disabled' : '' ?>>
+            <i class="fas fa-link fa-fw"></i>
+            <text class="visible-lg-inline">Gerenciar Vínculo</text>
             </button>
             <button href="#modalNovaFatura" id="novaFatura" data-toggle="modal" role="button" class="btn btn-primary btn-sm tip-bottom" title="Abrir nova fatura" <?= $disabledFatura ?>>
                 <i class="fas fa-plus fa-fw"></i>
@@ -282,7 +286,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 }
             } else { ?>
                 <tr>
-                    <td colspan="6">Nenhuma fatura encontrada <span class="font-weight-bold"><?= isset($cartao_config) ? 'para o cartão ' . $cartao_config : null ?></span></td>
+                    <td colspan="6">Nenhuma fatura encontrada <span class="font-weight-bold"><?= isset($cartaoSemFaturaencontrada) ? 'para o cartão ' . $cartaoSemFaturaencontrada : null ?></span></td>
                 </tr>
             <?php } ?>
             </tbody>
@@ -1109,25 +1113,18 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
         $(document).on('click', '#novaFatura', function () {
             $("#id_cartao_nova_fatura").val($('#cartoes').val());
-            $("#urlFatura").val($(location).attr('href'));
         });
 
         $(document).on('click', '.excluir', function (event) {
             $("#idExcluir").val($(this).attr('id_fatura'));
-            $("#urlExcluirFatura").val($(location).attr('href'));
         });
 
         $(document).on('click', '.pagar', function (event) {
             $("#id_fatura_pagar").val($(this).attr('id_fatura'));
-            $("#urlPagarFatura").val($(location).attr('href'));
         });
 
         $(document).on('click', '#pendencia', function () {
             $("#urlPendencia").val($(location).attr('href'));
-        });
-
-        $(document).on('click', '#devedor', function () {
-            $("#url").val($(location).attr('href'));
         });
 
         $(document).on('click', '.editar', function (event) {

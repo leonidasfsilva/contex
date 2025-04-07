@@ -43,7 +43,7 @@ if (isset($referenceMonth) && $referenceMonth) {
         </h3>
         <div class="row mr5 ml5">
             <div class="panel-ctrls ml5">
-                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) { ?>
+                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamentos')) { ?>
                     <a href="#modalEntrada" id="novaEntrada" data-toggle="modal" role="button" class="btn btn-success btn-sm tip-bottom" title="Registrar nova entrada">
                         <i class="fas fa-plus fa-fw"></i>
                         <span>Entrada</span>
@@ -246,106 +246,107 @@ if (!$results) {
                 </tr>
                 </thead>
                 <tbody>
-				<?php
-				$pendingNotification = null;
-				foreach ($results as $r) {
-					if ($r->oculto) {
-						$totalOcultosMes += $r->valor;
-						continue;
-					}
-					
-					$vencimento  = date(('d/m/y'), strtotime($r->data_lancamento));
-					$diaDaSemana = getExtendedWeekDayName($r->data_lancamento);
-					
-					if ($r->baixado == 0) {
-						$pendingNotification = 'notification-dot';
-						$status              = 'PENDENTE';
-						$label_status        = 'orange';
-						$iconTipo            = '<i class="far fa-clock fa-fw"></i>';
-					} else {
-						$status       = 'EFETIVADO';
-						$label_status = 'primary';
-						$iconTipo     = '<i class="fas fa-check-circle fa-fw"></i>';
-					};
-					
-					if ($r->observacoes) {
-						$iconObs = '
+                <?php
+                $pendingNotification = null;
+                foreach ($results as $r) {
+                    if ($r->oculto) {
+                        $totalOcultosMes += $r->valor;
+                        continue;
+                    }
+
+                    $dataLancamentos = date(('d/m/Y'), strtotime($r->data_lancamento));
+                    $dataPagamento  = isset($r->data_pagamento) ? date('d/m/Y', strtotime($r->data_pagamento)) : null;
+                    $diaDaSemana    = getExtendedWeekDayName($r->data_lancamento);
+
+                    if ($r->baixado == 0) {
+                        $pendingNotification = 'notification-dot';
+                        $status              = 'PENDENTE';
+                        $label_status        = 'orange';
+                        $iconTipo            = '<i class="far fa-clock fa-fw"></i>';
+                    } else {
+                        $status       = 'EFETIVADO';
+                        $label_status = 'primary';
+                        $iconTipo     = '<i class="fas fa-check-circle fa-fw"></i>';
+                    };
+
+                    if ($r->observacoes) {
+                        $iconObs = '
                                 <i class="fas fa-comment-dots fa-fw" title="Observações adicionais"></i>
                             ';
-					} else {
-						$iconObs = '';
-					};
-					
-					if ($r->tipo == 1) {
-						$color      = 'green';
-						$label_tipo = 'green';
-						$tipo       = 'ENTRADA';
-						$icon       = '<i class="far fa-arrow-left-to-bracket fa-rotate-270 fa-fw"></i>';
-					} else {
-						$color      = 'red';
-						$label_tipo = 'alizarin';
-						$tipo       = 'SAÍDA';
-						$icon       = '<i class="far fa-arrow-right-from-bracket fa-rotate-270 fa-fw"></i>';
-					}
-					
-					if ($r->cliente_fornecedor) {
-						$fornecedor = $r->cliente_fornecedor;
-					} else {
-						$fornecedor = "&nbsp;";
-					}
-					
-					foreach ($formasPagamento as $f) {
-						if ($f->id_forma == $r->forma_pgto) {
-							$forma_pgto = $f->nome;
-						}
-					}
-					
-					if ($r->valor < 0) {
-						if ($r->baixado == 0) {
-							$saidasPendentes += $r->valor;
-						} else {
-							$saidasEfetivadas += $r->valor;
-						}
-						$valor = number_format(abs($r->valor), 2, ',', '.');
-					} else {
-						if ($r->baixado == 0) {
-							$entradasPendentes += $r->valor;
-						} else {
-							$entradasEfetivadas += $r->valor;
-						}
-						$valor = number_format($r->valor, 2, ',', '.');
-					}
-					
-					$totalGeralMes += $r->valor;
-					
-					echo '<tr>';
-					echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
-					echo '<td class="idLancamento hidden">' . $r->id_lancamento . '</td>';
-					echo '<td class="font-weight-bold" title="' . $diaDaSemana . '">' . $vencimento . '</td>';
-					echo '<td class="font-weight-bold"><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Ver detalhes" idLancamento="' .
-						$r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
-						date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
-						$r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">' .
-						strtoupper($r->descricao) . $iconObs .
-						'<br><span class="small" style="color: grey;">' . ($fornecedor) . '</span></a></td>';
-					echo '<td class="font-weight-bold"><span class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small" style="color: grey;">' . ($forma_pgto) . '</td>';
-					echo '<td><span class="text-' . $label_tipo . '">' . ($icon) . '</span> <span class="badge badge-' . $label_tipo . '">' . ($tipo) . '</span>
+                    } else {
+                        $iconObs = '';
+                    };
+
+                    if ($r->tipo == 1) {
+                        $color      = 'green';
+                        $label_tipo = 'green';
+                        $tipo       = 'ENTRADA';
+                        $icon       = '<i class="far fa-arrow-left-to-bracket fa-rotate-270 fa-fw"></i>';
+                    } else {
+                        $color      = 'red';
+                        $label_tipo = 'alizarin';
+                        $tipo       = 'SAÍDA';
+                        $icon       = '<i class="far fa-arrow-right-from-bracket fa-rotate-270 fa-fw"></i>';
+                    }
+
+                    if ($r->cliente_fornecedor) {
+                        $fornecedor = $r->cliente_fornecedor;
+                    } else {
+                        $fornecedor = "&nbsp;";
+                    }
+
+                    foreach ($formasPagamento as $f) {
+                        if ($f->id_forma == $r->forma_pgto) {
+                            $forma_pgto = $f->nome;
+                        }
+                    }
+
+                    if ($r->valor < 0) {
+                        if ($r->baixado == 0) {
+                            $saidasPendentes += $r->valor;
+                        } else {
+                            $saidasEfetivadas += $r->valor;
+                        }
+                        $valor = number_format(abs($r->valor), 2, ',', '.');
+                    } else {
+                        if ($r->baixado == 0) {
+                            $entradasPendentes += $r->valor;
+                        } else {
+                            $entradasEfetivadas += $r->valor;
+                        }
+                        $valor = number_format($r->valor, 2, ',', '.');
+                    }
+
+                    $totalGeralMes += $r->valor;
+
+                    echo '<tr>';
+                    echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
+                    echo '<td class="idLancamento hidden">' . $r->id_lancamento . '</td>';
+                    echo '<td class="font-weight-bold" title="' . $diaDaSemana . '">' . $dataLancamentos . '</td>';
+                    echo '<td class="font-weight-bold"><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Ver detalhes" idLancamento="' .
+                        $r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
+                        $dataLancamentos . '" pagamento="' . $dataPagamento . '" baixado="' .
+                        $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">' .
+                        strtoupper($r->descricao) . $iconObs .
+                        '<br><span class="small" style="color: grey;">' . ($fornecedor) . '</span></a></td>';
+                    echo '<td class="font-weight-bold"><span class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small" style="color: grey;">' . ($forma_pgto) . '</td>';
+                    echo '<td><span class="text-' . $label_tipo . '">' . ($icon) . '</span> <span class="badge badge-' . $label_tipo . '">' . ($tipo) . '</span>
                             <br>
                             <span class="text-' . $label_status . '">' . ($iconTipo) . '</span> <span class="badge badge-' . $label_status . '">' . ($status) . '</span></td>';
-					echo '<td>';
-					if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
-						echo '<button type="button" href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Ver detalhes" idLancamento="' .
-							$r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
-							date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
-							$r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">
+                    echo '<td>';
+                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamentos')) {
+                        echo '<button type="button" href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Ver detalhes" idLancamento="' .
+                            $r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
+                            $dataLancamentos . '" pagamento="' . $dataPagamento . '" baixado="' .
+                            $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">
                                 <i class="fas fa-search-plus fa-lg fa-fw"></i></button>';
                         echo '<button type="button" href="#modalCopiar" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm copiar" title="Copiar" idLancamento="' .
                             $r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
-                            date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
+                            $dataLancamentos . '" pagamento="' . $dataPagamento . '" baixado="' .
                             $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">
                                 <i class="fass fa-copy fa-lg fa-fw"></i></button>';
                     }
-                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
+                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamentos')) {
                         echo '<button type="button" href="#modalExcluir" data-toggle="modal" idLancamento="' . $r->id_lancamento . '" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fas fa-trash-can-xmark fa-lg fa-fw"></i></button>';
                     }
                     echo '</td>';
@@ -572,98 +573,100 @@ if (!$results) {
                 </tr>
                 </thead>
                 <tbody>
-				<?php
-				$pendingNotification = null;
-				foreach ($hiddenItems as $r) {
-					$vencimento = date(('d/m/y'), strtotime($r->data_lancamento));
-					
-					if ($r->baixado == 0) {
-						$pendingNotification = 'notification-dot';
-						$status              = 'PENDENTE';
-						$label_status        = 'warning';
-						$iconTipo            = '<i class="far fa-clock fa-fw"></i>';
-					} else {
-						$status       = 'EFETIVADO';
-						$label_status = 'primary';
-						$iconTipo     = '<i class="fas fa-check-circle fa-fw"></i>';
-					};
-					
-					if ($r->observacoes) {
-						$iconObs = '<i class="fas fa-comment-dots fa-fw" title="Observações adicionais"></i>';
-					} else {
-						$iconObs = '';
-					};
-					
-					if ($r->tipo == 1) {
-						$color      = 'green';
-						$label_tipo = 'success';
-						$tipo       = 'ENTRADA';
-						$icon       = '<i class="far fa-arrow-left-to-bracket fa-rotate-270 fa-fw"></i>';
-					} else {
-						$color      = 'red';
-						$label_tipo = 'danger';
-						$tipo       = 'SAÍDA';
-						$icon       = '<i class="far fa-arrow-right-from-bracket fa-rotate-270 fa-fw"></i>';
-					}
-					
-					if ($r->cliente_fornecedor) {
-						$fornecedor = $r->cliente_fornecedor;
-					} else {
-						$fornecedor = "&nbsp;";
-					}
-					
-					foreach ($formasPagamento as $f) {
-						if ($f->id_forma == $r->forma_pgto) {
-							$forma_pgto = $f->nome;
-						}
-					}
-					
-					if ($r->valor < 0) {
-						if ($r->baixado == 0) {
-							$saidasPendentes += $r->valor;
-						} else {
-							$saidasEfetivadas += $r->valor;
-						}
-						$valor = number_format(abs($r->valor), 2, ',', '.');
-					} else {
-						if ($r->baixado == 0) {
-							$entradasPendentes += $r->valor;
-						} else {
-							$entradasEfetivadas += $r->valor;
-						}
-						$valor = number_format($r->valor, 2, ',', '.');
-					}
-					
-					$totalGeralMes += $r->valor;
-					
-					echo '<tr>';
-					// echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
-					echo '<td class="idLancamento hidden">' . $r->id_lancamento . '</td>';
-					echo '<td class="font-weight-bold">' . $vencimento . '</td>';
-					echo '<td class="font-weight-bold"><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Detalhes" idLancamento="' .
-						$r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
-						date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
-						$r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">' .
-						strtoupper($r->descricao) . $iconObs .
-						'<br><span class="small" style="color: grey;">' . ($fornecedor) . '</span></a></td>';
-					echo '<td class="font-weight-bold"><span class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small" style="color: grey;">' . ($forma_pgto) . '</td>';
-					echo '<td><span class="text-' . $label_tipo . '">' . ($icon) . '</span> <span class="badge badge-' . $label_tipo . '">' . ($tipo) . '</span>
+                <?php
+                $pendingNotification = null;
+                foreach ($hiddenItems as $r) {
+                    $dataLancamentos = date(('d/m/Y'), strtotime($r->data_lancamento));
+                    $dataPagamento  = isset($r->data_pagamento) ? date('d/m/Y', strtotime($r->data_pagamento)) : null;
+
+                    if ($r->baixado == 0) {
+                        $pendingNotification = 'notification-dot';
+                        $status              = 'PENDENTE';
+                        $label_status        = 'warning';
+                        $iconTipo            = '<i class="far fa-clock fa-fw"></i>';
+                    } else {
+                        $status       = 'EFETIVADO';
+                        $label_status = 'primary';
+                        $iconTipo     = '<i class="fas fa-check-circle fa-fw"></i>';
+                    };
+
+                    if ($r->observacoes) {
+                        $iconObs = '<i class="fas fa-comment-dots fa-fw" title="Observações adicionais"></i>';
+                    } else {
+                        $iconObs = '';
+                    };
+
+                    if ($r->tipo == 1) {
+                        $color      = 'green';
+                        $label_tipo = 'success';
+                        $tipo       = 'ENTRADA';
+                        $icon       = '<i class="far fa-arrow-left-to-bracket fa-rotate-270 fa-fw"></i>';
+                    } else {
+                        $color      = 'red';
+                        $label_tipo = 'danger';
+                        $tipo       = 'SAÍDA';
+                        $icon       = '<i class="far fa-arrow-right-from-bracket fa-rotate-270 fa-fw"></i>';
+                    }
+
+                    if ($r->cliente_fornecedor) {
+                        $fornecedor = $r->cliente_fornecedor;
+                    } else {
+                        $fornecedor = "&nbsp;";
+                    }
+
+                    foreach ($formasPagamento as $f) {
+                        if ($f->id_forma == $r->forma_pgto) {
+                            $forma_pgto = $f->nome;
+                        }
+                    }
+
+                    if ($r->valor < 0) {
+                        if ($r->baixado == 0) {
+                            $saidasPendentes += $r->valor;
+                        } else {
+                            $saidasEfetivadas += $r->valor;
+                        }
+                        $valor = number_format(abs($r->valor), 2, ',', '.');
+                    } else {
+                        if ($r->baixado == 0) {
+                            $entradasPendentes += $r->valor;
+                        } else {
+                            $entradasEfetivadas += $r->valor;
+                        }
+                        $valor = number_format($r->valor, 2, ',', '.');
+                    }
+
+                    $totalGeralMes += $r->valor;
+
+                    echo '<tr>';
+                    // echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
+                    echo '<td class="idLancamento hidden">' . $r->id_lancamento . '</td>';
+                    echo '<td class="font-weight-bold">' . $dataLancamentos . '</td>';
+                    echo '<td class="font-weight-bold"><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Detalhes" idLancamento="' .
+                        $r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
+                        $dataLancamentos . '" pagamento="' . $dataPagamento . '" baixado="' .
+                        $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">' .
+                        strtoupper($r->descricao) . $iconObs .
+                        '<br><span class="small" style="color: grey;">' . ($fornecedor) . '</span></a></td>';
+                    echo '<td class="font-weight-bold"><span class="valor_parcela" style=" color: ' . $color . '"><span>' .
+                        number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small" style="color: grey;">' . ($forma_pgto) . '</td>';
+                    echo '<td><span class="text-' . $label_tipo . '">' . ($icon) . '</span> <span class="badge badge-' . $label_tipo . '">' . ($tipo) . '</span>
                             <br>
                             <span class="text-' . $label_status . '">' . ($iconTipo) . '</span> <span class="badge badge-' . $label_status . '">' . ($status) . '</span></td>';
-					echo '<td>';
-					if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
-						echo '<button type="button" href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Detalhes" idLancamento="' .
-							$r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
-							date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
-							$r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">
+                    echo '<td>';
+                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamentos')) {
+                        echo '<button type="button" href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Detalhes" idLancamento="' .
+                            $r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
+                            $dataLancamentos . '" pagamento="' . $dataPagamento . '" baixado="' .
+                            $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">
                                 <i class="fas fa-search-plus fa-lg fa-fw"></i></button>';
                         echo '<button type="button" href="#modalCopiar" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm copiar" title="Copiar" idLancamento="' .
                             $r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
-                            date('d/m/Y', strtotime($r->data_lancamento)) . '" pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" baixado="' .
+                            $dataLancamentos . '" pagamento="' . $dataPagamento . '" baixado="' .
                             $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">
                                 <i class="fas fa-copy fa-lg fa-fw"></i></button>';
                     }
-                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
+                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamentos')) {
                         echo '<button type="button" href="#modalExcluir" data-toggle="modal" idLancamento="' . $r->id_lancamento . '" class="btn btn-danger btn-sm excluir" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw"></i></button>';
                     }
                     echo '</td>';
@@ -1089,7 +1092,7 @@ if (!$results) {
                         </div>
                         <div class="form-group col-lg-4 col-xs-6">
                             <label for="vencimentoCopiar" class="font-weight-bold">Data de Lançamento</label>
-                            <input class="form-control datepicker dataLancamento" id="vencimentoCopiar" type="text" name="vencimento"/>
+                            <input class="form-control datepicker dataLancamentos" id="vencimentoCopiar" type="text" name="vencimento"/>
                         </div>
                         <div class="form-group col-lg-4 col-xs-12">
                             <label for="tipoCopiar" class="font-weight-bold">Tipo</label>
@@ -1192,8 +1195,8 @@ if (!$results) {
                             <input class="form-control money valor" id="valorEditar" type="text" name="valor"/>
                         </div>
                         <div class="form-group col-lg-4 col-xs-6">
-                            <label for="dataLancamentoEditar" class="font-weight-bold">Data de Lançamento</label>
-                            <input class="form-control datepicker dataLancamento" id="dataLancamentoEditar" type="text" name="vencimento"/>
+                            <label for="dataLancamentosEditar" class="font-weight-bold">Data de Lançamento</label>
+                            <input class="form-control datepicker dataLancamentos" id="dataLancamentosEditar" type="text" name="vencimento"/>
                         </div>
                         <div class="form-group col-lg-4 col-xs-12">
                             <label for="tipoEditar" class="font-weight-bold">Tipo</label>
@@ -1973,8 +1976,8 @@ if (!$results) {
         $(".valor").val($(this).attr('valor'));
         $(".dataPagamento").val($(this).attr('pagamento'));
         $(".dataPagamento").datepicker('setDate', $(this).attr('pagamento'));
-        $(".dataLancamento").val($(this).attr('vencimento'));
-        $(".dataLancamento").datepicker('setDate', $(this).attr('vencimento'));
+        $(".dataLancamentos").val($(this).attr('vencimento'));
+        $(".dataLancamentos").datepicker('setDate', $(this).attr('vencimento'));
         $(".formaPgto").val($(this).attr('formaPgto'));
         $(".tipo").val($(this).attr('tipo'));
         var baixado = $(this).attr('baixado');

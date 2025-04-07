@@ -36,7 +36,7 @@ class Lancamentos extends CI_Controller
     // MODULO DE LANCAMENTOS
     public function lancamentos()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamentos')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar lançamentos.');
             redirect(base_url());
         }
@@ -288,7 +288,7 @@ class Lancamentos extends CI_Controller
 
     public function entrada()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamentos')) {
             $this->session->set_flashdata('erro', 'Você não tem permissão para adicionar lançamentos.');
             redirect(base_url());
         }
@@ -359,7 +359,7 @@ class Lancamentos extends CI_Controller
         );
 
         if ($this->financeiro_model->add('lancamentos', $data) == true) {
-            $this->session->set_flashdata('sucesso', 'Entrada registrada com sucesso!');
+            $this->session->set_flashdata('sucesso', 'Entrada registrada com sucesso');
             redirect($urlAtual);
         } else {
             $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar registrar entrada.');
@@ -372,7 +372,7 @@ class Lancamentos extends CI_Controller
 
     public function saida()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamento')) {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamentos')) {
             $this->session->set_flashdata('erro', 'Você não tem permissão para adicionar lançamentos.');
             redirect(base_url());
         }
@@ -444,7 +444,7 @@ class Lancamentos extends CI_Controller
         );
 
         if ($this->financeiro_model->add('lancamentos', $data) == true) {
-            $this->session->set_flashdata('sucesso', 'Saída registrada com sucesso!');
+            $this->session->set_flashdata('sucesso', 'Saída registrada com sucesso');
             redirect($urlAtual);
         } else {
             $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar registrar saída.');
@@ -456,7 +456,7 @@ class Lancamentos extends CI_Controller
 
     public function editar()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamentos')) {
             $this->session->set_flashdata('erro', 'Você não tem permissão para editar lançamentos.');
             redirect(base_url());
         }
@@ -511,7 +511,7 @@ class Lancamentos extends CI_Controller
         );
 
         if ($this->financeiro_model->edit('lancamentos', $data, 'id_lancamento', $this->input->post('id'))) {
-            $this->session->set_flashdata('sucesso', 'Lançamento alterado com sucesso!');
+            $this->session->set_flashdata('sucesso', 'Lançamento alterado com sucesso');
             redirect($urlAtual);
         }
 
@@ -521,7 +521,7 @@ class Lancamentos extends CI_Controller
 
     public function copiar()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamentos')) {
             $this->session->set_flashdata('erro', 'Você não tem permissão para copiar lançamentos.');
             redirect(base_url());
         }
@@ -577,7 +577,7 @@ class Lancamentos extends CI_Controller
                     redirect($urlAtual);
                 }
             }
-            $this->session->set_flashdata('sucesso', 'Série de lançamentos copiada com sucesso!');
+            $this->session->set_flashdata('sucesso', 'Série de lançamentos copiada com sucesso');
             redirect($urlAtual);
         }
 
@@ -614,13 +614,13 @@ class Lancamentos extends CI_Controller
             redirect($urlAtual);
         }
 
-        $this->session->set_flashdata('sucesso', 'Lançamento copiado com sucesso!');
+        $this->session->set_flashdata('sucesso', 'Lançamento copiado com sucesso');
         redirect($urlAtual);
     }
 
     public function excluir()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamento')) {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamentos')) {
             $this->session->set_flashdata('erro', 'Você não tem permissão para excluir lançamentos.');
             redirect($this->global_url);
         }
@@ -647,12 +647,12 @@ class Lancamentos extends CI_Controller
                 $this->financeiro_model->delete('lancamentos', $data, 'id_lancamento', $value);
             }
 
-            $this->session->set_flashdata('sucesso', 'Série de lançamentos excluída com sucesso!');
+            $this->session->set_flashdata('sucesso', 'Série de lançamentos excluída com sucesso');
             redirect($urlAtual);
         }
 
         if ($this->financeiro_model->delete('lancamentos', $data, 'id_lancamento', $id) == true) {
-            $this->session->set_flashdata('sucesso', 'Lançamento excluído com sucesso!');
+            $this->session->set_flashdata('sucesso', 'Lançamento excluído com sucesso');
             redirect($urlAtual);
         } else {
             $this->session->set_flashdata('erro', 'Erro ao tentar excluir lançamento.');
@@ -682,7 +682,7 @@ class Lancamentos extends CI_Controller
 
     public function mesPadrao()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamento')) {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamentos')) {
             $this->session->set_flashdata('erro', 'Você não tem permissão para configurar o módulo de Lançamentos.');
             redirect(base_url());
         }
@@ -712,7 +712,7 @@ class Lancamentos extends CI_Controller
             redirect($urlAtual);
         }
 
-        $this->session->set_flashdata('sucesso', 'Configurações salvas com sucesso!');
+        $this->session->set_flashdata('sucesso', 'Configurações salvas com sucesso');
         redirect($urlAtual);
     }
 

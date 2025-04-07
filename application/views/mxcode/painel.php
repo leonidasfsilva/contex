@@ -84,7 +84,7 @@ if ($direcionados) {
 
 <!--WIDGETS-->
 <div class="row">
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamentos')) { ?>
         <div class="col-lg-6">
             <div class="tile-sparkline">
                 <div class="tile-sparkline-heading clearfix">
@@ -206,15 +206,15 @@ if ($direcionados) {
         </div>
 	<?php endif ?>
 
-	<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) : ?>
+	<?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vDespesas')) : ?>
         <div class="col-md-6 col-sm-6 col-xs-6">
-            <a href="<?= base_url('/clientes') ?>" class="shortcut-tile tile-green">
+            <a href="<?= base_url('/financeiro/despesas') ?>" class="shortcut-tile tile-alizarin">
                 <div class="tile-body">
-                    <div class="pull-left"><i class="fal fa-people-group fa-fw"></i></div>
-                    <div class="pull-right"><span class="badge"><?= $this->clientes_model->countClientesUsuario(); ?></span></div>
+                    <div class="pull-left"><i class="fal fa-money-bill-transfer fa-fw"></i></div>
+                    <!--<div class="pull-right"><span class="badge">--><?php //= $this->clientes_model->countClientesUsuario(); ?><!--</span></div>-->
                 </div>
                 <div class="tile-footer">
-                    Clientes
+                    Despesas
                 </div>
             </a>
         </div>
@@ -265,7 +265,7 @@ if ($direcionados) {
         </a>
     </div>
     <div class="col-md-6 col-sm-6 col-xs-6">
-        <a href="<?= base_url('/chamados') ?>" class="shortcut-tile tile-alizarin">
+        <a href="<?= base_url('/chamados') ?>" class="shortcut-tile tile-green">
             <div class="tile-body">
                 <div class="pull-left"><i class="fal fa-comments-question-check fa-fw"></i></div>
             </div>

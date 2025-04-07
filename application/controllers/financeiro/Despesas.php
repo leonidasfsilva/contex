@@ -4,7 +4,9 @@
 
 class Despesas extends CI_Controller
 {
-    protected $yearsList = [];
+    protected $yearsList     = [];
+    protected $mesReferencia = null;
+    protected $anoReferencia = null;
 
     public function __construct()
     {
@@ -14,6 +16,7 @@ class Despesas extends CI_Controller
         }
         $this->load->library('pagination');
         $this->yearsList = range(2018, date('Y') + 3);
+        $this->monitorarVinculosDespesasFromUser();
     }
 
     public function index()
@@ -240,6 +243,7 @@ class Despesas extends CI_Controller
 
         $data['yearsList']          = $this->yearsList;
         $data['referenceMonth']     = null;
+        $data['autoLinkExpesnses']  = true;
         $data['referenceYear']      = $referenceYear;
         $data['total_provisorio']   = $this->financeiro_model->getTotalProvisorio(getUserId());
         $data['saidas_pendentes']   = $this->financeiro_model->getSaidasPendentes(getUserId());
@@ -285,7 +289,7 @@ class Despesas extends CI_Controller
         $where          = null;
         $limit          = null;
         $order_by       = [
-            'id' => 'asc',
+            'data_vencimento' => 'desc',
         ];
 
         $this->load->library('pagination');
@@ -469,30 +473,25 @@ class Despesas extends CI_Controller
 
         $this->pagination->initialize($config);
 
-        $lancamentos = $this->despesa_model->getLancamentosDespesa(
+        $lancamentosDespesa = $this->despesa_model->getLancamentosDespesa(
             $idDespesa,
-            null,
             $where,
-            $limit,
             $config['total_rows'],
             $config['per_page'],
-            $start,
-            $order_by ?: 'desc'
+            $order_by ?: ['data_vencimento' => 'desc']
         );
 
-        $data['yearsList']          = $this->yearsList;
-        $data['referenceMonth']     = null;
-        $data['referenceYear']      = $referenceYear;
-        $data['total_provisorio']   = $this->financeiro_model->getTotalProvisorio(getUserId());
-        $data['saidas_pendentes']   = $this->financeiro_model->getSaidasPendentes(getUserId());
-        $data['entradas_pendentes'] = $this->financeiro_model->getEntradasPendentes(getUserId());
-        $data['total']              = $this->financeiro_model->getTotal(getUserId());
-        $data['formasPagamento']    = $this->financeiro_model->getFormasPagamento();
-        $data['results']            = $this->getPaymentFormDescription($this->getTranslateMonth($lancamentos, true));
-        $data['despesa']            = $this->getPaymentFormDescription($this->addZeroOnInstallments($detalhesDespesa));
-        $data['parcelasPagas']      = $this->despesa_model->getParcelasPagas($idDespesa);
-        $data['menuFinanceiro']     = true;
-        $data['view']               = 'despesas/detalhes_despesa';
+        $data['yearsList']       = $this->yearsList;
+        $data['referenceMonth']  = null;
+        $data['referenceYear']   = $referenceYear;
+        $data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
+        $data['results']         = $this->getPaymentFormDescription($this->getTranslateMonth($lancamentosDespesa, true));
+        $data['despesa']         = $this->getPaymentFormDescription($this->addZeroOnInstallments($detalhesDespesa));
+        $data['hasLancamentos']  = $this->despesa_model->getLancamentosDespesa($idDespesa);
+        $data['parcelamento']    = (int)$data['despesa']->total_parcelas ?? null;
+        $data['parcelasPagas']   = $this->despesa_model->getParcelasPagas($idDespesa);
+        $data['menuFinanceiro']  = true;
+        $data['view']            = 'despesas/detalhes_despesa';
 
         $this->load->view('tema/topo', $data);
     }
@@ -597,7 +596,7 @@ class Despesas extends CI_Controller
         }
 
         if (!$qntParcelas || !$despesaParcelada) {
-            $qntParcelas  = 1;
+            $qntParcelas  = null;
             $valorParcela = $valor;
         }
 
@@ -624,7 +623,7 @@ class Despesas extends CI_Controller
             'tipo_despesa'       => $tipoDespesa,
             'id_forma_pagamento' => $formaPagto,
             'valor_parcela'      => $valorParcela,
-            'valor'              => $valor,
+            'valor_total'        => $valor,
             'dia_vencimento'     => $diaVencimento,
             'total_parcelas'     => $qntParcelas,
             'despesa_parcelada'  => $despesaParcelada,
@@ -635,9 +634,10 @@ class Despesas extends CI_Controller
 
         if ($this->despesa_model->add($dataArrayToDbPersist)) {
             $lastInsertedId = $this->despesa_model->lastInsertedId();
-            if ($this->registrarLancamentosDespesas($lastInsertedId)) {
-                $this->session->set_flashdata('sucesso', 'Despesa registrada com sucesso!');
+            if ($tipoDespesa == 1) {
+                $this->criaLancamentoDespesa($lastInsertedId);
             }
+            $this->session->set_flashdata('sucesso', 'Despesa registrada com sucesso');
         }
         redirect($urlAtual);
     }
@@ -700,7 +700,7 @@ class Despesas extends CI_Controller
             'tipo_despesa'       => $tipoDespesa,
             'id_forma_pagamento' => $formaPagto,
             'valor_parcela'      => $valorParcela,
-            'valor'              => $valor,
+            'valor_total'        => $valor,
             'dia_vencimento'     => $diaVencimento,
             'total_parcelas'     => $qntParcelas,
             'despesa_parcelada'  => $despesaParcelada,
@@ -711,35 +711,12 @@ class Despesas extends CI_Controller
 
         if ($this->despesa_model->add($dataArrayToDbPersist)) {
             $lastInsertedId = $this->despesa_model->lastInsertedId();
-            if ($this->registrarLancamentosDespesas($lastInsertedId)) {
-                $this->session->set_flashdata('sucesso', 'Despesa copiada com sucesso!');
+            if ($tipoDespesa == 1) {
+                $this->criaLancamentoDespesa($lastInsertedId);
             }
+            $this->session->set_flashdata('sucesso', 'Despesa copiada com sucesso');
         }
         redirect($urlAtual);
-    }
-
-    private function registrarLancamentosDespesas(int $idDespesa): bool
-    {
-        $detalhesDespesa = $this->despesa_model->getDespesaById($idDespesa);
-
-        if (!$detalhesDespesa) return false;
-
-        if ($detalhesDespesa->tipo_despesa == 2) return true;
-
-        $dataToPersist = [
-            'id_despesa'         => $detalhesDespesa->id,
-            'id_forma_pagamento' => $detalhesDespesa->id_forma_pagamento,
-            'data_vencimento'    => $detalhesDespesa->data_vencimento,
-        ];
-
-        for ($i = 1; $i <= $detalhesDespesa->total_parcelas; $i++) {
-            (string)$contadorParcela = $i;
-            $dataToPersist['num_parcela'] = $contadorParcela < 10 ? '0' . $contadorParcela : $contadorParcela;
-
-            if (!$this->despesa_model->addLancamentoDespesa($dataToPersist))
-                return false;
-        }
-        return true;
     }
 
     public function editar()
@@ -800,7 +777,7 @@ class Despesas extends CI_Controller
             'tipo_despesa'       => $tipoDespesa,
             'id_forma_pagamento' => $formaPagto,
             'valor_parcela'      => $valorParcela,
-            'valor'              => $valor,
+            'valor_total'        => $valor,
             'dia_vencimento'     => $diaVencimento,
             'total_parcelas'     => $qntParcelas,
             'despesa_parcelada'  => $despesaParcelada,
@@ -809,7 +786,7 @@ class Despesas extends CI_Controller
 
         if ($this->despesa_model->edit($dataArrayToDbUpdate, 'id', $idDespesa)) {
             if ($this->editarLancamentosDespesas($idDespesa)) {
-                $this->session->set_flashdata('sucesso', 'Despesa alterada com sucesso!');
+                $this->session->set_flashdata('sucesso', 'Despesa alterada com sucesso');
                 redirect($urlAtual);
             }
         }
@@ -817,108 +794,55 @@ class Despesas extends CI_Controller
         redirect($urlAtual);
     }
 
-    private function editarLancamentosDespesas(int $idDespesa): bool
-    {
-        $detalhesDespesa = $this->despesa_model->getDespesaById($idDespesa);
-
-        if (!$detalhesDespesa) return false;
-
-        $lancamentosVinculadosDespesa = $this->despesa_model->getLancamentosVinculadosDespesa($idDespesa);
-
-        $this->despesa_model->deleteLancamentosDespesa($idDespesa);
-
-        $dataToUpdate = [
-            'id_despesa'         => $detalhesDespesa->id,
-            'id_forma_pagamento' => $detalhesDespesa->id_forma_pagamento,
-        ];
-
-        if ($detalhesDespesa->despesa_parcelada == 1) {
-            for ($i = 1; $i <= $detalhesDespesa->total_parcelas; $i++) {
-                (string)$contadorParcela = $i;
-                $dataToUpdate['num_parcela'] = $contadorParcela < 10 ? '0' . $contadorParcela : $contadorParcela;
-
-                if ($lancamentosVinculadosDespesa) {
-                    $indexVinculo = $i - 1;
-
-                    if (
-                        isset($lancamentosVinculadosDespesa[$indexVinculo]->num_parcela)
-                        && $lancamentosVinculadosDespesa[$indexVinculo]->num_parcela == $dataToUpdate['num_parcela']
-                    ) {
-                        $dataToUpdate['data_vencimento']   = sprintf(
-                            '%s-%s-%s',
-                            $lancamentosVinculadosDespesa[$indexVinculo]->ano_referencia,
-                            $lancamentosVinculadosDespesa[$indexVinculo]->mes_referencia,
-                            $detalhesDespesa->dia_vencimento
-                        );
-                        $dataToUpdate['mes_referencia']    = $lancamentosVinculadosDespesa[$indexVinculo]->mes_referencia;
-                        $dataToUpdate['ano_referencia']    = $lancamentosVinculadosDespesa[$indexVinculo]->ano_referencia;
-                        $dataToUpdate['despesa_vinculada'] = $lancamentosVinculadosDespesa[$indexVinculo]->despesa_vinculada;
-                        $dataToUpdate['id_lancamento']     = $lancamentosVinculadosDespesa[$indexVinculo]->id_lancamento;
-                    }
-                }
-
-                if (!$this->despesa_model->addLancamentoDespesa($dataToUpdate))
-                    return false;
-
-                unset($dataToUpdate['mes_referencia']);
-                unset($dataToUpdate['ano_referencia']);
-                unset($dataToUpdate['despesa_vinculada']);
-                unset($dataToUpdate['id_lancamento']);
-                unset($dataToUpdate['data_vencimento']);
-            }
-            return true;
-        }
-
-        foreach ($lancamentosVinculadosDespesa as $lancamentoVinculo) {
-            $dataToUpdate['data_vencimento']   = sprintf(
-                '%s-%s-%s',
-                $lancamentoVinculo->ano_referencia,
-                $lancamentoVinculo->mes_referencia,
-                $detalhesDespesa->dia_vencimento
-            );
-            $dataToUpdate['mes_referencia']    = $lancamentoVinculo->mes_referencia;
-            $dataToUpdate['ano_referencia']    = $lancamentoVinculo->ano_referencia;
-            $dataToUpdate['despesa_vinculada'] = $lancamentoVinculo->despesa_vinculada;
-            $dataToUpdate['id_lancamento']     = $lancamentoVinculo->id_lancamento;
-
-            if (!$this->despesa_model->addLancamentoDespesa($dataToUpdate))
-                return false;
-        }
-        return true;
-    }
-
-
     public function excluir()
     {
-        // TODO: modelar método para excluir despesas
-
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dDespesas')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para excluir despesas.');
             redirect(base_url());
         }
         $urlAtual  = $this->input->post('urlAtual');
-        $idDespesa = null;
+        $idDespesa = $this->input->post('idDespesa');
 
-        if ($this->input->post('id_despesa')) {
-            $idDespesa = $this->input->post('id_despesa');
-        } else {
+        if (!$idDespesa) {
             $this->session->set_flashdata('erro', 'Método não permitido');
             redirect('financeiro/despesas');
         }
 
-        if ($this->despesa_model->deleteDespesa($idDespesa)) {
-            $this->session->set_flashdata('sucesso', 'Despesa excluída com sucesso!');
-
-            // TODO: implementar metodo desvinculaDespesa
-            desvincularDespesa($idDespesa);
-        } else {
+        if (!$this->despesa_model->deleteDespesa($idDespesa)) {
             $this->session->set_flashdata('erro', 'Erro ao tentar excluir despesa');
+            redirect($urlAtual);
         }
+        $this->session->set_flashdata('sucesso', 'Despesa excluída com sucesso');
+        redirect($urlAtual);
+    }
+
+    public function excluirLancamento()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dDespesas')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para excluir registro de despesas.');
+            redirect(base_url());
+        }
+        $urlAtual            = $this->input->post('urlAtual');
+        $idLancamentoDespesa = $this->input->post('idLancamentoDespesa') ?? null;
+
+        if (!$idLancamentoDespesa) {
+            $this->session->set_flashdata('erro', 'Método não permitido');
+            redirect($urlAtual);
+        }
+
+        if (!$this->despesa_model->deleteLancamentoDespesa($idLancamentoDespesa)) {
+            $this->session->set_flashdata('erro', 'Erro ao tentar excluir registro de despesa');
+            redirect($urlAtual);
+        }
+        $this->session->set_flashdata('sucesso', 'Registro excluído com sucesso');
         redirect($urlAtual);
     }
 
     public function pagar()
     {
+        //TODO: implementar metodo para ativar despesa
+
+        //TODO: implementar metodo para desativar despesa
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eDespesas')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para pagar despesas.');
             redirect(base_url());
@@ -961,7 +885,7 @@ class Despesas extends CI_Controller
                 );
                 $this->fatura_model->edit('lancamentos', $data, 'id_fatura', $_POST['id_fatura']);
             }
-            $this->session->set_flashdata('sucesso', 'Fatura paga com sucesso!');
+            $this->session->set_flashdata('sucesso', 'Fatura paga com sucesso');
             redirect($urlAtual);
         } else {
             $this->session->set_flashdata('erro', 'Erro ao tentar pagar a fatura.');
@@ -969,28 +893,166 @@ class Despesas extends CI_Controller
         }
     }
 
-    public function vincular()
+    public function ativar()
     {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eDespesas')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para ativar despesas.');
+            redirect(base_url());
+        }
+
+        $id       = $this->input->post('id');
+        $urlAtual = $this->input->post('urlAtual');
+
+        if (!$id) {
+            $this->session->set_flashdata('erro', 'Método não permitido');
+            redirect($urlAtual);
+        }
+
+        if (!$this->despesa_model->ativaDespesa($id)) {
+            $this->session->set_flashdata('erro', 'Erro ao tentar ativar despesa');
+            redirect($urlAtual);
+        }
+        $this->session->set_flashdata('sucesso', 'Despesa ativada com sucesso');
+        redirect($urlAtual);
+    }
+
+    public function desativar()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eDespesas')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para desativar despesas.');
+            redirect(base_url());
+        }
+
+        $id       = $this->input->post('id');
+        $urlAtual = $this->input->post('urlAtual');
+
+        if (!$id) {
+            $this->session->set_flashdata('erro', 'Método não permitido');
+            redirect($urlAtual);
+        }
+
+        if (!$this->despesa_model->desativaDespesa($id)) {
+            $this->session->set_flashdata('erro', 'Erro ao tentar desativar despesa');
+            redirect($urlAtual);
+        }
+        $this->session->set_flashdata('sucesso', 'Despesa desativada com sucesso');
+        redirect($urlAtual);
+    }
+
+    public function vincularLancamentoDespesa()
+    {
+        //TODO: metodo para vincular um lancamento individual de uma despesa
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eDespesas')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para vincular despesas.');
             redirect(base_url());
         }
-        $urlAtual = $this->input->post('urlAtual');
-        $idFatura = $this->input->post('idFatura');
+        $urlAtual                 = $this->input->post('urlAtual');
+        $this->mesReferencia      = $this->input->post('mesReferencia') ?? null;
+        $this->anoReferencia      = $this->input->post('anoReferencia') ?? null;
+        $idDespesa                = $this->input->post('idDespesa');
+        $idLancamentoDespesa      = $this->input->post('idLancamentoDespesa') ?? null;
+        $lancamentosDespesa       = $this->despesa_model->getLancamentosDespesa($idDespesa);
+        $vinculoLancamentoDespesa = $this->despesa_model->getVinculoLancamentoDespesa($idLancamentoDespesa);
+        $despesa                  = $this->despesa_model->getDespesaById($idDespesa);
 
-        $vinculoFatura = $this->fatura_model->getVinculoFatura($idFatura);
-        if ($vinculoFatura) {
-            $this->session->set_flashdata('erro', 'A fatura solicitada já possui vínculo ativo ao módulo de Lançamentos');
+        if (!$despesa) {
+            $this->session->set_flashdata('erro', 'Despesa não encontrada');
+            redirect($urlAtual);
+        }
+        // a condiçao abaixo só se aplica para vínculos individuais (botao de vinculo em cada sub-registro da despesa)
+        if ($vinculoLancamentoDespesa) {
+            $this->session->set_flashdata('erro', 'Vínculo já existente para o registro solicitado');
             redirect($urlAtual);
         }
 
-        $data = array(
-            'fatura_vinculada' => 1
-        );
+        //TODO:
+        // Despesa parcelada: efetuar o vinculo com Lançamentos mediante mes e ano de referencia, e o dia de vencimento da despesa
 
-        if ($this->fatura_model->edit('faturas', $data, 'id_fatura', $idFatura)) {
-            $detalhesFatura       = $this->fatura_model->getDetalhesFatura($idFatura);
-            $valorTotalFatura     = $this->fatura_model->getValorTotalFatura($idFatura);
+
+        // if (!$lancamentosDespesa) {
+        //TODO:
+        // Despesa recorrente: criar um registro na tabela lancamentos_despesas e repetir o mesmo procedimento para despesa parcelada
+        if ($despesa->tipo_despesa == 2) {
+            if (!$this->criaLancamentoDespesa($idDespesa)) {
+                $this->session->set_flashdata('erro', 'Erro ao tentar adicionar registro de despesa');
+                redirect($urlAtual);
+            }
+
+            //TODO:
+            // apos criar o registro em lancamento_despesa, gerar vinculo com o modulo de Lancamentos para este mesmo registro = OK
+
+            //TODO: separar a logica do vinculo com o modulo de Lancamentos em um método específico
+
+            $idLancamentoDespesa = $this->despesa_model->lastInsertedId();
+        }
+        // }
+
+        //chamada do metodo copiaRegistroEmModuloLancamentos()
+        if (!$this->copiaRegistroEmModuloLancamentos($idDespesa, $idLancamentoDespesa)) {
+            $this->session->set_flashdata('erro', 'Erro ao tentar vincular despesa');
+            redirect($urlAtual);
+        }
+
+        $this->session->set_flashdata('sucesso', 'Registro adicionado com sucesso');
+        redirect($urlAtual);
+    }
+
+    private function copiaRegistroEmModuloLancamentos($idDespesa, $idLancamentoDespesa)
+    {
+        $despesa           = $this->despesa_model->getDespesaById($idDespesa);
+        $lancamentoDespesa = $this->despesa_model->getLancamentoDespesaById($idLancamentoDespesa);
+        $valorFormatado    = sprintf('-%s', $despesa->valor_total);
+        $tipoLancamento    = 2;
+        $dataLancamento    = sprintf('%s-%s-%s', $lancamentoDespesa->ano_referencia, $lancamentoDespesa->mes_referencia, $despesa->dia_vencimento);
+
+        if ($despesa->despesa_terceiros) {
+            $valorFormatado = sprintf('%s', $despesa->valor_total);
+            $tipoLancamento = 1;
+        }
+
+        $data = [
+            'id_usuario'            => getUserId(),
+            'id_lancamento_despesa' => $idLancamentoDespesa,
+            'descricao'             => $despesa->descricao,
+            'observacoes'           => $despesa->observacoes,
+            'cliente_fornecedor'    => $despesa->nome_terceiro ?: $despesa->fornecedor,
+            'valor'                 => $valorFormatado,
+            'data_lancamento'       => $dataLancamento,
+            'data_pagamento'        => $lancamentoDespesa->data_pagamento ?: null,
+            'forma_pgto'            => $despesa->id_forma_pagamento,
+            'baixado'               => ($despesa->despesa_quitada == 1) ?: 0,
+            'tipo'                  => $tipoLancamento
+        ];
+
+        if (!$this->financeiro_model->add('lancamentos', $data)) {
+            return false;
+        }
+        return true;
+    }
+
+    public function desvincularDespesas()
+    {
+        //TODO: implementar metodo para vincular despesas
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eDespesas')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para vincular despesas.');
+            redirect(base_url());
+        }
+        $urlAtual           = $this->input->post('urlAtual');
+        $idDespesa          = $this->input->post('idDespesa');
+        $lancamentosDespesa = $this->despesa_model->getLancamentosDespesa($idDespesa);
+
+        if (!$lancamentosDespesa) {
+            $this->session->set_flashdata('erro', 'A despesa solicitada não possui parcelas disponíveis para gerenciamento');
+            redirect($urlAtual);
+        }
+
+        //TODO:
+        // Despesa parcelada: efetuar o vinculo com Lançamentos mediante mes e ano de referencia, e o dia de vencimento da despesa
+        // Despesa recorrente: criar um registro na tabela lancamentos_despesas e repetir o mesmo procedimento para despesa parcelada
+
+        if ($this->despesa_model->vinculaDespesa($idDespesa)) {
+            $detalhesFatura       = $this->fatura_model->getDetalhesFatura($idDespesa);
+            $valorTotalFatura     = $this->fatura_model->getValorTotalFatura($idDespesa);
             $detalhesCartaoFatura = $this->cartoes_model->getCartao($detalhesFatura->id_cartao);
             $n_cartao             = explode(" ", trim(decriptar($detalhesCartaoFatura->numero)));
             $final                = $n_cartao[3];
@@ -998,7 +1060,7 @@ class Despesas extends CI_Controller
 
             $data = array(
                 'id_usuario'         => getUserId(),
-                'id_fatura'          => $idFatura,
+                'id_fatura'          => $idDespesa,
                 'descricao'          => 'FATURA CARTAO DE CREDITO' . $apelido,
                 'cliente_fornecedor' => $detalhesCartaoFatura->bandeira ? $detalhesCartaoFatura->bandeira . ' - FINAL ' . $final : null,
                 'valor'              => '-' . $valorTotalFatura,
@@ -1016,8 +1078,10 @@ class Despesas extends CI_Controller
         redirect($urlAtual);
     }
 
-    public function vincularLoteDespesas()
+    public function gerenciarLoteVinculos()
     {
+        //TODO: estudar a real necessidade de um metodo para gerenciar vinculos de despesas
+        // (vincular e desvincular um lote de despesas, botao disponivel apenas na view gerenciar_despesas)
 
     }
 
@@ -1102,7 +1166,7 @@ class Despesas extends CI_Controller
                 );
                 $this->fatura_model->edit('configs_faturas', $data_adicional, 'id_cartao', $adicional->id_cartao);
             }
-            $this->session->set_flashdata('sucesso', 'Configurações alteradas com sucesso!');
+            $this->session->set_flashdata('sucesso', 'Configurações alteradas com sucesso');
         } else {
             $this->fatura_model->add('configs_faturas', $data);
             $adicionais = $this->cartoes_model->getCartoesAdicionais($id_cartao);
@@ -1139,10 +1203,154 @@ class Despesas extends CI_Controller
                 );
                 $this->fatura_model->add('configs_faturas', $data_adicional);
             }
-            $this->session->set_flashdata('sucesso', 'Configurações salvas com sucesso!');
+            $this->session->set_flashdata('sucesso', 'Configurações salvas com sucesso');
         }
         redirect($urlAtual);
     }
+
+    private function criaLancamentoDespesa(int $idDespesa): bool
+    {
+        $detalhesDespesa = $this->despesa_model->getDespesaById($idDespesa);
+
+        /**
+         * implementar duas logicas diferentes para ambos os tipos de despesas: recorrente e única
+         * cada lógica terá uma abordagem diferente.
+         *
+         * LOGICA DESPESA RECORRENTE (contas fixas a cada mes):
+         * ao criar uma nova Despesa, não criar registros de Despesa automaticamente (lancamentos_despesas)
+         * os registros de Despesa serao criados quando um novo Vinculo for criado (selecionar mes e ano alvos)
+         * no caso de ediçao de uma Despesa, os vinculos ja criados não serão reeditados
+         * no caso de exclusão de um registro de Despesa, o vinculo ja criado será excluido
+         * no caso de exclusão de uma Despesa, os vinculos ja lançados no modulo de Lançamentos não serao excluidos
+         *
+         */
+
+        if (!$detalhesDespesa) return false;
+
+        $dataVencimento       = sprintf('%s-%s-%s', $this->anoReferencia, $this->mesReferencia, $detalhesDespesa->dia_vencimento);
+        $newLancamentoDespesa = [
+            'id_despesa'         => $detalhesDespesa->id,
+            'id_forma_pagamento' => $detalhesDespesa->id_forma_pagamento,
+            'data_vencimento'    => $dataVencimento,
+            'mes_referencia'     => $this->mesReferencia,
+            'ano_referencia'     => $this->anoReferencia,
+        ];
+
+        if ($detalhesDespesa->tipo_despesa == 2) {
+            $newLancamentoDespesa['despesa_vinculada'] = 1;
+        }
+
+        if ($detalhesDespesa->despesa_parcelada) {
+            for ($i = 1; $i <= $detalhesDespesa->total_parcelas; $i++) {
+                (string)$contadorParcela = $i;
+                $newLancamentoDespesa['num_parcela'] = $contadorParcela < 10 ? '0' . $contadorParcela : $contadorParcela;
+
+                if (!$this->despesa_model->addLancamentoDespesa($newLancamentoDespesa)) return false;
+            }
+        }
+
+        if (!$this->despesa_model->addLancamentoDespesa($newLancamentoDespesa)) return false;
+
+        return true;
+    }
+
+    private function monitorarVinculosDespesasFromUser()
+    {
+        $despesas = $this->despesa_model->getDespesasAtivas();
+
+        if ($despesas) {
+            foreach ($despesas as $despesa) {
+                $lancamentosDespesa = $this->despesa_model->getLancamentosDespesa($despesa->id);
+
+                if ($lancamentosDespesa) {
+                    foreach ($lancamentosDespesa as $lancamento) {
+                        if ($lancamento->despesa_vinculada) {
+                            $vinculo = $this->despesa_model->getVinculoLancamentoDespesa($lancamento->id);
+
+                            if (!$vinculo) {
+                                $this->copiaRegistroEmModuloLancamentos($despesa->id, $lancamento->id);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    private function editarLancamentosDespesas(int $idDespesa): bool
+    {
+        $detalhesDespesa = $this->despesa_model->getDespesaById($idDespesa);
+
+        if (!$detalhesDespesa) return false;
+
+        $lancamentosVinculadosDespesa = $this->despesa_model->getLancamentosVinculadosDespesa($idDespesa);
+        $data                         = [
+            'id_despesa'         => $detalhesDespesa->id,
+            'id_forma_pagamento' => $detalhesDespesa->id_forma_pagamento,
+        ];
+
+        if ($detalhesDespesa->despesa_parcelada == 1) {
+            $this->despesa_model->deleteLancamentosDespesa($idDespesa);
+
+            for ($i = 1; $i <= $detalhesDespesa->total_parcelas; $i++) {
+                (string)$contadorParcela = $i;
+                $data['num_parcela'] = $contadorParcela < 10 ? '0' . $contadorParcela : $contadorParcela;
+
+                if ($lancamentosVinculadosDespesa) {
+                    $indexVinculo = $i - 1;
+
+                    if (
+                        isset($lancamentosVinculadosDespesa[$indexVinculo]->num_parcela)
+                        && $lancamentosVinculadosDespesa[$indexVinculo]->num_parcela == $data['num_parcela']
+                    ) {
+                        $data['data_vencimento']   = sprintf(
+                            '%s-%s-%s',
+                            $lancamentosVinculadosDespesa[$indexVinculo]->ano_referencia,
+                            $lancamentosVinculadosDespesa[$indexVinculo]->mes_referencia,
+                            $detalhesDespesa->dia_vencimento
+                        );
+                        $data['mes_referencia']    = $lancamentosVinculadosDespesa[$indexVinculo]->mes_referencia;
+                        $data['ano_referencia']    = $lancamentosVinculadosDespesa[$indexVinculo]->ano_referencia;
+                        $data['despesa_vinculada'] = $lancamentosVinculadosDespesa[$indexVinculo]->despesa_vinculada;
+                        $data['id_lancamento']     = $lancamentosVinculadosDespesa[$indexVinculo]->id_lancamento;
+                    }
+                }
+
+                if (!$this->despesa_model->addLancamentoDespesa($data)) return false;
+
+                unset($data['mes_referencia']);
+                unset($data['ano_referencia']);
+                unset($data['despesa_vinculada']);
+                unset($data['id_lancamento']);
+                unset($data['data_vencimento']);
+            }
+            return true;
+        }
+
+        if ($lancamentosVinculadosDespesa) {
+            foreach ($lancamentosVinculadosDespesa as $lancamentoVinculo) {
+                $data['data_vencimento']   = sprintf(
+                    '%s-%s-%s',
+                    $lancamentoVinculo->ano_referencia,
+                    $lancamentoVinculo->mes_referencia,
+                    $detalhesDespesa->dia_vencimento
+                );
+                $data['mes_referencia']    = $lancamentoVinculo->mes_referencia;
+                $data['ano_referencia']    = $lancamentoVinculo->ano_referencia;
+                $data['despesa_vinculada'] = $lancamentoVinculo->despesa_vinculada;
+                $data['id_lancamento']     = $lancamentoVinculo->id_lancamento;
+
+                if (!$this->despesa_model->addLancamentoDespesa($data)) return false;
+            }
+            return true;
+        }
+
+        if (!$this->despesa_model->editLancamentoDespesa($data)) return false;
+
+        return true;
+    }
+
 
     public function pesquisaLancamentos()
     {

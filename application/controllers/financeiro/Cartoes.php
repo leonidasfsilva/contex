@@ -132,7 +132,7 @@ class Cartoes extends CI_Controller
         }
     }
 
-    function desativar()
+    public function desativar()
     {
         $id = $this->input->post('id');
 
@@ -149,7 +149,7 @@ class Cartoes extends CI_Controller
         }
     }
 
-    function ativar()
+    public function ativar()
     {
         $id = $this->input->post('id');
 

@@ -230,9 +230,10 @@ class Mxcode_model extends CI_Model
         }
     }
 
-    function getTokenbyToken($token)
+    function getTokenbyToken($username, $token)
     {
         $this->db
+            ->where('username', $username)
             ->where('token', $token)
             ->where('status', 1);
         return $this->db->get('clientes_api');

@@ -422,13 +422,18 @@ $this->load->view('includes/custom_js');
                                     </li>
                                 <?php } ?>
 
-                                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
+                                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamentos') ||
+                                    $this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas') ||
+                                    $this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamentos') ||
+                                    $this->permission->checkPermission($this->session->userdata('permissao'), 'vDespesas') ||
+                                    $this->permission->checkPermission($this->session->userdata('permissao'), 'vInvestimentos') ||
+                                    $this->permission->checkPermission($this->session->userdata('permissao'), 'vPendencias')) { ?>
                                     <li class="<?= (isset($menuFinanceiro)) ? 'active' : ''; ?>">
                                         <a href="javascript:"><i class="fal fa-circle-dollar fa-lg"></i>
                                             <span>Financeiro</span>
                                         </a>
                                         <ul class="acc-menu">
-                                            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) { ?>
+                                            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamentos')) { ?>
                                                 <li><a href="<?= base_url('financeiro/lancamentos') ?>"><i class="pull-right fat fa-chart-mixed-up-circle-dollar fa-lg"></i> Lançamentos</a></li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) { ?>
@@ -436,6 +441,9 @@ $this->load->view('includes/custom_js');
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) { ?>
                                                 <li><a href="<?= base_url('financeiro/cartoes') ?>"><i class="pull-right fat fa-credit-card fa-lg"></i> Cartões</a></li>
+                                            <?php } ?>
+                                            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vDespesas')) { ?>
+                                                <li><a href="<?= base_url('financeiro/despesas') ?>"><i class="pull-right fat fa-money-bill-transfer fa-lg"></i> Despesas</a></li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vInvestimentos')) { ?>
                                                 <li><a href="<?= base_url('financeiro/investimentos') ?>"><i class="pull-right fat fa-hand-holding-circle-dollar fa-lg"></i> Investimentos</a></li>
@@ -447,7 +455,12 @@ $this->load->view('includes/custom_js');
                                     </li>
                                 <?php } ?>
 
-                                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rCliente') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rProduto') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rServico') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rOs') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro') || $this->permission->checkPermission($this->session->userdata('permissao'), 'rVenda')) { ?>
+                                <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rCliente') ||
+                                    $this->permission->checkPermission($this->session->userdata('permissao'), 'rProduto') ||
+                                    $this->permission->checkPermission($this->session->userdata('permissao'), 'rServico') ||
+                                    $this->permission->checkPermission($this->session->userdata('permissao'), 'rOs') ||
+                                    $this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro') ||
+                                    $this->permission->checkPermission($this->session->userdata('permissao'), 'rVenda')) { ?>
                                     <li class="<?= (isset($menuRelatorios)) ? 'active' : ''; ?>">
                                         <a href="javascript:"><i class="fal fa-file-alt fa-fw"></i>
                                             <span>Relatórios</span>
@@ -540,6 +553,9 @@ $this->load->view('includes/custom_js');
                                             </li>
                                             <li <?= ($this->uri->segment(2) == 'cartoes' ? 'class="active"' : '') ?>>
                                                 <a href="<?= base_url('financeiro/cartoes') ?>"><i class="pull-right fal fa-credit-card fa-lg"></i> Cartões</a>
+                                            </li>
+                                            <li <?= ($this->uri->segment(2) == 'despesas' ? 'class="active"' : '') ?>>
+                                                <a href="<?= base_url('financeiro/despesas') ?>"><i class="pull-right fal fa-money-bill-transfer fa-lg"></i> Despesas</a>
                                             </li>
                                             <li <?= ($this->uri->segment(2) == 'investimentos' ? 'class="active"' : '') ?>>
                                                 <a href="<?= base_url('financeiro/investimentos') ?>"><i class="pull-right fal fa-hand-holding-circle-dollar fa-lg"></i> Investimentos</a>
