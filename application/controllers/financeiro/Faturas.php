@@ -1360,12 +1360,10 @@ class Faturas extends CI_Controller
             }
             $this->session->set_flashdata('sucesso', 'Fatura paga com sucesso');
             redirect($urlAtual);
-            return true;
         }
 
         $this->session->set_flashdata('erro', 'Erro ao tentar pagar a fatura.');
         redirect($urlAtual);
-        return false;
     }
 
     public function vincular()

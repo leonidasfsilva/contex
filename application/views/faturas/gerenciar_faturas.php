@@ -817,7 +817,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 <div class="modal-body">
                     <p>Confirma o pagamento desta fatura?</p>
                     <input id="id_fatura_pagar" type="hidden" name="id_fatura" value=""/>
-                    <input id="urlPagarFatura" type="hidden" name="urlAtual" value=""/>
+                    <input class="urlAtual" type="hidden" name="urlAtual" value=""/>
                     <div class="row">
                         <div class="form-group col-lg-6">
                             <label class="font-weight-bold" for="data_pagamento">Data do pagamento</label>

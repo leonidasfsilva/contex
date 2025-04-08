@@ -14,6 +14,12 @@ class Despesas extends CI_Controller
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
             redirect('mxcode/login');
         }
+
+        if (ENVIRONMENT == 'production') {
+            $this->session->set_flashdata('erro', 'Módulo de Despesas em desenvolvimento.<br>Por favor, tente novamente mais tarde.');
+            redirect(base_url());
+        }
+
         $this->load->library('pagination');
         $this->yearsList = range(2018, date('Y') + 3);
         $this->monitorarVinculosDespesasFromUser();
