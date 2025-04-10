@@ -684,13 +684,13 @@ class Despesa_model extends CI_Model
         $count = $this->db
             ->from('lancamentos')
             ->where('status', 1)
-            ->where('id_lancamento_despesa', $id);
+            ->where('id_despesa', $id);
 
         if ($count->count_all_results() > 0) {
             $this->db
                 ->from('lancamentos')
                 ->where('status', 1)
-                ->where('id_lancamento_despesa', $id);
+                ->where('id_despesa', $id);
             return $this->db->get()->row();
         }
         return false;

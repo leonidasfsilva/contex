@@ -958,7 +958,7 @@ class Despesas extends CI_Controller
         $idDespesa                = $this->input->post('idDespesa');
         $idLancamentoDespesa      = $this->input->post('idLancamentoDespesa') ?? null;
         $lancamentosDespesa       = $this->despesa_model->getLancamentosDespesa($idDespesa);
-        $vinculoLancamentoDespesa = $this->despesa_model->getVinculoLancamentoDespesa($idLancamentoDespesa);
+        $vinculoLancamentoDespesa = $this->despesa_model->getVinculoLancamentoDespesa($idDespesa);
         $despesa                  = $this->despesa_model->getDespesaById($idDespesa);
 
         if (!$despesa) {
@@ -1017,17 +1017,17 @@ class Despesas extends CI_Controller
         }
 
         $data = [
-            'id_usuario'            => getUserId(),
-            'id_lancamento_despesa' => $idLancamentoDespesa,
-            'descricao'             => $despesa->descricao,
-            'observacoes'           => $despesa->observacoes,
-            'cliente_fornecedor'    => $despesa->nome_terceiro ?: $despesa->fornecedor,
-            'valor'                 => $valorFormatado,
-            'data_lancamento'       => $dataLancamento,
-            'data_pagamento'        => $lancamentoDespesa->data_pagamento ?: null,
-            'forma_pgto'            => $despesa->id_forma_pagamento,
-            'baixado'               => ($despesa->despesa_quitada == 1) ?: 0,
-            'tipo'                  => $tipoLancamento
+            'id_usuario'         => getUserId(),
+            'id_despesa'         => $despesa->id,
+            'descricao'          => $despesa->descricao,
+            'observacoes'        => $despesa->observacoes,
+            'cliente_fornecedor' => $despesa->nome_terceiro ?: $despesa->fornecedor,
+            'valor'              => $valorFormatado,
+            'data_lancamento'    => $dataLancamento,
+            'data_pagamento'     => $lancamentoDespesa->data_pagamento ?: null,
+            'forma_pgto'         => $despesa->id_forma_pagamento,
+            'baixado'            => ($despesa->despesa_quitada == 1) ?: 0,
+            'tipo'               => $tipoLancamento
         ];
 
         if (!$this->financeiro_model->add('lancamentos', $data)) {
@@ -1219,6 +1219,10 @@ class Despesas extends CI_Controller
         $detalhesDespesa = $this->despesa_model->getDespesaById($idDespesa);
 
         /**
+         * mudar relacionamento de DB para Despesas:
+         * o ID que será utilizado como vinculo na tabela Lançamentos,
+         * será o ID da tabela Despesa (despesas.id) e não mais (lancamentos_despesas.id)
+         *
          * implementar duas logicas diferentes para ambos os tipos de despesas: recorrente e única
          * cada lógica terá uma abordagem diferente.
          *
