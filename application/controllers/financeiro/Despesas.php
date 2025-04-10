@@ -17,7 +17,7 @@ class Despesas extends CI_Controller
 
         if (ENVIRONMENT == 'production') {
             $this->session->set_flashdata('erro', 'Módulo de Despesas em desenvolvimento.<br>Por favor, tente novamente mais tarde.');
-            redirect(base_url());
+            redirect($_SERVER['HTTP_REFERER']);
         }
 
         $this->load->library('pagination');
