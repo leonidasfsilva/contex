@@ -7,7 +7,7 @@ $periodo  = $this->input->get('periodo');
     <div class="panel-heading">
         <h3>
             <i class="fas fa-money-bill-transfer fa-lg fa-fw"></i>
-            Detalhes da Despesa <?= $despesa->id ?>
+            Detalhes da Despesa #<?= $despesa->id ?>
         </h3>
         <div class="panel-ctrls">
             <a href="<?= base_url('financeiro/despesas') ?>" class="btn btn-default btn-sm" title="Voltar para despesas">
@@ -98,17 +98,22 @@ $periodo  = $this->input->get('periodo');
             Registros da Despesa
         </h2>
         <div class="panel-ctrls">
-            <?php if ($despesa->tipo_despesa == 1): ?>
-                <a href="#modalGerenciarVinculos" data-toggle="modal" class="btn btn-primary btn-sm" title="Gerenciar vínculos da despesa">
-                    <i class="fas fa-link fa-fw"></i>
-                    Gerenciar Parcelas
-                </a>
-            <?php else: ?>
-                <a href="#modalNovoRegistroDespesa" data-toggle="modal" class="btn btn-primary btn-sm" title="Registrar lançamento da despesa">
-                    <i class="fas fa-plus fa-fw"></i>
-                    Novo Registro
-                </a>
-            <?php endif; ?>
+            <a href="#modalNovoRegistroDespesa" data-toggle="modal" class="btn btn-primary btn-sm" title="Registrar lançamento da despesa">
+                <i class="fas fa-plus fa-fw"></i>
+                Novo Registro
+            </a>
+
+            <?php //if ($despesa->tipo_despesa == 1): ?>
+            <!--    <a href="#modalGerenciarVinculos" data-toggle="modal" class="btn btn-primary btn-sm" title="Gerenciar vínculos da despesa">-->
+            <!--        <i class="fas fa-link fa-fw"></i>-->
+            <!--        Gerenciar Parcelas-->
+            <!--    </a>-->
+            <?php //else: ?>
+            <!--    <a href="#modalNovoRegistroDespesa" data-toggle="modal" class="btn btn-primary btn-sm" title="Registrar lançamento da despesa">-->
+            <!--        <i class="fas fa-plus fa-fw"></i>-->
+            <!--        Novo Registro-->
+            <!--    </a>-->
+            <?php //endif; ?>
             <a href="#" class="button-icon close-panel">
                 <i class="fas fa-times"></i>
             </a>

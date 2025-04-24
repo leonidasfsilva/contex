@@ -22,7 +22,6 @@ class Despesa_model extends CI_Model
 
     function get($where = null, $limit = null, $rows = 0, $perpage = 0, $start = 0, $order_by = null, $one = false)
     {
-        $this->db->select('*');
         $this->db->from($this->despesasTable);
         $this->db->limit($perpage, $start);
         $this->db->where('status', 1);
@@ -429,6 +428,25 @@ class Despesa_model extends CI_Model
                 ->from($this->lancamentosDespesasTable)
                 ->where('status', 1)
                 ->where('id', $id);
+            return $this->db->get()->row();
+        }
+        return false;
+    }
+
+    function getUltimaParcelaDespesa($idDespesa)
+    {
+        $count = $this->db
+            ->from($this->lancamentosDespesasTable)
+            ->where('status', 1)
+            ->where('id_despesa', $idDespesa)
+            ->where('num_parcela !=', null);
+
+        if ($count->count_all_results() > 0) {
+            $this->db
+                ->from($this->lancamentosDespesasTable)
+                ->where('status', 1)
+                ->where('id_despesa', $idDespesa)
+                ->order_by('num_parcela', 'DESC');
             return $this->db->get()->row();
         }
         return false;

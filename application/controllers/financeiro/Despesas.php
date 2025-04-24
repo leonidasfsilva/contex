@@ -647,10 +647,6 @@ class Despesas extends CI_Controller
         $this->session->set_flashdata('erro', 'Erro ao tentar registrar despesa');
 
         if ($this->despesa_model->add($newDespesa)) {
-            $lastInsertedId = $this->despesa_model->lastInsertedId();
-            if ($tipoDespesa == 1) {
-                $this->criaLancamentoDespesa($lastInsertedId);
-            }
             $this->session->set_flashdata('sucesso', 'Despesa registrada com sucesso');
         }
         redirect($this->redirectURL);
@@ -724,10 +720,6 @@ class Despesas extends CI_Controller
         $this->session->set_flashdata('erro', 'Erro ao tentar copiar despesa');
 
         if ($this->despesa_model->add($dataArrayToDbPersist)) {
-            $lastInsertedId = $this->despesa_model->lastInsertedId();
-            if ($tipoDespesa == 1) {
-                $this->criaLancamentoDespesa($lastInsertedId);
-            }
             $this->session->set_flashdata('sucesso', 'Despesa copiada com sucesso');
         }
         redirect($this->redirectURL);
@@ -946,7 +938,6 @@ class Despesas extends CI_Controller
 
     public function registrarLancamentoDespesa()
     {
-        //TODO: metodo para vincular um lancamento individual de uma despesa
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eDespesas')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para vincular despesas.');
             redirect($this->redirectURL);
@@ -973,22 +964,13 @@ class Despesas extends CI_Controller
         //TODO:
         // Despesa parcelada: efetuar o vinculo com Lançamentos mediante mes e ano de referencia, e o dia de vencimento da despesa
 
-
-        //TODO:
-        // Despesa recorrente:
-        // EDIT: nova logica: o vinculo nao ocorrerá mais nesta etapa, apenas a criaçao do registro da Despesa
-
-        if ($despesa->tipo_despesa == 2) {
-            if (!$this->criaLancamentoDespesa($idDespesa)) {
-                $this->session->set_flashdata('erro', 'Erro ao tentar adicionar registro de despesa');
-                redirect($this->redirectURL);
-            }
+        if (!criaLancamentoDespesa($idDespesa, $dataReferencia)) {
+            $this->session->set_flashdata('erro', 'Erro ao tentar adicionar registro de despesa');
+            redirect($this->redirectURL);
         }
 
-        //TODO: separar a logica do vinculo com o modulo de Lancamentos em um método específico - OK
-        //chamada do metodo copiaRegistroEmModuloLancamentos()
         if ($vincular) {
-            if (!$this->copiaRegistroEmModuloLancamentos($idDespesa, $dataReferencia)) {
+            if (!copiaRegistroEmModuloLancamentos($idDespesa, $dataReferencia)) {
                 $this->session->set_flashdata('erro', 'Erro ao tentar vincular despesa');
                 redirect($this->redirectURL);
             }
@@ -998,7 +980,7 @@ class Despesas extends CI_Controller
         redirect($this->redirectURL);
     }
 
-    private function copiaRegistroEmModuloLancamentos($idDespesa, $dataReferencia = null)
+    private function _copiaRegistroEmModuloLancamentos($idDespesa, $dataReferencia = null)
     {
         $despesa           = $this->despesa_model->getDespesaById($idDespesa);
         $dataLancamento    = sprintf('%s-%s-%s', $this->anoReferencia, $this->mesReferencia, $despesa->dia_vencimento);
@@ -1081,7 +1063,7 @@ class Despesas extends CI_Controller
         $dataVencimento = $this->input->post('dataVencimento');
 
         if ($this->despesa_model->setFlagRegistroVinculado($idRegistro)) {
-            if (!$this->copiaRegistroEmModuloLancamentos($idDespesa, $dataVencimento)) {
+            if (!copiaRegistroEmModuloLancamentos($idDespesa, $dataVencimento)) {
                 $this->session->set_flashdata('erro', 'Erro ao tentar vincular o registro da despesa');
                 redirect($this->redirectURL);
             }
@@ -1209,7 +1191,7 @@ class Despesas extends CI_Controller
      *
      */
 
-    private function criaLancamentoDespesa(int $idDespesa): bool
+    private function _criaLancamentoDespesa(int $idDespesa): bool
     {
         $detalhesDespesa = $this->despesa_model->getDespesaById($idDespesa);
 
@@ -1232,13 +1214,17 @@ class Despesas extends CI_Controller
         // }
 
         if ($detalhesDespesa->despesa_parcelada) {
-            for ($i = 1; $i <= $detalhesDespesa->total_parcelas; $i++) {
-                (string)$contadorParcela = $i;
-                $newLancamentoDespesa['num_parcela'] = $contadorParcela < 10 ? '0' . $contadorParcela : $contadorParcela;
+            $parcela = '01';
+            $ultimaParcela = $this->despesa_model->getUltimaParcelaDespesa($idDespesa);
 
-                if (!$this->despesa_model->addLancamentoDespesa($newLancamentoDespesa)) return false;
+            if ($ultimaParcela) {
+                $parcela = $ultimaParcela->num_parcela + 1;
+
+                if ($parcela < 10) $parcela = '0' . $parcela;
             }
-            return true;
+            //TODO: implementar metodo para obter o o numero da parcela do ultimo registro da despesa
+            // ex.: se a despesa parcelada em 12x ja possui 3 registros (parceladas), a leitura deve ser da parcela numero 3 (ultima)
+            $newLancamentoDespesa['num_parcela'] = (string)$parcela;
         }
 
         if (!$this->despesa_model->addLancamentoDespesa($newLancamentoDespesa)) return false;

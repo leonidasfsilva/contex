@@ -124,7 +124,7 @@ $periodo  = $this->input->get('periodo');
                     }
 
                     if ($r->despesa_parcelada) {
-                        $parcelas = '<span class="text-orange font-weight-bold">' . $r->total_parcelas . ' x ' . $valor_parcela . '</span>';
+                        $parcelas = '<span class="text-orange font-weight-bold">' . abs($r->total_parcelas) . ' x ' . $valor_parcela . '</span>';
                     }
 
                     if ($r->despesa_terceiros == 1) {

@@ -12,9 +12,17 @@ function integracaoDespesasUsuario()
 
     if ($despesas) {
         foreach ($despesas as $despesa) {
-            $lancamentosDespesa = $CI->despesa_model->getLancamentosDespesa($despesa->id);
+            //TODO: separar logica de integração (vinculo automatico) para despesas do tipo RECORRENTE
+            // a despesa deve possuir flag auto_vinculo = 1
+
+            //TODO: implementar metodo de integração (vinculo automatico) para despesas do tipo UNICA
+            // a despesa deve possuir flag auto_vinculo = 1
+            // remover a criaçao de parcelas automaticamente no momento de cadastrar uma nova despesa
 
             vinculoAutomaticoDespesaRecorrente($despesa->id);
+            vinculoAutomaticoDespesaUnica($despesa->id);
+
+            $lancamentosDespesa = $CI->despesa_model->getLancamentosDespesa($despesa->id);
 
             if ($lancamentosDespesa) {
                 foreach ($lancamentosDespesa as $lancamento) {
@@ -23,10 +31,6 @@ function integracaoDespesasUsuario()
 
                     monitoraVinculoComModuloLancamentos($lancamento->id);
                     monitoraIntegracaoAtivaComModuloLancamentos($lancamento->id);
-
-
-                    //TODO: separar logica de integração (vinculo automatico) para despesas do tipo RECORRENTE
-                    //TODO: a despesa deve possuir flag auto_vinculo = 1
                 }
             }
         }
@@ -102,6 +106,55 @@ function vinculoAutomaticoDespesaRecorrente($idDespesa)
 
     if (!$despesa) return false;
 
+    if ($despesa->tipo_despesa != 2) return false;
+
+    if (!$despesa->auto_vinculo) return false;
+
+    //TODO: separar logica de integração (vinculo automatico) para despesas do tipo RECORRENTE
+    //TODO: a despesa deve possuir flag auto_vinculo = 1 e possuir pelo menos um registro com data de vencimento válida
+
+    // if ($lancamento->data_vencimento && $lancamento->data_vencimento != '0000-00-00') {
+    $monthReference = $todayArray[1];
+    $yearReference  = $todayArray[0];
+
+    for ($i = 1; $i <= $monthsCount; $i++) {
+        $newDueDate = sprintf('%s-%s-%s', $yearReference, $monthReference, $despesa->dia_vencimento);
+        //TODO: criar um novo registro na tabela lancamentos_despesas, e em seguida,
+
+        $monthReference++;
+        if ($monthReference < 10) {
+            $monthReference = '0' . $monthReference;
+        }
+
+        if ($monthReference == '13') {
+            $monthReference = '01';
+            $yearReference++;
+        }
+
+        //TODO: realizar o vínculo do mesmo com modulo Lançamentos
+        criaLancamentoDespesa($idDespesa, $newDueDate);
+        copiaRegistroEmModuloLancamentos($despesa->id, $newDueDate);
+    }
+    // }
+
+    return true;
+}
+
+function vinculoAutomaticoDespesaUnica($idDespesa)
+{
+    $CI = get_instance();
+    $CI->load->model('despesa_model');
+
+    $todayDate   = date('Y-m-d');
+    $todayArray  = explode('-', $todayDate);
+    $monthsCount = 3;
+    // $lancamento  = $CI->despesa_model->getDetalhesLancamentoDespesa($idLancamentoDespesa);
+    $despesa = $CI->despesa_model->getDespesabyId($idDespesa);
+
+    if (!$despesa) return false;
+
+    if ($despesa->tipo_despesa != 1) return false;
+
     if (!$despesa->auto_vinculo) return false;
 
     //TODO: separar logica de integração (vinculo automatico) para despesas do tipo RECORRENTE
@@ -143,8 +196,12 @@ function copiaRegistroEmModuloLancamentos($idDespesa, $dataReferencia)
     $lancamento     = $CI->despesa_model->getRegistroDespesaByDate($idDespesa, $dataReferencia);
     $vinculo        = $CI->despesa_model->getVinculoDespesaComModuloLancamentos($idDespesa, $dataReferencia);
     $despesa        = $CI->despesa_model->getDespesaById($idDespesa);
+
+    if (!$lancamento) return false;
+
     $valorFormatado = sprintf('-%s', $lancamento->valor);
     $tipoLancamento = 2;
+    $data           = [];
 
     if (!$despesa) return false;
 
@@ -168,6 +225,12 @@ function copiaRegistroEmModuloLancamentos($idDespesa, $dataReferencia)
         'baixado'            => ($lancamento->registro_pago) ?: 0,
         'tipo'               => $tipoLancamento
     ];
+
+    if ($despesa->despesa_parcelada) {
+        $parcela           = $lancamento->num_parcela;
+        $totalParcelas     = $despesa->total_parcelas;
+        $data['descricao'] = sprintf('%s - PARC %s/%s', $data['descricao'], $parcela, $totalParcelas);
+    }
 
     if (!$CI->financeiro_model->add('lancamentos', $data))
         return false;
@@ -198,19 +261,20 @@ function criaLancamentoDespesa($idDespesa, $dataVencimento)
         'ano_referencia'     => $vencimento[0],
     ];
 
-    // if ($detalhesDespesa->tipo_despesa == 2) {
-    //     $newLancamentoDespesa['despesa_vinculada'] = 1;
-    // }
+    if ($despesa->despesa_parcelada) {
+        $parcela       = '01';
+        $ultimaParcela = $CI->despesa_model->getUltimaParcelaDespesa($idDespesa);
 
-    // if ($despesa->despesa_parcelada) {
-    //     for ($i = 1; $i <= $despesa->total_parcelas; $i++) {
-    //         (string)$contadorParcela = $i;
-    //         $newLancamentoDespesa['num_parcela'] = $contadorParcela < 10 ? '0' . $contadorParcela : $contadorParcela;
-    //
-    //         if (!$CI->despesa_model->addLancamentoDespesa($newLancamentoDespesa)) return false;
-    //     }
-    //     return true;
-    // }
+        if ($ultimaParcela) {
+            $parcela = $ultimaParcela->num_parcela + 1;
+
+            if ($parcela < 10) $parcela = '0' . $parcela;
+        }
+
+        if ($parcela > $despesa->total_parcelas) return false;
+
+        $newLancamentoDespesa['num_parcela'] = (string)$parcela;
+    }
 
     if (!$CI->despesa_model->addLancamentoDespesa($newLancamentoDespesa)) return false;
 
