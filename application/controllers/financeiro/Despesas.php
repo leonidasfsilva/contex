@@ -21,8 +21,8 @@ class Despesas extends CI_Controller
         $this->yearsList   = range(2018, date('Y') + 3);
 
         if (ENVIRONMENT == 'production') {
-            $this->session->set_flashdata('erro', 'Módulo de Despesas em desenvolvimento.<br>Por favor, tente novamente mais tarde.');
-            redirect($this->redirectURL);
+            // $this->session->set_flashdata('erro', 'Módulo de Despesas em desenvolvimento.<br>Por favor, tente novamente mais tarde.');
+            // redirect($this->redirectURL);
         }
 
         //TODO: criar uma funçao em despesa_helper para a automaçao de Despesas
