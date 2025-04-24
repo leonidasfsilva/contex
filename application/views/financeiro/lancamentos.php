@@ -255,51 +255,69 @@ if (!$results) {
                     }
 
                     $dataLancamentos = date(('d/m/Y'), strtotime($r->data_lancamento));
-                    $dataPagamento  = isset($r->data_pagamento) ? date('d/m/Y', strtotime($r->data_pagamento)) : null;
-                    $diaDaSemana    = getExtendedWeekDayName($r->data_lancamento);
+                    $dataPagamento   = isset($r->data_pagamento) ? date('d/m/Y', strtotime($r->data_pagamento)) : null;
+                    $diaDaSemana     = getExtendedWeekDayName($r->data_lancamento);
+                    $colorValue      = 'red';
+                    $labelType       = 'alizarin';
+                    $descriptionType = 'SAÍDA';
+                    $iconValue       = '<i class="far fa-arrow-left fa-rotate-by fa-fw" style="--fa-rotate-angle: 45deg !important;"></i>';
+                    $status          = 'EFETIVADO';
+                    $label_status    = 'primary';
+                    $iconTipo        = '<i class="fas fa-check-circle fa-fw"></i>';
+                    $iconExpense     = null;
+                    $iconInvoice     = null;
+                    $iconObs         = null;
+                    $fornecedor      = "&nbsp;";
 
                     if ($r->baixado == 0) {
                         $pendingNotification = 'notification-dot';
                         $status              = 'PENDENTE';
                         $label_status        = 'orange';
                         $iconTipo            = '<i class="far fa-clock fa-fw"></i>';
-                    } else {
-                        $status       = 'EFETIVADO';
-                        $label_status = 'primary';
-                        $iconTipo     = '<i class="fas fa-check-circle fa-fw"></i>';
-                    };
+                    }
 
                     if ($r->observacoes) {
                         $iconObs = '
                                 <i class="fas fa-comment-dots fa-fw" title="Observações adicionais"></i>
                             ';
-                    } else {
-                        $iconObs = '';
-                    };
+                    }
+
+                    if ($r->id_fatura) {
+                        $iconInvoice = '
+                                <i class="fas fa-file-invoice-dollar fa-fw" title="Fatura ' . $r->id_fatura . '"></i>
+                            ';
+                    }
+
+                    if ($r->id_despesa) {
+                        $iconExpense = '
+                                <i class="fas fa-money-bill-transfer fa-fw" title="Despesa ' . $r->id_despesa . '"></i>
+                            ';
+                    }
 
                     if ($r->tipo == 1) {
-                        $color      = 'green';
-                        $label_tipo = 'green';
-                        $tipo       = 'ENTRADA';
-                        $icon       = '<i class="far fa-arrow-left-to-bracket fa-rotate-270 fa-fw"></i>';
-                    } else {
-                        $color      = 'red';
-                        $label_tipo = 'alizarin';
-                        $tipo       = 'SAÍDA';
-                        $icon       = '<i class="far fa-arrow-right-from-bracket fa-rotate-270 fa-fw"></i>';
+                        $colorValue      = 'green';
+                        $labelType       = 'green';
+                        $descriptionType = 'ENTRADA';
+                        $iconValue       = '<i class="far fa-arrow-right fa-rotate-by fa-fw" style="--fa-rotate-angle: 45deg !important;"></i>';
                     }
 
                     if ($r->cliente_fornecedor) {
                         $fornecedor = $r->cliente_fornecedor;
-                    } else {
-                        $fornecedor = "&nbsp;";
                     }
 
                     foreach ($formasPagamento as $f) {
-                        if ($f->id_forma == $r->forma_pgto) {
-                            $forma_pgto = $f->nome;
+                        if ($f->id_forma == $r->forma_pgto) $forma_pgto = $f->nome;
+                    }
+
+                    if ($r->valor > 0) {
+                        if ($r->baixado == 0) {
+                            $entradasPendentes += $r->valor;
+                        } else {
+                            $entradasEfetivadas += $r->valor;
                         }
                     }
+
+                    $valor = number_format($r->valor, 2, ',', '.');
 
                     if ($r->valor < 0) {
                         if ($r->baixado == 0) {
@@ -308,13 +326,6 @@ if (!$results) {
                             $saidasEfetivadas += $r->valor;
                         }
                         $valor = number_format(abs($r->valor), 2, ',', '.');
-                    } else {
-                        if ($r->baixado == 0) {
-                            $entradasPendentes += $r->valor;
-                        } else {
-                            $entradasEfetivadas += $r->valor;
-                        }
-                        $valor = number_format($r->valor, 2, ',', '.');
                     }
 
                     $totalGeralMes += $r->valor;
@@ -327,10 +338,10 @@ if (!$results) {
                         $r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
                         $dataLancamentos . '" pagamento="' . $dataPagamento . '" baixado="' .
                         $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">' .
-                        strtoupper($r->descricao) . $iconObs .
+                        strtoupper($r->descricao) . $iconObs . $iconInvoice . $iconExpense .
                         '<br><span class="small" style="color: grey;">' . ($fornecedor) . '</span></a></td>';
-                    echo '<td class="font-weight-bold"><span class="valor_parcela" style=" color: ' . $color . '"><span>' . number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small" style="color: grey;">' . ($forma_pgto) . '</td>';
-                    echo '<td><span class="text-' . $label_tipo . '">' . ($icon) . '</span> <span class="badge badge-' . $label_tipo . '">' . ($tipo) . '</span>
+                    echo '<td class="font-weight-bold"><span class="valor_parcela" style=" color: ' . $colorValue . '"><span>' . number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small" style="color: grey;">' . ($forma_pgto) . '</td>';
+                    echo '<td><span class="text-' . $labelType . '">' . ($iconValue) . '</span> <span class="badge badge-' . $labelType . '">' . ($descriptionType) . '</span>
                             <br>
                             <span class="text-' . $label_status . '">' . ($iconTipo) . '</span> <span class="badge badge-' . $label_status . '">' . ($status) . '</span></td>';
                     echo '<td>';
@@ -577,7 +588,7 @@ if (!$results) {
                 $pendingNotification = null;
                 foreach ($hiddenItems as $r) {
                     $dataLancamentos = date(('d/m/Y'), strtotime($r->data_lancamento));
-                    $dataPagamento  = isset($r->data_pagamento) ? date('d/m/Y', strtotime($r->data_pagamento)) : null;
+                    $dataPagamento   = isset($r->data_pagamento) ? date('d/m/Y', strtotime($r->data_pagamento)) : null;
 
                     if ($r->baixado == 0) {
                         $pendingNotification = 'notification-dot';
@@ -597,15 +608,15 @@ if (!$results) {
                     };
 
                     if ($r->tipo == 1) {
-                        $color      = 'green';
-                        $label_tipo = 'success';
-                        $tipo       = 'ENTRADA';
-                        $icon       = '<i class="far fa-arrow-left-to-bracket fa-rotate-270 fa-fw"></i>';
+                        $colorValue      = 'green';
+                        $labelType       = 'success';
+                        $descriptionType = 'ENTRADA';
+                        $iconValue       = '<i class="far fa-arrow-left-to-bracket fa-rotate-270 fa-fw"></i>';
                     } else {
-                        $color      = 'red';
-                        $label_tipo = 'danger';
-                        $tipo       = 'SAÍDA';
-                        $icon       = '<i class="far fa-arrow-right-from-bracket fa-rotate-270 fa-fw"></i>';
+                        $colorValue      = 'red';
+                        $labelType       = 'danger';
+                        $descriptionType = 'SAÍDA';
+                        $iconValue       = '<i class="far fa-arrow-right-from-bracket fa-rotate-270 fa-fw"></i>';
                     }
 
                     if ($r->cliente_fornecedor) {
@@ -648,9 +659,9 @@ if (!$results) {
                         $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">' .
                         strtoupper($r->descricao) . $iconObs .
                         '<br><span class="small" style="color: grey;">' . ($fornecedor) . '</span></a></td>';
-                    echo '<td class="font-weight-bold"><span class="valor_parcela" style=" color: ' . $color . '"><span>' .
+                    echo '<td class="font-weight-bold"><span class="valor_parcela" style=" color: ' . $colorValue . '"><span>' .
                         number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small" style="color: grey;">' . ($forma_pgto) . '</td>';
-                    echo '<td><span class="text-' . $label_tipo . '">' . ($icon) . '</span> <span class="badge badge-' . $label_tipo . '">' . ($tipo) . '</span>
+                    echo '<td><span class="text-' . $labelType . '">' . ($iconValue) . '</span> <span class="badge badge-' . $labelType . '">' . ($descriptionType) . '</span>
                             <br>
                             <span class="text-' . $label_status . '">' . ($iconTipo) . '</span> <span class="badge badge-' . $label_status . '">' . ($status) . '</span></td>';
                     echo '<td>';

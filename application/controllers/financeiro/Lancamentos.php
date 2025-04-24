@@ -26,6 +26,7 @@ class Lancamentos extends CI_Controller
         $this->data['menuFinanceiro'] = 'Lancamentos';
         $this->global_url             = base_url('financeiro/lancamentos');
         $this->defaultMonthUser       = $this->configs_model->getMesPadraoUsuario(getUserId()) ?? null;
+        integracaoDespesasUsuario();
     }
 
     public function index()
@@ -56,9 +57,9 @@ class Lancamentos extends CI_Controller
         $yearsList      = $keys;
 
         if ($this->defaultMonthUser) {
-            // TODO: pensar em uma outra abordagem para o cenario em que o mes corrente
+            //TODO: pensar em uma outra abordagem para o cenario em que o mes corrente
             // é dezembro e o usuario deseja definir como seu mes padrao, janeiro do proximo ano
-            // (adicioanar no form um select para o ano, talvez)
+            // (adicionar no form um select para o ano, talvez)
 
             // if (date('m') > $this->defaultMonthUser) {
             //     $referenceYear = $year + 1;

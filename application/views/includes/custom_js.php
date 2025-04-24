@@ -511,7 +511,7 @@
             position: 'top',
             icon: 'success',
             title: 'Feito!',
-            timer: 2000,
+            timer: <?= (ENVIRONMENT == 'production' ? 2000 : 1000) ?>,
             html: '<?= $this->session->flashdata('sucesso') ?>',
             showConfirmButton: false,
             showCancelButton: false,

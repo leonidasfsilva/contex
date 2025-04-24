@@ -7,7 +7,7 @@ $periodo  = $this->input->get('periodo');
     <div class="panel-heading">
         <h3>
             <i class="fas fa-money-bill-transfer fa-lg fa-fw"></i>
-            Detalhes da Despesa
+            Detalhes da Despesa <?= $despesa->id ?>
         </h3>
         <div class="panel-ctrls">
             <a href="<?= base_url('financeiro/despesas') ?>" class="btn btn-default btn-sm" title="Voltar para despesas">
@@ -42,7 +42,7 @@ $periodo  = $this->input->get('periodo');
             <div class="row">
                 <div class="form-group col-lg-3 col-xs-6">
                     <label class="font-weight-bold">Valor</label>
-                    <input class="form-control font-weight-bold text-alizarin" type="text" value="<?= number_format($despesa->valor_total, 2, ',', '.') ?>" disabled/>
+                    <input class="form-control font-weight-bold <?= $despesa->despesa_terceiros ? 'text-green' : 'text-alizarin' ?>" type="text" value="<?= number_format($despesa->valor_total, 2, ',', '.') ?>" disabled/>
                 </div>
                 <div class="form-group col-lg-3 col-xs-6">
                     <label class="font-weight-bold">Forma de pagamento</label>
@@ -69,7 +69,7 @@ $periodo  = $this->input->get('periodo');
                     </div>
                     <div class="form-group col-lg-3 col-xs-6">
                         <label class="font-weight-bold">Valor da parcela</label>
-                        <input class="form-control font-weight-bold text-alizarin" type="text" value="<?= number_format($despesa->valor_parcela, 2, ',', '.') ?>" disabled/>
+                        <input class="form-control font-weight-bold <?= $despesa->despesa_terceiros ? 'text-green' : 'text-alizarin' ?>" type="text" value="<?= number_format($despesa->valor_parcela, 2, ',', '.') ?>" disabled/>
                     </div>
                 <?php }
                 if ($despesa->despesa_terceiros) { ?>
@@ -124,65 +124,89 @@ $periodo  = $this->input->get('periodo');
         <table class="table table-condensed table-striped table-bordeless table-hover" role="grid" style="width: 100%;">
             <thead>
             <tr role="row">
-                <th>Referência<br><br></th>
-                <th>Descrição<br><?= $despesa->despesa_parcelada == 1 ? 'Parcela' : 'Fornecedor' ?></th>
-                <th><?= $despesa->despesa_parcelada == 1 ? 'Valor parcela' : 'Valor' ?> (R$)<br>Forma pagamento</th>
-                <th>Vínculo<br>Status pagamento</th>
+                <th>Vencimento<br><br></th>
+                <th>Descrição<br><?= $despesa->despesa_parcelada ? 'Parcela' : 'Fornecedor' ?></th>
+                <th><?= $despesa->despesa_parcelada ? 'Valor parcela' : 'Valor' ?> (R$)<br>Forma pagamento</th>
+                <th>Status vínculo<br>Status pagamento</th>
                 <th style="width: 130px">Ações<br>&nbsp;</th>
             </tr>
             </thead>
             <tbody>
             <?php if (isset($results) && $results) {
                 foreach ($results as $r) {
-                    $value                = number_format($despesa->valor_total, 2, ',', '.');
+                    $value                = number_format($r->valor, 2, ',', '.');
                     $installmentValue     = null;
                     $thirdName            = null;
                     $installments         = null;
-                    $link                 = null;
+                    $link                 = '#';
                     $aditionalDescription = $despesa->fornecedor;
-                    $linkDate             = null;
-                    $referenceDate        = null;
+                    $dueDate              = null;
+                    $dueDateIcon          = null;
+                    $disableLinkBtn       = null;
+                    $disablePaymentBtn    = null;
+                    $dueDateColor         = 'text-gray';
                     $colorValue           = $despesa->despesa_terceiros ? 'text-green' : 'text-alizarin';
+                    $iconValue            = '<i class="far fa-arrow-left fa-rotate-by fa-fw mr1" style="--fa-rotate-angle: 45deg !important;"></i>';
                     $linkStatus           = '<i class="far fa-link-slash fa-fw text-orange"></i> <span class="badge badge-orange">SEM VÍNCULO</span>';
                     $paymentStatus        = '<i class="far fa-times fa-fw text-danger"></i> <span class="badge badge-red">PENDENTE</span>';
 
-                    if ($despesa->valor_parcela) {
-                        $value = number_format($despesa->valor_parcela, 2, ',', '.');
-                    }
+
+                    if ($r->mes_referencia && $r->ano_referencia)
+                        $dueDate = sprintf('%s/%s/%s', $despesa->dia_vencimento, $r->mes_referencia, $r->ano_referencia);
+
+                    if ($despesa->valor_parcela)
+                        // $value = number_format($despesa->valor_parcela, 2, ',', '.');
+
 
                     if ($despesa->despesa_parcelada) {
                         $aditionalDescription = sprintf('PARCELA %s/%s', $r->num_parcela, $despesa->total_parcelas);
                         $installments         = '<span class="badge badge-alizarin font-weight-bold">' . $r->num_parcela . '/' . $despesa->total_parcelas . '</span>';
                     }
 
-                    if ($despesa->despesa_terceiros == 1) {
+                    if ($despesa->despesa_terceiros) {
                         $thirdName = $despesa->nome_terceiro;
+                        $iconValue = '<i class="far fa-arrow-right fa-rotate-by fa-fw mr1" style="--fa-rotate-angle: 45deg !important;"></i>';
                     }
 
-                    if ($r->despesa_vinculada == 1) {
-                        $referenceDate = sprintf('%s/%s', $r->mes_referencia, $r->ano_referencia);
-                        $link          = '<a href="' . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $r->mes_referencia, $r->ano_referencia)) . '" title="Acessar período de referência">' . $referenceDate . '</span></a>';
-                        $linkStatus    = '<i class="far fa-link fa-fw text-primary"></i> <span class="badge badge-primary">VINCULADA</span>';
+                    if ($r->registro_vinculado) {
+                        $link           = base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s',
+                                $r->mes_referencia,
+                                $r->ano_referencia)
+                        );
+                        $linkStatus     = '<i class="far fa-link fa-fw text-primary"></i> <span class="badge badge-primary">VINCULADO</span>';
+                        $dueDateIcon    = ' <i class="far fa-arrow-up-right-from-square fa-fw text-primary"></i>';
+                        $dueDateColor   = 'text-primary';
+                        $disableLinkBtn = 'disabled';
                     }
 
-                    if ($r->despesa_paga == 1) {
+                    if ($r->registro_pago == 1) {
                         $paymentStatus = '<i class="far fa-check fa-fw text-success"></i> <span class="badge badge-green">EFETIVADO</span>';
+                        $disablePaymentBtn = 'disabled';
                     }
 
                     echo '<tr>';
-                    echo '<td class="font-weight-bold">' . $link . '</td>';
+
+                    echo '<td class="font-weight-bold"><a href="' . $link . '" title="Acessar período de referência" class="' . $dueDateColor . '">' . $dueDate . $dueDateIcon . '</a></td>';
 
                     echo '<td>' . strtoupper($despesa->descricao) . '<br><span class="small text-muted" >' . ($aditionalDescription) . '</td>';
 
-                    echo '<td><span class="font-11 font-weight-bold ' . $colorValue . '">' . ($value) . '</span><br><span class="small text-muted">' . ($despesa->descricao_pagamento) . '</span></td>';
+                    echo '<td><span class="font-11 font-weight-bold ' . $colorValue . '"> ' . $iconValue . ($value) . '</span><br><span class="small text-muted">' . ($despesa->descricao_pagamento) . '</span></td>';
 
                     echo '<td>' . $linkStatus . '<br>' . $paymentStatus . '</td>';
 
                     echo '<td>';
 
-                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dDespesas')) {
-                        echo '<a href="#modalExcluir" data-toggle="modal" id_despesa="' . $r->id . '" class="btn btn-danger btn-sm excluir" title="Excluir lancamento de despesa"><i class="fas fa-trash-can-xmark fa-lg fa-fw"></i></a>';
-                    }
+                    echo '<button type="button" href="#modalVincular" data-toggle="modal" id_lancamento_despesa="' . $r->id . '" id_despesa="' . $despesa->id .
+                        '" data_vencimento="' . $r->data_vencimento . '" class="btn btn-info btn-sm vincular mr1" title="Vincular este registro de despesa" ' . $disableLinkBtn . '>
+                            <i class="fas fa-link fa-lg fa-fw"></i>
+                          </button>';
+
+                    echo '<button href="#modalPagar" data-toggle="modal" id_despesa="' . $r->id . '" class="btn btn-green btn-sm pagar mr1" title="Pagar este registro de despesa" ' . $disablePaymentBtn . '>
+                            <i class="fas fa-circle-dollar-to-slot fa-lg fa-fw"></i>
+                          </button>';
+
+                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dDespesas'))
+                        echo '<a href="#modalExcluir" data-toggle="modal" id_despesa="' . $r->id . '" class="btn btn-deeporange btn-sm excluir" title="Excluir este registro de despesa"><i class="fas fa-trash-can-xmark fa-lg fa-fw"></i></a>';
 
                     echo '</td>';
 
@@ -205,7 +229,7 @@ $periodo  = $this->input->get('periodo');
 
 
 <!-- Modal ALERTA CONFIGURACAO -->
-<?php if (isset($cartao) && !$existe_configuracao) { ?>
+<?php if (isset($forma) && !$existe_configuracao) { ?>
     <div class="modal fade alerta-usuario" id="modalAlerta" tabindex="-10" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -235,37 +259,6 @@ $periodo  = $this->input->get('periodo');
     </div>
 <?php } ?>
 
-<!-- Modal ALERTA AUSENCIA DE CARTAO -->
-<?php if (!isset($cartao)) { ?>
-    <div class="modal fade alerta-usuario" id="modalAlerta" tabindex="-10" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-danger">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title text-white ">Configuração pendente</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="note note-danger font-weight-bold">
-                        <span>Não há nenhum cartão de crédito cadastrado.</span>
-                        <br>
-                        <span>Não é possível abrir novas faturas sem um cartão previamente cadastrado.</span>
-                        <br>
-                        <span>Cadastre seu primeiro cartão clicando no botão: <span class="label label-primary"> <i class="fas fa-cog fa-fw"></i> Cadastrar Cartão</span></span>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
-                        <i class="fa fa-times fa-fw"></i> Fechar
-                    </button>
-                    <a href="<?= base_url('financeiro/cartoes/cadastrar') ?>" class="btn btn-primary btn-sm" title="Cadastrar novo cartão">
-                        <i class="fas fa-credit-card fa-fw"></i> Cadastrar Cartão
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-<?php } ?>
-
 <!-- Modal GERENCIAR VINCULOS DA DESPESA -->
 <div class="modal fade" id="modalGerenciarVinculos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -274,7 +267,7 @@ $periodo  = $this->input->get('periodo');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Gerenciar Vínculos da Despesa</h4>
             </div>
-            <form id="formVincularLancamentosDespesa" action="<?php echo base_url('financeiro/despesas/vincularDespesas') ?>" method="post">
+            <form id="formRegistrarLancamentosDespesa" action="<?php echo base_url('financeiro/despesas/vincularDespesas') ?>" method="post">
                 <div class="modal-body">
                     <p class="font-weight-bold">
                         Defina o mês e ano de referência para vincular ou desvincular todos os registros desta despesa para o período solicitado:
@@ -352,7 +345,7 @@ $periodo  = $this->input->get('periodo');
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title text-white ">Novo Registro de Despesa</h4>
             </div>
-            <form id="formVincularLancamentosDespesa" action="<?php echo base_url('financeiro/despesas/vincularLancamentoDespesa') ?>" method="post">
+            <form id="formRegistrarLancamentosDespesa" action="<?php echo base_url('financeiro/despesas/registrarLancamentoDespesa') ?>" method="post">
                 <div class="modal-body">
                     <p class="font-weight-bold">
                         Defina o mês e ano de referência para efetuar o registro desta despesa para o período solicitado:
@@ -394,53 +387,52 @@ $periodo  = $this->input->get('periodo');
                             </select>
                         </div>
                     </div>
-
-                    <p class="note note-info">
-                        <i class="text-info fa fa-info-circle fa-fw fa-lg"></i>
-                        Esta ação irá vincular este registro de despesa ao módulo de Lançamentos referente ao mês e ano selecionados.
-                    </p>
-                    <!-- <p class="note note-info"><i class="text-info fa fa-info-circle fa-fw fa-lg"></i>
-                        Todas as atualizações de valores das faturas serão refletidas automaticamente no módulo de Lançamentos
-                    </p> -->
                     <input type="hidden" name="idDespesa" value="<?= $despesa->id ?>"/>
                     <input class="urlAtual" type="hidden" name="urlAtual"/>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
-                        <i class="fa fa-times fa-fw"></i> Cancelar
-                    </button>
-                    <!--<button class="btn btn-danger btn-sm" id="btnDesvincular">-->
-                    <!--    <i class="fa fa-unlink fa-fw"></i> Desvincular-->
-                    <!--</button>-->
-                    <button class="btn btn-primary btn-sm btnVincular">
-                        <i class="fa fa-check fa-fw"></i> Registrar
-                    </button>
+                    <div class="row">
+                        <div class="text-left col-xs-6">
+                            <div class="row"><input type="checkbox" class="switch-input primary autoVinculo" id="autoVinculo" name="vincular">
+                                <label for="autoVinculo" class="switch-label primary font-weight-bold">Vincular em Lançamentos</label>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 modal-form-buttons">
+                            <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times fa-fw"></i> Cancelar</button>
+                            <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<!-- Modal VINCULAR FATURA UNICA -->
+<!-- Modal VINCULAR REGISTRO INDIVIDUAL -->
 <div class="modal fade" id="modalVincular" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-success">
+            <div class="modal-header bg-info">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white">Vincular fatura</h4>
+                <h4 class="modal-title text-white">Vincular registro de despesa</h4>
             </div>
-            <form id="formFechar" action="<?php echo base_url('financeiro/faturas/vincular') ?>" method="post">
+            <form id="formFechar" action="<?php echo base_url('financeiro/despesas/vincular') ?>" method="post">
                 <div class="modal-body">
-                    <p class="font-weight-bold">Confirma o vínculo desta fatura ao módulo de Lançamentos?</p>
-                    <p class="note note-info"><i class="text-info fa fa-info-circle fa-fw fa-lg"></i> Todas as atualizações de valores desta fatura serão refletidas automaticamente no módulo de Lançamentos.</p>
-                    <input class="idFatura" type="hidden" name="idFatura"/>
+                    <p class="font-weight-bold">Confirma o vínculo deste registro de despesa ao módulo de Lançamentos?</p>
+                    <p class="note note-info">
+                        <i class="text-info fa fa-info-circle fa-fw fa-lg"></i>
+                        Esta ação irá vincular este registro de despesa ao módulo de Lançamentos referente à data de vencimento.
+                    </p>
+                    <input class="expenseId" type="hidden" name="idDespesa"/>
+                    <input class="registerId" type="hidden" name="idRegistro"/>
+                    <input class="dueDate" type="hidden" name="dataVencimento"/>
                     <input class="urlAtual" type="hidden" name="urlAtual"/>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                         <i class="fa fa-times fa-fw"></i> Cancelar
                     </button>
-                    <button class="btn btn-success btn-sm" id="btnFechar">
+                    <button class="btn btn-info btn-sm">
                         <i class="fa fa-check fa-fw"></i> Confirmar
                     </button>
                 </div>
@@ -477,33 +469,33 @@ $periodo  = $this->input->get('periodo');
     </div>
 </div>
 
-<!-- Modal PAGAR FATURA -->
+<!-- Modal PAGAR REGISTRO -->
 <div class="modal fade" id="modalPagar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-success">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white">Pagar fatura</h4>
+                <h4 class="modal-title text-white">Pagar registro de despesa</h4>
             </div>
-            <form id="formPagar" action="<?php echo base_url('financeiro/faturas/pagar') ?>" method="post" autocomplete="off">
+            <form id="formPagar" action="<?php echo base_url('financeiro/despesas/pagar') ?>" method="post" autocomplete="off">
                 <div class="modal-body">
-                    <p>Confirma o pagamento desta fatura?</p>
-                    <input id="id_fatura_pagar" type="hidden" name="id_fatura"/>
-                    <input id="urlPagarFatura" type="hidden" name="urlAtual"/>
+                    <p>Confirma o pagamento deste registro?</p>
+                    <input class="expenseId" type="hidden" name="idLancamentoDespesa"/>
+                    <input class="urlAtual" type="hidden" name="urlAtual"/>
                     <div class="row">
                         <div class="form-group col-lg-6">
                             <label class="font-weight-bold" for="data_pagamento">Data do pagamento</label>
-                            <input class="datepicker form-control" id="data_pagamento" type="text" name="data_pagamento"/>
+                            <input class="datepicker form-control" id="data_pagamento" type="text" name="dataPagamento"/>
                         </div>
                         <div class="form-group col-lg-6">
                             <label class="font-weight-bold" for="forma_pagamento">Forma de pagamento *</label>
-                            <select name="forma_pagamento" id="forma_pagamento" class="form-control">
+                            <select name="formaPagamento" id="forma_pagamento" class="form-control">
                                 <option value="">
                                     << Selecione >>
                                 </option>
                                 <?php if ($formasPagamento) {
-                                    foreach ($formasPagamento as $cartao) { ?>
-                                        <option value="<?= $cartao->id_forma ?>"><?= $cartao->nome ?></option>
+                                    foreach ($formasPagamento as $forma) { ?>
+                                        <option value="<?= $forma->id_forma ?>"><?= $forma->nome ?></option>
                                     <?php }
                                 } ?>
                             </select>
@@ -529,7 +521,7 @@ $periodo  = $this->input->get('periodo');
         <div class="modal-content">
             <div class="modal-header bg-danger">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white ">Excluir registro</h4>
+                <h4 class="modal-title text-white ">Excluir registro de despesa</h4>
             </div>
             <form action="<?php echo base_url('financeiro/despesas/excluirLancamento') ?>" method="post">
                 <div class="modal-body">
@@ -811,6 +803,31 @@ $periodo  = $this->input->get('periodo');
         })
 
 
+        $("#formPagar").validate({
+            rules: {
+                formaPagamento: {
+                    required: true
+                }
+            },
+            messages: {
+                formaPagamento: {
+                    required: 'Selecione a forma de pagamento'
+                },
+            },
+
+            errorClass: "help-block",
+            errorElement: "p",
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').addClass('has-error');
+                $(element).parents('.form-group').removeClass('has-success');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents('.form-group').removeClass('has-error');
+                $(element).parents('.form-group').addClass('has-success');
+            }
+
+        });
+
         // ========================================= OLD CODE BELOW
 
 
@@ -818,7 +835,7 @@ $periodo  = $this->input->get('periodo');
             var btn = $(this)
             event.preventDefault();
             $('.desvincularDespesas').val(1);
-            $('#formVincularLancamentosDespesa').attr('action', '<?php echo base_url('financeiro/despesas/desvincularDespesas') ?>').submit();
+            $('#formRegistrarLancamentosDespesa').attr('action', '<?php echo base_url('financeiro/despesas/desvincularDespesas') ?>').submit();
         });
 
 
@@ -881,14 +898,11 @@ $periodo  = $this->input->get('periodo');
             $(".id").val($(this).attr('id_despesa'));
         });
 
-        $(document).on('click', '.pagar', function (event) {
-            $("#id_fatura_pagar").val($(this).attr('id_fatura'));
-        });
-
-        $(document).on('click', '.editar', function (event) {
+        $(document).on('click', '.editar, .vincular, .pagar', function (event) {
             var expenseId = $(this).attr('id_despesa')
             $(".expenseId").val(expenseId)
             $(".description").val($(this).attr('descricao'))
+            $(".registerId").val($(this).attr('id_lancamento_despesa'))
             $(".supplier").val($(this).attr('fornecedor'))
             $(".thirdName").val($(this).attr('nome_terceiro'))
             $(".dueDate").val($(this).attr('data_vencimento'))

@@ -1,5 +1,5 @@
 <div class="row">
-    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamento')) : ?>
+    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamentos')) : ?>
         <div class="col-md-6">
             <a href="<?= base_url() ?>financeiro/lancamentos" class="shortcut-tile tile-blue">
                 <div class="tile-body">

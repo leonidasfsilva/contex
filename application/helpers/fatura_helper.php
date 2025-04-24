@@ -22,9 +22,9 @@ function vinculoAutomaticoFaturas(): bool
 
     if (!$CI->fatura_model->getAutoLinkUser()) return false;
 
-    $todayDate       = date('Y-m-d');
-    $todayArray      = explode('-', $todayDate);
-    $mounthsCount    = 3;
+    $todayDate   = date('Y-m-d');
+    $todayArray  = explode('-', $todayDate);
+    $monthsCount = 3;
 
     $cartoesAtivos = $CI->cartoes_model->getCartoesUsuarioFatura(getUserId());
 
@@ -35,7 +35,7 @@ function vinculoAutomaticoFaturas(): bool
         if ($cartao->id_cartao == 57) {
             $cartaoAlvo = true;
         }
-        for ($i = 1; $i <= $mounthsCount; $i++) {
+        for ($i = 1; $i <= $monthsCount; $i++) {
             $faturaReferencia = $CI->fatura_model->getFaturaReferencia($cartao->id_cartao, $mounthReference, $yearReference);
 
             if (!$faturaReferencia) {
