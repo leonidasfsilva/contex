@@ -1,5 +1,115 @@
 <script>
     $(document).ready(function () {
+        var marcados = false
+
+        // Calculate the total invoice amount from selected items only
+        function somaValorParcelas() {
+            var Soma = 0
+            var deleteSerie = []
+            var copiaSerie = []
+            var idLancamento = null
+
+            $('#deleteSerieFormBody').html('')
+            $('#copiaSerieFormBody').html('')
+
+            // iterate through each td based on class and add the values
+            $(".valor_parcela").each(function () {
+                //Check if the checkbox is checked
+                if ($(this).closest('tr').find('.soma_parcelas').is(':checked')) {
+                    idLancamento = $(this).closest('tr').find('.idLancamento').html()
+                    deleteSerie.push(idLancamento)
+                    copiaSerie.push(idLancamento)
+                    var value = $('span', this).text()
+                    value = jqueryFormat(value)
+                    // add only if the value is number
+                    if (!isNaN(value) && value.length != 0) {
+                        Soma += parseFloat(value)
+                    }
+                }
+            })
+            var Sum = br_format(Soma)
+
+            if (deleteSerie.length > 1) {
+                $('.modalExcluirSerie').attr('disabled', false)
+                deleteSerie.forEach(function (item) {
+                    $('#deleteSerieFormBody').append('<input type="hidden" name="id[]" value="' + item + '"/>')
+                })
+            } else {
+                $('.modalExcluirSerie').attr('disabled', true)
+            }
+
+            if (copiaSerie.length > 1) {
+                $('.modalCopiarSerie').attr('disabled', false)
+                deleteSerie.forEach(function (item) {
+                    $('#copiaSerieFormBody').append('<input type="hidden" name="id[]" value="' + item + '"/>')
+                });
+            } else {
+                $('.modalCopiarSerie').attr('disabled', true)
+            }
+
+            $('.valor_soma_parcelas').text(Sum)
+        }
+
+        function marcarTodosiCheck() {
+            if (marcados == false) {
+                $(".soma_parcelas").each(function () {
+                    $('.soma_parcelas').iCheck('check')
+                    marcados = true
+                })
+            } else {
+                $(".soma_parcelas").each(function () {
+                    $('.soma_parcelas').iCheck('uncheck')
+                    marcados = false
+                })
+            }
+        }
+
+        function jqueryFormat(valor) {
+            // Remove todos os .
+            valor = valor.replace(/\./g, "")
+
+            // Troca todas as , por .
+            valor = valor.replace(",", ".")
+
+            // Converte para float
+            valor = parseFloat(valor)
+            valor = parseFloat(valor) || 0.0
+
+            return valor
+        }
+
+        function br_format(n) {
+            return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.")
+        }
+
+        $('#marcar_todos, #desmarcar_todos').click(function () {
+            marcarTodosiCheck()
+            $('#marcar_todos').toggleClass('hidden')
+            $('#desmarcar_todos').toggleClass('hidden')
+        })
+
+        $('.habilita_desabilita_soma').click(function () {
+            $('.th_soma').toggleClass('hidden')
+            $('.td_soma').toggleClass('hidden')
+            $('#div_btn_marcar').toggleClass('hidden')
+            $('#somatorio_lancamentos').toggleClass('hidden')
+            $('#exibir_soma').toggleClass('hidden')
+            $('#esconder_soma').toggleClass('hidden')
+        })
+
+        $('.soma_parcelas').on('ifChanged', function (event) {
+            somaValorParcelas()
+        })
+
+        $('.modalExcluirSerie').click(function () {
+            $('#modalExcluirSerie').modal('show')
+        })
+
+        $('.modalCopiarSerie').click(function () {
+            $('#modalCopiarSerie').modal('show')
+        });
+
+
         function toggleUserMenuIcon() {
             var menuIcon = $('#user-menu-icon')
 
@@ -39,7 +149,7 @@
 
             for (var i = 0; i < 20; i++) {
                 if (parentModal != null && parentModal.attr('id') == "modalEditar") {
-                    console.log('parentModal: '+parentModal.attr('id'), 'parentElement: '+ parentElement.attr('id'))
+                    console.log('parentModal: ' + parentModal.attr('id'), 'parentElement: ' + parentElement.attr('id'))
                     toggleModals(parentModal, parentElement, true)
                     return false;
                 }
@@ -332,16 +442,16 @@
     $('#cpf, .cpf').mask("999.999.999-99");
     $('#rg, .rg').mask("99.999.999-9");
     $('#expiry, .expiry').mask("99 / 99");
-	
-	<?php
-	$url = current_url();
-	$segments = explode("/", $url);
-	$bloqueados = array(
-		'login',
-		'redefinirsenha',
-	);
-	
-	if (!count(array_intersect($segments, $bloqueados)) > 0) { ?>
+
+    <?php
+    $url = current_url();
+    $segments = explode("/", $url);
+    $bloqueados = array(
+        'login',
+        'redefinirsenha',
+    );
+
+    if (!count(array_intersect($segments, $bloqueados)) > 0) { ?>
     window.onload = function () {
         // var wrapper = document.body;
         // wrapper.className += " page-loading";
@@ -349,8 +459,8 @@
         //     wrapper.classList.remove('page-loading');
         // }, 2000);
     };
-	<?php
-	} ?>
+    <?php
+    } ?>
 
     $(document).ready(function () {
 
@@ -483,8 +593,8 @@
         })
 
         $('.tooltips').tooltip();
-		
-		<?php if ($this->session->flashdata('erro') != null) { ?>
+
+        <?php if ($this->session->flashdata('erro') != null) { ?>
         Swal.fire({
             position: 'top',
             icon: 'error',
@@ -504,9 +614,9 @@
 
             }
         });
-		<?php } ?>
-		
-		<?php if ($this->session->flashdata('sucesso') != null) { ?>
+        <?php } ?>
+
+        <?php if ($this->session->flashdata('sucesso') != null) { ?>
         Swal.fire({
             position: 'top',
             icon: 'success',
@@ -526,7 +636,7 @@
 
             }
         });
-		<?php } ?>
+        <?php } ?>
 
         $.fn.extend({
             toggleText: function (a, b) {

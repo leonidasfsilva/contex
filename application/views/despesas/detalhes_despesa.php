@@ -98,22 +98,36 @@ $periodo  = $this->input->get('periodo');
             Registros da Despesa
         </h2>
         <div class="panel-ctrls">
+                <span class="hidden" id="div_btn_marcar">
+                    <!--<button class="btn btn-info btn-sm modalCopiarSerie " id="copiar_serie" title="Copiar todos os lançamentos selecionados" disabled>-->
+                    <!--    <i class="fas fa-copy fa-fw"></i>-->
+                    <!--    Copiar-->
+                    <!--</button>-->
+                    <button class="btn btn-danger btn-sm modalExcluirSerie" id="excluir_serie" title="Excluir todos os lançamentos selecionados" disabled>
+                        <i class="fas fa-trash-alt fa-fw"></i>
+                        Excluir
+                    </button>
+                    <button class="btn btn-default btn-sm marcar_desmarcar" id="marcar_todos" title="Marcar todos os lançamentos da fatura">
+                        <i class="far fa-square fa-fw"></i>
+                        Marcar Todos
+                    </button>
+                    <button class="btn btn-default marcar_desmarcar btn-sm hidden" id="desmarcar_todos" title="Desmarcar todos os lançamentos da fatura">
+                        <i class="fas fa-check-square fa-fw"></i>
+                        Desmarcar Todos
+                    </button>
+                </span>
+            <button class="btn btn-default btn-sm habilita_desabilita_soma" id="exibir_soma" title="Habilitar soma de lançamentos individuais">
+                <i class="fas fa-toggle-off fa-fw"></i>
+                Habilitar Soma
+            </button>
+            <button class="btn btn-default btn-sm habilita_desabilita_soma hidden" id="esconder_soma" title="Desabilitar soma de lançamentos individuais">
+                <i class="fas fa-toggle-on fa-fw"></i>
+                Desabilitar Soma
+            </button>
             <a href="#modalNovoRegistroDespesa" data-toggle="modal" class="btn btn-primary btn-sm" title="Registrar lançamento da despesa">
                 <i class="fas fa-plus fa-fw"></i>
                 Novo Registro
             </a>
-
-            <?php //if ($despesa->tipo_despesa == 1): ?>
-            <!--    <a href="#modalGerenciarVinculos" data-toggle="modal" class="btn btn-primary btn-sm" title="Gerenciar vínculos da despesa">-->
-            <!--        <i class="fas fa-link fa-fw"></i>-->
-            <!--        Gerenciar Parcelas-->
-            <!--    </a>-->
-            <?php //else: ?>
-            <!--    <a href="#modalNovoRegistroDespesa" data-toggle="modal" class="btn btn-primary btn-sm" title="Registrar lançamento da despesa">-->
-            <!--        <i class="fas fa-plus fa-fw"></i>-->
-            <!--        Novo Registro-->
-            <!--    </a>-->
-            <?php //endif; ?>
             <a href="#" class="button-icon close-panel">
                 <i class="fas fa-times"></i>
             </a>
@@ -129,6 +143,7 @@ $periodo  = $this->input->get('periodo');
         <table class="table table-condensed table-striped table-bordeless table-hover" role="grid" style="width: 100%;">
             <thead>
             <tr role="row">
+                <th class="th_soma hidden" style="width: 10px !important;">Soma</th>
                 <th>Vencimento<br><br></th>
                 <th>Descrição<br><?= $despesa->despesa_parcelada ? 'Parcela' : 'Fornecedor' ?></th>
                 <th><?= $despesa->despesa_parcelada ? 'Valor parcela' : 'Valor' ?> (R$)<br>Forma pagamento</th>
@@ -191,11 +206,15 @@ $periodo  = $this->input->get('periodo');
 
                     echo '<tr>';
 
+                    echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
+
+                    echo '<td class="idLancamento hidden">' . $r->id . '</td>';
+
                     echo '<td class="font-weight-bold"><a href="' . $link . '" title="Acessar período de referência" class="' . $dueDateColor . '">' . $dueDate . $dueDateIcon . '</a></td>';
 
                     echo '<td>' . strtoupper($despesa->descricao) . '<br><span class="small text-muted" >' . ($aditionalDescription) . '</td>';
 
-                    echo '<td><span class="font-11 font-weight-bold ' . $colorValue . '"> ' . $iconValue . ($value) . '</span><br><span class="small text-muted">' . ($despesa->descricao_pagamento) . '</span></td>';
+                    echo '<td class="valor_parcela"><span class="font-11 font-weight-bold ' . $colorValue . '"> ' . $iconValue . ($value) . '</span><br><span class="small text-muted">' . ($despesa->descricao_pagamento) . '</span></td>';
 
                     echo '<td>' . $linkStatus . '<br>' . $paymentStatus . '</td>';
 
@@ -224,6 +243,22 @@ $periodo  = $this->input->get('periodo');
             <?php } ?>
             </tbody>
         </table>
+        <div id="somatorio_lancamentos" class="panel-footer hidden">
+            <table id="example" class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
+                <thead>
+                <tr>
+                    <th colspan="2" style="text-align: left !important;">Descrição</th>
+                    <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
+                </tr>
+                </thead>
+                <tr>
+                    <td class="font-weight-bold" colspan="2" style="text-align: left;">(=) REGISTROS SELECIONADOS</td>
+                    <td class="font-weight-bold valor_soma_parcelas" colspan="1" style="text-align: right;" id="valor_soma_parcelas">
+                        0,00
+                    </td>
+                </tr>
+            </table>
+        </div>
         <?php if ($this->pagination->create_links()) { ?>
             <div class="panel-footer">
                 <?= $this->pagination->create_links() ?>
@@ -446,34 +481,6 @@ $periodo  = $this->input->get('periodo');
     </div>
 </div>
 
-<!-- Modal DESVINCULAR FATURA -->
-<div class="modal fade" id="modalDesvincular" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-warning">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title text-white">Desvincular fatura</h4>
-            </div>
-            <form id="formFechar" action="<?php echo base_url('financeiro/faturas/desvincular') ?>" method="post">
-                <div class="modal-body">
-                    <p class="font-weight-bold">Confirma o desvinculo desta fatura do módulo de Lançamentos?</p>
-                    <p class="note note-info"><i class="text-info fa fa-info-circle fa-fw fa-lg"></i> Todas as atualizações de valores desta fatura deixarão de ser refletidas automaticamente no módulo de Lançamentos.</p>
-                    <input class="idFatura" type="hidden" name="idFatura"/>
-                    <input class="urlAtual" type="hidden" name="urlAtual"/>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
-                        <i class="fa fa-times fa-fw"></i> Cancelar
-                    </button>
-                    <button class="btn btn-warning btn-sm" id="btnFechar">
-                        <i class="fa fa-check fa-fw"></i> Confirmar
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <!-- Modal PAGAR REGISTRO -->
 <div class="modal fade" id="modalPagar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -545,6 +552,34 @@ $periodo  = $this->input->get('periodo');
                     </button>
                     <button class="btn btn-danger btn-sm" id="btnExcluir"><i class="fa fa-check fa-fw"></i> Excluir
                     </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal EXCLUIR SERIE DE REGISTROS-->
+<div class="modal fade" id="modalExcluirSerie" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-white ">Excluir série de registros</h4>
+            </div>
+            <form id="formExcluirSerie" action="<?= base_url('financeiro/despesas/excluirSerieLancamentos'); ?>" method="post">
+                <div class="modal-body">
+                    <p class="font-weight-bold">Confirma a exclusão dos registros selecionados?</p>
+                </div>
+                <div id="deleteSerieFormBody"></div>
+                <div class="modal-footer">
+                    <div class="modal-form-buttons">
+                        <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
+                            Cancelar
+                        </button>
+                        <button class="btn btn-danger btn-sm"><i class="fa fa-check fa-fw"></i>
+                            Excluir
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>

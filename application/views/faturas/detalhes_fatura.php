@@ -4,39 +4,39 @@ $periodo  = $this->input->get('periodo');
 $cliente  = $this->input->get('cliente');
 
 if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aFaturas')) {
-	if ($status_fatura == 1) {
-		if ($id_usuario != getUserId()) {
-			$disabled_lancamento = 'disabled';
-		} else {
-			$disabled_lancamento = '';
-		}
-		$statusFatura = 'ABERTA';
-		$label_status = 'info';
-	} else if ($status_fatura == 2) {
-		$disabled_lancamento = 'disabled';
-		$statusFatura        = 'FUTURA';
-		$label_status          = 'inverse';
-	} else {
-		$disabledFatura      = '';
-		$disabled_lancamento = 'disabled';
-		$statusFatura        = 'FECHADA';
-		$label_status          = 'inverse';
-	}
-	
-	if ($fatura_paga == 1) {
-		$pagamentoFatura = 'PAGA';
-		$label_pgto      = 'success';
-	} else if ($fatura_paga == 2) {
-		$pagamentoFatura = 'PENDENTE';
-		$label_pgto      = 'danger';
-	} else {
-		$pagamentoFatura = null;
-		$label_pgto      = 'primary';
-		$label_note      = 'info';
-	}
-	
-	$creditoFatura = 0;
-	$debitoFatura  = 0;
+    if ($status_fatura == 1) {
+        if ($id_usuario != getUserId()) {
+            $disabled_lancamento = 'disabled';
+        } else {
+            $disabled_lancamento = '';
+        }
+        $statusFatura = 'ABERTA';
+        $label_status = 'info';
+    } else if ($status_fatura == 2) {
+        $disabled_lancamento = 'disabled';
+        $statusFatura        = 'FUTURA';
+        $label_status        = 'inverse';
+    } else {
+        $disabledFatura      = '';
+        $disabled_lancamento = 'disabled';
+        $statusFatura        = 'FECHADA';
+        $label_status        = 'inverse';
+    }
+
+    if ($fatura_paga == 1) {
+        $pagamentoFatura = 'PAGA';
+        $label_pgto      = 'success';
+    } else if ($fatura_paga == 2) {
+        $pagamentoFatura = 'PENDENTE';
+        $label_pgto      = 'danger';
+    } else {
+        $pagamentoFatura = null;
+        $label_pgto      = 'primary';
+        $label_note      = 'info';
+    }
+
+    $creditoFatura = 0;
+    $debitoFatura  = 0;
 } ?>
 
 <div class="panel panel-midnightblue">
@@ -47,7 +47,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         </h3>
         <h3>
             <i class="fas fa-credit-card fa-lg fa-fw"></i>
-			<?= $cartao['apelido'] ? $cartao['apelido'] : $alternativeLabel ?>
+            <?= $cartao['apelido'] ? $cartao['apelido'] : $alternativeLabel ?>
         </h3>
         <div class="panel-ctrls">
             <a href="<?= base_url('financeiro/faturas?cartao=') . $id_cartao ?>" class="btn btn-sm btn-default"><i class="fas fa-arrow-left fa-fw"></i> Faturas</a>
@@ -143,11 +143,11 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             </div>
             <div class="panel-ctrls">
                 <span class="hidden" id="div_btn_marcar">
-                    <button class="btn btn-info btn-sm copiar_serie " id="copiar_serie" title="Copiar todos os lançamentos selecionados" disabled>
+                    <button class="btn btn-info btn-sm modalCopiarSerie " id="copiar_serie" title="Copiar todos os lançamentos selecionados" disabled>
                         <i class="fas fa-copy fa-fw"></i>
                         Copiar
                     </button>
-                    <button class="btn btn-danger btn-sm excluir_serie" id="excluir_serie" title="Excluir todos os lançamentos selecionados" disabled>
+                    <button class="btn btn-danger btn-sm modalExcluirSerie" id="excluir_serie" title="Excluir todos os lançamentos selecionados" disabled>
                         <i class="fas fa-trash-alt fa-fw"></i>
                         Excluir
                     </button>
@@ -184,98 +184,98 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 </tr>
                 </thead>
                 <tbody>
-				<?php
+                <?php
                 $content = false;
-				foreach ($results as $r) {
-					foreach ($subresults as $s) {
-						if ($s->id_lancamento == $r->id_lancamento) {
+                foreach ($results as $r) {
+                    foreach ($subresults as $s) {
+                        if ($s->id_lancamento == $r->id_lancamento) {
                             $content = true;
-							if (is_array($lancamentoEditavel)) {
-								if (in_array($r->id_lancamento, $lancamentoEditavel, true)) {
-									$disabled_lancamento_2 = '';
-								} else {
-									$disabled_lancamento_2 = 'disabled';
-								}
-							}
-							
-							if ($r->n_parcela < 10) {
-								$n_parcela = str_pad($r->n_parcela, 2, '0', STR_PAD_LEFT);
-							} else {
-								$n_parcela = $r->n_parcela;
-							}
-							
-							if ($r->total_parcelas < 10) {
-								$total_parcelas = str_pad($r->total_parcelas, 2, '0', STR_PAD_LEFT);
-							} else {
-								$total_parcelas = $r->total_parcelas;
-							}
-							
-							if ($s->observacoes) {
-								$iconObs = '
+                            if (is_array($lancamentoEditavel)) {
+                                if (in_array($r->id_lancamento, $lancamentoEditavel, true)) {
+                                    $disabled_lancamento_2 = '';
+                                } else {
+                                    $disabled_lancamento_2 = 'disabled';
+                                }
+                            }
+
+                            if ($r->n_parcela < 10) {
+                                $n_parcela = str_pad($r->n_parcela, 2, '0', STR_PAD_LEFT);
+                            } else {
+                                $n_parcela = $r->n_parcela;
+                            }
+
+                            if ($r->total_parcelas < 10) {
+                                $total_parcelas = str_pad($r->total_parcelas, 2, '0', STR_PAD_LEFT);
+                            } else {
+                                $total_parcelas = $r->total_parcelas;
+                            }
+
+                            if ($s->observacoes) {
+                                $iconObs = '
                                         <i class="fas fa-comment-dots fa-fw" title="Observações adicionais"></i>
                                     ';
-							} else {
-								$iconObs = '';
-							};
-							
-							if ($s->estorno == 1) {
-								$color = 'green';
-							} else {
-								$color = 'black';
-							}
-							
-							$data_compra  = date(('d/m/y'), strtotime($r->data_compra));
-							$diaDaSemana  = getExtendedWeekDayName($r->data_compra);
-							$debitoFatura += $r->valor_parcela;
-							
-							if ($r->valor_total < 0) {
-								$valor = number_format(abs($r->valor_total), 2, ',', '.');
-							} else {
-								$valor = number_format($r->valor_total, 2, ',', '.');
-							}
-							
-							echo '<tr>';
-							echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
-							echo '<td class="idLancamento hidden">' . $s->id_lancamento . '</td>';
-							echo '<td title="' . $diaDaSemana . '">' . $data_compra . '</td>';
-							echo '<td><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar font-weight-bold" title="Detalhes" id_lancamento="' .
-								$s->id_lancamento . '" descricao="' . $s->descricao . '" observacoes="' . nl2br($s->observacoes) . '" valor="' . $valor . '" data_compra="' .
-								date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
-								'" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '" nome_cliente="' . $s->nome_cliente .
-								'" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento . ' ' . $disabled_lancamento_2 . '>' .
-								strtoupper($s->descricao) . $iconObs .
-								'</a></td>';
-							echo '<td><a class="font-weight-bold" href="' . sprintf(base_url('financeiro/faturas/terceiros?mesReferencia=%s&anoReferencia=%s&cartao=%s&nome=%s'), $mes_referencia, $s->ano_referencia, $cartao['id_cartao'], $s->nome_cliente) . '">' . strtoupper($s->nome_cliente) . '</a></td>';
-							echo '<td>' . $n_parcela . '/' . $total_parcelas . '</td>';
-							echo '<td class="valor_parcela font-weight-bold" style=" color: ' . $color .
-								'"><span>' . number_format($r->valor_parcela, 2, ',', '.') .
-								'</span><br><span style="color: grey">' . number_format($r->valor_total, 2, ',', '.') .
-								'</span></td>';
-							
-							echo '<td>';
-							if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eFaturas')) {
-								echo '<button type="button" href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Detalhes" id_lancamento="' .
-									$s->id_lancamento . '" descricao="' . $s->descricao . '" observacoes="' . nl2br($s->observacoes) . '" valor="' . $valor . '" data_compra="' .
-									date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
-									'" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '"
+                            } else {
+                                $iconObs = '';
+                            };
+
+                            if ($s->estorno == 1) {
+                                $color = 'green';
+                            } else {
+                                $color = 'black';
+                            }
+
+                            $data_compra  = date(('d/m/y'), strtotime($r->data_compra));
+                            $diaDaSemana  = getExtendedWeekDayName($r->data_compra);
+                            $debitoFatura += $r->valor_parcela;
+
+                            if ($r->valor_total < 0) {
+                                $valor = number_format(abs($r->valor_total), 2, ',', '.');
+                            } else {
+                                $valor = number_format($r->valor_total, 2, ',', '.');
+                            }
+
+                            echo '<tr>';
+                            echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
+                            echo '<td class="idLancamento hidden">' . $s->id_lancamento . '</td>';
+                            echo '<td title="' . $diaDaSemana . '">' . $data_compra . '</td>';
+                            echo '<td><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar font-weight-bold" title="Detalhes" id_lancamento="' .
+                                $s->id_lancamento . '" descricao="' . $s->descricao . '" observacoes="' . nl2br($s->observacoes) . '" valor="' . $valor . '" data_compra="' .
+                                date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
+                                '" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '" nome_cliente="' . $s->nome_cliente .
+                                '" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento . ' ' . $disabled_lancamento_2 . '>' .
+                                strtoupper($s->descricao) . $iconObs .
+                                '</a></td>';
+                            echo '<td><a class="font-weight-bold" href="' . sprintf(base_url('financeiro/faturas/terceiros?mesReferencia=%s&anoReferencia=%s&cartao=%s&nome=%s'), $mes_referencia, $s->ano_referencia, $cartao['id_cartao'], $s->nome_cliente) . '">' . strtoupper($s->nome_cliente) . '</a></td>';
+                            echo '<td>' . $n_parcela . '/' . $total_parcelas . '</td>';
+                            echo '<td class="valor_parcela font-weight-bold" style=" color: ' . $color .
+                                '"><span>' . number_format($r->valor_parcela, 2, ',', '.') .
+                                '</span><br><span style="color: grey">' . number_format($r->valor_total, 2, ',', '.') .
+                                '</span></td>';
+
+                            echo '<td>';
+                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eFaturas')) {
+                                echo '<button type="button" href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Detalhes" id_lancamento="' .
+                                    $s->id_lancamento . '" descricao="' . $s->descricao . '" observacoes="' . nl2br($s->observacoes) . '" valor="' . $valor . '" data_compra="' .
+                                    date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
+                                    '" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '"
                                     nome_cliente="' . $s->nome_cliente . '" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento . ' ' . $disabled_lancamento_2 . '>
                                 <i class="fas fa-search-plus fa-lg fa-fw"></i></button>';
-								echo '<button type="button" href="#modalCopiar" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm copiar" title="Copiar" id_lancamento="' .
-									$s->id_lancamento . '" descricao="' . $s->descricao . '" observacoes="' . nl2br($s->observacoes) . '" valor="' . $valor . '" data_compra="' .
-									date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
-									'" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '"
+                                echo '<button type="button" href="#modalCopiar" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm copiar" title="Copiar" id_lancamento="' .
+                                    $s->id_lancamento . '" descricao="' . $s->descricao . '" observacoes="' . nl2br($s->observacoes) . '" valor="' . $valor . '" data_compra="' .
+                                    date('d/m/Y', strtotime($s->data_compra)) . '" parcelada="' . $s->compra_parcelada . '" estorno="' . $s->estorno . '" n_parcelas="' . $r->total_parcelas .
+                                    '" valor_parcela="' . number_format($r->valor_parcela, 2, ',', '.') . '" terceiros="' . $s->compra_terceiros . '"
                                     nome_cliente="' . $s->nome_cliente . '" id_cliente="' . $s->id_cliente . '" ' . $disabled_lancamento . ' ' . $disabled_lancamento_2 . '>
                                 <i class="fass fa-copy fa-lg fa-fw"></i></button>';
-							}
-							if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dFaturas')) {
-								echo '<button type="button" href="#modalExcluir" data-toggle="modal" id_lancamento="' . $s->id_lancamento . '" class="btn btn-danger btn-sm excluir" title="Excluir" ' . $disabled_lancamento . ' ' . $disabled_lancamento_2 . '>
+                            }
+                            if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dFaturas')) {
+                                echo '<button type="button" href="#modalExcluir" data-toggle="modal" id_lancamento="' . $s->id_lancamento . '" class="btn btn-danger btn-sm excluir" title="Excluir" ' . $disabled_lancamento . ' ' . $disabled_lancamento_2 . '>
                                             <i class="fas fa-trash-can-xmark fa-lg fa-fw"></i></button>';
-							}
-							echo '</td>';
-							echo '</tr>';
-						}
-					}
-				}
+                            }
+                            echo '</td>';
+                            echo '</tr>';
+                        }
+                    }
+                }
                 if (!$content) {
                     echo '<tr><td colspan="5">Nenhum registro encontrado</td></tr>';
                 }
@@ -292,7 +292,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                     </thead>
                     <tr>
                         <td class="font-weight-bold" colspan="2" style="text-align: left;">(=) LANÇAMENTOS SELECIONADOS</td>
-                        <td class="font-weight-bold" colspan="1" style="text-align: right;" id="valor_soma_parcelas">
+                        <td class="font-weight-bold valor_soma_parcelas" colspan="1" style="text-align: right;" id="valor_soma_parcelas">
                             0,00
                         </td>
                     </tr>
@@ -449,7 +449,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         <div class="form-group col-lg-12">
                             <label class="font-weight-bold" for="descricao">Descrição *</label>
                             <input class="form-control descricao" type="text" name="descricao" id="descricao"/>
-                            <input type="hidden" class="urlAtual" name="urlAtual" />
+                            <input type="hidden" class="urlAtual" name="urlAtual"/>
                         </div>
                     </div>
                     <div class="row">
@@ -859,7 +859,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             </div>
             <form id="formExcluirSerie" action="<?= base_url('financeiro/faturas/excluirSerieLancamentos'); ?>" method="post">
                 <div class="modal-body">
-                    <p class="font-weight-bold">Deseja realmente excluir os lançamentos selecionados?</p>
+                    <p class="font-weight-bold">Confirma a exclusão dos registros selecionados?</p>
                     <input class="urlAtual" type="hidden" name="urlAtual" value=""/>
                 </div>
                 <div id="deleteSerieFormBody"></div>
@@ -990,99 +990,6 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             }
         })
 
-        var marcados = false
-
-        somaValorParcelas()
-
-        $('#marcar_todos, #desmarcar_todos').click(function () {
-            marcarTodosiCheck()
-            $('#marcar_todos').toggleClass('hidden')
-            $('#desmarcar_todos').toggleClass('hidden')
-        })
-
-        $('.habilita_desabilita_soma').click(function () {
-            $('.th_soma').toggleClass('hidden')
-            $('.td_soma').toggleClass('hidden')
-            $('#div_btn_marcar').toggleClass('hidden')
-            $('#somatorio_lancamentos').toggleClass('hidden')
-            $('#exibir_soma').toggleClass('hidden')
-            $('#esconder_soma').toggleClass('hidden')
-        })
-
-        $('.soma_parcelas').on('ifChanged', function (event) {
-            somaValorParcelas()
-        })
-
-        $('.excluir_serie').click(function () {
-            $('#modalExcluirSerie').modal('show')
-        })
-
-        $('.copiar_serie').click(function () {
-            $('#modalCopiarSerie').modal('show')
-        });
-
-        // Calculate the total invoice amount from selected items only
-        function somaValorParcelas() {
-            var Soma = 0
-            var deleteSerie = []
-            var copiaSerie = []
-            var idLancamento = null
-
-            $('#deleteSerieFormBody').html('')
-            $('#copiaSerieFormBody').html('')
-
-            // iterate through each td based on class and add the values
-            $(".valor_parcela").each(function () {
-                //Check if the checkbox is checked
-                if ($(this).closest('tr').find('.soma_parcelas').is(':checked')) {
-                    idLancamento = $(this).closest('tr').find('.idLancamento').html()
-                    deleteSerie.push(idLancamento)
-                    copiaSerie.push(idLancamento)
-                    var value = $('span', this).text()
-                    value = jqueryFormat(value)
-                    // add only if the value is number
-                    if (!isNaN(value) && value.length != 0) {
-                        Soma += parseFloat(value)
-                    }
-                }
-            })
-            var Sum = br_format(Soma)
-
-            if (deleteSerie.length > 1) {
-                $('#excluir_serie').attr('disabled', false)
-                deleteSerie.forEach(function (item) {
-                    $('#deleteSerieFormBody').append('<input type="hidden" name="id[]" value="' + item + '"/>')
-                })
-            } else {
-                $('#excluir_serie').attr('disabled', true)
-            }
-
-            if (copiaSerie.length > 1) {
-                $('#copiar_serie').attr('disabled', false)
-                deleteSerie.forEach(function (item) {
-                    $('#copiaSerieFormBody').append('<input type="hidden" name="id[]" value="' + item + '"/>')
-                });
-            } else {
-                $('#copiar_serie').attr('disabled', true)
-            }
-
-            $('#valor_soma_parcelas').text(Sum)
-        }
-
-        function marcarTodosiCheck() {
-            if (marcados == false) {
-                $(".soma_parcelas").each(function () {
-                    $('.soma_parcelas').iCheck('check')
-                    marcados = true
-                })
-            } else {
-                $(".soma_parcelas").each(function () {
-                    $('.soma_parcelas').iCheck('uncheck')
-                    marcados = false
-                })
-            }
-        }
-
         // Metodos para função de parcelamento
         $('.qntParcelas').on('change', function (event) {
             var parcelas = event.target.value
@@ -1116,23 +1023,6 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             return valor_parcela
         }
 
-        function jqueryFormat(valor) {
-            // Remove todos os .
-            valor = valor.replace(/\./g, "")
-
-            // Troca todas as , por .
-            valor = valor.replace(",", ".")
-
-            // Converte para float
-            valor = parseFloat(valor)
-            valor = parseFloat(valor) || 0.0
-
-            return valor
-        }
-
-        function br_format(n) {
-            return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.")
-        }
 
         function adjustFloatResult(value) {
             const orderOfMagnitude = Math.pow(10, 2)

@@ -846,6 +846,34 @@ class Despesas extends CI_Controller
         redirect($this->redirectURL);
     }
 
+    public function excluirSerieLancamentos()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dDespesas')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para excluir registro de despesas.');
+            redirect($this->redirectURL);
+        }
+
+        $idsArray = $this->input->post('id');
+        $result   = false;
+
+        if (is_array($idsArray) && count($idsArray) > 0) {
+            foreach ($idsArray as $id) {
+                $lancamento = $this->despesa_model->getLancamentoDespesaById($id);
+                $result     = $this->despesa_model->deleteLancamentoDespesa($id);
+                $this->excluiRegistroEmModuloLancamentos($lancamento->id_despesa, $lancamento->data_vencimento);
+            }
+
+            if (!$result) {
+                $this->session->set_flashdata('erro', 'Erro ao tentar excluir série de lançamentos');
+                redirect($this->redirectURL);
+            }
+            $this->session->set_flashdata('sucesso', 'Lançamentos excluídos com sucesso');
+            redirect($this->redirectURL);
+        }
+        $this->session->set_flashdata('erro', 'Método não permitido');
+        redirect($this->redirectURL);
+    }
+
     public function pagar()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eDespesas')) {
@@ -1214,7 +1242,7 @@ class Despesas extends CI_Controller
         // }
 
         if ($detalhesDespesa->despesa_parcelada) {
-            $parcela = '01';
+            $parcela       = '01';
             $ultimaParcela = $this->despesa_model->getUltimaParcelaDespesa($idDespesa);
 
             if ($ultimaParcela) {
