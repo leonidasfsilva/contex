@@ -104,7 +104,7 @@ $periodo  = $this->input->get('periodo');
                     <!--    Copiar-->
                     <!--</button>-->
                     <button class="btn btn-danger btn-sm modalExcluirSerie" id="excluir_serie" title="Excluir todos os lançamentos selecionados" disabled>
-                        <i class="fas fa-trash-alt fa-fw"></i>
+                        <i class="fas fa-trash-can-xmark fa-fw"></i>
                         Excluir
                     </button>
                     <button class="btn btn-default btn-sm marcar_desmarcar" id="marcar_todos" title="Marcar todos os lançamentos da fatura">

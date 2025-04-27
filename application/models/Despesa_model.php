@@ -404,9 +404,10 @@ class Despesa_model extends CI_Model
 
     function countLancamentosFromDespesa($idDespesa, $where = null)
     {
-        $this->db->from($this->lancamentosDespesasTable);
-
-        $this->db->where('id_despesa', $idDespesa);
+        $this->db
+            ->from($this->lancamentosDespesasTable)
+            ->where('id_despesa', $idDespesa)
+            ->where('status', 1);
 
         if ($where) $this->db->where($where);
 
