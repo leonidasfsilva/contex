@@ -1,4 +1,22 @@
 <script>
+    function jqueryFormat(valor) {
+        // Remove todos os .
+        valor = valor.replace(/\./g, "")
+
+        // Troca todas as , por .
+        valor = valor.replace(",", ".")
+
+        // Converte para float
+        valor = parseFloat(valor)
+        valor = parseFloat(valor) || 0.0
+
+        return valor
+    }
+
+    function br_format(n) {
+        return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.")
+    }
+
     $(document).ready(function () {
         var marcados = false
 
@@ -62,24 +80,6 @@
                     marcados = false
                 })
             }
-        }
-
-        function jqueryFormat(valor) {
-            // Remove todos os .
-            valor = valor.replace(/\./g, "")
-
-            // Troca todas as , por .
-            valor = valor.replace(",", ".")
-
-            // Converte para float
-            valor = parseFloat(valor)
-            valor = parseFloat(valor) || 0.0
-
-            return valor
-        }
-
-        function br_format(n) {
-            return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.")
         }
 
         $('#marcar_todos, #desmarcar_todos').click(function () {
