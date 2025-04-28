@@ -1,14 +1,20 @@
 <?php
-$situacao = $this->input->get('situacao');
-$periodo  = $this->input->get('periodo');
+$situacao    = $this->input->get('situacao');
+$periodo     = $this->input->get('periodo');
+$activeLabel = '<i class="fas fa-stop fa-fw text-danger"></i> <span class="badge badge-red">INATIVA</span>';
+
+if ($despesa->auto_vinculo == 1) {
+    $activeLabel = '<i class="fas fa-play fa-fw text-success"></i> <span class="badge badge-green">ATIVA</span>';
+}
 ?>
 
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
-        <h3>
+        <h3 class="pr-md">
             <i class="fas fa-money-bill-transfer fa-lg fa-fw"></i>
-            Detalhes da Despesa #<?= $despesa->id ?>
+            Detalhes da Despesa #<?= sprintf('%s', $despesa->id) ?>
         </h3>
+        <?= sprintf('%s', $activeLabel) ?>
         <div class="panel-ctrls">
             <a href="<?= base_url('financeiro/despesas') ?>" class="btn btn-default btn-sm" title="Voltar para despesas">
                 <i class="fas fa-arrow-left fa-fw"></i>
@@ -178,10 +184,10 @@ $periodo  = $this->input->get('periodo');
                         // $value = number_format($despesa->valor_parcela, 2, ',', '.');
 
 
-                    if ($despesa->despesa_parcelada) {
-                        $aditionalDescription = sprintf('PARCELA %s/%s', $r->num_parcela, $despesa->total_parcelas);
-                        $installments         = '<span class="badge badge-alizarin font-weight-bold">' . $r->num_parcela . '/' . $despesa->total_parcelas . '</span>';
-                    }
+                        if ($despesa->despesa_parcelada) {
+                            $aditionalDescription = sprintf('PARCELA %s/%s', $r->num_parcela, $despesa->total_parcelas);
+                            $installments         = '<span class="badge badge-alizarin font-weight-bold">' . $r->num_parcela . '/' . $despesa->total_parcelas . '</span>';
+                        }
 
                     if ($despesa->despesa_terceiros) {
                         $thirdName = $despesa->nome_terceiro;
@@ -200,7 +206,7 @@ $periodo  = $this->input->get('periodo');
                     }
 
                     if ($r->registro_pago == 1) {
-                        $paymentStatus = '<i class="far fa-check fa-fw text-success"></i> <span class="badge badge-green">EFETIVADO</span>';
+                        $paymentStatus     = '<i class="far fa-check fa-fw text-success"></i> <span class="badge badge-green">EFETIVADO</span>';
                         $disablePaymentBtn = 'disabled';
                     }
 
