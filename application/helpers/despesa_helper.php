@@ -12,8 +12,7 @@ function integracaoDespesasUsuario()
 
     if ($despesas) {
         foreach ($despesas as $despesa) {
-            vinculoAutomaticoDespesaRecorrente($despesa->id);
-            vinculoAutomaticoDespesaUnica($despesa->id);
+            vinculoAutomaticoDespesa($despesa->id);
 
             $lancamentosDespesa = $CI->despesa_model->getLancamentosDespesa($despesa->id);
 
@@ -80,44 +79,7 @@ function monitoraIntegracaoAtivaComModuloLancamentos($idLancamentoDespesa)
     return true;
 }
 
-function vinculoAutomaticoDespesaRecorrente($idDespesa)
-{
-    $CI = get_instance();
-    $CI->load->model('despesa_model');
-
-    $todayDate   = date('Y-m-d');
-    $todayArray  = explode('-', $todayDate);
-    $monthsCount = 3;
-    $despesa     = $CI->despesa_model->getDespesabyId($idDespesa);
-
-    if (!$despesa) return false;
-
-    if ($despesa->tipo_despesa != 2) return false;
-
-    if (!$despesa->auto_vinculo) return false;
-
-    $monthReference = $todayArray[1];
-    $yearReference  = $todayArray[0];
-
-    for ($i = 1; $i <= $monthsCount; $i++) {
-        if ($monthReference < 10) {
-            $monthReference = '0' . $monthReference;
-        }
-
-        if ($monthReference == '13') {
-            $monthReference = '01';
-            $yearReference++;
-        }
-
-        $newDueDate = sprintf('%s-%s-%s', $yearReference, $monthReference, $despesa->dia_vencimento);
-        criaLancamentoDespesa($idDespesa, $newDueDate);
-        copiaRegistroEmModuloLancamentos($despesa->id, $newDueDate);
-        $monthReference++;
-    }
-    return true;
-}
-
-function vinculoAutomaticoDespesaUnica($idDespesa)
+function vinculoAutomaticoDespesa($idDespesa)
 {
     $CI = get_instance();
     $CI->load->model('despesa_model');
@@ -130,7 +92,7 @@ function vinculoAutomaticoDespesaUnica($idDespesa)
 
     if (!$despesa) return false;
 
-    if ($despesa->tipo_despesa != 1) return false;
+    // if ($despesa->tipo_despesa != 1) return false;
 
     if (!$despesa->auto_vinculo) return false;
 
