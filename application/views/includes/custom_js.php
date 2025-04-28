@@ -1,4 +1,8 @@
 <script>
+    console.log('custom_js loaded')
+
+    var marcados = false
+
     function jqueryFormat(valor) {
         // Remove todos os .
         valor = valor.replace(/\./g, "")
@@ -17,70 +21,77 @@
         return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.")
     }
 
-    $(document).ready(function () {
-        var marcados = false
-
-        // Calculate the total invoice amount from selected items only
-        function somaValorParcelas() {
-            var Soma = 0
-            var deleteSerie = []
-            var copiaSerie = []
-            var idLancamento = null
-
-            $('#deleteSerieFormBody').html('')
-            $('#copiaSerieFormBody').html('')
-
-            // iterate through each td based on class and add the values
-            $(".valor_parcela").each(function () {
-                //Check if the checkbox is checked
-                if ($(this).closest('tr').find('.soma_parcelas').is(':checked')) {
-                    idLancamento = $(this).closest('tr').find('.idLancamento').html()
-                    deleteSerie.push(idLancamento)
-                    copiaSerie.push(idLancamento)
-                    var value = $('span', this).text()
-                    value = jqueryFormat(value)
-                    // add only if the value is number
-                    if (!isNaN(value) && value.length != 0) {
-                        Soma += parseFloat(value)
-                    }
-                }
+    function marcarTodosiCheck() {
+        if (marcados == false) {
+            $(".soma_parcelas").each(function () {
+                $('.soma_parcelas').iCheck('check')
+                marcados = true
             })
-            var Sum = br_format(Soma)
+        } else {
+            $(".soma_parcelas").each(function () {
+                $('.soma_parcelas').iCheck('uncheck')
+                marcados = false
+            })
+        }
+    }
 
-            if (deleteSerie.length > 1) {
-                $('.modalExcluirSerie').attr('disabled', false)
-                deleteSerie.forEach(function (item) {
-                    $('#deleteSerieFormBody').append('<input type="hidden" name="id[]" value="' + item + '"/>')
-                })
-            } else {
-                $('.modalExcluirSerie').attr('disabled', true)
+    function somaValorParcelas() {
+        var Soma = 0
+        var deleteSerie = []
+        var copiaSerie = []
+        var idLancamento = null
+
+        $('#deleteSerieFormBody').html('')
+        $('#copiaSerieFormBody').html('')
+
+        // iterate through each td based on class and add the values
+        $(".valor_parcela").each(function () {
+            //Check if the checkbox is checked
+            if ($(this).closest('tr').find('.soma_parcelas').is(':checked')) {
+                idLancamento = $(this).closest('tr').find('.idLancamento').html()
+                deleteSerie.push(idLancamento)
+                copiaSerie.push(idLancamento)
+                var value = $('span', this).text()
+                value = jqueryFormat(value)
+                // add only if the value is number
+                if (!isNaN(value) && value.length != 0) {
+                    Soma += parseFloat(value)
+                }
             }
+        })
+        var Sum = br_format(Soma)
 
-            if (copiaSerie.length > 1) {
-                $('.modalCopiarSerie').attr('disabled', false)
-                deleteSerie.forEach(function (item) {
-                    $('#copiaSerieFormBody').append('<input type="hidden" name="id[]" value="' + item + '"/>')
-                });
-            } else {
-                $('.modalCopiarSerie').attr('disabled', true)
-            }
-
-            $('.valor_soma_parcelas').text(Sum)
+        if (deleteSerie.length > 1) {
+            $('.modalExcluirSerie').attr('disabled', false)
+            deleteSerie.forEach(function (item) {
+                $('#deleteSerieFormBody').append('<input type="hidden" name="id[]" value="' + item + '"/>')
+            })
+        } else {
+            $('.modalExcluirSerie').attr('disabled', true)
         }
 
-        function marcarTodosiCheck() {
-            if (marcados == false) {
-                $(".soma_parcelas").each(function () {
-                    $('.soma_parcelas').iCheck('check')
-                    marcados = true
-                })
-            } else {
-                $(".soma_parcelas").each(function () {
-                    $('.soma_parcelas').iCheck('uncheck')
-                    marcados = false
-                })
-            }
+        if (copiaSerie.length > 1) {
+            $('.modalCopiarSerie').attr('disabled', false)
+            deleteSerie.forEach(function (item) {
+                $('#copiaSerieFormBody').append('<input type="hidden" name="id[]" value="' + item + '"/>')
+            });
+        } else {
+            $('.modalCopiarSerie').attr('disabled', true)
         }
+
+        $('.valor_soma_parcelas').text(Sum)
+    }
+
+    function toggleUserMenuIcon() {
+        var menuIcon = $('#user-menu-icon')
+
+        if (menuIcon.hasClass('fa-times')) {
+            menuIcon.addClass('fa-bars')
+            menuIcon.removeClass('fa-times')
+        }
+    }
+
+    $(document).ready(function () {
 
         $('#marcar_todos, #desmarcar_todos').click(function () {
             marcarTodosiCheck()
@@ -89,6 +100,7 @@
         })
 
         $('.habilita_desabilita_soma').click(function () {
+            console.log('habilita_desabilita_soma clicked')
             $('.th_soma').toggleClass('hidden')
             $('.td_soma').toggleClass('hidden')
             $('#div_btn_marcar').toggleClass('hidden')
@@ -110,14 +122,6 @@
         });
 
 
-        function toggleUserMenuIcon() {
-            var menuIcon = $('#user-menu-icon')
-
-            if (menuIcon.hasClass('fa-times')) {
-                menuIcon.addClass('fa-bars')
-                menuIcon.removeClass('fa-times')
-            }
-        }
 
         $(document).click(function () {
             toggleUserMenuIcon()

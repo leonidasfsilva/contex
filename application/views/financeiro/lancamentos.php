@@ -206,11 +206,11 @@ if (!$results) {
             </div>
             <div class="panel-ctrls">
                 <span class="hidden" id="div_btn_marcar">
-                    <button class="btn btn-info btn-sm copiar_serie " id="copiar_serie" title="Copiar todos os lançamentos selecionados" disabled>
+                    <button class="btn btn-info btn-sm modalCopiarSerie " id="copiar_serie" title="Copiar todos os lançamentos selecionados" disabled>
                         <i class="fass fa-copy fa-fw"></i>
                         Copiar
                     </button>
-                    <button class="btn btn-danger btn-sm excluir_serie " id="excluir_serie" title="Excluir todos os lançamentos selecionados" disabled>
+                    <button class="btn btn-danger btn-sm modalExcluirSerie " id="excluir_serie" title="Excluir todos os lançamentos selecionados" disabled>
                         <i class="fas fa-trash-can-xmark fa-fw"></i>
                         Excluir
                     </button>
@@ -544,11 +544,11 @@ if (!$results) {
             </div>
             <div class="panel-ctrls">
                 <span class="hidden" id="div_btn_marcar">
-                    <button class="btn btn-info btn-sm copiar_serie " id="copiar_serie" title="Copiar todos os lançamentos selecionados" disabled>
+                    <button class="btn btn-info btn-sm modalCopiarSerie " id="copiar_serie" title="Copiar todos os lançamentos selecionados" disabled>
                         <i class="fas fa-copy fa-fw"></i>
                         Copiar
                     </button>
-                    <button class="btn btn-danger btn-sm excluir_serie " id="excluir_serie" title="Excluir todos os lançamentos selecionados" disabled>
+                    <button class="btn btn-danger btn-sm modalExcluirSerie " id="excluir_serie" title="Excluir todos os lançamentos selecionados" disabled>
                         <i class="fas fa-trash-alt fa-fw"></i>
                         Excluir
                     </button>
@@ -1550,100 +1550,6 @@ if (!$results) {
     });
 
     $(document).ready(function ($) {
-        var marcados = false;
-        somaValorParcelas();
-
-        $('#marcar_todos, #desmarcar_todos').click(function () {
-            marcarTodosiCheck();
-            $('#marcar_todos').toggleClass('hidden');
-            $('#desmarcar_todos').toggleClass('hidden');
-        });
-
-        $('.habilita_desabilita_soma').click(function () {
-            $('.th_soma').toggleClass('hidden');
-            $('.td_soma').toggleClass('hidden');
-            $('#div_btn_marcar').toggleClass('hidden');
-            $('#somatorio_lancamentos').toggleClass('hidden');
-            $('#exibir_soma').toggleClass('hidden');
-            $('#esconder_soma').toggleClass('hidden');
-        });
-
-        $('.soma_parcelas').on('ifChanged', function (event) {
-            somaValorParcelas();
-        });
-
-        $('.excluir_serie').click(function () {
-            $('#modalExcluirSerie').modal('show')
-        });
-
-        $('.copiar_serie').click(function () {
-            $('#modalCopiarSerie').modal('show')
-        });
-
-        // Calculate the total invoice amount from selected items only
-        function somaValorParcelas() {
-            var soma = 0
-            var value = 0
-            var deleteSerie = []
-            var copiaSerie = []
-            var idLancamento = null
-
-            $('#deleteSerieFormBody').html('')
-            $('#copiaSerieFormBody').html('')
-
-            // iterate through each td based on class and add the values
-            $(".valor_parcela").each(function () {
-                //Check if the checkbox is checked
-                if ($(this).closest('tr').find('.soma_parcelas').is(':checked')) {
-                    idLancamento = $(this).closest('tr').find('.idLancamento').html()
-                    deleteSerie.push(idLancamento)
-                    copiaSerie.push(idLancamento)
-                    value = $('span', this).text()
-                    value = jquery_format(value)
-                    // add only if the value is number
-                    if (!isNaN(value) && value.length != 0) {
-                        soma += parseFloat(value)
-                    }
-                }
-            })
-
-            var sum = br_format(soma);
-
-            if (deleteSerie.length > 1) {
-                $('#excluir_serie').attr('disabled', false)
-                deleteSerie.forEach(function (item) {
-                    $('#deleteSerieFormBody').append('<input type="hidden" name="id[]" value="' + item + '"/>')
-                });
-            } else {
-                $('#excluir_serie').attr('disabled', true)
-            }
-
-            if (copiaSerie.length > 1) {
-                $('#copiar_serie').attr('disabled', false)
-                deleteSerie.forEach(function (item) {
-                    $('#copiaSerieFormBody').append('<input type="hidden" name="id[]" value="' + item + '"/>')
-                });
-            } else {
-                $('#copiar_serie').attr('disabled', true)
-            }
-
-            $('#valor_soma_parcelas').text(sum);
-        }
-
-        function marcarTodosiCheck() {
-            if (marcados == false) {
-                $(".soma_parcelas").each(function () {
-                    $('.soma_parcelas').iCheck('check');
-                    marcados = true;
-                });
-            } else {
-                $(".soma_parcelas").each(function () {
-                    $('.soma_parcelas').iCheck('uncheck');
-                    marcados = false;
-                });
-            }
-        }
-
         $('#select_periodo').change(function () {
             const value = $(this).val();
 
