@@ -1,10 +1,16 @@
 <?php
 $situacao                 = $this->input->get('situacao');
 $periodo                  = $this->input->get('periodo');
-$autoIntegrationBtnStatus = '<a href="' . base_url('financeiro/despesas/ativar/') . $despesa->id . '" class="btn btn-sm btn-deeporange"><i class="fas fa-stop fa-fw"></i> INATIVA</a>';
+$autoIntegrationBtnStatus = '
+<a href="' . base_url('financeiro/despesas/ativar/') . $despesa->id . '" class="btn btn-sm btn-deeporange font-weight-bold">
+<i class="fas fa-stop fa-fw"></i> INATIVA
+</a>';
 
 if ($despesa->auto_vinculo == 1) {
-    $autoIntegrationBtnStatus = '<a href="' . base_url('financeiro/despesas/desativar/') . $despesa->id . '" class="btn btn-sm btn-success"><i class="fas fa-play fa-fw"></i> ATIVA</a>';
+    $autoIntegrationBtnStatus = '
+    <a href="' . base_url('financeiro/despesas/desativar/') . $despesa->id . '" class="btn btn-sm btn-success font-weight-bold">
+    <i class="fas fa-play fa-fw"></i> ATIVA
+    </a>';
 }
 ?>
 
