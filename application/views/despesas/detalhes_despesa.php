@@ -1,10 +1,10 @@
 <?php
-$situacao    = $this->input->get('situacao');
-$periodo     = $this->input->get('periodo');
-$activeLabel = '<i class="fas fa-stop fa-fw text-danger"></i> <span class="badge badge-red">INATIVA</span>';
+$situacao                 = $this->input->get('situacao');
+$periodo                  = $this->input->get('periodo');
+$autoIntegrationBtnStatus = '<a href="' . base_url('financeiro/despesas/ativar/') . $despesa->id . '" class="btn btn-sm btn-deeporange"><i class="fas fa-stop fa-fw"></i> INATIVA</a>';
 
 if ($despesa->auto_vinculo == 1) {
-    $activeLabel = '<i class="fas fa-play fa-fw text-success"></i> <span class="badge badge-green">ATIVA</span>';
+    $autoIntegrationBtnStatus = '<a href="' . base_url('financeiro/despesas/desativar/') . $despesa->id . '" class="btn btn-sm btn-success"><i class="fas fa-play fa-fw"></i> ATIVA</a>';
 }
 ?>
 
@@ -14,12 +14,12 @@ if ($despesa->auto_vinculo == 1) {
             <i class="fas fa-money-bill-transfer fa-lg fa-fw"></i>
             Detalhes da Despesa #<?= sprintf('%s', $despesa->id) ?>
         </h3>
-        <?= sprintf('%s', $activeLabel) ?>
         <div class="panel-ctrls">
             <a href="<?= base_url('financeiro/despesas') ?>" class="btn btn-default btn-sm" title="Voltar para despesas">
                 <i class="fas fa-arrow-left fa-fw"></i>
                 Despesas
             </a>
+            <?= $autoIntegrationBtnStatus ?>
             <a href="#" class="button-icon close-panel">
                 <i class="fas fa-times"></i>
             </a>
@@ -218,9 +218,9 @@ if ($despesa->auto_vinculo == 1) {
 
                     echo '<td class="font-weight-bold"><a href="' . $link . '" title="Acessar período de referência" class="' . $dueDateColor . '">' . $dueDate . $dueDateIcon . '</a></td>';
 
-                    echo '<td>' . strtoupper($despesa->descricao) . '<br><span class="small text-muted" >' . ($aditionalDescription) . '</td>';
+                    echo '<td class="font-weight-bold">' . strtoupper($despesa->descricao) . '<br><span class="small text-muted" >' . ($aditionalDescription) . '</td>';
 
-                    echo '<td class="valor_parcela"><span class="font-11 font-weight-bold ' . $colorValue . '"> ' . $iconValue . ($value) . '</span><br><span class="small text-muted">' . ($despesa->descricao_pagamento) . '</span></td>';
+                    echo '<td class="font-weight-bold valor_parcela"><span class="font-11 ' . $colorValue . '"> ' . $iconValue . ($value) . '</span><br><span class="small text-muted">' . ($despesa->descricao_pagamento) . '</span></td>';
 
                     echo '<td>' . $linkStatus . '<br>' . $paymentStatus . '</td>';
 

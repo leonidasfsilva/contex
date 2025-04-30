@@ -918,15 +918,14 @@ class Despesas extends CI_Controller
         redirect($this->redirectURL);
     }
 
-    public function ativar()
+    public function ativar($id = null)
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eDespesas')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para ativar despesas.');
             redirect($this->redirectURL);
         }
 
-        $id       = $this->input->post('id');
-        $urlAtual = $this->input->post('urlAtual');
+        if ($this->input->post('id')) $id = $this->input->post('id');
 
         if (!$id) {
             $this->session->set_flashdata('erro', 'Método não permitido');
@@ -941,15 +940,14 @@ class Despesas extends CI_Controller
         redirect($this->redirectURL);
     }
 
-    public function desativar()
+    public function desativar($id = null)
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eDespesas')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para desativar despesas.');
             redirect($this->redirectURL);
         }
 
-        $id       = $this->input->post('id');
-        $urlAtual = $this->input->post('urlAtual');
+        if ($this->input->post('id')) $id = $this->input->post('id');
 
         if (!$id) {
             $this->session->set_flashdata('erro', 'Método não permitido');
@@ -960,7 +958,7 @@ class Despesas extends CI_Controller
             $this->session->set_flashdata('erro', 'Erro ao tentar desativar despesa');
             redirect($this->redirectURL);
         }
-        $this->session->set_flashdata('sucesso', 'Auto vínculo desativado com sucesso');
+        $this->session->set_flashdata('sucesso', 'Vínculo automático desativado com sucesso');
         redirect($this->redirectURL);
     }
 

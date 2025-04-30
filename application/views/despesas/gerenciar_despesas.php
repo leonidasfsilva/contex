@@ -95,8 +95,8 @@ $periodo  = $this->input->get('periodo');
             </tr>
             </thead>
             <tbody>
-            <?php if (isset($results) && $results) {
-                foreach ($results as $r) {
+            <?php if (isset($results) && $results):
+                foreach ($results as $r):
                     $valor                = number_format($r->valor_total, 2, ',', '.');
                     $valor_parcela        = null;
                     $terceiro             = null;
@@ -163,7 +163,13 @@ $periodo  = $this->input->get('periodo');
                     echo '<td>' . $tipo . '<br>' . $activeIcon . '</td>';
 
                     echo '<td>';
-                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eDespesas')) {
+
+                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eDespesas')):
+                        echo '<a href="' . base_url('financeiro/despesas/detalhes/') . $r->id . '" type="button" id="btn_detalhes" style="margin-right: 1%" class="btn btn-primary btn-sm detalhes" title="Acessar vínculos da despesa" id_despesa="' .
+                            $r->id . '">
+                                <i class="fas fa-search-plus fa-lg fa-fw"></i>
+                              </a>';
+
                         echo '<button type="button" href="#modalCopiar" data-toggle="modal" class="btn btn-info btn-sm copiar mr1" title="Copiar" id_despesa="' .
                             $r->id . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor_parcela="' . $valor_parcela . '" valor="' . $valor .
                             '" dia_vencimento="' . $r->dia_vencimento . '" data_pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" total_parcelas="' . $r->total_parcelas .
@@ -172,28 +178,25 @@ $periodo  = $this->input->get('periodo');
                                 <i class="fas fa-copy fa-lg fa-fw"></i>
                               </button>';
 
-                        echo '<a href="' . base_url('financeiro/despesas/detalhes/') . $r->id . '" type="button" id="btn_detalhes" style="margin-right: 1%" class="btn btn-primary btn-sm detalhes" title="Acessar vínculos da despesa" id_despesa="' .
-                            $r->id . '">
-                                <i class="fas fa-search-plus fa-lg fa-fw"></i>
-                              </a>';
-
-                        echo '<button href="' . $activeBtnModalTarget . '"  class="mr1 ' . $activeBtnClass . '" data-toggle="modal" title="' . $activateBtnTitle . '" id_despesa="' . $r->id . '">
+                        echo '<button href="' . $activeBtnModalTarget . '" class="mr1 ' . $activeBtnClass . '" data-toggle="modal" title="' . $activateBtnTitle . '" id_despesa="' . $r->id . '">
                                 <i class="' . $activeBtnIconClass . '"></i>
                               </button>';
-                    }
-                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dDespesas')) {
+                    endif;
+
+                    if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dDespesas')):
                         echo '<a href="#modalExcluir" data-toggle="modal" id_despesa="' . $r->id . '" class="btn btn-danger btn-sm excluir" title="Excluir despesa">
                                 <i class="fas fa-trash-can-xmark fa-lg fa-fw"></i>
                               </a>';
-                    }
+                    endif;
+
                     echo '</td>';
                     echo '</tr>';
-                }
-            } else { ?>
+                endforeach;
+            else: ?>
                 <tr>
                     <td colspan="6">Nenhum registro encontrado</td>
                 </tr>
-            <?php } ?>
+            <?php endif; ?>
             </tbody>
         </table>
         <?php if ($this->pagination->create_links()) { ?>
