@@ -106,6 +106,7 @@ function vinculoAutomaticoDespesa($idDespesa)
 
     for ($i = 1; $i <= $monthsCount; $i++) {
         if ($lancamentos) {
+            $monthsCount = 4;
             if ($monthReference < $lancamentos[0]->mes_referencia) {
                 continue;
             }
