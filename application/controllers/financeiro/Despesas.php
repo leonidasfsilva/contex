@@ -591,9 +591,7 @@ class Despesas extends CI_Controller
 
         $descricao        = $_POST["descricao"];
         $observacoes      = $_POST["observacoes"] ?? null;
-        $autoVinculo      = isset($_POST["autoVinculo"]) ?? null;
-        $urlAtual         = $_POST["urlAtual"];
-        $valor            = $_POST["valor"];
+        $autoVinculo      = isset($_POST["autoVinculo"]) ?? null;$valor            = $_POST["valor"];
         $fornecedor       = $_POST["fornecedor"] ?? null;
         $despesaParcelada = $_POST["despesa_parcelada"] ?? null;
         $despesaTerceiros = $_POST["despesa_terceiros"] ?? null;
@@ -625,6 +623,10 @@ class Despesas extends CI_Controller
         if (!$diaVencimento) {
             $today         = date('d');
             $diaVencimento = $today;
+        }
+
+        if (abs($qntParcelas) < 10 ) {
+            $qntParcelas = sprintf('0%s', abs($qntParcelas));
         }
 
         $newDespesa = [
@@ -683,7 +685,7 @@ class Despesas extends CI_Controller
         }
 
         if (!$qntParcelas || !$despesaParcelada) {
-            $qntParcelas  = 1;
+            $qntParcelas  = '01';
             $valorParcela = $valor;
         }
 
@@ -699,6 +701,10 @@ class Despesas extends CI_Controller
         if (!$diaVencimento) {
             $today         = date('d');
             $diaVencimento = $today;
+        }
+
+        if (abs($qntParcelas) < 10 ) {
+            $qntParcelas = sprintf('0%s', abs($qntParcelas));
         }
 
         $dataArrayToDbPersist = [
@@ -921,7 +927,7 @@ class Despesas extends CI_Controller
     public function ativar($id = null)
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eDespesas')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para ativar despesas.');
+            $this->session->set_flashdata('error', 'Você não tem permissão para ativar integração de despesas.');
             redirect($this->redirectURL);
         }
 
@@ -933,17 +939,17 @@ class Despesas extends CI_Controller
         }
 
         if (!$this->despesa_model->ativaDespesa($id)) {
-            $this->session->set_flashdata('erro', 'Erro ao tentar ativar vínculo automático');
+            $this->session->set_flashdata('erro', 'Erro ao tentar ativar integração automática');
             redirect($this->redirectURL);
         }
-        $this->session->set_flashdata('sucesso', 'Vínculo automático ativado com sucesso');
+        $this->session->set_flashdata('sucesso', 'Integração automática ativada com sucesso');
         redirect($this->redirectURL);
     }
 
     public function desativar($id = null)
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eDespesas')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para desativar despesas.');
+            $this->session->set_flashdata('error', 'Você não tem permissão para desativar integração de despesas.');
             redirect($this->redirectURL);
         }
 
@@ -955,10 +961,10 @@ class Despesas extends CI_Controller
         }
 
         if (!$this->despesa_model->desativaDespesa($id)) {
-            $this->session->set_flashdata('erro', 'Erro ao tentar desativar despesa');
+            $this->session->set_flashdata('erro', 'Erro ao tentar desativar integração automática');
             redirect($this->redirectURL);
         }
-        $this->session->set_flashdata('sucesso', 'Vínculo automático desativado com sucesso');
+        $this->session->set_flashdata('sucesso', 'Integração automática desativada com sucesso');
         redirect($this->redirectURL);
     }
 
