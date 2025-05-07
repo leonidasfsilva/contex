@@ -591,7 +591,8 @@ class Despesas extends CI_Controller
 
         $descricao        = $_POST["descricao"];
         $observacoes      = $_POST["observacoes"] ?? null;
-        $autoVinculo      = isset($_POST["autoVinculo"]) ?? null;$valor            = $_POST["valor"];
+        $autoVinculo      = isset($_POST["autoVinculo"]) ?? null;
+        $valor            = $_POST["valor"];
         $fornecedor       = $_POST["fornecedor"] ?? null;
         $despesaParcelada = $_POST["despesa_parcelada"] ?? null;
         $despesaTerceiros = $_POST["despesa_terceiros"] ?? null;
@@ -625,7 +626,7 @@ class Despesas extends CI_Controller
             $diaVencimento = $today;
         }
 
-        if (abs($qntParcelas) < 10 ) {
+        if (abs($qntParcelas) < 10) {
             $qntParcelas = sprintf('0%s', abs($qntParcelas));
         }
 
@@ -703,7 +704,7 @@ class Despesas extends CI_Controller
             $diaVencimento = $today;
         }
 
-        if (abs($qntParcelas) < 10 ) {
+        if (abs($qntParcelas) < 10) {
             $qntParcelas = sprintf('0%s', abs($qntParcelas));
         }
 
@@ -870,10 +871,10 @@ class Despesas extends CI_Controller
             }
 
             if (!$result) {
-                $this->session->set_flashdata('erro', 'Erro ao tentar excluir série de lançamentos');
+                $this->session->set_flashdata('erro', 'Erro ao tentar excluir série de registros');
                 redirect($this->redirectURL);
             }
-            $this->session->set_flashdata('sucesso', 'Lançamentos excluídos com sucesso');
+            $this->session->set_flashdata('sucesso', 'Registros excluídos com sucesso');
             redirect($this->redirectURL);
         }
         $this->session->set_flashdata('erro', 'Método não permitido');
