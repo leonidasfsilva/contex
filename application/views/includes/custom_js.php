@@ -1,6 +1,4 @@
 <script>
-    console.log('custom_js loaded')
-
     var marcados = false
 
     function jqueryFormat(valor) {

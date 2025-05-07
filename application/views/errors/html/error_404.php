@@ -3,7 +3,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet"/>
 
 <link href="<?php echo config_item('base_url'); ?>/assets/font-awesome-6/css/all.css" rel="stylesheet">
 <link href="<?php echo config_item('base_url'); ?>/assets/css/styles-blessed3.css" type="text/css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
@@ -15,7 +17,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <head>
     <meta charset="utf-8">
     <title>404 Page Not Found</title>
-    <style type="text/css">
+    <style>
 
         ::selection {
             /*background-color: #E13300;*/
@@ -28,6 +30,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
         }
 
         body {
+            font-optical-sizing: auto;
+            font-weight: normal;
+            font-style: normal;
+
             font-family: Inter, sans-serif;
             background-color: #fff;
             margin: 40px;
