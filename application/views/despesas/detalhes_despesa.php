@@ -581,6 +581,9 @@ if ($despesa->auto_vinculo == 1) {
             <form id="formExcluirSerie" action="<?= base_url('financeiro/despesas/excluirSerieLancamentos'); ?>" method="post">
                 <div class="modal-body">
                     <p class="font-weight-bold">Confirma a exclusão dos registros selecionados?</p>
+                    <p class="note note-danger"><i class="text-danger fa fa-exclamation-triangle fa-fw fa-lg"></i>
+                        Caso este registro possua um vínculo ativo no módulo de Lançamentos, o mesmo será excluído.
+                    </p>
                 </div>
                 <div id="deleteSerieFormBody"></div>
                 <div class="modal-footer">
