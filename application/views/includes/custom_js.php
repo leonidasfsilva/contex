@@ -98,7 +98,6 @@
         })
 
         $('.habilita_desabilita_soma').click(function () {
-            console.log('habilita_desabilita_soma clicked')
             $('.th_soma').toggleClass('hidden')
             $('.td_soma').toggleClass('hidden')
             $('#div_btn_marcar').toggleClass('hidden')
@@ -151,7 +150,6 @@
 
             for (var i = 0; i < 20; i++) {
                 if (parentModal != null && parentModal.attr('id') == "modalEditar") {
-                    console.log('parentModal: ' + parentModal.attr('id'), 'parentElement: ' + parentElement.attr('id'))
                     toggleModals(parentModal, parentElement, true)
                     return false;
                 }
@@ -241,7 +239,6 @@
 
                     if (data.logado == true) {
                         conectado = true;
-                        // console.log('usuario logado: ' + data.logado)
                     } else {
                         conectado = false;
                         Swal.fire({
@@ -267,7 +264,6 @@
                     }
 
                     if (data.retorno !== null) {
-                        // console.log('atualizaNotificacoesUsuario(): usuario possui novas notificacoes')
                         $('#notifications-panel-footer').removeClass('hidden')
                         $(data.retorno).each(function (index, item) {
                             if (height < 210) {
@@ -299,7 +295,6 @@
                             )
                         })
                     } else {
-                        // console.log('atualizaNotificacoesUsuario(): usuario não possui novas notificacoes')
                         height = 73
                         $('#notifications-panel-footer').addClass('hidden')
                         $('#notifications-panel').append(
@@ -374,7 +369,6 @@
         event.preventDefault();
 
         if ($(form).valid()) {
-            // console.log('executou preloader');
             $(".principal-div").hide();
             $(".preloader").show();
             form.submit();
@@ -382,7 +376,6 @@
     });
 
     $(document).on('click', '#teste-btn', function () {
-        // console.log('teste ok!');
         $(".preloader").fadeIn();
         setTimeout(function () {
             $(".preloader").fadeOut();

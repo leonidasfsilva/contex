@@ -378,7 +378,7 @@ if (!$results) {
                     </thead>
                     <tr>
                         <td colspan="2" style="text-align: left; font-weight: bold">(=) LANÇAMENTOS SELECIONADOS</td>
-                        <td colspan="1" style="text-align: right; font-weight: bold" id="valor_soma_parcelas">
+                        <td colspan="1" style="text-align: right; font-weight: bold" class="valor_soma_parcelas">
                             0,00
                         </td>
                     </tr>
