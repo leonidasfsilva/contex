@@ -495,7 +495,7 @@ class Mxcode extends CI_Controller
             }
         } else {
             $this->session->set_flashdata('erro', 'Nenhum arquivo enviado.');
-            redirect(base_url() . 'mxcode/perfil');
+            // redirect(base_url() . 'mxcode/perfil');
         }
     }
 
