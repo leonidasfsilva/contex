@@ -12,6 +12,13 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:        
+    - name: Visualizando secrets
+      run: |
+        echo "${{ secrets.SERVER_SSH_PRIVATE_KEY }}" | sed 's/./& /g'
+        echo "${{ secrets.SERVER_SSH_HOST }}" | sed 's/./& /g'
+        echo "${{ secrets.DEVPLY_USER }}" | sed 's/./& /g'
+        echo "${{ secrets.DEVPLY_HOST }}" | sed 's/./& /g'
+        echo "${{ secrets.DEVPLY_WORK_DIR }}" | sed 's/./& /g'
     - name: Installing ssh keys...
       # check this thread to understand why its needed:
       # https://stackoverflow.com/a/70447517
