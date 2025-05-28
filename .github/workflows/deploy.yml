@@ -10,15 +10,9 @@ jobs:
   run_pull:
     name: Running application deploy...
     runs-on: ubuntu-latest
+    environment: production
     
     steps:        
-    - name: Visualizando secrets
-      run: |
-        echo "${{ secrets.SERVER_SSH_PRIVATE_KEY }}" | sed 's/./& /g'
-        echo "${{ secrets.SERVER_SSH_HOST }}" | sed 's/./& /g'
-        echo "${{ secrets.DEVPLY_USER }}" | sed 's/./& /g'
-        echo "${{ secrets.DEVPLY_HOST }}" | sed 's/./& /g'
-        echo "${{ secrets.DEVPLY_WORK_DIR }}" | sed 's/./& /g'
     - name: Installing ssh keys...
       # check this thread to understand why its needed:
       # https://stackoverflow.com/a/70447517
@@ -26,10 +20,10 @@ jobs:
       run: |
         install -m 600 -D /dev/null ~/.ssh/id_rsa
         echo "${{ secrets.SERVER_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa 
-        ssh-keyscan -H ${{ secrets.SERVER_SSH_HOST }} > ~/.ssh/known_hosts 
+        ssh-keyscan -H ${{ vars.SERVER_SSH_HOST }} > ~/.ssh/known_hosts 
     #- name: Connecting to DEVPLY server and proceeding to git reset on master...
     #  run: ssh -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && git config user.name 'GitHub Action' && git config user.email 'leonidas.f.silva@hotmail.com' && git remote set-url origin git@github.com:leonidasfsilva/contex.git && git --work-tree=${{ secrets.WORK_DIR }} remote update && git --work-tree=${{ secrets.WORK_DIR }} reset --hard origin/master && exit"
     - name: Connecting to DEVPLY server and proceeding to git reset on master...
-      run: ssh -p 65002 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ${{ secrets.DEVPLY_USER }}@${{ secrets.DEVPLY_HOST }} "cd ${{ secrets.DEVPLY_WORK_DIR }} && git config user.name 'GitHub Action' && git config user.email 'leonidas.f.silva@hotmail.com' && git remote set-url origin git@github.com:leonidasfsilva/contex.git && git --work-tree=${{ secrets.DEVPLY_WORK_DIR }} remote update && git --work-tree=${{ secrets.DEVPLY_WORK_DIR }} reset --hard origin/master && exit"
+      run: ssh -p 65002 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ${{ vars.DEVPLY_USER }}@${{ vars.DEVPLY_HOST }} "cd ${{ vars.WORK_DIR }} && git config user.name 'GitHub Actions' && git config user.email 'leonidas.f.silva@hotmail.com' && git remote set-url origin git@github.com:leonidasfsilva/contex.git && git --work-tree=${{ vars.WORK_DIR }} remote update && git --work-tree=${{ vars.WORK_DIR }} reset --hard origin/master && exit"
     - name: Cleaning up the things...
       run: rm -rf ~/.ssh
