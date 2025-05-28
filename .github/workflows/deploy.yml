@@ -1,4 +1,4 @@
-name: Starting project deployment on prod...
+name: Deploying contex on production
 
 on:
   push:
@@ -20,7 +20,7 @@ jobs:
       run: |
         install -m 600 -D /dev/null ~/.ssh/id_rsa
         echo "${{ secrets.SERVER_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa 
-        ssh-keyscan -H ${{ vars.SERVER_SSH_HOST }} > ~/.ssh/known_hosts 
+        echo "${{ vars.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts 
     #- name: Connecting to DEVPLY server and proceeding to git reset on master...
     #  run: ssh -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && git config user.name 'GitHub Action' && git config user.email 'leonidas.f.silva@hotmail.com' && git remote set-url origin git@github.com:leonidasfsilva/contex.git && git --work-tree=${{ secrets.WORK_DIR }} remote update && git --work-tree=${{ secrets.WORK_DIR }} reset --hard origin/master && exit"
     - name: Connecting to DEVPLY server and proceeding to git reset on master...
