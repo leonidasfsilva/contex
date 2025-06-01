@@ -62,15 +62,15 @@ if (isset($referenceMonth) && $referenceMonth) {
                     </button>
                     <ul class="dropdown-menu dropdown-menu-hover arrow" role="menu">
                         <li>
-                            <a href="#modalFiltrar" data-toggle="modal">
-                                <i class="fas fa-filter fa-fw pull-right"></i>
-                                <span>Filtrar</span>
-                            </a>
-                        </li>
-                        <li>
                             <a href="#modalSearch" data-toggle="modal">
                                 <i class="fas fa-search fa-fw pull-right"></i>
                                 <span>Pesquisar</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#modalFiltrar" data-toggle="modal">
+                                <i class="fas fa-filter fa-fw pull-right"></i>
+                                <span>Filtrar</span>
                             </a>
                         </li>
                         <li>
@@ -1487,10 +1487,10 @@ if (!$results) {
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
                         Cancelar
                     </button>
-                    <button class="btn btn-primary btn-sm"><i class="fa fa-search fa-fw"></i>
+                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-search fa-fw"></i>
                         Pesquisar
                     </button>
                 </div>
