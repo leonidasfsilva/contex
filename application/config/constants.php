@@ -21,10 +21,7 @@ include APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'codegen_helper.php';
 $version       = '142';
 $quarterOfYear = getQuarterOfCurrentYear();
 $currentYear   = date('y');
-define("APP_VERSION", sprintf('%s.%s.%s', $currentYear, $quarterOfYear, $version));
-
-// previsão de lançamento do modulo de Despesas (segundo semestre de 2023)
-// define('APP_VERSION', '2023.2.?');
+define('APP_VERSION', sprintf('%s.%s.%s', $currentYear, $quarterOfYear, $version));
 
 /*
 |--------------------------------------------------------------------------
