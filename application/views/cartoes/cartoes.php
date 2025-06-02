@@ -81,11 +81,11 @@
                     ?>
                     <tr>
                         <td><?= '<a href="#modalVisualizarCartao" role="button" data-toggle="modal" idCard="' . $r->id_cartao . '" numero="' . decriptar($r->numero) . '" validade="' . $r->validade . '" bandeira="' . $r->bandeira . '" cvc="' . decriptar($r->cvc) . '" 
-                            nome="' . $r->nome . '" class="visualizar font-weight-bold" title="Visualizar cartão"> **** **** **** ' . $final . '</a> 
+                            nome="' . $r->nome . '" principal="' . $r->principal . '" class="visualizar font-weight-bold" title="Visualizar cartão"> **** **** **** ' . $final . '</a> 
                             <span class="ml5 font-weight-bold badge badge-' . $labelPrincipal . '"> ' . $cartaoPrincipal . ' </span>' ?>
                         </td>
                         <td><?= '<a href="#modalVisualizarCartao" role="button" data-toggle="modal" idCard="' . $r->id_cartao . '" numero="' . decriptar($r->numero) . '" validade="' . $r->validade . '" bandeira="' . $r->bandeira . '" cvc="' . decriptar($r->cvc) . '" 
-                            nome="' . $r->nome . '" class="visualizar font-weight-bold" title="Visualizar cartão">' . $r->apelido . '</a>' ?>
+                            nome="' . $r->nome . '" principal="' . $r->principal . '" class="visualizar font-weight-bold" title="Visualizar cartão">' . $r->apelido . '</a>' ?>
                         </td>
                         <td class="font-weight-bold"><?= $r->nome ?></td>
                         <td><?= $r->bandeira ?></td>
@@ -93,7 +93,7 @@
                         <?=
                         '<td>
                             <button href="#modalVisualizarCartao" role="button" data-toggle="modal" idCard="' . $r->id_cartao . '" numero="' . decriptar($r->numero) . '" validade="' . $r->validade . '" bandeira="' . $r->bandeira . '" cvc="' . decriptar($r->cvc) .
-                        '" nome="' . $r->nome . '" class="btn btn-info btn-sm visualizar" title="Visualizar cartão"><i class="fas fa-eye fa-lg fa-fw"></i></button>
+                        '" nome="' . $r->nome . '" principal="' . $r->principal . '" class="btn btn-info btn-sm visualizar" title="Visualizar cartão"><i class="fas fa-eye fa-lg fa-fw"></i></button>
                             <a href="' . base_url('financeiro/cartoes/editar/') . $r->id_cartao . '" class="btn btn-primary btn-sm" title="Editar" ' . $disabled_editar . '><i class="fas fa-edit fa-lg fa-fw"></i></a>
                             <a href="' . base_url('financeiro/cartoes/adicional/') . $r->id_cartao . '" class="btn btn-inverse btn-sm" title="Gerar cartão adicional" ' . $disabled_adicional . '><i class="fas fa-credit-card fa-lg fa-fw"></i></a>
                             ' . $btn_status . '
@@ -208,15 +208,24 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="ver_cvc" class="btn btn-default btn-sm pull-left" aria-hidden="true">
-                        <i class="fa fa-eye fa-fw"></i> Ver CVC
-                    </button>
-                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
-                        <i class="fa fa-times fa-fw"></i> Fechar
-                    </button>
-                    <button type="submit" class="btn btn-info btn-sm" aria-hidden="true">
-                        <i class="fa fa-edit fa-fw"></i> Editar
-                    </button>
+                    <div class="row">
+                        <div class="text-left col-xs-4">
+                            <input type="hidden" class="cardId">
+                            <input type="checkbox" class="switch-input primary principal" id="principal" name="principal" value="1">
+                            <label for="principal" class="switch-label primary font-weight-bold">Cartão principal</label>
+                        </div>
+                        <div class="col-xs-8 modal-form-buttons">
+                            <button type="button" id="ver_cvc" class="btn btn-default btn-sm " aria-hidden="true">
+                                <i class="fa fa-eye fa-fw"></i> Ver CVC
+                            </button>
+                            <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                                <i class="fa fa-times fa-fw"></i> Fechar
+                            </button>
+                            <button type="submit" class="btn btn-info btn-sm" aria-hidden="true">
+                                <i class="fa fa-edit fa-fw"></i> Editar
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
@@ -300,6 +309,37 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        $('.principal').on('change', function (event) {
+            var cardId = $('.card-id').val();
+            toggleActiveCard(event, cardId);
+            location.reload();
+        });
+
+        function toggleActiveCard(event, cardId) {
+            const checked = event.target.checked;
+            if (checked === true) {
+                $.ajax({
+                    type: "POST",
+                    url: "<?= base_url('financeiro/cartoes/setCartaoAtivo'); ?>",
+                    data: {
+                        value: 1,
+                        idCartao: cardId,
+                    },
+                    dataType: 'html',
+                });
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "<?= base_url('financeiro/cartoes/setCartaoAtivo'); ?>",
+                    data: {
+                        value: null,
+                        idCartao: cardId,
+                    },
+                    dataType: 'html',
+                });
+            }
+        }
+
         mountCard('#formEditarCartao', '.card-wrapper');
 
         $(document).on('change', '#select_periodos, #select_status', function () {
@@ -326,7 +366,10 @@
             let validade = $(this).attr('validade');
             let cvc = $(this).attr('cvc');
             let idCard = $(this).attr('idCard');
+            let principal = $(this).attr('principal');
             $(".card-id").val(idCard);
+
+            console.log(principal);
 
             setTimeout(function () {
                 var evt = document.createEvent('HTMLEvents');
@@ -343,6 +386,12 @@
                 $("#expiry").val(validade);
                 $("#cvc").val(cvc);
             }, 100);
+
+            if (principal == true) {
+                $(".principal").prop('checked', true)
+            } else {
+                $(".principal").prop('checked', false)
+            }
         });
 
         $(document).on('click', '.ativar, .desativar', function (event) {

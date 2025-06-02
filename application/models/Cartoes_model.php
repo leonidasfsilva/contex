@@ -319,4 +319,17 @@ class Cartoes_model extends CI_Model
             ->where('id_usuario', $idUsuario)
             ->update('cartoes', $data);
     }
+
+    function setCartaoAtivo($idCartao, $activeCard)
+    {
+        if (!$activeCard  || !$idCartao) return false;
+
+        $this->db
+            ->where('id_usuario', getUserId())
+            ->where('id_cartao', $idCartao)
+            ->update('cartoes', ['principal' => $activeCard]);
+
+        return true;
+    }
+
 }

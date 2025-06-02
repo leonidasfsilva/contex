@@ -284,6 +284,19 @@ class Cartoes extends CI_Controller
         }
     }
 
+
+    public function setCartaoAtivo()
+    {
+        if (!$_POST) return false;
+
+        if (!$_POST['idCartao'] || !$_POST['value']) return false;
+
+        $this->cartoes_model->removerCartaoPrincipal(getUserId());
+        $this->cartoes_model->setCartaoAtivo($_POST['idCartao'], $_POST['value']);
+        $this->session->set_flashdata('sucesso', 'Cartão definido como principal');
+        // redirect('financeiro/cartoes');
+        return true;
+    }
     //Funcao para consultar se ja existe um cartao associado ao usuario:
     //se existir, retorna TRUE
     //se não existir, retorna FALSE

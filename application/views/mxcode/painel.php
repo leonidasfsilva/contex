@@ -297,7 +297,7 @@ if ($direcionados) {
             if ($(this).attr('id') == 'widget_lancamentos') {
                 $.ajax({
                     type: "POST",
-                    url: "<?= base_url(); ?>configuracoes/setWidgetLancamentos",
+                    url: "<?= base_url('configuracoes/setWidgetLancamentos'); ?>",
                     data: "value=" + 1,
                     dataType: 'html',
                 });
@@ -305,7 +305,7 @@ if ($direcionados) {
             if ($(this).attr('id') == 'widget_credito') {
                 $.ajax({
                     type: "POST",
-                    url: "<?= base_url(); ?>configuracoes/setWidgetCartaoCredito",
+                    url: "<?= base_url('configuracoes/setWidgetCartaoCredito'); ?>",
                     data: "value=" + 1,
                     dataType: 'html',
                 });
@@ -313,7 +313,7 @@ if ($direcionados) {
             if ($(this).attr('id') == 'widget_investimentos') {
                 $.ajax({
                     type: "POST",
-                    url: "<?= base_url(); ?>configuracoes/setWidgetInvestimentos",
+                    url: "<?= base_url('configuracoes/setWidgetInvestimentos'); ?>",
                     data: "value=" + 1,
                     dataType: 'html',
                 });
@@ -321,7 +321,7 @@ if ($direcionados) {
             if ($(this).attr('id') == 'widget_pendencias') {
                 $.ajax({
                     type: "POST",
-                    url: "<?= base_url(); ?>configuracoes/setWidgetPendencias",
+                    url: "<?= base_url('configuracoes/setWidgetPendencias'); ?>",
                     data: "value=" + 1,
                     dataType: 'html',
                 });
