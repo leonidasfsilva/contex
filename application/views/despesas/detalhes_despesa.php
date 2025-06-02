@@ -155,7 +155,7 @@ if ($despesa->auto_vinculo == 1) {
         <table class="table table-condensed table-striped table-bordeless table-hover" role="grid" style="width: 100%;">
             <thead>
             <tr role="row">
-                <th class="th_soma hidden" style="width: 10px !important;">Soma</th>
+                <th class="th_soma hidden" style="width: 10px !important;">Soma<br><br></th>
                 <th>Vencimento<br><br></th>
                 <th>Descrição<br><?= $despesa->despesa_parcelada ? 'Parcela' : 'Fornecedor' ?></th>
                 <th><?= $despesa->despesa_parcelada ? 'Valor parcela' : 'Valor' ?> (R$)<br>Forma pagamento</th>
