@@ -312,7 +312,12 @@
         $('.principal').on('change', function (event) {
             var cardId = $('.card-id').val();
             toggleActiveCard(event, cardId);
-            location.reload();
+            setTimeout(function () {
+                showSpinnerLoader()
+                setTimeout(function () {
+                    location.reload();
+                }, 500)
+            }, 400)
         });
 
         function toggleActiveCard(event, cardId) {
