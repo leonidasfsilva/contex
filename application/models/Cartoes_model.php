@@ -105,7 +105,7 @@ class Cartoes_model extends CI_Model
         }
     }
 
-    function getCartoesUsuarioFatura($id_usuario, $id_cartao = null)
+    function getCartoesAtivosUsuario($id_usuario, $id_cartao = null)
     {
         if ($id_cartao) {
             return $this->db

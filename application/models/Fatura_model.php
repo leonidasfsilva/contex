@@ -10,9 +10,15 @@ class Fatura_model extends CI_Model
      * email: leonidas.f.silva@hotmail.com
      */
 
+    protected string $faturasTable                 = 'faturas';
+    protected string $lancamentosFaturasTable      = 'lancamentos_faturas';
+    protected string $lancamentosFaturasAssocTable = 'lancamentos_faturas_assoc';
+    protected        $userId;
+
     function __construct()
     {
         parent::__construct();
+        $this->userId = getUserId();
     }
 
     function get($table, $fields, $id_cartao, $where = null, $limit = null, $rows = 0, $perpage = 0, $start = 0, $order_by = null, $one = false, $array = 'array')
@@ -154,6 +160,16 @@ class Fatura_model extends CI_Model
             ->where('status', 1)
             ->where('id_cartao', $id_cartao)
             ->where_not_in('fatura_aberta', 0)
+            ->get('faturas')
+            ->result();
+    }
+
+    function getFaturasCartaoUser($id_cartao)
+    {
+        return $this->db
+            ->where('status', 1)
+            ->where('id_cartao', $id_cartao)
+            ->where('id_usuario', $this->userId)
             ->get('faturas')
             ->result();
     }
@@ -885,6 +901,38 @@ class Fatura_model extends CI_Model
             ->where('auto_vinculo', 1);
 
         if ($this->db->count_all_results()) {
+            return true;
+        }
+        return false;
+    }
+
+    function getVinculoFaturaComModuloLancamentos($idFatura)
+    {
+        $count = $this->db
+            ->from('lancamentos')
+            ->where('status', 1)
+            ->where('id_usuario', $this->userId)
+            ->where('id_fatura', $idFatura);
+
+        if ($count->count_all_results() > 0) {
+            $this->db
+                ->from('lancamentos')
+                ->where('status', 1)
+                ->where('id_usuario', $this->userId)
+                ->where('id_fatura', $idFatura);
+            return $this->db->get()->row();
+        }
+        return false;
+    }
+
+    function setFlagFaturaPaga($idFatura, $dataToUpdate)
+    {
+        if (!is_array($dataToUpdate)) return false;
+
+        $this->db->where('id_fatura', $idFatura);
+        $this->db->update($this->faturasTable, $dataToUpdate);
+
+        if ($this->db->affected_rows() == 1) {
             return true;
         }
         return false;

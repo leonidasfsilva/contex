@@ -141,7 +141,7 @@ class Faturas extends CI_Controller
             $data['autoLinkInvoices']    = $this->fatura_model->getAutoLinkUser();
             $data['existe_configuracao'] = $this->fatura_model->existeConfiguracao($idCartao);
             $data['dia_vencimento']      = $this->fatura_model->getDiaVencimentoFatura($idCartao);
-            $data['cartoes']             = $this->cartoes_model->getCartoesUsuarioFatura(getUserId());
+            $data['cartoes']             = $this->cartoes_model->getCartoesAtivosUsuario(getUserId());
             $data['saldoVencidas']       = $this->fatura_model->getSaldoFaturasVencidas($idCartao);
             $data['saldoPendente']       = $this->fatura_model->getSaldoFaturasPendentes($idCartao);
             $data['saldoQuitado']        = $this->fatura_model->getSaldoFaturasPagas($idCartao);
@@ -1438,7 +1438,7 @@ class Faturas extends CI_Controller
             ($urlAtual) ? redirect($urlAtual) : redirect('financeiro/faturas');
         }
 
-        $cartoesAtivos = $this->cartoes_model->getCartoesUsuarioFatura(getUserId());
+        $cartoesAtivos = $this->cartoes_model->getCartoesAtivosUsuario(getUserId());
 
         foreach ($cartoesAtivos as $cartao) {
             $faturaReferencia = $this->fatura_model->getFaturaReferencia($cartao->id_cartao, $mesReferencia, $anoReferencia);

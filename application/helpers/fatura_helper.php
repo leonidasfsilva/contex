@@ -22,25 +22,20 @@ function vinculoAutomaticoFaturas(): bool
 
     if (!$CI->fatura_model->getAutoLinkUser()) return false;
 
-    $todayDate   = date('Y-m-d');
-    $todayArray  = explode('-', $todayDate);
-    $monthsCount = 3;
-
-    $cartoesAtivos = $CI->cartoes_model->getCartoesUsuarioFatura(getUserId());
+    $todayDate     = date('Y-m-d');
+    $todayArray    = explode('-', $todayDate);
+    $monthsCount   = 3;
+    $cartoesAtivos = $CI->cartoes_model->getCartoesAtivosUsuario(getUserId());
 
     foreach ($cartoesAtivos as $cartao) {
+        $faturas         = $CI->fatura_model->getFaturasCartaoUser($cartao->id_cartao);
         $mounthReference = $todayArray[1];
         $yearReference   = $todayArray[0];
 
-        if ($cartao->id_cartao == 57) {
-            $cartaoAlvo = true;
-        }
         for ($i = 1; $i <= $monthsCount; $i++) {
             $faturaReferencia = $CI->fatura_model->getFaturaReferencia($cartao->id_cartao, $mounthReference, $yearReference);
 
-            if (!$faturaReferencia) {
-                continue;
-            }
+            if (!$faturaReferencia) continue;
 
             vinculaFatura($faturaReferencia->id_fatura);
             $mounthReference++;
@@ -50,8 +45,37 @@ function vinculoAutomaticoFaturas(): bool
                 $yearReference++;
             }
         }
+
+        if ($faturas) {
+            foreach ($faturas as $fatura) {
+                monitoraPagamentosFaturasVinculadas($fatura->id_fatura);
+            }
+        }
     }
 
+    return true;
+}
+
+function monitoraPagamentosFaturasVinculadas($idFatura)
+{
+    if (!$idFatura) return false;
+
+    $CI = get_instance();
+    $CI->load->model('fatura_model');
+
+    $vinculo = $CI->fatura_model->getVinculoFaturaComModuloLancamentos($idFatura);
+
+    if ($vinculo) {
+        if ($vinculo->baixado) {
+            $dataToUpdate = [
+                'data_pagamento' => $vinculo->data_pagamento,
+                'forma_pgto'     => $vinculo->forma_pgto,
+                'fatura_paga'    => 1
+            ];
+
+            $CI->fatura_model->setFlagFaturaPaga($vinculo->id_fatura, $dataToUpdate);
+        }
+    }
     return true;
 }
 
@@ -70,13 +94,11 @@ function atualizaValorVinculoFaturas($idFatura = null): bool
             'valor' => '-' . $valorTotalFatura
         ];
 
-        if (!$vinculoFatura) {
-            return false;
-        }
+        if (!$vinculoFatura) return false;
 
-        if ($CI->fatura_model->edit('lancamentos', $data, 'id_fatura', $idFatura)) {
+        if ($CI->fatura_model->edit('lancamentos', $data, 'id_fatura', $idFatura))
             return true;
-        }
+
         return false;
     }
 
@@ -84,14 +106,12 @@ function atualizaValorVinculoFaturas($idFatura = null): bool
     $todayArray    = explode('-', $todayDate);
     $mesReferencia = $todayArray[1];
     $anoReferencia = $todayArray[0];
-    $cartoesAtivos = $CI->cartoes_model->getCartoesUsuarioFatura(getUserId());
+    $cartoesAtivos = $CI->cartoes_model->getCartoesAtivosUsuario(getUserId());
 
     foreach ($cartoesAtivos as $cartao) {
         $faturaReferencia = $CI->fatura_model->getFaturaReferencia($cartao->id_cartao, $mesReferencia, $anoReferencia);
 
-        if (!$faturaReferencia) {
-            continue;
-        }
+        if (!$faturaReferencia) continue;
 
         $vinculoFatura        = $CI->fatura_model->getVinculoFatura($faturaReferencia->id_fatura);
         $detalhesFatura       = $CI->fatura_model->getDetalhesFatura($faturaReferencia->id_fatura);
@@ -114,9 +134,9 @@ function atualizaValorVinculoFaturas($idFatura = null): bool
             'tipo'               => 2
         ];
 
-        if ($vinculoFatura) {
+        if ($vinculoFatura)
             $CI->financeiro_model->edit('lancamentos', $lancamentosList, 'id_lancamento', $vinculoFatura->id_lancamento);
-        }
+
     }
     return true;
 }
