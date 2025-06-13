@@ -17,7 +17,7 @@ include APPPATH . 'helpers' . DIRECTORY_SEPARATOR . 'codegen_helper.php';
  * | YYYY  - current year
  * | Q     - current quarter of year (1st, 2nd, 3rd or 4th)
  * | R     - current release version of system
- * testing SSH signature on commits (2)
+ * testing SSH signature on commits (3)
  */
 $version       = '149';
 $quarterOfYear = getQuarterOfCurrentYear();
