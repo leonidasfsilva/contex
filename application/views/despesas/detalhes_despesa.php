@@ -2,13 +2,13 @@
 $situacao                 = $this->input->get('situacao');
 $periodo                  = $this->input->get('periodo');
 $autoIntegrationBtnStatus = '
-<a href="' . base_url('financeiro/despesas/ativar/') . $despesa->id . '" class="btn btn-sm btn-deeporange font-weight-bold">
+<a href="' . base_url('financeiro/despesas/ativar/') . $despesa->id . '" class="btn btn-sm btn-deeporange font-weight-bold" title="Status da integração automática">
 <i class="fas fa-stop fa-fw"></i> INATIVA
 </a>';
 
 if ($despesa->auto_vinculo == 1) {
     $autoIntegrationBtnStatus = '
-    <a href="' . base_url('financeiro/despesas/desativar/') . $despesa->id . '" class="btn btn-sm btn-success font-weight-bold">
+    <a href="' . base_url('financeiro/despesas/desativar/') . $despesa->id . '" class="btn btn-sm btn-success font-weight-bold" title="Status da integração automática">
     <i class="fas fa-play fa-fw"></i> ATIVA
     </a>';
 }
