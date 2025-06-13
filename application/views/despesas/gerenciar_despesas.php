@@ -387,6 +387,14 @@ $periodo  = $this->input->get('periodo');
                         </div>
                     </div>
                     <div class="row">
+                        <div class="form-group col-lg-12 ">
+                            <div class="row">
+                                <input type="checkbox" class="switch-input primary hiddenExpense" id="despesaOculta" name="despesa_oculta" value="1">
+                                <label for="despesaOculta" class="switch-label primary font-weight-bold">Despesa oculta</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="form-group col-lg-4" style="margin-bottom: 0;">
                             <a href="javascript:" class="font-weight-bold obsLink">
                                 <i class="fas fa-plus fa-fw obsIcon"></i>
