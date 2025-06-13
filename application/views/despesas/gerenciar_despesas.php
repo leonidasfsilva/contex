@@ -102,6 +102,7 @@ $periodo  = $this->input->get('periodo');
                     $terceiro             = null;
                     $parcelas             = null;
                     $iconObs              = null;
+                    $iconHidden           = null;
                     $labelStatusClass     = 'warning';
                     $activateBtnTitle     = 'Ativar integração automática';
                     $activeBtnClass       = 'btn btn-deeporange btn-sm ativar';
@@ -116,6 +117,12 @@ $periodo  = $this->input->get('periodo');
                     if ($r->observacoes) {
                         $iconObs = '
                                 <i class="fas fa-comment-dots fa-fw" title="Observações adicionais"></i>
+                            ';
+                    }
+
+                    if ($r->despesa_oculta) {
+                        $iconHidden = '
+                                <i class="fas fa-eye-slash fa-fw" title="Despesa oculta"></i>
                             ';
                     }
 
@@ -152,8 +159,9 @@ $periodo  = $this->input->get('periodo');
                     echo '<td class="font-weight-bold"><a href="#modalEditar" data-toggle="modal" class="editar mr1" title="#' . $r->id . '" id_despesa="' .
                         $r->id . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor_parcela="' . $valor_parcela . '" valor="' . $valor .
                         '" dia_vencimento="' . $r->dia_vencimento . '" data_pagamento="' . date('d/m/Y', strtotime($r->data_pagamento)) . '" total_parcelas="' . $r->total_parcelas .
-                        '" fornecedor="' . $r->fornecedor . '" despesa_parcelada="' . $r->despesa_parcelada . '" despesa_terceiros="' . $r->despesa_terceiros . '" nome_terceiro="' . $r->nome_terceiro .
-                        '" forma_pagamento="' . $r->id_forma_pagamento . '" tipo="' . $r->tipo_despesa . '">' . strtoupper($r->descricao) . $iconObs . '<br><span class="small text-muted" >' . ($r->fornecedor) . '</span></a></td>';
+                        '" fornecedor="' . $r->fornecedor . '" despesa_parcelada="' . $r->despesa_parcelada . '" despesa_terceiros="' . $r->despesa_terceiros .
+                        '"despesa_oculta="' . $r->despesa_oculta . '" nome_terceiro="' . $r->nome_terceiro .
+                        '" forma_pagamento="' . $r->id_forma_pagamento . '" tipo="' . $r->tipo_despesa . '">' . strtoupper($r->descricao) . $iconObs . $iconHidden . '<br><span class="small text-muted" >' . ($r->fornecedor) . '</span></a></td>';
 
                     echo '<td class="font-weight-bold"><span class="font-11 font-weight-bold ' . $colorValue . '">' . $iconValue . ($valor) . '</span><br><span class="small text-muted">' . ($r->descricao_pagamento) . '</span></td>';
 
@@ -496,6 +504,14 @@ $periodo  = $this->input->get('periodo');
                             <div class="form-group col-lg-8 col-xs-7">
                                 <label class="font-weight-bold">Nome do terceiro *</label>
                                 <input class="form-control thirdName" type="text" name="nome_terceiro"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12 ">
+                            <div class="row">
+                                <input type="checkbox" class="switch-input primary hiddenExpense" id="despesaOcultaEditar" name="despesa_oculta" value="1">
+                                <label for="despesaOcultaEditar" class="switch-label primary font-weight-bold">Despesa oculta</label>
                             </div>
                         </div>
                     </div>
@@ -1374,6 +1390,7 @@ $periodo  = $this->input->get('periodo');
 
             var installmentExpense = $(this).attr('despesa_parcelada')
             var thirdPartyExpense = $(this).attr('despesa_terceiros')
+            var hiddenExpense = $(this).attr('despesa_oculta')
             var expenseType = $(this).attr('tipo')
             var observacoes = $(this).attr('observacoes')
 
@@ -1391,6 +1408,12 @@ $periodo  = $this->input->get('periodo');
             } else {
                 $(".thirdPartyExpense").prop('checked', false)
                 toggleThirdsDiv(false)
+            }
+
+            if (hiddenExpense == 1) {
+                $(".hiddenExpense").prop('checked', true)
+            } else {
+                $(".hiddenExpense").prop('checked', false)
             }
 
             if (expenseType == 1) {

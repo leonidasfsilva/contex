@@ -143,7 +143,6 @@ function copiaRegistroEmModuloLancamentos($idDespesa, $dataReferencia)
 
     $valorFormatado = sprintf('-%s', $lancamento->valor);
     $tipoLancamento = 2;
-    $data           = [];
 
     if (!$despesa) return false;
 
@@ -154,11 +153,12 @@ function copiaRegistroEmModuloLancamentos($idDespesa, $dataReferencia)
         $tipoLancamento = 1;
     }
 
-    $data = [
+    $dataToPersist = [
         'id_usuario'         => getUserId(),
         'id_despesa'         => $despesa->id,
         'descricao'          => $despesa->descricao,
         'observacoes'        => $despesa->observacoes ?? null,
+        'oculto'             => $despesa->despesa_oculta ?? null,
         'cliente_fornecedor' => $despesa->nome_terceiro ?? $despesa->fornecedor ?? null,
         'valor'              => $valorFormatado,
         'data_lancamento'    => $dataReferencia,
@@ -169,12 +169,12 @@ function copiaRegistroEmModuloLancamentos($idDespesa, $dataReferencia)
     ];
 
     if ($despesa->despesa_parcelada) {
-        $parcela           = $lancamento->num_parcela;
-        $totalParcelas     = $despesa->total_parcelas;
-        $data['descricao'] = sprintf('%s - PARC %s/%s', $data['descricao'], $parcela, $totalParcelas);
+        $parcela                    = $lancamento->num_parcela;
+        $totalParcelas              = $despesa->total_parcelas;
+        $dataToPersist['descricao'] = sprintf('%s - PARC %s/%s', $dataToPersist['descricao'], $parcela, $totalParcelas);
     }
 
-    if (!$CI->financeiro_model->add('lancamentos', $data))
+    if (!$CI->financeiro_model->add('lancamentos', $dataToPersist))
         return false;
 
     return true;
