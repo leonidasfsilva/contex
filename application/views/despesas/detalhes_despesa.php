@@ -62,7 +62,7 @@ if ($despesa->auto_vinculo == 1) {
                 </div>
                 <div class="form-group col-lg-3 col-xs-6">
                     <label class="font-weight-bold">Tipo de despesa</label>
-                    <input class="form-control" type="text" value="<?= ($despesa->tipo_despesa == 1 ? 'ÚNICA' : 'RECORRENTE') . (!$despesa->despesa_oculta ?: ' (oculta)') ?>" disabled/>
+                    <input class="form-control" type="text" value="<?= ($despesa->tipo_despesa == 1 ? 'ÚNICA' : 'RECORRENTE') . ($despesa->despesa_oculta == 1 ? ' (oculta)' : null) ?>" disabled/>
                 </div>
                 <div class="form-group col-lg-3 col-xs-6">
                     <label class="font-weight-bold">Vencimento</label>
