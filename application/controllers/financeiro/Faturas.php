@@ -907,7 +907,7 @@ class Faturas extends CI_Controller
             redirect($urlAtual);
         }
 
-        $this->session->set_flashdata('sucesso', 'Cópia efetuada com sucesso');
+        $this->session->set_flashdata('sucesso', 'Lançamento copiado com sucesso');
         redirect($urlAtual);
     }
 
