@@ -20,24 +20,27 @@
                 <th>Nome</th>
                 <th>Email</th>
                 <th>Telefone</th>
-                <th style="width: 150px">Ações</th>
+                <th style="width: 140px">Ações</th>
             </tr>
             </thead>
             <tbody>
             <tr>
                 <?php foreach ($results as $r) {
-                    echo '<td><a href="' . base_url('clientes/visualizar/') . $r->id_clientes . '">' . $r->nome . '</a></td>';
-                    echo '<td>' . $r->email . '</td>';
-                    echo '<td>' . $r->telefone . '</td>';
+                    echo '<td class="font-weight-bold"><a href="' . base_url('clientes/visualizar/') . $r->id_clientes . '">' . $r->nome . '</a></td>';
+                    echo '<td class="font-weight-bold">' . $r->email . '</td>';
+                    echo '<td class="font-weight-bold">' . $r->telefone . '</td>';
                     echo '<td style="text-align: center">';
+
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) {
                         echo '<a href="' . base_url('clientes/visualizar/') . $r->id_clientes . '" style="margin-right: 1%" class="btn btn-info btn-sm" title="Ver detalhes"><i class="fas fa-search-plus fa-lg fa-fw"></i></a>';
                     }
+
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eCliente')) {
                         echo '<a href="' . base_url() . 'clientes/editar/' . $r->id_clientes . '" style="margin-right: 1%" class="btn btn-primary btn-sm" title="Editar"><i class="fas fa-edit fa-lg fa-fw"></i></a>';
                     }
+
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dCliente')) {
-                        echo '<a href="#modalExcluir" role="button" data-toggle="modal" cliente="' . $r->id_clientes . '" style="margin-right: 1%" class="btn btn-danger btn-sm" title="Excluir"><i class="fas fa-trash-alt fa-lg fa-fw" ></i></a>';
+                        echo '<a href="#modalExcluir" role="button" data-toggle="modal" cliente="' . $r->id_clientes . '" style="margin-right: 1%" class="btn btn-danger btn-sm" title="Excluir"><i class="fas fa-trash-can-xmark fa-lg fa-fw" ></i></a>';
                     }
 
                     echo '</td>';
@@ -78,7 +81,6 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $('a').click(function (event) {
-
             var cliente = $(this).attr('cliente');
             $('#idCliente').val(cliente);
         });
