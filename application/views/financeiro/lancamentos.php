@@ -4,6 +4,8 @@ $tipo_lancamentos    = $this->input->get('tipo');
 $periodo_lancamentos = $this->input->get('periodo');
 $inicio              = $this->input->get('dataInicial');
 $fim                 = $this->input->get('dataFinal');
+$search              = $this->input->get('search') ?? null;
+$searchPath          = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $saidasPendentes     = null;
 $entradasPendentes   = null;
 $saidasEfetivadas    = null;
@@ -26,11 +28,11 @@ if (isset($referenceMonth) && $referenceMonth) {
         $nextLinkTitle = sprintf('%s / %s', $nextMonth, $nextReferenceYear);
     }
 
-    $prevLink         = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $prevReferenceMonth, $prevReferenceYear)) .
-        " title='$prevLinkTitle'><span class='badge badge-primary'><i style='margin: 0 !important;' class='fas fa-angle-double-left'></i></span></a>";
+    $prevLink         = "<a href=" . base_url(sprintf('%s?periodo=mensal&mesReferencia=%s&anoReferencia=%s&search=%s', uri_string(), $prevReferenceMonth, $prevReferenceYear, $search)) .
+            " title='$prevLinkTitle'><span class='badge badge-primary'><i style='margin: 0 !important;' class='fas fa-angle-double-left'></i></span></a>";
     $currentMonthText = "<a href='#modalSelectMounth' data-toggle='modal' role='button' title='Clique para selecionar um mes específico'><span class='badge badge-primary' style='margin-left: 10px;'>Período: $month / $referenceYear</span></a>";
-    $nextLink         = "<a href=" . base_url(sprintf('financeiro/lancamentos?periodo=mensal&mesReferencia=%s&anoReferencia=%s', $nextReferenceMonth, $nextReferenceYear)) .
-        " title='$nextLinkTitle'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-right'></i></span></a>";
+    $nextLink         = "<a href=" . base_url(sprintf('%s?periodo=mensal&mesReferencia=%s&anoReferencia=%s&search=%s', uri_string(), $nextReferenceMonth, $nextReferenceYear, $search)) .
+            " title='$nextLinkTitle'><span class='badge badge-primary' style='margin-left: 10px;'><i style='margin: 0 !important;' class='fas fa-angle-double-right'></i></span></a>";
 
     $monthFilterButtons = $referenceMonth ? $prevLink . $currentMonthText . $nextLink : null;
 }
@@ -148,7 +150,11 @@ if (!$results) {
     <div class="panel panel-midnightblue">
         <div class="panel-heading">
             <h2>
-                <span style='margin-right: 10px !important;'>Extrato de Lançamentos</span>
+                <?php if ($search) { ?>
+                    <span style='margin-right: 10px !important;'>Pesquisando: <?= $search ?></span>
+                <?php } else { ?>
+                    <span style='margin-right: 10px !important;'>Extrato de Lançamentos</span>
+                <?php } ?>
                 <br class="visible-xs-block">
                 <?= $monthFilterButtons ?? null ?>
             </h2>
@@ -189,7 +195,11 @@ if (!$results) {
     <div class="panel panel-midnightblue">
         <div class="panel-heading">
             <h2>
-                <span style='margin-right: 10px !important;'>Extrato de Lançamentos</span>
+                <?php if ($search) { ?>
+                    <span style='margin-right: 10px !important;'>Pesquisando: <?= $search ?></span>
+                <?php } else { ?>
+                    <span style='margin-right: 10px !important;'>Extrato de Lançamentos</span>
+                <?php } ?>
                 <br class="visible-xs-block">
                 <?= $monthFilterButtons ?>
             </h2>
@@ -329,11 +339,11 @@ if (!$results) {
                     echo '<td class="idLancamento hidden">' . $r->id_lancamento . '</td>';
                     echo '<td class="font-weight-bold" title="' . $diaDaSemana . '">' . $dataLancamentos . '</td>';
                     echo '<td class="font-weight-bold"><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Ver detalhes" idLancamento="' .
-                        $r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
-                        $dataLancamentos . '" pagamento="' . $dataPagamento . '" baixado="' .
-                        $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">' .
-                        strtoupper($r->descricao) . $iconObs . $iconInvoice . $iconExpense .
-                        '<br><span class="small" style="color: grey;">' . ($fornecedor) . '</span></a></td>';
+                            $r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
+                            $dataLancamentos . '" pagamento="' . $dataPagamento . '" baixado="' .
+                            $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">' .
+                            strtoupper($r->descricao) . $iconObs . $iconInvoice . $iconExpense .
+                            '<br><span class="small" style="color: grey;">' . ($fornecedor) . '</span></a></td>';
                     echo '<td class="font-weight-bold"><span class="valor_parcela" style=" color: ' . $colorValue . '"><span>' . number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small" style="color: grey;">' . ($forma_pgto) . '</td>';
                     echo '<td><span class="text-' . $labelType . '">' . ($iconValue) . '</span> <span class="badge badge-' . $labelType . '">' . ($descriptionType) . '</span>
                             <br>
@@ -341,14 +351,14 @@ if (!$results) {
                     echo '<td>';
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamentos')) {
                         echo '<button type="button" href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Ver detalhes" idLancamento="' .
-                            $r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
-                            $dataLancamentos . '" pagamento="' . $dataPagamento . '" baixado="' .
-                            $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">
+                                $r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
+                                $dataLancamentos . '" pagamento="' . $dataPagamento . '" baixado="' .
+                                $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">
                                 <i class="fas fa-search-plus fa-lg fa-fw"></i></button>';
                         echo '<button type="button" href="#modalCopiar" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm copiar" title="Copiar" idLancamento="' .
-                            $r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
-                            $dataLancamentos . '" pagamento="' . $dataPagamento . '" baixado="' .
-                            $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">
+                                $r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
+                                $dataLancamentos . '" pagamento="' . $dataPagamento . '" baixado="' .
+                                $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">
                                 <i class="fass fa-copy fa-lg fa-fw"></i></button>';
                     }
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamentos')) {
@@ -648,27 +658,27 @@ if (!$results) {
                     echo '<td class="idLancamento hidden">' . $r->id_lancamento . '</td>';
                     echo '<td class="font-weight-bold">' . $dataLancamentos . '</td>';
                     echo '<td class="font-weight-bold"><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Detalhes" idLancamento="' .
-                        $r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
-                        $dataLancamentos . '" pagamento="' . $dataPagamento . '" baixado="' .
-                        $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">' .
-                        strtoupper($r->descricao) . $iconObs . $iconExpense .
-                        '<br><span class="small" style="color: grey;">' . ($fornecedor) . '</span></a></td>';
+                            $r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
+                            $dataLancamentos . '" pagamento="' . $dataPagamento . '" baixado="' .
+                            $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">' .
+                            strtoupper($r->descricao) . $iconObs . $iconExpense .
+                            '<br><span class="small" style="color: grey;">' . ($fornecedor) . '</span></a></td>';
                     echo '<td class="font-weight-bold"><span class="valor_parcela" style=" color: ' . $colorValue . '"><span>' .
-                        number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small" style="color: grey;">' . ($forma_pgto) . '</td>';
+                            number_format($r->valor, 2, ',', '.') . '</span></span><br><span class="small" style="color: grey;">' . ($forma_pgto) . '</td>';
                     echo '<td><span class="text-' . $labelType . '">' . ($iconValue) . '</span> <span class="badge badge-' . $labelType . '">' . ($descriptionType) . '</span>
                             <br>
                             <span class="text-' . $label_status . '">' . ($iconTipo) . '</span> <span class="badge badge-' . $label_status . '">' . ($status) . '</span></td>';
                     echo '<td>';
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamentos')) {
                         echo '<button type="button" href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Detalhes" idLancamento="' .
-                            $r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
-                            $dataLancamentos . '" pagamento="' . $dataPagamento . '" baixado="' .
-                            $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">
+                                $r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
+                                $dataLancamentos . '" pagamento="' . $dataPagamento . '" baixado="' .
+                                $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">
                                 <i class="fas fa-search-plus fa-lg fa-fw"></i></button>';
                         echo '<button type="button" href="#modalCopiar" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm copiar" title="Copiar" idLancamento="' .
-                            $r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
-                            $dataLancamentos . '" pagamento="' . $dataPagamento . '" baixado="' .
-                            $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">
+                                $r->id_lancamento . '" descricao="' . $r->descricao . '" observacoes="' . nl2br($r->observacoes) . '" valor="' . $valor . '" vencimento="' .
+                                $dataLancamentos . '" pagamento="' . $dataPagamento . '" baixado="' .
+                                $r->baixado . '" fornecedor="' . $r->cliente_fornecedor . '" formaPgto="' . $r->forma_pgto . '" tipo="' . $r->tipo . '" oculto="' . $r->oculto . '">
                                 <i class="fas fa-copy fa-lg fa-fw"></i></button>';
                     }
                     if ($this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamentos')) {
@@ -716,7 +726,7 @@ if (!$results) {
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title">Filtrar lançamentos</h4>
             </div>
-            <form action="<?php echo current_url(); ?>" method="get" id="form_filtro" autocomplete="off">
+            <form method="get" id="form_filtro" autocomplete="off">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-lg-6">
@@ -753,11 +763,7 @@ if (!$results) {
                             <label class="tooltips font-weight-bold" title="Filtrar lançamentos por período específico">Período <i class="fa fa-info-circle fa-fw"></i></label>
                             <select name="periodo" id="select_periodo" class="form-control">
                                 <option value="">
-                                    << Selecione>>
-                                </option>
-                                <option value="todos" <?php if ($periodo_lancamentos == 'todos') {
-                                    echo 'selected';
-                                } ?>>Todos
+                                    << Selecione >>
                                 </option>
                                 <option value="3dias" <?php if ($periodo_lancamentos == '3dias') {
                                     echo 'selected';
@@ -787,9 +793,13 @@ if (!$results) {
                                     echo 'selected';
                                 } ?>>Últimos 90 dias
                                 </option>
+                                <option value="todos" <?php if ($periodo_lancamentos == 'todos') {
+                                    echo 'selected';
+                                } ?>>Todos
+                                </option>
                                 <option value="mensal" <?php if (
-                                    $periodo_lancamentos == 'mensal' ||
-                                    !$periodo_lancamentos
+                                        $periodo_lancamentos == 'mensal' ||
+                                        (!$periodo_lancamentos && !$search)
                                 ) {
                                     echo 'selected';
                                 } ?>>MÊS/ANO ESPECÍFICOS
@@ -865,6 +875,7 @@ if (!$results) {
                     </button>
                     <button class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Filtrar</button>
                 </div>
+                <input type="hidden" name="search" value="<?= $search ?>"/>
             </form>
         </div>
     </div>
@@ -1423,6 +1434,7 @@ if (!$results) {
                         </div> -->
                     </div>
                 </div>
+                <input type="hidden" name="search" value="<?= $search ?>"/>
             </form>
         </div>
     </div>
@@ -1468,7 +1480,7 @@ if (!$results) {
 <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
-            <form id="formSearch" action="<?= base_url('financeiro/lancamentos/pesquisa') ?>" method="get">  <!-- adicionar no form a rota para método do controller que irá persistir a config do usuario em DB -->
+            <form id="formSearch" method="get">
                 <div class="modal-body">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                     <p class="font-weight-bold">Pesquisar por: </p>

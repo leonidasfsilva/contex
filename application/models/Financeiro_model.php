@@ -9,12 +9,17 @@ class Financeiro_model extends CI_Model
 		parent::__construct();
 	}
 	
-	function get($table, $fields, $id_usuario, $where = null, $limit = null, $rows = 0, $perpage = 0, $start = 0, $order_by = null, $one = false)
+	function get($table, $fields, $id_usuario, $where = null, $limit = null, $rows = 0, $perpage = 0, $start = 0, $order_by = null, $one = false, $searchTerm = null)
 	{
 		$this->db->select($fields);
 		$this->db->from($table);
 		$this->db->limit($perpage, $start);
-		
+
+        if ($searchTerm) {
+            $value = $this->db->escape_like_str($searchTerm);
+            $this->db->where("(descricao LIKE '%$value%' || cliente_fornecedor LIKE '%$value%' || observacoes LIKE '%$value%')");
+        }
+
 		if ($where) {
 			$this->db->where($where . ' AND status = 1 AND id_usuario = ' . $id_usuario);
 		} else {
@@ -45,12 +50,17 @@ class Financeiro_model extends CI_Model
 		return !$one ? $query->result() : $query->row();
 	}
 	
-	function getHiddenItems($table, $fields, $id_usuario, $where = null, $order_by = null, $one = null)
+	function getHiddenItems($table, $fields, $id_usuario, $where = null, $order_by = null, $one = null, $searchTerm = null)
 	{
 		$this->db->select($fields);
 		$this->db->from($table);
-		
-		if ($where) {
+
+        if ($searchTerm) {
+            $value = $this->db->escape_like_str($searchTerm);
+            $this->db->where("(descricao LIKE '%$value%' || cliente_fornecedor LIKE '%$value%' || observacoes LIKE '%$value%')");
+        }
+
+        if ($where) {
 			$this->db->where($where . ' AND status = 1 AND oculto = 1 AND id_usuario = ' . $id_usuario);
 		} else {
 			$this->db->where('status = 1 AND oculto = 1 AND id_usuario = ' . $id_usuario);

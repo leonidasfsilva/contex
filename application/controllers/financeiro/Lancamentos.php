@@ -11,6 +11,25 @@ class Lancamentos extends CI_Controller
 
     protected $global_url;
     protected $defaultMonthUser;
+    protected $defaultYearsList;
+    protected $status;
+    protected $tipo;
+    protected $periodo;
+    protected $inicio;
+    protected $fim;
+    protected $start;
+    protected $perPage;
+    protected $totalRows;
+    protected $referenceMonth;
+    protected $preReferenceMonth;
+    protected $nextReferenceMonth;
+    protected $referenceYear;
+    protected $prevReferenceYear;
+    protected $nextReferenceYear;
+    protected $where;
+    protected $limit;
+    protected $orderBy;
+    protected $queryString;
 
     public function __construct()
     {
@@ -26,6 +45,27 @@ class Lancamentos extends CI_Controller
         $this->data['menuFinanceiro'] = 'Lancamentos';
         $this->global_url             = base_url('financeiro/lancamentos');
         $this->defaultMonthUser       = $this->configs_model->getMesPadraoUsuario(getUserId()) ?? null;
+        $this->defaultYearsList       = getYearsList();
+
+        $this->status             = $_GET['status'] ?? null;
+        $this->tipo               = $_GET['tipo'] ?? null;
+        $this->periodo            = $_GET['periodo'] ?? null;
+        $this->inicio             = $_GET['dataInicial'] ?? null;
+        $this->fim                = $_GET['dataFinal'] ?? null;
+        $this->start              = $_GET['per_page'] ?? null;
+        $this->referenceMonth     = $_GET['mesReferencia'] ?? null;
+        $this->referenceYear      = $_GET['anoReferencia'] ?? null;
+        $this->preReferenceMonth  = null;
+        $this->nextReferenceMonth = null;
+        $this->prevReferenceYear  = null;
+        $this->nextReferenceYear  = null;
+        $this->where              = null;
+        $this->perPage            = null;
+        $this->totalRows          = null;
+        $this->limit              = null;
+        $this->orderBy            = null;
+        $this->queryString        = null;
+
         integracaoDespesasUsuario();
     }
 
@@ -42,245 +82,41 @@ class Lancamentos extends CI_Controller
             redirect(base_url());
         }
 
-        $status         = $_GET['status'] ?? null;
-        $tipo           = $_GET['tipo'] ?? null;
-        $periodo        = $_GET['periodo'] ?? null;
-        $inicio         = $_GET['dataInicial'] ?? null;
-        $fim            = $_GET['dataFinal'] ?? null;
-        $start          = $_GET['per_page'] ?? null;
-        $referenceMonth = $_GET['mesReferencia'] ?? null;
-        $referenceYear  = $_GET['anoReferencia'] ?? null;
-        $where          = null;
-        $limit          = null;
-        $year           = date('Y');
-        $keys           = range(2019, $year + 3);
-        $yearsList      = $keys;
+        $params['search'] = $this->input->get('search', TRUE);
+        $this->getPreBuildFunctions($params);
+        $this->buildPagination();
 
-        if ($this->defaultMonthUser) {
-            //TODO: pensar em uma outra abordagem para o cenario em que o mes corrente
-            // é dezembro e o usuario deseja definir como seu mes padrao, janeiro do proximo ano
-            // (adicionar no form um select para o ano, talvez)
-
-            // if (date('m') > $this->defaultMonthUser) {
-            //     $referenceYear = $year + 1;
-            // }
-        }
-
-        $order_by = [
-            'data_lancamento' => 'desc',
-            'id_lancamento'   => 'desc',
-        ];
-
-        switch ($periodo) {
-            case 'todos':
-                break;
-            case '3dias':
-                $semana = $this->getLastThreeDays();
-                $where  = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
-                break;
-            case '5dias':
-                $semana = $this->getLastFiveDays();
-                $where  = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
-                break;
-            case '7dias':
-                $semana = $this->getLastSevenDays();
-                $where  = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
-                break;
-            case '15dias':
-                $semana = $this->getLastFifteenDays();
-                $where  = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
-                break;
-            case '30dias':
-                $semana = $this->getLastTirthyDays();
-                $where  = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
-                break;
-            case '60dias':
-                $semana = $this->getLastSixtyDays();
-                $where  = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
-                break;
-            case '90dias':
-                $semana = $this->getLastNinetyDays();
-                $where  = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
-                break;
-            case 'especifico':
-                if (isset($inicio) && isset($fim) && $inicio != null && $fim != null) {
-                    $inicio = explode('/', $inicio);
-                    $inicio = $inicio[2] . '-' . $inicio[1] . '-' . $inicio[0];
-
-                    $fim = explode('/', $fim);
-                    $fim = $fim[2] . '-' . $fim[1] . '-' . $fim[0];
-
-                    if (!isset($where)) {
-                        $where = 'data_lancamento BETWEEN "' . $inicio . '" AND "' . $fim . '"';
-                    } else {
-                        $where .= ' AND data_lancamento BETWEEN "' . $inicio . '" AND "' . $fim . '"';
-                    }
-                }
-                break;
-            case 'mensal':
-                if (isset($referenceMonth) && $referenceMonth) {
-                    $startEndDate = buildStartEndDate($referenceMonth, ($referenceYear) ?: null);
-
-                    if (!isset($referenceYear) && !$referenceYear) {
-                        $referenceYear = $startEndDate['referenceYear'];
-                    }
-
-                    if (!isset($where)) {
-                        $where = "data_lancamento BETWEEN '{$startEndDate['startDate']}' AND '{$startEndDate['endDate']}'";
-                    } else {
-                        $where .= " AND data_lancamento BETWEEN '{$startEndDate['startDate']}' AND '{$startEndDate['endDate']}'";
-                    }
-                }
-                break;
-            default:
-                $startEndDate   = buildStartEndDate($this->defaultMonthUser, ($referenceYear) ?: null);
-                $referenceMonth = $startEndDate['referenceMonth'];
-
-                if (!isset($referenceYear) && !$referenceYear) {
-                    $referenceYear = $startEndDate['referenceYear'];
-                }
-
-                if (!isset($where)) {
-                    $where = "data_lancamento BETWEEN '{$startEndDate['startDate']}' AND '{$startEndDate['endDate']}'";
-                } else {
-                    $where .= " AND data_lancamento BETWEEN '{$startEndDate['startDate']}' AND '{$startEndDate['endDate']}'";
-                }
-
-                if ($this->financeiro_model->countLancamentos(getUserId(), $where) > 20) {
-                    // $limit = 20;
-                    // $start = $this->financeiro_model->countLancamentos(getUserId()) - $limit;
-                }
-                break;
-        }
-
-        if (isset($status) && $status != null) {
-            if ($status == 'pendente') {
-                if (!isset($where)) {
-                    $where = 'baixado = 0';
-                } else {
-                    $where .= ' AND baixado = 0';
-                }
-            } elseif ($status == 'efetivado') {
-                if (!isset($where)) {
-                    $where = 'baixado = 1';
-                } else {
-                    $where .= ' AND baixado = 1';
-                }
-            }
-        }
-
-        if ($tipo) {
-            if ($tipo == 'entrada') {
-                if (!isset($where)) {
-                    $where = 'tipo = 1';
-                } else {
-                    $where .= ' AND tipo = 1';
-                }
-            } elseif ($tipo == 'saida') {
-                if (!isset($where)) {
-                    $where = 'tipo = 2';
-                } else {
-                    $where .= ' AND tipo = 2';
-                }
-            }
-        }
-
-        if ($referenceMonth) {
-            $this->data['month']     = translateMonth($referenceMonth);
-            $this->data['nextMonth'] = translateMonth($referenceMonth + 1);
-            $this->data['prevMonth'] = translateMonth($referenceMonth - 1);
-            $prevReferenceMonth      = $referenceMonth - 1;
-            $nextReferenceMonth      = $referenceMonth + 1;
-            $prevReferenceYear       = $referenceYear;
-            $nextReferenceYear       = $referenceYear;
-        }
-
-        if ($referenceMonth == 12) {
-            $nextReferenceMonth = 1;
-            $nextReferenceYear++;
-        }
-
-        if ($referenceMonth == 1) {
-            $prevReferenceMonth = 12;
-            $prevReferenceYear--;
-        }
-
-        for ($m = 1; $m <= 12; $m++) {
-            $currentMonth                                                             = buildStartEndDate(translateMonth($m, true, true), $referenceYear);
-            $this->data['monthList'][$currentMonth["referenceMonth"]]['name']         = translateMonth($m, true, true) . ' - ' . translateMonth($m, true);
-            $this->data['monthList'][$currentMonth["referenceMonth"]]['notification'] = $this->financeiro_model->getLancamentosPendentes(getUserId(), $currentMonth['startDate'], $currentMonth['endDate']);
-        }
-
-        $query_string = null;
-        $lastElement  = end($_GET);
-
-        foreach ($_GET as $key => $value) {
-            if ($key != 'per_page') {
-                if ($value == $lastElement) {
-                    $query_string .= $key . '=' . $value;
-                    continue;
-                }
-                $query_string .= $key . '=' . $value . '&';
-            }
-        }
-
-        $config['base_url']          = base_url('financeiro/lancamentos');
-        $config['suffix']            = '&' . $query_string;
-        $config['first_url']         = $config['base_url'] . '?' . $query_string;
-        $config['total_rows']        = $this->financeiro_model->countLancamentos(getUserId(), $where ?? null);
-        $config['per_page']          = 30;
-        $config['page_query_string'] = true;
-        $config['next_link']         = '<i class="fa-solid fa-forward"></i>';
-        $config['prev_link']         = '<i class="fa-solid fa-backward"></i>';
-        $config['full_tag_open']     = '<ul class="pagination pagination-sm">';
-        $config['full_tag_close']    = '</ul>';
-        $config['num_tag_open']      = '<li>';
-        $config['num_tag_close']     = '</li>';
-        $config['cur_tag_open']      = '<li class="disabled"><a style="background-color:#337ab7; color: white" class="js:"><b>';
-        $config['cur_tag_close']     = '</b></a></li>';
-        $config['prev_tag_open']     = '<li>';
-        $config['prev_tag_close']    = '</li>';
-        $config['next_tag_open']     = '<li>';
-        $config['next_tag_close']    = '</li>';
-        $config['first_link']        = 'Primeira';
-        $config['last_link']         = 'Última';
-        $config['first_tag_open']    = '<li>';
-        $config['first_tag_close']   = '</li>';
-        $config['last_tag_open']     = '<li>';
-        $config['last_tag_close']    = '</li>';
-
-        $this->pagination->initialize($config);
-
-        $this->data['yearsList']          = $yearsList;
-        $this->data['referenceMonth']     = $referenceMonth;
-        $this->data['referenceYear']      = $referenceYear;
-        $this->data['prevReferenceMonth'] = translateMonth($prevReferenceMonth ?? null, true, true);
-        $this->data['nextReferenceMonth'] = translateMonth($nextReferenceMonth ?? null, true, true);
-        $this->data['prevReferenceYear']  = $prevReferenceYear ?? null;
-        $this->data['nextReferenceYear']  = $nextReferenceYear ?? null;
+        $this->data['yearsList']          = $this->defaultYearsList;
+        $this->data['referenceMonth']     = $this->referenceMonth;
+        $this->data['referenceYear']      = $this->referenceYear;
+        $this->data['defaultMonth']       = $this->defaultMonthUser;
+        $this->data['prevReferenceMonth'] = translateMonth($this->prevReferenceMonth ?? null, true, true);
+        $this->data['nextReferenceMonth'] = translateMonth($this->nextReferenceMonth ?? null, true, true);
+        $this->data['prevReferenceYear']  = $this->prevReferenceYear ?? null;
+        $this->data['nextReferenceYear']  = $this->nextReferenceYear ?? null;
         $this->data['total_provisorio']   = $this->financeiro_model->getTotalProvisorio(getUserId());
         $this->data['saidas_pendentes']   = $this->financeiro_model->getSaidasPendentes(getUserId());
         $this->data['entradas_pendentes'] = $this->financeiro_model->getEntradasPendentes(getUserId());
         $this->data['total']              = $this->financeiro_model->getTotal(getUserId());
         $this->data['formasPagamento']    = $this->financeiro_model->getFormasPagamento();
-        $this->data['defaultMonth']       = $this->defaultMonthUser;
         $this->data['results']            = $this->financeiro_model->get(
             'lancamentos',
             '*',
             getUserId(),
-            $where,
-            $limit,
-            $config['total_rows'],
-            $config['per_page'],
-            $start,
-            $order_by ? $order_by : 'desc'
+            $this->where,
+            $this->limit,
+            $this->totalRows,
+            $this->perPage,
+            $this->start,
+            $this->orderBy ?: 'desc'
         );
-        $this->data['hiddenItems']        = $this->financeiro_model->getHiddenItems(
+
+        $this->data['hiddenItems'] = $this->financeiro_model->getHiddenItems(
             'lancamentos',
             '*',
             getUserId(),
-            $where,
-            $order_by ? $order_by : 'desc'
+            $this->where,
+            $this->orderBy ?: 'desc'
         );
 
         $this->data['view'] = 'financeiro/lancamentos';
@@ -386,8 +222,8 @@ class Lancamentos extends CI_Controller
 
         $vencimentoRequest = $this->input->post('vencimento') ?? null;
         $vencimento        = date('Y-m-d');
-        $pagamento   = $this->input->post('pagamento');
-        $observacoes = sanitizarString($this->input->post('observacoes')) ?? null;
+        $pagamento         = $this->input->post('pagamento');
+        $observacoes       = sanitizarString($this->input->post('observacoes')) ?? null;
         $queryString       = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_QUERY);
 
         if ($vencimentoRequest) {
@@ -661,7 +497,7 @@ class Lancamentos extends CI_Controller
         }
     }
 
-    public function pesquisa()
+    public function _pesquisa()
     {
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
             redirect('mxcode/login');
@@ -671,13 +507,45 @@ class Lancamentos extends CI_Controller
             $this->session->set_flashdata('erro', 'Método não permitido.');
             redirect($this->global_url);
         }
+        $search             = $this->input->get('search', TRUE);
+        $params['base_url'] = base_url('financeiro/lancamentos/pesquisa');
+        $params['per_page'] = 20;
+        $params['search']   = $search;
 
-        $termo = $this->input->get('search');
+        $this->getPreBuildFunctions($params);
+        $this->buildPagination($params);
         $this->load->library('pagination');
-        $this->data['total']           = $this->financeiro_model->getTotal(getUserId());
-        $this->data['formasPagamento'] = $this->financeiro_model->getFormasPagamento();
-        $this->data['results']         = $this->financeiro_model->pesquisa($termo, getUserId());
-        $this->data['view']            = 'financeiro/lancamentos';
+        $this->data['yearsList']          = $this->defaultYearsList;
+        $this->data['referenceMonth']     = $this->referenceMonth;
+        $this->data['referenceYear']      = $this->referenceYear;
+        $this->data['defaultMonth']       = $this->defaultMonthUser;
+        $this->data['prevReferenceMonth'] = translateMonth($this->prevReferenceMonth ?? null, true, true);
+        $this->data['nextReferenceMonth'] = translateMonth($this->nextReferenceMonth ?? null, true, true);
+        $this->data['prevReferenceYear']  = $this->prevReferenceYear ?? null;
+        $this->data['nextReferenceYear']  = $this->nextReferenceYear ?? null;
+        $this->data['total']              = $this->financeiro_model->getTotal(getUserId());
+        $this->data['formasPagamento']    = $this->financeiro_model->getFormasPagamento();
+        $this->data['results']            = $this->financeiro_model->get(
+            'lancamentos',
+            '*',
+            getUserId(),
+            $this->where,
+            $this->limit,
+            $config['total_rows'] ?? null,
+            $config['per_page'] ?? null,
+            $this->perPage,
+            $this->orderBy ?: 'desc',
+        );
+
+        $this->data['hiddenItems'] = $this->financeiro_model->getHiddenItems(
+            'lancamentos',
+            '*',
+            getUserId(),
+            $this->where,
+            $this->orderBy ?: 'desc',
+        );
+
+        $this->data['view'] = 'financeiro/lancamentos';
         $this->load->view('tema/topo', $this->data);
     }
 
@@ -819,5 +687,216 @@ class Lancamentos extends CI_Controller
         $ate        = $ano . "-" . $mes . "-" . $qtdDiasMes;
 
         return array($inicia, $ate);
+    }
+
+    protected function getPreBuildFunctions($params = null)
+    {
+        $this->orderBy = [
+            'data_lancamento' => 'desc',
+            'id_lancamento'   => 'desc',
+        ];
+
+        if ($params) {
+            if (isset($params['search'])) {
+                $this->where = sprintf(
+                    "(descricao LIKE '%%%1\$s%%' || cliente_fornecedor LIKE '%%%1\$s%%' || observacoes LIKE '%%%1\$s%%')",
+                    $params['search']
+                );
+                // if (!$this->start)
+                $this->periodo = 'todos';
+            }
+        }
+
+        switch ($this->periodo) {
+            case 'todos':
+                $startEndDate = buildStartEndDate($this->defaultMonthUser, ($this->referenceYear) ?: null);
+                // $this->referenceMonth = $startEndDate['referenceMonth'];
+
+                if (!isset($this->referenceYear) && !$this->referenceYear) {
+                    $this->referenceYear = $startEndDate['referenceYear'];
+                }
+                break;
+            case '3dias':
+                $semana      = $this->getLastThreeDays();
+                $this->where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
+                break;
+            case '5dias':
+                $semana      = $this->getLastFiveDays();
+                $this->where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
+                break;
+            case '7dias':
+                $semana      = $this->getLastSevenDays();
+                $this->where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
+                break;
+            case '15dias':
+                $semana      = $this->getLastFifteenDays();
+                $this->where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
+                break;
+            case '30dias':
+                $semana      = $this->getLastTirthyDays();
+                $this->where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
+                break;
+            case '60dias':
+                $semana      = $this->getLastSixtyDays();
+                $this->where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
+                break;
+            case '90dias':
+                $semana      = $this->getLastNinetyDays();
+                $this->where = 'data_lancamento BETWEEN "' . $semana[0] . '" AND "' . $semana[1] . '"';
+                break;
+            case 'especifico':
+                if (isset($this->inicio) && isset($this->fim) && $this->inicio != null && $this->fim != null) {
+                    $this->inicio = explode('/', $this->inicio);
+                    $this->inicio = $this->inicio[2] . '-' . $this->inicio[1] . '-' . $this->inicio[0];
+
+                    $this->fim = explode('/', $this->fim);
+                    $this->fim = $this->fim[2] . '-' . $this->fim[1] . '-' . $this->fim[0];
+
+                    if (!isset($this->where)) {
+                        $this->where = 'data_lancamento BETWEEN "' . $this->inicio . '" AND "' . $this->fim . '"';
+                    } else {
+                        $this->where .= ' AND data_lancamento BETWEEN "' . $this->inicio . '" AND "' . $this->fim . '"';
+                    }
+                }
+                break;
+            case 'mensal':
+                if (isset($this->referenceMonth) && $this->referenceMonth) {
+                    $startEndDate = buildStartEndDate($this->referenceMonth, ($this->referenceYear) ?: null);
+
+                    if (!isset($this->referenceYear) && !$this->referenceYear) {
+                        $this->referenceYear = $startEndDate['referenceYear'];
+                    }
+
+                    if (!isset($this->where)) {
+                        $this->where = "data_lancamento BETWEEN '{$startEndDate['startDate']}' AND '{$startEndDate['endDate']}'";
+                    } else {
+                        $this->where .= " AND data_lancamento BETWEEN '{$startEndDate['startDate']}' AND '{$startEndDate['endDate']}'";
+                    }
+                }
+                break;
+            default:
+                $startEndDate         = buildStartEndDate($this->defaultMonthUser, ($this->referenceYear) ?: null);
+                $this->referenceMonth = $startEndDate['referenceMonth'];
+
+                if (!isset($this->referenceYear) && !$this->referenceYear) {
+                    $this->referenceYear = $startEndDate['referenceYear'];
+                }
+
+                if (!isset($this->where)) {
+                    $this->where = "data_lancamento BETWEEN '{$startEndDate['startDate']}' AND '{$startEndDate['endDate']}'";
+                } else {
+                    $this->where .= " AND data_lancamento BETWEEN '{$startEndDate['startDate']}' AND '{$startEndDate['endDate']}'";
+                }
+
+                if ($this->financeiro_model->countLancamentos(getUserId(), $this->where) > 20) {
+                    // $limit = 20;
+                    // $start = $this->financeiro_model->countLancamentos(getUserId()) - $limit;
+                }
+                break;
+        }
+
+        if ($this->status) {
+            if ($this->status == 'pendente') {
+                if (!isset($this->where)) {
+                    $this->where = 'baixado = 0';
+                } else {
+                    $this->where .= ' AND baixado = 0';
+                }
+            }
+
+            if ($this->status == 'efetivado') {
+                if (!isset($this->where)) {
+                    $this->where = 'baixado = 1';
+                } else {
+                    $this->where .= ' AND baixado = 1';
+                }
+            }
+        }
+
+        if ($this->tipo) {
+            if ($this->tipo == 'entrada') {
+                if (!isset($this->where)) {
+                    $this->where = 'tipo = 1';
+                } else {
+                    $this->where .= ' AND tipo = 1';
+                }
+            } elseif ($this->tipo == 'saida') {
+                if (!isset($this->where)) {
+                    $this->where = 'tipo = 2';
+                } else {
+                    $this->where .= ' AND tipo = 2';
+                }
+            }
+        }
+
+        if ($this->referenceMonth) {
+            $this->data['month']      = translateMonth($this->referenceMonth);
+            $this->data['nextMonth']  = translateMonth($this->referenceMonth + 1);
+            $this->data['prevMonth']  = translateMonth($this->referenceMonth - 1);
+            $this->prevReferenceMonth = $this->referenceMonth - 1;
+            $this->nextReferenceMonth = $this->referenceMonth + 1;
+            $this->prevReferenceYear  = $this->referenceYear;
+            $this->nextReferenceYear  = $this->referenceYear;
+        }
+
+        if ($this->referenceMonth == 12) {
+            $this->nextReferenceMonth = 1;
+            $this->nextReferenceYear++;
+        };
+
+        if ($this->referenceMonth == 1) {
+            $this->prevReferenceMonth = 12;
+            $this->prevReferenceYear--;
+        }
+
+        for ($m = 1; $m <= 12; $m++) {
+            $currentMonth                                                             = buildStartEndDate(translateMonth($m, true, true), $this->referenceYear);
+            $this->data['monthList'][$currentMonth["referenceMonth"]]['name']         = translateMonth($m, true, true) . ' - ' . translateMonth($m, true);
+            $this->data['monthList'][$currentMonth["referenceMonth"]]['notification'] = $this->financeiro_model->getLancamentosPendentes(getUserId(), $currentMonth['startDate'], $currentMonth['endDate']);
+        }
+    }
+
+    protected function buildPagination($params = null)
+    {
+        $lastElement = end($_GET);
+
+        foreach ($_GET as $key => $value) {
+            if ($key != 'per_page') {
+                if ($value == $lastElement) {
+                    $this->queryString .= $key . '=' . $value;
+                    continue;
+                }
+                $this->queryString .= $key . '=' . $value . '&';
+            }
+        }
+
+        $config['base_url']          = base_url(uri_string());
+        $config['suffix']            = '&' . $this->queryString;
+        $config['first_url']         = sprintf('%s?%s', $config['base_url'], $this->queryString);
+        $config['total_rows']        = $this->financeiro_model->countLancamentos(getUserId(), $this->where ?? null);
+        $config['per_page']          = $params['per_page'] ?? 30;
+        $config['page_query_string'] = true;
+        $config['next_link']         = '<i class="fa-solid fa-forward"></i>';
+        $config['prev_link']         = '<i class="fa-solid fa-backward"></i>';
+        $config['full_tag_open']     = '<ul class="pagination pagination-sm">';
+        $config['full_tag_close']    = '</ul>';
+        $config['num_tag_open']      = '<li>';
+        $config['num_tag_close']     = '</li>';
+        $config['cur_tag_open']      = '<li class="disabled"><a style="background-color:#337ab7; color: white" class="js:"><b>';
+        $config['cur_tag_close']     = '</b></a></li>';
+        $config['prev_tag_open']     = '<li>';
+        $config['prev_tag_close']    = '</li>';
+        $config['next_tag_open']     = '<li>';
+        $config['next_tag_close']    = '</li>';
+        $config['first_link']        = 'Primeira';
+        $config['last_link']         = 'Última';
+        $config['first_tag_open']    = '<li>';
+        $config['first_tag_close']   = '</li>';
+        $config['last_tag_open']     = '<li>';
+        $config['last_tag_close']    = '</li>';
+        $this->perPage               = $config['per_page'];
+        $this->totalRows             = $config['total_rows'];
+
+        $this->pagination->initialize($config);
     }
 }
