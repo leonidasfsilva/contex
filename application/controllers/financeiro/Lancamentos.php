@@ -82,7 +82,7 @@ class Lancamentos extends CI_Controller
             redirect(base_url());
         }
 
-        $params['search'] = $this->input->get('search', TRUE);
+        $params['search'] = empty($this->input->get('search', TRUE)) ? null : $this->input->get('search', TRUE);
         $this->getPreBuildFunctions($params);
         $this->buildPagination();
 
