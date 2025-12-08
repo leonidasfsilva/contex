@@ -122,7 +122,7 @@ class Mikrotik extends CI_Controller
     public function sendEmail()
     {
         if (!$this->token || !$this->authenticated) {
-            gravaLog(null, sprintf('HTTP_USER_AGENT', $_SERVER['HTTP_USER_AGENT']), null, 'Unauthorized: Tentativa recusada de envio de email de relatório Mikrotik', getenv("REMOTE_ADDR"));
+            gravaLog(null, sprintf('HTTP_USER_AGENT: %s', $_SERVER['HTTP_USER_AGENT']), null, 'Unauthorized: Tentativa recusada de envio de email de relatório Mikrotik', getenv("REMOTE_ADDR"));
             return $this->response(
                 ['response' => 'Error 401 Unauthorized'],
                 401
