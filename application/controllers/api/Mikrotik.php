@@ -23,6 +23,8 @@ class Mikrotik extends CI_Controller
         $userAgent = strstr($userAgent, '/', true);
 
         if (ENVIRONMENT == 'production') {
+            gravaLog(null, $userAgent, null, 'User agent identification', getenv("REMOTE_ADDR"));
+
             if ($userAgent != 'mikrotik') {
                 exit(0);
             }
