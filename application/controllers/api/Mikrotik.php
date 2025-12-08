@@ -24,7 +24,6 @@ class Mikrotik extends CI_Controller
 
         if (ENVIRONMENT == 'production') {
             if ($userAgent != 'mikrotik') {
-                echo 'FAILED!';
                 exit(0);
             }
         }
