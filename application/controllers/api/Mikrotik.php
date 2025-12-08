@@ -19,6 +19,17 @@ class Mikrotik extends CI_Controller
     {
         parent::__construct();
 
+        $userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);
+        $userAgent = strstr($userAgent, '/', true);
+
+        if (ENVIRONMENT == 'production') {
+            if ($userAgent != 'mikrotik') {
+                echo 'FAILED!';
+                exit(0);
+            }
+        }
+
+        // Check if the word was found
         if ($_GET) {
             if ($this->input->get('token')) {
                 $this->token = $this->input->get('token');
