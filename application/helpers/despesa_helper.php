@@ -107,7 +107,7 @@ function vinculoAutomaticoDespesa($idDespesa)
     for ($i = 1; $i <= $monthsCount; $i++) {
         if ($lancamentos) {
             $monthsCount = 4;
-            if ($monthReference < $lancamentos[0]->mes_referencia) {
+            if ($monthReference < $lancamentos[0]->mes_referencia && $yearReference == $lancamentos[0]->ano_referencia) {
                 continue;
             }
         }
