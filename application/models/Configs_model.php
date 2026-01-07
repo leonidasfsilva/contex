@@ -293,8 +293,17 @@ class Configs_model extends CI_Model
 			->get('configs_lancamentos')
 			->row('mes_padrao');
 	}
-	
-	public function setMesPadraoUsuario($data)
+
+	public function getAnoPadraoUsuario($idUsuario)
+	{
+		return $this->db
+			->where('id_usuario', $idUsuario)
+			->where('ano_padrao IS NOT NULL', null, false)
+			->get('configs_lancamentos')
+			->row('ano_padrao');
+	}
+
+	public function setMesAnoPadraoUsuario($data)
 	{
 		$this->db->insert('configs_lancamentos', $data);
 		if ($this->db->affected_rows() == 1) {

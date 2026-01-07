@@ -11,6 +11,7 @@ class Lancamentos extends CI_Controller
 
     protected $global_url;
     protected $defaultMonthUser;
+    protected $defaultYearUser;
     protected $defaultYearsList;
     protected $status;
     protected $tipo;
@@ -21,9 +22,9 @@ class Lancamentos extends CI_Controller
     protected $perPage;
     protected $totalRows;
     protected $referenceMonth;
+    protected $referenceYear;
     protected $preReferenceMonth;
     protected $nextReferenceMonth;
-    protected $referenceYear;
     protected $prevReferenceYear;
     protected $nextReferenceYear;
     protected $where;
@@ -45,6 +46,7 @@ class Lancamentos extends CI_Controller
         $this->data['menuFinanceiro'] = 'Lancamentos';
         $this->global_url             = base_url('financeiro/lancamentos');
         $this->defaultMonthUser       = $this->configs_model->getMesPadraoUsuario(getUserId()) ?? null;
+        $this->defaultYearUser        = $this->configs_model->getAnoPadraoUsuario(getUserId()) ?? null;
         $this->defaultYearsList       = getYearsList();
 
         $this->status             = $_GET['status'] ?? null;
@@ -90,6 +92,7 @@ class Lancamentos extends CI_Controller
         $this->data['referenceMonth']     = $this->referenceMonth;
         $this->data['referenceYear']      = $this->referenceYear;
         $this->data['defaultMonth']       = $this->defaultMonthUser;
+        $this->data['defaultYear']        = $this->defaultYearUser;
         $this->data['prevReferenceMonth'] = translateMonth($this->prevReferenceMonth ?? null, true, true);
         $this->data['nextReferenceMonth'] = translateMonth($this->nextReferenceMonth ?? null, true, true);
         $this->data['prevReferenceYear']  = $this->prevReferenceYear ?? null;
@@ -549,7 +552,7 @@ class Lancamentos extends CI_Controller
         $this->load->view('tema/topo', $this->data);
     }
 
-    public function mesPadrao()
+    public function setMesAnoPadrao()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamentos')) {
             $this->session->set_flashdata('erro', 'Você não tem permissão para configurar o módulo de Lançamentos.');
@@ -568,9 +571,11 @@ class Lancamentos extends CI_Controller
         }
 
         $mes = $this->input->post('mesPadrao');
+        $ano = $this->input->post('anoPadrao');
 
         $data = array(
             'mes_padrao' => !empty($mes) ? $mes : null,
+            'ano_padrao' => !empty($ano) ? $ano : null,
             'id_usuario' => getUserId()
         );
 
@@ -775,7 +780,7 @@ class Lancamentos extends CI_Controller
                 }
                 break;
             default:
-                $startEndDate         = buildStartEndDate($this->defaultMonthUser, ($this->referenceYear) ?: null);
+                $startEndDate         = buildStartEndDate($this->defaultMonthUser, ($this->defaultYearUser) ?: null);
                 $this->referenceMonth = $startEndDate['referenceMonth'];
 
                 if (!isset($this->referenceYear) && !$this->referenceYear) {

@@ -1442,35 +1442,69 @@ if (!$results) {
 
 <!-- Modal SELECAO DE MES PADRAO DO USUARIO -->
 <div class="modal fade" id="modalSelectDefaultMounth" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog">
         <div class="modal-content">
-            <form id="form_default_month" action="<?= base_url('financeiro/lancamentos/mesPadrao'); ?>" method="post">  <!-- adicionar no form a rota para método do controller que irá persistir a config do usuario em DB -->
+            <div class="modal-header bg-default">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title ">Configurações de Lançamentos</h4>
+            </div>
+            <form id="form_default_month" action="<?= base_url('financeiro/lancamentos/setMesAnoPadrao'); ?>" method="post">  <!-- adicionar no form a rota para método do controller que irá persistir a config do usuario em DB -->
                 <div class="modal-body">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <p class="font-weight-bold">Configurações de Lançamentos </p>
-                    <!--                    <p class="font-weight-bold">O mês escolhido será usado como padrão para visualização do módulo de Lançamentos. </p>-->
-                </div>
-                <div class="modal-footer">
                     <div class="row">
-                        <div class="btn-block">
-                            <div class="input-group">
-                                <span class="input-group-addon">Mês padrão:</span>
-                                <select class="form-control" id="mesPadraoSelect" name="mesPadrao">
-                                    <option value="" style="font-style: italic;">
-                                        << Não definido >>
-                                    </option>
-                                    <?php if ($monthList) {
-                                        foreach ($monthList as $index => $month) { ?>
-                                            <option value="<?= $index ?>" <?= ($defaultMonth == $index ? 'selected' : '') ?>>
-                                                <?= $month['name'] ?>
-                                            </option>
-                                        <?php }
-                                    } ?>
-                                </select>
-                            </div>
+                        <div class="form-group col-lg-12">
+                            <label class="tooltips font-weight-bold">
+                                Defina o mês e ano padrão para visualização inicial do módulo de Lançamentos.
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="form-group col-lg-6 col-xs-6">
+                            <label class="tooltips font-weight-bold">
+                                Mês padrão
+                            </label>
+
+                            <select class="form-control" id="mesPadraoSelect" name="mesPadrao">
+                                <option value="" style="font-style: italic;">
+                                    << Não definido >>
+                                </option>
+                                <?php if ($monthList) {
+                                    foreach ($monthList as $index => $month) { ?>
+                                        <option value="<?= $index ?>" <?= ($defaultMonth == $index ? 'selected' : '') ?>>
+                                            <?= $month['name'] ?>
+                                        </option>
+                                    <?php }
+                                } ?>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6 col-xs-6">
+                            <label class="tooltips font-weight-bold">
+                                Ano padrão
+                            </label>
+                            <select class="form-control" id="anoReferenciaSelect" name="anoPadrao">
+                                <option value="" style="font-style: italic;">
+                                    << Não definido >>
+                                </option>
+                                <?php if ($yearsList) {
+                                    foreach ($yearsList as $year) { ?>
+                                        <option value="<?= $year ?>" <?= ($defaultYear == $year ? 'selected' : '') ?>>
+                                            <?= $year ?>
+                                        </option>
+                                    <?php }
+                                } ?>
+                            </select>
                         </div>
                     </div>
                 </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-times fa-fw"></i>
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i>
+                        Salvar
+                    </button>
+                </div>
+                <input class="urlAtual" type="hidden" name="urlAtual" value=""/>
             </form>
         </div>
     </div>
@@ -1552,7 +1586,7 @@ if (!$results) {
     });
 
     $(document).on('change', '#mesPadraoSelect', function () {
-        $("#form_default_month").submit();
+        // $("#form_default_month").submit();
     });
 
     $(document).ready(function ($) {
