@@ -52,6 +52,9 @@
   - `webmaster-devply <webmaster@devply.net>`
 - Quando necessário, usar `git commit --author="webmaster-devply <webmaster@devply.net>" -m "mensagem"`.
 - O push pode continuar usando a credencial Git disponível no ambiente, desde que o PR seja aberto via `gh` como `webmaster-devply`.
+- O hook de commit possui escopo conhecido e determinístico: novo commit -> verifica regra -> incrementa a versão em `application/config/constants.php`.
+- Não gastar comandos/tokens verificando o efeito do hook a cada commit.
+- Verificar o hook apenas se houver erro, arquivo inesperado no status, alteração direta no versionamento/hook ou pedido explícito do desenvolvedor.
 
 ### Pull Requests
 - Criar PRs pelo GitHub CLI autenticado como `webmaster-devply`.
