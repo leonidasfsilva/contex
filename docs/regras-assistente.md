@@ -44,7 +44,7 @@
   - `gh api user --jq .login`
 - O login esperado é `webmaster-devply`.
 - Não expor tokens, chaves ou credenciais no chat.
-- O `gh` foi configurado com armazenamento acessível ao processo do assistente porque o keyring do terminal interativo não estava acessível pelo ambiente do Codex.
+- O `gh` foi configurado com armazenamento acessível ao processo do assistente porque o keyring do terminal interativo pode não estar acessível pelo ambiente do Agente IA.
 
 ### Commits
 - O assistente não deve alterar a configuração global ou local de `user.name`/`user.email` do desenvolvedor sem aprovação explícita.

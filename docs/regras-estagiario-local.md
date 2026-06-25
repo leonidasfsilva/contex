@@ -4,7 +4,7 @@
 
 O projeto Contex possui um assistente local auxiliar, chamado informalmente de **estagiario**.
 
-Esse estagiario foi configurado para executar tarefas auxiliares de codigo localmente, com o objetivo de reduzir uso desnecessario de tokens do Codex em tarefas medias, repetitivas ou bem delimitadas.
+Esse estagiario foi configurado para executar tarefas auxiliares de codigo localmente, com o objetivo de reduzir uso desnecessario de tokens do Agente IA em tarefas medias, repetitivas ou bem delimitadas.
 
 ## Stack Configurada
 
@@ -61,7 +61,7 @@ Nao usar o estagiario local para:
 - alterar multiplos arquivos sensiveis sem supervisao;
 - mexer em branch, commit, push ou PR;
 - executar tarefas diretamente na `master`;
-- substituir a revisao do Codex ou do desenvolvedor senior;
+- substituir a revisao do Agente IA ou do desenvolvedor senior;
 - tomar decisoes de produto ou escopo.
 
 ## Regras de Seguranca
@@ -75,11 +75,11 @@ Nao usar o estagiario local para:
 ## Fluxo Recomendado
 
 ```text
-Desenvolvedor senior -> Codex
-Codex -> pergunta se o estagiario local esta disponivel
-Codex -> delega tarefa pequena e bem delimitada
+Desenvolvedor senior -> Agente IA
+Agente IA -> pergunta se o estagiario local esta disponivel
+Agente IA -> delega tarefa pequena e bem delimitada
 Estagiario -> gera rascunho/diff
-Codex -> revisa, adapta e apresenta ao desenvolvedor
+Agente IA -> revisa, adapta e apresenta ao desenvolvedor
 Desenvolvedor senior -> aprova ou ajusta
 ```
 
