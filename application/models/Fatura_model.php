@@ -772,8 +772,8 @@ class Fatura_model extends CI_Model
             $idUsuario = getUserId();
         }
 
-        $mainQuery = "SELECT
-            lf.*
+        $mainQuery = "SELECT DISTINCT
+            lf.nome_cliente
             FROM lancamentos_faturas lf
             INNER JOIN faturas f
             ON lf.id_fatura = f.id_fatura
@@ -801,7 +801,7 @@ class Fatura_model extends CI_Model
 
         $groupBy     = " GROUP BY lf.nome_cliente";
         $orderBy     = " ORDER BY lf.nome_cliente ASC";
-        $mainQuery   .= $where . $groupBy . $orderBy;
+        $mainQuery   .= $where . $orderBy;
         $resultQuery = $this->db->query($mainQuery);
 
         if ($resultQuery->num_rows() > 0) {
