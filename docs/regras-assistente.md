@@ -30,6 +30,37 @@
 - Formato: `action: description`
 - Exemplos: `feat: add user auth`, `fix: resolve db connection`, `docs: update migration guide`
 
+## Configuração de Git/GitHub do Assistente
+
+### Identidade GitHub
+- O assistente deve usar a conta GitHub `webmaster-devply`.
+- E-mail da conta: `webmaster@devply.net`.
+- Esta conta está cadastrada como contribuidor do projeto Contex no GitHub.
+
+### GitHub CLI
+- O GitHub CLI (`gh`) deve estar autenticado como `webmaster-devply`.
+- Verificação obrigatória antes de criar PRs:
+  - `gh auth status`
+  - `gh api user --jq .login`
+- O login esperado é `webmaster-devply`.
+- Não expor tokens, chaves ou credenciais no chat.
+- O `gh` foi configurado com armazenamento acessível ao processo do assistente porque o keyring do terminal interativo não estava acessível pelo ambiente do Codex.
+
+### Commits
+- O assistente não deve alterar a configuração global ou local de `user.name`/`user.email` do desenvolvedor sem aprovação explícita.
+- Para commits feitos pelo assistente, usar autor separado quando solicitado:
+  - `webmaster-devply <webmaster@devply.net>`
+- Quando necessário, usar `git commit --author="webmaster-devply <webmaster@devply.net>" -m "mensagem"`.
+- O push pode continuar usando a credencial Git disponível no ambiente, desde que o PR seja aberto via `gh` como `webmaster-devply`.
+
+### Pull Requests
+- Criar PRs pelo GitHub CLI autenticado como `webmaster-devply`.
+- PRs devem apontar para `master`, salvo orientação diferente do desenvolvedor.
+- O assistente abre o PR; o desenvolvedor senior revisa e aprova.
+- O merge na `master` deve seguir as regras de proteção configuradas no GitHub.
+- Não apagar branches de feature sem pedido explícito do desenvolvedor.
+- A branch `feature/adiantamento-parcelas-terceiros` é a branch oficial desta feature e deve ser mantida enquanto a feature estiver em andamento.
+
 ## Contexto do Projeto
 
 ### Sistema Contex
