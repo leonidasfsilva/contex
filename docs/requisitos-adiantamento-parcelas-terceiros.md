@@ -32,16 +32,53 @@ Essa marcacao deve ajudar o usuario a controlar o que ainda esta pendente de rec
 - Parcelas marcadas como pagas pelo terceiro nao devem compor o saldo devedor do terceiro no mes/fatura.
 - Deve existir acao reversa para desmarcar uma parcela como paga.
 - O botao de acao nao deve ser desabilitado; deve alternar estado/icone conforme a parcela esteja paga ou em aberto.
+- Regra da flag `parcela_terceiro_pago`:
+  - `NULL` = parcela em aberto/nao paga pelo terceiro;
+  - `1` = parcela paga pelo terceiro.
 
-## Fora do Escopo Inicial
+## Releases
+
+### Release 1 - Controle por Parcela
+
+Escopo da primeira entrega:
+
+- Criar flag `parcela_terceiro_pago` em `lancamentos_faturas_assoc`.
+- Permitir marcar uma parcela especifica como paga pelo terceiro.
+- Permitir desmarcar uma parcela especifica como paga pelo terceiro.
+- Exibir visualmente se a parcela esta paga ou em aberto.
+- Ignorar parcelas pagas pelo terceiro no saldo devedor do mes/fatura.
+
+A primeira release deve priorizar o controle operacional minimo, sem auditoria e sem acao em lote por compra inteira.
+
+### Release 2 - Auditoria e Compra Inteira
+
+Escopo previsto para a segunda entrega:
+
+- Registrar auditoria/log ao marcar e desmarcar uma parcela como paga.
+- Exibir historico da parcela em modal dedicado.
+- Permitir marcar uma compra inteira de terceiro como paga.
+- Permitir desmarcar uma compra inteira de terceiro como paga.
+
+Ao marcar uma compra inteira como paga:
+
+- compras parceladas devem ter todas as parcelas marcadas com `parcela_terceiro_pago = 1`;
+- compras a vista devem ter a parcela unica marcada com `parcela_terceiro_pago = 1`.
+
+Ao desmarcar uma compra inteira como paga:
+
+- compras parceladas devem ter todas as parcelas marcadas com `parcela_terceiro_pago = NULL`;
+- compras a vista devem ter a parcela unica marcada com `parcela_terceiro_pago = NULL`.
+
+## Fora do Escopo da Release 1
 
 - Marcar uma compra inteira como paga/adiantada.
 - Pagamentos parciais de uma mesma parcela.
 - Comprovantes de pagamento.
 - Conciliacao bancaria.
 - Motivo obrigatorio para reversao.
+- Auditoria/log de marcacao e reversao.
 
-Esses itens podem virar features separadas.
+Esses itens podem virar features separadas ou compor a Release 2, conforme aprovacao do desenvolvedor.
 
 ## Alteracoes de Banco Previstas
 
@@ -50,15 +87,16 @@ Tabela: `lancamentos_faturas_assoc`
 Campos sugeridos:
 
 ```sql
-pagamento_terceiro TINYINT DEFAULT 0
-data_pagamento_terceiro DATE NULL
+parcela_terceiro_pago TINYINT(1) NULL DEFAULT NULL
 ```
 
-Campos adicionais podem ser avaliados depois, conforme necessidade de auditoria direta na propria tabela.
+O campo deve nascer `NULL` para nao gravar `0` nos registros ja existentes.
 
-## Auditoria
+Campos adicionais como data, usuario, motivo ou metadados ficam fora da Release 1 e devem ser avaliados no escopo da auditoria.
 
-A feature deve registrar log ao marcar e desmarcar uma parcela como paga.
+## Auditoria - Release 2
+
+A auditoria deve registrar log ao marcar e desmarcar uma parcela como paga.
 
 A preferencia e integrar com a tabela `logs` existente, desde que ela passe a suportar contexto estruturado.
 
@@ -98,9 +136,9 @@ Exemplo de `metadata`:
 
 O campo `metadata` deve guardar detalhes do evento no momento da acao, para que o historico continue compreensivel mesmo se dados da compra forem alterados depois.
 
-## Historico da Parcela
+## Historico da Parcela - Release 2
 
-Em etapa posterior, a view pode exibir um botao dedicado para abrir modal com o historico da parcela.
+A view deve exibir um botao dedicado para abrir modal com o historico da parcela.
 
 Esse modal deve consultar os logs por:
 
@@ -143,7 +181,7 @@ Novos comportamentos esperados:
 - validar permissao antes de marcar/desmarcar;
 - validar se o `id_assoc` pertence ao usuario logado;
 - atualizar a flag de pagamento do terceiro;
-- registrar log estruturado;
+- registrar log estruturado na Release 2;
 - redirecionar para a URL atual mantendo os filtros da view.
 
 ## Observacoes

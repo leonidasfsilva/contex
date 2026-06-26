@@ -228,6 +228,31 @@ class Fatura_model extends CI_Model
         }
     }
 
+    function getLancamentoAssocTerceiroUsuario($idAssoc, $idUsuario)
+    {
+        return $this->db
+            ->select('lfa.*, lf.nome_cliente, lf.descricao, lf.id_usuario')
+            ->from('lancamentos_faturas_assoc AS lfa')
+            ->join('lancamentos_faturas AS lf', 'lf.id_lancamento = lfa.id_lancamento', 'inner')
+            ->where('lfa.id_assoc', $idAssoc)
+            ->where('lfa.status', 1)
+            ->where('lf.status', 1)
+            ->where('lf.compra_terceiros', 1)
+            ->where('lf.id_usuario', $idUsuario)
+            ->get()
+            ->row();
+    }
+
+    function setParcelaTerceiroPago($idAssoc, $pago)
+    {
+        $this->db->where('id_assoc', $idAssoc);
+        $this->db->update('lancamentos_faturas_assoc', [
+            'parcela_terceiro_pago' => $pago ? 1 : null
+        ]);
+
+        return ($this->db->error()['code'] == 0);
+    }
+
     function delete($table, $data, $fieldID, $ID)
     {
         $this->db->where($fieldID, $ID);
@@ -772,8 +797,8 @@ class Fatura_model extends CI_Model
             $idUsuario = getUserId();
         }
 
-        $mainQuery = "SELECT
-            lf.*
+        $mainQuery = "SELECT DISTINCT
+            lf.nome_cliente
             FROM lancamentos_faturas lf
             INNER JOIN faturas f
             ON lf.id_fatura = f.id_fatura
@@ -801,7 +826,7 @@ class Fatura_model extends CI_Model
 
         $groupBy     = " GROUP BY lf.nome_cliente";
         $orderBy     = " ORDER BY lf.nome_cliente ASC";
-        $mainQuery   .= $where . $groupBy . $orderBy;
+        $mainQuery   .= $where . $orderBy;
         $resultQuery = $this->db->query($mainQuery);
 
         if ($resultQuery->num_rows() > 0) {
@@ -847,7 +872,7 @@ class Fatura_model extends CI_Model
 
     function getLancamentosPendentesTerceiros($id_usuario, $referenceMonth, $referenceYear, $terceiro)
     {
-        $query = "SELECT lf.id_lancamento, lfa.mes_referencia
+        $query = "SELECT 1
             FROM lancamentos_faturas lf
             JOIN lancamentos_faturas_assoc lfa
             ON lf.id_lancamento = lfa.id_lancamento
@@ -858,11 +883,11 @@ class Fatura_model extends CI_Model
             AND lf.nome_cliente LIKE '%$terceiro%'
             AND lfa.mes_referencia = $referenceMonth
             AND lfa.ano_referencia = $referenceYear
-            GROUP BY lfa.mes_referencia
+            AND lfa.parcela_terceiro_pago IS NULL
+            LIMIT 1
         ";
 
-        $resultQuery = $this->db->query($query);
-        $result      = $resultQuery->result_array();
+        $result      = (bool) $this->db->query($query)->row();
 
         if (!$result) {
             return false;
