@@ -1727,6 +1727,41 @@ class Faturas extends CI_Controller
         $this->load->view('tema/topo', $data);
     }
 
+    public function marcarParcelaTerceiroPago()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eFaturas')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para editar lançamentos de faturas.');
+            redirect(base_url());
+        }
+
+        $urlAtual = $this->input->post('urlAtual') ?: base_url('financeiro/faturas');
+        $idAssoc  = (int) $this->input->post('id_assoc');
+        $acao     = $this->input->post('acao');
+
+        if (!$idAssoc || !in_array($acao, ['pagar', 'remover'])) {
+            $this->session->set_flashdata('erro', 'Método não permitido');
+            redirect($urlAtual);
+        }
+
+        $lancamento = $this->fatura_model->getLancamentoAssocTerceiroUsuario($idAssoc, getUserId());
+
+        if (!$lancamento) {
+            $this->session->set_flashdata('erro', 'Parcela solicitada não encontrada para este usuário');
+            redirect($urlAtual);
+        }
+
+        $pago = ($acao == 'pagar');
+
+        if ($this->fatura_model->setParcelaTerceiroPago($idAssoc, $pago)) {
+            $mensagem = $pago ? 'Parcela marcada como paga' : 'Pagamento da parcela removido';
+            $this->session->set_flashdata('sucesso', $mensagem);
+            redirect($urlAtual);
+        }
+
+        $this->session->set_flashdata('erro', 'Erro ao tentar atualizar pagamento da parcela');
+        redirect($urlAtual);
+    }
+
     public function pesquisa()
     {
         if (!isset($_GET['busca'])) {

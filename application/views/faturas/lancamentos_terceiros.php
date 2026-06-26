@@ -28,6 +28,24 @@ if (isset($referenceMonth) && $referenceMonth) {
         </h2>
         <div class="panel-ctrls">
             <a href="<?= base_url('financeiro/faturas?cartao=') . $idCard ?>" class="btn btn-sm btn-default"><i class="fas fa-arrow-left fa-fw"></i> Faturas</a>
+            <span class="hidden" id="div_btn_marcar">
+                <button class="btn btn-default btn-sm marcar_desmarcar" id="marcar_todos" title="Marcar todos os lançamentos listados">
+                    <i class="far fa-square fa-fw"></i>
+                    Marcar Todos
+                </button>
+                <button class="btn btn-default marcar_desmarcar btn-sm hidden" id="desmarcar_todos" title="Desmarcar todos os lançamentos listados">
+                    <i class="fas fa-check-square fa-fw"></i>
+                    Desmarcar Todos
+                </button>
+            </span>
+            <button class="btn btn-default btn-sm habilita_desabilita_soma" id="exibir_soma" title="Habilitar soma de lançamentos individuais">
+                <i class="fas fa-toggle-off fa-fw"></i>
+                Habilitar Soma
+            </button>
+            <button class="btn btn-default btn-sm habilita_desabilita_soma hidden" id="esconder_soma" title="Desabilitar soma de lançamentos individuais">
+                <i class="fas fa-toggle-on fa-fw"></i>
+                Desabilitar Soma
+            </button>
             <button href="#modalFiltrar" class="btn btn-default btn-sm" id="filtrar" data-toggle="modal" title="Filtrar por período">
                 <i class="fas fa-filter fa-fw"></i>
                 Filtrar
@@ -85,16 +103,20 @@ if (isset($referenceMonth) && $referenceMonth) {
 												} else {
 													$n_parcela = $r['n_parcela'];
 												}
-												
+
 												if ($r['total_parcelas'] < 10) {
 													$total_parcelas = str_pad($r['total_parcelas'], 2, '0', STR_PAD_LEFT);
 												} else {
 													$total_parcelas = $r['total_parcelas'];
 												}
-												
-												$data_compra  = date(('d/m/y'), strtotime($r['data_compra']));
-												$debitoFatura += $r['valor_parcela'];
-												$totalSum     += $r['valor_parcela'];
+
+												$data_compra = date(('d/m/y'), strtotime($r['data_compra']));
+												$parcelaPaga = (isset($r['parcela_terceiro_pago']) && $r['parcela_terceiro_pago'] == 1);
+
+												if (!$parcelaPaga) {
+													$debitoFatura += $r['valor_parcela'];
+													$totalSum     += $r['valor_parcela'];
+												}
 												
 												if ($r['valor_total'] < 0) {
 													$valor = number_format(abs($r['valor_total']), 2, ',', '.');
@@ -110,23 +132,36 @@ if (isset($referenceMonth) && $referenceMonth) {
 													$iconObs = '';
 												};
 												
-												echo '<tr>';
+												echo '<tr' . ($parcelaPaga ? ' class="success"' : '') . '>';
 												echo '<td class="td_soma hidden"><div class="icheck"><input type="checkbox" class="soma_parcelas"></div></td>';
+												echo '<td class="idLancamento hidden">' . $r['id_lancamento'] . '</td>';
 												echo '<td>' . $data_compra . '</td>';
-												echo '<td><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar" title="Detalhes" id_lancamento="' .
+												echo '<td><a href="#modalEditar" style="margin-right: 1%" data-toggle="modal" class="editar font-weight-bold" title="Detalhes" id_lancamento="' .
 													$r['id_lancamento'] . '" descricao="' . $r['descricao'] . '" observacoes="' . nl2br($r['observacoes']) . '" valor="' . $valor . '" data_compra="' .
 													date('d/m/Y', strtotime($r['data_compra'])) . '" parcelada="' . $r['compra_parcelada'] . '" estorno="' . $r['estorno'] . '" n_parcelas="' . $r['total_parcelas'] .
 													'" valor_parcela="' . number_format($r['valor_parcela'], 2, ',', '.') . '" terceiros="' . $r['compra_terceiros'] . '" nome_cliente="' . $r['nome_cliente'] .
-													'" id_cliente="' . $r['id_cliente'] . '">' . strtoupper($r['descricao']) . $iconObs .
+													'" id_cliente="' . $r['id_cliente'] . '" id_assoc="' . $r['id_assoc'] . '" acao_pagamento_terceiro="' . ($parcelaPaga ? 'remover' : 'pagar') .
+													'" parcela="' . $n_parcela . '/' . $total_parcelas . '" parcela_paga="' . ($parcelaPaga ? '1' : '0') . '">' . strtoupper($r['descricao']) . $iconObs .
 													'</a></td>';
-												echo '<td>' . strtoupper($r['nome_cliente']) . '</td>';
+												echo '<td class="font-weight-bold">' . strtoupper($r['nome_cliente']) . ($parcelaPaga ? ' <span class="badge badge-pill badge-success">PAGO</span>' : '') . '</td>';
 												echo '<td>' . $n_parcela . '/' . $total_parcelas . '</td>';
-												echo '<td class="valor_parcela" style=" color: ' . $color = null .
+												echo '<td class="valor_parcela font-weight-bold" style=" color: ' . $color = null .
 														'"><span>' . number_format($r['valor_parcela'], 2, ',', '.') .
 														'</span><br><span style="color: grey">' . number_format($r['valor_total'], 2, ',', '.') .
 														'</span></td>';
 												
 												echo '<td>';
+												echo '<button type="button" style="margin-right: 1%" class="btn ' . ($parcelaPaga ? 'btn-warning' : 'btn-success') . ' btn-sm marcar-parcela-terceiro-pago"
+													title="' . ($parcelaPaga ? 'Remover pagamento' : 'Marcar como pago') . '"
+													data-toggle="modal"
+													data-target="#modalParcelaTerceiroPago"
+													data-id-assoc="' . $r['id_assoc'] . '"
+													data-acao="' . ($parcelaPaga ? 'remover' : 'pagar') . '"
+													data-descricao="' . htmlspecialchars(strtoupper($r['descricao']), ENT_QUOTES, 'UTF-8') . '"
+													data-parcela="' . $n_parcela . '/' . $total_parcelas . '"
+													data-valor="' . number_format($r['valor_parcela'], 2, ',', '.') . '">
+                                                            <i class="fas ' . ($parcelaPaga ? 'fa-undo' : 'fa-hand-holding-circle-dollar') . ' fa-lg fa-fw"></i>
+                                                        </button>';
 												echo '<a type="button" href="' . base_url('financeiro/faturas/detalhes/' . $r['id_fatura'] . '/' . $result['id_cartao']) . '" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm editar" title="Visualizar fatura desta compra">
                                                             <i class="fas fa-file-invoice-dollar fa-lg fa-fw"></i>
                                                         </a>';
@@ -169,6 +204,22 @@ if (isset($referenceMonth) && $referenceMonth) {
                         </div>
                     </div>
 				<?php } ?>
+            </div>
+            <div id="somatorio_lancamentos" class="panel-footer hidden">
+                <table class="table table-condensed table-striped table-bordeless table-hover no-footer" role="grid" style="width: 100%;">
+                    <thead>
+                    <tr>
+                        <th colspan="2" style="text-align: left !important;">Descrição</th>
+                        <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
+                    </tr>
+                    </thead>
+                    <tr>
+                        <td class="font-weight-bold" colspan="2" style="text-align: left;">(=) LANÇAMENTOS SELECIONADOS</td>
+                        <td class="font-weight-bold valor_soma_parcelas" colspan="1" style="text-align: right;" id="valor_soma_parcelas">
+                            0,00
+                        </td>
+                    </tr>
+                </table>
             </div>
             <div class="panel panel-alizarin" style="margin: 0 !important;">
                 <div class="panel-heading font-weight-bold">
@@ -350,6 +401,48 @@ if (isset($referenceMonth) && $referenceMonth) {
     </div>
 </div>
 
+<!-- Modal MARCAR PARCELA PAGA POR TERCEIROs -->
+<div class="modal fade" id="modalParcelaTerceiroPago" tabindex="-1" role="dialog" aria-labelledby="modalParcelaTerceiroPagoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="<?php echo base_url('financeiro/faturas/marcarParcelaTerceiroPago') ?>" method="post" autocomplete="off">
+                <div class="modal-header bg-success parcelaTerceiroPagoHeader">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title text-white" id="modalParcelaTerceiroPagoLabel">Confirmar pagamento da parcela</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id_assoc" class="parcelaTerceiroPagoIdAssoc">
+                    <input type="hidden" name="acao" class="parcelaTerceiroPagoAcao">
+                    <input class="urlAtual" type="hidden" name="urlAtual"/>
+                    <p class="font-weight-bold parcelaTerceiroPagoTexto"></p>
+                    <table class="table table-condensed table-bordeless mb0">
+                        <tr>
+                            <td class="font-weight-bold">Descrição</td>
+                            <td class="parcelaTerceiroPagoDescricao"></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Parcela</td>
+                            <td class="parcelaTerceiroPagoParcela"></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Valor</td>
+                            <td>R$ <span class="parcelaTerceiroPagoValor"></span></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                        <i class="fa fa-times fa-fw"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-success btn-sm parcelaTerceiroPagoSubmit">
+                        <i class="fa fa-check fa-fw"></i> Confirmar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Modal DETALHES LANÇAMENTO-->
 <div class="modal fade" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -408,6 +501,9 @@ if (isset($referenceMonth) && $referenceMonth) {
                         <label class="font-weight-bold">Estorno</label>
                     </div>
                     <div class="col-xs-8">
+                        <button type="button" class="btn btn-success btn-sm marcar-parcela-terceiro-pago marcar-parcela-terceiro-pago-modal-detalhes">
+                            <i class="fas fa-hand-holding-circle-dollar fa-fw"></i> Marcar como pago
+                        </button>
                         <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                             <i class="fa fa-times fa-fw"></i> Fechar
                         </button>
@@ -464,6 +560,23 @@ if (isset($referenceMonth) && $referenceMonth) {
         $(".dataCompra").val($(this).attr('data_compra'));
         $(".nomeCliente").val($(this).attr('nome_cliente'));
 
+        var acaoPagamentoTerceiro = $(this).attr('acao_pagamento_terceiro');
+        var parcelaPaga = $(this).attr('parcela_paga') == 1;
+        $('.marcar-parcela-terceiro-pago-modal-detalhes')
+            .toggleClass('btn-success', !parcelaPaga)
+            .toggleClass('btn-warning', parcelaPaga)
+            .attr('title', parcelaPaga ? 'Remover pagamento' : 'Marcar como pago')
+            .attr('data-id-assoc', $(this).attr('id_assoc'))
+            .attr('data-acao', acaoPagamentoTerceiro)
+            .attr('data-descricao', $(this).attr('descricao').toUpperCase())
+            .attr('data-parcela', $(this).attr('parcela'))
+            .attr('data-valor', $(this).attr('valor_parcela'))
+            .html(
+                parcelaPaga
+                    ? '<i class="fas fa-undo fa-fw"></i> Remover pagamento'
+                    : '<i class="fas fa-hand-holding-circle-dollar fa-fw"></i> Marcar como pago'
+            );
+
         var estorno = $(this).attr('estorno');
         var terceiros = $(this).attr('terceiros');
         var parcelada = $(this).attr('parcelada');
@@ -512,4 +625,31 @@ if (isset($referenceMonth) && $referenceMonth) {
             obsText.text('Adicionar observações')
         }
     })
+
+    $(document).on('click', '.marcar-parcela-terceiro-pago', function () {
+        var acao = $(this).data('acao');
+        var pagar = acao === 'pagar';
+
+        $('.parcelaTerceiroPagoIdAssoc').val($(this).data('id-assoc'));
+        $('.parcelaTerceiroPagoAcao').val(acao);
+        $('.parcelaTerceiroPagoDescricao').text($(this).data('descricao'));
+        $('.parcelaTerceiroPagoParcela').text($(this).data('parcela'));
+        $('.parcelaTerceiroPagoValor').text($(this).data('valor'));
+        $('.parcelaTerceiroPagoTexto').text(
+            pagar
+                ? 'Deseja marcar esta parcela como paga pelo terceiro?'
+                : 'Deseja remover o pagamento desta parcela?'
+        );
+        $('.parcelaTerceiroPagoHeader')
+            .toggleClass('bg-success', pagar)
+            .toggleClass('bg-warning', !pagar);
+        $('.parcelaTerceiroPagoSubmit')
+            .toggleClass('btn-success', pagar)
+            .toggleClass('btn-warning', !pagar)
+            .html('<i class="fa fa-check fa-fw"></i> ' + (pagar ? 'Marcar como pago' : 'Remover pagamento'));
+
+        if ($(this).hasClass('marcar-parcela-terceiro-pago-modal-detalhes')) {
+            toggleModals($('#modalEditar'), $('#modalParcelaTerceiroPago'), true);
+        }
+    });
 </script>
