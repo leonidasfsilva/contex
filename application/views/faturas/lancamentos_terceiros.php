@@ -143,10 +143,10 @@ if (isset($referenceMonth) && $referenceMonth) {
 													'" id_cliente="' . $r['id_cliente'] . '" id_assoc="' . $r['id_assoc'] . '" acao_pagamento_terceiro="' . ($parcelaPaga ? 'remover' : 'pagar') .
 													'" parcela="' . $n_parcela . '/' . $total_parcelas . '" parcela_paga="' . ($parcelaPaga ? '1' : '0') . '">' . strtoupper($r['descricao']) . $iconObs .
 													'</a></td>';
-												echo '<td class="font-weight-bold">' . strtoupper($r['nome_cliente']) . ($parcelaPaga ? ' <span class="badge badge-pill badge-success">PAGO</span>' : '') . '</td>';
+												echo '<td class="font-weight-bold">' . strtoupper($r['nome_cliente']) . '</td>';
 												echo '<td>' . $n_parcela . '/' . $total_parcelas . '</td>';
 												echo '<td class="valor_parcela font-weight-bold" style=" color: ' . $color = null .
-														'"><span>' . number_format($r['valor_parcela'], 2, ',', '.') .
+														'"><span>' . number_format($r['valor_parcela'], 2, ',', '.') . ($parcelaPaga ? ' <span class="badge badge-pill badge-success">PAGO</span>' : '') .
 														'</span><br><span style="color: grey">' . number_format($r['valor_total'], 2, ',', '.') .
 														'</span></td>';
 												
