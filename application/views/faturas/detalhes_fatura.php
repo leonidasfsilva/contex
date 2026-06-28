@@ -1013,6 +1013,27 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             }
         })
 
+        $('.valor').on('focusin', function () {
+            var input = this
+            var delays = [0, 30, 80, 150]
+
+            $(input).data('selectingValor', true)
+
+            $.each(delays, function (index, delay) {
+                setTimeout(function () {
+                    if (!$(input).data('selectingValor')) {
+                        return
+                    }
+
+                    input.setSelectionRange(0, input.value.length)
+                }, delay)
+            })
+        }).on('keydown input', function () {
+            $(this).data('selectingValor', false)
+        }).on('mouseup', function (event) {
+            event.preventDefault()
+        })
+
         function calculaValorParcela(parcela, valor) {
             var parcelas = parcela
             valor = jqueryFormat(valor)
