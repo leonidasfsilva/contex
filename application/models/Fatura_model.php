@@ -1167,12 +1167,15 @@ class Fatura_model extends CI_Model
             ON lf.id_fatura = f.id_fatura
             INNER JOIN lancamentos_faturas_assoc lfa
             ON lfa.id_lancamento = lf.id_lancamento
-            WHERE lf.descricao LIKE '%$term%'
-            OR lf.observacoes LIKE '%$term%'
-            OR lf.nome_cliente LIKE '%$term%'
+            WHERE (
+                lf.descricao LIKE '%$term%'
+                OR lf.observacoes LIKE '%$term%'
+                OR lf.nome_cliente LIKE '%$term%'
+            )
             AND f.id_usuario = $idUser
             AND f.status = 1
             AND lf.status = 1
+            AND lfa.status = 1
             GROUP BY lf.id_lancamento
             ORDER BY lf.criado_em DESC
             LIMIT $start, $perpage
@@ -1211,12 +1214,15 @@ class Fatura_model extends CI_Model
             ON lf.id_fatura = f.id_fatura
             INNER JOIN lancamentos_faturas_assoc lfa
             ON lfa.id_lancamento = lf.id_lancamento
-            WHERE lf.descricao LIKE '%$term%'
-            OR lf.observacoes LIKE '%$term%'
-            OR lf.nome_cliente LIKE '%$term%'
+            WHERE (
+                lf.descricao LIKE '%$term%'
+                OR lf.observacoes LIKE '%$term%'
+                OR lf.nome_cliente LIKE '%$term%'
+            )
             AND f.id_usuario = $idUser
             AND f.status = 1
             AND lf.status = 1
+            AND lfa.status = 1
             GROUP BY lf.id_lancamento
             ORDER BY lf.criado_em DESC";
 
