@@ -906,11 +906,15 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         }
     })
 
-    $('#modalLancamento').on('shown.bs.modal', function (e) {
-        $('#descricao').focus()
-    })
+        $('#modalLancamento').on('shown.bs.modal', function (e) {
+            $('#descricao').focus()
+        })
 
-    $(document).ready(function ($) {
+        $('#modalCopiar').on('shown.bs.modal', function (e) {
+            $(this).find('.descricao').focus()
+        })
+
+        $(document).ready(function ($) {
         $('#novoLancamento').click(function () {
             $(".descricao").val('')
             $(".valor").val('')
