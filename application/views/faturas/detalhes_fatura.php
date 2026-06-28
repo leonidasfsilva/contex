@@ -1076,7 +1076,8 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             }
 
             if (checked == true) {
-                $('.divContainerTerceiros, .divContainerParcelamento').addClass('hidden')
+                $('.divContainerParcelamento').addClass('hidden')
+                $('.divContainerTerceiros').removeClass('hidden')
             } else {
                 $('.divContainerTerceiros, .divContainerParcelamento').removeClass('hidden')
             }
