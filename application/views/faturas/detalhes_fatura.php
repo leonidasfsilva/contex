@@ -906,15 +906,32 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
         }
     })
 
-        $('#modalLancamento').on('shown.bs.modal', function (e) {
-            $('#descricao').focus()
+    $('#modalLancamento').on('shown.bs.modal', function (e) {
+        $('#descricao').focus()
+    })
+
+    $('#modalCopiar').on('shown.bs.modal', function (e) {
+        $(this).find('.descricao').focus()
+    })
+
+    $(document).ready(function ($) {
+        $('#formNovoLancamento, #formEditarLancamento, #formCopiar').on('keydown', function (event) {
+            if (event.key !== 'Enter' && event.keyCode !== 13) {
+                return
+            }
+
+            if ($(event.target).is('textarea')) {
+                return
+            }
+
+            if ($('.ui-autocomplete:visible').length) {
+                return
+            }
+
+            event.preventDefault()
+            $(this).trigger('submit')
         })
 
-        $('#modalCopiar').on('shown.bs.modal', function (e) {
-            $(this).find('.descricao').focus()
-        })
-
-        $(document).ready(function ($) {
         $('#novoLancamento').click(function () {
             $(".descricao").val('')
             $(".valor").val('')
