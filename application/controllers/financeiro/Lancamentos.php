@@ -69,6 +69,8 @@ class Lancamentos extends CI_Controller
         $this->queryString        = null;
 
         integracaoDespesasUsuario();
+        vinculoAutomaticoFaturas();
+        vinculoAutomaticoComprasTerceiros();
     }
 
     public function index()
@@ -351,6 +353,7 @@ class Lancamentos extends CI_Controller
         );
 
         if ($this->financeiro_model->edit('lancamentos', $data, 'id_lancamento', $this->input->post('id'))) {
+            $this->fatura_model->setParcelasTerceiroPagoPorVinculo($this->input->post('id'), getUserId(), $data['baixado'] == 1);
             $this->session->set_flashdata('sucesso', 'Lançamento alterado com sucesso');
             redirect($urlAtual);
         }

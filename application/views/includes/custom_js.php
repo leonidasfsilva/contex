@@ -49,7 +49,7 @@
                 idLancamento = $(this).closest('tr').find('.idLancamento').html()
                 deleteSerie.push(idLancamento)
                 copiaSerie.push(idLancamento)
-                var value = $('span', this).text()
+                var value = $('span:first', this).text()
                 value = jqueryFormat(value)
                 // add only if the value is number
                 if (!isNaN(value) && value.length != 0) {

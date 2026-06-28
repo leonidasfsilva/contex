@@ -11,6 +11,9 @@
 - **Manter comunicação em português**
 - Ser direto e técnico
 - Não usar cumprimentos ou formalidades desnecessárias
+- Para ler trechos com acentuação, revisar diffs ou validar textos em português, preferir Git Bash ao PowerShell quando possível.
+- Se o PowerShell exibir mojibake ou quebrar caracteres especiais, não usar essa saída como referência textual confiável.
+- Ao editar textos exibidos ao usuário, preservar acentuação e grafia correta em português do Brasil.
 
 ### 3. Processo de Decisão
 - **Sempre responder primeiro às perguntas antes de tomar qualquer ação**
@@ -24,6 +27,10 @@
 - **Quaisquer ideias ou inferências devem obrigatoriamente passar pelo crivo/approve do desenvolvedor antes de serem efetivamente registradas ou editadas em quaisquer arquivos do projeto.**
 - Se o desenvolvedor pedir para documentar o que foi conversado, registrar apenas o que foi conversado/aprovado, sem acrescentar backlog, features futuras ou interpretações não aprovadas.
 - Se o assistente quiser acrescentar algo como "possível melhoria futura", deve perguntar antes se o desenvolvedor quer registrar isso no arquivo.
+- Para alterações de código em tarefas médias ou repetitivas, o estagiário local deve gerar patch/rascunho primeiro.
+- Se o rascunho do estagiário local vier inadequado, o primeiro passo deve ser pedir que ele corrija a própria proposta com feedback objetivo.
+- O Agente IA deve atuar como revisor/integrador final nesses casos, evitando implementar diretamente antes de testar o fluxo com o estagiário local.
+- Exceções: hotfix de uma linha, bug crítico, tarefa muito sensível ou pedido explícito do desenvolvedor para o Agente IA implementar diretamente.
 
 ### 4. Estilo de Commits
 - **Mensagens curtas e em inglês**
