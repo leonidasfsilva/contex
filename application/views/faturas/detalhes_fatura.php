@@ -915,6 +915,20 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
     })
 
     $(document).ready(function ($) {
+        var enterSelecionandoAutocomplete = false
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key !== 'Enter' && event.keyCode !== 13) {
+                return
+            }
+
+            if (!$(event.target).hasClass('ui-autocomplete-input')) {
+                return
+            }
+
+            enterSelecionandoAutocomplete = $(event.target).autocomplete('widget').is(':visible')
+        }, true)
+
         $('#formNovoLancamento, #formEditarLancamento, #formCopiar').on('keydown', function (event) {
             if (event.key !== 'Enter' && event.keyCode !== 13) {
                 return
@@ -924,7 +938,9 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                 return
             }
 
-            if ($('.ui-autocomplete:visible').length) {
+            if (enterSelecionandoAutocomplete) {
+                event.preventDefault()
+                enterSelecionandoAutocomplete = false
                 return
             }
 
