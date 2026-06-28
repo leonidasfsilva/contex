@@ -57,6 +57,7 @@ Escopo previsto para a segunda entrega:
 - Exibir novos totalizadores por fatura e por periodo.
 - Permitir marcar uma compra inteira de terceiro como paga.
 - Permitir desmarcar uma compra inteira de terceiro como paga.
+- Permitir registrar estorno de compras de terceiros.
 - Registrar auditoria/log ao marcar e desmarcar pagamentos de terceiros.
 - Exibir historico da parcela em modal dedicado.
 
@@ -98,7 +99,7 @@ Ao desmarcar uma compra inteira como paga:
 - Garantir comportamento mobile-friendly.
 - Validado em homologacao pelo desenvolvedor.
 
-5. 🕒 **Integracao com totais**
+5. ✅ **Integracao com totais**
 
 - Saldo por fatura.
 - Total pago na fatura.
@@ -106,8 +107,17 @@ Ao desmarcar uma compra inteira como paga:
 - Total pago no periodo.
 - Saldo devedor no periodo.
 - Total do periodo.
+- Vinculo do saldo do periodo com o modulo de Lancamentos.
+- Sincronizacao automatica dos vinculos nos controllers `Faturas` e `Lancamentos`.
+- Validado em homologacao pelo desenvolvedor.
 
-6. 🕒 **Auditoria/log**
+6. ✅ **Estorno de compras de terceiros**
+
+- A modal de novo lancamento deve permitir marcar `Estorno` junto com `Compra de terceiros`.
+- O bloco de terceiros deve permanecer disponivel ao marcar estorno.
+- O bloco de parcelamento deve continuar oculto para estorno.
+
+7. 🕒 **Auditoria/log**
 
 - Ultimo case da release.
 - Inspecionar estrutura atual de logs.
