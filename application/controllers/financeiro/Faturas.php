@@ -1932,7 +1932,7 @@ class Faturas extends CI_Controller
 
         $dataLancamento = [
             'id_usuario'         => getUserId(),
-            'descricao'          => 'GASTOS NOS CARTOES',
+            'descricao'          => 'TOTAL DEVIDO NOS CARTOES',
             'observacoes'        => implode("\n", $observacoes),
             'valor'              => $total,
             'data_lancamento'    => $vencimento,

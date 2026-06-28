@@ -1066,6 +1066,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
         function mudaCheckboxEstorno(event) {
             let checked
+            let form = null
 
             $('#estorno, .estorno').on('change', function (e) {
                 checked = e
@@ -1073,14 +1074,35 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
             if (event) {
                 checked = event.target.checked
+                form = event.target.form
             }
 
             if (checked == true) {
-                $('.divContainerParcelamento').addClass('hidden')
-                $('.divContainerTerceiros').removeClass('hidden')
+                desabilitaParcelamentoEstorno(form)
+                $(form).find('.divContainerTerceiros').removeClass('hidden')
             } else {
-                $('.divContainerTerceiros, .divContainerParcelamento').removeClass('hidden')
+                habilitaParcelamentoEstorno(form)
+                $(form).find('.divContainerTerceiros').removeClass('hidden')
             }
+        }
+
+        function desabilitaParcelamentoEstorno(form) {
+            let container = form ? $(form) : $(document)
+
+            container.find('.divContainerParcelamento').addClass('hidden')
+            container.find('.divParcelas').addClass('hidden')
+            container.find('.parcelada').prop('checked', false).prop('disabled', true)
+            container.find('.qntParcelas').val('').prop('disabled', true)
+            container.find('.valorParcela').val('').prop('disabled', true)
+        }
+
+        function habilitaParcelamentoEstorno(form) {
+            let container = form ? $(form) : $(document)
+
+            container.find('.divContainerParcelamento').removeClass('hidden')
+            container.find('.parcelada').prop('disabled', false)
+            container.find('.qntParcelas').prop('disabled', false)
+            container.find('.valorParcela').prop('disabled', false)
         }
 
         function mudaCheckboxTerceiros(event) {
@@ -1347,11 +1369,11 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
 
             if (estorno == 1) {
                 $('.estorno').prop('checked', true)
-                $(".divContainerParcelamento").addClass('hidden')
-                $(".divContainerTerceiros").addClass('hidden')
+                desabilitaParcelamentoEstorno()
+                $(".divContainerTerceiros").removeClass('hidden')
             } else {
                 $('.estorno').prop('checked', false)
-                $(".divContainerParcelamento").removeClass('hidden')
+                habilitaParcelamentoEstorno()
                 $(".divContainerTerceiros").removeClass('hidden')
 
             }
