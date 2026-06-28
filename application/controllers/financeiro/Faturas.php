@@ -17,6 +17,7 @@ class Faturas extends CI_Controller
         $this->load->library('pagination');
         $this->yearsList = range(2018, date('Y') + 3);
         vinculoAutomaticoFaturas();
+        vinculoAutomaticoComprasTerceiros();
     }
 
     public function index()
@@ -611,6 +612,7 @@ class Faturas extends CI_Controller
         $valor_parcela = $this->input->post('valor_parcela');
         $id_lancamento = $this->input->post('id_lancamento');
         $observacoes   = $this->input->post('observacoes');
+        $mapaVinculosTerceiros = $this->fatura_model->getMapaVinculosTerceiroPorCompra($id_lancamento, getUserId());
 
         if ($this->input->post('compra_parcelada') == 1) {
             $qnt_parcelas = $this->input->post('qnt_parcelas');
@@ -785,6 +787,7 @@ class Faturas extends CI_Controller
                             redirect($urlAtual);
                         }
                     }
+                    $this->sincronizarVinculosTerceiroCompraEditada($id_lancamento, $mapaVinculosTerceiros, $urlAtual);
                     redirect($urlAtual);
                 } else {
                     // COMPRA A VISTA
@@ -819,6 +822,7 @@ class Faturas extends CI_Controller
 
                     if ($this->fatura_model->add('lancamentos_faturas_assoc', $data1)) {
                         atualizaValorVinculoFaturas($id_fatura);
+                        $this->sincronizarVinculosTerceiroCompraEditada($id_lancamento, $mapaVinculosTerceiros, $urlAtual);
                         $this->session->set_flashdata('sucesso', 'Lançamento alterado com sucesso');
                     } else {
                         $this->session->set_flashdata('erro', 'Erro ao tentar alterar lançamentos_assoc!');
@@ -1117,6 +1121,8 @@ class Faturas extends CI_Controller
         );
 
         $faturas = $this->fatura_model->getFaturaByLancamentosAssoc($idLancamento);
+        $vinculosTerceiros = $this->fatura_model->getLancamentosTerceirosVinculadosPorCompra($idLancamento, getUserId());
+        $idsLancamentosTerceiros = array_values(array_unique(array_column($vinculosTerceiros, 'id_lancamento')));
 
         foreach ($faturas as $fatura) {
             atualizaValorVinculoFaturas($fatura["id_fatura"]);
@@ -1133,6 +1139,8 @@ class Faturas extends CI_Controller
                 }
             }
 
+            $this->fatura_model->sincronizarLancamentosTerceiros($idsLancamentosTerceiros, getUserId());
+
             if (!$parameter) {
                 redirect($urlAtual);
             }
@@ -1145,6 +1153,27 @@ class Faturas extends CI_Controller
             redirect($urlAtual);
         }
         return false;
+    }
+
+    private function sincronizarVinculosTerceiroCompraEditada($idLancamentoFatura, array $mapaVinculosTerceiros, $urlAtual)
+    {
+        if (!$mapaVinculosTerceiros) {
+            return true;
+        }
+
+        $idsLancamentos = array_values(array_unique(array_column($mapaVinculosTerceiros, 'id_lancamento')));
+
+        if (!$this->fatura_model->reconstruirVinculosTerceiroCompra($idLancamentoFatura, $mapaVinculosTerceiros, getUserId())) {
+            $this->session->set_flashdata('erro', 'Erro ao tentar atualizar vínculo de terceiros');
+            redirect($urlAtual);
+        }
+
+        if (!$this->fatura_model->sincronizarLancamentosTerceiros($idsLancamentos, getUserId())) {
+            $this->session->set_flashdata('erro', 'Erro ao tentar atualizar lançamento vinculado do terceiro');
+            redirect($urlAtual);
+        }
+
+        return true;
     }
 
     public function excluirSerieLancamentos()
@@ -1689,6 +1718,7 @@ class Faturas extends CI_Controller
         }
 
         $faturasTerceiros   = $this->fatura_model->getFaturasTerceiros(getUserId(), $nome, $referenceMonth, $referenceYear);
+        $vinculoTerceiroPeriodo = $this->fatura_model->getVinculoTerceiroPeriodo(getUserId(), $nome, $referenceMonth, $referenceYear);
         $referenceMonthName = getExtendedMonthName($referenceMonth);
         $prevReferenceMonth = translateMonth($prevReferenceMonth, true, true);
         $nextReferenceMonth = translateMonth($nextReferenceMonth, true, true);
@@ -1713,6 +1743,7 @@ class Faturas extends CI_Controller
         $data['terceiros']          = $this->fatura_model->getAllTerceiros(null, null, $referenceYear);
         $data['results']            = $result;
         $data['name']               = $nome;
+        $data['vinculoTerceiroPeriodo'] = $vinculoTerceiroPeriodo;
         $data['yearsList']          = $this->yearsList;
         $data['referencePeriod']    = sprintf('%s / %s', $referenceMonthName, $referenceYear);
         $data['dueDatePeriod']      = sprintf('%s / %s', $dueDateMonthName, $anoVencimento);
@@ -1724,6 +1755,42 @@ class Faturas extends CI_Controller
         $data['referenceYear']      = $referenceYear;
         $data['menuFinanceiro']     = true;
         $data['view']               = 'faturas/lancamentos_terceiros';
+        $this->load->view('tema/topo', $data);
+    }
+
+    public function compraTerceiro($idLancamento = null)
+    {
+        if (!$idLancamento) {
+            $this->session->set_flashdata('erro', 'Método não permitido');
+            redirect('financeiro/faturas');
+        }
+
+        $compra = $this->fatura_model->getCompraTerceiro(getUserId(), (int) $idLancamento);
+
+        if (!$compra) {
+            $this->session->set_flashdata('erro', 'Compra solicitada não encontrada para este usuário');
+            redirect('financeiro/faturas');
+        }
+
+        $parcelas = $this->fatura_model->getParcelasCompraTerceiro(getUserId(), (int) $idLancamento);
+
+        if (!$parcelas) {
+            $this->session->set_flashdata('erro', 'Parcelas da compra não encontradas');
+            redirect('financeiro/faturas');
+        }
+
+        $voltarUrl = base_url('financeiro/faturas/terceiros') . '?' . http_build_query([
+                'mesReferencia' => date('m'),
+                'anoReferencia' => date('Y'),
+                'cartao'        => $parcelas[0]['id_cartao'],
+                'nome'          => $compra->nome_cliente,
+            ]);
+
+        $data['compra']          = $compra;
+        $data['parcelas']        = $parcelas;
+        $data['voltarUrl']       = $voltarUrl;
+        $data['menuFinanceiro']  = true;
+        $data['view']            = 'faturas/compra_terceiro';
         $this->load->view('tema/topo', $data);
     }
 
@@ -1752,13 +1819,144 @@ class Faturas extends CI_Controller
 
         $pago = ($acao == 'pagar');
 
-        if ($this->fatura_model->setParcelaTerceiroPago($idAssoc, $pago)) {
+        if (
+            $this->fatura_model->setParcelaTerceiroPago($idAssoc, $pago) &&
+            $this->fatura_model->sincronizarVinculoTerceiroPorParcela($idAssoc, getUserId())
+        ) {
             $mensagem = $pago ? 'Parcela marcada como paga' : 'Pagamento da parcela removido';
             $this->session->set_flashdata('sucesso', $mensagem);
             redirect($urlAtual);
         }
 
         $this->session->set_flashdata('erro', 'Erro ao tentar atualizar pagamento da parcela');
+        redirect($urlAtual);
+    }
+
+    public function marcarCompraTerceiroPago()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eFaturas')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para editar lançamentos de faturas.');
+            redirect(base_url());
+        }
+
+        $urlAtual = $this->input->post('urlAtual') ?: base_url('financeiro/faturas');
+        $idAssoc  = (int) $this->input->post('id_assoc');
+        $acao     = $this->input->post('acao');
+
+        if (!$idAssoc || !in_array($acao, ['pagar', 'remover'])) {
+            $this->session->set_flashdata('erro', 'Método não permitido');
+            redirect($urlAtual);
+        }
+
+        $lancamento = $this->fatura_model->getLancamentoAssocTerceiroUsuario($idAssoc, getUserId());
+
+        if (!$lancamento) {
+            $this->session->set_flashdata('erro', 'Parcela solicitada não encontrada para este usuário');
+            redirect($urlAtual);
+        }
+
+        $pago = ($acao == 'pagar');
+
+        if (
+            $this->fatura_model->setCompraTerceiroPago($lancamento->id_lancamento, getUserId(), $pago) &&
+            $this->fatura_model->sincronizarVinculosTerceiroPorCompra($lancamento->id_lancamento, getUserId())
+        ) {
+            $mensagem = $pago ? 'Compra marcada como paga' : 'Pagamento da compra removido';
+            $this->session->set_flashdata('sucesso', $mensagem);
+            redirect($urlAtual);
+        }
+
+        $this->session->set_flashdata('erro', 'Erro ao tentar atualizar pagamento da compra');
+        redirect($urlAtual);
+    }
+
+    public function vincularTerceiroPeriodo()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eFaturas')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para vincular compras de terceiros.');
+            redirect(base_url());
+        }
+
+        $urlAtual      = $this->input->post('urlAtual') ?: base_url('financeiro/faturas');
+        $nome          = $this->input->post('nome');
+        $mesReferencia = $this->input->post('mesReferencia');
+        $anoReferencia = $this->input->post('anoReferencia');
+
+        if (!$nome || !is_string($nome) || is_numeric($nome) || !$mesReferencia || !$anoReferencia) {
+            $this->session->set_flashdata('erro', 'Método não permitido');
+            redirect($urlAtual);
+        }
+
+        if ($this->fatura_model->getVinculoTerceiroPeriodo(getUserId(), $nome, $mesReferencia, $anoReferencia)) {
+            $this->session->set_flashdata('erro', 'Este período já possui vínculo ativo para o terceiro selecionado');
+            redirect($urlAtual);
+        }
+
+        $parcelas = $this->fatura_model->getParcelasTerceiroPeriodoParaVinculo(getUserId(), $nome, $mesReferencia, $anoReferencia);
+
+        if (!$parcelas) {
+            $this->session->set_flashdata('erro', 'Não existem parcelas pendentes para vincular neste período');
+            redirect($urlAtual);
+        }
+
+        $total       = 0;
+        $vencimento  = $parcelas[0]['vencimento'];
+        $idsAssoc    = [];
+        $totaisCartao = [];
+
+        foreach ($parcelas as $parcela) {
+            $total += $parcela['valor_parcela'];
+            $idsAssoc[] = $parcela['id_assoc'];
+
+            if (strtotime($parcela['vencimento']) < strtotime($vencimento)) {
+                $vencimento = $parcela['vencimento'];
+            }
+
+            $numeroCartao = decriptar($parcela['cartao_numero']);
+            $partesCartao = explode(' ', trim($numeroCartao));
+            $finalCartao  = end($partesCartao);
+            $cartaoLabel  = $parcela['cartao_apelido'] ?: $parcela['cartao_bandeira'] . ' - FINAL ' . $finalCartao;
+
+            if (!isset($totaisCartao[$cartaoLabel])) {
+                $totaisCartao[$cartaoLabel] = 0;
+            }
+
+            $totaisCartao[$cartaoLabel] += $parcela['valor_parcela'];
+        }
+
+        $observacoes = [];
+
+        foreach ($totaisCartao as $cartaoLabel => $valorCartao) {
+            $observacoes[] = $cartaoLabel . ': R$ ' . number_format($valorCartao, 2, ',', '.');
+        }
+
+        $dataLancamento = [
+            'id_usuario'         => getUserId(),
+            'descricao'          => 'GASTOS NOS CARTOES',
+            'observacoes'        => implode("\n", $observacoes),
+            'valor'              => $total,
+            'data_lancamento'    => $vencimento,
+            'data_pagamento'     => $vencimento,
+            'baixado'            => 0,
+            'cliente_fornecedor' => padronizarString($nome),
+            'forma_pgto'         => 6,
+            'tipo'               => 1
+        ];
+
+        $this->db->trans_begin();
+
+        $lancamentoCriado = $this->fatura_model->add('lancamentos', $dataLancamento);
+        $idLancamento     = $lancamentoCriado ? $this->fatura_model->insert_id('lancamentos') : null;
+        $vinculado        = $idLancamento ? $this->fatura_model->vincularLancamentoTerceiro($idLancamento, $idsAssoc) : false;
+
+        if ($this->db->trans_status() && $lancamentoCriado && $vinculado) {
+            $this->db->trans_commit();
+            $this->session->set_flashdata('sucesso', 'Compras do terceiro vinculadas com sucesso');
+            redirect($urlAtual);
+        }
+
+        $this->db->trans_rollback();
+        $this->session->set_flashdata('erro', 'Erro ao tentar vincular compras do terceiro');
         redirect($urlAtual);
     }
 

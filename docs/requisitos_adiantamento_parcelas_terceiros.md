@@ -50,14 +50,15 @@ Escopo da primeira entrega:
 
 A primeira release deve priorizar o controle operacional minimo, sem auditoria e sem acao em lote por compra inteira.
 
-### Release 2 - Auditoria e Compra Inteira
+### Release 2 - Compra Inteira, Totalizadores e Auditoria
 
 Escopo previsto para a segunda entrega:
 
-- Registrar auditoria/log ao marcar e desmarcar uma parcela como paga.
-- Exibir historico da parcela em modal dedicado.
+- Exibir novos totalizadores por fatura e por periodo.
 - Permitir marcar uma compra inteira de terceiro como paga.
 - Permitir desmarcar uma compra inteira de terceiro como paga.
+- Registrar auditoria/log ao marcar e desmarcar pagamentos de terceiros.
+- Exibir historico da parcela em modal dedicado.
 
 Ao marcar uma compra inteira como paga:
 
@@ -68,6 +69,58 @@ Ao desmarcar uma compra inteira como paga:
 
 - compras parceladas devem ter todas as parcelas marcadas com `parcela_terceiro_pago = NULL`;
 - compras a vista devem ter a parcela unica marcada com `parcela_terceiro_pago = NULL`.
+
+#### To-do List da Release 2
+
+1. ✅ **Totalizadores da tela de terceiros**
+
+- Validado pelo desenvolvedor.
+- Se surgir divergencia posterior, tratar em branch `bugfix`.
+
+2. ✅ **Marcar compra inteira como paga**
+
+- Compra parcelada: todas as parcelas recebem `parcela_terceiro_pago = 1`.
+- Compra a vista: a parcela unica recebe `parcela_terceiro_pago = 1`.
+- Validado em homologacao pelo desenvolvedor.
+
+3. ✅ **Remover pagamento da compra inteira**
+
+- Todas as parcelas da compra voltam para `parcela_terceiro_pago = NULL`.
+- A acao deve afetar somente a compra selecionada.
+- Validado em homologacao pelo desenvolvedor.
+
+4. ✅ **UI da acao por compra inteira**
+
+- Definir e implementar local do botao.
+- Definir icones FA6.
+- Criar modal de confirmacao.
+- Definir textos e cores.
+- Garantir comportamento mobile-friendly.
+- Validado em homologacao pelo desenvolvedor.
+
+5. 🕒 **Integracao com totais**
+
+- Saldo por fatura.
+- Total pago na fatura.
+- Total da fatura.
+- Total pago no periodo.
+- Saldo devedor no periodo.
+- Total do periodo.
+
+6. 🕒 **Auditoria/log**
+
+- Ultimo case da release.
+- Inspecionar estrutura atual de logs.
+- Definir campos necessarios.
+- Registrar marcacao/remocao por parcela.
+- Registrar marcacao/remocao por compra inteira.
+- Criar botao/modal para exibir historico da parcela/linha.
+
+#### Versionamento de To-do Lists
+
+- To-do lists devem ficar no documento de requisitos da feature correspondente.
+- Evitar criar um arquivo solto em `docs/` para cada release.
+- Bugfixes nao precisam de to-do list propria, salvo se o desenvolvedor solicitar.
 
 ## Fora do Escopo da Release 1
 

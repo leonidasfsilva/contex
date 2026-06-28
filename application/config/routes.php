@@ -48,6 +48,7 @@ $route['phpinfo']                      = 'mxcode/phpinfo';
 $route['editarFotoUsuario']            = "mxcode/editarFotoUsuario";
 $route['api/mikrotik/get-info/(:any)'] = 'api/mikrotik/getInfo/$1';
 $route['api/mikrotik/get-info']        = 'api/mikrotik/getInfo';
+$route['financeiro/faturas/terceiro/compra/(:num)'] = 'financeiro/faturas/compraTerceiro/$1';
 
 // $route['financeiro/faturas/detalhes']        = 'faturas/detalhes';
 // $route['financeiro/faturas/detalhes/(:any)'] = 'faturas/detalhes/$1';

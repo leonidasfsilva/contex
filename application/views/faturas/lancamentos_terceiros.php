@@ -2,6 +2,7 @@
 $prevLink         = null;
 $nextLink         = null;
 $currentMonthText = null;
+$urlAtual         = current_url() . (isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] ? '?' . $_SERVER['QUERY_STRING'] : '');
 
 if (isset($referenceMonth) && $referenceMonth) {
 	if ($prevMonth && $nextMonth) {
@@ -28,6 +29,16 @@ if (isset($referenceMonth) && $referenceMonth) {
         </h2>
         <div class="panel-ctrls">
             <a href="<?= base_url('financeiro/faturas?cartao=') . $idCard ?>" class="btn btn-sm btn-default"><i class="fas fa-arrow-left fa-fw"></i> Faturas</a>
+            <?php if ($results) { ?>
+                <button href="#modalVincularTerceiroPeriodo"
+                    class="btn btn-primary btn-sm"
+                    id="vincularTerceiroPeriodo"
+                    data-toggle="modal"
+                    title="<?= $vinculoTerceiroPeriodo ? 'Período já vinculado ao módulo de Lançamentos' : 'Vincular saldo do período ao módulo de Lançamentos' ?>"
+                    <?= $vinculoTerceiroPeriodo ? 'disabled' : '' ?>>
+                    <i class="fas fa-link fa-fw"></i> Vincular
+                </button>
+            <?php } ?>
             <span class="hidden" id="div_btn_marcar">
                 <button class="btn btn-default btn-sm marcar_desmarcar" id="marcar_todos" title="Marcar todos os lançamentos listados">
                     <i class="far fa-square fa-fw"></i>
@@ -57,7 +68,8 @@ if (isset($referenceMonth) && $referenceMonth) {
 		if ($results) { ?>
             <div class="accordion-group" id="accordion">
 				<?php
-				$totalSum = 0;
+				$totalSum         = 0;
+				$totalPagoPeriodo = 0;
 				
 				foreach ($results as $result) {
 					$n_cartao               = explode(" ", trim(decriptar($result['cartao']['numero'])));
@@ -96,6 +108,7 @@ if (isset($referenceMonth) && $referenceMonth) {
 											<?php
 											$creditoFatura = 0;
 											$debitoFatura  = 0;
+											$pagoFatura    = 0;
 											
 											foreach ($result['lancamentos'] as $r) {
 												if ($r['n_parcela'] < 10) {
@@ -112,8 +125,12 @@ if (isset($referenceMonth) && $referenceMonth) {
 
 												$data_compra = date(('d/m/y'), strtotime($r['data_compra']));
 												$parcelaPaga = (isset($r['parcela_terceiro_pago']) && $r['parcela_terceiro_pago'] == 1);
+												$compraPaga  = ($parcelaPaga && isset($r['parcelas_compra_total'], $r['parcelas_compra_pagas']) && $r['parcelas_compra_total'] == $r['parcelas_compra_pagas']);
 
-												if (!$parcelaPaga) {
+												if ($parcelaPaga) {
+													$pagoFatura        += $r['valor_parcela'];
+													$totalPagoPeriodo += $r['valor_parcela'];
+												} else {
 													$debitoFatura += $r['valor_parcela'];
 													$totalSum     += $r['valor_parcela'];
 												}
@@ -146,8 +163,9 @@ if (isset($referenceMonth) && $referenceMonth) {
 												echo '<td class="font-weight-bold">' . strtoupper($r['nome_cliente']) . '</td>';
 												echo '<td>' . $n_parcela . '/' . $total_parcelas . '</td>';
 												echo '<td class="valor_parcela font-weight-bold" style=" color: ' . $color = null .
-														'"><span>' . number_format($r['valor_parcela'], 2, ',', '.') . ($parcelaPaga ? ' <span class="badge badge-pill badge-success">PAGO</span>' : '') .
+														'"><span>' . number_format($r['valor_parcela'], 2, ',', '.') . ($parcelaPaga && !$compraPaga ? ' <span class="badge badge-pill badge-success">PAGO</span>' : '') .
 														'</span><br><span style="color: grey">' . number_format($r['valor_total'], 2, ',', '.') .
+														($compraPaga ? ' <span class="badge badge-pill badge-success">PAGO</span>' : '') .
 														'</span></td>';
 												
 												echo '<td>';
@@ -159,13 +177,14 @@ if (isset($referenceMonth) && $referenceMonth) {
 													data-acao="' . ($parcelaPaga ? 'remover' : 'pagar') . '"
 													data-descricao="' . htmlspecialchars(strtoupper($r['descricao']), ENT_QUOTES, 'UTF-8') . '"
 													data-parcela="' . $n_parcela . '/' . $total_parcelas . '"
-													data-valor="' . number_format($r['valor_parcela'], 2, ',', '.') . '">
-                                                            <i class="fas ' . ($parcelaPaga ? 'fa-undo' : 'fa-hand-holding-circle-dollar') . ' fa-lg fa-fw"></i>
+													data-total-parcelas="' . $r['total_parcelas'] . '"
+													data-valor="' . number_format($r['valor_parcela'], 2, ',', '.') . '"
+													data-valor-compra="' . number_format($r['valor_total'], 2, ',', '.') . '">
+                                                            <i class="fal ' . ($parcelaPaga ? 'fa-undo' : 'fa-hand-holding-dollar') . ' fa-lg fa-fw"></i>
                                                         </button>';
-												echo '<a type="button" href="' . base_url('financeiro/faturas/detalhes/' . $r['id_fatura'] . '/' . $result['id_cartao']) . '" style="margin-right: 1%" data-toggle="modal" class="btn btn-info btn-sm editar" title="Visualizar fatura desta compra">
+												echo '<a type="button" href="' . base_url('financeiro/faturas/detalhes/' . $r['id_fatura'] . '/' . $result['id_cartao']) . '" style="margin-right: 1%" data-toggle="modal" class="btn btn-primary btn-sm editar" title="Visualizar fatura desta compra">
                                                             <i class="fas fa-file-invoice-dollar fa-lg fa-fw"></i>
                                                         </a>';
-												
 												echo '</td>';
 												echo '</tr>';
 											} ?>
@@ -186,16 +205,35 @@ if (isset($referenceMonth) && $referenceMonth) {
                                                     <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
                                                 </tr>
                                                 </thead>
+												<?php $totalFatura = $pagoFatura + $debitoFatura; ?>
+												<?php if ($pagoFatura) { ?>
                                                 <tr>
-                                                    <td colspan="2" style="text-align: left; color: red">(-) SALDO DEVEDOR NA FATURA</td>
-                                                    <td colspan="1" style="text-align: right; color: red">
-                                                        <input type="hidden" id="debit-balance" value="<?php echo number_format($debitoFatura, 2, ',', '.') ?>">
-                                                        <span style="cursor: pointer;" title="Copiar para área de transferência" class="i-copy-debit">
-                                                            <i class="fas fa-copy fa-fw hidden" id="icon-debit"></i>
-                                                            <?php echo number_format($debitoFatura, 2, ',', '.') ?>
+                                                    <td class="font-weight-bold" colspan="2" style="text-align: left; color: green">(+) TOTAL PAGO NA FATURA</td>
+                                                    <td class="font-weight-bold" colspan="1" style="text-align: right; color: green">
+                                                        <?php echo number_format($pagoFatura, 2, ',', '.') ?>
+                                                    </td>
+                                                </tr>
+												<?php } ?>
+                                                <tr>
+                                                    <td class="font-weight-bold" colspan="2" style="text-align: left; color: red">(-) SALDO DEVEDOR NA FATURA</td>
+                                                    <td class="font-weight-bold" colspan="1" style="text-align: right; color: red">
+                                                        <span style="cursor: pointer;" title="Copiar para área de transferência" class="i-copy-value" data-copy-value="<?php echo number_format($totalFatura, 2, ',', '.') ?>">
+                                                            <i class="fas fa-copy fa-fw"></i>
+                                                            <?php echo number_format($totalFatura, 2, ',', '.') ?>
                                                         </span>
                                                     </td>
                                                 </tr>
+												<?php if ($pagoFatura) { ?>
+                                                <tr>
+                                                    <td class="font-weight-bold" colspan="2" style="text-align: left;">(=) SALDO TOTAL DA FATURA</td>
+                                                    <td class="font-weight-bold" colspan="1" style="text-align: right;">
+                                                        <span style="cursor: pointer;" title="Copiar para área de transferência" class="i-copy-value" data-copy-value="<?php echo number_format($debitoFatura, 2, ',', '.') ?>">
+                                                            <i class="fas fa-copy fa-fw"></i>
+														    <?php echo number_format($debitoFatura, 2, ',', '.') ?>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+												<?php } ?>
                                             </table>
                                         </div>
                                     </div>
@@ -242,16 +280,35 @@ if (isset($referenceMonth) && $referenceMonth) {
                             <th colspan="1" style="text-align: right !important;">Valor (R$)</th>
                         </tr>
                         </thead>
+						<?php $totalPeriodo = $totalPagoPeriodo + $totalSum; ?>
+						<?php if ($totalPagoPeriodo) { ?>
                         <tr>
-                            <td colspan="2" style="text-align: left; color: red">(-) SALDO DEVEDOR TOTAL</td>
-                            <td colspan="1" style="text-align: right; color: red">
-                                <input type="hidden" id="debit-balance" value="<?php echo number_format($totalSum, 2, ',', '.') ?>">
-                                <span style="cursor: pointer;" title="Copiar para área de transferência" class="i-copy-debit">
-                                    <i class="fas fa-copy fa-fw hidden"></i>
-                                    <?php echo number_format($totalSum, 2, ',', '.') ?>
+                            <td class="font-weight-bold" colspan="2" style="text-align: left; color: green">(+) SALDO TOTAL PAGO NO PERÍODO</td>
+                            <td class="font-weight-bold" colspan="1" style="text-align: right; color: green">
+								<?php echo number_format($totalPagoPeriodo, 2, ',', '.') ?>
+                            </td>
+                        </tr>
+						<?php } ?>
+                        <tr>
+                            <td class="font-weight-bold" colspan="2" style="text-align: left; color: red">(-) SALDO TOTAL DEVEDOR NO PERÍODO</td>
+                            <td class="font-weight-bold" colspan="1" style="text-align: right; color: red">
+                                <span style="cursor: pointer;" title="Copiar para área de transferência" class="i-copy-value" data-copy-value="<?php echo number_format($totalPeriodo, 2, ',', '.') ?>">
+                                    <i class="fas fa-copy fa-fw"></i>
+								<?php echo number_format($totalPeriodo, 2, ',', '.') ?>
                                 </span>
                             </td>
                         </tr>
+						<?php if ($totalPagoPeriodo) { ?>
+                        <tr>
+                            <td class="font-weight-bold" colspan="2" style="text-align: left;">(=) SALDO TOTAL DO PERÍODO</td>
+                            <td class="font-weight-bold" colspan="1" style="text-align: right;">
+                                <span style="cursor: pointer;" title="Copiar para área de transferência" class="i-copy-value" data-copy-value="<?php echo number_format($totalSum, 2, ',', '.') ?>">
+                                    <i class="fas fa-copy fa-fw"></i>
+								    <?php echo number_format($totalSum, 2, ',', '.') ?>
+                                </span>
+                            </td>
+                        </tr>
+						<?php } ?>
                     </table>
                 </div>
             </div>
@@ -271,6 +328,55 @@ if (isset($referenceMonth) && $referenceMonth) {
 			        <?= $dueDatePeriod ?>
                 </span>
             </div>
+        </div>
+    </div>
+</div>
+
+<?php $saldoVinculoTerceiro = $totalSum ?? 0; ?>
+<!-- Modal VINCULAR TERCEIRO AO MODULO DE LANCAMENTOS -->
+<div class="modal fade" id="modalVincularTerceiroPeriodo" tabindex="-1" role="dialog" aria-labelledby="modalVincularTerceiroPeriodoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="formVincularTerceiroPeriodo" action="<?= base_url('financeiro/faturas/vincularTerceiroPeriodo') ?>" method="post" autocomplete="off">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title text-white" id="modalVincularTerceiroPeriodoLabel">Vincular compras do terceiro</h4>
+                </div>
+                <div class="modal-body">
+                    <input class="urlAtual" type="hidden" name="urlAtual"/>
+                    <input type="hidden" name="nome" value="<?= $name ?>">
+                    <input type="hidden" name="mesReferencia" value="<?= $referenceMonth ?>">
+                    <input type="hidden" name="anoReferencia" value="<?= $referenceYear ?>">
+
+                    <p class="font-weight-bold">Deseja vincular o saldo pendente deste período ao módulo de Lançamentos?</p>
+                    <table class="table table-condensed table-bordeless mb0">
+                        <tr>
+                            <td class="font-weight-bold">Terceiro</td>
+                            <td><?= strtoupper($name) ?></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Referência</td>
+                            <td><?= $referencePeriod ?></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Vencimento</td>
+                            <td><?= $dueDatePeriod ?></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Valor</td>
+                            <td>R$ <span class="vinculoTerceiroValor"><?= number_format($saldoVinculoTerceiro, 2, ',', '.') ?></span></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm hidden-xs" data-dismiss="modal" aria-hidden="true">
+                        <i class="fa fa-times fa-fw"></i> Cancelar
+                    </button>
+                    <button type="submit" form="formVincularTerceiroPeriodo" class="btn btn-primary btn-sm">
+                        <i class="fa fa-check fa-fw"></i> Vincular
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -405,7 +511,7 @@ if (isset($referenceMonth) && $referenceMonth) {
 <div class="modal fade" id="modalParcelaTerceiroPago" tabindex="-1" role="dialog" aria-labelledby="modalParcelaTerceiroPagoLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="<?php echo base_url('financeiro/faturas/marcarParcelaTerceiroPago') ?>" method="post" autocomplete="off">
+            <form id="formParcelaTerceiroPago" action="<?php echo base_url('financeiro/faturas/marcarParcelaTerceiroPago') ?>" method="post" autocomplete="off">
                 <div class="modal-header bg-success parcelaTerceiroPagoHeader">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                     <h4 class="modal-title text-white" id="modalParcelaTerceiroPagoLabel">Confirmar pagamento da parcela</h4>
@@ -431,10 +537,62 @@ if (isset($referenceMonth) && $referenceMonth) {
                     </table>
                 </div>
                 <div class="modal-footer">
+                    <div class="row">
+                        <div class="text-left col-xs-4 modal-form-buttons">
+                            <button type="button" class="btn btn-success btn-sm compraTerceiroPagoOpen">
+                                <i class="fa fa-layer-group fa-fw"></i> Pagar compra inteira
+                            </button>
+                        </div>
+                        <div class="col-xs-8 modal-form-buttons">
+                            <button class="btn btn-default btn-sm hidden-xs" data-dismiss="modal" aria-hidden="true">
+                                <i class="fa fa-times fa-fw"></i> Cancelar
+                            </button>
+                            <button type="submit" form="formParcelaTerceiroPago" class="btn btn-success btn-sm parcelaTerceiroPagoSubmit">
+                                <i class="fa fa-check fa-fw"></i> Confirmar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal MARCAR COMPRA PAGA POR TERCEIROs -->
+<div class="modal fade" id="modalCompraTerceiroPago" tabindex="-1" role="dialog" aria-labelledby="modalCompraTerceiroPagoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="formCompraTerceiroPago" action="<?php echo base_url('financeiro/faturas/marcarCompraTerceiroPago') ?>" method="post" autocomplete="off">
+                <div class="modal-header bg-success compraTerceiroPagoHeader">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title text-white" id="modalCompraTerceiroPagoLabel">Confirmar pagamento da compra</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id_assoc" class="compraTerceiroPagoIdAssoc">
+                    <input type="hidden" name="acao" class="compraTerceiroPagoAcao">
+                    <input class="urlAtual" type="hidden" name="urlAtual"/>
+                    <p class="font-weight-bold compraTerceiroPagoTexto"></p>
+                    <p class="note note-info compraTerceiroPagoNota"></p>
+                    <table class="table table-condensed table-bordeless mb0">
+                        <tr>
+                            <td class="font-weight-bold">Descrição</td>
+                            <td class="compraTerceiroPagoDescricao"></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Parcelamento</td>
+                            <td class="compraTerceiroPagoParcelamento"></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Valor da compra</td>
+                            <td>R$ <span class="compraTerceiroPagoValorCompra"></span></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
                         <i class="fa fa-times fa-fw"></i> Cancelar
                     </button>
-                    <button type="submit" class="btn btn-success btn-sm parcelaTerceiroPagoSubmit">
+                    <button type="submit" form="formCompraTerceiroPago" class="btn btn-success btn-sm compraTerceiroPagoSubmit">
                         <i class="fa fa-check fa-fw"></i> Confirmar
                     </button>
                 </div>
@@ -501,6 +659,9 @@ if (isset($referenceMonth) && $referenceMonth) {
                         <label class="font-weight-bold">Estorno</label>
                     </div>
                     <div class="col-xs-8">
+                        <a href="#" class="btn btn-primary btn-sm controle-compra-terceiro" title="Controle da compra">
+                            <i class="fas fa-list-check fa-fw"></i> Controle da compra
+                        </a>
                         <button type="button" class="btn btn-success btn-sm marcar-parcela-terceiro-pago marcar-parcela-terceiro-pago-modal-detalhes">
                             <i class="fas fa-hand-holding-circle-dollar fa-fw"></i> Marcar como pago
                         </button>
@@ -520,15 +681,21 @@ if (isset($referenceMonth) && $referenceMonth) {
 <script>
     $('.accordion-title').addClass('collapsed');
 
-    $(".i-copy-debit").hover(function () {
+    <?php if ($saldoVinculoTerceiro <= 0) { ?>
+    $('#vincularTerceiroPeriodo')
+        .attr('disabled', true)
+        .attr('title', 'Não há saldo pendente para vincular neste período');
+    <?php } ?>
+
+    $(document).on('mouseenter mouseleave', '.i-copy-value', function () {
         $(this).toggleClass('font-weight-bold')
     });
 
-    $(".i-copy-debit").click(function () {
+    $(document).on('click', '.i-copy-value', function () {
         var copyText = $(this);
         var textArea = document.createElement("textarea");
-        value = copyText[0].innerText;
-        valueNew = value.toString().split('.').join('');
+        var value = copyText.attr('data-copy-value');
+        var valueNew = value.toString().split('.').join('');
         valueNew = valueNew.toString().split('-').join('');
         textArea.value = valueNew;
         document.body.appendChild(textArea);
@@ -562,6 +729,7 @@ if (isset($referenceMonth) && $referenceMonth) {
 
         var acaoPagamentoTerceiro = $(this).attr('acao_pagamento_terceiro');
         var parcelaPaga = $(this).attr('parcela_paga') == 1;
+        $('.controle-compra-terceiro').attr('href', '<?= base_url('financeiro/faturas/terceiro/compra/') ?>' + $(this).attr('id_lancamento'));
         $('.marcar-parcela-terceiro-pago-modal-detalhes')
             .toggleClass('btn-success', !parcelaPaga)
             .toggleClass('btn-warning', parcelaPaga)
@@ -571,6 +739,8 @@ if (isset($referenceMonth) && $referenceMonth) {
             .attr('data-descricao', $(this).attr('descricao').toUpperCase())
             .attr('data-parcela', $(this).attr('parcela'))
             .attr('data-valor', $(this).attr('valor_parcela'))
+            .attr('data-total-parcelas', $(this).attr('n_parcelas'))
+            .attr('data-valor-compra', $(this).attr('valor'))
             .html(
                 parcelaPaga
                     ? '<i class="fas fa-undo fa-fw"></i> Remover pagamento'
@@ -627,29 +797,60 @@ if (isset($referenceMonth) && $referenceMonth) {
     })
 
     $(document).on('click', '.marcar-parcela-terceiro-pago', function () {
-        var acao = $(this).data('acao');
+        var botao = $(this);
+        var acao = botao.attr('data-acao');
         var pagar = acao === 'pagar';
 
-        $('.parcelaTerceiroPagoIdAssoc').val($(this).data('id-assoc'));
+        $('.parcelaTerceiroPagoIdAssoc').val(botao.attr('data-id-assoc'));
         $('.parcelaTerceiroPagoAcao').val(acao);
-        $('.parcelaTerceiroPagoDescricao').text($(this).data('descricao'));
-        $('.parcelaTerceiroPagoParcela').text($(this).data('parcela'));
-        $('.parcelaTerceiroPagoValor').text($(this).data('valor'));
+        $('.parcelaTerceiroPagoDescricao').text(botao.attr('data-descricao'));
+        $('.parcelaTerceiroPagoParcela').text(botao.attr('data-parcela'));
+        $('.parcelaTerceiroPagoValor').text(botao.attr('data-valor'));
+        $('.compraTerceiroPagoIdAssoc').val(botao.attr('data-id-assoc'));
+        $('.compraTerceiroPagoAcao').val(acao);
+        $('.compraTerceiroPagoDescricao').text(botao.attr('data-descricao'));
+        $('.compraTerceiroPagoParcelamento').text(botao.attr('data-total-parcelas') + 'x');
+        $('.compraTerceiroPagoValorCompra').text(botao.attr('data-valor-compra'));
         $('.parcelaTerceiroPagoTexto').text(
             pagar
                 ? 'Deseja marcar esta parcela como paga pelo terceiro?'
                 : 'Deseja remover o pagamento desta parcela?'
         );
+        $('.compraTerceiroPagoTexto').text(
+            pagar
+                ? 'Deseja marcar a compra inteira como paga pelo terceiro?'
+                : 'Deseja remover o pagamento da compra inteira?'
+        );
+        $('.compraTerceiroPagoNota').text(
+            pagar
+                ? 'Todas as parcelas desta compra serão marcadas como pagas.'
+                : 'Todas as parcelas desta compra voltarão a ficar em aberto.'
+        );
         $('.parcelaTerceiroPagoHeader')
+            .toggleClass('bg-success', pagar)
+            .toggleClass('bg-warning', !pagar);
+        $('.compraTerceiroPagoHeader')
             .toggleClass('bg-success', pagar)
             .toggleClass('bg-warning', !pagar);
         $('.parcelaTerceiroPagoSubmit')
             .toggleClass('btn-success', pagar)
             .toggleClass('btn-warning', !pagar)
             .html('<i class="fa fa-check fa-fw"></i> ' + (pagar ? 'Marcar como pago' : 'Remover pagamento'));
+        $('.compraTerceiroPagoOpen')
+            .toggleClass('btn-success', pagar)
+            .toggleClass('btn-warning', !pagar)
+            .html('<i class="fa fa-layer-group fa-fw"></i> ' + (pagar ? 'Pagar compra inteira' : 'Remover pagamento da compra'));
+        $('.compraTerceiroPagoSubmit')
+            .toggleClass('btn-success', pagar)
+            .toggleClass('btn-warning', !pagar)
+            .html('<i class="fa fa-check fa-fw"></i> ' + (pagar ? 'Pagar compra' : 'Remover pagamento'));
 
         if ($(this).hasClass('marcar-parcela-terceiro-pago-modal-detalhes')) {
             toggleModals($('#modalEditar'), $('#modalParcelaTerceiroPago'), true);
         }
+    });
+
+    $(document).on('click', '.compraTerceiroPagoOpen', function () {
+        toggleModals($('#modalParcelaTerceiroPago'), $('#modalCompraTerceiroPago'), true);
     });
 </script>

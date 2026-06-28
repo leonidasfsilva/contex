@@ -141,6 +141,30 @@ function atualizaValorVinculoFaturas($idFatura = null): bool
     return true;
 }
 
+function vinculoAutomaticoComprasTerceiros(): bool
+{
+    $CI = get_instance();
+    $CI->load->model('fatura_model');
+
+    $periodosVinculados = $CI->fatura_model->getPeriodosTerceirosVinculadosAtivos(getUserId());
+
+    if (!$periodosVinculados) {
+        return true;
+    }
+
+    foreach ($periodosVinculados as $periodo) {
+        $CI->fatura_model->sincronizarVinculoTerceiroPeriodo(
+            $periodo['id_lancamento'],
+            getUserId(),
+            $periodo['nome_cliente'],
+            $periodo['mes_referencia'],
+            $periodo['ano_referencia']
+        );
+    }
+
+    return true;
+}
+
 function vinculaFatura($idFatura)
 {
     if (!$idFatura) {
