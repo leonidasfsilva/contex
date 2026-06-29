@@ -96,6 +96,7 @@ class Mxcode extends CI_Controller
 
         $modulosBusca          = $this->configs_model->getModulosBuscaGlobal(getUserId());
         $data['results']       = $this->mxcode_model->pesquisar($termo, getUserId(), $modulosBusca);
+        $this->data['modulosBusca'] = $modulosBusca;
         $this->data['lancamentos'] = $data['results']['lancamentos'];
         $this->data['faturas']     = $data['results']['faturas'];
         $this->data['despesas']    = $data['results']['despesas'];

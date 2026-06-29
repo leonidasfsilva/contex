@@ -9,6 +9,16 @@ $formatDate = function ($date) {
 $escape = function ($value) {
     return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
 };
+$modulosBusca = array_merge(
+    array(
+        'lancamentos' => true,
+        'faturas'     => true,
+        'despesas'    => true,
+        'clientes'    => true,
+        'cartoes'     => true,
+    ),
+    (array)$modulosBusca
+);
 ?>
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
@@ -31,7 +41,14 @@ $escape = function ($value) {
             </div>
         </form>
 
+        <?php if (!array_filter($modulosBusca)) { ?>
+            <span class="note note-info block font-weight-bold">
+                Nenhum módulo está habilitado para a busca geral.
+            </span>
+        <?php } ?>
+
         <div class="row">
+            <?php if ($modulosBusca['lancamentos']) { ?>
             <div class="col-lg-6">
                 <div class="panel panel-midnightblue">
                     <div class="panel-heading">
@@ -81,7 +98,9 @@ $escape = function ($value) {
                     </div>
                 </div>
             </div>
+            <?php } ?>
 
+            <?php if ($modulosBusca['faturas']) { ?>
             <div class="col-lg-6">
                 <div class="panel panel-midnightblue">
                     <div class="panel-heading">
@@ -126,9 +145,11 @@ $escape = function ($value) {
                     </div>
                 </div>
             </div>
+            <?php } ?>
         </div>
 
         <div class="row">
+            <?php if ($modulosBusca['despesas']) { ?>
             <div class="col-lg-6">
                 <div class="panel panel-midnightblue">
                     <div class="panel-heading">
@@ -177,7 +198,9 @@ $escape = function ($value) {
                     </div>
                 </div>
             </div>
+            <?php } ?>
 
+            <?php if ($modulosBusca['clientes']) { ?>
             <div class="col-lg-6">
                 <div class="panel panel-midnightblue">
                     <div class="panel-heading">
@@ -223,9 +246,11 @@ $escape = function ($value) {
                     </div>
                 </div>
             </div>
+            <?php } ?>
         </div>
 
         <div class="row">
+            <?php if ($modulosBusca['cartoes']) { ?>
             <div class="col-lg-6">
                 <div class="panel panel-midnightblue">
                     <div class="panel-heading">
@@ -268,6 +293,7 @@ $escape = function ($value) {
                     </div>
                 </div>
             </div>
+            <?php } ?>
         </div>
     </div>
 </div>
