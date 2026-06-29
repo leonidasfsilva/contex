@@ -23,7 +23,7 @@ $modulosBusca = array_merge(
 <div class="panel panel-midnightblue">
     <div class="panel-heading">
         <h2 class="pb0">
-            <span class="pr20">Resultados de busca para: </span><span class="pr20"><?= $escape($termo) ?></span>
+            <span class="pr20">Resultados de pesquisa para: </span><span class="pr20"><?= $escape($termo) ?></span>
         </h2>
         <div class="panel-ctrls">
             <a href="<?= base_url('mxcode') ?>" class="btn btn-sm btn-default"><i class="fas fa-arrow-left fa-fw"></i> Painel Inicial</a>
@@ -43,7 +43,7 @@ $modulosBusca = array_merge(
 
         <?php if (!array_filter($modulosBusca)) { ?>
             <span class="note note-info block font-weight-bold">
-                Nenhum módulo está habilitado para a busca geral.
+                Nenhum módulo está habilitado para a pesquisa geral.
             </span>
         <?php } ?>
 
