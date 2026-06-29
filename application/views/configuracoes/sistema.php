@@ -11,6 +11,9 @@
             <button onclick="getVersion()" role="button" class="btn btn-primary btn-sm" type="button">
                 <i class="fas fa-info-circle fa-fw"></i> Versão do Sistema
             </button>
+            <button href="#modalBuscaGlobal" role="button" data-toggle="modal" class="btn btn-primary btn-sm" type="button">
+                <i class="fas fa-search fa-fw"></i> Busca Geral
+            </button>
             <!--            <a href="#" class="button-icon close-panel">-->
             <!--                <i class="fas fa-times"></i>-->
             <!--            </a>-->
@@ -95,6 +98,54 @@
 			} ?>
             </tbody>
         </table>
+    </div>
+</div>
+
+<!-- Modal BUSCA GERAL-->
+<div class="modal fade" id="modalBuscaGlobal" tabindex="-1" role="dialog" aria-labelledby="modalBuscaGlobalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-white" id="modalBuscaGlobalLabel">Configurar busca geral</h4>
+            </div>
+            <form action="<?php echo base_url('configuracoes/buscaGlobal') ?>" method="post">
+                <div class="modal-body">
+                    <p class="font-weight-bold">Selecione os módulos consultados pela busca geral da navbar.</p>
+
+                    <div class="mb10">
+                        <input type="checkbox" id="busca_lancamentos" name="modulos_busca[]" value="lancamentos" class="switch-input primary" <?= $modulosBusca['lancamentos'] ? 'checked' : '' ?>>
+                        <label for="busca_lancamentos" class="switch-label primary font-weight-bold">Lançamentos</label>
+                    </div>
+
+                    <div class="mb10">
+                        <input type="checkbox" id="busca_faturas" name="modulos_busca[]" value="faturas" class="switch-input primary" <?= $modulosBusca['faturas'] ? 'checked' : '' ?>>
+                        <label for="busca_faturas" class="switch-label primary font-weight-bold">Faturas</label>
+                    </div>
+
+                    <div class="mb10">
+                        <input type="checkbox" id="busca_despesas" name="modulos_busca[]" value="despesas" class="switch-input primary" <?= $modulosBusca['despesas'] ? 'checked' : '' ?>>
+                        <label for="busca_despesas" class="switch-label primary font-weight-bold">Despesas</label>
+                    </div>
+
+                    <div class="mb10">
+                        <input type="checkbox" id="busca_clientes" name="modulos_busca[]" value="clientes" class="switch-input primary" <?= $modulosBusca['clientes'] ? 'checked' : '' ?>>
+                        <label for="busca_clientes" class="switch-label primary font-weight-bold">Clientes</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="busca_cartoes" name="modulos_busca[]" value="cartoes" class="switch-input primary" <?= $modulosBusca['cartoes'] ? 'checked' : '' ?>>
+                        <label for="busca_cartoes" class="switch-label primary font-weight-bold">Cartões</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">
+                        <i class="fa fa-times fa-fw"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-check fa-fw"></i> Salvar</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

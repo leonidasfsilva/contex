@@ -53,32 +53,100 @@ class Mxcode_model extends CI_Model
 
     }
 
-    function pesquisar($termo, $id)
+    function pesquisar($termo, $id, $modulosBusca = null)
     {
-        $data = array();
+        $data = array(
+            'lancamentos' => array(),
+            'faturas'     => array(),
+            'despesas'    => array(),
+            'clientes'    => array(),
+            'cartoes'     => array(),
+        );
+
+        $termo = trim((string)$termo);
+
+        if ($termo === '') {
+            return $data;
+        }
+
+        $termo = $this->db->escape_like_str($termo);
+        $modulosBusca = array_merge(
+            array(
+                'lancamentos' => true,
+                'faturas'     => true,
+                'despesas'    => true,
+                'clientes'    => true,
+                'cartoes'     => true,
+            ),
+            (array)$modulosBusca
+        );
+
+        // buscando lançamentos
+        if ($modulosBusca['lancamentos']) {
+            $this->db
+                ->select('id_lancamento, descricao, cliente_fornecedor, valor, data_lancamento, tipo, baixado')
+                ->where("(descricao LIKE '%$termo%' OR cliente_fornecedor LIKE '%$termo%' OR observacoes LIKE '%$termo%')")
+                ->where('status', 1)
+                ->where('id_usuario', $id)
+                ->order_by('data_lancamento', 'desc')
+                ->order_by('id_lancamento', 'desc')
+                ->limit(5);
+            $data['lancamentos'] = $this->db->get('lancamentos')->result();
+        }
+
+        // buscando faturas/compras
+        if ($modulosBusca['faturas']) {
+            $this->db
+                ->select('lf.id_lancamento, lf.id_fatura, f.id_cartao, lf.descricao, lf.nome_cliente, lf.valor_total, lf.total_parcelas, lf.data_compra, f.mes_referencia, f.ano_referencia, c.apelido AS cartao_apelido')
+                ->from('lancamentos_faturas AS lf')
+                ->join('faturas AS f', 'f.id_fatura = lf.id_fatura', 'inner')
+                ->join('cartoes AS c', 'c.id_cartao = f.id_cartao', 'left')
+                ->where("(lf.descricao LIKE '%$termo%' OR lf.nome_cliente LIKE '%$termo%' OR lf.observacoes LIKE '%$termo%')")
+                ->where('lf.status', 1)
+                ->where('f.status', 1)
+                ->where('f.id_usuario', $id)
+                ->group_by('lf.id_lancamento')
+                ->order_by('lf.criado_em', 'desc')
+                ->limit(5);
+            $data['faturas'] = $this->db->get()->result();
+        }
+
+        // buscando despesas
+        if ($modulosBusca['despesas']) {
+            $this->db
+                ->select('id, descricao, fornecedor, nome_terceiro, valor_total, valor_parcela, data_pagamento, tipo_despesa, despesa_parcelada, total_parcelas')
+                ->where("(descricao LIKE '%$termo%' OR fornecedor LIKE '%$termo%' OR nome_terceiro LIKE '%$termo%' OR observacoes LIKE '%$termo%')")
+                ->where('status', 1)
+                ->where('id_usuario', $id)
+                ->order_by('criado_em', 'desc')
+                ->order_by('id', 'desc')
+                ->limit(5);
+            $data['despesas'] = $this->db->get('despesas')->result();
+        }
+
         // buscando clientes
-        $this->db->like('nome', $termo);
-        $this->db->where('id_usuario', $id);
-        $this->db->limit(5);
-        $data['clientes'] = $this->db->get('clientes')->result();
+        if ($modulosBusca['clientes']) {
+            $this->db
+                ->select('id_clientes, nome, cpf, email, telefone')
+                ->where("(nome LIKE '%$termo%' OR cpf LIKE '%$termo%' OR email LIKE '%$termo%' OR telefone LIKE '%$termo%')")
+                ->where('status', 1)
+                ->where('id_usuario', $id)
+                ->order_by('nome', 'asc')
+                ->limit(5);
+            $data['clientes'] = $this->db->get('clientes')->result();
+        }
 
-        // buscando os
-        $this->db->like('idOs', $termo);
-        $this->db->where('id_usuario', $id);
-        $this->db->limit(5);
-        $data['os'] = $this->db->get('os')->result();
-
-        // buscando produtos
-        $this->db->like('descricao', $termo);
-        $this->db->where('id_usuario', $id);
-        $this->db->limit(5);
-        $data['produtos'] = $this->db->get('produtos')->result();
-
-        //buscando serviços
-        $this->db->like('nome', $termo);
-        $this->db->where('id_usuario', $id);
-        $this->db->limit(5);
-        $data['servicos'] = $this->db->get('servicos')->result();
+        // buscando cartões
+        if ($modulosBusca['cartoes']) {
+            $this->db
+                ->select('id_cartao, apelido, bandeira, nome, ativo, principal')
+                ->where("(apelido LIKE '%$termo%' OR bandeira LIKE '%$termo%' OR nome LIKE '%$termo%')")
+                ->where('status', 1)
+                ->where('id_usuario', $id)
+                ->order_by('apelido', 'asc')
+                ->limit(5);
+            $data['cartoes'] = $this->db->get('cartoes')->result();
+        }
 
         return $data;
     }
