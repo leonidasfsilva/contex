@@ -233,7 +233,7 @@ $this->load->view('includes/custom_js');
                 </div>
                 <form action="<?= base_url() ?>mxcode/pesquisar">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Pesquisar...">
+                        <input type="text" class="form-control" name="termo" placeholder="Pesquisar...">
                         <span class="input-group-btn">
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-search fa-fw"></i></button>
                             </span>

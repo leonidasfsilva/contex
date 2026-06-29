@@ -5,6 +5,8 @@
 ### 1. Controle de Versão
 - **Nunca mexer na branch master**
 - Sempre trabalhar em branches separadas
+- Para tarefas originadas de cards do Trello, criar a branch a partir da `master` atualizada usando o padrão `feature/{numero-card}-{slug-do-card}`.
+- Exemplo: `feature/262-corrigir-view-de-pesquisa-da-navbar`.
 - Commits com mensagens curtas e em inglês
 
 ### 2. Comunicação
