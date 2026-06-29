@@ -53,6 +53,7 @@ class Configuracoes extends CI_Controller
 		
 		// $data['maintenanceMode']   = $this->load->get_var('maintenanceMode');
 		$data['menuConfiguracoes'] = true;
+		$data['modulosBusca']      = $this->configs_model->getModulosBuscaGlobal(getUserId());
 		$data['results']           = $this->configs_model->getConfigs();
 		$data['view']              = 'configuracoes/sistema';
 		$this->load->view('tema/topo', $data);
@@ -340,6 +341,30 @@ class Configuracoes extends CI_Controller
 		$this->session->set_flashdata('erro', 'Erro ao tentar efetuar alterações!');
 		redirect(base_url() . 'configuracoes/sistema');
 		
+	}
+
+	public function buscaGlobal()
+	{
+		if ((!session_id()) || (!$this->session->userdata('logado'))) {
+			redirect('mxcode/login');
+		}
+
+		if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {
+			$this->session->set_flashdata('erro', 'Você não tem permissão para editar configurações do sistema.');
+			redirect(base_url());
+		}
+
+		if (!$_POST) {
+			$this->session->set_flashdata('erro', 'Método não permitido.');
+			redirect(base_url('configuracoes/sistema'));
+		}
+
+		$modulosAtivos = $this->input->post('modulos_busca');
+		$modulosAtivos = is_array($modulosAtivos) ? $modulosAtivos : array();
+
+		$this->configs_model->setModulosBuscaGlobal(getUserId(), $modulosAtivos);
+		$this->session->set_flashdata('sucesso', 'Configurações da busca geral salvas com sucesso!');
+		redirect(base_url('configuracoes/sistema'));
 	}
 	
 	public function setWidgetLancamentos()

@@ -195,6 +195,70 @@ class Configs_model extends CI_Model
 			->get('configs_usuario_assoc')
 			->num_rows();
 	}
+
+	public function getModulosBuscaGlobal($id_usuario)
+	{
+		$modulos = array(
+			'lancamentos' => true,
+			'faturas'     => true,
+			'despesas'    => true,
+			'clientes'    => true,
+			'cartoes'     => true,
+		);
+
+		$configs = array(
+			201 => 'lancamentos',
+			202 => 'faturas',
+			203 => 'despesas',
+			204 => 'clientes',
+			205 => 'cartoes',
+		);
+
+		$desativados = $this->db
+			->select('id_config_opcao')
+			->where('id_usuario', $id_usuario)
+			->where_in('id_config_opcao', array_keys($configs))
+			->get('configs_usuario_assoc')
+			->result();
+
+		foreach ($desativados as $desativado) {
+			$modulos[$configs[$desativado->id_config_opcao]] = false;
+		}
+
+		return $modulos;
+	}
+
+	public function setModulosBuscaGlobal($id_usuario, $modulosAtivos)
+	{
+		$configs = array(
+			'lancamentos' => 201,
+			'faturas'     => 202,
+			'despesas'    => 203,
+			'clientes'    => 204,
+			'cartoes'     => 205,
+		);
+
+		$this->db
+			->where('id_usuario', $id_usuario)
+			->where_in('id_config_opcao', array_values($configs))
+			->delete('configs_usuario_assoc');
+
+		foreach ($configs as $modulo => $idConfigOpcao) {
+			if (in_array($modulo, $modulosAtivos)) {
+				continue;
+			}
+
+			$this->db->insert(
+				'configs_usuario_assoc',
+				array(
+					'id_config_opcao' => $idConfigOpcao,
+					'id_usuario'      => $id_usuario
+				)
+			);
+		}
+
+		return true;
+	}
 	
 	public function setWidgetLancamentos($id_usuario)
 	{

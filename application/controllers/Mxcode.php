@@ -94,12 +94,14 @@ class Mxcode extends CI_Controller
 
         $termo = $this->input->get('termo');
 
-        $data['results']        = $this->mxcode_model->pesquisar($termo, getUserId());
-        $this->data['produtos'] = $data['results']['produtos'];
-        $this->data['servicos'] = $data['results']['servicos'];
-        $this->data['os']       = $data['results']['os'];
-        $this->data['clientes'] = $data['results']['clientes'];
-        $this->data['view']     = 'mxcode/pesquisa';
+        $modulosBusca          = $this->configs_model->getModulosBuscaGlobal(getUserId());
+        $data['results']       = $this->mxcode_model->pesquisar($termo, getUserId(), $modulosBusca);
+        $this->data['lancamentos'] = $data['results']['lancamentos'];
+        $this->data['faturas']     = $data['results']['faturas'];
+        $this->data['despesas']    = $data['results']['despesas'];
+        $this->data['clientes']    = $data['results']['clientes'];
+        $this->data['cartoes']     = $data['results']['cartoes'];
+        $this->data['view']        = 'mxcode/pesquisa';
         $this->load->view('tema/topo', $this->data);
     }
 
