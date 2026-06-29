@@ -73,6 +73,11 @@
 - Não apagar branches de feature sem pedido explícito do desenvolvedor.
 - A branch `feature/adiantamento-parcelas-terceiros` é a branch oficial desta feature e deve ser mantida enquanto a feature estiver em andamento.
 
+### Trello
+- Para tarefas originadas de cards do Trello, usar o número do card como referência operacional.
+- Ao finalizar um card, mover para a lista `Finalizado` sempre no topo da lista.
+- O helper `.agents/trello/trello.ps1` deve manter esse comportamento como padrão ao mover cards.
+
 ## Contexto do Projeto
 
 ### Sistema Contex

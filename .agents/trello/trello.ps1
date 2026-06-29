@@ -25,7 +25,11 @@ param(
     [string]$Text,
 
     [Parameter(Mandatory = $false)]
-    [string]$Url
+    [string]$Url,
+
+    [Parameter(Mandatory = $false)]
+    [ValidateSet("top", "bottom")]
+    [string]$Position = "top"
 )
 
 $ErrorActionPreference = "Stop"
@@ -205,7 +209,11 @@ switch ($Command) {
             throw "ListId é obrigatório para mover card."
         }
 
-        $result = Invoke-TrelloRequest -Method "PUT" -Path "cards/$CardId/idList?value=$([uri]::EscapeDataString($ListId))"
+        $list = [uri]::EscapeDataString($ListId)
+        Invoke-TrelloRequest -Method "PUT" -Path "cards/$CardId/idList?value=$list" | Out-Null
+
+        $pos = [uri]::EscapeDataString($Position)
+        $result = Invoke-TrelloRequest -Method "PUT" -Path "cards/$CardId/pos?value=$pos"
         Write-Json $result
         break
     }
