@@ -32,12 +32,16 @@ class Faturas extends CI_Controller
             $this->session->set_flashdata('error', 'Você não tem permissão para visualizar faturas.');
             redirect(base_url());
         }
-        $where    = '';
-        $periodo  = $this->input->get('periodo');
-        $cliente  = $this->input->get('terceiro');
-        $start    = $_GET['per_page'] ?? null;
-        $limit    = null;
-        $idCartao = null;
+        $where      = '';
+        $periodo    = $this->input->get('periodo');
+        $status     = $this->input->get('status');
+        $pagamento  = $this->input->get('pagamento');
+        $inicio     = $this->input->get('dataInicial');
+        $fim        = $this->input->get('dataFinal');
+        $cliente    = $this->input->get('terceiro');
+        $start      = $_GET['per_page'] ?? null;
+        $limit      = null;
+        $idCartao   = null;
 
         $order_by = [
             'ano_referencia' => 'desc',
@@ -61,10 +65,42 @@ class Faturas extends CI_Controller
             }
         }
 
+        $whereFiltros = [
+            'status = 1',
+            'id_usuario = ' . getUserId(),
+        ];
+
+        if ($status == 'aberta') {
+            $whereFiltros[] = 'fatura_aberta = 1';
+        } elseif ($status == 'fechada') {
+            $whereFiltros[] = 'fatura_aberta = 0';
+        } elseif ($status == 'futura') {
+            $whereFiltros[] = 'fatura_aberta = 2';
+        }
+
+        if ($pagamento == 'paga') {
+            $whereFiltros[] = 'fatura_paga = 1';
+        } elseif ($pagamento == 'pendente') {
+            $whereFiltros[] = 'fatura_paga = 2';
+        }
+
+        if ($periodo == 'especifico' && $inicio && $fim) {
+            $inicioFiltro = explode('/', $inicio);
+            $fimFiltro    = explode('/', $fim);
+
+            if (count($inicioFiltro) == 3 && count($fimFiltro) == 3) {
+                $inicioFiltro   = $inicioFiltro[2] . '-' . $inicioFiltro[1] . '-' . $inicioFiltro[0];
+                $fimFiltro      = $fimFiltro[2] . '-' . $fimFiltro[1] . '-' . $fimFiltro[0];
+                $whereFiltros[] = 'STR_TO_DATE(CONCAT(ano_referencia, "-", mes_referencia, "-01"), "%Y-%m-%d") BETWEEN "' . $inicioFiltro . '" AND "' . $fimFiltro . '"';
+            }
+        }
+
+        $where = implode(' AND ', $whereFiltros);
+
         $config['base_url']          = base_url('financeiro/faturas/');
         $config['suffix']            = '&' . $query_string;
         $config['first_url']         = $config['base_url'] . '?' . $query_string;
-        $config['total_rows']        = $this->fatura_model->count('faturas', 'status = 1 AND id_usuario = ' . getUserId(), $idCartao);
+        $config['total_rows']        = $this->fatura_model->count('faturas', $where, $idCartao);
         $config['per_page']          = 13;
         $config['page_query_string'] = true;
         $config['next_link']         = false;
