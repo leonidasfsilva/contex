@@ -1,6 +1,9 @@
 <?php
-$situacao = $this->input->get('situacao');
-$periodo  = $this->input->get('periodo');
+$periodo          = $this->input->get('periodo');
+$statusFaturas    = $this->input->get('status');
+$pagamentoFaturas = $this->input->get('pagamento');
+$inicio           = $this->input->get('dataInicial');
+$fim              = $this->input->get('dataFinal');
 
 if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aFaturas')) {
     if ($faturaAberta != 0) {
@@ -342,61 +345,56 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             <form action="<?php echo current_url(); ?>" method="get" id="form_filtro">
                 <div class="modal-body">
                     <div class="row">
-                        <div class="form-group col-lg-6" style="margin-left: 0">
-                            <label class="tip-top" title="Filtrar faturas por período específico">Período <i class="fa fa-info-circle fa-fw"></i></label>
-                            <select name="periodo" id="select_periodos" class="form-control">
-                                <option value="">Selecione o período</option>
-                                <option value="3dias" <?php if ($periodo == '3dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 3 dias
-                                </option>
-                                <option value="5dias" <?php if ($periodo == '5dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 5 dias
-                                </option>
-                                <option value="7dias" <?php if ($periodo == '7dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 7 dias
-                                </option>
-                                <option value="15dias" <?php if ($periodo == '15dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 15 dias
-                                </option>
-                                <option value="30dias" <?php if ($periodo == '30dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 30 dias
-                                </option>
-                                <option value="60dias" <?php if ($periodo == '60dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 60 dias
-                                </option>
-                                <option value="90dias" <?php if ($periodo == '90dias') {
-                                    echo 'selected';
-                                } ?>>Últimos 90 dias
-                                </option>
-                                <option value="todos" <?php if ($periodo == 'todos') {
-                                    echo 'selected';
-                                } ?>>Todos
-                                </option>
-                            </select>
-                        </div>
-                        <div class="col-lg-6">
-                            <label class="tip-top" title="Filtrar faturas por status">Status <i class="fa fa-info-circle fa-fw"></i></label>
+                        <div class="form-group col-lg-6">
+                            <label class="tip-top font-weight-bold" title="Filtrar faturas por status">Status <i class="fa fa-info-circle fa-fw"></i></label>
                             <select class="form-control" id="select_status" name="status">
                                 <option value="">Selecione o status</option>
-                                <option value="aberta" <?php if ($periodo == 'aberta') {
+                                <option value="aberta" <?php if ($statusFaturas == 'aberta') {
                                     echo 'selected';
                                 } ?>>Aberta
                                 </option>
-                                <option value="fechada" <?php if ($periodo == 'fechada') {
+                                <option value="fechada" <?php if ($statusFaturas == 'fechada') {
                                     echo 'selected';
                                 } ?>>Fechada
                                 </option>
-                                <option value="futura" <?php if ($periodo == 'futura') {
+                                <option value="futura" <?php if ($statusFaturas == 'futura') {
                                     echo 'selected';
                                 } ?>>Futura
                                 </option>
                             </select>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label class="tip-top font-weight-bold" title="Filtrar faturas por pagamento">Pagamento <i class="fa fa-info-circle fa-fw"></i></label>
+                            <select class="form-control" id="select_pagamento" name="pagamento">
+                                <option value="">Selecione o pagamento</option>
+                                <option value="paga" <?php if ($pagamentoFaturas == 'paga') {
+                                    echo 'selected';
+                                } ?>>Paga
+                                </option>
+                                <option value="pendente" <?php if ($pagamentoFaturas == 'pendente') {
+                                    echo 'selected';
+                                } ?>>Pendente
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label class="tip-top font-weight-bold" title="Filtrar faturas por período específico">Período <i class="fa fa-info-circle fa-fw"></i></label>
+                            <select name="periodo" id="select_periodos" class="form-control">
+                                <option value="">Selecione o período</option>
+                                <option value="especifico" <?php if ($periodo == 'especifico') {
+                                    echo 'selected';
+                                } ?>>PERÍODO ESPECÍFICO
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6" id="div_intervalo_data" hidden>
+                            <label class="tip-top font-weight-bold" title="Filtrar faturas por intervalo de referência">Período específico <i class="fa fa-info-circle fa-fw"></i></label>
+                            <div class="input-group">
+                                <span class="input-group-addon">de</span>
+                                <input type="text" class="form-control datepicker" id="dataInicial" name="dataInicial" value="<?= $inicio ?>" autocomplete="off">
+                                <span class="input-group-addon">até</span>
+                                <input type="text" class="form-control datepicker" id="dataFinal" name="dataFinal" value="<?= $fim ?>" autocomplete="off">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -952,8 +950,32 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
             }, 500)
         });
 
-        $(document).on('change', '#select_periodos, #select_status', function () {
-            $("#_form_filtro").submit();
+        $(document).on('change', '#select_status, #select_pagamento', function () {
+            $("#form_filtro").submit();
+        });
+
+        $('#select_periodos').change(function () {
+            const value = $(this).val();
+
+            if (value === 'especifico') {
+                $('#div_intervalo_data').show();
+            } else {
+                $('#div_intervalo_data').hide();
+                $('#dataInicial').val('');
+                $('#dataFinal').val('');
+            }
+        });
+
+        $('#select_periodos option:selected').each(function () {
+            const value = $(this).val();
+
+            if (value === 'especifico') {
+                $('#div_intervalo_data').show();
+            } else {
+                $('#div_intervalo_data').hide();
+                $('#dataInicial').val('');
+                $('#dataFinal').val('');
+            }
         });
 
         $('#cartoes').change(function () {
