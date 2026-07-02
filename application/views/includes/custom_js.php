@@ -345,6 +345,28 @@
         $(".preloader .preloader-text").html('Sincronizando dados...<br>Por favor, aguarde.')
     }
 
+    function hasFinancialSyncLoader(element) {
+        var href = $(element).attr('href') || ''
+
+        if (typeof financeiroSyncPendente === 'undefined') {
+            return false
+        }
+
+        if (financeiroSyncPendente.logoff && href.indexOf('mxcode/logout') !== -1) {
+            return true
+        }
+
+        if (financeiroSyncPendente.faturas && href.indexOf('financeiro/faturas') !== -1) {
+            return true
+        }
+
+        if (financeiroSyncPendente.despesas && href.indexOf('financeiro/despesas') !== -1) {
+            return true
+        }
+
+        return financeiroSyncPendente.lancamentos && href.indexOf('financeiro/lancamentos') !== -1
+    }
+
     function removeSpinnerLoader(element, time = 600) {
         var percentage = Math.round((time * 20) / 100)
 
@@ -369,7 +391,7 @@
         function () {
             var element = $(".principal-div")
 
-            if ($(this).hasClass('financeiro-sync-loader')) {
+            if (hasFinancialSyncLoader(this)) {
                 setFinancialSyncPreloaderMessage()
             } else {
                 setDefaultPreloaderMessage()
