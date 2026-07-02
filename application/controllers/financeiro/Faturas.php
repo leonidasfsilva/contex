@@ -52,6 +52,12 @@ class Faturas extends CI_Controller
             $idCartao = $this->input->get('cartao');
         }
 
+        $cartaoPrincipal = $this->cartoes_model->getCartaoPrincipalUsuario(getUserId());
+
+        if (!$idCartao) {
+            $idCartao = $cartaoPrincipal->id_cartao ?? null;
+        }
+
         $query_string = null;
         $lastElement  = end($_GET);
 
@@ -95,13 +101,59 @@ class Faturas extends CI_Controller
             }
         }
 
+        $perPage = 13;
+        $limitarPeriodo = false;
+        $faturaAbertaAtual = null;
+
+        if (in_array($periodo, ['3ultimas', '5ultimas', '3proximas', '5proximas']) && $idCartao) {
+            $faturaAbertaAtual = $this->fatura_model->get(
+                'faturas',
+                '*',
+                $idCartao,
+                'fatura_aberta = 1 AND id_usuario = ' . getUserId(),
+                null,
+                0,
+                1,
+                0,
+                null,
+                true
+            );
+        }
+
+        if ($faturaAbertaAtual) {
+            $referenciaAberta = $faturaAbertaAtual->ano_referencia . '-' . str_pad($faturaAbertaAtual->mes_referencia, 2, '0', STR_PAD_LEFT) . '-01';
+            $totalPeriodos = in_array($periodo, ['3ultimas', '3proximas']) ? 3 : 5;
+            $intervaloPeriodos = $totalPeriodos - 1;
+
+            if (in_array($periodo, ['3ultimas', '5ultimas'])) {
+                $limitarPeriodo = true;
+                $referenciaInicial = date('Y-m-d', strtotime($referenciaAberta . ' -' . $intervaloPeriodos . ' months'));
+                $whereFiltros[] = 'STR_TO_DATE(CONCAT(ano_referencia, "-", mes_referencia, "-01"), "%Y-%m-%d") BETWEEN "' . $referenciaInicial . '" AND "' . $referenciaAberta . '"';
+                $order_by = [
+                    'ano_referencia' => 'desc',
+                    'mes_referencia' => 'desc',
+                ];
+                $perPage = $totalPeriodos;
+            } elseif (in_array($periodo, ['3proximas', '5proximas'])) {
+                $limitarPeriodo = true;
+                $referenciaFinal = date('Y-m-d', strtotime($referenciaAberta . ' +' . $intervaloPeriodos . ' months'));
+                $whereFiltros[] = 'STR_TO_DATE(CONCAT(ano_referencia, "-", mes_referencia, "-01"), "%Y-%m-%d") BETWEEN "' . $referenciaAberta . '" AND "' . $referenciaFinal . '"';
+                $order_by = [
+                    'ano_referencia' => 'desc',
+                    'mes_referencia' => 'desc',
+                ];
+                $perPage = $totalPeriodos;
+            }
+        }
+
         $where = implode(' AND ', $whereFiltros);
 
         $config['base_url']          = base_url('financeiro/faturas/');
         $config['suffix']            = '&' . $query_string;
         $config['first_url']         = $config['base_url'] . '?' . $query_string;
-        $config['total_rows']        = $this->fatura_model->count('faturas', $where, $idCartao);
-        $config['per_page']          = 13;
+        $totalRows                   = $this->fatura_model->count('faturas', $where, $idCartao);
+        $config['total_rows']        = $limitarPeriodo ? min($totalRows, $perPage) : $totalRows;
+        $config['per_page']          = $perPage;
         $config['page_query_string'] = true;
         $config['next_link']         = false;
         $config['prev_link']         = false;
@@ -137,8 +189,6 @@ class Faturas extends CI_Controller
             11 => '11 x',
             12 => '12 x',
         );
-
-        $cartaoPrincipal = $this->cartoes_model->getCartaoPrincipalUsuario(getUserId());
 
         if ($idCartao) {
             $cartao = $this->cartoes_model->cartaoExistente($idCartao);
