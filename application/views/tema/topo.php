@@ -3,6 +3,9 @@ clearstatcache();
 $this->load->view('includes/css');
 $this->load->view('includes/js');
 $this->load->view('includes/custom_js');
+
+$reconciliacaoPendenteLogoff = reconciliacaoPendenteUsuario(getUserId(), 'logoff');
+$reconciliacaoPendenteLancamentos = reconciliacaoPendenteUsuario(getUserId(), 'lancamentos');
 ?>
 
 <body class="infobar-offcanvas infobar-overlay sidebar-scroll sidebar-hideon-mobile" id="body">
@@ -328,7 +331,7 @@ $this->load->view('includes/custom_js');
                 <!--                <li><a href="#"><span class="pull-left">Statement</span> <i class="pull-right fa fa-list-alt"></i></a></li>-->
                 <!--                <li><a href="#"><span class="pull-left">Withdrawals</span> <i class="pull-right fa fa-dollar"></i></a></li>-->
                 <li class="divider"></li>
-                <li title="Encerrar sessão"><a href="<?= base_url('mxcode/logout'); ?>"><span class="pull-left">Sair</span> <i class="pull-right fal fa-power-off fa-lg"></i></a></li>
+                <li title="Encerrar sessão"><a href="<?= base_url('mxcode/logout'); ?>" class="<?= $reconciliacaoPendenteLogoff ? 'financeiro-sync-loader' : '' ?>"><span class="pull-left">Sair</span> <i class="pull-right fal fa-power-off fa-lg"></i></a></li>
             </ul>
         </li>
         <!--MENU USUARIO-->
@@ -436,7 +439,7 @@ $this->load->view('includes/custom_js');
                                         </a>
                                         <ul class="acc-menu">
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamentos')) { ?>
-                                                <li><a href="<?= base_url('financeiro/lancamentos') ?>"><i class="pull-right fat fa-chart-mixed-up-circle-dollar fa-lg"></i> Lançamentos</a></li>
+                                                <li><a href="<?= base_url('financeiro/lancamentos') ?>" class="<?= $reconciliacaoPendenteLancamentos ? 'financeiro-sync-loader' : '' ?>"><i class="pull-right fat fa-chart-mixed-up-circle-dollar fa-lg"></i> Lançamentos</a></li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vFaturas')) { ?>
                                                 <li><a href="<?= base_url('financeiro/faturas') ?>"><i class="pull-right fat fa-file-invoice-dollar fa-lg"></i> Faturas</a></li>
@@ -548,7 +551,7 @@ $this->load->view('includes/custom_js');
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="link" aria-haspopup="false" aria-expanded="false"><?= ucfirst($this->uri->segment(1)); ?> <span class="caret"></span></a>
                                         <ul class="dropdown-menu dropdown-menu-hover arrow" role="menu">
                                             <li <?= ($this->uri->segment(2) == 'lancamentos' ? 'class="active"' : '') ?>>
-                                                <a href="<?= base_url('financeiro/lancamentos') ?>"><i class="pull-right fal fa-chart-mixed-up-circle-dollar fa-lg"></i> Lançamentos</a>
+                                                <a href="<?= base_url('financeiro/lancamentos') ?>" class="<?= $reconciliacaoPendenteLancamentos ? 'financeiro-sync-loader' : '' ?>"><i class="pull-right fal fa-chart-mixed-up-circle-dollar fa-lg"></i> Lançamentos</a>
                                             </li>
                                             <li <?= ($this->uri->segment(2) == 'faturas' ? 'class="active"' : '') ?>>
                                                 <a href="<?= base_url('financeiro/faturas') ?>"><i class="pull-right fal fa-file-invoice-dollar fa-lg"></i> Faturas</a>
@@ -642,8 +645,7 @@ $this->load->view('includes/custom_js');
 
         <!--SPINNER LOADER-->
         <div class="preloader" style="display: none">
-            <div class="row">
-
+            <div class="preloader-content">
                 <i class="fas fa-duotone fa-spinner-third fa-spin cssload-speeding-wheel"></i>
                 <!--<i class="fas fa-spinner fa-spin-pulse fa-2x cssload-speeding-wheel"></i>-->
                 <p class="preloader-text font-weight-bold text-gray">Aguarde...</p>

@@ -123,6 +123,7 @@ class Mxcode extends CI_Controller
     {
         if ((session_id()) && ($this->session->userdata('logado'))) {
             gravaLog(getUserId(), getUserName(), getUserEmail(), 'Logout no sistema', getenv("REMOTE_ADDR"));
+            reconciliarFinanceiroUsuario(getUserId(), 'logoff');
         }
 
         $this->session->sess_destroy();
@@ -179,7 +180,7 @@ class Mxcode extends CI_Controller
 
                 $this->session->set_userdata($session_data);
                 gravaLog(getUserId(), getUserName(), getUserEmail(), 'Login no sistema', getenv("REMOTE_ADDR"));
-                atualizaValorVinculoFaturas();
+                reconciliarFinanceiroUsuario(getUserId(), 'login');
 
                 if ($this->session->userdata('last_url')) {
                     header('location:' . $this->session->userdata('last_url'));

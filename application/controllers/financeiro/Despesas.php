@@ -26,7 +26,7 @@ class Despesas extends CI_Controller
         }
 
         //TODO: criar uma funçao em despesa_helper para a automaçao de Despesas
-        integracaoDespesasUsuario();
+        reconciliarFinanceiroUsuario(getUserId(), 'despesas');
     }
 
     public function index()

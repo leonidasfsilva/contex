@@ -332,8 +332,17 @@
             element = $(".principal-div")
         }
 
+        setDefaultPreloaderMessage()
         element.hide()
         $(".preloader").show();
+    }
+
+    function setDefaultPreloaderMessage() {
+        $(".preloader .preloader-text").html('Aguarde...')
+    }
+
+    function setFinancialSyncPreloaderMessage() {
+        $(".preloader .preloader-text").html('Sincronizando dados...<br>Por favor, aguarde.')
     }
 
     function removeSpinnerLoader(element, time = 600) {
@@ -359,6 +368,13 @@
         '[data-toggle="tab"])',
         function () {
             var element = $(".principal-div")
+
+            if ($(this).hasClass('financeiro-sync-loader')) {
+                setFinancialSyncPreloaderMessage()
+            } else {
+                setDefaultPreloaderMessage()
+            }
+
             element.hide()
             $(".preloader").show();
             // removeSpinnerLoader(element)
@@ -369,6 +385,14 @@
         event.preventDefault();
 
         if ($(form).valid()) {
+            var action = $(form).attr('action') || ''
+
+            if (action.indexOf('mxcode/verificarLogin') !== -1) {
+                setFinancialSyncPreloaderMessage()
+            } else {
+                setDefaultPreloaderMessage()
+            }
+
             $(".principal-div").hide();
             $(".preloader").show();
             form.submit();

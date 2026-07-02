@@ -16,8 +16,7 @@ class Faturas extends CI_Controller
         }
         $this->load->library('pagination');
         $this->yearsList = range(2018, date('Y') + 3);
-        vinculoAutomaticoFaturas();
-        vinculoAutomaticoComprasTerceiros();
+        reconciliarFinanceiroUsuario(getUserId(), 'faturas');
     }
 
     public function index()
