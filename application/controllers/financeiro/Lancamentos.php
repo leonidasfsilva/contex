@@ -68,9 +68,7 @@ class Lancamentos extends CI_Controller
         $this->orderBy            = null;
         $this->queryString        = null;
 
-        integracaoDespesasUsuario();
-        vinculoAutomaticoFaturas();
-        vinculoAutomaticoComprasTerceiros();
+        reconciliarFinanceiroUsuario(getUserId(), 'lancamentos');
     }
 
     public function index()

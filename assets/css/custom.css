@@ -76,13 +76,12 @@
 
 @media only screen and (max-width: 600px) {
     .preloader {
-        height: 80%;
+        height: auto;
     }
 }
 
 .preloader-text {
-    position: absolute;
-    padding-top: 10px;
+    margin: 10px 0 0;
     font-size: 12pt;
     text-align: center;
     color: rgb(187, 187, 187);
@@ -96,8 +95,6 @@
 }
 
 .preloader-login .preloader-text {
-    position: absolute;
-    padding-top: 110px;
     font-size: 12pt;
     text-align: center;
     color: rgb(187, 187, 187);
@@ -248,12 +245,40 @@ table {
 }
 
 .preloader {
-    height: 100%;
-    width: 0 !important;
-    display: inline-grid;
+    position: fixed;
+    top: 40px;
+    right: 0;
+    bottom: 0;
+    left: 248px;
+    height: auto;
+    width: auto !important;
+    display: flex;
     justify-content: center;
     align-items: center;
     background: #eee;
+}
+
+body.sidebar-collapsed .preloader {
+    left: 48px;
+}
+
+.preloader-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media only screen and (max-width: 600px) {
+    .preloader {
+        top: 40px;
+        right: 0;
+        bottom: 0;
+        left: 0 !important;
+        width: 100vw !important;
+        margin: 0 !important;
+        transform: none !important;
+    }
 }
 
 .user-avatar {

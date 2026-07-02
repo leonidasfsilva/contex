@@ -78,6 +78,7 @@ $autoload['libraries'] = array(
 $autoload['helper'] = [
     'url',
     'codegen_helper',
+    'consolidacao_helper',
     'fatura_helper',
     'despesa_helper',
     'general_helper',

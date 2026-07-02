@@ -48,11 +48,13 @@
         <div class="white-box box-login">
             <!--SPINNER LOADER-->
             <div class="preloader-login" style="display: none">
-                <i class="fas fa-duotone fa-spinner-third fa-spin cssload-speeding-wheel"></i>
-                <!--<i class="fas fa-spinner fa-spin-pulse fa-2x cssload-speeding-wheel"></i>-->
-                <p class="preloader-text font-weight-bold text-gray">
-                    Aguarde...
-                </p>
+                <div class="preloader-content">
+                    <i class="fas fa-duotone fa-spinner-third fa-spin cssload-speeding-wheel"></i>
+                    <!--<i class="fas fa-spinner fa-spin-pulse fa-2x cssload-speeding-wheel"></i>-->
+                    <p class="preloader-text font-weight-bold text-gray">
+                        Aguarde...
+                    </p>
+                </div>
             </div>
 
             <form class="form-horizontal floating-labels before-loading" id="formLogin" method="post" action="<?php echo base_url('mxcode/verificarLogin') ?>">
@@ -199,6 +201,7 @@
         event.preventDefault();
 
         if ($(form).valid()) {
+            $(".preloader-login .preloader-text").html('Sincronizando dados...<br>Por favor, aguarde.')
             $(".before-loading").hide();
             $(".preloader-login").show();
             form.submit();
@@ -210,6 +213,7 @@
         var href = $(this).attr('href');
 
         $(".before-loading").hide();
+        $(".preloader-login .preloader-text").html('Aguarde...')
         $(".preloader-login").show();
 
         setTimeout(function () {
