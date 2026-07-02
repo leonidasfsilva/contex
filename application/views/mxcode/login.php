@@ -201,7 +201,7 @@
         event.preventDefault();
 
         if ($(form).valid()) {
-            $(".preloader-login .preloader-text").html('Sincronizando dados...<br>Por favor, aguarde.')
+            $(".preloader-login .preloader-text").html('Sincronizando dados...<br>Aguarde...')
             $(".before-loading").hide();
             $(".preloader-login").show();
             form.submit();

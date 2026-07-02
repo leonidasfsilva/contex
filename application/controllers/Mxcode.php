@@ -123,7 +123,6 @@ class Mxcode extends CI_Controller
     {
         if ((session_id()) && ($this->session->userdata('logado'))) {
             gravaLog(getUserId(), getUserName(), getUserEmail(), 'Logout no sistema', getenv("REMOTE_ADDR"));
-            reconciliarFinanceiroUsuario(getUserId(), 'logoff');
         }
 
         $this->session->sess_destroy();

@@ -342,7 +342,7 @@
     }
 
     function setFinancialSyncPreloaderMessage() {
-        $(".preloader .preloader-text").html('Sincronizando dados...<br>Por favor, aguarde.')
+        $(".preloader .preloader-text").html('Sincronizando dados...<br>Aguarde...')
     }
 
     function hasFinancialSyncLoader(element) {
