@@ -175,6 +175,7 @@ switch ($Command) {
         $body = @{
             idList = $ListId
             name = $Name
+            pos = $Position
         }
 
         if (![string]::IsNullOrWhiteSpace($Desc)) {

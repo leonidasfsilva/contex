@@ -348,7 +348,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         <div class="form-group col-lg-6">
                             <label class="tip-top font-weight-bold" title="Filtrar faturas por status">Status <i class="fa fa-info-circle fa-fw"></i></label>
                             <select class="form-control" id="select_status" name="status">
-                                <option value="">Selecione o status</option>
+                                <option value=""><< Selecione o status >></option>
                                 <option value="aberta" <?php if ($statusFaturas == 'aberta') {
                                     echo 'selected';
                                 } ?>>Aberta
@@ -366,7 +366,7 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         <div class="form-group col-lg-6">
                             <label class="tip-top font-weight-bold" title="Filtrar faturas por pagamento">Pagamento <i class="fa fa-info-circle fa-fw"></i></label>
                             <select class="form-control" id="select_pagamento" name="pagamento">
-                                <option value="">Selecione o pagamento</option>
+                                <option value=""><< Selecione o pagamento >></option>
                                 <option value="paga" <?php if ($pagamentoFaturas == 'paga') {
                                     echo 'selected';
                                 } ?>>Paga
@@ -380,7 +380,23 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         <div class="form-group col-lg-6">
                             <label class="tip-top font-weight-bold" title="Filtrar faturas por período específico">Período <i class="fa fa-info-circle fa-fw"></i></label>
                             <select name="periodo" id="select_periodos" class="form-control">
-                                <option value="">Selecione o período</option>
+                                <option value=""><< Selecione o período >></option>
+                                <option value="3ultimas" <?php if ($periodo == '3ultimas') {
+                                    echo 'selected';
+                                } ?>>3 Últimas
+                                </option>
+                                <option value="5ultimas" <?php if ($periodo == '5ultimas') {
+                                    echo 'selected';
+                                } ?>>5 Últimas
+                                </option>
+                                <option value="3proximas" <?php if ($periodo == '3proximas') {
+                                    echo 'selected';
+                                } ?>>3 Próximas
+                                </option>
+                                <option value="5proximas" <?php if ($periodo == '5proximas') {
+                                    echo 'selected';
+                                } ?>>5 Próximas
+                                </option>
                                 <option value="especifico" <?php if ($periodo == 'especifico') {
                                     echo 'selected';
                                 } ?>>PERÍODO ESPECÍFICO
