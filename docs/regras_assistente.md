@@ -80,6 +80,8 @@
 ### Pull Requests
 - Criar PRs pelo GitHub CLI autenticado como `webmaster-devply`.
 - PRs devem apontar para `master`, salvo orientação diferente do desenvolvedor.
+- Antes de subir alterações solicitadas pelo desenvolvedor com objetivo de atualizar ou abrir PR, verificar no GitHub a existência e o status do PR anterior da branch/card atual.
+- Se o PR anterior já estiver `MERGED` ou `CLOSED`, não assumir que o push atualiza aquele PR; criar novo PR ou pedir confirmação quando o fluxo não estiver claro.
 - O assistente abre o PR; o desenvolvedor senior revisa e aprova.
 - O merge na `master` deve seguir as regras de proteção configuradas no GitHub.
 - Não apagar branches de feature sem pedido explícito do desenvolvedor.
