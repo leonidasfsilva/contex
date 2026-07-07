@@ -56,12 +56,58 @@ function vinculoAutomaticoFaturas(): bool
     return true;
 }
 
+function monitoraPagamentosFaturasUsuario(): bool
+{
+    $CI = get_instance();
+    $CI->load->model('fatura_model');
+    $CI->load->model('cartoes_model');
+
+    $cartoesAtivos = $CI->cartoes_model->getCartoesAtivosUsuario(getUserId());
+
+    foreach ($cartoesAtivos as $cartao) {
+        $faturas = $CI->fatura_model->get(
+            'faturas',
+            '*',
+            $cartao->id_cartao,
+            'status = 1',
+            null,
+            0,
+            0,
+            0,
+            [
+                'ano_referencia' => 'desc',
+                'mes_referencia' => 'desc',
+            ]
+        );
+
+        if (!$faturas) continue;
+
+        foreach ($faturas as $fatura) {
+            monitoraPagamentosFaturasVinculadas($fatura->id_fatura);
+        }
+    }
+
+    return true;
+}
+
 function monitoraPagamentosFaturasVinculadas($idFatura)
 {
     if (!$idFatura) return false;
 
     $CI = get_instance();
     $CI->load->model('fatura_model');
+
+    $fatura = $CI->fatura_model->getFatura($idFatura);
+
+    if (!$fatura) return false;
+
+    if ($fatura->fatura_aberta != 0) {
+        return $CI->fatura_model->setFlagFaturaPaga($idFatura, [
+            'data_pagamento' => null,
+            'forma_pgto'     => null,
+            'fatura_paga'    => null
+        ]);
+    }
 
     $vinculo = $CI->fatura_model->getVinculoFaturaComModuloLancamentos($idFatura);
 
@@ -104,6 +150,7 @@ function atualizaValorVinculoFaturas($idFatura = null): bool
     $CI->load->model('cartoes_model');
 
     vinculoAutomaticoFaturas();
+    monitoraPagamentosFaturasUsuario();
 
     if ($idFatura) {
         $valorTotalFatura = $CI->fatura_model->getValorTotalFatura($idFatura);
