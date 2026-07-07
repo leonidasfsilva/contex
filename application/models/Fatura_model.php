@@ -767,15 +767,11 @@ class Fatura_model extends CI_Model
         return ($this->db->error()['code'] == 0);
     }
 
-    function setParcelasTerceiroPagoPorVinculo($idLancamento, $idUsuario, $pago)
+    function setParcelasTerceiroPagoPorAssoc(array $idsLancamentosFaturasAssoc, $pago)
     {
-        $vinculos = $this->getVinculosTerceiroPorLancamento($idLancamento, $idUsuario);
-
-        if (!$vinculos) {
+        if (!$idsLancamentosFaturasAssoc) {
             return false;
         }
-
-        $idsLancamentosFaturasAssoc = array_column($vinculos, 'id_lancamento_fatura_assoc');
 
         $this->db->where_in('id_assoc', $idsLancamentosFaturasAssoc);
         $this->db->update('lancamentos_faturas_assoc', [

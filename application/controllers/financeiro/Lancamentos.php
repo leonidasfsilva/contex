@@ -350,8 +350,16 @@ class Lancamentos extends CI_Controller
             'tipo'               => $tipo
         );
 
-        if ($this->financeiro_model->edit('lancamentos', $data, 'id_lancamento', $this->input->post('id'))) {
-            $this->fatura_model->setParcelasTerceiroPagoPorVinculo($this->input->post('id'), getUserId(), $data['baixado'] == 1);
+        $idLancamento = $this->input->post('id');
+
+        if ($this->financeiro_model->edit('lancamentos', $data, 'id_lancamento', $idLancamento)) {
+            sincronizaPagamentoTerceiroPorLancamento($idLancamento, getUserId(), $data['baixado'] == 1);
+
+            $lancamento = $this->financeiro_model->getById($idLancamento, getUserId());
+
+            if ($lancamento && $lancamento->id_fatura) {
+                monitoraPagamentosFaturasVinculadas($lancamento->id_fatura);
+            }
             $this->session->set_flashdata('sucesso', 'Lançamento alterado com sucesso');
             redirect($urlAtual);
         }
