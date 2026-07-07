@@ -66,17 +66,35 @@ function monitoraPagamentosFaturasVinculadas($idFatura)
     $vinculo = $CI->fatura_model->getVinculoFaturaComModuloLancamentos($idFatura);
 
     if ($vinculo) {
-        if ($vinculo->baixado) {
-            $dataToUpdate = [
-                'data_pagamento' => $vinculo->data_pagamento,
-                'forma_pgto'     => $vinculo->forma_pgto,
-                'fatura_paga'    => 1
-            ];
+        $dataToUpdate = [
+            'data_pagamento' => $vinculo->baixado ? $vinculo->data_pagamento : null,
+            'forma_pgto'     => $vinculo->baixado ? $vinculo->forma_pgto : null,
+            'fatura_paga'    => $vinculo->baixado ? 1 : 2
+        ];
 
-            $CI->fatura_model->setFlagFaturaPaga($vinculo->id_fatura, $dataToUpdate);
-        }
+        $CI->fatura_model->setFlagFaturaPaga($vinculo->id_fatura, $dataToUpdate);
     }
     return true;
+}
+
+function sincronizaPagamentoTerceiroPorLancamento($idLancamento, $idUsuario, $pago)
+{
+    if (!$idLancamento || !$idUsuario) {
+        return false;
+    }
+
+    $CI = get_instance();
+    $CI->load->model('fatura_model');
+
+    $vinculos = $CI->fatura_model->getVinculosTerceiroPorLancamento($idLancamento, $idUsuario);
+
+    if (!$vinculos) {
+        return false;
+    }
+
+    $idsLancamentosFaturasAssoc = array_column($vinculos, 'id_lancamento_fatura_assoc');
+
+    return $CI->fatura_model->setParcelasTerceiroPagoPorAssoc($idsLancamentosFaturasAssoc, $pago);
 }
 
 function atualizaValorVinculoFaturas($idFatura = null): bool
