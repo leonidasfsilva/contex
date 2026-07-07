@@ -183,6 +183,21 @@ function vinculoAutomaticoComprasTerceiros(): bool
     return true;
 }
 
+function sincronizaVinculosTerceiroPorCompra($idLancamentoFatura, $idUsuario = null): bool
+{
+    if (!$idLancamentoFatura) {
+        return true;
+    }
+
+    $CI = get_instance();
+    $CI->load->model('fatura_model');
+
+    return $CI->fatura_model->sincronizarVinculosTerceiroPorCompra(
+        $idLancamentoFatura,
+        $idUsuario ?: getUserId()
+    );
+}
+
 function vinculaFatura($idFatura)
 {
     if (!$idFatura) {

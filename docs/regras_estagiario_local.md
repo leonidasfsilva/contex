@@ -74,6 +74,20 @@ Não usar o estagiário local para:
 - Se o estagiário errar, a primeira tentativa deve ser pedir que ele corrija a própria proposta com feedback objetivo.
 - Não expor credenciais, tokens, chaves ou valores sensíveis encontrados no projeto.
 
+## Regras para SQL
+
+- Todo SQL gerado pelo estagiário é rascunho e deve ser revisado pelo Agente IA antes de aplicação.
+- Scripts de criação de tabela devem manter compatibilidade com o dump/inject direto do HeidiSQL entre produção e desenvolvimento.
+- Por padrão, tabelas novas devem usar:
+
+```sql
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci
+```
+
+- Não usar `utf8mb4` sem `COLLATE` explícito.
+- Não deixar tabelas ou colunas herdarem collations modernas como `uca1400` ou `0900`.
+- Se `utf8mb4` for realmente necessário, sugerir `utf8mb4_unicode_ci` e pedir validação do desenvolvedor sênior antes de aplicar.
+
 ## Fluxo Recomendado
 
 ```text
