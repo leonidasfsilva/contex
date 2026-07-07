@@ -435,6 +435,7 @@ class Fatura_model extends CI_Model
         }
 
         $this->db->insert('lancamentos_terceiros_vinculos', [
+            'id_usuario'                 => getUserId(),
             'id_lancamento'              => $idLancamento,
             'id_lancamento_fatura'       => $parcela->id_lancamento,
             'id_fatura'                  => $parcela->id_fatura,
@@ -526,6 +527,7 @@ class Fatura_model extends CI_Model
 
         foreach ($parcelas as $parcela) {
             $this->db->insert('lancamentos_terceiros_vinculos', [
+                'id_usuario'                 => getUserId(),
                 'id_lancamento'              => $idLancamento,
                 'id_lancamento_fatura'       => $parcela['id_lancamento'],
                 'id_fatura'                  => $parcela['id_fatura'],
@@ -609,6 +611,7 @@ class Fatura_model extends CI_Model
 
             foreach ($parcelasAtuais as $parcela) {
                 $this->db->insert('lancamentos_terceiros_vinculos', [
+                    'id_usuario'                 => getUserId(),
                     'id_lancamento'              => $idLancamento,
                     'id_lancamento_fatura'       => $idLancamentoFatura,
                     'id_fatura'                  => $parcela['id_fatura'],

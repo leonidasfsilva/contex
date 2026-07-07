@@ -611,6 +611,10 @@ class Faturas extends CI_Controller
                             $ano++;
                         }
                     }
+                    if ($compra_terceiros && !sincronizaVinculosTerceiroPorCompra($last_id, getUserId())) {
+                        $this->session->set_flashdata('erro', 'Erro ao tentar atualizar lançamento vinculado do terceiro');
+                        redirect($urlAtual);
+                    }
                     redirect($urlAtual);
                 } else {
                     // COMPRA A VISTA
@@ -657,6 +661,10 @@ class Faturas extends CI_Controller
 
                     if ($this->fatura_model->add('lancamentos_faturas_assoc', $lancamentosFaturasAssocArray)) {
                         atualizaValorVinculoFaturas($id_fatura);
+                        if ($compra_terceiros && !sincronizaVinculosTerceiroPorCompra($last_id, getUserId())) {
+                            $this->session->set_flashdata('erro', 'Erro ao tentar atualizar lançamento vinculado do terceiro');
+                            redirect($urlAtual);
+                        }
                         $this->session->set_flashdata('sucesso', 'Lançamento adicionado com sucesso');
                     } else {
                         $this->session->set_flashdata('erro', 'Erro ao tentar adicionar lançamentos_assoc!');
@@ -1071,6 +1079,10 @@ class Faturas extends CI_Controller
                 if (!$this->fatura_model->add('lancamentos_faturas_assoc', $lancamentosFaturasAssocArray)) {
                     return false;
                 }
+
+                if ($lancamento->compra_terceiros && !sincronizaVinculosTerceiroPorCompra($last_id, getUserId())) {
+                    return false;
+                }
             }
             atualizaValorVinculoFaturas($idFatura);
             return true;
@@ -1165,6 +1177,10 @@ class Faturas extends CI_Controller
                 }
             }
 
+            if ($compra_terceiros && !sincronizaVinculosTerceiroPorCompra($last_id, getUserId())) {
+                return false;
+            }
+
             return true;
         }
 
@@ -1184,6 +1200,9 @@ class Faturas extends CI_Controller
 
         if ($this->fatura_model->add('lancamentos_faturas_assoc', $lancamentosFaturasAssocArray)) {
             atualizaValorVinculoFaturas($idFatura);
+            if ($compra_terceiros && !sincronizaVinculosTerceiroPorCompra($last_id, getUserId())) {
+                return false;
+            }
             return true;
         }
         return false;
@@ -1243,6 +1262,10 @@ class Faturas extends CI_Controller
     private function sincronizarVinculosTerceiroCompraEditada($idLancamentoFatura, array $mapaVinculosTerceiros, $urlAtual)
     {
         if (!$mapaVinculosTerceiros) {
+            if (!sincronizaVinculosTerceiroPorCompra($idLancamentoFatura, getUserId())) {
+                $this->session->set_flashdata('erro', 'Erro ao tentar atualizar lançamento vinculado do terceiro');
+                redirect($urlAtual);
+            }
             return true;
         }
 

@@ -39,6 +39,18 @@
 - Formato: `action: description`
 - Exemplos: `feat: add user auth`, `fix: resolve db connection`, `docs: update migration guide`
 
+### 5. Banco de Dados e SQL
+- Scripts SQL versionados devem preservar compatibilidade com o fluxo operacional do projeto: exportar de produção e injetar diretamente no banco local via HeidiSQL, com `Criar Tabela` habilitado.
+- Ao criar tabelas novas, não usar `utf8mb4` sem `COLLATE` explícito.
+- Para tabelas novas do Contex, usar por padrão:
+  - `ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci`
+- Se houver motivo técnico para usar `utf8mb4`, o agente deve pedir aprovação antes e cravar collation compatível com o ambiente local, preferencialmente:
+  - `ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`
+- Nunca deixar o MariaDB/MySQL escolher automaticamente collations modernas como `uca1400` ou `0900`, pois elas podem quebrar o dump/inject em ambientes locais mais antigos.
+- Para colunas textuais em tabelas novas, quando houver risco de herdar collation da sessão, declarar explicitamente `CHARACTER SET` e `COLLATE`.
+- Após criar ou alterar SQL estrutural, validar com `SHOW CREATE TABLE` e garantir que não apareçam collations incompatíveis como `utf8mb4_uca1400_ai_ci`, `utf8mb3_uca1400_ai_ci` ou `utf8mb4_0900_ai_ci`.
+- Não propor script de inicialização no HeidiSQL como solução permanente para incompatibilidade criada por SQL versionado. A correção deve estar no schema/SQL do projeto.
+
 ## Configuração de Git/GitHub do Assistente
 
 ### Identidade GitHub
