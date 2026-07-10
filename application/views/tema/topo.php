@@ -9,6 +9,7 @@ $reconciliacaoFinanceiraPendente = [
     'faturas' => reconciliacaoPendenteUsuario(getUserId(), 'faturas'),
     'despesas' => reconciliacaoPendenteUsuario(getUserId(), 'despesas'),
     'lancamentos' => reconciliacaoPendenteUsuario(getUserId(), 'lancamentos'),
+    'manual' => reconciliacaoPendenteUsuario(getUserId(), 'manual'),
 ];
 ?>
 <script>
@@ -231,6 +232,14 @@ $reconciliacaoFinanceiraPendente = [
             <!--				</span>-->
             <!--            </a>-->
         </li>
+
+        <!--        SINCRONIZACAO FINANCEIRA-->
+        <li class="toolbar-icon-bg">
+            <a href="<?= base_url('mxcode/sincronizarFinanceiro') ?>" class="btn-sync-financeiro" data-toggle="tooltips" data-placement="bottom" title="Sincronizar financeiro">
+                <span class="icon-bg"><i class="fal fa-sync-alt fa-fw sync-financeiro-icon"></i></span>
+            </a>
+        </li>
+        <!--        SINCRONIZACAO FINANCEIRA-->
 
         <!--        BUSCA-->
         <li class="dropdown toolbar-icon-bg demo-search-hidden">

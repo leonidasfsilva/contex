@@ -231,9 +231,10 @@ class Fatura_model extends CI_Model
     function getLancamentoAssocTerceiroUsuario($idAssoc, $idUsuario)
     {
         return $this->db
-            ->select('lfa.*, lf.nome_cliente, lf.descricao, lf.id_usuario')
+            ->select('lfa.*, lf.nome_cliente, lf.descricao, lf.id_usuario, f.id_cartao, f.vencimento')
             ->from('lancamentos_faturas_assoc AS lfa')
             ->join('lancamentos_faturas AS lf', 'lf.id_lancamento = lfa.id_lancamento', 'inner')
+            ->join('faturas AS f', 'f.id_fatura = lfa.id_fatura', 'inner')
             ->where('lfa.id_assoc', $idAssoc)
             ->where('lfa.status', 1)
             ->where('lf.status', 1)
@@ -361,6 +362,419 @@ class Fatura_model extends CI_Model
         return $this->sincronizarLancamentosTerceiros($idsLancamentos, $idUsuario);
     }
 
+    function garantirVinculoPagamentoTerceiroPorParcela($idAssoc, $idUsuario)
+    {
+        $parcela = $this->getLancamentoAssocTerceiroUsuario($idAssoc, $idUsuario);
+
+        if (!$parcela) {
+            return false;
+        }
+
+        $vinculoPeriodo = $this->getVinculoTerceiroPeriodo(
+            $idUsuario,
+            $parcela->nome_cliente,
+            $parcela->mes_referencia,
+            $parcela->ano_referencia
+        );
+
+        if (!$vinculoPeriodo) {
+            return false;
+        }
+
+        if (!$this->vincularParcelaTerceiroAoLancamento($vinculoPeriodo->id_lancamento, $parcela)) {
+            return false;
+        }
+
+        return $this->getVinculoPagamentoTerceiroPorAssoc($idAssoc, $idUsuario);
+    }
+
+    function garantirVinculosPagamentoTerceiroPorCompra($idLancamentoFatura, $idUsuario)
+    {
+        $parcelas = $this->db
+            ->select('lfa.id_assoc')
+            ->from('lancamentos_faturas_assoc AS lfa')
+            ->join('lancamentos_faturas AS lf', 'lf.id_lancamento = lfa.id_lancamento', 'inner')
+            ->where('lfa.id_lancamento', $idLancamentoFatura)
+            ->where('lfa.status', 1)
+            ->where('lf.status', 1)
+            ->where('lf.compra_terceiros', 1)
+            ->where('lf.id_usuario', $idUsuario)
+            ->get()
+            ->result_array();
+
+        if (!$parcelas) {
+            return [];
+        }
+
+        $vinculos = [];
+
+        foreach ($parcelas as $parcela) {
+            $vinculo = $this->garantirVinculoPagamentoTerceiroPorParcela($parcela['id_assoc'], $idUsuario);
+
+            if ($vinculo) {
+                $vinculos[] = $vinculo;
+            }
+        }
+
+        return $vinculos;
+    }
+
+    function getVinculoPagamentoTerceiroPorAssoc($idAssoc, $idUsuario)
+    {
+        return $this->db
+            ->select('
+                ltv.id AS id_lancamento_terceiros_vinculo,
+                ltv.id_lancamento AS id_lancamento_debito,
+                ltv.nome_terceiro,
+                ltv.id_cartao,
+                ltv.mes_vencimento,
+                ltv.ano_vencimento,
+                lfa.id_assoc,
+                lfa.valor_parcela,
+                lfa.parcela_terceiro_pago,
+                lfa.mes_referencia,
+                lfa.ano_referencia,
+                lf.nome_cliente,
+                f.vencimento,
+                c.apelido AS cartao_apelido,
+                c.bandeira AS cartao_bandeira,
+                c.numero AS cartao_numero
+            ')
+            ->from('lancamentos_terceiros_vinculos AS ltv')
+            ->join('lancamentos AS l', 'l.id_lancamento = ltv.id_lancamento', 'inner')
+            ->join('lancamentos_faturas_assoc AS lfa', 'lfa.id_assoc = ltv.id_lancamento_fatura_assoc', 'inner')
+            ->join('lancamentos_faturas AS lf', 'lf.id_lancamento = lfa.id_lancamento', 'inner')
+            ->join('faturas AS f', 'f.id_fatura = lfa.id_fatura', 'inner')
+            ->join('cartoes AS c', 'c.id_cartao = f.id_cartao', 'left')
+            ->where('ltv.id_lancamento_fatura_assoc', $idAssoc)
+            ->where('ltv.id_usuario', $idUsuario)
+            ->where('l.id_usuario', $idUsuario)
+            ->where('l.status', 1)
+            ->where('lf.id_usuario', $idUsuario)
+            ->where('lf.status', 1)
+            ->where('lf.compra_terceiros', 1)
+            ->where('lfa.status', 1)
+            ->limit(1)
+            ->get()
+            ->row();
+    }
+
+    function getLancamentoRecebimentoTerceiroPeriodo($idUsuario, $nome, $mesVencimento, $anoVencimento)
+    {
+        return $this->db
+            ->select('l.*')
+            ->from('lancamentos_terceiros_pagamentos AS ltp')
+            ->join('lancamentos AS l', 'l.id_lancamento = ltp.id_lancamento', 'inner')
+            ->join('lancamentos_terceiros_vinculos AS ltv', 'ltv.id = ltp.id_lancamento_terceiros_vinculo', 'inner')
+            ->join('lancamentos_faturas_assoc AS lfa', 'lfa.id_assoc = ltv.id_lancamento_fatura_assoc', 'inner')
+            ->join('lancamentos_faturas AS lf', 'lf.id_lancamento = lfa.id_lancamento', 'inner')
+            ->where('ltp.id_usuario', $idUsuario)
+            ->where('ltp.status', 1)
+            ->where('l.id_usuario', $idUsuario)
+            ->where('l.status', 1)
+            ->where('lf.id_usuario', $idUsuario)
+            ->where('ltv.nome_terceiro', $nome)
+            ->where('ltv.mes_vencimento', $mesVencimento)
+            ->where('ltv.ano_vencimento', $anoVencimento)
+            ->order_by('l.id_lancamento', 'ASC')
+            ->limit(1)
+            ->get()
+            ->row();
+    }
+
+    function getLancamentoRecebimentoTerceiroPorVinculos($idUsuario, $idsVinculos)
+    {
+        if (!$idsVinculos) {
+            return null;
+        }
+
+        return $this->db
+            ->select('l.*')
+            ->from('lancamentos_terceiros_pagamentos AS ltp')
+            ->join('lancamentos AS l', 'l.id_lancamento = ltp.id_lancamento', 'inner')
+            ->where('ltp.id_usuario', $idUsuario)
+            ->where_in('ltp.id_lancamento_terceiros_vinculo', $idsVinculos)
+            ->where('ltp.status', 1)
+            ->where('l.id_usuario', $idUsuario)
+            ->where('l.status', 1)
+            ->order_by('l.id_lancamento', 'ASC')
+            ->limit(1)
+            ->get()
+            ->row();
+    }
+
+    function criarLancamentoRecebimentoTerceiro($idUsuario, $nome, $dataPagamento = null)
+    {
+        $dataPagamento = $dataPagamento ?: date('Y-m-d');
+
+        $data = [
+            'id_usuario'         => $idUsuario,
+            'descricao'          => 'PAGAMENTO RECEBIDO - GASTOS NOS CARTOES',
+            'observacoes'        => null,
+            'valor'              => 0,
+            'data_lancamento'    => $dataPagamento,
+            'data_pagamento'     => $dataPagamento,
+            'baixado'            => 1,
+            'cliente_fornecedor' => padronizarString($nome),
+            'forma_pgto'         => 2,
+            'tipo'               => 1
+        ];
+
+        if (!$this->add('lancamentos', $data)) {
+            return false;
+        }
+
+        return $this->insert_id('lancamentos');
+    }
+
+    function registrarPagamentoTerceiro($idLancamento, $idUsuario, $vinculo, $tipoPgto)
+    {
+        $pagamentoAtivo = $this->db
+            ->select('id, id_lancamento')
+            ->from('lancamentos_terceiros_pagamentos')
+            ->where('id_lancamento_terceiros_vinculo', $vinculo->id_lancamento_terceiros_vinculo)
+            ->where('id_usuario', $idUsuario)
+            ->where('status', 1)
+            ->limit(1)
+            ->get()
+            ->row();
+
+        if ($pagamentoAtivo) {
+            $this->db->where('id', $pagamentoAtivo->id);
+            $this->db->update('lancamentos_terceiros_pagamentos', [
+                'id_lancamento'   => $idLancamento,
+                'valor'          => $vinculo->valor_parcela,
+                'data_pagamento' => $vinculo->vencimento,
+                'atualizado_em' => date('Y-m-d H:i:s')
+            ]);
+
+            if ($this->db->error()['code'] != 0) {
+                return false;
+            }
+
+            if ($pagamentoAtivo->id_lancamento != $idLancamento) {
+                return $this->sincronizarLancamentoRecebimentoTerceiro($pagamentoAtivo->id_lancamento, $idUsuario);
+            }
+
+            return true;
+        }
+
+        $this->db->insert('lancamentos_terceiros_pagamentos', [
+            'id_usuario'                       => $idUsuario,
+            'id_lancamento'                    => $idLancamento,
+            'id_lancamento_terceiros_vinculo'  => $vinculo->id_lancamento_terceiros_vinculo,
+            'valor'                            => $vinculo->valor_parcela,
+            'data_pagamento'                   => $vinculo->vencimento,
+            'forma_pgto'                       => 2,
+            'tipo_pgto'                        => $tipoPgto
+        ]);
+
+        return ($this->db->error()['code'] == 0);
+    }
+
+    function desativarPagamentoTerceiroPorVinculo($idLancamentoTerceirosVinculo, $idUsuario)
+    {
+        $pagamentos = $this->db
+            ->select('id, id_lancamento')
+            ->from('lancamentos_terceiros_pagamentos')
+            ->where('id_lancamento_terceiros_vinculo', $idLancamentoTerceirosVinculo)
+            ->where('id_usuario', $idUsuario)
+            ->where('status', 1)
+            ->get()
+            ->result_array();
+
+        if (!$pagamentos) {
+            return [];
+        }
+
+        $idsPagamentos  = array_column($pagamentos, 'id');
+        $idsLancamentos = array_values(array_unique(array_column($pagamentos, 'id_lancamento')));
+
+        $this->db->where_in('id', $idsPagamentos);
+        $this->db->update('lancamentos_terceiros_pagamentos', [
+            'status'       => 0,
+            'atualizado_em' => date('Y-m-d H:i:s')
+        ]);
+
+        if ($this->db->error()['code'] != 0) {
+            return false;
+        }
+
+        return $idsLancamentos;
+    }
+
+    function sincronizarLancamentoRecebimentoTerceiro($idLancamento, $idUsuario)
+    {
+        $pagamentos = $this->db
+            ->select('
+                ltp.valor,
+                ltp.data_pagamento,
+                f.vencimento,
+                c.apelido AS cartao_apelido,
+                c.bandeira AS cartao_bandeira,
+                c.numero AS cartao_numero
+            ')
+            ->from('lancamentos_terceiros_pagamentos AS ltp')
+            ->join('lancamentos_terceiros_vinculos AS ltv', 'ltv.id = ltp.id_lancamento_terceiros_vinculo', 'inner')
+            ->join('lancamentos_faturas_assoc AS lfa', 'lfa.id_assoc = ltv.id_lancamento_fatura_assoc', 'inner')
+            ->join('faturas AS f', 'f.id_fatura = lfa.id_fatura', 'inner')
+            ->join('cartoes AS c', 'c.id_cartao = f.id_cartao', 'left')
+            ->where('ltp.id_lancamento', $idLancamento)
+            ->where('ltp.id_usuario', $idUsuario)
+            ->where('ltp.status', 1)
+            ->get()
+            ->result_array();
+
+        if (!$pagamentos) {
+            return $this->edit('lancamentos', [
+                'valor'       => 0,
+                'observacoes' => null,
+                'status'      => 0
+            ], 'id_lancamento', $idLancamento);
+        }
+
+        $total        = 0;
+        $totaisCartao = [];
+        $dataLancamento = null;
+
+        foreach ($pagamentos as $pagamento) {
+            $total += $pagamento['valor'];
+
+            $dataPagamento = $pagamento['vencimento'] ?: $pagamento['data_pagamento'];
+
+            if (!$dataLancamento || strtotime($dataPagamento) < strtotime($dataLancamento)) {
+                $dataLancamento = $dataPagamento;
+            }
+
+            $numeroCartao = decriptar($pagamento['cartao_numero']);
+            $partesCartao = explode(' ', trim($numeroCartao));
+            $finalCartao  = end($partesCartao);
+            $cartaoLabel  = $pagamento['cartao_apelido'] ?: $pagamento['cartao_bandeira'] . ' - FINAL ' . $finalCartao;
+
+            if (!isset($totaisCartao[$cartaoLabel])) {
+                $totaisCartao[$cartaoLabel] = 0;
+            }
+
+            $totaisCartao[$cartaoLabel] += $pagamento['valor'];
+        }
+
+        $observacoes = [];
+
+        foreach ($totaisCartao as $cartaoLabel => $valorCartao) {
+            $observacoes[] = $cartaoLabel . ': R$ ' . number_format($valorCartao, 2, ',', '.');
+        }
+
+        return $this->edit('lancamentos', [
+            'valor'           => $total,
+            'observacoes'     => implode("\n", $observacoes),
+            'data_lancamento' => $dataLancamento,
+            'data_pagamento'  => $dataLancamento,
+            'baixado'         => 1,
+            'forma_pgto'      => 2,
+            'tipo'            => 1,
+            'status'          => 1
+        ], 'id_lancamento', $idLancamento);
+    }
+
+    function getLancamentosRecebimentosTerceirosAtivos($idUsuario)
+    {
+        return $this->db
+            ->select('DISTINCT id_lancamento', false)
+            ->from('lancamentos_terceiros_pagamentos')
+            ->where('id_usuario', $idUsuario)
+            ->where('status', 1)
+            ->get()
+            ->result_array();
+    }
+
+    function getVinculosTerceiroPagosAtivos($idUsuario)
+    {
+        return $this->db
+            ->select('
+                ltv.id AS id_lancamento_terceiros_vinculo,
+                ltv.id_lancamento AS id_lancamento_debito,
+                ltv.nome_terceiro,
+                ltv.id_cartao,
+                ltv.mes_vencimento,
+                ltv.ano_vencimento,
+                lfa.id_assoc,
+                lfa.id_lancamento,
+                lfa.id_fatura,
+                lfa.valor_parcela,
+                lfa.parcela_terceiro_pago,
+                lfa.mes_referencia,
+                lfa.ano_referencia,
+                lf.nome_cliente,
+                f.vencimento,
+                c.apelido AS cartao_apelido,
+                c.bandeira AS cartao_bandeira,
+                c.numero AS cartao_numero
+            ')
+            ->from('lancamentos_terceiros_vinculos AS ltv')
+            ->join('lancamentos AS l', 'l.id_lancamento = ltv.id_lancamento', 'inner')
+            ->join('lancamentos_faturas_assoc AS lfa', 'lfa.id_assoc = ltv.id_lancamento_fatura_assoc', 'inner')
+            ->join('lancamentos_faturas AS lf', 'lf.id_lancamento = lfa.id_lancamento', 'inner')
+            ->join('faturas AS f', 'f.id_fatura = lfa.id_fatura', 'inner')
+            ->join('cartoes AS c', 'c.id_cartao = f.id_cartao', 'left')
+            ->where('ltv.id_usuario', $idUsuario)
+            ->where('l.id_usuario', $idUsuario)
+            ->where('l.status', 1)
+            ->where('lf.id_usuario', $idUsuario)
+            ->where('lf.status', 1)
+            ->where('lf.compra_terceiros', 1)
+            ->where('lfa.status', 1)
+            ->where('lfa.parcela_terceiro_pago', 1)
+            ->order_by('f.vencimento', 'ASC')
+            ->get()
+            ->result_array();
+    }
+
+    function desativarPagamentosRecebidosInvalidos($idUsuario)
+    {
+        $pagamentos = $this->db
+            ->select('ltp.id, ltp.id_lancamento')
+            ->from('lancamentos_terceiros_pagamentos AS ltp')
+            ->join('lancamentos_terceiros_vinculos AS ltv', 'ltv.id = ltp.id_lancamento_terceiros_vinculo', 'left')
+            ->join('lancamentos AS l', 'l.id_lancamento = ltv.id_lancamento', 'left')
+            ->join('lancamentos_faturas_assoc AS lfa', 'lfa.id_assoc = ltv.id_lancamento_fatura_assoc', 'left')
+            ->join('lancamentos_faturas AS lf', 'lf.id_lancamento = lfa.id_lancamento', 'left')
+            ->where('ltp.id_usuario', $idUsuario)
+            ->where('ltp.status', 1)
+            ->group_start()
+            ->where('ltv.id IS NULL', null, false)
+            ->or_where('ltv.id_usuario !=', $idUsuario)
+            ->or_where('l.id_lancamento IS NULL', null, false)
+            ->or_where('l.status !=', 1)
+            ->or_where('lf.id_lancamento IS NULL', null, false)
+            ->or_where('lf.status !=', 1)
+            ->or_where('lf.compra_terceiros !=', 1)
+            ->or_where('lfa.id_assoc IS NULL', null, false)
+            ->or_where('lfa.status !=', 1)
+            ->or_where('lfa.parcela_terceiro_pago IS NULL', null, false)
+            ->group_end()
+            ->get()
+            ->result_array();
+
+        if (!$pagamentos) {
+            return [];
+        }
+
+        $idsPagamentos  = array_column($pagamentos, 'id');
+        $idsLancamentos = array_values(array_unique(array_column($pagamentos, 'id_lancamento')));
+
+        $this->db->where_in('id', $idsPagamentos);
+        $this->db->update('lancamentos_terceiros_pagamentos', [
+            'status'       => 0,
+            'atualizado_em' => date('Y-m-d H:i:s')
+        ]);
+
+        if ($this->db->error()['code'] != 0) {
+            return false;
+        }
+
+        return $idsLancamentos;
+    }
+
     function getLancamentosTerceirosVinculadosPorAssoc($idAssoc, $idUsuario)
     {
         return $this->db
@@ -415,6 +829,24 @@ class Fatura_model extends CI_Model
         return $this->sincronizarLancamentoTerceiroVinculado($idLancamento, $idUsuario);
     }
 
+    function sincronizarVinculosTerceiroPagosPeriodo($idLancamento, $idUsuario, $nome, $mesReferencia, $anoReferencia)
+    {
+        $parcelasPagas = $this->getParcelasTerceiroPeriodoPagasParaVinculo(
+            $idUsuario,
+            $nome,
+            $mesReferencia,
+            $anoReferencia
+        );
+
+        foreach ($parcelasPagas as $parcela) {
+            if (!$this->vincularParcelaTerceiroAoLancamento($idLancamento, (object) $parcela)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     function vincularParcelaTerceiroAoLancamento($idLancamento, $parcela)
     {
         $vinculoExistente = $this->db
@@ -434,15 +866,42 @@ class Fatura_model extends CI_Model
             return false;
         }
 
-        $this->db->insert('lancamentos_terceiros_vinculos', [
+        $data = [
             'id_usuario'                 => getUserId(),
             'id_lancamento'              => $idLancamento,
             'id_lancamento_fatura'       => $parcela->id_lancamento,
             'id_fatura'                  => $parcela->id_fatura,
             'id_lancamento_fatura_assoc' => $parcela->id_assoc
-        ]);
+        ];
+
+        $this->db->insert('lancamentos_terceiros_vinculos', array_merge(
+            $data,
+            $this->dadosMapeamentoVinculoTerceiro($parcela)
+        ));
 
         return ($this->db->error()['code'] == 0);
+    }
+
+    function dadosMapeamentoVinculoTerceiro($parcela)
+    {
+        $nomeTerceiro = is_array($parcela)
+            ? ($parcela['nome_cliente'] ?? null)
+            : ($parcela->nome_cliente ?? null);
+
+        $idCartao = is_array($parcela)
+            ? ($parcela['id_cartao'] ?? null)
+            : ($parcela->id_cartao ?? null);
+
+        $vencimento = is_array($parcela)
+            ? ($parcela['vencimento'] ?? null)
+            : ($parcela->vencimento ?? null);
+
+        return [
+            'nome_terceiro'  => $nomeTerceiro,
+            'id_cartao'      => $idCartao,
+            'mes_vencimento' => $vencimento ? date('m', strtotime($vencimento)) : null,
+            'ano_vencimento' => $vencimento ? date('Y', strtotime($vencimento)) : null
+        ];
     }
 
     function getParcelasTerceiroPeriodoParaVinculo($idUsuario, $nome, $mesReferencia, $anoReferencia)
@@ -458,6 +917,7 @@ class Fatura_model extends CI_Model
                 lfa.valor_parcela,
                 lfa.mes_referencia,
                 lfa.ano_referencia,
+                lf.nome_cliente,
                 f.id_fatura,
                 f.id_cartao,
                 f.vencimento,
@@ -477,6 +937,44 @@ class Fatura_model extends CI_Model
             ->where('lfa.mes_referencia', $mesReferencia)
             ->where('lfa.ano_referencia', $anoReferencia)
             ->where('lfa.parcela_terceiro_pago IS NULL', null, false)
+            ->order_by('f.vencimento', 'ASC')
+            ->get()
+            ->result_array();
+    }
+
+    function getParcelasTerceiroPeriodoPagasParaVinculo($idUsuario, $nome, $mesReferencia, $anoReferencia)
+    {
+        if (!is_string($nome) || is_numeric($nome)) {
+            return false;
+        }
+
+        return $this->db
+            ->select('
+                lfa.id_assoc,
+                lfa.id_lancamento,
+                lfa.valor_parcela,
+                lfa.mes_referencia,
+                lfa.ano_referencia,
+                lf.nome_cliente,
+                f.id_fatura,
+                f.id_cartao,
+                f.vencimento,
+                c.apelido AS cartao_apelido,
+                c.bandeira AS cartao_bandeira,
+                c.numero AS cartao_numero
+            ')
+            ->from('lancamentos_faturas_assoc AS lfa')
+            ->join('lancamentos_faturas AS lf', 'lf.id_lancamento = lfa.id_lancamento', 'inner')
+            ->join('faturas AS f', 'f.id_fatura = lfa.id_fatura', 'inner')
+            ->join('cartoes AS c', 'c.id_cartao = f.id_cartao', 'left')
+            ->where('lf.id_usuario', $idUsuario)
+            ->where('lf.status', 1)
+            ->where('lf.compra_terceiros', 1)
+            ->where('lf.nome_cliente', $nome)
+            ->where('lfa.status', 1)
+            ->where('lfa.mes_referencia', $mesReferencia)
+            ->where('lfa.ano_referencia', $anoReferencia)
+            ->where('lfa.parcela_terceiro_pago', 1)
             ->order_by('f.vencimento', 'ASC')
             ->get()
             ->result_array();
@@ -515,9 +1013,18 @@ class Fatura_model extends CI_Model
         }
 
         $parcelas = $this->db
-            ->select('id_assoc, id_lancamento, id_fatura')
-            ->from('lancamentos_faturas_assoc')
-            ->where_in('id_assoc', $idsLancamentosFaturasAssoc)
+            ->select('
+                lfa.id_assoc,
+                lfa.id_lancamento,
+                lfa.id_fatura,
+                lf.nome_cliente,
+                f.id_cartao,
+                f.vencimento
+            ')
+            ->from('lancamentos_faturas_assoc AS lfa')
+            ->join('lancamentos_faturas AS lf', 'lf.id_lancamento = lfa.id_lancamento', 'inner')
+            ->join('faturas AS f', 'f.id_fatura = lfa.id_fatura', 'inner')
+            ->where_in('lfa.id_assoc', $idsLancamentosFaturasAssoc)
             ->get()
             ->result_array();
 
@@ -526,13 +1033,18 @@ class Fatura_model extends CI_Model
         }
 
         foreach ($parcelas as $parcela) {
-            $this->db->insert('lancamentos_terceiros_vinculos', [
+            $data = [
                 'id_usuario'                 => getUserId(),
                 'id_lancamento'              => $idLancamento,
                 'id_lancamento_fatura'       => $parcela['id_lancamento'],
                 'id_fatura'                  => $parcela['id_fatura'],
                 'id_lancamento_fatura_assoc' => $parcela['id_assoc']
-            ]);
+            ];
+
+            $this->db->insert('lancamentos_terceiros_vinculos', array_merge(
+                $data,
+                $this->dadosMapeamentoVinculoTerceiro($parcela)
+            ));
 
             if ($this->db->error()['code'] != 0) {
                 return false;
@@ -597,9 +1109,16 @@ class Fatura_model extends CI_Model
             $this->removerVinculosTerceiroCompra($idLancamento, $idLancamentoFatura);
 
             $parcelasAtuais = $this->db
-                ->select('lfa.id_assoc, lfa.id_fatura')
+                ->select('
+                    lfa.id_assoc,
+                    lfa.id_fatura,
+                    lf.nome_cliente,
+                    f.id_cartao,
+                    f.vencimento
+                ')
                 ->from('lancamentos_faturas_assoc AS lfa')
                 ->join('lancamentos_faturas AS lf', 'lf.id_lancamento = lfa.id_lancamento', 'inner')
+                ->join('faturas AS f', 'f.id_fatura = lfa.id_fatura', 'inner')
                 ->where('lfa.id_lancamento', $idLancamentoFatura)
                 ->where_in('lfa.id_fatura', array_unique($idsFaturas))
                 ->where('lfa.status', 1)
@@ -610,13 +1129,18 @@ class Fatura_model extends CI_Model
                 ->result_array();
 
             foreach ($parcelasAtuais as $parcela) {
-                $this->db->insert('lancamentos_terceiros_vinculos', [
+                $data = [
                     'id_usuario'                 => getUserId(),
                     'id_lancamento'              => $idLancamento,
                     'id_lancamento_fatura'       => $idLancamentoFatura,
                     'id_fatura'                  => $parcela['id_fatura'],
                     'id_lancamento_fatura_assoc' => $parcela['id_assoc']
-                ]);
+                ];
+
+                $this->db->insert('lancamentos_terceiros_vinculos', array_merge(
+                    $data,
+                    $this->dadosMapeamentoVinculoTerceiro($parcela)
+                ));
 
                 if ($this->db->error()['code'] != 0) {
                     return false;
@@ -756,6 +1280,12 @@ class Fatura_model extends CI_Model
         if ($idsAssocAtivos) {
             $this->db->where_not_in('id_lancamento_fatura_assoc', $idsAssocAtivos);
         }
+
+        $this->db->where('id NOT IN (
+            SELECT id_lancamento_terceiros_vinculo
+            FROM lancamentos_terceiros_pagamentos
+            WHERE status = 1
+        )', null, false);
 
         $this->db->delete('lancamentos_terceiros_vinculos');
 

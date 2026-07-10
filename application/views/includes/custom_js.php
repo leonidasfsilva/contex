@@ -356,6 +356,10 @@
             return true
         }
 
+        if (financeiroSyncPendente.manual && href.indexOf('mxcode/sincronizarFinanceiro') !== -1) {
+            return true
+        }
+
         if (financeiroSyncPendente.faturas && href.indexOf('financeiro/faturas') !== -1) {
             return true
         }
@@ -390,6 +394,10 @@
         '[data-toggle="tab"])',
         function () {
             var element = $(".principal-div")
+
+            if ($(this).hasClass('btn-sync-financeiro')) {
+                $(this).find('.sync-financeiro-icon').addClass('fa-spin')
+            }
 
             if (hasFinancialSyncLoader(this)) {
                 setFinancialSyncPreloaderMessage()

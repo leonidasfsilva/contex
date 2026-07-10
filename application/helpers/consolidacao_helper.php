@@ -9,7 +9,7 @@ function reconciliacaoPendenteUsuario($idUsuario = null, $origem = 'login')
         return false;
     }
 
-    if ($origem == 'login') {
+    if (in_array($origem, ['login', 'manual'])) {
         return true;
     }
 
@@ -88,7 +88,7 @@ function reconciliarFinanceiroUsuario($idUsuario = null, $origem = 'login')
         ->get('consolidacoes_financeiras')
         ->row();
 
-    if ($origem != 'login' && $ultimaExecucao && $ultimaExecucao->status == 'sucesso') {
+    if (!in_array($origem, ['login', 'manual']) && $ultimaExecucao && $ultimaExecucao->status == 'sucesso') {
         $limiteExecucao = strtotime("-{$intervaloHoras} hours");
 
         if (strtotime($ultimaExecucao->iniciado_em) > $limiteExecucao) {
@@ -129,6 +129,7 @@ function reconciliarFinanceiroUsuario($idUsuario = null, $origem = 'login')
         integracaoDespesasUsuario();
         atualizaValorVinculoFaturas();
         vinculoAutomaticoComprasTerceiros();
+        sincronizaPagamentosRecebidosTerceirosUsuario($idUsuario);
 
         $CI->db
             ->where('id', $idConsolidacao)
