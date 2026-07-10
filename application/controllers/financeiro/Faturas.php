@@ -1929,6 +1929,7 @@ class Faturas extends CI_Controller
 
         if (
             $this->fatura_model->setParcelaTerceiroPago($idAssoc, $pago) &&
+            sincronizaPagamentoRecebidoTerceiroPorParcela($idAssoc, getUserId(), $pago) &&
             $this->fatura_model->sincronizarVinculoTerceiroPorParcela($idAssoc, getUserId())
         ) {
             $mensagem = $pago ? 'Parcela marcada como paga' : 'Pagamento da parcela removido';
@@ -1967,6 +1968,7 @@ class Faturas extends CI_Controller
 
         if (
             $this->fatura_model->setCompraTerceiroPago($lancamento->id_lancamento, getUserId(), $pago) &&
+            sincronizaPagamentoRecebidoTerceiroPorCompra($lancamento->id_lancamento, getUserId(), $pago) &&
             $this->fatura_model->sincronizarVinculosTerceiroPorCompra($lancamento->id_lancamento, getUserId())
         ) {
             $mensagem = $pago ? 'Compra marcada como paga' : 'Pagamento da compra removido';

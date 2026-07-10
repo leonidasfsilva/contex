@@ -16,6 +16,8 @@
 - Para ler trechos com acentuação, revisar diffs ou validar textos em português, preferir Git Bash ao PowerShell quando possível.
 - Se o PowerShell exibir mojibake ou quebrar caracteres especiais, não usar essa saída como referência textual confiável.
 - Ao editar textos exibidos ao usuário, preservar acentuação e grafia correta em português do Brasil.
+- Agentes DEVEM editar e salvar arquivos em UTF-8 real sempre que houver texto acentuado; se a ferramenta/shell usada não garantir UTF-8, trocar de ferramenta antes de escrever.
+- Após editar mensagens exibidas ao usuário, validar o diff ou o arquivo por um meio confiável em UTF-8, sem depender de saída mojibake do PowerShell.
 
 ### 3. Processo de Decisão
 - **Sempre responder primeiro às perguntas antes de tomar qualquer ação**
@@ -48,6 +50,7 @@
   - `ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`
 - Nunca deixar o MariaDB/MySQL escolher automaticamente collations modernas como `uca1400` ou `0900`, pois elas podem quebrar o dump/inject em ambientes locais mais antigos.
 - Para colunas textuais em tabelas novas, quando houver risco de herdar collation da sessão, declarar explicitamente `CHARACTER SET` e `COLLATE`.
+- Campos opcionais em modelagem SQL devem permitir `NULL` e declarar `DEFAULT NULL`; não usar `NOT NULL` quando o dado só será preenchido por evento posterior do sistema.
 - Após criar ou alterar SQL estrutural, validar com `SHOW CREATE TABLE` e garantir que não apareçam collations incompatíveis como `utf8mb4_uca1400_ai_ci`, `utf8mb3_uca1400_ai_ci` ou `utf8mb4_0900_ai_ci`.
 - Não propor script de inicialização no HeidiSQL como solução permanente para incompatibilidade criada por SQL versionado. A correção deve estar no schema/SQL do projeto.
 

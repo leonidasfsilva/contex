@@ -129,6 +129,25 @@ class Mxcode extends CI_Controller
         redirect('mxcode/login');
     }
 
+    public function sincronizarFinanceiro()
+    {
+        if ((!session_id()) || (!$this->session->userdata('logado'))) {
+            redirect('mxcode/login');
+        }
+
+        $sincronizado = reconciliarFinanceiroUsuario(getUserId(), 'manual');
+
+        if ($sincronizado) {
+            $this->session->set_flashdata('sucesso', 'Sincronização financeira executada com sucesso.');
+        } else {
+            $this->session->set_flashdata('erro', 'Não foi possível executar a sincronização financeira neste momento.');
+        }
+
+        $urlRetorno = $this->input->server('HTTP_REFERER');
+
+        redirect($urlRetorno ?: base_url());
+    }
+
     public function verificarLogin()
     {
         header('Access-Control-Allow-Origin: ' . base_url());

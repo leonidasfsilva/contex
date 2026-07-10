@@ -140,7 +140,241 @@ function sincronizaPagamentoTerceiroPorLancamento($idLancamento, $idUsuario, $pa
 
     $idsLancamentosFaturasAssoc = array_column($vinculos, 'id_lancamento_fatura_assoc');
 
-    return $CI->fatura_model->setParcelasTerceiroPagoPorAssoc($idsLancamentosFaturasAssoc, $pago);
+    if (!$CI->fatura_model->setParcelasTerceiroPagoPorAssoc($idsLancamentosFaturasAssoc, $pago)) {
+        return false;
+    }
+
+    foreach ($idsLancamentosFaturasAssoc as $idAssoc) {
+        if (!sincronizaPagamentoRecebidoTerceiroPorParcela($idAssoc, $idUsuario, $pago)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function sincronizaPagamentoRecebidoTerceiroPorParcela($idAssoc, $idUsuario, $pago): bool
+{
+    if (!$idAssoc || !$idUsuario) {
+        return false;
+    }
+
+    $CI = get_instance();
+    $CI->load->model('fatura_model');
+
+    $vinculo = $CI->fatura_model->garantirVinculoPagamentoTerceiroPorParcela($idAssoc, $idUsuario);
+
+    if (!$vinculo) {
+        return true;
+    }
+
+    if ($pago) {
+        $periodoVencimento = getPeriodoVencimentoTerceiro($vinculo);
+        $lancamento = $CI->fatura_model->getLancamentoRecebimentoTerceiroPeriodo(
+            $idUsuario,
+            $vinculo->nome_cliente,
+            $periodoVencimento['mes'],
+            $periodoVencimento['ano']
+        );
+
+        $idLancamento = $lancamento
+            ? $lancamento->id_lancamento
+            : $CI->fatura_model->criarLancamentoRecebimentoTerceiro($idUsuario, $vinculo->nome_cliente, $vinculo->vencimento);
+
+        if (!$idLancamento) {
+            return false;
+        }
+
+        if (!$CI->fatura_model->registrarPagamentoTerceiro($idLancamento, $idUsuario, $vinculo, 1)) {
+            return false;
+        }
+
+        return $CI->fatura_model->sincronizarLancamentoRecebimentoTerceiro($idLancamento, $idUsuario);
+    }
+
+    $idsLancamentos = $CI->fatura_model->desativarPagamentoTerceiroPorVinculo(
+        $vinculo->id_lancamento_terceiros_vinculo,
+        $idUsuario
+    );
+
+    if ($idsLancamentos === false) {
+        return false;
+    }
+
+    foreach ($idsLancamentos as $idLancamento) {
+        if (!$CI->fatura_model->sincronizarLancamentoRecebimentoTerceiro($idLancamento, $idUsuario)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function getPeriodoVencimentoTerceiro($vinculo): array
+{
+    $vencimento = is_array($vinculo)
+        ? ($vinculo['vencimento'] ?? null)
+        : ($vinculo->vencimento ?? null);
+
+    $mes = is_array($vinculo)
+        ? ($vinculo['mes_vencimento'] ?? null)
+        : ($vinculo->mes_vencimento ?? null);
+
+    $ano = is_array($vinculo)
+        ? ($vinculo['ano_vencimento'] ?? null)
+        : ($vinculo->ano_vencimento ?? null);
+
+    return [
+        'mes' => $mes ?: ($vencimento ? date('m', strtotime($vencimento)) : null),
+        'ano' => $ano ?: ($vencimento ? date('Y', strtotime($vencimento)) : null)
+    ];
+}
+
+function sincronizaPagamentoRecebidoTerceiroPorCompra($idLancamentoFatura, $idUsuario, $pago): bool
+{
+    if (!$idLancamentoFatura || !$idUsuario) {
+        return false;
+    }
+
+    $CI = get_instance();
+    $CI->load->model('fatura_model');
+
+    $vinculos = $CI->fatura_model->garantirVinculosPagamentoTerceiroPorCompra($idLancamentoFatura, $idUsuario);
+
+    if (!$vinculos) {
+        return true;
+    }
+
+    $idsLancamentos = [];
+    $lancamentosPorPeriodo = [];
+
+    foreach ($vinculos as $vinculo) {
+        if ($pago) {
+            $periodoVencimento = getPeriodoVencimentoTerceiro($vinculo);
+            $chavePeriodo = $vinculo->nome_cliente . '|' . $periodoVencimento['mes'] . '|' . $periodoVencimento['ano'];
+
+            if (!isset($lancamentosPorPeriodo[$chavePeriodo])) {
+                $lancamento = $CI->fatura_model->getLancamentoRecebimentoTerceiroPeriodo(
+                    $idUsuario,
+                    $vinculo->nome_cliente,
+                    $periodoVencimento['mes'],
+                    $periodoVencimento['ano']
+                );
+
+                $lancamentosPorPeriodo[$chavePeriodo] = $lancamento
+                    ? $lancamento->id_lancamento
+                    : $CI->fatura_model->criarLancamentoRecebimentoTerceiro($idUsuario, $vinculo->nome_cliente, $vinculo->vencimento);
+            }
+
+            $idLancamento = $lancamentosPorPeriodo[$chavePeriodo];
+
+            if (!$idLancamento) {
+                return false;
+            }
+
+            if (!$CI->fatura_model->registrarPagamentoTerceiro($idLancamento, $idUsuario, $vinculo, 2)) {
+                return false;
+            }
+
+            $idsLancamentos[] = $idLancamento;
+            continue;
+        }
+
+        $idsDesativados = $CI->fatura_model->desativarPagamentoTerceiroPorVinculo(
+            $vinculo->id_lancamento_terceiros_vinculo,
+            $idUsuario
+        );
+
+        if ($idsDesativados === false) {
+            return false;
+        }
+
+        $idsLancamentos = array_merge($idsLancamentos, $idsDesativados);
+    }
+
+    $idsLancamentos = array_values(array_unique(array_filter($idsLancamentos)));
+
+    foreach ($idsLancamentos as $idLancamento) {
+        if (!$CI->fatura_model->sincronizarLancamentoRecebimentoTerceiro($idLancamento, $idUsuario)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function sincronizaPagamentosRecebidosTerceiroPorCompra($idLancamentoFatura, $idUsuario = null): bool
+{
+    if (!$idLancamentoFatura) {
+        return true;
+    }
+
+    $CI = get_instance();
+    $CI->load->model('fatura_model');
+
+    $idUsuario = $idUsuario ?: getUserId();
+    $vinculos  = $CI->fatura_model->garantirVinculosPagamentoTerceiroPorCompra($idLancamentoFatura, $idUsuario);
+
+    if (!$vinculos) {
+        return true;
+    }
+
+    $idsLancamentos = [];
+    $lancamentosPorPeriodo = [];
+
+    foreach ($vinculos as $vinculo) {
+        if ($vinculo->parcela_terceiro_pago == 1) {
+            $periodoVencimento = getPeriodoVencimentoTerceiro($vinculo);
+            $chavePeriodo = $vinculo->nome_cliente . '|' . $periodoVencimento['mes'] . '|' . $periodoVencimento['ano'];
+
+            if (!isset($lancamentosPorPeriodo[$chavePeriodo])) {
+                $lancamento = $CI->fatura_model->getLancamentoRecebimentoTerceiroPeriodo(
+                    $idUsuario,
+                    $vinculo->nome_cliente,
+                    $periodoVencimento['mes'],
+                    $periodoVencimento['ano']
+                );
+
+                $lancamentosPorPeriodo[$chavePeriodo] = $lancamento
+                    ? $lancamento->id_lancamento
+                    : $CI->fatura_model->criarLancamentoRecebimentoTerceiro($idUsuario, $vinculo->nome_cliente, $vinculo->vencimento);
+            }
+
+            $idLancamento = $lancamentosPorPeriodo[$chavePeriodo];
+
+            if (!$idLancamento) {
+                return false;
+            }
+
+            if (!$CI->fatura_model->registrarPagamentoTerceiro($idLancamento, $idUsuario, $vinculo, 2)) {
+                return false;
+            }
+
+            $idsLancamentos[] = $idLancamento;
+            continue;
+        }
+
+        $idsDesativados = $CI->fatura_model->desativarPagamentoTerceiroPorVinculo(
+            $vinculo->id_lancamento_terceiros_vinculo,
+            $idUsuario
+        );
+
+        if ($idsDesativados === false) {
+            return false;
+        }
+
+        $idsLancamentos = array_merge($idsLancamentos, $idsDesativados);
+    }
+
+    $idsLancamentos = array_values(array_unique(array_filter($idsLancamentos)));
+
+    foreach ($idsLancamentos as $idLancamento) {
+        if (!$CI->fatura_model->sincronizarLancamentoRecebimentoTerceiro($idLancamento, $idUsuario)) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 function atualizaValorVinculoFaturas($idFatura = null): bool
@@ -230,6 +464,89 @@ function vinculoAutomaticoComprasTerceiros(): bool
     return true;
 }
 
+function sincronizaPagamentosRecebidosTerceirosUsuario($idUsuario = null): bool
+{
+    $CI = get_instance();
+    $CI->load->model('fatura_model');
+    $CI->load->database();
+
+    if (!$CI->db->table_exists('lancamentos_terceiros_pagamentos')) {
+        return true;
+    }
+
+    $idUsuario = $idUsuario ?: getUserId();
+    $idsLancamentos = [];
+
+    $idsInvalidos = $CI->fatura_model->desativarPagamentosRecebidosInvalidos($idUsuario);
+
+    if ($idsInvalidos === false) {
+        return false;
+    }
+
+    $idsLancamentos = array_merge($idsLancamentos, $idsInvalidos);
+
+    $periodosVinculados = $CI->fatura_model->getPeriodosTerceirosVinculadosAtivos($idUsuario);
+
+    foreach ($periodosVinculados as $periodo) {
+        if (!$CI->fatura_model->sincronizarVinculosTerceiroPagosPeriodo(
+            $periodo['id_lancamento'],
+            $idUsuario,
+            $periodo['nome_cliente'],
+            $periodo['mes_referencia'],
+            $periodo['ano_referencia']
+        )) {
+            return false;
+        }
+    }
+
+    $vinculosPagos = $CI->fatura_model->getVinculosTerceiroPagosAtivos($idUsuario);
+    $vinculosPorPeriodo = [];
+
+    foreach ($vinculosPagos as $vinculo) {
+        $periodoVencimento = getPeriodoVencimentoTerceiro($vinculo);
+        $chavePeriodo = $vinculo['nome_cliente'] . '|' . $periodoVencimento['mes'] . '|' . $periodoVencimento['ano'];
+        $vinculosPorPeriodo[$chavePeriodo][] = $vinculo;
+    }
+
+    foreach ($vinculosPorPeriodo as $vinculosPeriodo) {
+        $primeiroVinculo = $vinculosPeriodo[0];
+        $idsVinculos     = array_column($vinculosPeriodo, 'id_lancamento_terceiros_vinculo');
+
+        $lancamento = $CI->fatura_model->getLancamentoRecebimentoTerceiroPorVinculos($idUsuario, $idsVinculos);
+        $idLancamento = $lancamento
+            ? $lancamento->id_lancamento
+            : $CI->fatura_model->criarLancamentoRecebimentoTerceiro($idUsuario, $primeiroVinculo['nome_cliente'], $primeiroVinculo['vencimento']);
+
+        if (!$idLancamento) {
+            return false;
+        }
+
+        foreach ($vinculosPeriodo as $vinculo) {
+            if (!$CI->fatura_model->registrarPagamentoTerceiro($idLancamento, $idUsuario, (object) $vinculo, 1)) {
+                return false;
+            }
+
+            $idsLancamentos[] = $idLancamento;
+        }
+    }
+
+    $lancamentos = $CI->fatura_model->getLancamentosRecebimentosTerceirosAtivos($idUsuario);
+
+    foreach ($lancamentos as $lancamento) {
+        $idsLancamentos[] = $lancamento['id_lancamento'];
+    }
+
+    $idsLancamentos = array_values(array_unique(array_filter($idsLancamentos)));
+
+    foreach ($idsLancamentos as $idLancamento) {
+        if (!$CI->fatura_model->sincronizarLancamentoRecebimentoTerceiro($idLancamento, $idUsuario)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 function sincronizaVinculosTerceiroPorCompra($idLancamentoFatura, $idUsuario = null): bool
 {
     if (!$idLancamentoFatura) {
@@ -239,10 +556,14 @@ function sincronizaVinculosTerceiroPorCompra($idLancamentoFatura, $idUsuario = n
     $CI = get_instance();
     $CI->load->model('fatura_model');
 
-    return $CI->fatura_model->sincronizarVinculosTerceiroPorCompra(
+    if (!$CI->fatura_model->sincronizarVinculosTerceiroPorCompra(
         $idLancamentoFatura,
         $idUsuario ?: getUserId()
-    );
+    )) {
+        return false;
+    }
+
+    return sincronizaPagamentosRecebidosTerceiroPorCompra($idLancamentoFatura, $idUsuario ?: getUserId());
 }
 
 function vinculaFatura($idFatura)
