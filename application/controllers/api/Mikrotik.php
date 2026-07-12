@@ -13,6 +13,7 @@ class Mikrotik extends CI_Controller
     protected ?string $token         = null;
     protected ?string $username      = null;
     protected ?array  $request       = null;
+    protected ?object $apiClient     = null;
     protected bool    $authenticated = false;
     protected bool    $bearerToken   = false;
 
@@ -66,7 +67,10 @@ class Mikrotik extends CI_Controller
         }
 
         if ($this->token) {
-            if ($this->checkToken($this->username, $this->token, $this->bearerToken)) {
+            $apiClient = $this->checkToken($this->username, $this->token, $this->bearerToken);
+
+            if ($apiClient) {
+                $this->apiClient = $apiClient;
                 $this->authenticated = true;
             }
         }
@@ -128,7 +132,7 @@ class Mikrotik extends CI_Controller
 
     public function sendEmail()
     {
-        if (!$this->token || !$this->authenticated) {
+        if (!$this->token || !$this->authenticated || !$this->hasScope('mikrotik')) {
             gravaLog(null, sprintf('HTTP_USER_AGENT: %s', $_SERVER['HTTP_USER_AGENT']), null, 'Unauthorized: Tentativa recusada de envio de email de relatório Mikrotik', getenv("REMOTE_ADDR"));
             return $this->response(
                 ['response' => 'Error 401 Unauthorized'],
@@ -177,15 +181,26 @@ class Mikrotik extends CI_Controller
     private function checkToken($username, $token, $tokenFromBearer = false)
     {
         if ($tokenFromBearer) {
-            $storagedToken = $this->mxcode_model->getApiClientByToken($token)->result();
+            $storagedToken = $this->mxcode_model->getApiClientByToken($token)->row();
         } else {
-            $storagedToken = $this->mxcode_model->getTokenByToken($username, $token)->result();
+            $storagedToken = $this->mxcode_model->getTokenByToken($username, $token)->row();
         }
 
         if ($storagedToken) {
             return $storagedToken;
         }
         return false;
+    }
+
+    private function hasScope($scope)
+    {
+        if (!$this->apiClient || empty($this->apiClient->scopes)) {
+            return false;
+        }
+
+        $scopes = array_filter(array_map('trim', explode(',', $this->apiClient->scopes)));
+
+        return in_array($scope, $scopes) || in_array('*', $scopes);
     }
 
     private function getBearerToken()
