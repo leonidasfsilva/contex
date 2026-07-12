@@ -306,4 +306,12 @@ class Mxcode_model extends CI_Model
             ->where('status', 1);
         return $this->db->get('clientes_api');
     }
+
+    function getApiClientByToken($token)
+    {
+        $this->db
+            ->where('token', $token)
+            ->where('status', 1);
+        return $this->db->get('clientes_api');
+    }
 }
