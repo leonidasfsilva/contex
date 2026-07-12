@@ -14,6 +14,7 @@ class Mikrotik extends CI_Controller
     protected ?string $username      = null;
     protected ?array  $request       = null;
     protected bool    $authenticated = false;
+    protected bool    $bearerToken   = false;
 
     public function __construct()
     {
@@ -58,8 +59,14 @@ class Mikrotik extends CI_Controller
             }
         }
 
+        $bearerToken = $this->getBearerToken();
+        if ($bearerToken) {
+            $this->token = $bearerToken;
+            $this->bearerToken = true;
+        }
+
         if ($this->token) {
-            if ($this->checkToken($this->username, $this->token)) {
+            if ($this->checkToken($this->username, $this->token, $this->bearerToken)) {
                 $this->authenticated = true;
             }
         }
@@ -167,14 +174,67 @@ class Mikrotik extends CI_Controller
         }
     }
 
-    private function checkToken($username, $token)
+    private function checkToken($username, $token, $tokenFromBearer = false)
     {
-        $storagedToken = $this->mxcode_model->getTokenByToken($username, $token)->result();
+        if ($tokenFromBearer) {
+            $storagedToken = $this->mxcode_model->getApiClientByToken($token)->result();
+        } else {
+            $storagedToken = $this->mxcode_model->getTokenByToken($username, $token)->result();
+        }
 
         if ($storagedToken) {
             return $storagedToken;
         }
         return false;
+    }
+
+    private function getBearerToken()
+    {
+        $authorization = $this->getAuthorizationHeader();
+
+        if (!$authorization) {
+            return null;
+        }
+
+        if (preg_match('/Bearer\s+(.+)/i', $authorization, $matches)) {
+            return trim($matches[1]);
+        }
+
+        return null;
+    }
+
+    private function getAuthorizationHeader()
+    {
+        $authorization = $this->input->server('HTTP_AUTHORIZATION');
+
+        if (!$authorization) {
+            $authorization = $this->input->server('REDIRECT_HTTP_AUTHORIZATION');
+        }
+
+        if (!$authorization && function_exists('apache_request_headers')) {
+            $authorization = $this->findAuthorizationHeader(apache_request_headers());
+        }
+
+        if (!$authorization && function_exists('getallheaders')) {
+            $authorization = $this->findAuthorizationHeader(getallheaders());
+        }
+
+        return $authorization ?: null;
+    }
+
+    private function findAuthorizationHeader($headers)
+    {
+        if (!is_array($headers)) {
+            return null;
+        }
+
+        foreach ($headers as $key => $value) {
+            if (strtolower($key) === 'authorization') {
+                return $value;
+            }
+        }
+
+        return null;
     }
 
     private function response($response = [], $code = 200)
