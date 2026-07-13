@@ -86,6 +86,10 @@
 ### Pull Requests
 - Criar PRs pelo GitHub CLI autenticado como `webmaster-devply`.
 - PRs devem apontar para `master`, salvo orientação diferente do desenvolvedor.
+- Título e descrição de PRs do Contex devem ser escritos em português do Brasil.
+- A descrição padrão de PR deve usar as seções `Resumo` e `Validação`.
+- Não misturar inglês e português na descrição do PR. Commits continuam seguindo a regra própria de mensagens curtas em inglês.
+- Antes de criar ou editar PR, usar PRs recentes do projeto como referência de formato quando houver dúvida.
 - Antes de subir alterações solicitadas pelo desenvolvedor com objetivo de atualizar ou abrir PR, verificar no GitHub a existência e o status do PR anterior da branch/card atual.
 - Se o PR anterior já estiver `MERGED` ou `CLOSED`, não assumir que o push atualiza aquele PR; criar novo PR ou pedir confirmação quando o fluxo não estiver claro.
 - O assistente abre o PR; o desenvolvedor senior revisa e aprova.
