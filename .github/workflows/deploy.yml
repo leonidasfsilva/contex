@@ -5,14 +5,22 @@ on:
     branches:
       - master
   workflow_dispatch:
-  
+
+permissions:
+  contents: write
+
 jobs:
   run_pull:
     name: Running application deploy...
     runs-on: ubuntu-latest
     environment: production
-    
-    steps:        
+
+    steps:
+    - name: Checking out repository...
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
     - name: Installing ssh keys...
       # check this thread to understand why its needed:
       # https://stackoverflow.com/a/70447517
@@ -25,5 +33,24 @@ jobs:
     #  run: ssh -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && git config user.name 'GitHub Action' && git config user.email 'leonidas.f.silva@hotmail.com' && git remote set-url origin git@github.com:leonidasfsilva/contex.git && git --work-tree=${{ secrets.WORK_DIR }} remote update && git --work-tree=${{ secrets.WORK_DIR }} reset --hard origin/master && exit"
     - name: Connecting to DEVPLY server and proceeding to git reset on master...
       run: ssh -p 65002 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ${{ vars.SERVER_USER }}@${{ vars.SERVER_HOST }} "cd ${{ vars.WORK_DIR }} && git config user.name 'GitHub Actions' && git config user.email 'leonidas.f.silva@hotmail.com' && git remote set-url origin git@github.com:leonidasfsilva/contex.git && git --work-tree=${{ vars.WORK_DIR }} remote update && git --work-tree=${{ vars.WORK_DIR }} reset --hard origin/master && exit"
+    - name: Creating version tag...
+      run: |
+        RELEASE_VERSION=$(awk -F"'" '/\$version/{print $2; exit}' application/config/constants.php)
+        CURRENT_YEAR=$(date +%y)
+        CURRENT_MONTH=$(date +%-m)
+        CURRENT_QUARTER=$(((CURRENT_MONTH + 2) / 3))
+        TAG="v${CURRENT_YEAR}.${CURRENT_QUARTER}.${RELEASE_VERSION}"
+
+        git fetch --tags
+
+        if git rev-parse "refs/tags/${TAG}" >/dev/null 2>&1; then
+          echo "Tag ${TAG} already exists."
+          exit 0
+        fi
+
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+        git tag -a "${TAG}" -m "Release ${TAG}"
+        git push origin "${TAG}"
     - name: Cleaning up the things...
       run: rm -rf ~/.ssh
