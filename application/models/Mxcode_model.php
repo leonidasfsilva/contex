@@ -303,6 +303,7 @@ class Mxcode_model extends CI_Model
         $this->db
             ->where('username', $username)
             ->where('token', $token)
+            ->where('active', 1)
             ->where('status', 1);
         return $this->db->get('clientes_api');
     }
@@ -311,6 +312,7 @@ class Mxcode_model extends CI_Model
     {
         $this->db
             ->where('token', $token)
+            ->where('active', 1)
             ->where('status', 1);
         return $this->db->get('clientes_api');
     }

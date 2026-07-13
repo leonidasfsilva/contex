@@ -1,4 +1,6 @@
-<?php if (!defined('BASEPATH')) {
+<?php
+
+if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -10,9 +12,11 @@ class Mikrotik extends CI_Controller
      *
      */
 
+    protected ?string $userAgent     = null;
     protected ?string $token         = null;
     protected ?string $username      = null;
     protected ?array  $request       = null;
+    protected ?object $apiClient     = null;
     protected bool    $authenticated = false;
     protected bool    $bearerToken   = false;
 
@@ -20,14 +24,8 @@ class Mikrotik extends CI_Controller
     {
         parent::__construct();
 
-        $userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);
-        $userAgent = strstr($userAgent, '/', true);
-
-        if (ENVIRONMENT == 'production') {
-            if ($userAgent != 'mikrotik') {
-                exit(0);
-            }
-        }
+        $this->userAgent = strtolower($_SERVER['HTTP_USER_AGENT'] ?? '');
+        $this->userAgent = strstr($this->userAgent, '/', true) ?: $this->userAgent;
 
         // Check if the word was found
         if ($_GET) {
@@ -61,12 +59,15 @@ class Mikrotik extends CI_Controller
 
         $bearerToken = $this->getBearerToken();
         if ($bearerToken) {
-            $this->token = $bearerToken;
+            $this->token       = $bearerToken;
             $this->bearerToken = true;
         }
 
         if ($this->token) {
-            if ($this->checkToken($this->username, $this->token, $this->bearerToken)) {
+            $apiClient = $this->checkToken($this->username, $this->token, $this->bearerToken);
+
+            if ($apiClient) {
+                $this->apiClient     = $apiClient;
                 $this->authenticated = true;
             }
         }
@@ -102,7 +103,7 @@ class Mikrotik extends CI_Controller
         return $this->response($response);
     }
 
-    public function getToken()
+    public function generateToken()
     {
         if (!$this->token || !$this->authenticated) {
             gravaLog(null, null, null, 'Unauthorized: Tentativa de acesso recusada de getToken da API', getenv("REMOTE_ADDR"));
@@ -114,9 +115,9 @@ class Mikrotik extends CI_Controller
 
         $token = str_shuffle(
             '1234567890' .
-            'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvXxYyWwZz' .
-            'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvXxYyWwZz' .
-            '1234567890'
+                'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvXxYyWwZz' .
+                'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvXxYyWwZz' .
+                '1234567890'
         );
 
         $response = [
@@ -128,7 +129,13 @@ class Mikrotik extends CI_Controller
 
     public function sendEmail()
     {
-        if (!$this->token || !$this->authenticated) {
+        if (ENVIRONMENT == 'production') {
+            if ($this->userAgent != 'mikrotik') {
+                exit(0);
+            }
+        }
+
+        if (!$this->token || !$this->authenticated || !$this->hasScope('mikrotik')) {
             gravaLog(null, sprintf('HTTP_USER_AGENT: %s', $_SERVER['HTTP_USER_AGENT']), null, 'Unauthorized: Tentativa recusada de envio de email de relatório Mikrotik', getenv("REMOTE_ADDR"));
             return $this->response(
                 ['response' => 'Error 401 Unauthorized'],
@@ -177,15 +184,26 @@ class Mikrotik extends CI_Controller
     private function checkToken($username, $token, $tokenFromBearer = false)
     {
         if ($tokenFromBearer) {
-            $storagedToken = $this->mxcode_model->getApiClientByToken($token)->result();
+            $storagedToken = $this->mxcode_model->getApiClientByToken($token)->row();
         } else {
-            $storagedToken = $this->mxcode_model->getTokenByToken($username, $token)->result();
+            $storagedToken = $this->mxcode_model->getTokenByToken($username, $token)->row();
         }
 
         if ($storagedToken) {
             return $storagedToken;
         }
         return false;
+    }
+
+    private function hasScope($scope)
+    {
+        if (!$this->apiClient || empty($this->apiClient->scopes)) {
+            return false;
+        }
+
+        $scopes = array_filter(array_map('trim', explode(',', $this->apiClient->scopes)));
+
+        return in_array($scope, $scopes) || in_array('*', $scopes);
     }
 
     private function getBearerToken()
@@ -247,7 +265,6 @@ class Mikrotik extends CI_Controller
             ->set_content_type('application/json')
             ->set_status_header($code)
             ->set_output(json_encode($response, JSON_PRETTY_PRINT));
-
     }
 
     private function buildEmailTemplate($request = null)

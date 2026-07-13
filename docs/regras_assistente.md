@@ -13,6 +13,9 @@
 - **Manter comunicação em português**
 - Ser direto e técnico
 - Não usar cumprimentos ou formalidades desnecessárias
+- No projeto Contex, usar Bash/Git Bash como shell padrão operacional para comandos de terminal sempre que a ferramenta permitir.
+- Se o runtime do assistente expuser PowerShell como shell interno, chamar Bash explicitamente para comandos sensíveis a ambiente, quoting, paths, Composer, Git Bash/MINGW ou encoding.
+- Usar PowerShell apenas quando for inevitável ou quando o comando for simples e não houver risco de divergência com o ambiente real do desenvolvedor.
 - Para ler trechos com acentuação, revisar diffs ou validar textos em português, preferir Git Bash ao PowerShell quando possível.
 - Se o PowerShell exibir mojibake ou quebrar caracteres especiais, não usar essa saída como referência textual confiável.
 - Ao editar textos exibidos ao usuário, preservar acentuação e grafia correta em português do Brasil.
@@ -83,6 +86,10 @@
 ### Pull Requests
 - Criar PRs pelo GitHub CLI autenticado como `webmaster-devply`.
 - PRs devem apontar para `master`, salvo orientação diferente do desenvolvedor.
+- Título e descrição de PRs do Contex devem ser escritos em português do Brasil.
+- A descrição padrão de PR deve usar as seções `Resumo` e `Validação`.
+- Não misturar inglês e português na descrição do PR. Commits continuam seguindo a regra própria de mensagens curtas em inglês.
+- Antes de criar ou editar PR, usar PRs recentes do projeto como referência de formato quando houver dúvida.
 - Antes de subir alterações solicitadas pelo desenvolvedor com objetivo de atualizar ou abrir PR, verificar no GitHub a existência e o status do PR anterior da branch/card atual.
 - Se o PR anterior já estiver `MERGED` ou `CLOSED`, não assumir que o push atualiza aquele PR; criar novo PR ou pedir confirmação quando o fluxo não estiver claro.
 - O assistente abre o PR; o desenvolvedor senior revisa e aprova.
