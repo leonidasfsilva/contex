@@ -13,6 +13,9 @@
 - **Manter comunicação em português**
 - Ser direto e técnico
 - Não usar cumprimentos ou formalidades desnecessárias
+- No projeto Contex, usar Bash/Git Bash como shell padrão operacional para comandos de terminal sempre que a ferramenta permitir.
+- Se o runtime do assistente expuser PowerShell como shell interno, chamar Bash explicitamente para comandos sensíveis a ambiente, quoting, paths, Composer, Git Bash/MINGW ou encoding.
+- Usar PowerShell apenas quando for inevitável ou quando o comando for simples e não houver risco de divergência com o ambiente real do desenvolvedor.
 - Para ler trechos com acentuação, revisar diffs ou validar textos em português, preferir Git Bash ao PowerShell quando possível.
 - Se o PowerShell exibir mojibake ou quebrar caracteres especiais, não usar essa saída como referência textual confiável.
 - Ao editar textos exibidos ao usuário, preservar acentuação e grafia correta em português do Brasil.

@@ -275,7 +275,7 @@ $reconciliacaoFinanceiraPendente = [
         <!--        BOTAO DO MENU SUSPENSO-->
 
         <!--        TELA CHEIA-->
-        <li class="toolbar-icon-bg" id="trigger-fullscreen">
+        <li class="toolbar-icon-bg hidden-xs" id="trigger-fullscreen">
             <a href="#" class="toggle-fullscreen" data-toggle="tooltips" data-placement="bottom" title='Ativar/desativar exibição em tela cheia'>
                 <span class="icon-bg"><i class="fal fa-fw fa-expand-wide"></i></span></i></a>
         </li>
@@ -525,6 +525,9 @@ $reconciliacaoFinanceiraPendente = [
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) { ?>
                                                 <li><a href="<?= base_url('configuracoes/sistema') ?>"><i class="fat fa-cog fa-lg pull-right"></i> Configurações</a></li>
+                                            <?php } ?>
+                                            <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) { ?>
+                                                <li><a href="<?= base_url('clientesApi') ?>"><i class="fat fa-plug fa-lg pull-right"></i> Clientes API</a></li>
                                             <?php } ?>
                                             <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'cUsuario')) { ?>
                                                 <li><a href="<?= base_url('usuarios') ?>"><i class="fat fa-users fa-lg pull-right"></i> Usuários do Sistema</a></li>
