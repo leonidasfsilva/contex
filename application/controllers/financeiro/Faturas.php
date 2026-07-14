@@ -16,7 +16,7 @@ class Faturas extends CI_Controller
         }
         $this->load->library('pagination');
         $this->yearsList = range(2018, date('Y') + 3);
-        reconciliarFinanceiroUsuario(getUserId(), 'faturas');
+        reconciliarFinanceiro(getUserId(), 'faturas');
     }
 
     public function index()

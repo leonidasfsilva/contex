@@ -40,21 +40,19 @@
 |
 */
 
-$route['default_controller']           = "mxcode";
-$route['404_override']                 = '';
-$route['financeiro']                   = 'financeiro/index';
-$route['mxcode/perfil']                = 'mxcode/perfil';
-$route['phpinfo']                      = 'mxcode/phpinfo';
-$route['editarFotoUsuario']            = "mxcode/editarFotoUsuario";
-$route['api/mikrotik/get-info/(:any)'] = 'api/mikrotik/getInfo/$1';
-$route['api/mikrotik/get-info']        = 'api/mikrotik/getInfo';
+$route['default_controller']                        = "mxcode";
+$route['404_override']                              = '';
+$route['financeiro']                                = 'financeiro/index';
+$route['mxcode/perfil']                             = 'mxcode/perfil';
+$route['phpinfo']                                   = 'mxcode/phpinfo';
+$route['editarFotoUsuario']                         = "mxcode/editarFotoUsuario";
 $route['financeiro/faturas/terceiro/compra/(:num)'] = 'financeiro/faturas/compraTerceiro/$1';
-$route['clientesapi/(:any)/(:num)']    = 'ClientesApi/$1/$2';
-$route['clientesapi/(:any)']           = 'ClientesApi/$1';
-$route['clientesapi']                  = 'ClientesApi';
-$route['clientesApi/(:any)/(:num)']    = 'ClientesApi/$1/$2';
-$route['clientesApi/(:any)']           = 'ClientesApi/$1';
-$route['clientesApi']                  = 'ClientesApi';
+$route['clientesapi/(:any)/(:num)']                 = 'ClientesApi/$1/$2';
+$route['clientesapi/(:any)']                        = 'ClientesApi/$1';
+$route['clientesapi']                               = 'ClientesApi';
+$route['clientesApi/(:any)/(:num)']                 = 'ClientesApi/$1/$2';
+$route['clientesApi/(:any)']                        = 'ClientesApi/$1';
+$route['clientesApi']                               = 'ClientesApi';
 
 // $route['financeiro/faturas/detalhes']        = 'faturas/detalhes';
 // $route['financeiro/faturas/detalhes/(:any)'] = 'faturas/detalhes/$1';

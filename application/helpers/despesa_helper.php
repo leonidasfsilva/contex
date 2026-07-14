@@ -3,16 +3,17 @@ if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
-function integracaoDespesasUsuario()
+function integracaoDespesasUsuario($idUsuario = null)
 {
     $CI = get_instance();
     $CI->load->model('despesa_model');
 
-    $despesas = $CI->despesa_model->getDespesas();
+    $idUsuario = $idUsuario ?: getUserId();
+    $despesas  = $CI->despesa_model->getDespesas(null, 0, 0, null, false, $idUsuario);
 
     if ($despesas) {
         foreach ($despesas as $despesa) {
-            vinculoAutomaticoDespesa($despesa->id);
+            vinculoAutomaticoDespesa($despesa->id, $idUsuario);
 
             $lancamentosDespesa = $CI->despesa_model->getLancamentosDespesa($despesa->id);
 
@@ -79,7 +80,7 @@ function monitoraIntegracaoAtivaComModuloLancamentos($idLancamentoDespesa)
     return true;
 }
 
-function vinculoAutomaticoDespesa($idDespesa)
+function vinculoAutomaticoDespesa($idDespesa, $idUsuario = null)
 {
     $CI = get_instance();
     $CI->load->model('despesa_model');
@@ -123,18 +124,19 @@ function vinculoAutomaticoDespesa($idDespesa)
 
         $newDueDate = sprintf('%s-%s-%s', $yearReference, $monthReference, $despesa->dia_vencimento);
         criaLancamentoDespesa($idDespesa, $newDueDate);
-        copiaRegistroEmModuloLancamentos($despesa->id, $newDueDate);
+        copiaRegistroEmModuloLancamentos($despesa->id, $newDueDate, $idUsuario);
         $monthReference++;
     }
     return true;
 }
 
-function copiaRegistroEmModuloLancamentos($idDespesa, $dataReferencia)
+function copiaRegistroEmModuloLancamentos($idDespesa, $dataReferencia, $idUsuario = null)
 {
     $CI = get_instance();
     $CI->load->model('despesa_model');
     $CI->load->model('financeiro_model');
 
+    $idUsuario  = $idUsuario ?: getUserId();
     $lancamento = $CI->despesa_model->getRegistroDespesaByDate($idDespesa, $dataReferencia);
     $vinculo    = $CI->despesa_model->getVinculoDespesaComModuloLancamentos($idDespesa, $dataReferencia);
     $despesa    = $CI->despesa_model->getDespesaById($idDespesa);
@@ -154,7 +156,7 @@ function copiaRegistroEmModuloLancamentos($idDespesa, $dataReferencia)
     }
 
     $dataToPersist = [
-        'id_usuario'         => getUserId(),
+        'id_usuario'         => $idUsuario,
         'id_despesa'         => $despesa->id,
         'descricao'          => $despesa->descricao,
         'observacoes'        => $despesa->observacoes ?? null,

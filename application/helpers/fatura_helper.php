@@ -14,21 +14,23 @@ function getVinculoFatura($idFatura)
     return $CI->faturaModel->getVinculoFatura($idFatura);
 }
 
-function vinculoAutomaticoFaturas(): bool
+function vinculoAutomaticoFaturas($idUsuario = null): bool
 {
     $CI = get_instance();
     $CI->load->model('fatura_model');
     $CI->load->model('cartoes_model');
 
-    if (!$CI->fatura_model->getAutoLinkUser()) return false;
+    $idUsuario = $idUsuario ?: getUserId();
+
+    if (!$CI->fatura_model->getAutoLinkUser($idUsuario)) return false;
 
     $todayDate     = date('Y-m-d');
     $todayArray    = explode('-', $todayDate);
     $monthsCount   = 3;
-    $cartoesAtivos = $CI->cartoes_model->getCartoesAtivosUsuario(getUserId());
+    $cartoesAtivos = $CI->cartoes_model->getCartoesAtivosUsuario($idUsuario);
 
     foreach ($cartoesAtivos as $cartao) {
-        $faturas         = $CI->fatura_model->getFaturasCartaoUser($cartao->id_cartao);
+        $faturas         = $CI->fatura_model->getFaturasCartaoUser($cartao->id_cartao, $idUsuario);
         $mounthReference = $todayArray[1];
         $yearReference   = $todayArray[0];
 
@@ -37,7 +39,7 @@ function vinculoAutomaticoFaturas(): bool
 
             if (!$faturaReferencia) continue;
 
-            vinculaFatura($faturaReferencia->id_fatura);
+            vinculaFatura($faturaReferencia->id_fatura, $idUsuario);
             $mounthReference++;
 
             if ($mounthReference == 13) {
@@ -48,7 +50,7 @@ function vinculoAutomaticoFaturas(): bool
 
         if ($faturas) {
             foreach ($faturas as $fatura) {
-                monitoraPagamentosFaturasVinculadas($fatura->id_fatura);
+                monitoraPagamentosFaturasVinculadas($fatura->id_fatura, $idUsuario);
             }
         }
     }
@@ -56,13 +58,14 @@ function vinculoAutomaticoFaturas(): bool
     return true;
 }
 
-function monitoraPagamentosFaturasUsuario(): bool
+function monitoraPagamentosFaturasUsuario($idUsuario = null): bool
 {
     $CI = get_instance();
     $CI->load->model('fatura_model');
     $CI->load->model('cartoes_model');
 
-    $cartoesAtivos = $CI->cartoes_model->getCartoesAtivosUsuario(getUserId());
+    $idUsuario = $idUsuario ?: getUserId();
+    $cartoesAtivos = $CI->cartoes_model->getCartoesAtivosUsuario($idUsuario);
 
     foreach ($cartoesAtivos as $cartao) {
         $faturas = $CI->fatura_model->get(
@@ -83,14 +86,14 @@ function monitoraPagamentosFaturasUsuario(): bool
         if (!$faturas) continue;
 
         foreach ($faturas as $fatura) {
-            monitoraPagamentosFaturasVinculadas($fatura->id_fatura);
+            monitoraPagamentosFaturasVinculadas($fatura->id_fatura, $idUsuario);
         }
     }
 
     return true;
 }
 
-function monitoraPagamentosFaturasVinculadas($idFatura)
+function monitoraPagamentosFaturasVinculadas($idFatura, $idUsuario = null)
 {
     if (!$idFatura) return false;
 
@@ -109,7 +112,7 @@ function monitoraPagamentosFaturasVinculadas($idFatura)
         ]);
     }
 
-    $vinculo = $CI->fatura_model->getVinculoFaturaComModuloLancamentos($idFatura);
+    $vinculo = $CI->fatura_model->getVinculoFaturaComModuloLancamentos($idFatura, $idUsuario);
 
     if ($vinculo) {
         $dataToUpdate = [
@@ -377,14 +380,16 @@ function sincronizaPagamentosRecebidosTerceiroPorCompra($idLancamentoFatura, $id
     return true;
 }
 
-function atualizaValorVinculoFaturas($idFatura = null): bool
+function atualizaValorVinculoFaturas($idFatura = null, $idUsuario = null): bool
 {
     $CI = get_instance();
     $CI->load->model('fatura_model');
     $CI->load->model('cartoes_model');
 
-    vinculoAutomaticoFaturas();
-    monitoraPagamentosFaturasUsuario();
+    $idUsuario = $idUsuario ?: getUserId();
+
+    vinculoAutomaticoFaturas($idUsuario);
+    monitoraPagamentosFaturasUsuario($idUsuario);
 
     if ($idFatura) {
         $valorTotalFatura = $CI->fatura_model->getValorTotalFatura($idFatura);
@@ -405,7 +410,7 @@ function atualizaValorVinculoFaturas($idFatura = null): bool
     $todayArray    = explode('-', $todayDate);
     $mesReferencia = $todayArray[1];
     $anoReferencia = $todayArray[0];
-    $cartoesAtivos = $CI->cartoes_model->getCartoesAtivosUsuario(getUserId());
+    $cartoesAtivos = $CI->cartoes_model->getCartoesAtivosUsuario($idUsuario);
 
     foreach ($cartoesAtivos as $cartao) {
         $faturaReferencia = $CI->fatura_model->getFaturaReferencia($cartao->id_cartao, $mesReferencia, $anoReferencia);
@@ -421,7 +426,7 @@ function atualizaValorVinculoFaturas($idFatura = null): bool
         $apelido              = $detalhesCartaoFatura->apelido ? sprintf('- %s', $detalhesCartaoFatura->apelido) : null;
 
         $lancamentosList = [
-            'id_usuario'         => getUserId(),
+            'id_usuario'         => $idUsuario,
             'id_fatura'          => $faturaReferencia->id_fatura,
             'descricao'          => sprintf('FATURA CARTAO DE CREDITO %s', $apelido),
             'cliente_fornecedor' => $detalhesCartaoFatura->bandeira ? $detalhesCartaoFatura->bandeira . ' - FINAL ' . $final : null,
@@ -440,12 +445,13 @@ function atualizaValorVinculoFaturas($idFatura = null): bool
     return true;
 }
 
-function vinculoAutomaticoComprasTerceiros(): bool
+function vinculoAutomaticoComprasTerceiros($idUsuario = null): bool
 {
     $CI = get_instance();
     $CI->load->model('fatura_model');
 
-    $periodosVinculados = $CI->fatura_model->getPeriodosTerceirosVinculadosAtivos(getUserId());
+    $idUsuario = $idUsuario ?: getUserId();
+    $periodosVinculados = $CI->fatura_model->getPeriodosTerceirosVinculadosAtivos($idUsuario);
 
     if (!$periodosVinculados) {
         return true;
@@ -454,7 +460,7 @@ function vinculoAutomaticoComprasTerceiros(): bool
     foreach ($periodosVinculados as $periodo) {
         $CI->fatura_model->sincronizarVinculoTerceiroPeriodo(
             $periodo['id_lancamento'],
-            getUserId(),
+            $idUsuario,
             $periodo['nome_cliente'],
             $periodo['mes_referencia'],
             $periodo['ano_referencia']
@@ -566,7 +572,7 @@ function sincronizaVinculosTerceiroPorCompra($idLancamentoFatura, $idUsuario = n
     return sincronizaPagamentosRecebidosTerceiroPorCompra($idLancamentoFatura, $idUsuario ?: getUserId());
 }
 
-function vinculaFatura($idFatura)
+function vinculaFatura($idFatura, $idUsuario = null)
 {
     if (!$idFatura) {
         return false;
@@ -574,6 +580,7 @@ function vinculaFatura($idFatura)
     $CI = get_instance();
     $CI->load->model('fatura_model');
 
+    $idUsuario = $idUsuario ?: getUserId();
     $vinculoFatura = $CI->fatura_model->getVinculoFatura($idFatura);
 
     if ($vinculoFatura) {
@@ -594,7 +601,7 @@ function vinculaFatura($idFatura)
         $apelido              = $detalhesCartaoFatura->apelido ? ' - ' . $detalhesCartaoFatura->apelido : null;
 
         $data = array(
-            'id_usuario'         => getUserId(),
+            'id_usuario'         => $idUsuario,
             'id_fatura'          => $idFatura,
             'descricao'          => 'FATURA CARTAO DE CREDITO' . $apelido,
             'cliente_fornecedor' => $detalhesCartaoFatura->bandeira ? $detalhesCartaoFatura->bandeira . ' - FINAL ' . $final : null,

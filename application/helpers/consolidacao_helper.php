@@ -55,6 +55,53 @@ function reconciliacaoPendenteUsuario($idUsuario = null, $origem = 'login')
     return true;
 }
 
+function reconciliarFinanceiro($idUsuario = null, $origem = 'manual')
+{
+    if ($idUsuario) {
+        $sucesso = reconciliarFinanceiroUsuario($idUsuario, $origem);
+
+        return [
+            'total'    => 1,
+            'sucesso'  => $sucesso ? 1 : 0,
+            'erro'     => $sucesso ? 0 : 1,
+            'usuarios' => [
+                [
+                    'id_usuario' => (int) $idUsuario,
+                    'status'     => $sucesso ? 'sucesso' : 'erro',
+                ]
+            ],
+        ];
+    }
+
+    $CI = get_instance();
+    $CI->load->model('usuarios_model');
+
+    $usuarios = $CI->usuarios_model->getUsuariosAtivos();
+    $resultado = [
+        'total'    => count($usuarios),
+        'sucesso'  => 0,
+        'erro'     => 0,
+        'usuarios' => [],
+    ];
+
+    foreach ($usuarios as $usuario) {
+        $sucesso = reconciliarFinanceiroUsuario($usuario->id_usuarios, $origem);
+
+        if ($sucesso) {
+            $resultado['sucesso']++;
+        } else {
+            $resultado['erro']++;
+        }
+
+        $resultado['usuarios'][] = [
+            'id_usuario' => (int) $usuario->id_usuarios,
+            'status'     => $sucesso ? 'sucesso' : 'erro',
+        ];
+    }
+
+    return $resultado;
+}
+
 function reconciliarFinanceiroUsuario($idUsuario = null, $origem = 'login')
 {
     if (!$idUsuario) {
@@ -126,9 +173,9 @@ function reconciliarFinanceiroUsuario($idUsuario = null, $origem = 'login')
     $idConsolidacao = $CI->db->insert_id();
 
     try {
-        integracaoDespesasUsuario();
-        atualizaValorVinculoFaturas();
-        vinculoAutomaticoComprasTerceiros();
+        integracaoDespesasUsuario($idUsuario);
+        atualizaValorVinculoFaturas(null, $idUsuario);
+        vinculoAutomaticoComprasTerceiros($idUsuario);
         sincronizaPagamentosRecebidosTerceirosUsuario($idUsuario);
 
         $CI->db

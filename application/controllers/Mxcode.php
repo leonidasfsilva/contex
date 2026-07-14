@@ -135,7 +135,8 @@ class Mxcode extends CI_Controller
             redirect('mxcode/login');
         }
 
-        $sincronizado = reconciliarFinanceiroUsuario(getUserId(), 'manual');
+        $resultado     = reconciliarFinanceiro(getUserId(), 'manual');
+        $sincronizado  = ($resultado['erro'] ?? 1) == 0;
 
         if ($sincronizado) {
             $this->session->set_flashdata('sucesso', 'Sincronização financeira executada com sucesso.');
@@ -198,7 +199,7 @@ class Mxcode extends CI_Controller
 
                 $this->session->set_userdata($session_data);
                 gravaLog(getUserId(), getUserName(), getUserEmail(), 'Login no sistema', getenv("REMOTE_ADDR"));
-                reconciliarFinanceiroUsuario(getUserId(), 'login');
+                reconciliarFinanceiro(getUserId(), 'login');
 
                 if ($this->session->userdata('last_url')) {
                     header('location:' . $this->session->userdata('last_url'));
