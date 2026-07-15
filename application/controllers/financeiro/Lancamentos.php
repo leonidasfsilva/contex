@@ -68,7 +68,7 @@ class Lancamentos extends CI_Controller
         $this->orderBy            = null;
         $this->queryString        = null;
 
-        reconciliarFinanceiroUsuario(getUserId(), 'lancamentos');
+        reconciliarFinanceiro(getUserId(), 'lancamentos');
     }
 
     public function index()

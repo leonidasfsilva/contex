@@ -164,12 +164,14 @@ class Fatura_model extends CI_Model
             ->result();
     }
 
-    function getFaturasCartaoUser($id_cartao)
+    function getFaturasCartaoUser($id_cartao, $idUser = null)
     {
+        $idUser = $idUser ?: $this->userId;
+
         return $this->db
             ->where('status', 1)
             ->where('id_cartao', $id_cartao)
-            ->where('id_usuario', $this->userId)
+            ->where('id_usuario', $idUser)
             ->get('faturas')
             ->result();
     }
@@ -2053,11 +2055,13 @@ class Fatura_model extends CI_Model
         return true;
     }
 
-    function getAutoLinkUser()
+    function getAutoLinkUser($idUsuario = null)
     {
+        $idUsuario = $idUsuario ?: getUserId();
+
         $this->db
             ->from('configs_faturas')
-            ->where('id_usuario', getUserId())
+            ->where('id_usuario', $idUsuario)
             ->where('auto_vinculo', 1);
 
         if ($this->db->count_all_results()) {
@@ -2066,19 +2070,21 @@ class Fatura_model extends CI_Model
         return false;
     }
 
-    function getVinculoFaturaComModuloLancamentos($idFatura)
+    function getVinculoFaturaComModuloLancamentos($idFatura, $idUsuario = null)
     {
+        $idUsuario = $idUsuario ?: $this->userId;
+
         $count = $this->db
             ->from('lancamentos')
             ->where('status', 1)
-            ->where('id_usuario', $this->userId)
+            ->where('id_usuario', $idUsuario)
             ->where('id_fatura', $idFatura);
 
         if ($count->count_all_results() > 0) {
             $this->db
                 ->from('lancamentos')
                 ->where('status', 1)
-                ->where('id_usuario', $this->userId)
+                ->where('id_usuario', $idUsuario)
                 ->where('id_fatura', $idFatura);
             return $this->db->get()->row();
         }

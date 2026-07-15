@@ -6,8 +6,8 @@ Ferramenta local para o Agente IA consultar e atualizar cards do Trello via REST
 
 Copie o arquivo de exemplo:
 
-```powershell
-Copy-Item .agents/trello/config.example.json .agents/trello/config.local.json
+```bash
+cp .agents/trello/config.example.json .agents/trello/config.local.json
 ```
 
 Preencha `config.local.json` com:
@@ -26,13 +26,15 @@ Também é possível usar variáveis de ambiente:
 
 ## Uso
 
-```powershell
-.agents/trello/trello.ps1 test
-.agents/trello/trello.ps1 boards
-.agents/trello/trello.ps1 lists
-.agents/trello/trello.ps1 cards -ListId "ID_DA_LISTA"
-.agents/trello/trello.ps1 create-card -ListId "ID_DA_LISTA" -Name "Título" -Desc "Descrição"
-.agents/trello/trello.ps1 comment -CardId "ID_DO_CARD" -Text "Comentário"
-.agents/trello/trello.ps1 move-card -CardId "ID_DO_CARD" -ListId "ID_DA_LISTA_DESTINO"
+```bash
+.agents/trello/trello.sh test
+.agents/trello/trello.sh boards
+.agents/trello/trello.sh lists
+.agents/trello/trello.sh cards -ListId "ID_DA_LISTA"
+.agents/trello/trello.sh card -CardNumber 264
+.agents/trello/trello.sh create-card -ListId "ID_DA_LISTA" -Name "Título" -Desc "Descrição"
+.agents/trello/trello.sh comment -CardId "ID_DO_CARD" -Text "Comentário"
+.agents/trello/trello.sh move-card -CardId "ID_DO_CARD" -ListId "ID_DA_LISTA_DESTINO"
 ```
 
+O script `trello.ps1` fica apenas como legado. O fluxo operacional dos agentes no Contex deve usar `trello.sh`.

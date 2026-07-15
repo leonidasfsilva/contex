@@ -54,12 +54,12 @@ class Despesa_model extends CI_Model
         return !$one ? $query->result() : $query->row();
     }
 
-    function getDespesas($where = '', $perpage = 0, $start = 0, $order_by = null, $one = false)
+    function getDespesas($where = '', $perpage = 0, $start = 0, $order_by = null, $one = false, $idUsuario = null)
     {
         $this->db->from($this->despesasTable);
         $this->db->limit($perpage, $start);
 
-        $idUsuario = getUserId();
+        $idUsuario = $idUsuario ?: getUserId();
 
         if ($where) {
             $this->db->where($where);
