@@ -62,10 +62,49 @@ EOF
 # Tornar executável
 chmod +x .git/hooks/pre-commit
 
+# Hook pre-push para impedir push em branch com PR ja fechado/mergeado
+cat > .git/hooks/pre-push << 'EOF'
+#!/bin/bash
+
+# Hook pre-push para evitar atualizar branch cujo PR ja foi fechado/mergeado
+
+BRANCH=$(git branch --show-current)
+
+if [ -z "$BRANCH" ]; then
+    echo "Erro: nao foi possivel identificar a branch atual."
+    exit 1
+fi
+
+if ! command -v gh >/dev/null 2>&1; then
+    echo "Erro: GitHub CLI (gh) nao encontrado. Push bloqueado para proteger a regra de PR."
+    exit 1
+fi
+
+PR_FECHADO=$(gh pr list --head "$BRANCH" --state all --json number,state,title,url --jq '.[] | select(.state == "MERGED" or .state == "CLOSED") | "\(.number)|\(.state)|\(.title)|\(.url)"' 2>/dev/null | head -n 1)
+
+if [ -n "$PR_FECHADO" ]; then
+    IFS='|' read -r PR_NUMBER PR_STATE PR_TITLE PR_URL <<< "$PR_FECHADO"
+
+    echo "Push bloqueado: a branch atual ja possui PR $PR_STATE."
+    echo "Branch: $BRANCH"
+    echo "PR: #$PR_NUMBER - $PR_TITLE"
+    echo "URL: $PR_URL"
+    echo ""
+    echo "Crie uma nova branch antes de subir novas alteracoes."
+    exit 1
+fi
+
+exit 0
+EOF
+
+# Tornar executavel
+chmod +x .git/hooks/pre-push
+
 echo "✅ Git Hooks configurados com sucesso!"
 echo ""
 echo "📋 Hooks ativos:"
 echo "   • pre-commit: Versionamento automático"
+echo "   • pre-push: Bloqueio de push em branch com PR fechado/mergeado"
 echo ""
 echo "🎯 Como testar:"
 echo "   1. Faça qualquer modificação no código"
