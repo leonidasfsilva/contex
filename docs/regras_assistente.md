@@ -89,6 +89,8 @@
 - Título e descrição de PRs do Contex devem ser escritos em português do Brasil.
 - A descrição padrão de PR deve usar as seções `Resumo` e `Validação`.
 - Não misturar inglês e português na descrição do PR. Commits continuam seguindo a regra própria de mensagens curtas em inglês.
+- Corpos de PR devem ser preparados e enviados pelo helper `.agents/git/pr.sh`, que normaliza UTF-8, rejeita `\\n` literal e caracteres de controle.
+- Após criar ou editar um PR, executar `.agents/git/pr.sh verify --pr <numero>` e conferir a renderização no GitHub antes de reportar a conclusão.
 - Antes de criar ou editar PR, usar PRs recentes do projeto como referência de formato quando houver dúvida.
 - Antes de subir alterações solicitadas pelo desenvolvedor com objetivo de atualizar ou abrir PR, verificar no GitHub a existência e o status do PR anterior da branch/card atual.
 - Se o PR anterior já estiver `MERGED` ou `CLOSED`, não assumir que o push atualiza aquele PR; criar novo PR ou pedir confirmação quando o fluxo não estiver claro.
