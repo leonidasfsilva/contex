@@ -99,8 +99,15 @@
 
 ### Trello
 - Para tarefas originadas de cards do Trello, usar o número do card como referência operacional.
+- Todo card novo solicitado pelo desenvolvedor deve ser criado no topo da lista indicada, independentemente da coluna.
+- Nas descrições dos cards, todos os tópicos e seções devem usar o padrão Markdown de Título 3: `### Nome da seção`. Não usar texto simples como título de seção.
+- Nas descrições dos cards, identificadores técnicos devem usar código inline com crases. Isso inclui nomes de tabelas, campos, métodos, funções, classes, arquivos, caminhos, rotas, variáveis de ambiente, comandos e valores literais, por exemplo: `usuarios_passkeys`, `id_usuario` e `reconciliarFinanceiro()`.
+- Todo texto enviado ao Trello deve estar em UTF-8 real. É proibido enviar título, descrição, comentário ou nome de anexo em ANSI/Windows-1252 ou confiar em saída com mojibake.
+- O fluxo operacional deve usar `.agents/trello/trello.sh`, que normaliza entradas textuais para UTF-8 antes da chamada da API. Não contornar o helper com PowerShell ou chamada crua sem normalização equivalente.
+- Após criar ou atualizar um card, consultar novamente o card e validar título, descrição, formatação das seções com `###`, identificadores técnicos com código inline e posição na lista. Sequências percentuais literais como `%E7`, `%E3`, mojibake ou caracteres corrompidos devem ser corrigidos imediatamente antes de reportar conclusão.
+- Escopo, requisitos e decisões do projeto devem ser registrados na descrição do card. Comentários são reservados ao registro de entrega, resultado, PR e fechamento.
 - Ao finalizar um card, mover para a lista `Finalizado` sempre no topo da lista.
-- O helper `.agents/trello/trello.ps1` deve manter esse comportamento como padrão ao mover cards.
+- O helper `.agents/trello/trello.sh` deve manter esse comportamento como padrão ao mover cards.
 
 ## Contexto do Projeto
 
