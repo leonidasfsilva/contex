@@ -20,5 +20,12 @@ $hook['display_override'][] = array(
 	'filepath' => 'hooks'
 );
 
+$hook['pre_controller'][] = array(
+    'class' => 'DatabaseTimezone',
+    'function' => 'setTimezone',
+    'filename' => 'DatabaseTimezone.php',
+    'filepath' => 'hooks'
+);
+
 /* End of file hooks.php */
 /* Location: ./application/config/hooks.php */
