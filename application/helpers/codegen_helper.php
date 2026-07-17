@@ -140,7 +140,7 @@ function capsLock($str)
 }
 
 // Refactor this method to receive an array instead of multiple parameters
-function gravaLog($id_usuario = null, $nome = null, $email = null, $acao = null, $ip = null)
+function gravaLog($id_usuario = null, $nome = null, $email = null, $acao = null, $ip = null, $modulo = null, $origem = null)
 {
     $CI = get_instance();
     $CI->load->model('mxcode_model');
@@ -151,6 +151,8 @@ function gravaLog($id_usuario = null, $nome = null, $email = null, $acao = null,
         'email'      => $email,
         'descricao'  => $acao,
         'ip'         => $ip,
+        'modulo'     => $modulo,
+        'origem'     => $origem,
     );
 
     $CI->mxcode_model->gravaLog($data);
@@ -408,7 +410,7 @@ function checkForcedLogout()
 
     if ($CI->configs_model->getForcedLogout()) {
         if ((session_id()) && ($CI->session->userdata('logado')) && ($CI->session->userdata('permissao') != 1)) {
-            gravaLog(getUserId(), getUserName(), getUserEmail(), 'Logout forçado: sistema em manutenção', getenv("REMOTE_ADDR"));
+            gravaLog(getUserId(), getUserName(), getUserEmail(), 'Logout forçado: sistema em manutenção', getenv("REMOTE_ADDR"), 'autenticacao', '/mxcode/logout-forcado');
             $CI->session->sess_destroy();
         }
         return true;
