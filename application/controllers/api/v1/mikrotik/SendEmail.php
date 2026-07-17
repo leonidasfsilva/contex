@@ -39,6 +39,8 @@ class SendEmail extends CI_Controller
             );
         }
 
+        $this->request = $this->api_auth->getRequest();
+
         if (!$this->request) {
             return $this->response(
                 ['response' => 'Error 400 Bad Request'],
