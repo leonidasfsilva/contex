@@ -13,8 +13,7 @@ class SendEmail extends CI_Controller
     {
         parent::__construct();
 
-        $this->load->library('api_auth');
-        $this->api_auth->authenticate();
+        $this->load->library('ApiAuth', null, 'api_auth');
 
         $this->userAgent = $this->api_auth->getUserAgent();
         $this->request   = $this->api_auth->getRequest();
@@ -22,17 +21,21 @@ class SendEmail extends CI_Controller
 
     public function index()
     {
-        if (ENVIRONMENT == 'production') {
-            if ($this->userAgent != 'mikrotik') {
-                exit(0);
-            }
+        if (strtolower($this->input->method(true)) !== 'post') {
+            return $this->response(
+                ['response' => 'Error 405 Method Not Allowed'],
+                405
+            );
         }
 
-        if (!$this->api_auth->isAuthenticated() || !$this->api_auth->hasScope('mikrotik')) {
-            gravaLog(null, sprintf('HTTP_USER_AGENT: %s', $_SERVER['HTTP_USER_AGENT']), null, 'Unauthorized: Tentativa recusada de envio de email de relatório Mikrotik', getenv("REMOTE_ADDR"));
+        if (!$this->api_auth->authorize('mikrotik')) {
+            $code = $this->api_auth->getAuthorizationCode();
+            if ($code !== 429) {
+                gravaLog(null, sprintf('HTTP_USER_AGENT: %s', $_SERVER['HTTP_USER_AGENT']), null, 'Unauthorized: Tentativa recusada de envio de email de relatório Mikrotik', getenv("REMOTE_ADDR"), 'api', '/api/v1/mikrotik/sendemail');
+            }
             return $this->response(
-                ['response' => 'Error 401 Unauthorized'],
-                401
+                ['response' => $this->api_auth->getAuthorizationMessage()],
+                $code
             );
         }
 
@@ -56,7 +59,7 @@ class SendEmail extends CI_Controller
                 'remoteAddress' => getenv("REMOTE_ADDR") ?? null,
             ];
 
-            gravaLog(null, null, $email, 'Email de relatório Mikrotik enviado com sucesso', getenv("REMOTE_ADDR"));
+            gravaLog(null, null, $email, 'Email de relatório Mikrotik enviado com sucesso', getenv("REMOTE_ADDR"), 'api', '/api/v1/mikrotik/sendemail');
             return $this->response($response);
         } catch (Exception $e) {
             return $this->response(
