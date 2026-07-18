@@ -29,6 +29,45 @@ BEGIN
 
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = 1;
 
+    -- Remove temporariamente os gatilhos ON UPDATE antes de alterar valores.
+    -- Sem esta fase, atualizar criado_em pode sobrescrever atualizado_em.
+    OPEN v_cursor;
+
+    desativar_atualizacao: LOOP
+        FETCH v_cursor INTO v_table, v_column, v_type, v_nullable, v_default, v_extra;
+
+        IF v_done = 1 THEN
+            LEAVE desativar_atualizacao;
+        END IF;
+
+        IF LOWER(v_extra) LIKE '%on update current_timestamp%' THEN
+            SET v_sql = CONCAT(
+                'ALTER TABLE `', REPLACE(v_table, '`', '``'), '` ',
+                'MODIFY COLUMN `', REPLACE(v_column, '`', '``'), '` ',
+                v_type
+            );
+
+            IF v_nullable = 'YES' THEN
+                SET v_sql = CONCAT(v_sql, ' NULL');
+            ELSE
+                SET v_sql = CONCAT(v_sql, ' NOT NULL');
+            END IF;
+
+            IF v_default IS NOT NULL THEN
+                SET v_sql = CONCAT(v_sql, ' DEFAULT ', v_default);
+            ELSEIF v_nullable = 'YES' THEN
+                SET v_sql = CONCAT(v_sql, ' DEFAULT NULL');
+            END IF;
+
+            SET @contex_sql = v_sql;
+            PREPARE contex_stmt FROM @contex_sql;
+            EXECUTE contex_stmt;
+            DEALLOCATE PREPARE contex_stmt;
+        END IF;
+    END LOOP;
+
+    CLOSE v_cursor;
+    SET v_done = 0;
     OPEN v_cursor;
 
     migrar: LOOP
