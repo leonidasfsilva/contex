@@ -153,6 +153,7 @@ function gravaLog($id_usuario = null, $nome = null, $email = null, $acao = null,
         'ip'         => $ip,
         'modulo'     => $modulo,
         'origem'     => $origem,
+        'data_registro' => date('Y-m-d H:i:s'),
     );
 
     $CI->mxcode_model->gravaLog($data);
