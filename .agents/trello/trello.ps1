@@ -1,6 +1,6 @@
 param(
     [Parameter(Mandatory = $true, Position = 0)]
-    [ValidateSet("test", "boards", "lists", "cards", "card", "create-card", "comment", "move-card", "attach-url")]
+    [ValidateSet("test", "boards", "create-board", "lists", "cards", "card", "create-card", "update-card", "checklists", "add-checkitem", "checkitem", "comment", "move-card", "attach-url")]
     [string]$Command,
 
     [Parameter(Mandatory = $false)]
@@ -13,6 +13,12 @@ param(
     [string]$CardId,
 
     [Parameter(Mandatory = $false)]
+    [string]$CheckItemId,
+
+    [Parameter(Mandatory = $false)]
+    [string]$ChecklistId,
+
+    [Parameter(Mandatory = $false)]
     [int]$CardNumber,
 
     [Parameter(Mandatory = $false)]
@@ -20,6 +26,12 @@ param(
 
     [Parameter(Mandatory = $false)]
     [string]$Desc,
+
+    [Parameter(Mandatory = $false)]
+    [string]$DescFile,
+
+    [Parameter(Mandatory = $false)]
+    [switch]$ClearDesc,
 
     [Parameter(Mandatory = $false)]
     [string]$Text,
@@ -30,6 +42,11 @@ param(
     [Parameter(Mandatory = $false)]
     [ValidateSet("top", "bottom")]
     [string]$Position = "top"
+
+    ,
+    [Parameter(Mandatory = $false)]
+    [ValidateSet("complete", "incomplete")]
+    [string]$State
 )
 
 $ErrorActionPreference = "Stop"
@@ -81,7 +98,7 @@ function Invoke-TrelloRequest {
         [string]$Path,
 
         [Parameter(Mandatory = $false)]
-        [hashtable]$Body = @{}
+        [object]$Body = $null
     )
 
     $config = Read-TrelloConfig
@@ -89,7 +106,11 @@ function Invoke-TrelloRequest {
     $separator = if ($Path.Contains("?")) { "&" } else { "?" }
     $url = "https://api.trello.com/1/$Path$separator$auth"
 
-    if ($Body.Count -gt 0) {
+    if ($null -ne $Body) {
+        if ($Body -is [string]) {
+            return Invoke-RestMethod -Method $Method -Uri $url -Body $Body -ContentType "application/json"
+        }
+
         return Invoke-RestMethod -Method $Method -Uri $url -Body $Body
     }
 
@@ -111,6 +132,24 @@ switch ($Command) {
 
     "boards" {
         $result = Invoke-TrelloRequest -Method "GET" -Path "members/me/boards?fields=id,name,closed,url"
+        Write-Json $result
+        break
+    }
+
+    "create-board" {
+        if ([string]::IsNullOrWhiteSpace($Name)) {
+            throw "Name e obrigatorio para criar board."
+        }
+
+        $body = @{
+            name = $Name
+        }
+
+        if (![string]::IsNullOrWhiteSpace($Desc)) {
+            $body.desc = $Desc
+        }
+
+        $result = Invoke-TrelloRequest -Method "POST" -Path "boards" -Body $body
         Write-Json $result
         break
     }
@@ -187,6 +226,55 @@ switch ($Command) {
         break
     }
 
+    "update-card" {
+        if ([string]::IsNullOrWhiteSpace($CardId)) {
+            throw "CardId e obrigatorio para atualizar card."
+        }
+
+        $body = @{}
+
+        if ($PSBoundParameters.ContainsKey("Name")) {
+            if ([string]::IsNullOrWhiteSpace($Name)) {
+                throw "Name nao pode ser vazio quando informado."
+            }
+            $body.name = $Name
+        }
+
+        if ($PSBoundParameters.ContainsKey("Desc")) {
+            $body.desc = $Desc
+        }
+
+        if ($PSBoundParameters.ContainsKey("DescFile")) {
+            if (!(Test-Path -LiteralPath $DescFile)) {
+                throw "DescFile nao encontrado."
+            }
+            $body.desc = Get-Content -LiteralPath $DescFile -Raw -Encoding UTF8
+        }
+
+        if ($ClearDesc) {
+            $body.desc = ""
+        }
+
+        if ($body.Count -eq 0) {
+            throw "Informe Name e/ou Desc para atualizar card."
+        }
+
+        $result = $null
+
+        if ($body.ContainsKey("name")) {
+            $value = [uri]::EscapeDataString([string]$body.name)
+            $result = Invoke-TrelloRequest -Method "PUT" -Path "cards/$CardId/name?value=$value"
+        }
+
+        if ($body.ContainsKey("desc")) {
+            $value = [uri]::EscapeDataString([string]$body.desc)
+            $result = Invoke-TrelloRequest -Method "PUT" -Path "cards/$CardId/desc?value=$value"
+        }
+
+        Write-Json $result
+        break
+    }
+
     "comment" {
         if ([string]::IsNullOrWhiteSpace($CardId)) {
             throw "CardId é obrigatório para comentar."
@@ -197,6 +285,66 @@ switch ($Command) {
         }
 
         $result = Invoke-TrelloRequest -Method "POST" -Path "cards/$CardId/actions/comments" -Body @{ text = $Text }
+        Write-Json $result
+        break
+    }
+
+    "checklists" {
+        if ([string]::IsNullOrWhiteSpace($CardId)) {
+            throw "CardId e obrigatorio para listar checklists."
+        }
+
+        $checklists = Invoke-TrelloRequest -Method "GET" -Path "cards/$CardId/checklists?fields=id,name,pos"
+        $result = @(
+            foreach ($checklist in @($checklists)) {
+                $items = Invoke-TrelloRequest -Method "GET" -Path "checklists/$($checklist.id)/checkItems?fields=id,name,state,pos"
+                [pscustomobject]@{
+                    id = $checklist.id
+                    name = $checklist.name
+                    pos = $checklist.pos
+                    checkItems = @($items)
+                }
+            }
+        )
+
+        Write-Json $result
+        break
+    }
+
+    "add-checkitem" {
+        if ([string]::IsNullOrWhiteSpace($ChecklistId)) {
+            throw "ChecklistId e obrigatorio para adicionar item da checklist."
+        }
+
+        if ([string]::IsNullOrWhiteSpace($Name)) {
+            throw "Name e obrigatorio para adicionar item da checklist."
+        }
+
+        $body = @{ name = $Name }
+        $result = Invoke-TrelloRequest -Method "POST" -Path "checklists/$ChecklistId/checkItems" -Body $body
+        Write-Json $result
+        break
+    }
+
+    "checkitem" {
+        if ([string]::IsNullOrWhiteSpace($CardId)) {
+            throw "CardId e obrigatorio para atualizar item da checklist."
+        }
+
+        if ([string]::IsNullOrWhiteSpace($ChecklistId)) {
+            throw "ChecklistId e obrigatorio para atualizar item da checklist."
+        }
+
+        if ([string]::IsNullOrWhiteSpace($CheckItemId)) {
+            throw "CheckItemId e obrigatorio para atualizar item da checklist."
+        }
+
+        if ([string]::IsNullOrWhiteSpace($State)) {
+            throw "State e obrigatorio: complete ou incomplete."
+        }
+
+        $body = @{ state = $State } | ConvertTo-Json -Compress
+        $result = Invoke-TrelloRequest -Method "PUT" -Path "cards/$CardId/checklist/$ChecklistId/checkItem/$CheckItemId" -Body $body
         Write-Json $result
         break
     }
