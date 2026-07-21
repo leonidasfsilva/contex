@@ -74,6 +74,8 @@
 - O `gh` foi configurado com armazenamento acessível ao processo do assistente porque o keyring do terminal interativo pode não estar acessível pelo ambiente do Agente IA.
 
 ### Commits
+- Antes de qualquer operação Git local que dependa do histórico ou altere o repositório, executar `git fetch`/`git pull` para sincronizar a branch com a origem. Depois, verificar o status e os conflitos antes de editar, criar commits ou fazer push.
+- Nunca subir alterações sem confirmar que a branch está atualizada em relação à sua base e ao remoto; se houver conflito, interromper o fluxo, resolver e validar antes do push.
 - O assistente não deve alterar a configuração global ou local de `user.name`/`user.email` do desenvolvedor sem aprovação explícita.
 - Para commits feitos pelo assistente, usar autor separado quando solicitado:
   - `webmaster-devply <webmaster@devply.net>`

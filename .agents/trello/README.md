@@ -14,7 +14,7 @@ Preencha `config.local.json` com:
 
 - `key`: API key do Trello;
 - `token`: token de acesso do Trello;
-- `boardId`: board padrão, opcional.
+- `boardIds`: IDs dos boards por projeto (`contex` e `contex-spa`).
 
 O arquivo `config.local.json` fica ignorado pelo Git e não deve ser commitado.
 
@@ -23,6 +23,7 @@ Também é possível usar variáveis de ambiente:
 - `TRELLO_KEY`
 - `TRELLO_TOKEN`
 - `TRELLO_BOARD_ID`
+- `TRELLO_PROJECT` (opcional; use `contex` ou `contex-spa` para sobrescrever a detecção automática)
 
 ## Uso
 
@@ -40,34 +41,33 @@ Também é possível usar variáveis de ambiente:
 
 O script `trello.ps1` fica apenas como legado. O fluxo operacional dos agentes no Contex deve usar `trello.sh`.
 
-## Codificacao de texto
+O board é detectado pelo diretório atual do projeto. Por exemplo, executando o script a partir de `C:\laragon\www\contex` será usado o board `contex`; a partir de `C:\laragon\www\contex-spa`, o board `contex-spa`.
 
-O helper normaliza automaticamente os campos textuais enviados ao Trello para UTF-8. Entradas que chegarem em Windows-1252/ANSI sao convertidas antes da chamada da API.
+Prioridade para escolher o board: `-BoardId`, `TRELLO_BOARD_ID`, `TRELLO_PROJECT`/diretório atual e, por último, o campo legado `boardId`.
 
-A normalizacao e aplicada a:
+O arquivo `config.local.json` permanece apenas no projeto pai e nunca deve ser copiado para o `contex-spa`.
 
-- titulo do card;
-- descricao;
-- comentarios;
+## Codificação de texto
+
+O helper normaliza automaticamente os campos textuais enviados ao Trello para UTF-8. Entradas que chegarem em Windows-1252/ANSI são convertidas antes da chamada da API.
+
+A normalização é aplicada a:
+
+- título do card;
+- descrição;
+- comentários;
 - nome de anexos.
 
-Depois de criar ou atualizar um card, o agente deve consultar o card novamente e validar que o Trello nao armazenou sequencias percentuais literais, mojibake ou caracteres corrompidos.
+Depois de criar ou atualizar um card, o agente deve consultar o card novamente e validar que o Trello não armazenou sequências percentuais literais, mojibake ou caracteres corrompidos.
 
-## Formatacao das descricoes
+## Formatação das descrições
 
-Todos os topicos e secoes da descricao de um card devem usar o padrao Markdown de Titulo 3:
-
-```markdown
-### Nome da secao
-```
-
-Nao usar texto simples como titulo de secao. Depois de criar ou atualizar um card, o agente deve validar tambem a formatacao com `###` e a posicao correta do card na lista.
-
-Identificadores tecnicos devem usar codigo inline com crases. A regra se aplica a nomes de tabelas, campos, metodos, funcoes, classes, arquivos, caminhos, rotas, variaveis de ambiente, comandos e valores literais. Exemplos:
+Todos os tópicos e seções da descrição de um card devem usar o padrão Markdown de título 3:
 
 ```markdown
-Criar a tabela `usuarios_passkeys` vinculada pelo campo `id_usuario`.
-Executar `reconciliarFinanceiro()` pela rota `/api/v1/cron/rotinas/financeiro`.
+### Nome da seção
 ```
 
-Na validacao posterior, o agente deve confirmar que esses identificadores foram renderizados como codigo inline e nao permaneceram como texto comum.
+Não usar texto simples como título de seção. Depois de criar ou atualizar um card, o agente deve validar também a formatação com `###` e a posição correta do card na lista.
+
+Identificadores técnicos devem usar código inline com crases. A regra se aplica a nomes de tabelas, campos, métodos, funções, classes, arquivos, caminhos, rotas, variáveis de ambiente, comandos e valores literais.

@@ -12,6 +12,7 @@ $finder = PhpCsFixer\Finder::create()
 return (new PhpCsFixer\Config())
     ->setRiskyAllowed(false)
     ->setRules([
+        '@PSR12' => true,
         'binary_operator_spaces' => [
             'operators' => [
                 '=' => 'align_single_space_minimal',

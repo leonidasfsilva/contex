@@ -1,10 +1,11 @@
-<?php if (!defined('BASEPATH')) {
+<?php
+
+if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
 class Cartoes extends CI_Controller
 {
-
     public function __construct()
     {
         parent::__construct();
@@ -39,7 +40,7 @@ class Cartoes extends CI_Controller
             $final    = $n_cartao[3];
             //            print_array_exit($_POST);
 
-            $data          = array(
+            $data = array(
                 'numero'     => encriptar($_POST['number']),
                 'nome'       => padronizarString($_POST['name']),
                 'apelido'    => padronizarString($_POST['apelido']),
@@ -77,7 +78,7 @@ class Cartoes extends CI_Controller
             $bandeira = padronizarString($_POST['bandeira']);
             $final    = $n_cartao[3];
 
-            $data          = array(
+            $data = array(
                 'numero'             => encriptar($_POST['number']),
                 'nome'               => padronizarString($_POST['name']),
                 'validade'           => $validade,
@@ -287,9 +288,13 @@ class Cartoes extends CI_Controller
 
     public function setCartaoAtivo()
     {
-        if (!$_POST) return false;
+        if (!$_POST) {
+            return false;
+        }
 
-        if (!$_POST['idCartao'] || !$_POST['value']) return false;
+        if (!$_POST['idCartao'] || !$_POST['value']) {
+            return false;
+        }
 
         $this->cartoes_model->removerCartaoPrincipal(getUserId());
         $this->cartoes_model->setCartaoAtivo($_POST['idCartao'], $_POST['value']);
