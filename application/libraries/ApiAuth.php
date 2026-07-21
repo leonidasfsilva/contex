@@ -4,15 +4,17 @@ if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
-class Api_auth
+class ApiAuth
 {
-    protected ?string $token         = null;
-    protected ?string $username      = null;
-    protected ?array  $request       = null;
-    protected ?object $apiClient     = null;
-    protected ?string $userAgent     = null;
-    protected bool    $authenticated = false;
-    protected bool    $bearerToken   = false;
+    protected ?string $token                   = null;
+    protected ?string $username                = null;
+    protected ?array  $request                 = null;
+    protected ?object $apiClient               = null;
+    protected ?string $userAgent               = null;
+    protected bool    $authenticated           = false;
+    protected bool    $bearerToken             = false;
+    protected bool    $authenticationAttempted = false;
+    protected array   $authorization           = [];
 
     protected $CI;
 
@@ -24,8 +26,13 @@ class Api_auth
 
     public function authenticate(): bool
     {
-        $this->userAgent = strtolower($_SERVER['HTTP_USER_AGENT'] ?? '');
-        $this->userAgent = strstr($this->userAgent, '/', true) ?: $this->userAgent;
+        if ($this->authenticationAttempted) {
+            return $this->authenticated;
+        }
+
+        $this->authenticationAttempted = true;
+        $this->userAgent               = strtolower($_SERVER['HTTP_USER_AGENT'] ?? '');
+        $this->userAgent               = strstr($this->userAgent, '/', true) ?: $this->userAgent;
 
         $this->setCredentialsFromInput();
         $this->setCredentialsFromJson();
@@ -45,6 +52,42 @@ class Api_auth
         $this->authenticated = true;
 
         return true;
+    }
+
+    public function authorize($scope = [], $endpoint = null): bool
+    {
+        $this->authenticate();
+        $endpoint     = $endpoint ?: $this->CI->uri->uri_string();
+        $scopeAllowed = empty($scope) || $this->hasScope($scope);
+
+        $this->CI->load->library('ApiProtection', null, 'api_protection');
+        $this->authorization = $this->CI->api_protection->authorize(
+            $this->apiClient,
+            getenv('REMOTE_ADDR') ?: 'unknown',
+            $endpoint,
+            $this->CI->input->method(true),
+            $this->authenticated,
+            $scopeAllowed
+        );
+
+        return !empty($this->authorization['allowed']);
+    }
+
+    public function getAuthorizationCode(): int
+    {
+        return (int) ($this->authorization['code'] ?? 401);
+    }
+
+    public function getAuthorizationMessage(): string
+    {
+        $messages = [
+            401 => 'Error 401 Unauthorized',
+            413 => 'Error 413 Payload Too Large',
+            429 => 'Error 429 Too Many Requests',
+            503 => 'Error 503 Service Unavailable',
+        ];
+
+        return $messages[$this->getAuthorizationCode()] ?? 'Error 500 Internal Server Error';
     }
 
     public function isAuthenticated(): bool

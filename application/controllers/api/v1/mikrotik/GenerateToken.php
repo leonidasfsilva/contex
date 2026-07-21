@@ -10,23 +10,30 @@ class GenerateToken extends CI_Controller
     {
         parent::__construct();
 
-        $this->load->library('api_auth');
-        $this->api_auth->authenticate();
+        $this->load->library('ApiAuth', null, 'api_auth');
     }
 
     public function index()
     {
-        if (!$this->api_auth->isAuthenticated()) {
-            gravaLog(null, null, null, 'Unauthorized: Tentativa de acesso recusada de generateToken da API Mikrotik', getenv("REMOTE_ADDR"));
+        if (strtolower($this->input->method(true)) !== 'get') {
             return $this->response(
-                ['response' => 'Error 401 Unauthorized'],
-                401
+                ['response' => 'Error 405 Method Not Allowed'],
+                405
+            );
+        }
+
+        if (!$this->api_auth->authorize()) {
+            $code = $this->api_auth->getAuthorizationCode();
+            if ($code !== 429) {
+                gravaLog(null, null, null, 'Unauthorized: Tentativa de acesso recusada de generateToken da API Mikrotik', getenv("REMOTE_ADDR"), 'api', '/api/v1/mikrotik/generatetoken');
+            }
+            return $this->response(
+                ['response' => $this->api_auth->getAuthorizationMessage()],
+                $code
             );
         }
 
         $token = str_shuffle(
-            '1234567890' .
-                'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvXxYyWwZz' .
                 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvXxYyWwZz' .
                 '1234567890'
         );

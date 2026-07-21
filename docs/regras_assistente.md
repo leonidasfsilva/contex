@@ -74,6 +74,8 @@
 - O `gh` foi configurado com armazenamento acessível ao processo do assistente porque o keyring do terminal interativo pode não estar acessível pelo ambiente do Agente IA.
 
 ### Commits
+- Antes de qualquer operação Git local que dependa do histórico ou altere o repositório, executar `git fetch`/`git pull` para sincronizar a branch com a origem. Depois, verificar o status e os conflitos antes de editar, criar commits ou fazer push.
+- Nunca subir alterações sem confirmar que a branch está atualizada em relação à sua base e ao remoto; se houver conflito, interromper o fluxo, resolver e validar antes do push.
 - O assistente não deve alterar a configuração global ou local de `user.name`/`user.email` do desenvolvedor sem aprovação explícita.
 - Para commits feitos pelo assistente, usar autor separado quando solicitado:
   - `webmaster-devply <webmaster@devply.net>`
@@ -89,6 +91,8 @@
 - Título e descrição de PRs do Contex devem ser escritos em português do Brasil.
 - A descrição padrão de PR deve usar as seções `Resumo` e `Validação`.
 - Não misturar inglês e português na descrição do PR. Commits continuam seguindo a regra própria de mensagens curtas em inglês.
+- Corpos de PR devem ser preparados e enviados pelo helper `.agents/git/pr.sh`, que normaliza UTF-8, rejeita `\\n` literal e caracteres de controle.
+- Após criar ou editar um PR, executar `.agents/git/pr.sh verify --pr <numero>` e conferir a renderização no GitHub antes de reportar a conclusão.
 - Antes de criar ou editar PR, usar PRs recentes do projeto como referência de formato quando houver dúvida.
 - Antes de subir alterações solicitadas pelo desenvolvedor com objetivo de atualizar ou abrir PR, verificar no GitHub a existência e o status do PR anterior da branch/card atual.
 - Se o PR anterior já estiver `MERGED` ou `CLOSED`, não assumir que o push atualiza aquele PR; criar novo PR ou pedir confirmação quando o fluxo não estiver claro.
@@ -99,8 +103,15 @@
 
 ### Trello
 - Para tarefas originadas de cards do Trello, usar o número do card como referência operacional.
+- Todo card novo solicitado pelo desenvolvedor deve ser criado no topo da lista indicada, independentemente da coluna.
+- Nas descrições dos cards, todos os tópicos e seções devem usar o padrão Markdown de Título 3: `### Nome da seção`. Não usar texto simples como título de seção.
+- Nas descrições dos cards, identificadores técnicos devem usar código inline com crases. Isso inclui nomes de tabelas, campos, métodos, funções, classes, arquivos, caminhos, rotas, variáveis de ambiente, comandos e valores literais, por exemplo: `usuarios_passkeys`, `id_usuario` e `reconciliarFinanceiro()`.
+- Todo texto enviado ao Trello deve estar em UTF-8 real. É proibido enviar título, descrição, comentário ou nome de anexo em ANSI/Windows-1252 ou confiar em saída com mojibake.
+- O fluxo operacional deve usar `.agents/trello/trello.sh`, que normaliza entradas textuais para UTF-8 antes da chamada da API. Não contornar o helper com PowerShell ou chamada crua sem normalização equivalente.
+- Após criar ou atualizar um card, consultar novamente o card e validar título, descrição, formatação das seções com `###`, identificadores técnicos com código inline e posição na lista. Sequências percentuais literais como `%E7`, `%E3`, mojibake ou caracteres corrompidos devem ser corrigidos imediatamente antes de reportar conclusão.
+- Escopo, requisitos e decisões do projeto devem ser registrados na descrição do card. Comentários são reservados ao registro de entrega, resultado, PR e fechamento.
 - Ao finalizar um card, mover para a lista `Finalizado` sempre no topo da lista.
-- O helper `.agents/trello/trello.ps1` deve manter esse comportamento como padrão ao mover cards.
+- O helper `.agents/trello/trello.sh` deve manter esse comportamento como padrão ao mover cards.
 
 ## Contexto do Projeto
 

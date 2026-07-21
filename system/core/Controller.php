@@ -79,7 +79,7 @@ class CI_Controller {
 		$this->load->initialize();
 		log_message('info', 'Controller Class Initialized');
 
-		//adicionando timezone padrao para carregamento durante inicialização da aplicação
+		//definindo timezone padrao para o PHP durante inicialização da aplicação
         setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
         date_default_timezone_set('America/Sao_Paulo');
 

@@ -40,13 +40,13 @@ class Cadastro extends CI_Controller
             $confirmarSenha = $this->input->post('confirmarSenha');
 
             if ($this->cadastro_model->verificaEmailExistente($email) == true) {
-                gravaLog(null, null, $email, 'Tentativa de cadastro recusada: email já existente', getenv("REMOTE_ADDR"));
+                gravaLog(null, null, $email, 'Tentativa de cadastro recusada: email já existente', getenv("REMOTE_ADDR"), 'cadastro', '/cadastro');
                 $this->session->set_flashdata('erro', 'O email informado já se encontra em uso, por favor informe um email diferente.');
                 redirect('cadastro');
             }
 
             if ($this->cadastro_model->verificaPreCadastroByEmail($email) == true) {
-                gravaLog(null, null, $email, 'Tentativa de cadastro recusada: pré-cadastro aguardando validação', getenv("REMOTE_ADDR"));
+                gravaLog(null, null, $email, 'Tentativa de cadastro recusada: pré-cadastro aguardando validação', getenv("REMOTE_ADDR"), 'cadastro', '/cadastro');
                 $this->session->set_flashdata('erro', 'Já existe uma conta aguardando validação para o email informado, valide sua conta através do link enviado para o seu email. Caso não tenha recebido o email, <a href="javascript:" onclick="verificar_conta()">clique aqui</a>.');
                 redirect('cadastro');
             }
@@ -71,7 +71,7 @@ class Cadastro extends CI_Controller
 
             if ($this->cadastro_model->gravaPreCadastro($preCadastro) == true) {
                 $id_pre_cadastro = $this->db->insert_id();
-                gravaLog(null, null, $email, 'Pré-cadastro registrado com sucesso: (' . $id_pre_cadastro . ') nova conta aguardando finalização de validação da conta', getenv("REMOTE_ADDR"));
+                gravaLog(null, null, $email, 'Pré-cadastro registrado com sucesso: (' . $id_pre_cadastro . ') nova conta aguardando finalização de validação da conta', getenv("REMOTE_ADDR"), 'cadastro', '/cadastro');
             } else {
                 $this->session->set_flashdata('erro', 'Não foi possível registrar pré cadastro de usuário.<br>ERRO: gravaPreCadastro()');
                 redirect('cadastro');
@@ -85,7 +85,7 @@ class Cadastro extends CI_Controller
 
             if ($this->cadastro_model->gravaValidacao($validacao) == true) {
                 $id_validacao = $this->db->insert_id();
-                gravaLog(null, null, $email, 'Pré-validação registrada com sucesso: (' . $id_validacao . ') nova conta aguardando finalização de validação da conta', getenv("REMOTE_ADDR"));
+                gravaLog(null, null, $email, 'Pré-validação registrada com sucesso: (' . $id_validacao . ') nova conta aguardando finalização de validação da conta', getenv("REMOTE_ADDR"), 'cadastro', '/cadastro');
             } else {
                 $this->session->set_flashdata('erro', 'Não foi possível registrar pré cadastro de usuário.<br>ERRO: gravaValidacao()');
                 redirect('cadastro');
@@ -386,7 +386,7 @@ class Cadastro extends CI_Controller
                             if ($this->cadastro_model->registraUsuario($data) == true) {
                                 $last_id = $this->cadastro_model->insert_id('usuarios');
                                 $this->cadastro_model->invalidaToken($id);
-                                gravaLog($last_id, $result->nome, $result->email, 'Validação de conta finalizada: (' . $id . ') nova conta validada com sucesso', getenv("REMOTE_ADDR"));
+                                gravaLog($last_id, $result->nome, $result->email, 'Validação de conta finalizada: (' . $id . ') nova conta validada com sucesso', getenv("REMOTE_ADDR"), 'cadastro', '/cadastro/validar');
 
                                 $this->session->set_flashdata(
                                     'sucesso',

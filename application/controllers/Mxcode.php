@@ -122,7 +122,7 @@ class Mxcode extends CI_Controller
     public function logout($forcedLogout = false)
     {
         if ((session_id()) && ($this->session->userdata('logado'))) {
-            gravaLog(getUserId(), getUserName(), getUserEmail(), 'Logout no sistema', getenv("REMOTE_ADDR"));
+            gravaLog(getUserId(), getUserName(), getUserEmail(), 'Logout no sistema', getenv("REMOTE_ADDR"), 'autenticacao', '/mxcode/logout');
         }
 
         $this->session->sess_destroy();
@@ -193,7 +193,7 @@ class Mxcode extends CI_Controller
                 );
 
                 $this->session->set_userdata($session_data);
-                gravaLog(getUserId(), getUserName(), getUserEmail(), 'Login no sistema', getenv("REMOTE_ADDR"));
+                gravaLog(getUserId(), getUserName(), getUserEmail(), 'Login no sistema', getenv("REMOTE_ADDR"), 'autenticacao', '/mxcode/login');
                 reconciliarFinanceiro(getUserId(), 'login');
 
                 if ($this->session->userdata('last_url')) {
@@ -202,11 +202,11 @@ class Mxcode extends CI_Controller
                 }
                 redirect('mxcode/login');
             }
-            gravaLog($usuario->id_usuarios, $usuario->nome, $usuario->email, 'Tentativa de login recusada: senha incorreta', getenv("REMOTE_ADDR"));
+            gravaLog($usuario->id_usuarios, $usuario->nome, $usuario->email, 'Tentativa de login recusada: senha incorreta', getenv("REMOTE_ADDR"), 'autenticacao', '/mxcode/login');
             $this->session->set_flashdata('erro', 'Dados de acesso inválidos, por favor tente novamente.');
             redirect('mxcode/login');
         }
-        gravaLog(null, null, $email, 'Tentativa de login recusada: email inexistente', getenv("REMOTE_ADDR"));
+        gravaLog(null, null, $email, 'Tentativa de login recusada: email inexistente', getenv("REMOTE_ADDR"), 'autenticacao', '/mxcode/login');
         $this->session->set_flashdata('erro', 'Dados de acesso inválidos, por favor tente novamente.');
         redirect('mxcode/login');
     }

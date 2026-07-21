@@ -10,31 +10,33 @@ class Rotinas extends CI_Controller
     {
         parent::__construct();
 
-        $this->load->library('api_auth');
-        $this->api_auth->authenticate();
+        $this->load->library('ApiAuth', null, 'api_auth');
     }
 
     public function financeiro()
     {
-        if (strtolower($this->input->method(true)) != 'post') {
+        if (strtolower($this->input->method(true)) !== 'post') {
             return $this->response(
                 ['response' => 'Error 405 Method Not Allowed'],
                 405
             );
         }
 
-        if (!$this->api_auth->isAuthenticated() || !$this->api_auth->hasScope(['cron', 'financeiro'])) {
-            gravaLog(null, null, null, 'Unauthorized: Tentativa recusada de execução da consolidação financeira via cron', getenv("REMOTE_ADDR"));
+        if (!$this->api_auth->authorize(['cron', 'financeiro'])) {
+            $code = $this->api_auth->getAuthorizationCode();
+            if ($code !== 429) {
+                gravaLog(null, null, null, 'Unauthorized: Tentativa recusada de execução da consolidação financeira via cron', getenv("REMOTE_ADDR"), 'api', '/api/v1/cron/rotinas/financeiro');
+            }
             return $this->response(
-                ['response' => 'Error 401 Unauthorized'],
-                401
+                ['response' => $this->api_auth->getAuthorizationMessage()],
+                $code
             );
         }
 
         $resultado = reconciliarFinanceiro(null, 'cron');
         $code      = ($resultado['erro'] ?? 0) ? 500 : 200;
 
-        gravaLog(null, null, null, $this->getMensagemLogFinanceiro($resultado, $code), getenv("REMOTE_ADDR"));
+        gravaLog(null, null, null, $this->getMensagemLogFinanceiro($resultado, $code), getenv("REMOTE_ADDR"), 'api', '/api/v1/cron/rotinas/financeiro');
 
         return $this->response(
             [

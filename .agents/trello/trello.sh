@@ -4,7 +4,7 @@ set -euo pipefail
 COMMAND="${1:-}"
 
 if [[ -z "$COMMAND" ]]; then
-  echo "Informe um comando: test, boards, lists, cards, card, create-card, comment, move-card, attach-url ou update-description." >&2
+  echo "Informe um comando: test, boards, lists, cards, card, create-card, comment, move-card, attach-url, update-name ou update-description." >&2
   exit 1
 fi
 
@@ -73,6 +73,19 @@ done
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_PATH="$SCRIPT_DIR/config.local.json"
 
+if [[ -z "${TRELLO_CURL_BIN:-}" ]]; then
+  if [[ -x "/c/laragon/bin/laragon/utils/curl.exe" ]]; then
+    TRELLO_CURL_BIN="/c/laragon/bin/laragon/utils/curl.exe"
+  else
+    TRELLO_CURL_BIN="$(command -v curl)"
+  fi
+fi
+
+if [[ -z "$TRELLO_CURL_BIN" || ! -x "$TRELLO_CURL_BIN" ]]; then
+  echo "cURL nao encontrado. Defina TRELLO_CURL_BIN com o caminho do executavel." >&2
+  exit 1
+fi
+
 json_config_value() {
   local key="$1"
 
@@ -92,6 +105,20 @@ json_config_value() {
 
 urlencode() {
   php -r 'echo rawurlencode($argv[1]);' "$1"
+}
+
+normalize_utf8() {
+  php -r '
+    $value = $argv[1];
+
+    if (preg_match("//u", $value) === 1) {
+        echo $value;
+        exit(0);
+    }
+
+    $converted = iconv("Windows-1252", "UTF-8//IGNORE", $value);
+    echo $converted === false ? $value : $converted;
+  ' "$1"
 }
 
 TRELLO_API_KEY="${TRELLO_KEY:-$(json_config_value key)}"
@@ -123,9 +150,9 @@ trello_request() {
   local request_url="https://api.trello.com/1/${path}${separator}${auth}"
 
   if [[ $# -gt 0 ]]; then
-    curl -sS -X "$method" "$request_url" "$@"
+    "$TRELLO_CURL_BIN" -sS -X "$method" "$request_url" "$@"
   else
-    curl -sS -X "$method" "$request_url"
+    "$TRELLO_CURL_BIN" -sS -X "$method" "$request_url"
   fi
 }
 
@@ -138,6 +165,10 @@ require_value() {
     exit 1
   fi
 }
+
+NAME="$(normalize_utf8 "$NAME")"
+DESC="$(normalize_utf8 "$DESC")"
+TEXT="$(normalize_utf8 "$TEXT")"
 
 case "$COMMAND" in
   test)
@@ -189,13 +220,13 @@ case "$COMMAND" in
     require_value "$NAME" "Name e obrigatorio para criar card."
 
     body=(
-      --data-urlencode "idList=$LIST_ID"
-      --data-urlencode "name=$NAME"
-      --data-urlencode "pos=$POSITION"
+      --data-raw "idList=$(urlencode "$LIST_ID")"
+      --data-raw "name=$(urlencode "$NAME")"
+      --data-raw "pos=$(urlencode "$POSITION")"
     )
 
     if [[ -n "$DESC" ]]; then
-      body+=(--data-urlencode "desc=$DESC")
+      body+=(--data-raw "desc=$(urlencode "$DESC")")
     fi
 
     trello_request POST "cards" "${body[@]}"
@@ -204,7 +235,7 @@ case "$COMMAND" in
   comment)
     require_value "$CARD_ID" "CardId e obrigatorio para comentar."
     require_value "$TEXT" "Text e obrigatorio para comentar."
-    trello_request POST "cards/${CARD_ID}/actions/comments" --data-urlencode "text=$TEXT"
+    trello_request POST "cards/${CARD_ID}/actions/comments" --data-raw "text=$(urlencode "$TEXT")"
     ;;
 
   move-card)
@@ -219,13 +250,20 @@ case "$COMMAND" in
     require_value "$CARD_ID" "CardId e obrigatorio para anexar URL."
     require_value "$URL_VALUE" "Url e obrigatoria para anexar URL."
 
-    body=(--data-urlencode "url=$URL_VALUE")
+    body=(--data-raw "url=$(urlencode "$URL_VALUE")")
 
     if [[ -n "$NAME" ]]; then
-      body+=(--data-urlencode "name=$NAME")
+      body+=(--data-raw "name=$(urlencode "$NAME")")
     fi
 
     trello_request POST "cards/${CARD_ID}/attachments" "${body[@]}"
+    ;;
+
+  update-name)
+    require_value "$CARD_ID" "CardId e obrigatorio para atualizar o nome."
+    require_value "$NAME" "Name e obrigatorio para atualizar o nome."
+
+    trello_request PUT "cards/${CARD_ID}" --data-raw "name=$(urlencode "$NAME")"
     ;;
 
   update-description)
@@ -239,7 +277,7 @@ case "$COMMAND" in
         exit 1
       fi
 
-      DESC="$(cat "$DESC_FILE")"
+      DESC="$(normalize_utf8 "$(cat "$DESC_FILE")")"
     fi
 
     require_value "$DESC" "Desc ou DescFile e obrigatorio para atualizar descricao."
