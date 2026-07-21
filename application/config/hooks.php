@@ -12,6 +12,13 @@
 |
 */
 
+$hook['pre_system'][] = array(
+	'class' => '',
+	'function' => 'cors',
+	'filename' => 'cors.php',
+	'filepath' => 'hooks'
+);
+
 // compress output
 $hook['display_override'][] = array(
 	'class' => '',
