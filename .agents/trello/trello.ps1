@@ -1,6 +1,6 @@
-param(
+﻿param(
     [Parameter(Mandatory = $true, Position = 0)]
-    [ValidateSet("test", "boards", "create-board", "lists", "cards", "card", "create-card", "update-card", "checklists", "add-checkitem", "checkitem", "comment", "move-card", "attach-url")]
+    [ValidateSet("test", "boards", "create-board", "lists", "cards", "all-cards", "card", "create-card", "update-card", "checklists", "create-checklist", "add-checkitem", "checkitem", "rename-checkitem", "comment", "move-card", "attach-url")]
     [string]$Command,
 
     [Parameter(Mandatory = $false)]
@@ -17,6 +17,9 @@ param(
 
     [Parameter(Mandatory = $false)]
     [string]$ChecklistId,
+
+    [Parameter(Mandatory = $false)]
+    [string]$ChecklistName,
 
     [Parameter(Mandatory = $false)]
     [int]$CardNumber,
@@ -51,8 +54,53 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+if ($Host.Name -eq "ConsoleHost") {
+    [Console]::InputEncoding = [Text.UTF8Encoding]::new($false)
+    [Console]::OutputEncoding = [Text.UTF8Encoding]::new($false)
+}
+
+function Read-Utf8Text {
+    param([Parameter(Mandatory = $true)][string]$Path)
+
+    $reader = [IO.StreamReader]::new($Path, [Text.UTF8Encoding]::new($false), $true)
+    try {
+        return $reader.ReadToEnd()
+    } finally {
+        $reader.Dispose()
+    }
+}
+
+function Assert-TrelloTextEncoding {
+    param(
+        [Parameter(Mandatory = $true)][AllowEmptyString()][string]$Text,
+        [Parameter(Mandatory = $true)][string]$FieldName
+    )
+
+    # ASCII is valid UTF-8; reject only the signatures of accidental charset loss.
+    if ($Text.Contains([char]0xFFFD) -or $Text -cmatch '[ÃÂ�]') {
+        throw "$FieldName contém texto com charset inválido (mojibake). Corrija a origem para UTF-8 antes de enviar ao Trello."
+    }
+
+    return $Text.Normalize([Text.NormalizationForm]::FormC)
+}
+
 function Get-ScriptDir {
     return Split-Path -Parent $PSCommandPath
+}
+
+function Get-ProjectKey {
+    if ($env:TRELLO_PROJECT) {
+        return $env:TRELLO_PROJECT
+    }
+
+    $currentPath = (Get-Location).Path.TrimEnd([char[]]@([char]92, [char]47))
+    $projectName = Split-Path -Leaf $currentPath
+
+    if ($projectName -in @('contex', 'contex-spa')) {
+        return $projectName
+    }
+
+    return $null
 }
 
 function Read-TrelloConfig {
@@ -60,12 +108,24 @@ function Read-TrelloConfig {
     $config = [pscustomobject]@{}
 
     if (Test-Path -LiteralPath $configPath) {
-        $config = Get-Content -Raw -LiteralPath $configPath | ConvertFrom-Json
+        $config = Read-Utf8Text -Path $configPath | ConvertFrom-Json
     }
 
     $key = if ($config.key) { $config.key } else { $env:TRELLO_KEY }
     $token = if ($config.token) { $config.token } else { $env:TRELLO_TOKEN }
-    $boardId = if ($BoardId) { $BoardId } elseif ($config.boardId) { $config.boardId } else { $env:TRELLO_BOARD_ID }
+    $projectKey = Get-ProjectKey
+    $configuredBoardId = if ($projectKey -and $config.boardIds) {
+        $config.boardIds.$projectKey
+    }
+    $boardId = if ($BoardId) {
+        $BoardId
+    } elseif ($env:TRELLO_BOARD_ID) {
+        $env:TRELLO_BOARD_ID
+    } elseif ($configuredBoardId) {
+        $configuredBoardId
+    } else {
+        $config.boardId
+    }
 
     if ([string]::IsNullOrWhiteSpace($key)) {
         throw "TRELLO_KEY não configurada. Preencha .agents/trello/config.local.json ou a variável de ambiente TRELLO_KEY."
@@ -79,6 +139,7 @@ function Read-TrelloConfig {
         Key = $key
         Token = $token
         BoardId = $boardId
+        Project = $projectKey
     }
 }
 
@@ -108,7 +169,7 @@ function Invoke-TrelloRequest {
 
     if ($null -ne $Body) {
         if ($Body -is [string]) {
-            return Invoke-RestMethod -Method $Method -Uri $url -Body $Body -ContentType "application/json"
+            return Invoke-RestMethod -Method $Method -Uri $url -Body $Body -ContentType "application/json; charset=utf-8"
         }
 
         return Invoke-RestMethod -Method $Method -Uri $url -Body $Body
@@ -141,12 +202,14 @@ switch ($Command) {
             throw "Name e obrigatorio para criar board."
         }
 
+        $Name = Assert-TrelloTextEncoding -Text $Name -FieldName "Name"
+
         $body = @{
             name = $Name
         }
 
         if (![string]::IsNullOrWhiteSpace($Desc)) {
-            $body.desc = $Desc
+            $body.desc = Assert-TrelloTextEncoding -Text $Desc -FieldName "Desc"
         }
 
         $result = Invoke-TrelloRequest -Method "POST" -Path "boards" -Body $body
@@ -157,11 +220,13 @@ switch ($Command) {
     "lists" {
         $config = Read-TrelloConfig
 
-        if ([string]::IsNullOrWhiteSpace($config.BoardId)) {
+        $lookupBoardId = if ($BoardId) { $BoardId } else { $config.BoardId }
+
+        if ([string]::IsNullOrWhiteSpace($lookupBoardId)) {
             throw "BoardId não informado. Use -BoardId, config.local.json ou TRELLO_BOARD_ID."
         }
 
-        $result = Invoke-TrelloRequest -Method "GET" -Path "boards/$($config.BoardId)/lists?fields=id,name,closed,pos"
+        $result = Invoke-TrelloRequest -Method "GET" -Path "boards/$lookupBoardId/lists?fields=id,name,closed,pos"
         Write-Json $result
         break
     }
@@ -176,6 +241,19 @@ switch ($Command) {
         break
     }
 
+    "all-cards" {
+        $config = Read-TrelloConfig
+        $lookupBoardId = if ($BoardId) { $BoardId } else { $config.BoardId }
+
+        if ([string]::IsNullOrWhiteSpace($lookupBoardId)) {
+            throw "BoardId não informado. Use -BoardId, config.local.json ou TRELLO_BOARD_ID."
+        }
+
+        $result = Invoke-TrelloRequest -Method "GET" -Path "boards/$lookupBoardId/cards/all?fields=id,idShort,name,desc,closed,url,idList,pos"
+        Write-Json $result
+        break
+    }
+
     "card" {
         $config = Read-TrelloConfig
 
@@ -183,12 +261,13 @@ switch ($Command) {
             throw "Informe CardId ou CardNumber para consultar um card."
         }
 
-        if ($CardNumber -gt 0 -and [string]::IsNullOrWhiteSpace($config.BoardId)) {
+        if ($CardNumber -gt 0 -and [string]::IsNullOrWhiteSpace($BoardId) -and [string]::IsNullOrWhiteSpace($config.BoardId)) {
             throw "BoardId é obrigatório para consultar card por número. Use -BoardId, config.local.json ou TRELLO_BOARD_ID."
         }
 
         if ($CardNumber -gt 0) {
-            $cards = Invoke-TrelloRequest -Method "GET" -Path "boards/$($config.BoardId)/cards?fields=id,idShort,name,desc,closed,url,idList,pos"
+            $lookupBoardId = if ($BoardId) { $BoardId } else { $config.BoardId }
+            $cards = Invoke-TrelloRequest -Method "GET" -Path "boards/$lookupBoardId/cards?fields=id,idShort,name,desc,closed,url,idList,pos"
             $result = $cards | Where-Object { $_.idShort -eq $CardNumber } | Select-Object -First 1
 
             if (!$result) {
@@ -211,6 +290,8 @@ switch ($Command) {
             throw "Name é obrigatório para criar card."
         }
 
+        $Name = Assert-TrelloTextEncoding -Text $Name -FieldName "Name"
+
         $body = @{
             idList = $ListId
             name = $Name
@@ -218,7 +299,7 @@ switch ($Command) {
         }
 
         if (![string]::IsNullOrWhiteSpace($Desc)) {
-            $body.desc = $Desc
+            $body.desc = Assert-TrelloTextEncoding -Text $Desc -FieldName "Desc"
         }
 
         $result = Invoke-TrelloRequest -Method "POST" -Path "cards" -Body $body
@@ -237,18 +318,18 @@ switch ($Command) {
             if ([string]::IsNullOrWhiteSpace($Name)) {
                 throw "Name nao pode ser vazio quando informado."
             }
-            $body.name = $Name
+            $body.name = Assert-TrelloTextEncoding -Text $Name -FieldName "Name"
         }
 
         if ($PSBoundParameters.ContainsKey("Desc")) {
-            $body.desc = $Desc
+            $body.desc = Assert-TrelloTextEncoding -Text $Desc -FieldName "Desc"
         }
 
         if ($PSBoundParameters.ContainsKey("DescFile")) {
             if (!(Test-Path -LiteralPath $DescFile)) {
                 throw "DescFile nao encontrado."
             }
-            $body.desc = Get-Content -LiteralPath $DescFile -Raw -Encoding UTF8
+            $body.desc = Assert-TrelloTextEncoding -Text (Read-Utf8Text -Path $DescFile) -FieldName "DescFile"
         }
 
         if ($ClearDesc) {
@@ -284,6 +365,8 @@ switch ($Command) {
             throw "Text é obrigatório para comentar."
         }
 
+        $Text = Assert-TrelloTextEncoding -Text $Text -FieldName "Text"
+
         $result = Invoke-TrelloRequest -Method "POST" -Path "cards/$CardId/actions/comments" -Body @{ text = $Text }
         Write-Json $result
         break
@@ -311,6 +394,23 @@ switch ($Command) {
         break
     }
 
+    "create-checklist" {
+        if ([string]::IsNullOrWhiteSpace($CardId)) {
+            throw "CardId e obrigatorio para criar checklist."
+        }
+
+        if ([string]::IsNullOrWhiteSpace($ChecklistName)) {
+            throw "ChecklistName e obrigatorio para criar checklist."
+        }
+
+        $ChecklistName = Assert-TrelloTextEncoding -Text $ChecklistName -FieldName "ChecklistName"
+
+        $body = @{ idCard = $CardId; name = $ChecklistName }
+        $result = Invoke-TrelloRequest -Method "POST" -Path "checklists" -Body $body
+        Write-Json $result
+        break
+    }
+
     "add-checkitem" {
         if ([string]::IsNullOrWhiteSpace($ChecklistId)) {
             throw "ChecklistId e obrigatorio para adicionar item da checklist."
@@ -319,6 +419,8 @@ switch ($Command) {
         if ([string]::IsNullOrWhiteSpace($Name)) {
             throw "Name e obrigatorio para adicionar item da checklist."
         }
+
+        $Name = Assert-TrelloTextEncoding -Text $Name -FieldName "Name"
 
         $body = @{ name = $Name }
         $result = Invoke-TrelloRequest -Method "POST" -Path "checklists/$ChecklistId/checkItems" -Body $body
@@ -344,6 +446,27 @@ switch ($Command) {
         }
 
         $body = @{ state = $State } | ConvertTo-Json -Compress
+        $result = Invoke-TrelloRequest -Method "PUT" -Path "cards/$CardId/checklist/$ChecklistId/checkItem/$CheckItemId" -Body $body
+        Write-Json $result
+        break
+    }
+
+    "rename-checkitem" {
+        if ([string]::IsNullOrWhiteSpace($CardId)) {
+            throw "CardId e obrigatorio para renomear item da checklist."
+        }
+
+        if ([string]::IsNullOrWhiteSpace($CheckItemId)) {
+            throw "CheckItemId e obrigatorio para renomear item da checklist."
+        }
+
+        if ([string]::IsNullOrWhiteSpace($Name)) {
+            throw "Name e obrigatorio para renomear item da checklist."
+        }
+
+        $Name = Assert-TrelloTextEncoding -Text $Name -FieldName "Name"
+
+        $body = @{ name = $Name } | ConvertTo-Json -Compress
         $result = Invoke-TrelloRequest -Method "PUT" -Path "cards/$CardId/checklist/$ChecklistId/checkItem/$CheckItemId" -Body $body
         Write-Json $result
         break
