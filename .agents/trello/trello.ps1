@@ -340,17 +340,8 @@ switch ($Command) {
             throw "Informe Name e/ou Desc para atualizar card."
         }
 
-        $result = $null
-
-        if ($body.ContainsKey("name")) {
-            $value = [uri]::EscapeDataString([string]$body.name)
-            $result = Invoke-TrelloRequest -Method "PUT" -Path "cards/$CardId/name?value=$value"
-        }
-
-        if ($body.ContainsKey("desc")) {
-            $value = [uri]::EscapeDataString([string]$body.desc)
-            $result = Invoke-TrelloRequest -Method "PUT" -Path "cards/$CardId/desc?value=$value"
-        }
+        $payload = $body | ConvertTo-Json -Compress
+        $result = Invoke-TrelloRequest -Method "PUT" -Path "cards/$CardId" -Body $payload
 
         Write-Json $result
         break
