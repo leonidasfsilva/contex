@@ -253,6 +253,19 @@ class Mxcode_model extends CI_Model
         return $this->db->get('usuarios')->row();
     }
 
+    public function getPermissoes($idPermissao)
+    {
+        $permissoes = $this->db
+            ->select('atividade')
+            ->where('id_permissao', $idPermissao)
+            ->get('permissoes_assoc')
+            ->result();
+
+        return array_map(function ($permissao) {
+            return $permissao->atividade;
+        }, $permissoes);
+    }
+
     function gravaLog($data)
     {
         $this->db->insert('logs', $data);
