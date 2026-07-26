@@ -54,6 +54,7 @@ class Configuracoes extends CI_Controller
 		// $data['maintenanceMode']   = $this->load->get_var('maintenanceMode');
 		$data['menuConfiguracoes'] = true;
 		$data['modulosBusca']      = $this->configs_model->getModulosBuscaGlobal(getUserId());
+		$data['spaApiEnabled']     = $this->configs_model->isSpaApiEnabled();
 		$data['results']           = $this->configs_model->getConfigs();
 		$data['view']              = 'configuracoes/sistema';
 		$this->load->view('tema/topo', $data);
@@ -451,5 +452,42 @@ class Configuracoes extends CI_Controller
 		}
 		$this->session->set_flashdata('erro', 'Não foi possível desativar o logout força bruta');
 		echo false;
+	}
+
+	public function setSpaApiStatus()
+	{
+		if ((!session_id()) || (!$this->session->userdata('logado'))) {
+			return $this->output
+				->set_status_header(401)
+				->set_content_type('application/json', 'utf-8')
+				->set_output(json_encode(array('message' => 'Sessão inválida ou expirada.')));
+		}
+
+		if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {
+			return $this->output
+				->set_status_header(403)
+				->set_content_type('application/json', 'utf-8')
+				->set_output(json_encode(array('message' => 'Permissão insuficiente.')));
+		}
+
+		$enabled = $this->input->post('enabled');
+
+		if (!in_array($enabled, array('0', '1'), true)) {
+			return $this->output
+				->set_status_header(422)
+				->set_content_type('application/json', 'utf-8')
+				->set_output(json_encode(array('message' => 'Estado inválido.')));
+		}
+
+		if (!$this->configs_model->setSpaApiEnabled($enabled === '1')) {
+			return $this->output
+				->set_status_header(500)
+				->set_content_type('application/json', 'utf-8')
+				->set_output(json_encode(array('message' => 'Não foi possível atualizar o acesso do SPA.')));
+		}
+
+		return $this->output
+			->set_content_type('application/json', 'utf-8')
+			->set_output(json_encode(array('enabled' => $enabled === '1')));
 	}
 }

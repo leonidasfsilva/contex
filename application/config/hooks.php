@@ -28,6 +28,13 @@ $hook['display_override'][] = array(
 );
 
 $hook['post_controller_constructor'][] = array(
+	'class' => 'SpaApiAvailability',
+	'function' => 'check',
+	'filename' => 'SpaApiAvailability.php',
+	'filepath' => 'hooks'
+);
+
+$hook['post_controller_constructor'][] = array(
     'class' => 'DatabaseTimezone',
     'function' => 'setTimezone',
     'filename' => 'DatabaseTimezone.php',

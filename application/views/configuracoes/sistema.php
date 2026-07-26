@@ -29,6 +29,10 @@
                 <input type="checkbox" id="force-logout-switch" name="forceLogout" class="switch-input primary" <?= $forcedLogout ? 'checked' : '' ?>>
                 <label for="force-logout-switch" class="switch-label primary font-weight-bold">Desconectar usuários conectados</label>
             </div>
+            <div>
+                <input type="checkbox" id="spa-api-switch" name="spaApiEnabled" class="switch-input primary" <?= $spaApiEnabled ? 'checked' : '' ?>>
+                <label for="spa-api-switch" class="switch-label primary font-weight-bold">Permitir acesso do Contex SPA</label>
+            </div>
         </form>
     </div>
 </div>
@@ -393,6 +397,27 @@
                 })
             }
             $(this).prop('disabled', true)
+        })
+
+        $('#spa-api-switch').change(function () {
+            const control = $(this)
+            const enabled = control.is(':checked') ? 1 : 0
+
+            control.prop('disabled', true)
+
+            $.ajax({
+                type: 'POST',
+                url: "<?= base_url('configuracoes/setSpaApiStatus'); ?>",
+                data: { enabled: enabled },
+                dataType: 'json',
+                success: function () {
+                    location.reload()
+                },
+                error: function () {
+                    control.prop('checked', !control.is(':checked'))
+                    control.prop('disabled', false)
+                }
+            })
         })
 
         $('.editar, .excluir, .desativar').click(function () {
