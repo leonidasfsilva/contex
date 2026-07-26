@@ -53,6 +53,9 @@ $route['clientesapi']                               = 'ClientesApi';
 $route['clientesApi/(:any)/(:num)']                 = 'ClientesApi/$1/$2';
 $route['clientesApi/(:any)']                        = 'ClientesApi/$1';
 $route['clientesApi']                               = 'ClientesApi';
+$route['api/v1/auth/login']                         = 'mxcode/verificarLogin';
+$route['api/v1/auth/session']                       = 'mxcode/validaSessao';
+$route['api/v1/auth/logout']                        = 'mxcode/logout';
 
 // $route['financeiro/faturas/detalhes']        = 'faturas/detalhes';
 // $route['financeiro/faturas/detalhes/(:any)'] = 'faturas/detalhes/$1';

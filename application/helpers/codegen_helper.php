@@ -187,6 +187,7 @@ function getLastUserURL($get = null)
 {
     $CI = get_instance();
     if ((!session_id()) || (!$CI->session->userdata('logado'))) {
+        $uri = uri_string();
         $notRedirectedUlrs = [
             '',
             'mxcode',
@@ -196,7 +197,7 @@ function getLastUserURL($get = null)
             'mxcode/verificarLogin'
         ];
 
-        if (!in_array(uri_string(), $notRedirectedUlrs, true) && !$get) {
+        if (strpos($uri, 'api/') !== 0 && !in_array($uri, $notRedirectedUlrs, true) && !$get) {
             $currentURL = current_url();            //for simple URL
             $params     = $_SERVER['QUERY_STRING']; //for parameters
             $fullURL    = $currentURL;

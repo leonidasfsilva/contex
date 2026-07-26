@@ -126,6 +126,11 @@ class Mxcode extends CI_Controller
         }
 
         $this->session->sess_destroy();
+
+        if ($this->requisicaoJson()) {
+            return $this->responderJson(null, 204);
+        }
+
         redirect('mxcode/login');
     }
 
@@ -151,30 +156,54 @@ class Mxcode extends CI_Controller
 
     public function verificarLogin()
     {
+        $dadosLogin = $this->dadosLogin();
+
         $this->load->library('form_validation');
+        $this->form_validation->set_data($dadosLogin);
         $this->form_validation->set_rules('email', 'E-mail', 'valid_email|required|trim');
         $this->form_validation->set_rules('senha', 'Senha', 'required|trim');
 
         if (!$this->form_validation->run()) {
+            if ($this->requisicaoJson()) {
+                return $this->responderJson(
+                    array('message' => 'Informe um e-mail válido e uma senha.'),
+                    422
+                );
+            }
+
             // print_array(validation_errors());
             $msgValidation = validation_errors();
             $this->session->set_flashdata('erro', 'Formato de e-mail inválido.');
             redirect('mxcode/login');
         }
 
-        $email    = $this->input->post('email');
-        $password = $this->input->post('senha');
+        $email    = $dadosLogin['email'];
+        $password = $dadosLogin['senha'];
         $usuario  = $this->mxcode_model->check_credentials($email);
 
         if ($usuario) {
             if (password_verify($password, $usuario->senha)) {
                 if ($usuario->ativo == 0) {
+                    if ($this->requisicaoJson()) {
+                        return $this->responderJson(
+                            array('message' => 'Conta de usuário desativada.'),
+                            403
+                        );
+                    }
+
                     $this->session->set_flashdata('erro', 'Conta de usuário desativada.<br>Por favor, contate o administrador do sistema.');
                     redirect('mxcode/login');
                 }
 
                 if (checkMaintenanceMode()) {
                     if ($usuario->permissoes_id != 1) {
+                        if ($this->requisicaoJson()) {
+                            return $this->responderJson(
+                                array('message' => 'Sistema em manutenção. Tente novamente mais tarde.'),
+                                503
+                            );
+                        }
+
                         $this->session
                             ->set_flashdata(
                                 'erro',
@@ -196,6 +225,10 @@ class Mxcode extends CI_Controller
                 gravaLog(getUserId(), getUserName(), getUserEmail(), 'Login no sistema', getenv("REMOTE_ADDR"), 'autenticacao', '/mxcode/login');
                 reconciliarFinanceiro(getUserId(), 'login');
 
+                if ($this->requisicaoJson()) {
+                    return $this->responderJson($this->dadosSessao());
+                }
+
                 if ($this->session->userdata('last_url')) {
                     header('location:' . $this->session->userdata('last_url'));
                     return;
@@ -203,12 +236,99 @@ class Mxcode extends CI_Controller
                 redirect('mxcode/login');
             }
             gravaLog($usuario->id_usuarios, $usuario->nome, $usuario->email, 'Tentativa de login recusada: senha incorreta', getenv("REMOTE_ADDR"), 'autenticacao', '/mxcode/login');
+
+            if ($this->requisicaoJson()) {
+                return $this->responderJson(
+                    array('message' => 'Dados de acesso inválidos.'),
+                    401
+                );
+            }
+
             $this->session->set_flashdata('erro', 'Dados de acesso inválidos, por favor tente novamente.');
             redirect('mxcode/login');
         }
         gravaLog(null, null, $email, 'Tentativa de login recusada: email inexistente', getenv("REMOTE_ADDR"), 'autenticacao', '/mxcode/login');
+
+        if ($this->requisicaoJson()) {
+            return $this->responderJson(
+                array('message' => 'Dados de acesso inválidos.'),
+                401
+            );
+        }
+
         $this->session->set_flashdata('erro', 'Dados de acesso inválidos, por favor tente novamente.');
         redirect('mxcode/login');
+    }
+
+    public function validaSessao()
+    {
+        if (!$this->session->userdata('logado')) {
+            return $this->responderJson(
+                array(
+                    'authenticated' => false,
+                    'message'       => 'Sessão inválida ou expirada.',
+                ),
+                401
+            );
+        }
+
+        return $this->responderJson($this->dadosSessao());
+    }
+
+    private function dadosLogin()
+    {
+        $dados = $this->input->post();
+
+        if ($this->requisicaoJson()) {
+            $json = json_decode($this->input->raw_input_stream, true);
+
+            if (is_array($json)) {
+                $dados = $json;
+            }
+        }
+
+        return array(
+            'email' => trim((string)($dados['email'] ?? '')),
+            'senha' => (string)($dados['senha'] ?? $dados['password'] ?? ''),
+        );
+    }
+
+    private function dadosSessao()
+    {
+        $idPermissao = $this->session->userdata('permissao');
+
+        return array(
+            'authenticated' => true,
+            'user'          => array(
+                'id'           => $this->session->userdata('id'),
+                'name'         => $this->session->userdata('nome'),
+                'email'        => $this->session->userdata('email'),
+                'avatar'       => $this->session->userdata('avatar'),
+                'permissionId' => $idPermissao,
+            ),
+            'permissions'   => $this->mxcode_model->getPermissoes($idPermissao),
+            'csrfToken'     => null,
+        );
+    }
+
+    private function requisicaoJson()
+    {
+        return stripos((string)$this->input->get_request_header('Accept'), 'application/json') !== false;
+    }
+
+    private function responderJson($dados, $status = 200)
+    {
+        $this->output
+            ->set_status_header($status)
+            ->set_content_type('application/json', 'utf-8');
+
+        if ($status === 204) {
+            return $this->output->set_output('');
+        }
+
+        return $this->output->set_output(
+            json_encode($dados, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+        );
     }
 
     public function backup()

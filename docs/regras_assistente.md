@@ -110,6 +110,9 @@
 - O fluxo operacional deve usar `.agents/trello/trello.sh`, que normaliza entradas textuais para UTF-8 antes da chamada da API. Não contornar o helper com PowerShell ou chamada crua sem normalização equivalente.
 - Após criar ou atualizar um card, consultar novamente o card e validar título, descrição, formatação das seções com `###`, identificadores técnicos com código inline e posição na lista. Sequências percentuais literais como `%E7`, `%E3`, mojibake ou caracteres corrompidos devem ser corrigidos imediatamente antes de reportar conclusão.
 - Escopo, requisitos e decisões do projeto devem ser registrados na descrição do card. Comentários são reservados ao registro de entrega, resultado, PR e fechamento.
+- Quando a descrição de um card contiver etapas executáveis de infraestrutura, arquitetura, código, configuração, testes ou homologação, criar no próprio card uma ou mais checklists correspondentes antes de iniciar a execução.
+- A descrição deve preservar contexto, decisões e critérios de conclusão; as checklists devem decompor apenas as etapas verificáveis, agrupadas por assunto quando isso tornar a execução mais clara.
+- Não criar checklist para conteúdo apenas informativo, sem ação concreta a executar ou validar.
 - Ao finalizar um card, mover para a lista `Finalizado` sempre no topo da lista.
 - O helper `.agents/trello/trello.sh` deve manter esse comportamento como padrão ao mover cards.
 
