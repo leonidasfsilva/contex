@@ -18,6 +18,7 @@ class Mxcode extends CI_Controller
         $this->load->helper('file');
         $this->load->library('upload');
         $this->load->library('image_lib');
+        $this->load->library('spa_csrf');
     }
 
     public function index()
@@ -121,6 +122,16 @@ class Mxcode extends CI_Controller
 
     public function logout($forcedLogout = false)
     {
+        if ($this->requisicaoApiSpa() && $this->session->userdata('logado') && !$this->validarCsrfApiSpa()) {
+            return $this->responderJson(
+                array(
+                    'code'    => 'CSRF_TOKEN_INVALID',
+                    'message' => 'Token CSRF ausente ou inválido.',
+                ),
+                403
+            );
+        }
+
         if ((session_id()) && ($this->session->userdata('logado'))) {
             gravaLog(getUserId(), getUserName(), getUserEmail(), 'Logout no sistema', getenv("REMOTE_ADDR"), 'autenticacao', '/mxcode/logout');
         }
@@ -222,6 +233,7 @@ class Mxcode extends CI_Controller
                 );
 
                 $this->session->set_userdata($session_data);
+                $this->spa_csrf->rotateToken();
                 gravaLog(getUserId(), getUserName(), getUserEmail(), 'Login no sistema', getenv("REMOTE_ADDR"), 'autenticacao', '/mxcode/login');
                 reconciliarFinanceiro(getUserId(), 'login');
 
@@ -307,8 +319,20 @@ class Mxcode extends CI_Controller
                 'permissionId' => $idPermissao,
             ),
             'permissions'   => $this->mxcode_model->getPermissoes($idPermissao),
-            'csrfToken'     => null,
+            'csrfToken'     => $this->spa_csrf->getToken(),
         );
+    }
+
+    private function validarCsrfApiSpa()
+    {
+        $token = $this->input->get_request_header('X-CSRF-TOKEN', true);
+
+        return $this->spa_csrf->isValid($token);
+    }
+
+    private function requisicaoApiSpa()
+    {
+        return strpos(uri_string(), 'api/v1/') === 0;
     }
 
     private function requisicaoJson()
