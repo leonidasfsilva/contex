@@ -434,16 +434,17 @@ class Configs_model extends CI_Model
 		return $this->db->insert('configs_opcoes', $data);
 	}
 
-	public function disconnectSpaSessions($currentSessionId = null)
+	public function revokeSpaSessions()
 	{
-		$this->db
-			->like('data', 'spa_authenticated|b:1;', 'both');
-
-		if ($currentSessionId) {
-			$this->db->where('id !=', $currentSessionId);
-		}
-
-		$this->db->delete('ci_sessions');
+		$this->db->query(
+			"UPDATE ci_sessions
+			 SET data = CASE
+				 WHEN data LIKE '%spa_forced_logout|b:0;%' THEN REPLACE(data, 'spa_forced_logout|b:0;', 'spa_forced_logout|b:1;')
+				 WHEN data NOT LIKE '%spa_forced_logout|b:1;%' THEN CONCAT(data, 'spa_forced_logout|b:1;')
+				 ELSE data
+			 END
+			 WHERE data LIKE '%spa_authenticated|b:1;%'"
+		);
 
 		return $this->db->affected_rows();
 	}

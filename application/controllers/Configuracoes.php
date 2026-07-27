@@ -509,7 +509,12 @@ class Configuracoes extends CI_Controller
 			return $this->jsonResponse(array('message' => 'Requisição inválida.'), 400);
 		}
 
-		$disconnectedSessions = $this->configs_model->disconnectSpaSessions(session_id());
+		$disconnectedSessions = $this->configs_model->revokeSpaSessions();
+
+		if ($this->session->userdata('spa_authenticated')) {
+			$this->session->set_userdata('spa_forced_logout', true);
+		}
+
 		$message = $disconnectedSessions > 0
 			? 'Usuários do Contex SPA desconectados com sucesso.'
 			: 'Não havia outras sessões do Contex SPA conectadas.';

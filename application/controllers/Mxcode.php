@@ -236,6 +236,7 @@ class Mxcode extends CI_Controller
 
                 if ($this->requisicaoApiSpa()) {
                     $this->session->set_userdata('spa_authenticated', true);
+                    $this->session->set_userdata('spa_forced_logout', false);
                 }
 
                 $this->spa_csrf->rotateToken();
@@ -279,6 +280,17 @@ class Mxcode extends CI_Controller
 
     public function validaSessao()
     {
+        if ($this->session->userdata('spa_forced_logout')) {
+            return $this->responderJson(
+                array(
+                    'authenticated' => false,
+                    'code'          => 'SPA_SESSION_REVOKED',
+                    'message'       => 'Sua sessão no Contex SPA foi encerrada pelo administrador.',
+                ),
+                401
+            );
+        }
+
         if (!$this->session->userdata('logado')) {
             return $this->responderJson(
                 array(
