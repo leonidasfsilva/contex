@@ -398,6 +398,41 @@ class Configs_model extends CI_Model
 			->get('configs_usuario_assoc')
 			->row();
 	}
+
+	public function isSpaApiEnabled()
+	{
+		$option = $this->db
+			->where('id', 100)
+			->where('status', 1)
+			->get('configs_opcoes')
+			->row();
+
+		return !$option || (bool)$option->ativo;
+	}
+
+	public function setSpaApiEnabled($enabled)
+	{
+		$data = array(
+			'descricao' => 'ACESSO DO CONTEX SPA A API',
+			'setor'     => 'SISTEMA',
+			'ativo'     => $enabled ? 1 : 0,
+			'status'    => 1,
+		);
+
+		$exists = $this->db
+			->where('id', 100)
+			->count_all_results('configs_opcoes') > 0;
+
+		if ($exists) {
+			return $this->db
+				->where('id', 100)
+				->update('configs_opcoes', $data);
+		}
+
+		$data['id'] = 100;
+
+		return $this->db->insert('configs_opcoes', $data);
+	}
 	
 	public function activateMaintenanceMode($id_usuario)
 	{

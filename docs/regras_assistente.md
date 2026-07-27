@@ -56,6 +56,10 @@
 - Campos opcionais em modelagem SQL devem permitir `NULL` e declarar `DEFAULT NULL`; não usar `NOT NULL` quando o dado só será preenchido por evento posterior do sistema.
 - Após criar ou alterar SQL estrutural, validar com `SHOW CREATE TABLE` e garantir que não apareçam collations incompatíveis como `utf8mb4_uca1400_ai_ci`, `utf8mb3_uca1400_ai_ci` ou `utf8mb4_0900_ai_ci`.
 - Não propor script de inicialização no HeidiSQL como solução permanente para incompatibilidade criada por SQL versionado. A correção deve estar no schema/SQL do projeto.
+- Toda SQL que exigir aplicação manual em produção deve entrar como `PENDENTE` em `docs/sql/deploy_prd_pendente.md` no mesmo commit.
+- A pendência deve ser espelhada como item não concluído no card operacional de deploy SQL do Trello.
+- Nunca marcar uma SQL como aplicada em PRD apenas porque foi executada localmente, integrada ao Git ou publicada em um PR.
+- Após aplicação e verificação em PRD, registrar data e responsável no arquivo e concluir o item correspondente no Trello.
 
 ## Configuração de Git/GitHub do Assistente
 
