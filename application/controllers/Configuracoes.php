@@ -510,6 +510,9 @@ class Configuracoes extends CI_Controller
 		}
 
 		$disconnectedSessions = $this->configs_model->disconnectSpaSessions(session_id());
+		$message = $disconnectedSessions > 0
+			? 'Usuários do Contex SPA desconectados com sucesso.'
+			: 'Não havia outras sessões do Contex SPA conectadas.';
 
 		gravaLog(
 			getUserId(),
@@ -520,13 +523,12 @@ class Configuracoes extends CI_Controller
 			'autenticacao',
 			'/configuracoes/disconnectSpaUsers'
 		);
+		$this->session->set_flashdata('sucesso', $message);
 
 		return $this->jsonResponse(
 			array(
 				'disconnectedSessions' => $disconnectedSessions,
-				'message'              => $disconnectedSessions > 0
-					? 'Usuários do Contex SPA desconectados com sucesso.'
-					: 'Não havia outras sessões do Contex SPA conectadas.',
+				'message'              => $message,
 			)
 		);
 	}

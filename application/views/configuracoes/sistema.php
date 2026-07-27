@@ -33,11 +33,9 @@
                 <input type="checkbox" id="spa-api-switch" name="spaApiEnabled" class="switch-input primary" <?= $spaApiEnabled ? 'checked' : '' ?>>
                 <label for="spa-api-switch" class="switch-label primary font-weight-bold">Permitir acesso do Contex SPA</label>
             </div>
-            <div class="mt10">
-                <button type="button" id="disconnect-spa-users" class="btn btn-danger btn-sm">
-                    <i class="fas fa-sign-out-alt fa-fw"></i> Desconectar usuários do Contex SPA
-                </button>
-                <span class="help-block mb0">Encerra as sessões utilizadas pelo SPA sem alterar o acesso à API ou as sessões exclusivas do MVC.</span>
+            <div>
+                <input type="checkbox" id="disconnect-spa-users-switch" class="switch-input primary">
+                <label for="disconnect-spa-users-switch" class="switch-label primary font-weight-bold">Desconectar usuários do Contex SPA</label>
             </div>
         </form>
     </div>
@@ -108,6 +106,30 @@
 			} ?>
             </tbody>
         </table>
+    </div>
+</div>
+
+<!-- Modal DESCONECTAR USUÁRIOS DO CONTEX SPA -->
+<div class="modal fade" id="modalDisconnectSpaUsers" tabindex="-1" role="dialog" aria-labelledby="modalDisconnectSpaUsersLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title text-white" id="modalDisconnectSpaUsersLabel">Desconectar usuários do Contex SPA</h4>
+            </div>
+            <div class="modal-body font-weight-bold">
+                <p>Deseja realmente desconectar todos os usuários conectados pelo Contex SPA?</p>
+                <span class="note note-warning block">Os usuários precisarão entrar novamente. O acesso à API e as sessões exclusivas do MVC não serão alterados.</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+                    <i class="fa fa-times fa-fw"></i> Cancelar
+                </button>
+                <button type="button" id="confirm-disconnect-spa-users" class="btn btn-warning btn-sm">
+                    <i class="fa fa-check fa-fw"></i> Desconectar
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -426,48 +448,32 @@
             })
         })
 
-        $('#disconnect-spa-users').click(function () {
+        $('#disconnect-spa-users-switch').change(function () {
+            if ($(this).is(':checked')) {
+                $('#modalDisconnectSpaUsers').modal('show')
+            }
+        })
+
+        $('#modalDisconnectSpaUsers').on('hidden.bs.modal', function () {
+            $('#disconnect-spa-users-switch').prop('checked', false)
+        })
+
+        $('#confirm-disconnect-spa-users').click(function () {
             const control = $(this)
 
-            Swal.fire({
-                icon: 'warning',
-                title: 'Desconectar usuários do SPA?',
-                text: 'Os usuários conectados pelo Contex SPA precisarão entrar novamente. O MVC e o status da API não serão alterados.',
-                showCancelButton: true,
-                confirmButtonColor: '#d9534f',
-                confirmButtonText: 'Sim, desconectar',
-                cancelButtonText: 'Cancelar'
-            }).then(function (result) {
-                if (!result.isConfirmed) {
-                    return
+            control.prop('disabled', true)
+
+            $.ajax({
+                type: 'POST',
+                url: "<?= base_url('configuracoes/disconnectSpaUsers'); ?>",
+                dataType: 'json',
+                success: function () {
+                    location.reload()
+                },
+                error: function () {
+                    $('#modalDisconnectSpaUsers').modal('hide')
+                    location.reload()
                 }
-
-                control.prop('disabled', true)
-
-                $.ajax({
-                    type: 'POST',
-                    url: "<?= base_url('configuracoes/disconnectSpaUsers'); ?>",
-                    dataType: 'json',
-                    success: function (response) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Operação concluída',
-                            text: response.message
-                        })
-                    },
-                    error: function (xhr) {
-                        const response = xhr.responseJSON || {}
-
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Não foi possível desconectar',
-                            text: response.message || 'Tente novamente.'
-                        })
-                    },
-                    complete: function () {
-                        control.prop('disabled', false)
-                    }
-                })
             })
         })
 
