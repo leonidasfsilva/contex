@@ -19,6 +19,13 @@ $hook['pre_system'][] = array(
 	'filepath' => 'hooks'
 );
 
+$hook['pre_controller'][] = array(
+	'class' => '',
+	'function' => 'selectSpaSessionCookie',
+	'filename' => 'SpaSessionCookie.php',
+	'filepath' => 'hooks'
+);
+
 // compress output
 $hook['display_override'][] = array(
 	'class' => '',

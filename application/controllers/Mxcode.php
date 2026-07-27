@@ -301,8 +301,6 @@ class Mxcode extends CI_Controller
             );
         }
 
-        $this->session->set_userdata('spa_authenticated', true);
-
         return $this->responderJson($this->dadosSessao());
     }
 
