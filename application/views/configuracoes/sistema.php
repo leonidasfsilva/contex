@@ -33,6 +33,12 @@
                 <input type="checkbox" id="spa-api-switch" name="spaApiEnabled" class="switch-input primary" <?= $spaApiEnabled ? 'checked' : '' ?>>
                 <label for="spa-api-switch" class="switch-label primary font-weight-bold">Permitir acesso do Contex SPA</label>
             </div>
+            <div class="mt10">
+                <button type="button" id="disconnect-spa-users" class="btn btn-danger btn-sm">
+                    <i class="fas fa-sign-out-alt fa-fw"></i> Desconectar usuários do Contex SPA
+                </button>
+                <span class="help-block mb0">Encerra as sessões utilizadas pelo SPA sem alterar o acesso à API ou as sessões exclusivas do MVC.</span>
+            </div>
         </form>
     </div>
 </div>
@@ -417,6 +423,51 @@
                     control.prop('checked', !control.is(':checked'))
                     control.prop('disabled', false)
                 }
+            })
+        })
+
+        $('#disconnect-spa-users').click(function () {
+            const control = $(this)
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Desconectar usuários do SPA?',
+                text: 'Os usuários conectados pelo Contex SPA precisarão entrar novamente. O MVC e o status da API não serão alterados.',
+                showCancelButton: true,
+                confirmButtonColor: '#d9534f',
+                confirmButtonText: 'Sim, desconectar',
+                cancelButtonText: 'Cancelar'
+            }).then(function (result) {
+                if (!result.isConfirmed) {
+                    return
+                }
+
+                control.prop('disabled', true)
+
+                $.ajax({
+                    type: 'POST',
+                    url: "<?= base_url('configuracoes/disconnectSpaUsers'); ?>",
+                    dataType: 'json',
+                    success: function (response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Operação concluída',
+                            text: response.message
+                        })
+                    },
+                    error: function (xhr) {
+                        const response = xhr.responseJSON || {}
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Não foi possível desconectar',
+                            text: response.message || 'Tente novamente.'
+                        })
+                    },
+                    complete: function () {
+                        control.prop('disabled', false)
+                    }
+                })
             })
         })
 

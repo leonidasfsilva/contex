@@ -433,6 +433,20 @@ class Configs_model extends CI_Model
 
 		return $this->db->insert('configs_opcoes', $data);
 	}
+
+	public function disconnectSpaSessions($currentSessionId = null)
+	{
+		$this->db
+			->like('data', 'spa_authenticated|b:1;', 'both');
+
+		if ($currentSessionId) {
+			$this->db->where('id !=', $currentSessionId);
+		}
+
+		$this->db->delete('ci_sessions');
+
+		return $this->db->affected_rows();
+	}
 	
 	public function activateMaintenanceMode($id_usuario)
 	{

@@ -233,6 +233,11 @@ class Mxcode extends CI_Controller
                 );
 
                 $this->session->set_userdata($session_data);
+
+                if ($this->requisicaoApiSpa()) {
+                    $this->session->set_userdata('spa_authenticated', true);
+                }
+
                 $this->spa_csrf->rotateToken();
                 gravaLog(getUserId(), getUserName(), getUserEmail(), 'Login no sistema', getenv("REMOTE_ADDR"), 'autenticacao', '/mxcode/login');
                 reconciliarFinanceiro(getUserId(), 'login');
@@ -283,6 +288,8 @@ class Mxcode extends CI_Controller
                 401
             );
         }
+
+        $this->session->set_userdata('spa_authenticated', true);
 
         return $this->responderJson($this->dadosSessao());
     }
