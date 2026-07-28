@@ -52,7 +52,9 @@ O arquivo `config.local.json` permanece apenas no projeto pai e nunca deve ser c
 Antes de criar ou renomear arquivos, classes, métodos, variáveis, rotas ou estruturas, o agente deve inspecionar implementações equivalentes já existentes no projeto e seguir o padrão predominante do Contex.
 
 - O padrão local do projeto prevalece sobre convenções genéricas do framework, linguagem ou mercado, salvo decisão explícita em contrário.
+- Padrões e decisões definidos ou impostos pelo responsável do projeto têm precedência e devem ser seguidos mesmo quando divergirem das convenções gerais.
 - Não justificar uma nomenclatura apenas por ela ser aceita pelo CodeIgniter ou por outra ferramenta; ela também deve ser coerente com os arquivos vizinhos e componentes equivalentes do repositório.
+- Somente em projetos, módulos ou estruturas realmente criados do zero, sem precedente local nem padrão definido pelo responsável, adotar as convenções oficiais e atuais da tecnologia utilizada, como no projeto Vue.
 - Quando não houver precedente local claro, registrar a decisão técnica adotada antes de introduzir um novo padrão.
 
 ## Codificação de texto
