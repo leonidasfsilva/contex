@@ -518,7 +518,7 @@ class Configuracoes extends CI_Controller
 			getUserId(),
 			getUserName(),
 			getUserEmail(),
-			sprintf('Desconexão coletiva do Contex SPA: %d sessão(ões) removida(s)', $disconnectedSessions),
+			$this->getSpaDisconnectionLogMessage($disconnectedSessions),
 			getenv('REMOTE_ADDR'),
 			'autenticacao',
 			'/configuracoes/disconnectSpaUsers'
@@ -530,6 +530,18 @@ class Configuracoes extends CI_Controller
 				'disconnectedSessions' => $disconnectedSessions,
 				'message'              => $message,
 			)
+		);
+	}
+
+	private function getSpaDisconnectionLogMessage($disconnectedSessions)
+	{
+		if ($disconnectedSessions === 1) {
+			return 'Desconexão coletiva do Contex SPA: 1 sessão removida';
+		}
+
+		return sprintf(
+			'Desconexão coletiva do Contex SPA: %d sessões removidas',
+			$disconnectedSessions
 		);
 	}
 
