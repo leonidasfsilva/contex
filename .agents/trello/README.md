@@ -53,7 +53,6 @@ Antes de criar ou renomear arquivos, classes, métodos, variáveis, rotas ou est
 
 - O padrão local do projeto prevalece sobre convenções genéricas do framework, linguagem ou mercado, salvo decisão explícita em contrário.
 - Não justificar uma nomenclatura apenas por ela ser aceita pelo CodeIgniter ou por outra ferramenta; ela também deve ser coerente com os arquivos vizinhos e componentes equivalentes do repositório.
-- Em caso de divergência entre o padrão do projeto e o padrão do framework, aplicar a regra: "em terra de sapo, de cócoras com ele".
 - Quando não houver precedente local claro, registrar a decisão técnica adotada antes de introduzir um novo padrão.
 
 ## Codificação de texto
