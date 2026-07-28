@@ -10,6 +10,6 @@ function selectSpaSessionCookie()
     $routePath  = ltrim(substr($requestUri, strlen($basePath)), '/');
 
     if (strpos($routePath, 'api/v1/') === 0) {
-        $GLOBALS['CFG']->set_item('sess_cookie_name', 'spa_session');
+        $GLOBALS['CFG']->set_item('sess_cookie_name', 'api_session');
     }
 }

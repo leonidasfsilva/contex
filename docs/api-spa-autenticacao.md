@@ -2,7 +2,7 @@
 
 ## Escopo
 
-O Contex SPA reutiliza a autenticação por sessão do frontend MVC. O backend continua sendo a autoridade sobre sessão, usuário e permissões.
+O Contex SPA utiliza autenticação por sessão própria, independente da sessão do frontend MVC. O backend continua sendo a autoridade sobre sessão, usuário e permissões.
 
 Este contrato se aplica às rotas `/api/v1/auth/*`. As APIs existentes autenticadas por Bearer Token permanecem independentes.
 
@@ -19,7 +19,8 @@ Variáveis iniciadas por `VITE_` são incorporadas ao bundle e podem ser lidas n
 
 ## Sessão e credenciais
 
-- O cookie `app_session` identifica a sessão existente do Contex.
+- O cookie `api_session` identifica exclusivamente a sessão da API fake consumida pelo Contex SPA.
+- O MVC continua usando `app_session`; um login MVC não autentica o SPA e um login SPA não autentica o MVC.
 - O navegador armazena e envia esse cookie automaticamente nas requisições com credenciais.
 - O cliente HTTP do SPA deve usar `credentials: include` ou `withCredentials: true`.
 - O Vue não usa dados locais como prova de autenticação; a confirmação vem de `GET /api/v1/auth/session`.
@@ -30,7 +31,7 @@ Variáveis iniciadas por `VITE_` são incorporadas ao bundle e podem ser lidas n
 - O backend o entrega no campo JSON `csrfToken` após login ou consulta de sessão.
 - O SPA mantém o token em memória e o envia no header `X-CSRF-TOKEN` nas operações protegidas.
 - O token permanece estável durante a mesma sessão e deixa de ser válido quando a sessão é encerrada.
-- O token CSRF não autentica o usuário e não substitui o cookie `app_session`.
+- O token CSRF não autentica o usuário e não substitui o cookie `api_session`.
 - O CSRF global do CodeIgniter permanece desativado para preservar os formulários e AJAX legados do MVC.
 
 ## `POST /api/v1/auth/login`
@@ -72,7 +73,7 @@ O login não exige CSRF porque ainda não existe uma sessão autenticada a prote
 
 ## `GET /api/v1/auth/session`
 
-O navegador envia `app_session`. Quando a sessão for válida, a resposta será `200 OK` com o mesmo contrato do login, incluindo `csrfToken`.
+O navegador envia `api_session`. Quando a sessão for válida, a resposta será `200 OK` com o mesmo contrato do login, incluindo `csrfToken`.
 
 Sem sessão válida, retorna `401 Unauthorized`:
 
@@ -109,7 +110,7 @@ Uma consulta autenticada depois do logout deve retornar `401 Unauthorized`.
 
 ## Futuras operações de escrita
 
-Rotas SPA autenticadas por `app_session` que alterem dados por `POST`, `PUT`, `PATCH` ou `DELETE` devem reutilizar a validação do header `X-CSRF-TOKEN` antes de executar a regra de negócio.
+Rotas SPA autenticadas por `api_session` que alterem dados por `POST`, `PUT`, `PATCH` ou `DELETE` devem reutilizar a validação do header `X-CSRF-TOKEN` antes de executar a regra de negócio.
 
 O contrato esperado é:
 
