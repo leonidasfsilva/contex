@@ -123,12 +123,15 @@ class Usuarios_model extends CI_Model
 
     public function getLogsUsuario($id_usuario, $perpage, $start)
     {
-        return $this->db
+        $this->db
             ->where('id_usuario', $id_usuario)
-            ->limit($perpage, $start)
-            ->order_by('data_registro', 'desc')
-            ->get('logs')
-            ->result();
+            ->order_by('data_registro', 'desc');
+
+        if ($perpage > 0) {
+            $this->db->limit($perpage, $start);
+        }
+
+        return $this->db->get('logs')->result();
     }
 
 }

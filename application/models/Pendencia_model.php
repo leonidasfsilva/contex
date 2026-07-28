@@ -19,9 +19,12 @@ class Pendencia_model extends CI_Model
     function get($table, $fields, $where = null, $id_usuario, $limit = null, $rows, $perpage = 0, $start = 0, $one = false, $array = 'array')
     {
 
-        $this->db->select($fields);
-        $this->db->from($table);
-        $this->db->limit($perpage, $start);
+		$this->db->select($fields);
+		$this->db->from($table);
+
+		if ($perpage > 0) {
+			$this->db->limit($perpage, $start);
+		}
         if ($where) {
             $this->db->where($where . ' AND status = 1 AND id_usuario = ' . $id_usuario);
         } else {
