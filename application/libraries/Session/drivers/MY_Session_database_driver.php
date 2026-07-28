@@ -5,7 +5,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class MY_Session_database_driver extends CI_Session_database_driver
 {
     private $passiveRequest;
-    private $expiredSession = false;
 
     public function __construct(&$params)
     {
@@ -21,17 +20,13 @@ class MY_Session_database_driver extends CI_Session_database_driver
             return $sessionData;
         }
 
-        $this->expiredSession = true;
+        $this->discardExpiredRow($sessionId);
 
         return '';
     }
 
     public function write($sessionId, $sessionData)
     {
-        if ($this->expiredSession) {
-            return $this->_success;
-        }
-
         if (!$this->passiveRequest) {
             return parent::write($sessionId, $sessionData);
         }
@@ -66,7 +61,7 @@ class MY_Session_database_driver extends CI_Session_database_driver
 
     public function updateTimestamp($sessionId, $data)
     {
-        if ($this->passiveRequest || $this->expiredSession) {
+        if ($this->passiveRequest) {
             return true;
         }
 
@@ -100,5 +95,19 @@ class MY_Session_database_driver extends CI_Session_database_driver
         $timestamp = $this->_db->get()->row('timestamp');
 
         return $timestamp !== null && (int)$timestamp < time() - $expiration;
+    }
+
+    private function discardExpiredRow($sessionId)
+    {
+        $this->_db->reset_query();
+        $this->_db->where('id', $sessionId);
+
+        if ($this->_config['match_ip']) {
+            $this->_db->where('ip_address', $_SERVER['REMOTE_ADDR']);
+        }
+
+        $this->_db->delete($this->_config['save_path']);
+        $this->_row_exists = false;
+        $this->_fingerprint = md5('');
     }
 }

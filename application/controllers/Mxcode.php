@@ -232,6 +232,10 @@ class Mxcode extends CI_Controller
                     'logado'    => true
                 );
 
+                if ($this->requisicaoApiSpa()) {
+                    $this->session->sess_regenerate(true);
+                }
+
                 $this->session->set_userdata($session_data);
 
                 if ($this->requisicaoApiSpa()) {
