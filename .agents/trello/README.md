@@ -39,7 +39,7 @@ Também é possível usar variáveis de ambiente:
 .agents/trello/trello.sh update-name -CardId "ID_DO_CARD" -Name "Novo título"
 ```
 
-O script `trello.ps1` fica apenas como legado. O fluxo operacional dos agentes no Contex deve usar `trello.sh`.
+O script `trello.ps1` fica disponível como alternativa legada. O agente pode usar o helper ou outra ferramenta adequada para acessar o Trello, desde que preserve a codificação, o conteúdo e as regras operacionais do projeto.
 
 O board é detectado pelo diretório atual do projeto. Por exemplo, executando o script a partir de `C:\laragon\www\contex` será usado o board `contex`; a partir de `C:\laragon\www\contex-spa`, o board `contex-spa`.
 
