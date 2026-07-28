@@ -490,4 +490,66 @@ class Configuracoes extends CI_Controller
 			->set_content_type('application/json', 'utf-8')
 			->set_output(json_encode(array('enabled' => $enabled === '1')));
 	}
+
+	public function disconnectSpaUsers()
+	{
+		if ((!session_id()) || (!$this->session->userdata('logado'))) {
+			return $this->jsonResponse(array('message' => 'Sessão inválida ou expirada.'), 401);
+		}
+
+		if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'cPermissao')) {
+			return $this->jsonResponse(array('message' => 'Permissão insuficiente.'), 403);
+		}
+
+		if (strtoupper((string)$this->input->server('REQUEST_METHOD')) !== 'POST') {
+			return $this->jsonResponse(array('message' => 'Método não permitido.'), 405);
+		}
+
+		if (!$this->input->is_ajax_request()) {
+			return $this->jsonResponse(array('message' => 'Requisição inválida.'), 400);
+		}
+
+		$disconnectedSessions = $this->configs_model->disconnectSpaSessions();
+		$message = $disconnectedSessions > 0
+			? 'Usuários do Contex SPA desconectados com sucesso.'
+			: 'Não havia outras sessões do Contex SPA conectadas.';
+
+		gravaLog(
+			getUserId(),
+			getUserName(),
+			getUserEmail(),
+			$this->getSpaDisconnectionLogMessage($disconnectedSessions),
+			getenv('REMOTE_ADDR'),
+			'autenticacao',
+			'/configuracoes/disconnectSpaUsers'
+		);
+		$this->session->set_flashdata('sucesso', $message);
+
+		return $this->jsonResponse(
+			array(
+				'disconnectedSessions' => $disconnectedSessions,
+				'message'              => $message,
+			)
+		);
+	}
+
+	private function getSpaDisconnectionLogMessage($disconnectedSessions)
+	{
+		if ($disconnectedSessions === 1) {
+			return 'Desconexão coletiva do Contex SPA: 1 sessão removida';
+		}
+
+		return sprintf(
+			'Desconexão coletiva do Contex SPA: %d sessões removidas',
+			$disconnectedSessions
+		);
+	}
+
+	private function jsonResponse($data, $status = 200)
+	{
+		return $this->output
+			->set_status_header($status)
+			->set_content_type('application/json', 'utf-8')
+			->set_output(json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+	}
 }

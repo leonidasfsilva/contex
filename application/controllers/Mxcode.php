@@ -18,7 +18,7 @@ class Mxcode extends CI_Controller
         $this->load->helper('file');
         $this->load->library('upload');
         $this->load->library('image_lib');
-        $this->load->library('spa_csrf');
+        $this->load->library('SpaCsrf', null, 'spa_csrf');
     }
 
     public function index()
@@ -232,7 +232,17 @@ class Mxcode extends CI_Controller
                     'logado'    => true
                 );
 
+                if ($this->requisicaoApiSpa()) {
+                    $this->session->sess_regenerate(true);
+                }
+
                 $this->session->set_userdata($session_data);
+
+                if ($this->requisicaoApiSpa()) {
+                    $this->session->set_userdata('spa_authenticated', true);
+                    $this->session->set_userdata('spa_forced_logout', false);
+                }
+
                 $this->spa_csrf->rotateToken();
                 gravaLog(getUserId(), getUserName(), getUserEmail(), 'Login no sistema', getenv("REMOTE_ADDR"), 'autenticacao', '/mxcode/login');
                 reconciliarFinanceiro(getUserId(), 'login');
@@ -274,6 +284,17 @@ class Mxcode extends CI_Controller
 
     public function validaSessao()
     {
+        if ($this->session->userdata('spa_forced_logout')) {
+            return $this->responderJson(
+                array(
+                    'authenticated' => false,
+                    'code'          => 'SPA_SESSION_REVOKED',
+                    'message'       => 'Sua sessão no Contex SPA foi encerrada pelo administrador.',
+                ),
+                401
+            );
+        }
+
         if (!$this->session->userdata('logado')) {
             return $this->responderJson(
                 array(

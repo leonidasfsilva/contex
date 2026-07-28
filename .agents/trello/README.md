@@ -47,6 +47,27 @@ Prioridade para escolher o board: `-BoardId`, `TRELLO_BOARD_ID`, `TRELLO_PROJECT
 
 O arquivo `config.local.json` permanece apenas no projeto pai e nunca deve ser copiado para o `contex-spa`.
 
+## Padrões do projeto
+
+Antes de criar ou renomear arquivos, classes, métodos, variáveis, rotas ou estruturas, o agente deve inspecionar implementações equivalentes já existentes no projeto e seguir o padrão predominante do Contex.
+
+- O padrão local do projeto prevalece sobre convenções genéricas do framework, linguagem ou mercado, salvo decisão explícita em contrário.
+- Padrões e decisões definidos ou impostos pelo responsável do projeto têm precedência e devem ser seguidos mesmo quando divergirem das convenções gerais.
+- Não justificar uma nomenclatura apenas por ela ser aceita pelo CodeIgniter ou por outra ferramenta; ela também deve ser coerente com os arquivos vizinhos e componentes equivalentes do repositório.
+- Somente em projetos, módulos ou estruturas realmente criados do zero, sem precedente local nem padrão definido pelo responsável, adotar as convenções oficiais e atuais da tecnologia utilizada, como no projeto Vue.
+- Quando não houver precedente local claro, registrar a decisão técnica adotada antes de introduzir um novo padrão.
+
+## Fluxo de implementação, homologação e Git
+
+Durante a execução de uma tarefa ou correção, o agente deve modificar somente os arquivos necessários e aguardar a homologação do usuário antes de realizar operações de entrega no Git.
+
+- Não criar commit, executar `push`, abrir PR ou atualizar um PR durante ciclos intermediários de implementação e correção.
+- Correções solicitadas durante a homologação devem permanecer como alterações locais para que o usuário possa acompanhar e inspecionar o diff acumulado.
+- Após cada ajuste, executar somente as verificações técnicas proporcionais ao risco e informar os arquivos alterados e o resultado dos testes, sem publicar a entrega.
+- Realizar um único commit referente à tarefa-alvo e abrir ou atualizar um único PR somente após o usuário aprovar explicitamente a homologação.
+- Não consumir tempo ou contexto com commits e atualizações remotas para tentativas intermediárias que ainda podem ser rejeitadas ou corrigidas.
+- Exceções a esse fluxo exigem ordem explícita do usuário para commitar, enviar ou publicar antes da homologação.
+
 ## Codificação de texto
 
 O helper normaliza automaticamente os campos textuais enviados ao Trello para UTF-8. Entradas que chegarem em Windows-1252/ANSI são convertidas antes da chamada da API.
@@ -72,10 +93,17 @@ Não usar texto simples como título de seção. Depois de criar ou atualizar um
 
 Identificadores técnicos devem usar código inline com crases. A regra se aplica a nomes de tabelas, campos, métodos, funções, classes, arquivos, caminhos, rotas, variáveis de ambiente, comandos e valores literais.
 
-## Checklists de implementação
+## Checklists de implementação e homologação
 
-Quando a descrição de um card contiver etapas executáveis de infraestrutura, arquitetura, código, configuração, testes ou homologação, crie no próprio card uma ou mais checklists correspondentes antes de iniciar a execução.
+Todo novo card ou novo escopo executável deve ter obrigatoriamente duas checklists separadas antes do início da execução:
+
+- `Implementação`: itens de infraestrutura, arquitetura, código, configuração, documentação e verificações técnicas executadas pelo agente;
+- `Homologação`: cenários funcionais que dependem da validação e confirmação do usuário.
 
 - A descrição preserva contexto, decisões e critérios de conclusão.
-- As checklists decompõem somente as etapas verificáveis e podem ser agrupadas por assunto, como `Implementação` e `Homologação`.
+- As checklists decompõem somente etapas verificáveis.
+- O agente pode concluir itens da checklist `Implementação` após implementar e verificar tecnicamente a entrega.
+- Verificações automatizadas, inspeções HTTP, lint, testes e build são evidências técnicas e não equivalem à homologação do usuário.
+- Itens da checklist `Homologação` só podem ser concluídos após confirmação explícita do usuário para o cenário correspondente.
+- Comentários do card devem distinguir claramente `validado tecnicamente pelo agente` de `homologado pelo usuário`.
 - Não crie checklist para texto apenas informativo, sem ação concreta a executar ou validar.
