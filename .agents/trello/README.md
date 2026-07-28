@@ -72,10 +72,17 @@ Não usar texto simples como título de seção. Depois de criar ou atualizar um
 
 Identificadores técnicos devem usar código inline com crases. A regra se aplica a nomes de tabelas, campos, métodos, funções, classes, arquivos, caminhos, rotas, variáveis de ambiente, comandos e valores literais.
 
-## Checklists de implementação
+## Checklists de implementação e homologação
 
-Quando a descrição de um card contiver etapas executáveis de infraestrutura, arquitetura, código, configuração, testes ou homologação, crie no próprio card uma ou mais checklists correspondentes antes de iniciar a execução.
+Todo novo card ou novo escopo executável deve ter obrigatoriamente duas checklists separadas antes do início da execução:
+
+- `Implementação`: itens de infraestrutura, arquitetura, código, configuração, documentação e verificações técnicas executadas pelo agente;
+- `Homologação`: cenários funcionais que dependem da validação e confirmação do usuário.
 
 - A descrição preserva contexto, decisões e critérios de conclusão.
-- As checklists decompõem somente as etapas verificáveis e podem ser agrupadas por assunto, como `Implementação` e `Homologação`.
+- As checklists decompõem somente etapas verificáveis.
+- O agente pode concluir itens da checklist `Implementação` após implementar e verificar tecnicamente a entrega.
+- Verificações automatizadas, inspeções HTTP, lint, testes e build são evidências técnicas e não equivalem à homologação do usuário.
+- Itens da checklist `Homologação` só podem ser concluídos após confirmação explícita do usuário para o cenário correspondente.
+- Comentários do card devem distinguir claramente `validado tecnicamente pelo agente` de `homologado pelo usuário`.
 - Não crie checklist para texto apenas informativo, sem ação concreta a executar ou validar.
