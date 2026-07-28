@@ -2,7 +2,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Spa_csrf
+class SpaCsrf
 {
     const SESSION_KEY = 'spa_csrf_token';
 

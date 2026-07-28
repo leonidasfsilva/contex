@@ -18,7 +18,7 @@ class Mxcode extends CI_Controller
         $this->load->helper('file');
         $this->load->library('upload');
         $this->load->library('image_lib');
-        $this->load->library('spa_csrf');
+        $this->load->library('SpaCsrf', null, 'spa_csrf');
     }
 
     public function index()

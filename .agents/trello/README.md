@@ -47,6 +47,15 @@ Prioridade para escolher o board: `-BoardId`, `TRELLO_BOARD_ID`, `TRELLO_PROJECT
 
 O arquivo `config.local.json` permanece apenas no projeto pai e nunca deve ser copiado para o `contex-spa`.
 
+## Padrões do projeto
+
+Antes de criar ou renomear arquivos, classes, métodos, variáveis, rotas ou estruturas, o agente deve inspecionar implementações equivalentes já existentes no projeto e seguir o padrão predominante do Contex.
+
+- O padrão local do projeto prevalece sobre convenções genéricas do framework, linguagem ou mercado, salvo decisão explícita em contrário.
+- Não justificar uma nomenclatura apenas por ela ser aceita pelo CodeIgniter ou por outra ferramenta; ela também deve ser coerente com os arquivos vizinhos e componentes equivalentes do repositório.
+- Em caso de divergência entre o padrão do projeto e o padrão do framework, aplicar a regra: "em terra de sapo, de cócoras com ele".
+- Quando não houver precedente local claro, registrar a decisão técnica adotada antes de introduzir um novo padrão.
+
 ## Codificação de texto
 
 O helper normaliza automaticamente os campos textuais enviados ao Trello para UTF-8. Entradas que chegarem em Windows-1252/ANSI são convertidas antes da chamada da API.
