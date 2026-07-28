@@ -57,6 +57,17 @@ Antes de criar ou renomear arquivos, classes, métodos, variáveis, rotas ou est
 - Somente em projetos, módulos ou estruturas realmente criados do zero, sem precedente local nem padrão definido pelo responsável, adotar as convenções oficiais e atuais da tecnologia utilizada, como no projeto Vue.
 - Quando não houver precedente local claro, registrar a decisão técnica adotada antes de introduzir um novo padrão.
 
+## Fluxo de implementação, homologação e Git
+
+Durante a execução de uma tarefa ou correção, o agente deve modificar somente os arquivos necessários e aguardar a homologação do usuário antes de realizar operações de entrega no Git.
+
+- Não criar commit, executar `push`, abrir PR ou atualizar um PR durante ciclos intermediários de implementação e correção.
+- Correções solicitadas durante a homologação devem permanecer como alterações locais para que o usuário possa acompanhar e inspecionar o diff acumulado.
+- Após cada ajuste, executar somente as verificações técnicas proporcionais ao risco e informar os arquivos alterados e o resultado dos testes, sem publicar a entrega.
+- Realizar um único commit referente à tarefa-alvo e abrir ou atualizar um único PR somente após o usuário aprovar explicitamente a homologação.
+- Não consumir tempo ou contexto com commits e atualizações remotas para tentativas intermediárias que ainda podem ser rejeitadas ou corrigidas.
+- Exceções a esse fluxo exigem ordem explícita do usuário para commitar, enviar ou publicar antes da homologação.
+
 ## Codificação de texto
 
 O helper normaliza automaticamente os campos textuais enviados ao Trello para UTF-8. Entradas que chegarem em Windows-1252/ANSI são convertidas antes da chamada da API.

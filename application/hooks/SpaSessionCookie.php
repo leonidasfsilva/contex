@@ -11,6 +11,6 @@ function selectSpaSessionCookie()
 
     if (strpos($routePath, 'api/v1/') === 0) {
         $GLOBALS['CFG']->set_item('sess_cookie_name', 'api_session');
-        $GLOBALS['CFG']->set_item('sess_expiration', 60);
+        $GLOBALS['CFG']->set_item('sess_expiration', 7200);
     }
 }
