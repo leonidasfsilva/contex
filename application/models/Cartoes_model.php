@@ -22,7 +22,9 @@ class Cartoes_model extends CI_Model
         $this->db->select($fields);
         $this->db->from($table);
         $this->db->order_by('vencimento', 'asc');
-        $this->db->limit($perpage, $start);
+        if ($perpage > 0) {
+            $this->db->limit($perpage, $start);
+        }
         if ($where) {
             $this->db->where($where . ' AND status = 1 AND id_usuario = ' . $id_usuario);
         } else {
@@ -40,7 +42,9 @@ class Cartoes_model extends CI_Model
         $this->db->select($fields);
         $this->db->from($table);
         $this->db->order_by('data_compra', 'id_assoc', 'asc');
-        $this->db->limit($perpage, $start);
+        if ($perpage > 0) {
+            $this->db->limit($perpage, $start);
+        }
         if ($where) {
             $this->db->where($where);
             $this->db->where('status', 1);
@@ -60,7 +64,9 @@ class Cartoes_model extends CI_Model
         $this->db->select($fields);
         $this->db->from($table);
         $this->db->order_by('id_lancamento', 'asc');
-        $this->db->limit($perpage, $start);
+        if ($perpage > 0) {
+            $this->db->limit($perpage, $start);
+        }
         if ($where) {
             $this->db->where($where);
             $this->db->where('status', 1);

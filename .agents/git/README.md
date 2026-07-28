@@ -29,3 +29,19 @@ feature/273-titulo-do-card
 ```
 
 Nao inserir o prefixo `card-` antes do numero.
+
+## Bugs sem card prévio
+
+Quando o desenvolvedor relatar um bug que não possua card prévio, criar a branch sem número de card:
+
+```text
+bugfix/{descricao-do-bug}
+```
+
+Exemplo:
+
+```text
+bugfix/corrige-limit-zero-ci-3113
+```
+
+Não reutilizar o número de um card antigo apenas porque a regressão foi causada por uma entrega relacionada a ele.

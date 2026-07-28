@@ -23,7 +23,9 @@ class Os_model extends CI_Model
         $this->db->select($fields . ',clientes.nome');
         $this->db->from($table);
         $this->db->join('clientes', 'clientes.id_clientes = os.id_cliente');
-        $this->db->limit($perpage, $start);
+        if ($perpage > 0) {
+            $this->db->limit($perpage, $start);
+        }
         $this->db->order_by('idOs', 'desc');
         if ($where) {
             $this->db->where($where);
@@ -84,7 +86,9 @@ class Os_model extends CI_Model
             $this->db->where('dataFinal <=', $where['ate']);
         }
 
-        $this->db->limit($perpage, $start);
+        if ($perpage > 0) {
+            $this->db->limit($perpage, $start);
+        }
 
 
         $this->db->order_by('os.idOs', 'desc');

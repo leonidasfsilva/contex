@@ -23,7 +23,10 @@ class Despesa_model extends CI_Model
     function get($where = null, $limit = null, $rows = 0, $perpage = 0, $start = 0, $order_by = null, $one = false)
     {
         $this->db->from($this->despesasTable);
-        $this->db->limit($perpage, $start);
+
+        if ($perpage > 0) {
+            $this->db->limit($perpage, $start);
+        }
         $this->db->where('status', 1);
         $this->db->where('id_usuario', getUserId());
 
@@ -57,7 +60,10 @@ class Despesa_model extends CI_Model
     function getDespesas($where = '', $perpage = 0, $start = 0, $order_by = null, $one = false, $idUsuario = null)
     {
         $this->db->from($this->despesasTable);
-        $this->db->limit($perpage, $start);
+
+        if ($perpage > 0) {
+            $this->db->limit($perpage, $start);
+        }
 
         $idUsuario = $idUsuario ?: getUserId();
 
@@ -86,7 +92,10 @@ class Despesa_model extends CI_Model
     function getLancamentosDespesa($idDespesa, $where = '', $limit = null, $rows = 0, $perpage = 0, $start = 0, $order_by = null, $one = false)
     {
         $this->db->from($this->lancamentosDespesasTable);
-        $this->db->limit($perpage, $start);
+
+        if ($perpage > 0) {
+            $this->db->limit($perpage, $start);
+        }
 
         if ($where) {
             $this->db->where($where);
@@ -125,7 +134,10 @@ class Despesa_model extends CI_Model
         if ($fields) $this->db->select($fields);
 
         $this->db->from($this->lancamentosDespesasTable);
-        $this->db->limit($perpage, $start);
+
+        if ($perpage > 0) {
+            $this->db->limit($perpage, $start);
+        }
         $this->db->where('status', 1);
         $this->db->where('registro_vinculado', 1);
         $this->db->where('id_despesa', $idDespesa);

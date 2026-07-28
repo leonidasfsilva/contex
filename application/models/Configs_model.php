@@ -14,7 +14,9 @@ class Configs_model extends CI_Model
 	{
 		$this->db->select($fields);
 		$this->db->from($table);
-		$this->db->limit($perpage, $start);
+		if ($perpage > 0) {
+			$this->db->limit($perpage, $start);
+		}
 		if ($where) {
 			$this->db->where($where);
 		}
@@ -342,11 +344,13 @@ class Configs_model extends CI_Model
 	
 	public function getLogsSistema($perpage, $start)
 	{
-		return $this->db
-			->limit($perpage, $start)
-			->order_by('data_registro', 'desc')
-			->get('logs')
-			->result();
+		$this->db->order_by('data_registro', 'desc');
+
+		if ($perpage > 0) {
+			$this->db->limit($perpage, $start);
+		}
+
+		return $this->db->get('logs')->result();
 	}
 	
 	public function getMesPadraoUsuario($idUsuario)

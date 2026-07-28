@@ -7,6 +7,8 @@
 - Sempre trabalhar em branches separadas
 - Para tarefas originadas de cards do Trello, criar a branch a partir da `master` atualizada usando o padrão `feature/{numero-card}-{slug-do-card}`.
 - Exemplo: `feature/262-corrigir-view-de-pesquisa-da-navbar`.
+- Quando o desenvolvedor relatar um bug sem card prévio, criar a branch sem número de card, usando o padrão `bugfix/{descricao-do-bug}`.
+- Não associar a branch de correção ao número de um card antigo apenas porque a regressão foi causada ou introduzida pelo escopo daquele card.
 - Commits com mensagens curtas e em inglês
 
 ### 2. Comunicação
