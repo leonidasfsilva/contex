@@ -111,14 +111,14 @@
 - Nas descrições dos cards, todos os tópicos e seções devem usar o padrão Markdown de Título 3: `### Nome da seção`. Não usar texto simples como título de seção.
 - Nas descrições dos cards, identificadores técnicos devem usar código inline com crases. Isso inclui nomes de tabelas, campos, métodos, funções, classes, arquivos, caminhos, rotas, variáveis de ambiente, comandos e valores literais, por exemplo: `usuarios_passkeys`, `id_usuario` e `reconciliarFinanceiro()`.
 - Todo texto enviado ao Trello deve estar em UTF-8 real. É proibido enviar título, descrição, comentário ou nome de anexo em ANSI/Windows-1252 ou confiar em saída com mojibake.
-- O fluxo operacional deve usar `.agents/trello/trello.sh`, que normaliza entradas textuais para UTF-8 antes da chamada da API. Não contornar o helper com PowerShell ou chamada crua sem normalização equivalente.
+- O agente pode usar qualquer ferramenta adequada para acessar o Trello, desde que envie texto em UTF-8 real e cumpra as regras de conteúdo, validação e posicionamento dos cards.
 - Após criar ou atualizar um card, consultar novamente o card e validar título, descrição, formatação das seções com `###`, identificadores técnicos com código inline e posição na lista. Sequências percentuais literais como `%E7`, `%E3`, mojibake ou caracteres corrompidos devem ser corrigidos imediatamente antes de reportar conclusão.
 - Escopo, requisitos e decisões do projeto devem ser registrados na descrição do card. Comentários são reservados ao registro de entrega, resultado, PR e fechamento.
 - Quando a descrição de um card contiver etapas executáveis de infraestrutura, arquitetura, código, configuração, testes ou homologação, criar no próprio card uma ou mais checklists correspondentes antes de iniciar a execução.
 - A descrição deve preservar contexto, decisões e critérios de conclusão; as checklists devem decompor apenas as etapas verificáveis, agrupadas por assunto quando isso tornar a execução mais clara.
 - Não criar checklist para conteúdo apenas informativo, sem ação concreta a executar ou validar.
 - Ao finalizar um card, mover para a lista `Finalizado` sempre no topo da lista.
-- O helper `.agents/trello/trello.sh` deve manter esse comportamento como padrão ao mover cards.
+- Independentemente da ferramenta utilizada, o agente deve conferir a posição do card após a movimentação.
 
 ## Contexto do Projeto
 
