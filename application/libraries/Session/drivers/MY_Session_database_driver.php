@@ -32,7 +32,7 @@ class MY_Session_database_driver extends CI_Session_database_driver
         }
 
         if ($this->_row_exists === false) {
-            return parent::write($sessionId, $sessionData);
+            return $this->_success;
         }
 
         if ($this->_fingerprint === md5($sessionData)) {
