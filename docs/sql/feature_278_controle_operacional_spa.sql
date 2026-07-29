@@ -1,5 +1,5 @@
 INSERT INTO configs_opcoes (descricao, setor, ativo, status)
-VALUES ('ACESSO A API FRONTEND', 'SISTEMA', 1, 1);
+VALUES ('DESATIVAR API FRONTEND', 'SISTEMA', 0, 1);
 
 INSERT INTO configs_opcoes (descricao, setor, ativo, status)
 VALUES ('DESCONEXAO DE USUARIOS API FRONTEND', 'SISTEMA', 0, 1);

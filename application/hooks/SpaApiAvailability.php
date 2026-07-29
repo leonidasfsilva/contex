@@ -15,7 +15,7 @@ class SpaApiAvailability
         $CI = get_instance();
         $CI->load->model('configs_model');
 
-        if ($CI->configs_model->isSpaApiEnabled()) {
+        if (!$CI->configs_model->isSpaApiDisabled()) {
             return;
         }
 
