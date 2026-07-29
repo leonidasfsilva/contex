@@ -55,6 +55,7 @@ class Configuracoes extends CI_Controller
 		$data['menuConfiguracoes'] = true;
 		$data['modulosBusca']      = $this->configs_model->getModulosBuscaGlobal(getUserId());
 		$data['spaApiEnabled']     = $this->configs_model->isSpaApiEnabled();
+		$data['spaForcedLogout']   = $this->configs_model->isSpaForcedLogoutEnabled();
 		$data['results']           = $this->configs_model->getConfigs();
 		$data['view']              = 'configuracoes/sistema';
 		$this->load->view('tema/topo', $data);
@@ -486,6 +487,20 @@ class Configuracoes extends CI_Controller
 				->set_output(json_encode(array('message' => 'Não foi possível atualizar o acesso do SPA.')));
 		}
 
+		if ($enabled === '1' && !$this->configs_model->setSpaForcedLogoutEnabled(false)) {
+			return $this->output
+				->set_status_header(500)
+				->set_content_type('application/json', 'utf-8')
+				->set_output(json_encode(array('message' => 'Não foi possível desativar a desconexão da API Frontend.')));
+		}
+
+		$this->session->set_flashdata(
+			'sucesso',
+			$enabled === '1'
+				? 'API Frontend ativada com sucesso.'
+				: 'API Frontend desativada com sucesso.'
+		);
+
 		return $this->output
 			->set_content_type('application/json', 'utf-8')
 			->set_output(json_encode(array('enabled' => $enabled === '1')));
@@ -509,10 +524,33 @@ class Configuracoes extends CI_Controller
 			return $this->jsonResponse(array('message' => 'Requisição inválida.'), 400);
 		}
 
+		$enabled = $this->input->post('enabled');
+
+		if (!in_array($enabled, array('0', '1'), true)) {
+			return $this->jsonResponse(array('message' => 'Estado inválido.'), 422);
+		}
+
+		if ($enabled === '0') {
+			if (!$this->configs_model->setSpaForcedLogoutEnabled(false)) {
+				return $this->jsonResponse(array('message' => 'Não foi possível desativar a desconexão da API Frontend.'), 500);
+			}
+
+			$this->session->set_flashdata('sucesso', 'Desconexão de usuários da API Frontend desativada com sucesso.');
+
+			return $this->jsonResponse(array('enabled' => false));
+		}
+
+		if (
+			!$this->configs_model->setSpaApiEnabled(false) ||
+			!$this->configs_model->setSpaForcedLogoutEnabled(true)
+		) {
+			return $this->jsonResponse(array('message' => 'Não foi possível ativar a desconexão da API Frontend.'), 500);
+		}
+
 		$disconnectedSessions = $this->configs_model->disconnectSpaSessions();
 		$message = $disconnectedSessions > 0
-			? 'Usuários do Contex SPA desconectados com sucesso.'
-			: 'Não havia outras sessões do Contex SPA conectadas.';
+			? 'Desconexão de usuários da API Frontend ativada. ' . $disconnectedSessions . ($disconnectedSessions === 1 ? ' sessão removida.' : ' sessões removidas.')
+			: 'Desconexão de usuários da API Frontend ativada. Não havia sessões conectadas.';
 
 		gravaLog(
 			getUserId(),

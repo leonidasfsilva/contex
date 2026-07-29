@@ -47,6 +47,13 @@
 - Exemplos: `feat: add user auth`, `fix: resolve db connection`, `docs: update migration guide`
 
 ### 5. Banco de Dados e SQL
+- Antes de qualquer escrita direta em banco de dados, inclusive no ambiente de desenvolvimento, o agente deve executar somente consultas de leitura para inspecionar o estado atual, identificar registros, vínculos, duplicidades e padrões já existentes.
+- Após a inspeção, o agente deve apresentar no chat o diagnóstico e a SQL exata proposta, informando o impacto esperado.
+- `INSERT`, `UPDATE`, `DELETE`, alterações de schema, execução de scripts, migrations e qualquer outra mutação no banco só podem ser executados após autorização explícita do desenvolvedor para aquela operação.
+- Uma autorização para criar ou corrigir o arquivo SQL não implica autorização para executá-lo no banco. Frases que indiquem apenas possibilidade técnica, como “pode apagar e refazer”, não devem ser interpretadas como ordem de execução sem confirmação explícita.
+- Antes de referenciar ou inserir uma chave primária manualmente, o agente deve inspecionar o schema, o `AUTO_INCREMENT`, os registros existentes e os vínculos relacionados. Não escolher IDs por faixa presumida, conveniência ou para evitar colisões sem evidência do banco.
+- Em tabelas com chave primária `AUTO_INCREMENT`, novos registros devem omitir a coluna da PK e deixar o banco atribuir o ID. IDs explícitos só podem ser usados quando constituírem uma chave técnica estável já definida pelo projeto e forem aprovados pelo desenvolvedor.
+- Regras funcionais não devem depender de IDs auto-incrementais arbitrários. O código deve localizar o registro por chave funcional estável ou por relacionamento persistido, conforme o padrão do projeto.
 - Scripts SQL versionados devem preservar compatibilidade com o fluxo operacional do projeto: exportar de produção e injetar diretamente no banco local via HeidiSQL, com `Criar Tabela` habilitado.
 - Ao criar tabelas novas, não usar `utf8mb4` sem `COLLATE` explícito.
 - Para tabelas novas do Contex, usar por padrão:

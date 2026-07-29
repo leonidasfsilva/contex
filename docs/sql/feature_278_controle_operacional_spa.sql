@@ -1,6 +1,11 @@
+INSERT INTO configs_opcoes (descricao, setor, ativo, status)
+VALUES ('ACESSO A API FRONTEND', 'SISTEMA', 1, 1);
+
+INSERT INTO configs_opcoes (descricao, setor, ativo, status)
+VALUES ('DESCONEXAO DE USUARIOS API FRONTEND', 'SISTEMA', 0, 1);
+
 INSERT INTO configs_opcoes (id, descricao, setor, ativo, status)
-VALUES (100, 'ACESSO DO CONTEX SPA A API', 'SISTEMA', 1, 1)
-ON DUPLICATE KEY UPDATE
-    descricao = VALUES(descricao),
-    setor = VALUES(setor),
-    status = 1;
+VALUES (98, 'DESCONECTAR USUARIOS CONECTADOS', 'SISTEMA', 1, 1);
+
+INSERT INTO configs_opcoes (id, descricao, setor, ativo, status)
+VALUES (99, 'MODO MANUTENCAO', 'SISTEMA', 1, 1);
