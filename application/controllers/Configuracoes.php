@@ -54,7 +54,7 @@ class Configuracoes extends CI_Controller
 		// $data['maintenanceMode']   = $this->load->get_var('maintenanceMode');
 		$data['menuConfiguracoes'] = true;
 		$data['modulosBusca']      = $this->configs_model->getModulosBuscaGlobal(getUserId());
-		$data['spaApiEnabled']     = $this->configs_model->isSpaApiEnabled();
+		$data['spaApiDisabled']    = $this->configs_model->isSpaApiDisabled();
 		$data['spaForcedLogout']   = $this->configs_model->isSpaForcedLogoutEnabled();
 		$data['results']           = $this->configs_model->getConfigs();
 		$data['view']              = 'configuracoes/sistema';
@@ -471,23 +471,27 @@ class Configuracoes extends CI_Controller
 				->set_output(json_encode(array('message' => 'Permissão insuficiente.')));
 		}
 
-		$enabled = $this->input->post('enabled');
+		$disabled = $this->input->post('disabled');
 
-		if (!in_array($enabled, array('0', '1'), true)) {
+		if (!in_array($disabled, array('0', '1'), true)) {
 			return $this->output
 				->set_status_header(422)
 				->set_content_type('application/json', 'utf-8')
 				->set_output(json_encode(array('message' => 'Estado inválido.')));
 		}
 
-		if (!$this->configs_model->setSpaApiEnabled($enabled === '1')) {
+		$updated = $disabled === '1'
+			? $this->configs_model->activateSpaApiDisabled(getUserId())
+			: $this->configs_model->deactivateSpaApiDisabled();
+
+		if (!$updated) {
 			return $this->output
 				->set_status_header(500)
 				->set_content_type('application/json', 'utf-8')
 				->set_output(json_encode(array('message' => 'Não foi possível atualizar o acesso do SPA.')));
 		}
 
-		if ($enabled === '1' && !$this->configs_model->setSpaForcedLogoutEnabled(false)) {
+		if ($disabled === '0' && !$this->configs_model->deactivateSpaForcedLogout()) {
 			return $this->output
 				->set_status_header(500)
 				->set_content_type('application/json', 'utf-8')
@@ -496,14 +500,14 @@ class Configuracoes extends CI_Controller
 
 		$this->session->set_flashdata(
 			'sucesso',
-			$enabled === '1'
-				? 'API Frontend ativada com sucesso.'
-				: 'API Frontend desativada com sucesso.'
+			$disabled === '1'
+				? 'API Frontend desativada com sucesso.'
+				: 'API Frontend ativada com sucesso.'
 		);
 
 		return $this->output
 			->set_content_type('application/json', 'utf-8')
-			->set_output(json_encode(array('enabled' => $enabled === '1')));
+			->set_output(json_encode(array('disabled' => $disabled === '1')));
 	}
 
 	public function disconnectSpaUsers()
@@ -531,7 +535,7 @@ class Configuracoes extends CI_Controller
 		}
 
 		if ($enabled === '0') {
-			if (!$this->configs_model->setSpaForcedLogoutEnabled(false)) {
+			if (!$this->configs_model->deactivateSpaForcedLogout()) {
 				return $this->jsonResponse(array('message' => 'Não foi possível desativar a desconexão da API Frontend.'), 500);
 			}
 
@@ -541,8 +545,8 @@ class Configuracoes extends CI_Controller
 		}
 
 		if (
-			!$this->configs_model->setSpaApiEnabled(false) ||
-			!$this->configs_model->setSpaForcedLogoutEnabled(true)
+			(!$this->configs_model->isSpaApiDisabled() && !$this->configs_model->activateSpaApiDisabled(getUserId())) ||
+			!$this->configs_model->activateSpaForcedLogout(getUserId())
 		) {
 			return $this->jsonResponse(array('message' => 'Não foi possível ativar a desconexão da API Frontend.'), 500);
 		}

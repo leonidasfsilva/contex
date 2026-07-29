@@ -14,7 +14,7 @@ Depois de executar `feature_278_controle_operacional_spa.sql`, confirmar:
 SELECT id, descricao, setor, ativo, status
 FROM configs_opcoes
 WHERE descricao IN (
-    'ACESSO A API FRONTEND',
+    'DESATIVAR API FRONTEND',
     'DESCONEXAO DE USUARIOS API FRONTEND',
     'DESCONECTAR USUARIOS CONECTADOS',
     'MODO MANUTENCAO'
@@ -24,7 +24,7 @@ ORDER BY id;
 
 Resultado esperado:
 
-- um único registro `ACESSO A API FRONTEND`, setor `SISTEMA`, `ativo = 1` e `status = 1`;
+- um único registro `DESATIVAR API FRONTEND`, setor `SISTEMA`, `ativo = 0` e `status = 1`;
 - um único registro `DESCONEXAO DE USUARIOS API FRONTEND`, setor `SISTEMA`, `ativo = 0` e `status = 1`;
 - IDs atribuídos automaticamente pelo banco, sem valores fixos no script.
 - ID `98`: `DESCONECTAR USUARIOS CONECTADOS`, setor `SISTEMA`, `ativo = 1` e `status = 1`;

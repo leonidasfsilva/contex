@@ -30,7 +30,7 @@
                 <label for="force-logout-switch" class="switch-label primary font-weight-bold">Desconectar usuários conectados</label>
             </div>
             <div>
-                <input type="checkbox" id="spa-api-switch" name="spaApiDisabled" class="switch-input primary" <?= !$spaApiEnabled ? 'checked' : '' ?>>
+                <input type="checkbox" id="spa-api-switch" name="spaApiDisabled" class="switch-input primary" <?= $spaApiDisabled ? 'checked' : '' ?>>
                 <label for="spa-api-switch" class="switch-label primary font-weight-bold">Desativar API Frontend</label>
             </div>
             <div>
@@ -410,7 +410,7 @@
             $.ajax({
                 type: 'POST',
                 url: "<?= base_url('configuracoes/setSpaApiStatus'); ?>",
-                data: { enabled: disabled ? 0 : 1 },
+                data: { disabled: disabled ? 1 : 0 },
                 dataType: 'json',
                 success: function () {
                     location.reload()

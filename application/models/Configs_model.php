@@ -4,7 +4,7 @@
 
 class Configs_model extends CI_Model
 {
-	const SPA_API_ACCESS_DESCRIPTION = 'ACESSO A API FRONTEND';
+	const SPA_API_DISABLED_DESCRIPTION = 'DESATIVAR API FRONTEND';
 	const SPA_FORCED_LOGOUT_DESCRIPTION = 'DESCONEXAO DE USUARIOS API FRONTEND';
 	function __construct()
 	{
@@ -405,77 +405,107 @@ class Configs_model extends CI_Model
 			->row();
 	}
 
-	public function isSpaApiEnabled()
+	public function isSpaApiDisabled()
 	{
-		$option = $this->db
-			->where('descricao', self::SPA_API_ACCESS_DESCRIPTION)
-			->where('setor', 'SISTEMA')
-			->where('status', 1)
-			->order_by('id', 'asc')
-			->get('configs_opcoes')
-			->row();
-
-		return !$option || (bool)$option->ativo;
+		return $this->hasSystemConfigAssociation(self::SPA_API_DISABLED_DESCRIPTION);
 	}
 
-	public function setSpaApiEnabled($enabled)
+	public function activateSpaApiDisabled($idUsuario)
 	{
-		$data = array(
-			'descricao' => self::SPA_API_ACCESS_DESCRIPTION,
-			'setor'     => 'SISTEMA',
-			'ativo'     => $enabled ? 1 : 0,
-			'status'    => 1,
-		);
+		return $this->activateSystemConfigAssociation(self::SPA_API_DISABLED_DESCRIPTION, $idUsuario);
+	}
 
-		$exists = $this->db
-			->where('descricao', self::SPA_API_ACCESS_DESCRIPTION)
-			->where('setor', 'SISTEMA')
-			->count_all_results('configs_opcoes') > 0;
-
-		if ($exists) {
-			return $this->db
-				->where('descricao', self::SPA_API_ACCESS_DESCRIPTION)
-				->where('setor', 'SISTEMA')
-				->update('configs_opcoes', $data);
-		}
-
-		return $this->db->insert('configs_opcoes', $data);
+	public function deactivateSpaApiDisabled()
+	{
+		return $this->deactivateSystemConfigAssociation(self::SPA_API_DISABLED_DESCRIPTION);
 	}
 
 	public function isSpaForcedLogoutEnabled()
 	{
-		$option = $this->db
-			->where('descricao', self::SPA_FORCED_LOGOUT_DESCRIPTION)
-			->where('setor', 'SISTEMA')
-			->where('status', 1)
-			->get('configs_opcoes')
-			->row();
-
-		return $option && (bool)$option->ativo;
+		return $this->hasSystemConfigAssociation(self::SPA_FORCED_LOGOUT_DESCRIPTION);
 	}
 
-	public function setSpaForcedLogoutEnabled($enabled)
+	public function activateSpaForcedLogout($idUsuario)
 	{
-		$data = array(
-			'descricao' => self::SPA_FORCED_LOGOUT_DESCRIPTION,
-			'setor'     => 'SISTEMA',
-			'ativo'     => $enabled ? 1 : 0,
-			'status'    => 1,
-		);
+		return $this->activateSystemConfigAssociation(self::SPA_FORCED_LOGOUT_DESCRIPTION, $idUsuario);
+	}
 
-		$exists = $this->db
-			->where('descricao', self::SPA_FORCED_LOGOUT_DESCRIPTION)
-			->where('setor', 'SISTEMA')
-			->count_all_results('configs_opcoes') > 0;
+	public function deactivateSpaForcedLogout()
+	{
+		return $this->deactivateSystemConfigAssociation(self::SPA_FORCED_LOGOUT_DESCRIPTION);
+	}
 
-		if ($exists) {
-			return $this->db
-				->where('descricao', self::SPA_FORCED_LOGOUT_DESCRIPTION)
-				->where('setor', 'SISTEMA')
-				->update('configs_opcoes', $data);
+	private function hasSystemConfigAssociation($description)
+	{
+		return (bool)$this->db
+			->from('configs_usuario_assoc')
+			->join('configs_opcoes', 'configs_opcoes.id = configs_usuario_assoc.id_config_opcao')
+			->where('configs_opcoes.descricao', $description)
+			->where('configs_opcoes.setor', 'SISTEMA')
+			->where('configs_opcoes.status', 1)
+			->limit(1)
+			->get()
+			->row();
+	}
+
+	private function activateSystemConfigAssociation($description, $idUsuario)
+	{
+		$option = $this->getSystemConfigOption($description);
+
+		if (!$option) {
+			return false;
 		}
 
-		return $this->db->insert('configs_opcoes', $data);
+		$exists = $this->db
+			->where('id_config_opcao', $option->id)
+			->count_all_results('configs_usuario_assoc') > 0;
+
+		if ($exists) {
+			return true;
+		}
+
+		return $this->db->insert(
+			'configs_usuario_assoc',
+			array(
+				'id_config_opcao' => $option->id,
+				'id_usuario'      => $idUsuario,
+			)
+		);
+	}
+
+	private function deactivateSystemConfigAssociation($description)
+	{
+		$option = $this->getSystemConfigOption($description);
+
+		if (!$option) {
+			return false;
+		}
+
+		$exists = $this->db
+			->where('id_config_opcao', $option->id)
+			->count_all_results('configs_usuario_assoc') > 0;
+
+		if (!$exists) {
+			return true;
+		}
+
+		$this->db
+			->where('id_config_opcao', $option->id)
+			->delete('configs_usuario_assoc');
+
+		return $this->db->affected_rows() > 0;
+	}
+
+	private function getSystemConfigOption($description)
+	{
+		return $this->db
+			->where('descricao', $description)
+			->where('setor', 'SISTEMA')
+			->where('status', 1)
+			->order_by('id', 'asc')
+			->limit(1)
+			->get('configs_opcoes')
+			->row();
 	}
 
 	public function disconnectSpaSessions()
