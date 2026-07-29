@@ -30,12 +30,12 @@
                 <label for="force-logout-switch" class="switch-label primary font-weight-bold">Desconectar usuários conectados</label>
             </div>
             <div>
-                <input type="checkbox" id="spa-api-switch" name="spaApiDisabled" class="switch-input primary" <?= $spaApiDisabled ? 'checked' : '' ?>>
-                <label for="spa-api-switch" class="switch-label primary font-weight-bold">Desativar API Frontend</label>
+                <input type="checkbox" id="api-frontend-switch" name="apiDisabled" class="switch-input primary" <?= $apiDisabled ? 'checked' : '' ?>>
+                <label for="api-frontend-switch" class="switch-label primary font-weight-bold">Desativar API Frontend</label>
             </div>
             <div>
-                <input type="checkbox" id="disconnect-spa-users-switch" class="switch-input primary" <?= $spaForcedLogout ? 'checked' : '' ?>>
-                <label for="disconnect-spa-users-switch" class="switch-label primary font-weight-bold">Desconectar usuários API Frontend</label>
+                <input type="checkbox" id="disconnect-api-users-switch" class="switch-input primary" <?= $apiForcedLogout ? 'checked' : '' ?>>
+                <label for="disconnect-api-users-switch" class="switch-label primary font-weight-bold">Desconectar usuários API Frontend</label>
             </div>
         </form>
     </div>
@@ -403,13 +403,13 @@
             $(this).prop('disabled', true)
         })
 
-        $('#spa-api-switch').change(function () {
+        $('#api-frontend-switch').change(function () {
             const control = $(this)
             const disabled = control.is(':checked')
 
             $.ajax({
                 type: 'POST',
-                url: "<?= base_url('configuracoes/setSpaApiStatus'); ?>",
+                url: "<?= base_url('configuracoes/setApiStatus'); ?>",
                 data: { disabled: disabled ? 1 : 0 },
                 dataType: 'json',
                 success: function () {
@@ -421,22 +421,22 @@
             })
 
             if (!disabled) {
-                $('#disconnect-spa-users-switch').prop('checked', false)
-                $('#disconnect-spa-users-switch').prop('disabled', true)
+                $('#disconnect-api-users-switch').prop('checked', false)
+                $('#disconnect-api-users-switch').prop('disabled', true)
             }
 
             control.prop('disabled', true)
         })
 
-        $('#disconnect-spa-users-switch').change(function () {
+        $('#disconnect-api-users-switch').change(function () {
             if ($(this).is(':checked')) {
-                $('#spa-api-switch').prop('checked', true)
-                $('#spa-api-switch').prop('disabled', true)
+                $('#api-frontend-switch').prop('checked', true)
+                $('#api-frontend-switch').prop('disabled', true)
             }
 
             $.ajax({
                 type: 'POST',
-                url: "<?= base_url('configuracoes/disconnectSpaUsers'); ?>",
+                url: "<?= base_url('configuracoes/disconnectApiUsers'); ?>",
                 data: { enabled: $(this).is(':checked') ? 1 : 0 },
                 dataType: 'json',
                 success: function () {
