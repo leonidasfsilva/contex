@@ -4,6 +4,8 @@
 
 class Configs_model extends CI_Model
 {
+	const SPA_API_ACCESS_DESCRIPTION = 'ACESSO A API FRONTEND';
+	const SPA_FORCED_LOGOUT_DESCRIPTION = 'DESCONEXAO DE USUARIOS API FRONTEND';
 	function __construct()
 	{
 		parent::__construct();
@@ -406,8 +408,10 @@ class Configs_model extends CI_Model
 	public function isSpaApiEnabled()
 	{
 		$option = $this->db
-			->where('id', 100)
+			->where('descricao', self::SPA_API_ACCESS_DESCRIPTION)
+			->where('setor', 'SISTEMA')
 			->where('status', 1)
+			->order_by('id', 'asc')
 			->get('configs_opcoes')
 			->row();
 
@@ -417,23 +421,59 @@ class Configs_model extends CI_Model
 	public function setSpaApiEnabled($enabled)
 	{
 		$data = array(
-			'descricao' => 'ACESSO DO CONTEX SPA A API',
+			'descricao' => self::SPA_API_ACCESS_DESCRIPTION,
 			'setor'     => 'SISTEMA',
 			'ativo'     => $enabled ? 1 : 0,
 			'status'    => 1,
 		);
 
 		$exists = $this->db
-			->where('id', 100)
+			->where('descricao', self::SPA_API_ACCESS_DESCRIPTION)
+			->where('setor', 'SISTEMA')
 			->count_all_results('configs_opcoes') > 0;
 
 		if ($exists) {
 			return $this->db
-				->where('id', 100)
+				->where('descricao', self::SPA_API_ACCESS_DESCRIPTION)
+				->where('setor', 'SISTEMA')
 				->update('configs_opcoes', $data);
 		}
 
-		$data['id'] = 100;
+		return $this->db->insert('configs_opcoes', $data);
+	}
+
+	public function isSpaForcedLogoutEnabled()
+	{
+		$option = $this->db
+			->where('descricao', self::SPA_FORCED_LOGOUT_DESCRIPTION)
+			->where('setor', 'SISTEMA')
+			->where('status', 1)
+			->get('configs_opcoes')
+			->row();
+
+		return $option && (bool)$option->ativo;
+	}
+
+	public function setSpaForcedLogoutEnabled($enabled)
+	{
+		$data = array(
+			'descricao' => self::SPA_FORCED_LOGOUT_DESCRIPTION,
+			'setor'     => 'SISTEMA',
+			'ativo'     => $enabled ? 1 : 0,
+			'status'    => 1,
+		);
+
+		$exists = $this->db
+			->where('descricao', self::SPA_FORCED_LOGOUT_DESCRIPTION)
+			->where('setor', 'SISTEMA')
+			->count_all_results('configs_opcoes') > 0;
+
+		if ($exists) {
+			return $this->db
+				->where('descricao', self::SPA_FORCED_LOGOUT_DESCRIPTION)
+				->where('setor', 'SISTEMA')
+				->update('configs_opcoes', $data);
+		}
 
 		return $this->db->insert('configs_opcoes', $data);
 	}
