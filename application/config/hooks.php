@@ -21,8 +21,8 @@ $hook['pre_system'][] = array(
 
 $hook['pre_controller'][] = array(
 	'class' => '',
-	'function' => 'selectSpaSessionCookie',
-	'filename' => 'SpaSessionCookie.php',
+	'function' => 'selectApiSessionCookie',
+	'filename' => 'ApiSessionCookie.php',
 	'filepath' => 'hooks'
 );
 
@@ -35,9 +35,9 @@ $hook['display_override'][] = array(
 );
 
 $hook['post_controller_constructor'][] = array(
-	'class' => 'SpaApiAvailability',
+	'class' => 'ApiFrontendAvailability',
 	'function' => 'check',
-	'filename' => 'SpaApiAvailability.php',
+	'filename' => 'ApiFrontendAvailability.php',
 	'filepath' => 'hooks'
 );
 

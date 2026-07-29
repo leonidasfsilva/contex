@@ -18,7 +18,7 @@ class Mxcode extends CI_Controller
         $this->load->helper('file');
         $this->load->library('upload');
         $this->load->library('image_lib');
-        $this->load->library('SpaCsrf', null, 'spa_csrf');
+        $this->load->library('ApiCsrf', null, 'api_csrf');
     }
 
     public function index()
@@ -122,7 +122,7 @@ class Mxcode extends CI_Controller
 
     public function logout($forcedLogout = false)
     {
-        if ($this->requisicaoApiSpa() && $this->session->userdata('logado') && !$this->validarCsrfApiSpa()) {
+        if ($this->requisicaoApiFrontend() && $this->session->userdata('logado') && !$this->validarCsrfApiFrontend()) {
             return $this->responderJson(
                 array(
                     'code'    => 'CSRF_TOKEN_INVALID',
@@ -232,18 +232,19 @@ class Mxcode extends CI_Controller
                     'logado'    => true
                 );
 
-                if ($this->requisicaoApiSpa()) {
+                if ($this->requisicaoApiFrontend()) {
                     $this->session->sess_regenerate(true);
                 }
 
                 $this->session->set_userdata($session_data);
 
-                if ($this->requisicaoApiSpa()) {
-                    $this->session->set_userdata('spa_authenticated', true);
-                    $this->session->set_userdata('spa_forced_logout', false);
-                }
+                if ($this->requisicaoApiFrontend()) {
+					$this->session->set_userdata('api_authenticated', true);
+					$this->session->set_userdata('api_forced_logout', false);
+					$this->session->unset_userdata(array('spa_authenticated', 'spa_forced_logout'));
+				}
 
-                $this->spa_csrf->rotateToken();
+				$this->api_csrf->rotateToken();
                 gravaLog(getUserId(), getUserName(), getUserEmail(), 'Login no sistema', getenv("REMOTE_ADDR"), 'autenticacao', '/mxcode/login');
                 reconciliarFinanceiro(getUserId(), 'login');
 
@@ -284,12 +285,12 @@ class Mxcode extends CI_Controller
 
     public function validaSessao()
     {
-        if ($this->session->userdata('spa_forced_logout')) {
+        if ($this->session->userdata('api_forced_logout') || $this->session->userdata('spa_forced_logout')) {
             return $this->responderJson(
                 array(
                     'authenticated' => false,
-                    'code'          => 'SPA_SESSION_REVOKED',
-                    'message'       => 'Sua sessão no Contex SPA foi encerrada pelo administrador.',
+					'code'          => 'API_SESSION_REVOKED',
+					'message'       => 'Sua sessão na API Frontend foi encerrada pelo administrador.',
                 ),
                 401
             );
@@ -340,18 +341,18 @@ class Mxcode extends CI_Controller
                 'permissionId' => $idPermissao,
             ),
             'permissions'   => $this->mxcode_model->getPermissoes($idPermissao),
-            'csrfToken'     => $this->spa_csrf->getToken(),
+			'csrfToken'     => $this->api_csrf->getToken(),
         );
     }
 
-    private function validarCsrfApiSpa()
+	private function validarCsrfApiFrontend()
     {
         $token = $this->input->get_request_header('X-CSRF-TOKEN', true);
 
-        return $this->spa_csrf->isValid($token);
+		return $this->api_csrf->isValid($token);
     }
 
-    private function requisicaoApiSpa()
+	private function requisicaoApiFrontend()
     {
         return strpos(uri_string(), 'api/v1/') === 0;
     }

@@ -4,8 +4,8 @@
 
 class Configs_model extends CI_Model
 {
-	const SPA_API_DISABLED_DESCRIPTION = 'DESATIVAR API FRONTEND';
-	const SPA_FORCED_LOGOUT_DESCRIPTION = 'DESCONEXAO DE USUARIOS API FRONTEND';
+	const API_DISABLED_DESCRIPTION = 'DESATIVAR API FRONTEND';
+	const API_FORCED_LOGOUT_DESCRIPTION = 'DESCONEXAO DE USUARIOS API FRONTEND';
 	function __construct()
 	{
 		parent::__construct();
@@ -405,34 +405,34 @@ class Configs_model extends CI_Model
 			->row();
 	}
 
-	public function isSpaApiDisabled()
+	public function isApiDisabled()
 	{
-		return $this->hasSystemConfigAssociation(self::SPA_API_DISABLED_DESCRIPTION);
+		return $this->hasSystemConfigAssociation(self::API_DISABLED_DESCRIPTION);
 	}
 
-	public function activateSpaApiDisabled($idUsuario)
+	public function activateApiDisabled($idUsuario)
 	{
-		return $this->activateSystemConfigAssociation(self::SPA_API_DISABLED_DESCRIPTION, $idUsuario);
+		return $this->activateSystemConfigAssociation(self::API_DISABLED_DESCRIPTION, $idUsuario);
 	}
 
-	public function deactivateSpaApiDisabled()
+	public function deactivateApiDisabled()
 	{
-		return $this->deactivateSystemConfigAssociation(self::SPA_API_DISABLED_DESCRIPTION);
+		return $this->deactivateSystemConfigAssociation(self::API_DISABLED_DESCRIPTION);
 	}
 
-	public function isSpaForcedLogoutEnabled()
+	public function isApiForcedLogoutEnabled()
 	{
-		return $this->hasSystemConfigAssociation(self::SPA_FORCED_LOGOUT_DESCRIPTION);
+		return $this->hasSystemConfigAssociation(self::API_FORCED_LOGOUT_DESCRIPTION);
 	}
 
-	public function activateSpaForcedLogout($idUsuario)
+	public function activateApiForcedLogout($idUsuario)
 	{
-		return $this->activateSystemConfigAssociation(self::SPA_FORCED_LOGOUT_DESCRIPTION, $idUsuario);
+		return $this->activateSystemConfigAssociation(self::API_FORCED_LOGOUT_DESCRIPTION, $idUsuario);
 	}
 
-	public function deactivateSpaForcedLogout()
+	public function deactivateApiForcedLogout()
 	{
-		return $this->deactivateSystemConfigAssociation(self::SPA_FORCED_LOGOUT_DESCRIPTION);
+		return $this->deactivateSystemConfigAssociation(self::API_FORCED_LOGOUT_DESCRIPTION);
 	}
 
 	private function hasSystemConfigAssociation($description)
@@ -508,10 +508,13 @@ class Configs_model extends CI_Model
 			->row();
 	}
 
-	public function disconnectSpaSessions()
+	public function disconnectApiSessions()
 	{
 		$this->db
-			->like('data', 'spa_authenticated|b:1;', 'both')
+			->group_start()
+				->like('data', 'api_authenticated|b:1;', 'both')
+				->or_like('data', 'spa_authenticated|b:1;', 'both')
+			->group_end()
 			->delete('ci_sessions');
 
 		return $this->db->affected_rows();

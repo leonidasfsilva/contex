@@ -2,7 +2,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class SpaApiAvailability
+class ApiFrontendAvailability
 {
     public function check()
     {
@@ -15,7 +15,7 @@ class SpaApiAvailability
         $CI = get_instance();
         $CI->load->model('configs_model');
 
-        if (!$CI->configs_model->isSpaApiDisabled()) {
+        if (!$CI->configs_model->isApiDisabled()) {
             return;
         }
 
@@ -25,7 +25,7 @@ class SpaApiAvailability
             ->set_output(
                 json_encode(
                     array(
-                        'code'    => 'SPA_API_UNAVAILABLE',
+                        'code'    => 'API_UNAVAILABLE',
                         'message' => 'API indisponível no momento. Tente novamente mais tarde.',
                     ),
                     JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES

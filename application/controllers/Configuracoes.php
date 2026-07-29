@@ -54,8 +54,8 @@ class Configuracoes extends CI_Controller
 		// $data['maintenanceMode']   = $this->load->get_var('maintenanceMode');
 		$data['menuConfiguracoes'] = true;
 		$data['modulosBusca']      = $this->configs_model->getModulosBuscaGlobal(getUserId());
-		$data['spaApiDisabled']    = $this->configs_model->isSpaApiDisabled();
-		$data['spaForcedLogout']   = $this->configs_model->isSpaForcedLogoutEnabled();
+		$data['apiDisabled']       = $this->configs_model->isApiDisabled();
+		$data['apiForcedLogout']   = $this->configs_model->isApiForcedLogoutEnabled();
 		$data['results']           = $this->configs_model->getConfigs();
 		$data['view']              = 'configuracoes/sistema';
 		$this->load->view('tema/topo', $data);
@@ -455,7 +455,7 @@ class Configuracoes extends CI_Controller
 		echo false;
 	}
 
-	public function setSpaApiStatus()
+	public function setApiStatus()
 	{
 		if ((!session_id()) || (!$this->session->userdata('logado'))) {
 			return $this->output
@@ -481,17 +481,17 @@ class Configuracoes extends CI_Controller
 		}
 
 		$updated = $disabled === '1'
-			? $this->configs_model->activateSpaApiDisabled(getUserId())
-			: $this->configs_model->deactivateSpaApiDisabled();
+			? $this->configs_model->activateApiDisabled(getUserId())
+			: $this->configs_model->deactivateApiDisabled();
 
 		if (!$updated) {
 			return $this->output
 				->set_status_header(500)
 				->set_content_type('application/json', 'utf-8')
-				->set_output(json_encode(array('message' => 'Não foi possível atualizar o acesso do SPA.')));
+				->set_output(json_encode(array('message' => 'Não foi possível atualizar o acesso da API Frontend.')));
 		}
 
-		if ($disabled === '0' && !$this->configs_model->deactivateSpaForcedLogout()) {
+		if ($disabled === '0' && !$this->configs_model->deactivateApiForcedLogout()) {
 			return $this->output
 				->set_status_header(500)
 				->set_content_type('application/json', 'utf-8')
@@ -510,7 +510,7 @@ class Configuracoes extends CI_Controller
 			->set_output(json_encode(array('disabled' => $disabled === '1')));
 	}
 
-	public function disconnectSpaUsers()
+	public function disconnectApiUsers()
 	{
 		if ((!session_id()) || (!$this->session->userdata('logado'))) {
 			return $this->jsonResponse(array('message' => 'Sessão inválida ou expirada.'), 401);
@@ -535,7 +535,7 @@ class Configuracoes extends CI_Controller
 		}
 
 		if ($enabled === '0') {
-			if (!$this->configs_model->deactivateSpaForcedLogout()) {
+			if (!$this->configs_model->deactivateApiForcedLogout()) {
 				return $this->jsonResponse(array('message' => 'Não foi possível desativar a desconexão da API Frontend.'), 500);
 			}
 
@@ -545,13 +545,13 @@ class Configuracoes extends CI_Controller
 		}
 
 		if (
-			(!$this->configs_model->isSpaApiDisabled() && !$this->configs_model->activateSpaApiDisabled(getUserId())) ||
-			!$this->configs_model->activateSpaForcedLogout(getUserId())
+			(!$this->configs_model->isApiDisabled() && !$this->configs_model->activateApiDisabled(getUserId())) ||
+			!$this->configs_model->activateApiForcedLogout(getUserId())
 		) {
 			return $this->jsonResponse(array('message' => 'Não foi possível ativar a desconexão da API Frontend.'), 500);
 		}
 
-		$disconnectedSessions = $this->configs_model->disconnectSpaSessions();
+		$disconnectedSessions = $this->configs_model->disconnectApiSessions();
 		$message = $disconnectedSessions > 0
 			? 'Desconexão de usuários da API Frontend ativada. ' . $disconnectedSessions . ($disconnectedSessions === 1 ? ' sessão removida.' : ' sessões removidas.')
 			: 'Desconexão de usuários da API Frontend ativada. Não havia sessões conectadas.';
@@ -560,10 +560,10 @@ class Configuracoes extends CI_Controller
 			getUserId(),
 			getUserName(),
 			getUserEmail(),
-			$this->getSpaDisconnectionLogMessage($disconnectedSessions),
+			$this->getApiDisconnectionLogMessage($disconnectedSessions),
 			getenv('REMOTE_ADDR'),
 			'autenticacao',
-			'/configuracoes/disconnectSpaUsers'
+			'/configuracoes/disconnectApiUsers'
 		);
 		$this->session->set_flashdata('sucesso', $message);
 
@@ -575,14 +575,14 @@ class Configuracoes extends CI_Controller
 		);
 	}
 
-	private function getSpaDisconnectionLogMessage($disconnectedSessions)
+	private function getApiDisconnectionLogMessage($disconnectedSessions)
 	{
 		if ($disconnectedSessions === 1) {
-			return 'Desconexão coletiva do Contex SPA: 1 sessão removida';
+			return 'Desconexão coletiva da API Frontend: 1 sessão removida';
 		}
 
 		return sprintf(
-			'Desconexão coletiva do Contex SPA: %d sessões removidas',
+			'Desconexão coletiva da API Frontend: %d sessões removidas',
 			$disconnectedSessions
 		);
 	}
