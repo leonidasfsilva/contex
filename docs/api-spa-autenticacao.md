@@ -4,7 +4,7 @@
 
 O Contex SPA utiliza autenticação por sessão própria, independente da sessão do frontend MVC. O backend continua sendo a autoridade sobre sessão, usuário e permissões.
 
-Este contrato se aplica às rotas `/api/v1/auth/*`. As APIs existentes autenticadas por Bearer Token permanecem independentes.
+Este contrato se aplica às rotas `/api/frontend/v1/auth/*`. As APIs existentes em `/api/v1/*`, autenticadas por Bearer Token, permanecem independentes.
 
 ## Variáveis do frontend
 
@@ -13,7 +13,7 @@ O bundle Vue pode receber apenas configurações públicas:
 | Variável | Exemplo DEV | Finalidade |
 | --- | --- | --- |
 | `VITE_APP_URL` | `https://contex-spa.local` | Origem pública do SPA. |
-| `VITE_API_BASE_URL` | `https://contex.local/api/v1` | Base pública dos endpoints consumidos pelo SPA. |
+| `VITE_API_BASE_URL` | `https://contex.local/api/frontend/v1` | Base pública dos endpoints consumidos pelo SPA. |
 
 Variáveis iniciadas por `VITE_` são incorporadas ao bundle e podem ser lidas no navegador. Nunca armazenar nelas senhas, tokens administrativos, chaves privadas, credenciais de banco de dados ou segredos de integração.
 
@@ -23,7 +23,7 @@ Variáveis iniciadas por `VITE_` são incorporadas ao bundle e podem ser lidas n
 - O MVC continua usando `app_session`; um login MVC não autentica o SPA e um login SPA não autentica o MVC.
 - O navegador armazena e envia esse cookie automaticamente nas requisições com credenciais.
 - O cliente HTTP do SPA deve usar `credentials: include` ou `withCredentials: true`.
-- O Vue não usa dados locais como prova de autenticação; a confirmação vem de `GET /api/v1/auth/session`.
+- O Vue não usa dados locais como prova de autenticação; a confirmação vem de `GET /api/frontend/v1/auth/session`.
 
 ## Token CSRF
 
@@ -34,7 +34,7 @@ Variáveis iniciadas por `VITE_` são incorporadas ao bundle e podem ser lidas n
 - O token CSRF não autentica o usuário e não substitui o cookie `api_session`.
 - O CSRF global do CodeIgniter permanece desativado para preservar os formulários e AJAX legados do MVC.
 
-## `POST /api/v1/auth/login`
+## `POST /api/frontend/v1/auth/login`
 
 Corpo JSON:
 
@@ -71,7 +71,7 @@ Erros esperados:
 
 O login não exige CSRF porque ainda não existe uma sessão autenticada a proteger.
 
-## `GET /api/v1/auth/session`
+## `GET /api/frontend/v1/auth/session`
 
 O navegador envia `api_session`. Quando a sessão for válida, a resposta será `200 OK` com o mesmo contrato do login, incluindo `csrfToken`.
 
@@ -86,7 +86,7 @@ Sem sessão válida, retorna `401 Unauthorized`:
 
 O SPA deve consultar esta rota ao iniciar e ao retomar o aplicativo depois de tempo relevante em segundo plano.
 
-## `POST /api/v1/auth/logout`
+## `POST /api/frontend/v1/auth/logout`
 
 Quando existir sessão autenticada, enviar:
 

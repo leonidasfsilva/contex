@@ -8,7 +8,7 @@ class ApiFrontendAvailability
     {
         $uri = uri_string();
 
-        if (strpos($uri, 'api/v1/auth/') !== 0) {
+        if (strpos($uri, 'api/frontend/v1/auth/') !== 0) {
             return;
         }
 

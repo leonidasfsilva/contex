@@ -71,7 +71,7 @@ class MY_Session_database_driver extends CI_Session_database_driver
     private function isPassiveRequest()
     {
         return strtoupper(isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : '') === 'GET'
-            && uri_string() === 'api/v1/auth/session';
+            && uri_string() === 'api/frontend/v1/auth/session';
     }
 
     private function rowIsExpired($sessionId)

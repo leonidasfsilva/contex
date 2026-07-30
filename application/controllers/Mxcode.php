@@ -354,7 +354,7 @@ class Mxcode extends CI_Controller
 
 	private function requisicaoApiFrontend()
     {
-        return strpos(uri_string(), 'api/v1/') === 0;
+        return strpos(uri_string(), 'api/frontend/v1/') === 0;
     }
 
     private function requisicaoJson()

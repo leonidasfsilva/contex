@@ -9,7 +9,7 @@ function selectApiSessionCookie()
     $basePath   = rtrim(str_replace('index.php', '', $scriptName), '/');
     $routePath  = ltrim(substr($requestUri, strlen($basePath)), '/');
 
-    if (strpos($routePath, 'api/v1/') === 0) {
+    if (strpos($routePath, 'api/frontend/v1/') === 0) {
         $GLOBALS['CFG']->set_item('sess_cookie_name', 'api_session');
         $GLOBALS['CFG']->set_item('sess_expiration', 7200);
     }
