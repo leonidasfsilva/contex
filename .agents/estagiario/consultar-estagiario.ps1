@@ -22,6 +22,8 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+$guardScript = Join-Path (Split-Path -Parent $PSCommandPath) "..\text\utf8_guard.ps1"
+. $guardScript
 
 function Get-RepoRoot {
     $scriptPath = Split-Path -Parent $PSCommandPath
@@ -32,7 +34,7 @@ function Read-TextFileIfExists {
     param([string]$Path)
 
     if (Test-Path -LiteralPath $Path) {
-        return Get-Content -Raw -LiteralPath $Path
+        return Read-ExternalUtf8Text -Path $Path
     }
 
     return ""
@@ -63,7 +65,7 @@ function Read-ContextSpec {
         return @(
             "ARQUIVO ${path}:",
             '```',
-            (Get-Content -Raw -LiteralPath $fullPath),
+            (Read-ExternalUtf8Text -Path $fullPath),
             '```'
         ) -join "`n"
     }
@@ -74,7 +76,7 @@ function Read-ContextSpec {
 
     $start = [int]$Matches[1]
     $end = [int]$Matches[2]
-    $lines = Get-Content -LiteralPath $fullPath
+    $lines = (Read-ExternalUtf8Text -Path $fullPath) -split "`r?`n"
     $selected = New-Object System.Collections.Generic.List[string]
 
     for ($i = $start; $i -le $end; $i++) {
@@ -98,6 +100,8 @@ if (!$Prompt) {
 if (!$Prompt.Trim()) {
     throw "Informe um prompt via -Prompt ou stdin."
 }
+
+$Prompt = Protect-ExternalText -Text $Prompt -FieldName "prompt do estagiário"
 
 $repoRoot = Get-RepoRoot
 $rulesPath = Join-Path $repoRoot ".clinerules\estagiario.md"
@@ -139,6 +143,9 @@ CONTEXTO:
 $($contextBlocks -join "`n")
 "@
 
+$systemMessage = Protect-ExternalText -Text $systemMessage -FieldName "mensagem de sistema do estagiário"
+$userMessage = Protect-ExternalText -Text $userMessage -FieldName "mensagem do usuário ao estagiário"
+
 $payload = [ordered]@{
     model = $Model
     messages = @(
@@ -149,9 +156,11 @@ $payload = [ordered]@{
     max_tokens = $MaxTokens
 }
 
+$payload = Protect-ExternalPayload -Value $payload -FieldPath "LM Studio"
 $body = $payload | ConvertTo-Json -Depth 10 -Compress
 $bytes = [System.Text.Encoding]::UTF8.GetBytes($body)
 $url = "$BaseUrl/chat/completions"
 
 $response = Invoke-RestMethod -Uri $url -Method Post -ContentType "application/json; charset=utf-8" -Body $bytes -TimeoutSec 180
-$response.choices[0].message.content
+$responseText = [string]$response.choices[0].message.content
+Protect-ExternalText -Text $responseText -FieldName "resposta do estagiário"

@@ -53,35 +53,12 @@
 )
 
 $ErrorActionPreference = "Stop"
+$guardScript = Join-Path (Split-Path -Parent $PSCommandPath) "..\text\utf8_guard.ps1"
+. $guardScript
 
 if ($Host.Name -eq "ConsoleHost") {
     [Console]::InputEncoding = [Text.UTF8Encoding]::new($false)
     [Console]::OutputEncoding = [Text.UTF8Encoding]::new($false)
-}
-
-function Read-Utf8Text {
-    param([Parameter(Mandatory = $true)][string]$Path)
-
-    $reader = [IO.StreamReader]::new($Path, [Text.UTF8Encoding]::new($false), $true)
-    try {
-        return $reader.ReadToEnd()
-    } finally {
-        $reader.Dispose()
-    }
-}
-
-function Assert-TrelloTextEncoding {
-    param(
-        [Parameter(Mandatory = $true)][AllowEmptyString()][string]$Text,
-        [Parameter(Mandatory = $true)][string]$FieldName
-    )
-
-    # ASCII is valid UTF-8; reject only the signatures of accidental charset loss.
-    if ($Text.Contains([char]0xFFFD) -or $Text -cmatch '[ÃÂ�]') {
-        throw "$FieldName contém texto com charset inválido (mojibake). Corrija a origem para UTF-8 antes de enviar ao Trello."
-    }
-
-    return $Text.Normalize([Text.NormalizationForm]::FormC)
 }
 
 function Get-ScriptDir {
@@ -108,7 +85,7 @@ function Read-TrelloConfig {
     $config = [pscustomobject]@{}
 
     if (Test-Path -LiteralPath $configPath) {
-        $config = Read-Utf8Text -Path $configPath | ConvertFrom-Json
+        $config = Read-ExternalUtf8Text -Path $configPath | ConvertFrom-Json
     }
 
     $key = if ($config.key) { $config.key } else { $env:TRELLO_KEY }
@@ -168,11 +145,14 @@ function Invoke-TrelloRequest {
     $url = "https://api.trello.com/1/$Path$separator$auth"
 
     if ($null -ne $Body) {
-        if ($Body -is [string]) {
-            return Invoke-RestMethod -Method $Method -Uri $url -Body $Body -ContentType "application/json; charset=utf-8"
+        $protectedBody = Protect-ExternalPayload -Value $Body -FieldPath "Trello"
+        $json = $protectedBody | ConvertTo-Json -Depth 20 -Compress
+        $bytes = [Text.Encoding]::UTF8.GetBytes($json)
+        $result = Invoke-RestMethod -Method $Method -Uri $url -Body $bytes -ContentType "application/json; charset=utf-8"
+        if ($Method -ne "GET") {
+            Protect-ExternalPayload -Value $result -FieldPath "resposta publicada pelo Trello" | Out-Null
         }
-
-        return Invoke-RestMethod -Method $Method -Uri $url -Body $Body
+        return $result
     }
 
     return Invoke-RestMethod -Method $Method -Uri $url
@@ -202,14 +182,14 @@ switch ($Command) {
             throw "Name e obrigatorio para criar board."
         }
 
-        $Name = Assert-TrelloTextEncoding -Text $Name -FieldName "Name"
+        $Name = Protect-ExternalText -Text $Name -FieldName "Name"
 
         $body = @{
             name = $Name
         }
 
         if (![string]::IsNullOrWhiteSpace($Desc)) {
-            $body.desc = Assert-TrelloTextEncoding -Text $Desc -FieldName "Desc"
+            $body.desc = Protect-ExternalText -Text $Desc -FieldName "Desc"
         }
 
         $result = Invoke-TrelloRequest -Method "POST" -Path "boards" -Body $body
@@ -290,7 +270,7 @@ switch ($Command) {
             throw "Name é obrigatório para criar card."
         }
 
-        $Name = Assert-TrelloTextEncoding -Text $Name -FieldName "Name"
+        $Name = Protect-ExternalText -Text $Name -FieldName "Name"
 
         $body = @{
             idList = $ListId
@@ -299,7 +279,7 @@ switch ($Command) {
         }
 
         if (![string]::IsNullOrWhiteSpace($Desc)) {
-            $body.desc = Assert-TrelloTextEncoding -Text $Desc -FieldName "Desc"
+            $body.desc = Protect-ExternalText -Text $Desc -FieldName "Desc"
         }
 
         $result = Invoke-TrelloRequest -Method "POST" -Path "cards" -Body $body
@@ -318,18 +298,18 @@ switch ($Command) {
             if ([string]::IsNullOrWhiteSpace($Name)) {
                 throw "Name nao pode ser vazio quando informado."
             }
-            $body.name = Assert-TrelloTextEncoding -Text $Name -FieldName "Name"
+            $body.name = Protect-ExternalText -Text $Name -FieldName "Name"
         }
 
         if ($PSBoundParameters.ContainsKey("Desc")) {
-            $body.desc = Assert-TrelloTextEncoding -Text $Desc -FieldName "Desc"
+            $body.desc = Protect-ExternalText -Text $Desc -FieldName "Desc"
         }
 
         if ($PSBoundParameters.ContainsKey("DescFile")) {
             if (!(Test-Path -LiteralPath $DescFile)) {
                 throw "DescFile nao encontrado."
             }
-            $body.desc = Assert-TrelloTextEncoding -Text (Read-Utf8Text -Path $DescFile) -FieldName "DescFile"
+            $body.desc = Protect-ExternalText -Text (Read-ExternalUtf8Text -Path $DescFile) -FieldName "DescFile"
         }
 
         if ($ClearDesc) {
@@ -340,8 +320,7 @@ switch ($Command) {
             throw "Informe Name e/ou Desc para atualizar card."
         }
 
-        $payload = $body | ConvertTo-Json -Compress
-        $result = Invoke-TrelloRequest -Method "PUT" -Path "cards/$CardId" -Body $payload
+        $result = Invoke-TrelloRequest -Method "PUT" -Path "cards/$CardId" -Body $body
 
         Write-Json $result
         break
@@ -356,7 +335,7 @@ switch ($Command) {
             throw "Text é obrigatório para comentar."
         }
 
-        $Text = Assert-TrelloTextEncoding -Text $Text -FieldName "Text"
+        $Text = Protect-ExternalText -Text $Text -FieldName "Text"
 
         $result = Invoke-TrelloRequest -Method "POST" -Path "cards/$CardId/actions/comments" -Body @{ text = $Text }
         Write-Json $result
@@ -394,7 +373,7 @@ switch ($Command) {
             throw "ChecklistName e obrigatorio para criar checklist."
         }
 
-        $ChecklistName = Assert-TrelloTextEncoding -Text $ChecklistName -FieldName "ChecklistName"
+        $ChecklistName = Protect-ExternalText -Text $ChecklistName -FieldName "ChecklistName"
 
         $body = @{ idCard = $CardId; name = $ChecklistName }
         $result = Invoke-TrelloRequest -Method "POST" -Path "checklists" -Body $body
@@ -411,7 +390,7 @@ switch ($Command) {
             throw "Name e obrigatorio para adicionar item da checklist."
         }
 
-        $Name = Assert-TrelloTextEncoding -Text $Name -FieldName "Name"
+        $Name = Protect-ExternalText -Text $Name -FieldName "Name"
 
         $body = @{ name = $Name }
         $result = Invoke-TrelloRequest -Method "POST" -Path "checklists/$ChecklistId/checkItems" -Body $body
@@ -436,7 +415,7 @@ switch ($Command) {
             throw "State e obrigatorio: complete ou incomplete."
         }
 
-        $body = @{ state = $State } | ConvertTo-Json -Compress
+        $body = @{ state = $State }
         $result = Invoke-TrelloRequest -Method "PUT" -Path "cards/$CardId/checklist/$ChecklistId/checkItem/$CheckItemId" -Body $body
         Write-Json $result
         break
@@ -455,9 +434,9 @@ switch ($Command) {
             throw "Name e obrigatorio para renomear item da checklist."
         }
 
-        $Name = Assert-TrelloTextEncoding -Text $Name -FieldName "Name"
+        $Name = Protect-ExternalText -Text $Name -FieldName "Name"
 
-        $body = @{ name = $Name } | ConvertTo-Json -Compress
+        $body = @{ name = $Name }
         $result = Invoke-TrelloRequest -Method "PUT" -Path "cards/$CardId/checklist/$ChecklistId/checkItem/$CheckItemId" -Body $body
         Write-Json $result
         break
@@ -495,7 +474,7 @@ switch ($Command) {
         }
 
         if (![string]::IsNullOrWhiteSpace($Name)) {
-            $body.name = $Name
+            $body.name = Protect-ExternalText -Text $Name -FieldName "Name"
         }
 
         $result = Invoke-TrelloRequest -Method "POST" -Path "cards/$CardId/attachments" -Body $body

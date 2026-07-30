@@ -2,6 +2,15 @@
 
 Ferramenta local para o Agente IA consultar e atualizar cards do Trello via REST API.
 
+Todos os campos textuais enviados pelos helpers passam pelo guard comum
+`.agents/text/utf8_guard.php`, inclusive nomes, descrições, comentários,
+checklists, itens e nomes de anexos. A função central de request do helper
+PowerShell percorre o payload inteiro antes do envio.
+
+Não faça escrita direta com `curl`, `Invoke-RestMethod` ou outro cliente contra
+a API do Trello. As escritas devem passar pelos helpers protegidos e ser relidas
+após a publicação quando o serviço permitir.
+
 ## Configuração
 
 Copie o arquivo de exemplo:

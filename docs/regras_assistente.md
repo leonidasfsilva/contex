@@ -23,6 +23,10 @@
 - Ao editar textos exibidos ao usuário, preservar acentuação e grafia correta em português do Brasil.
 - Agentes DEVEM editar e salvar arquivos em UTF-8 real sempre que houver texto acentuado; se a ferramenta/shell usada não garantir UTF-8, trocar de ferramenta antes de escrever.
 - Após editar mensagens exibidas ao usuário, validar o diff ou o arquivo por um meio confiável em UTF-8, sem depender de saída mojibake do PowerShell.
+- Todo texto livre publicado por automação em serviço externo deve passar pelo guard comum `.agents/text/utf8_guard.php` antes da requisição. Isso inclui títulos, descrições, comentários, checklists, nomes de anexos, corpos de PR, prompts e mensagens.
+- É proibido usar chamadas cruas como `gh api`, `gh pr create`, `curl` ou `Invoke-RestMethod` para publicar texto quando existir um conector protegido do projeto. Novos conectores devem integrar o guard antes da primeira escrita.
+- O guard deve normalizar Unicode NFC, aceitar conversão de Windows-1252 somente quando a origem não for UTF-8 válida e rejeitar caracteres de controle, `U+FFFD`, assinaturas de mojibake e perda de caracteres representada por `??` em palavras.
+- Após publicação externa, reler e validar o conteúdo armazenado quando o serviço oferecer consulta, antes de reportar a entrega como concluída.
 
 ### 3. Processo de Decisão
 - **Sempre responder primeiro às perguntas antes de tomar qualquer ação**
@@ -104,7 +108,7 @@
 - Título e descrição de PRs do Contex devem ser escritos em português do Brasil.
 - A descrição padrão de PR deve usar as seções `Resumo` e `Validação`.
 - Não misturar inglês e português na descrição do PR. Commits continuam seguindo a regra própria de mensagens curtas em inglês.
-- Corpos de PR devem ser preparados e enviados pelo helper `.agents/git/pr.sh`, que normaliza UTF-8, rejeita `\\n` literal e caracteres de controle.
+- Títulos, corpos e comentários de PR devem ser preparados e enviados pelo helper `.agents/git/pr.sh`, que aplica a proteção UTF-8 e antimojibake comum.
 - Após criar ou editar um PR, executar `.agents/git/pr.sh verify --pr <numero>` e conferir a renderização no GitHub antes de reportar a conclusão.
 - Antes de criar ou editar PR, usar PRs recentes do projeto como referência de formato quando houver dúvida.
 - Antes de subir alterações solicitadas pelo desenvolvedor com objetivo de atualizar ou abrir PR, verificar no GitHub a existência e o status do PR anterior da branch/card atual.

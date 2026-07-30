@@ -23,6 +23,7 @@ O estagiário existe para reduzir uso desnecessário de tokens do Agente IA em t
 - Regras do Cline ficam em `.clinerules/estagiario.md`.
 - Regras gerais do Agente IA ficam em `docs/regras_assistente.md`.
 - O script `.agents/estagiario/consultar-estagiario.ps1` deve carregar essas regras antes de chamar a API local do LM Studio.
+- Prompt, regras, arquivos de contexto e mensagens enviados ao LM Studio devem ser lidos explicitamente como UTF-8 e passar pelo guard comum `.agents/text/utf8_guard.php` antes da requisição.
 
 ## Disponibilidade
 

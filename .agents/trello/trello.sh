@@ -72,6 +72,7 @@ done
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_PATH="$SCRIPT_DIR/config.local.json"
+UTF8_GUARD="$SCRIPT_DIR/../text/utf8_guard.php"
 
 if [[ -z "${TRELLO_CURL_BIN:-}" ]]; then
   if [[ -x "/c/laragon/bin/laragon/utils/curl.exe" ]]; then
@@ -107,18 +108,14 @@ urlencode() {
   php -r 'echo rawurlencode($argv[1]);' "$1"
 }
 
+urldecode() {
+  php -r 'echo rawurldecode($argv[1]);' "$1"
+}
+
 normalize_utf8() {
-  php -r '
-    $value = $argv[1];
-
-    if (preg_match("//u", $value) === 1) {
-        echo $value;
-        exit(0);
-    }
-
-    $converted = iconv("Windows-1252", "UTF-8//IGNORE", $value);
-    echo $converted === false ? $value : $converted;
-  ' "$1"
+  local value="$1"
+  local field="$2"
+  printf '%s' "$value" | php "$UTF8_GUARD" normalize-stdin "$field"
 }
 
 TRELLO_API_KEY="${TRELLO_KEY:-$(json_config_value key)}"
@@ -150,7 +147,30 @@ trello_request() {
   local request_url="https://api.trello.com/1/${path}${separator}${auth}"
 
   if [[ $# -gt 0 ]]; then
-    "$TRELLO_CURL_BIN" -sS -X "$method" "$request_url" "$@"
+    local -a protected_args=()
+    local expects_data=0
+    local argument field encoded_value decoded_value protected_value
+    for argument in "$@"; do
+      if [[ "$expects_data" -eq 1 ]]; then
+        if [[ "$argument" != *=* ]]; then
+          echo "Payload textual invalido enviado ao Trello." >&2
+          exit 1
+        fi
+        field="${argument%%=*}"
+        encoded_value="${argument#*=}"
+        decoded_value="$(urldecode "$encoded_value")"
+        protected_value="$(normalize_utf8 "$decoded_value" "campo ${field} enviado ao Trello")"
+        protected_args+=("${field}=$(urlencode "$protected_value")")
+        expects_data=0
+        continue
+      fi
+
+      protected_args+=("$argument")
+      if [[ "$argument" == "--data-raw" ]]; then
+        expects_data=1
+      fi
+    done
+    "$TRELLO_CURL_BIN" -sS -X "$method" "$request_url" "${protected_args[@]}"
   else
     "$TRELLO_CURL_BIN" -sS -X "$method" "$request_url"
   fi
@@ -166,9 +186,9 @@ require_value() {
   fi
 }
 
-NAME="$(normalize_utf8 "$NAME")"
-DESC="$(normalize_utf8 "$DESC")"
-TEXT="$(normalize_utf8 "$TEXT")"
+NAME="$(normalize_utf8 "$NAME" "nome enviado ao Trello")"
+DESC="$(normalize_utf8 "$DESC" "descricao enviada ao Trello")"
+TEXT="$(normalize_utf8 "$TEXT" "comentario enviado ao Trello")"
 
 case "$COMMAND" in
   test)
@@ -277,7 +297,10 @@ case "$COMMAND" in
         exit 1
       fi
 
-      DESC="$(normalize_utf8 "$(cat "$DESC_FILE")")"
+      normalized_desc="$(mktemp "${TMPDIR:-/tmp}/contex-trello-desc.XXXXXX")"
+      trap 'rm -f "$normalized_desc"' EXIT
+      php "$UTF8_GUARD" normalize-file "$DESC_FILE" "$normalized_desc" "arquivo de descricao enviado ao Trello"
+      DESC="$(<"$normalized_desc")"
     fi
 
     require_value "$DESC" "Desc ou DescFile e obrigatorio para atualizar descricao."
