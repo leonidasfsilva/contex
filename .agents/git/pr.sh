@@ -4,7 +4,7 @@ set -euo pipefail
 COMMAND="${1:-}"
 
 if [[ -z "$COMMAND" ]]; then
-  echo "Uso: pr.sh create|edit|verify ..." >&2
+  echo "Uso: pr.sh create|edit|comment|verify ..." >&2
   exit 1
 fi
 
@@ -15,6 +15,8 @@ BODY_FILE=""
 BASE="master"
 HEAD=""
 REPOSITORY=""
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+UTF8_GUARD="$SCRIPT_DIR/../text/utf8_guard.php"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -52,39 +54,11 @@ require_file() {
   fi
 }
 
-normalize_body() {
+normalize_file() {
   local source="$1"
   local target="$2"
-
-  php -r '
-    $source = $argv[1];
-    $target = $argv[2];
-    $value = file_get_contents($source);
-    if ($value === false) {
-        fwrite(STDERR, "Nao foi possivel ler o corpo do PR.\n");
-        exit(1);
-    }
-    if (preg_match("//u", $value) !== 1) {
-        $converted = iconv("Windows-1252", "UTF-8//IGNORE", $value);
-        if ($converted === false) {
-            fwrite(STDERR, "Nao foi possivel converter o corpo para UTF-8.\n");
-            exit(1);
-        }
-        $value = $converted;
-    }
-    if (preg_match("/\\\\n/", $value) === 1) {
-        fwrite(STDERR, "O corpo contem \\\\n literal; use quebras de linha reais.\n");
-        exit(1);
-    }
-    if (preg_match("/[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F\\x7F]/", $value) === 1) {
-        fwrite(STDERR, "O corpo contem caracteres de controle invalidos.\n");
-        exit(1);
-    }
-    if (file_put_contents($target, $value) === false) {
-        fwrite(STDERR, "Nao foi possivel gravar o corpo normalizado.\n");
-        exit(1);
-    }
-  ' "$source" "$target"
+  local field="$3"
+  php "$UTF8_GUARD" normalize-file "$source" "$target" "$field"
 }
 
 repository_name() {
@@ -96,7 +70,8 @@ repository_name() {
 
 json_payload() {
   local body_file="$1"
-  local target="$2"
+  local title_file="$2"
+  local target="$3"
 
   php -r '
     $body = file_get_contents($argv[1]);
@@ -104,22 +79,41 @@ json_payload() {
         fwrite(STDERR, "Nao foi possivel ler o corpo normalizado.\n");
         exit(1);
     }
-    $payload = json_encode(
-        ["body" => $body],
+    $payload = ["body" => $body];
+    if ($argv[2] !== "") {
+        $title = file_get_contents($argv[2]);
+        if ($title === false) {
+            fwrite(STDERR, "Nao foi possivel ler o titulo normalizado.\n");
+            exit(1);
+        }
+        $payload["title"] = $title;
+    }
+    $json = json_encode(
+        $payload,
         JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR
     );
-    if (file_put_contents($argv[2], $payload) === false) {
+    if (file_put_contents($argv[3], $json) === false) {
         fwrite(STDERR, "Nao foi possivel gravar o payload JSON.\n");
         exit(1);
     }
-  ' "$body_file" "$target"
+  ' "$body_file" "$title_file" "$target"
 }
 
 prepare_body() {
   require_file "$BODY_FILE"
   local normalized
   normalized="$(mktemp "${TMPDIR:-/tmp}/contex-pr-body.XXXXXX")"
-  normalize_body "$BODY_FILE" "$normalized"
+  normalize_file "$BODY_FILE" "$normalized" "corpo do PR"
+  echo "$normalized"
+}
+
+prepare_title() {
+  local source normalized
+  source="$(mktemp "${TMPDIR:-/tmp}/contex-pr-title-source.XXXXXX")"
+  normalized="$(mktemp "${TMPDIR:-/tmp}/contex-pr-title.XXXXXX")"
+  printf '%s' "$TITLE" > "$source"
+  normalize_file "$source" "$normalized" "titulo do PR"
+  rm -f "$source"
   echo "$normalized"
 }
 
@@ -128,27 +122,46 @@ case "$COMMAND" in
     [[ -n "$TITLE" ]] || { echo "--title e obrigatorio." >&2; exit 1; }
     [[ -n "$HEAD" ]] || HEAD="$(git branch --show-current)"
     body_file="$(prepare_body)"
-    trap 'rm -f "$body_file"' EXIT
-    gh pr create --base "$BASE" --head "$HEAD" --title "$TITLE" --body-file "$body_file"
+    title_file="$(prepare_title)"
+    trap 'rm -f "$body_file" "$title_file"' EXIT
+    gh pr create --base "$BASE" --head "$HEAD" --title "$(<"$title_file")" --body-file "$body_file"
     ;;
   edit)
     [[ -n "$PR_NUMBER" ]] || { echo "--pr e obrigatorio." >&2; exit 1; }
     body_file="$(prepare_body)"
+    title_file=""
+    if [[ -n "$TITLE" ]]; then
+      title_file="$(prepare_title)"
+    fi
     payload_file="$(mktemp "${TMPDIR:-/tmp}/contex-pr-payload.XXXXXX")"
-    trap 'rm -f "$body_file" "$payload_file"' EXIT
-    json_payload "$body_file" "$payload_file"
+    trap 'rm -f "$body_file" "$title_file" "$payload_file"' EXIT
+    json_payload "$body_file" "$title_file" "$payload_file"
     gh api "repos/$(repository_name)/pulls/${PR_NUMBER}" --method PATCH --input "$payload_file" --jq .html_url
+    ;;
+  comment)
+    [[ -n "$PR_NUMBER" ]] || { echo "--pr e obrigatorio." >&2; exit 1; }
+    body_file="$(prepare_body)"
+    payload_file="$(mktemp "${TMPDIR:-/tmp}/contex-pr-comment-payload.XXXXXX")"
+    published_file="$(mktemp "${TMPDIR:-/tmp}/contex-pr-comment-published.XXXXXX")"
+    trap 'rm -f "$body_file" "$payload_file" "$published_file"' EXIT
+    json_payload "$body_file" "" "$payload_file"
+    gh api "repos/$(repository_name)/issues/${PR_NUMBER}/comments" \
+      --method POST \
+      --input "$payload_file" \
+      --jq '.body' > "$published_file"
+    php "$UTF8_GUARD" validate-file "$published_file" "comentario publicado no PR"
+    echo "Comentario publicado e validado em UTF-8, sem mojibake."
     ;;
   verify)
     [[ -n "$PR_NUMBER" ]] || { echo "--pr e obrigatorio." >&2; exit 1; }
-    gh pr view "$PR_NUMBER" --json body --jq .body | php -r '
-      $body = stream_get_contents(STDIN);
-      if (preg_match("//u", $body) !== 1 || preg_match("/\\\\n/", $body) === 1 || preg_match("/[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F\\x7F]/", $body) === 1) {
-          fwrite(STDERR, "O corpo publicado do PR nao passou na validacao UTF-8.\n");
-          exit(1);
-      }
-      echo "Corpo do PR validado em UTF-8, sem escapes literais ou caracteres de controle.\n";
-    '
+    title_file="$(mktemp "${TMPDIR:-/tmp}/contex-pr-title-published.XXXXXX")"
+    body_file="$(mktemp "${TMPDIR:-/tmp}/contex-pr-body-published.XXXXXX")"
+    trap 'rm -f "$title_file" "$body_file"' EXIT
+    gh pr view "$PR_NUMBER" --json title --jq .title > "$title_file"
+    gh pr view "$PR_NUMBER" --json body --jq .body > "$body_file"
+    php "$UTF8_GUARD" validate-file "$title_file" "titulo publicado do PR"
+    php "$UTF8_GUARD" validate-file "$body_file" "corpo publicado do PR"
+    echo "Titulo e corpo publicados passaram pela validacao UTF-8 e antimojibake."
     ;;
   *)
     echo "Comando desconhecido: $COMMAND" >&2
