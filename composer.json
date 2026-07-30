@@ -5,6 +5,10 @@
         "phpmailer/phpmailer": "^6.9"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.64"
+        "friendsofphp/php-cs-fixer": "^3.64",
+        "phpunit/phpunit": "^9.6"
+    },
+    "scripts": {
+        "test": "phpunit"
     }
 }

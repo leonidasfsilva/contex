@@ -24,3 +24,5 @@ application/config/config.php
 application/config/database.php
 /assets/uploads/
 /vendor
+/.phpunit.cache/
+/.phpunit.result.cache

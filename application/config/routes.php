@@ -56,6 +56,8 @@ $route['clientesApi']                               = 'ClientesApi';
 $route['api/frontend/v1/auth/login']                = 'mxcode/verificarLogin';
 $route['api/frontend/v1/auth/session']              = 'mxcode/validaSessao';
 $route['api/frontend/v1/auth/logout']               = 'mxcode/logout';
+$route['api/frontend/v1/financeiro/lancamentos']        = 'api/frontend/v1/financeiro/lancamentos/collection';
+$route['api/frontend/v1/financeiro/lancamentos/(:num)'] = 'api/frontend/v1/financeiro/lancamentos/resource/$1';
 
 // $route['financeiro/faturas/detalhes']        = 'faturas/detalhes';
 // $route['financeiro/faturas/detalhes/(:any)'] = 'faturas/detalhes/$1';
