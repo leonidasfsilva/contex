@@ -29,10 +29,6 @@
 		"setasign/fpdi": "2.6.*"
 	},
 
-	"require-dev": {
-		"phpunit/phpunit": "^4.7"
-	},
-
 	"suggest": {
 		"ext-zlib": "Needed for compression of embedded resources, such as fonts"
 	},
