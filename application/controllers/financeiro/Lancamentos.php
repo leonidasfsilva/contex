@@ -35,7 +35,27 @@ class Lancamentos extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        $this->load->library('FrontendRequestContext');
+        $this->load->library('FrontendResponder');
+        $this->load->library('LancamentosPresenter');
+        $this->load->library('ApiFrontendFormatter');
+        $this->load->library('ApiFrontendLancamentoInput');
+
+        if ($this->frontendrequestcontext->expectsJson()) {
+            $this->frontendrequestcontext->normalizeCollectionQuery();
+        }
+
         if ((!session_id()) || (!$this->session->userdata('logado'))) {
+            if ($this->frontendrequestcontext->expectsJson()) {
+                $this->frontendresponder->error(
+                    'SESSION_INVALID',
+                    'Sessão inválida ou expirada.',
+                    401,
+                    'mxcode/login'
+                );
+                $this->output->_display();
+                exit;
+            }
             redirect('mxcode/login');
         }
 
@@ -76,15 +96,66 @@ class Lancamentos extends CI_Controller
         $this->lancamentos();
     }
 
+    public function recurso($id = null)
+    {
+        if (!$this->frontendrequestcontext->expectsJson()) {
+            return $this->frontendresponder->error('INVALID_REQUEST', 'Método não permitido.', 400, $this->global_url);
+        }
+
+        $method = $this->frontendrequestcontext->method();
+
+        if ($method === 'GET') {
+            if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamentos')) {
+                return $this->frontendresponder->error('PERMISSION_DENIED', 'Você não tem permissão para visualizar lançamentos.', 403, base_url());
+            }
+
+            $lancamento = $this->financeiro_model->getById($id, getUserId());
+
+            if (!$lancamento) {
+                return $this->frontendresponder->error('TRANSACTION_NOT_FOUND', 'Lançamento não encontrado.', 404, $this->global_url);
+            }
+
+            return $this->apifrontendresponse->success($this->lancamentospresenter->item($lancamento));
+        }
+
+        if ($method === 'PUT') {
+            return $this->editar($id);
+        }
+
+        if ($method === 'DELETE') {
+            return $this->excluir($id);
+        }
+
+        return $this->frontendresponder->error('INVALID_REQUEST', 'Método não permitido.', 400, $this->global_url);
+    }
+
     // MODULO DE LANCAMENTOS
     public function lancamentos()
     {
+        if ($this->frontendrequestcontext->expectsJson() && $this->frontendrequestcontext->method() === 'POST') {
+            $input = $this->frontendrequestcontext->jsonInput();
+            return isset($input['type']) && (int) $input['type'] === 1
+                ? $this->entrada()
+                : $this->saida();
+        }
+
+        if ($this->frontendrequestcontext->expectsJson() && $this->frontendrequestcontext->method() !== 'GET') {
+            return $this->frontendresponder->error('INVALID_REQUEST', 'Método não permitido.', 400, $this->global_url);
+        }
+
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'vLancamentos')) {
-            $this->session->set_flashdata('error', 'Você não tem permissão para visualizar lançamentos.');
-            redirect(base_url());
+            return $this->frontendresponder->error(
+                'PERMISSION_DENIED',
+                'Você não tem permissão para visualizar lançamentos.',
+                403,
+                base_url()
+            );
         }
 
         $params['search'] = empty($this->input->get('search', TRUE)) ? null : $this->input->get('search', TRUE);
+        if ($this->frontendrequestcontext->expectsJson()) {
+            $params['per_page'] = (int) ($this->input->get('api_per_page', true) ?: 30);
+        }
         $this->getPreBuildFunctions($params);
         $this->buildPagination();
 
@@ -122,15 +193,26 @@ class Lancamentos extends CI_Controller
             $this->orderBy ?: 'desc'
         );
 
-        $this->data['view'] = 'financeiro/lancamentos';
-        $this->load->view('tema/topo', $this->data);
+        if ($this->frontendrequestcontext->expectsJson()) {
+            $this->prepareJsonCollectionContext($params['search']);
+        }
+
+        return $this->frontendresponder->view(
+            'financeiro/lancamentos',
+            $this->data,
+            $this->lancamentospresenter->collection($this->data)
+        );
     }
 
     public function entrada()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamentos')) {
-            $this->session->set_flashdata('erro', 'Você não tem permissão para adicionar lançamentos.');
-            redirect(base_url());
+            return $this->frontendresponder->error('PERMISSION_DENIED', 'Você não tem permissão para adicionar lançamentos.', 403, base_url());
+        }
+
+        if ($this->frontendrequestcontext->expectsJson()) {
+            if (!$this->validateJsonLancamentoInput()) return;
+            $this->frontendrequestcontext->applyLancamentoJsonToPost();
         }
 
         if ($this->input->post('urlAtual') != null) {
@@ -199,22 +281,27 @@ class Lancamentos extends CI_Controller
         );
 
         if ($this->financeiro_model->add('lancamentos', $data) == true) {
-            $this->session->set_flashdata('sucesso', 'Entrada registrada com sucesso');
-            redirect($urlAtual);
-        } else {
-            $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar registrar entrada.');
-            redirect($urlAtual);
+            $created = $this->financeiro_model->getById($this->db->insert_id(), getUserId());
+            return $this->frontendresponder->success(
+                'Entrada registrada com sucesso',
+                $urlAtual,
+                $created ? $this->lancamentospresenter->item($created) : array(),
+                201
+            );
         }
 
-        $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar registrar entrada.');
-        redirect($urlAtual);
+        return $this->frontendresponder->error('TRANSACTION_CREATE_FAILED', 'Ocorreu um erro ao tentar registrar entrada.', 500, $urlAtual);
     }
 
     public function saida()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aLancamentos')) {
-            $this->session->set_flashdata('erro', 'Você não tem permissão para adicionar lançamentos.');
-            redirect(base_url());
+            return $this->frontendresponder->error('PERMISSION_DENIED', 'Você não tem permissão para adicionar lançamentos.', 403, base_url());
+        }
+
+        if ($this->frontendrequestcontext->expectsJson()) {
+            if (!$this->validateJsonLancamentoInput()) return;
+            $this->frontendrequestcontext->applyLancamentoJsonToPost();
         }
 
         if ($this->input->post('urlAtual') != null) {
@@ -284,26 +371,31 @@ class Lancamentos extends CI_Controller
         );
 
         if ($this->financeiro_model->add('lancamentos', $data) == true) {
-            $this->session->set_flashdata('sucesso', 'Saída registrada com sucesso');
-            redirect($urlAtual);
-        } else {
-            $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar registrar saída.');
-            redirect($urlAtual);
+            $created = $this->financeiro_model->getById($this->db->insert_id(), getUserId());
+            return $this->frontendresponder->success(
+                'Saída registrada com sucesso',
+                $urlAtual,
+                $created ? $this->lancamentospresenter->item($created) : array(),
+                201
+            );
         }
-        $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar registrar saída.');
-        redirect($urlAtual);
+
+        return $this->frontendresponder->error('TRANSACTION_CREATE_FAILED', 'Ocorreu um erro ao tentar registrar saída.', 500, $urlAtual);
     }
 
-    public function editar()
+    public function editar($id = null)
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamentos')) {
-            $this->session->set_flashdata('erro', 'Você não tem permissão para editar lançamentos.');
-            redirect(base_url());
+            return $this->frontendresponder->error('PERMISSION_DENIED', 'Você não tem permissão para editar lançamentos.', 403, base_url());
+        }
+
+        if ($this->frontendrequestcontext->expectsJson()) {
+            if (!$this->validateJsonLancamentoInput()) return;
+            $this->frontendrequestcontext->applyLancamentoJsonToPost($id);
         }
 
         if (!$this->input->post()) {
-            $this->session->set_flashdata('erro', 'Método não permitido.');
-            redirect($this->global_url);
+            return $this->frontendresponder->error('INVALID_REQUEST', 'Método não permitido.', 400, $this->global_url);
         }
 
         if ($this->input->post('urlAtual') != null) {
@@ -360,24 +452,29 @@ class Lancamentos extends CI_Controller
             if ($lancamento && $lancamento->id_fatura) {
                 monitoraPagamentosFaturasVinculadas($lancamento->id_fatura);
             }
-            $this->session->set_flashdata('sucesso', 'Lançamento alterado com sucesso');
-            redirect($urlAtual);
+            return $this->frontendresponder->success(
+                'Lançamento alterado com sucesso',
+                $urlAtual,
+                $lancamento ? $this->lancamentospresenter->item($lancamento) : array()
+            );
         }
 
-        $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar alterar o registro.');
-        redirect($urlAtual);
+        return $this->frontendresponder->error('TRANSACTION_UPDATE_FAILED', 'Ocorreu um erro ao tentar alterar o registro.', 500, $urlAtual);
     }
 
-    public function copiar()
+    public function copiar($id = null)
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamentos')) {
-            $this->session->set_flashdata('erro', 'Você não tem permissão para copiar lançamentos.');
-            redirect(base_url());
+            return $this->frontendresponder->error('PERMISSION_DENIED', 'Você não tem permissão para copiar lançamentos.', 403, base_url());
+        }
+
+        if ($this->frontendrequestcontext->expectsJson()) {
+            if (!$this->validateJsonLancamentoInput()) return;
+            $this->frontendrequestcontext->applyLancamentoJsonToPost($id);
         }
 
         if (!$this->input->post()) {
-            $this->session->set_flashdata('erro', 'Método não permitido.');
-            redirect($this->global_url);
+            return $this->frontendresponder->error('INVALID_REQUEST', 'Método não permitido.', 400, $this->global_url);
         }
 
         if ($this->input->post('urlAtual') != null) {
@@ -422,12 +519,10 @@ class Lancamentos extends CI_Controller
                 }
 
                 if (!$this->financeiro_model->add('lancamentos', $data)) {
-                    $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar copiar a série de lançamentos.');
-                    redirect($urlAtual);
+                    return $this->frontendresponder->error('TRANSACTION_COPY_FAILED', 'Ocorreu um erro ao tentar copiar a série de lançamentos.', 500, $urlAtual);
                 }
             }
-            $this->session->set_flashdata('sucesso', 'Série de lançamentos copiada com sucesso');
-            redirect($urlAtual);
+            return $this->frontendresponder->success('Série de lançamentos copiada com sucesso', $urlAtual);
         }
 
         if ($pagamento != null) {
@@ -459,21 +554,29 @@ class Lancamentos extends CI_Controller
         );
 
         if (!$this->financeiro_model->add('lancamentos', $data)) {
-            $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar copiar o registro.');
-            redirect($urlAtual);
+            return $this->frontendresponder->error('TRANSACTION_COPY_FAILED', 'Ocorreu um erro ao tentar copiar o registro.', 500, $urlAtual);
         }
 
-        $this->session->set_flashdata('sucesso', 'Lançamento copiado com sucesso');
-        redirect($urlAtual);
+        $created = $this->financeiro_model->getById($this->db->insert_id(), getUserId());
+        return $this->frontendresponder->success(
+            'Lançamento copiado com sucesso',
+            $urlAtual,
+            $created ? $this->lancamentospresenter->item($created) : array(),
+            201
+        );
     }
 
-    public function excluir()
+    public function excluir($id = null)
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'dLancamentos')) {
-            $this->session->set_flashdata('erro', 'Você não tem permissão para excluir lançamentos.');
-            redirect($this->global_url);
+            return $this->frontendresponder->error('PERMISSION_DENIED', 'Você não tem permissão para excluir lançamentos.', 403, $this->global_url);
         }
 
+        $this->frontendrequestcontext->applyIdsToPost($id);
+
+        if ($this->frontendrequestcontext->expectsJson() && !$this->validateJsonWriteRequest(false)) {
+            return;
+        }
         $id = $this->input->post('id');
 
         if ($this->input->post('urlAtual') != null) {
@@ -483,8 +586,7 @@ class Lancamentos extends CI_Controller
         }
 
         if (!$id) {
-            $this->session->set_flashdata('erro', 'Método não permitido.');
-            redirect($this->global_url);
+            return $this->frontendresponder->error('INVALID_REQUEST', 'Método não permitido.', 400, $this->global_url);
         }
 
         $data = array(
@@ -496,17 +598,14 @@ class Lancamentos extends CI_Controller
                 $this->financeiro_model->delete('lancamentos', $data, 'id_lancamento', $value);
             }
 
-            $this->session->set_flashdata('sucesso', 'Série de lançamentos excluída com sucesso');
-            redirect($urlAtual);
+            return $this->frontendresponder->noContent('Série de lançamentos excluída com sucesso', $urlAtual);
         }
 
         if ($this->financeiro_model->delete('lancamentos', $data, 'id_lancamento', $id) == true) {
-            $this->session->set_flashdata('sucesso', 'Lançamento excluído com sucesso');
-            redirect($urlAtual);
-        } else {
-            $this->session->set_flashdata('erro', 'Erro ao tentar excluir lançamento.');
-            redirect($urlAtual);
+            return $this->frontendresponder->noContent('Lançamento excluído com sucesso', $urlAtual);
         }
+
+        return $this->frontendresponder->error('TRANSACTION_DELETE_FAILED', 'Erro ao tentar excluir lançamento.', 500, $urlAtual);
     }
 
     public function _pesquisa()
@@ -564,13 +663,20 @@ class Lancamentos extends CI_Controller
     public function setMesAnoPadrao()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'eLancamentos')) {
-            $this->session->set_flashdata('erro', 'Você não tem permissão para configurar o módulo de Lançamentos.');
-            redirect(base_url());
+            return $this->frontendresponder->error('PERMISSION_DENIED', 'Você não tem permissão para configurar o módulo de Lançamentos.', 403, base_url());
+        }
+
+        if ($this->frontendrequestcontext->expectsJson()) {
+            if (!$this->validateJsonWriteRequest()) return;
+            $input = $this->frontendrequestcontext->jsonInput();
+            $_POST = array(
+                'mesPadrao' => $input['month'] ?? null,
+                'anoPadrao' => $input['year'] ?? null,
+            );
         }
 
         if (!$this->input->post()) {
-            $this->session->set_flashdata('erro', 'Método não permitido.');
-            redirect($this->global_url);
+            return $this->frontendresponder->error('INVALID_REQUEST', 'Método não permitido.', 400, $this->global_url);
         }
 
         if ($this->input->post('urlAtual') != null) {
@@ -591,12 +697,13 @@ class Lancamentos extends CI_Controller
         $this->configs_model->unsetMesPadraoUsuario(getUserId());
 
         if (!$this->configs_model->add('configs_lancamentos', $data)) {
-            $this->session->set_flashdata('erro', 'Ocorreu um erro ao tentar salvar as configurações.');
-            redirect($urlAtual);
+            return $this->frontendresponder->error('SETTINGS_UPDATE_FAILED', 'Ocorreu um erro ao tentar salvar as configurações.', 500, $urlAtual);
         }
 
-        $this->session->set_flashdata('sucesso', 'Configurações salvas com sucesso');
-        redirect($urlAtual);
+        return $this->frontendresponder->success('Configurações salvas com sucesso', $urlAtual, array(
+            'month' => $data['mes_padrao'],
+            'year' => $data['ano_padrao'],
+        ));
     }
 
     protected function filterHiddenEntries(array $array)
@@ -614,11 +721,93 @@ class Lancamentos extends CI_Controller
         return $array;
     }
 
+    protected function prepareJsonCollectionContext($search = null)
+    {
+        $offset = (int) ($this->start ?: 0);
+        $this->data['aggregateResults'] = $this->financeiro_model->get(
+            'lancamentos',
+            '*',
+            getUserId(),
+            $this->where,
+            null,
+            0,
+            0,
+            0,
+            $this->orderBy ?: 'desc'
+        );
+        $this->data['perPage'] = (int) ($this->perPage ?: 30);
+        $this->data['totalRows'] = (int) $this->totalRows;
+        $this->data['currentPage'] = (int) floor($offset / max(1, $this->data['perPage'])) + 1;
+        $this->data['totalPages'] = $this->totalRows === 0
+            ? 0
+            : (int) ceil($this->totalRows / $this->data['perPage']);
+        $this->data['prevReferenceMonthNumber'] = $this->prevReferenceMonth;
+        $this->data['nextReferenceMonthNumber'] = $this->nextReferenceMonth;
+        $this->data['filters'] = array(
+            'search' => $search ?: null,
+            'period' => $this->periodo ?: 'mensal',
+            'month' => $this->referenceMonth ? (int) $this->referenceMonth : null,
+            'year' => $this->referenceYear ? (int) $this->referenceYear : null,
+            'status' => $this->status ?: null,
+            'type' => $this->tipo ?: null,
+        );
+    }
+
+    protected function validateJsonLancamentoInput()
+    {
+        if (!$this->frontendrequestcontext->expectsJson()) {
+            return true;
+        }
+
+        if (!$this->validateJsonWriteRequest()) {
+            return false;
+        }
+
+        $validation = $this->apifrontendlancamentoinput->validate(
+            $this->frontendrequestcontext->jsonInput()
+        );
+
+        if (!$validation['valid']) {
+            $this->frontendresponder->error(
+                'VALIDATION_ERROR',
+                'Verifique os campos informados.',
+                422,
+                $this->global_url,
+                array('fields' => $validation['fields'])
+            );
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function validateJsonWriteRequest($requireBody = true)
+    {
+        if (!$this->frontendrequestcontext->expectsJson()) {
+            return true;
+        }
+
+        $this->load->library('ApiCsrf', null, 'api_csrf');
+        $token = $this->input->get_request_header('X-CSRF-TOKEN', true);
+
+        if (!$this->api_csrf->isValid($token)) {
+            $this->frontendresponder->error('CSRF_TOKEN_INVALID', 'Token CSRF ausente ou inválido.', 403, $this->global_url);
+            return false;
+        }
+
+        if ($requireBody && !$this->frontendrequestcontext->jsonIsValid()) {
+            $this->frontendresponder->error('INVALID_JSON', 'O corpo JSON enviado é inválido.', 400, $this->global_url);
+            return false;
+        }
+
+        return true;
+    }
+
     public function autoCompleteDescricao()
     {
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
-            $this->financeiro_model->autoCompleteDescricao($q, getUserId());
+            return $this->financeiro_model->autoCompleteDescricao($q, getUserId());
         }
     }
 
@@ -626,7 +815,7 @@ class Lancamentos extends CI_Controller
     {
         if (isset($_GET['term'])) {
             $q = strtolower($_GET['term']);
-            $this->financeiro_model->autoCompleteFornecedor($q, getUserId());
+            return $this->financeiro_model->autoCompleteFornecedor($q, getUserId());
         }
     }
 
@@ -875,7 +1064,7 @@ class Lancamentos extends CI_Controller
         $lastElement = end($_GET);
 
         foreach ($_GET as $key => $value) {
-            if ($key != 'per_page') {
+            if (!in_array($key, array('per_page', 'api_per_page', 'page', 'perPage', 'sortDirection'), true)) {
                 if ($value == $lastElement) {
                     $this->queryString .= $key . '=' . $value;
                     continue;

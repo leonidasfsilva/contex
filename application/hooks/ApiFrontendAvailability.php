@@ -8,7 +8,7 @@ class ApiFrontendAvailability
     {
         $uri = uri_string();
 
-        if (strpos($uri, 'api/frontend/v1/auth/') !== 0) {
+        if (strpos($uri, 'api/frontend/v1/') !== 0) {
             return;
         }
 
@@ -25,8 +25,11 @@ class ApiFrontendAvailability
             ->set_output(
                 json_encode(
                     array(
-                        'code'    => 'API_UNAVAILABLE',
-                        'message' => 'API indisponível no momento. Tente novamente mais tarde.',
+                        'success' => false,
+                        'error'   => array(
+                            'code'    => 'API_UNAVAILABLE',
+                            'message' => 'API indisponível no momento. Tente novamente mais tarde.',
+                        ),
                     ),
                     JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
                 )

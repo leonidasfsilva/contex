@@ -56,6 +56,12 @@ $route['clientesApi']                               = 'ClientesApi';
 $route['api/frontend/v1/auth/login']                = 'mxcode/verificarLogin';
 $route['api/frontend/v1/auth/session']              = 'mxcode/validaSessao';
 $route['api/frontend/v1/auth/logout']               = 'mxcode/logout';
+$route['api/frontend/v1/financeiro/lancamentos']             = 'financeiro/lancamentos/index';
+$route['api/frontend/v1/financeiro/lancamentos/(:num)']      = 'financeiro/lancamentos/recurso/$1';
+$route['api/frontend/v1/financeiro/lancamentos/copiar/(:num)'] = 'financeiro/lancamentos/copiar/$1';
+$route['api/frontend/v1/financeiro/lancamentos/configuracao'] = 'financeiro/lancamentos/setMesAnoPadrao';
+$route['api/frontend/v1/financeiro/lancamentos/autocomplete/descricao'] = 'financeiro/lancamentos/autoCompleteDescricao';
+$route['api/frontend/v1/financeiro/lancamentos/autocomplete/fornecedor'] = 'financeiro/lancamentos/autoCompleteFornecedor';
 
 // $route['financeiro/faturas/detalhes']        = 'faturas/detalhes';
 // $route['financeiro/faturas/detalhes/(:any)'] = 'faturas/detalhes/$1';

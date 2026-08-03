@@ -96,6 +96,39 @@ class Financeiro_model extends CI_Model
 		}
 		return $result;
 	}
+
+	function addLancamentoApiFrontend($data)
+	{
+		$this->db->insert('lancamentos', $data);
+
+		if ($this->db->affected_rows() !== 1) {
+			return false;
+		}
+
+		return (int) $this->db->insert_id();
+	}
+
+	function updateLancamentoApiFrontend($id, $idUsuario, $data)
+	{
+		$this->db
+			->where('id_lancamento', $id)
+			->where('id_usuario', $idUsuario)
+			->where('status', 1)
+			->update('lancamentos', $data);
+
+		return $this->db->affected_rows() >= 0;
+	}
+
+	function deleteLancamentoApiFrontend($id, $idUsuario)
+	{
+		$this->db
+			->where('id_lancamento', $id)
+			->where('id_usuario', $idUsuario)
+			->where('status', 1)
+			->update('lancamentos', array('status' => 0));
+
+		return $this->db->affected_rows() === 1;
+	}
 	
 	function add($table, $data)
 	{
@@ -152,6 +185,54 @@ class Financeiro_model extends CI_Model
 			$this->db->limit($limit, $start);
 		}
 		return $this->db->count_all_results('lancamentos');
+	}
+
+	function getLancamentosApiFrontend($idUsuario, $search = null, $perPage = 30, $offset = 0, $sortDirection = 'desc')
+	{
+		$this->db
+			->select('id_lancamento, descricao, valor, data_lancamento, data_pagamento, baixado, cliente_fornecedor, forma_pgto, tipo, observacoes, oculto')
+			->from('lancamentos')
+			->where('id_usuario', $idUsuario)
+			->where('status', 1);
+
+		$this->applyLancamentosApiFrontendSearch($search);
+
+		$sortDirection = strtolower($sortDirection) === 'asc' ? 'asc' : 'desc';
+
+		return $this->db
+			->order_by('data_lancamento', $sortDirection)
+			->order_by('id_lancamento', $sortDirection)
+			->limit((int) $perPage, (int) $offset)
+			->get()
+			->result();
+	}
+
+	function countLancamentosApiFrontend($idUsuario, $search = null)
+	{
+		$this->db
+			->from('lancamentos')
+			->where('id_usuario', $idUsuario)
+			->where('status', 1);
+
+		$this->applyLancamentosApiFrontendSearch($search);
+
+		return $this->db->count_all_results();
+	}
+
+	private function applyLancamentosApiFrontendSearch($search)
+	{
+		$search = trim((string) $search);
+
+		if ($search === '') {
+			return;
+		}
+
+		$this->db
+			->group_start()
+			->like('descricao', $search)
+			->or_like('cliente_fornecedor', $search)
+			->or_like('observacoes', $search)
+			->group_end();
 	}
 	
 	function getSaidasPendentes($id_usuario)
