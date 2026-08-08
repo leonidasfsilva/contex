@@ -47,7 +47,60 @@ function normalizeExternalText(string $value, string $field): string
         fail("{$field}: o texto contem \\n literal; use quebras de linha reais.");
     }
 
+    validatePortugueseDiacritics($value, $field);
+
     return $value;
+}
+
+function validatePortugueseDiacritics(string $value, string $field): void
+{
+    // Identificadores, caminhos e trechos de código não devem ser corrigidos
+    // como prosa. A validação abaixo atua somente sobre o texto restante.
+    $prose = preg_replace('/`[^`]*`/u', ' ', $value);
+    if ($prose === null) {
+        fail("{$field}: não foi possível analisar a prosa em UTF-8.");
+    }
+
+    $missingDiacritics = [
+        'acao' => 'ação',
+        'acoes' => 'ações',
+        'aplicacao' => 'aplicação',
+        'apos' => 'após',
+        'codigo' => 'código',
+        'concluida' => 'concluída',
+        'duplicacao' => 'duplicação',
+        'duplicacoes' => 'duplicações',
+        'historico' => 'histórico',
+        'historicos' => 'históricos',
+        'indice' => 'índice',
+        'integracao' => 'integração',
+        'lancamento' => 'lançamento',
+        'lancamentos' => 'lançamentos',
+        'operacao' => 'operação',
+        'operacoes' => 'operações',
+        'orfao' => 'órfão',
+        'orfaos' => 'órfãos',
+        'producao' => 'produção',
+        'reconciliacao' => 'reconciliação',
+        'sanitizacao' => 'sanitização',
+        'sincronizacao' => 'sincronização',
+        'solucao' => 'solução',
+        'tambem' => 'também',
+        'transacao' => 'transação',
+        'unico' => 'único',
+        'unica' => 'única',
+        'validacao' => 'validação',
+        'valido' => 'válido',
+        'vinculo' => 'vínculo',
+        'vinculos' => 'vínculos',
+    ];
+
+    foreach ($missingDiacritics as $plain => $expected) {
+        $pattern = '/(?<![\\p{L}\\p{N}_])' . preg_quote($plain, '/') . '(?![\\p{L}\\p{N}_])/iu';
+        if (preg_match($pattern, $prose) === 1) {
+            fail("{$field}: termo PT-BR sem diacrítico: {$plain}; use {$expected}.");
+        }
+    }
 }
 
 function readFileStrict(string $path): string
