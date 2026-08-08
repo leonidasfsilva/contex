@@ -373,6 +373,100 @@ class Fatura_model extends CI_Model
         return $this->sincronizarLancamentosTerceiros($idsLancamentos, $idUsuario);
     }
 
+    function garantirLancamentosTotalDevidoTerceiroPorCompra($idLancamentoFatura, $idUsuario)
+    {
+        $periodos = $this->db
+            ->select('DISTINCT lf.nome_cliente, lfa.mes_referencia, lfa.ano_referencia', false)
+            ->from('lancamentos_faturas_assoc AS lfa')
+            ->join('lancamentos_faturas AS lf', 'lf.id_lancamento = lfa.id_lancamento', 'inner')
+            ->where('lfa.id_lancamento', $idLancamentoFatura)
+            ->where('lfa.status', 1)
+            ->where('lf.status', 1)
+            ->where('lf.compra_terceiros', 1)
+            ->where('lf.id_usuario', $idUsuario)
+            ->get()
+            ->result_array();
+
+        foreach ($periodos as $periodo) {
+            $vinculoExistente = $this->getVinculoTerceiroPeriodo(
+                $idUsuario,
+                $periodo['nome_cliente'],
+                $periodo['mes_referencia'],
+                $periodo['ano_referencia']
+            );
+
+            if ($vinculoExistente) {
+                continue;
+            }
+
+            $parcelas = $this->getParcelasTerceiroPeriodoParaVinculo(
+                $idUsuario,
+                $periodo['nome_cliente'],
+                $periodo['mes_referencia'],
+                $periodo['ano_referencia']
+            ) ?: [];
+
+            if (!$parcelas) {
+                continue;
+            }
+
+            $total = 0;
+            $vencimento = $parcelas[0]['vencimento'];
+            $totaisCartao = [];
+
+            foreach ($parcelas as $parcela) {
+                $total += $parcela['valor_parcela'];
+
+                if (strtotime($parcela['vencimento']) < strtotime($vencimento)) {
+                    $vencimento = $parcela['vencimento'];
+                }
+
+                $numeroCartao = decriptar($parcela['cartao_numero']);
+                $partesCartao = explode(' ', trim($numeroCartao));
+                $finalCartao = end($partesCartao);
+                $cartaoLabel = $parcela['cartao_apelido'] ?: $parcela['cartao_bandeira'] . ' - FINAL ' . $finalCartao;
+
+                if (!isset($totaisCartao[$cartaoLabel])) {
+                    $totaisCartao[$cartaoLabel] = 0;
+                }
+
+                $totaisCartao[$cartaoLabel] += $parcela['valor_parcela'];
+            }
+
+            $observacoes = [];
+
+            foreach ($totaisCartao as $cartaoLabel => $valorCartao) {
+                $observacoes[] = $cartaoLabel . ': R$ ' . number_format($valorCartao, 2, ',', '.');
+            }
+
+            $dataLancamento = [
+                'id_usuario'         => $idUsuario,
+                'descricao'          => 'TOTAL DEVIDO NOS CARTOES',
+                'observacoes'        => implode("\n", $observacoes),
+                'valor'              => $total,
+                'data_lancamento'    => $vencimento,
+                'data_pagamento'     => $vencimento,
+                'baixado'            => 0,
+                'cliente_fornecedor' => padronizarString($periodo['nome_cliente']),
+                'forma_pgto'         => 6,
+                'tipo'               => 1
+            ];
+
+            if (!$this->add('lancamentos', $dataLancamento)) {
+                return false;
+            }
+
+            $idLancamento = $this->insert_id('lancamentos');
+            $idsAssoc = array_column($parcelas, 'id_assoc');
+
+            if (!$idLancamento || !$this->vincularLancamentoTerceiro($idLancamento, $idsAssoc)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     function garantirVinculoPagamentoTerceiroPorParcela($idAssoc, $idUsuario)
     {
         $parcela = $this->getLancamentoAssocTerceiroUsuario($idAssoc, $idUsuario);
@@ -926,6 +1020,7 @@ class Fatura_model extends CI_Model
                 lfa.id_assoc,
                 lfa.id_lancamento,
                 lfa.valor_parcela,
+                lfa.parcela_terceiro_pago,
                 lfa.mes_referencia,
                 lfa.ano_referencia,
                 lf.nome_cliente,
@@ -964,6 +1059,7 @@ class Fatura_model extends CI_Model
                 lfa.id_assoc,
                 lfa.id_lancamento,
                 lfa.valor_parcela,
+                lfa.parcela_terceiro_pago,
                 lfa.mes_referencia,
                 lfa.ano_referencia,
                 lf.nome_cliente,

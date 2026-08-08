@@ -562,14 +562,23 @@ function sincronizaVinculosTerceiroPorCompra($idLancamentoFatura, $idUsuario = n
     $CI = get_instance();
     $CI->load->model('fatura_model');
 
-    if (!$CI->fatura_model->sincronizarVinculosTerceiroPorCompra(
+    $idUsuario = $idUsuario ?: getUserId();
+
+    if (!$CI->fatura_model->garantirLancamentosTotalDevidoTerceiroPorCompra(
         $idLancamentoFatura,
-        $idUsuario ?: getUserId()
+        $idUsuario
     )) {
         return false;
     }
 
-    return sincronizaPagamentosRecebidosTerceiroPorCompra($idLancamentoFatura, $idUsuario ?: getUserId());
+    if (!$CI->fatura_model->sincronizarVinculosTerceiroPorCompra(
+        $idLancamentoFatura,
+        $idUsuario
+    )) {
+        return false;
+    }
+
+    return sincronizaPagamentosRecebidosTerceiroPorCompra($idLancamentoFatura, $idUsuario);
 }
 
 function vinculaFatura($idFatura, $idUsuario = null)

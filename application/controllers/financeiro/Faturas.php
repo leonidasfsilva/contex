@@ -1927,6 +1927,11 @@ class Faturas extends CI_Controller
 
         $pago = ($acao == 'pagar');
 
+        if (!sincronizaVinculosTerceiroPorCompra($lancamento->id_lancamento, getUserId())) {
+            $this->session->set_flashdata('erro', 'Erro ao tentar atualizar lançamento vinculado do terceiro');
+            redirect($urlAtual);
+        }
+
         if (
             $this->fatura_model->setParcelaTerceiroPago($idAssoc, $pago) &&
             sincronizaPagamentoRecebidoTerceiroPorParcela($idAssoc, getUserId(), $pago) &&
@@ -1965,6 +1970,11 @@ class Faturas extends CI_Controller
         }
 
         $pago = ($acao == 'pagar');
+
+        if (!sincronizaVinculosTerceiroPorCompra($lancamento->id_lancamento, getUserId())) {
+            $this->session->set_flashdata('erro', 'Erro ao tentar atualizar lançamento vinculado do terceiro');
+            redirect($urlAtual);
+        }
 
         if (
             $this->fatura_model->setCompraTerceiroPago($lancamento->id_lancamento, getUserId(), $pago) &&
