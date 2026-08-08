@@ -168,7 +168,9 @@ function sincronizaPagamentoRecebidoTerceiroPorParcela($idAssoc, $idUsuario, $pa
     $vinculo = $CI->fatura_model->garantirVinculoPagamentoTerceiroPorParcela($idAssoc, $idUsuario);
 
     if (!$vinculo) {
-        return true;
+        // Ao marcar como pago, ausência de vínculo não é sucesso: sem ele a
+        // tabela de integração e o lançamento recebido não são materializados.
+        return !$pago;
     }
 
     if ($pago) {
@@ -245,7 +247,7 @@ function sincronizaPagamentoRecebidoTerceiroPorCompra($idLancamentoFatura, $idUs
     $vinculos = $CI->fatura_model->garantirVinculosPagamentoTerceiroPorCompra($idLancamentoFatura, $idUsuario);
 
     if (!$vinculos) {
-        return true;
+        return !$pago;
     }
 
     $idsLancamentos = [];
@@ -553,6 +555,14 @@ function sincronizaPagamentosRecebidosTerceirosUsuario($idUsuario = null): bool
     return true;
 }
 
+function sanitizaIntegracaoTerceirosUsuario($idUsuario = null): bool
+{
+    $CI = get_instance();
+    $CI->load->model('fatura_model');
+
+    return $CI->fatura_model->sanitizarIntegracaoTerceirosUsuario($idUsuario ?: getUserId());
+}
+
 function sincronizaVinculosTerceiroPorCompra($idLancamentoFatura, $idUsuario = null): bool
 {
     if (!$idLancamentoFatura) {
@@ -562,14 +572,16 @@ function sincronizaVinculosTerceiroPorCompra($idLancamentoFatura, $idUsuario = n
     $CI = get_instance();
     $CI->load->model('fatura_model');
 
+    $idUsuario = $idUsuario ?: getUserId();
+
     if (!$CI->fatura_model->sincronizarVinculosTerceiroPorCompra(
         $idLancamentoFatura,
-        $idUsuario ?: getUserId()
+        $idUsuario
     )) {
         return false;
     }
 
-    return sincronizaPagamentosRecebidosTerceiroPorCompra($idLancamentoFatura, $idUsuario ?: getUserId());
+    return sincronizaPagamentosRecebidosTerceiroPorCompra($idLancamentoFatura, $idUsuario);
 }
 
 function vinculaFatura($idFatura, $idUsuario = null)

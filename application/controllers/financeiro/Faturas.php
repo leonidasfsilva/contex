@@ -1281,6 +1281,11 @@ class Faturas extends CI_Controller
             redirect($urlAtual);
         }
 
+        if (!sincronizaPagamentosRecebidosTerceiroPorCompra($idLancamentoFatura, getUserId())) {
+            $this->session->set_flashdata('erro', 'Erro ao tentar atualizar pagamento recebido do terceiro');
+            redirect($urlAtual);
+        }
+
         return true;
     }
 
@@ -1927,16 +1932,20 @@ class Faturas extends CI_Controller
 
         $pago = ($acao == 'pagar');
 
+        $this->db->trans_begin();
+
         if (
             $this->fatura_model->setParcelaTerceiroPago($idAssoc, $pago) &&
             sincronizaPagamentoRecebidoTerceiroPorParcela($idAssoc, getUserId(), $pago) &&
             $this->fatura_model->sincronizarVinculoTerceiroPorParcela($idAssoc, getUserId())
         ) {
+            $this->db->trans_commit();
             $mensagem = $pago ? 'Parcela marcada como paga' : 'Pagamento da parcela removido';
             $this->session->set_flashdata('sucesso', $mensagem);
             redirect($urlAtual);
         }
 
+        $this->db->trans_rollback();
         $this->session->set_flashdata('erro', 'Erro ao tentar atualizar pagamento da parcela');
         redirect($urlAtual);
     }
@@ -1966,16 +1975,20 @@ class Faturas extends CI_Controller
 
         $pago = ($acao == 'pagar');
 
+        $this->db->trans_begin();
+
         if (
             $this->fatura_model->setCompraTerceiroPago($lancamento->id_lancamento, getUserId(), $pago) &&
             sincronizaPagamentoRecebidoTerceiroPorCompra($lancamento->id_lancamento, getUserId(), $pago) &&
             $this->fatura_model->sincronizarVinculosTerceiroPorCompra($lancamento->id_lancamento, getUserId())
         ) {
+            $this->db->trans_commit();
             $mensagem = $pago ? 'Compra marcada como paga' : 'Pagamento da compra removido';
             $this->session->set_flashdata('sucesso', $mensagem);
             redirect($urlAtual);
         }
 
+        $this->db->trans_rollback();
         $this->session->set_flashdata('erro', 'Erro ao tentar atualizar pagamento da compra');
         redirect($urlAtual);
     }
@@ -2059,7 +2072,11 @@ class Faturas extends CI_Controller
         $idLancamento     = $lancamentoCriado ? $this->fatura_model->insert_id('lancamentos') : null;
         $vinculado        = $idLancamento ? $this->fatura_model->vincularLancamentoTerceiro($idLancamento, $idsAssoc) : false;
 
-        if ($this->db->trans_status() && $lancamentoCriado && $vinculado) {
+        $pagamentosSincronizados = $vinculado
+            ? sincronizaPagamentosRecebidosTerceiroPorCompra($parcelas[0]['id_lancamento'], getUserId())
+            : false;
+
+        if ($this->db->trans_status() && $lancamentoCriado && $vinculado && $pagamentosSincronizados) {
             $this->db->trans_commit();
             $this->session->set_flashdata('sucesso', 'Compras do terceiro vinculadas com sucesso');
             redirect($urlAtual);

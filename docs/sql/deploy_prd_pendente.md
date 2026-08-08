@@ -5,6 +5,7 @@ Este arquivo controla scripts versionados que ainda precisam ser aplicados manua
 | Estado | Ordem | Script | Origem | Adicionado em | Aplicado em | Responsável |
 | --- | ---: | --- | --- | --- | --- | --- |
 | APLICADO | 1 | `feature_278_controle_operacional_spa.sql` | Card 278 / PR 54 | 2026-07-27 | 2026-07-28 | Leônidas Ferreira |
+| PENDENTE | 2 | `bugfix_283_integracao_terceiros_unica_por_parcela.sql` | Card 283 | 2026-08-08 | - | Leônidas Ferreira |
 
 ## Verificação da pendência atual
 

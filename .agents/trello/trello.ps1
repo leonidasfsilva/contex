@@ -322,6 +322,10 @@ switch ($Command) {
 
         $result = Invoke-TrelloRequest -Method "PUT" -Path "cards/$CardId" -Body $body
 
+        if ($body.ContainsKey('desc') -and $result.desc -ne $body.desc) {
+            throw "O Trello devolveu descrição diferente do texto sanitizado enviado."
+        }
+
         Write-Json $result
         break
     }
@@ -338,6 +342,9 @@ switch ($Command) {
         $Text = Protect-ExternalText -Text $Text -FieldName "Text"
 
         $result = Invoke-TrelloRequest -Method "POST" -Path "cards/$CardId/actions/comments" -Body @{ text = $Text }
+        if ($result.data.text -ne $Text -and $result.data.text) {
+            throw "O Trello devolveu comentário diferente do texto sanitizado enviado."
+        }
         Write-Json $result
         break
     }

@@ -7,6 +7,8 @@ Todo título, corpo e comentário publicado no GitHub passa pelo guard comum
 caracteres de controle e `\n` literal, além de normalizar Unicode em NFC.
 
 Não use `gh pr create`, `gh pr edit`, `gh pr comment` ou `gh api` diretamente
+para publicar texto. O único caminho autorizado é `pr.sh`: ele normaliza pelo
+guard, envia o payload e relê o conteúdo publicado para validar o resultado.
 para publicar texto.
 
 ```bash

@@ -61,6 +61,12 @@ normalize_file() {
   php "$UTF8_GUARD" normalize-file "$source" "$target" "$field"
 }
 
+validate_published_text() {
+  local value_file="$1"
+  local field="$2"
+  php "$UTF8_GUARD" validate-file "$value_file" "$field"
+}
+
 repository_name() {
   if [[ -z "$REPOSITORY" ]]; then
     REPOSITORY="$(gh repo view --json nameWithOwner --jq .nameWithOwner)"
@@ -124,7 +130,24 @@ case "$COMMAND" in
     body_file="$(prepare_body)"
     title_file="$(prepare_title)"
     trap 'rm -f "$body_file" "$title_file"' EXIT
-    gh pr create --base "$BASE" --head "$HEAD" --title "$(<"$title_file")" --body-file "$body_file"
+    pr_url_file="$(mktemp "${TMPDIR:-/tmp}/contex-pr-url.XXXXXX")"
+    trap 'rm -f "$body_file" "$title_file" "$pr_url_file"' EXIT
+    gh pr create --base "$BASE" --head "$HEAD" --title "$(<"$title_file")" --body-file "$body_file" > "$pr_url_file"
+    pr_url="$(<"$pr_url_file")"
+    pr_number="${pr_url##*/}"
+    if [[ ! "$pr_number" =~ ^[0-9]+$ ]]; then
+      echo "A API nao retornou uma URL de PR valida para verificacao." >&2
+      exit 1
+    fi
+    published_file="$(mktemp "${TMPDIR:-/tmp}/contex-pr-body-published.XXXXXX")"
+    trap 'rm -f "$body_file" "$title_file" "$pr_url_file" "$published_file"' EXIT
+    gh pr view "$pr_number" --json body --jq .body > "$published_file"
+    validate_published_text "$published_file" "corpo do PR publicado"
+    cmp -s "$body_file" "$published_file" || {
+      echo "O corpo devolvido pelo GitHub diverge do corpo sanitizado enviado." >&2
+      exit 1
+    }
+    cat "$pr_url_file"
     ;;
   edit)
     [[ -n "$PR_NUMBER" ]] || { echo "--pr e obrigatorio." >&2; exit 1; }
@@ -136,7 +159,29 @@ case "$COMMAND" in
     payload_file="$(mktemp "${TMPDIR:-/tmp}/contex-pr-payload.XXXXXX")"
     trap 'rm -f "$body_file" "$title_file" "$payload_file"' EXIT
     json_payload "$body_file" "$title_file" "$payload_file"
-    gh api "repos/$(repository_name)/pulls/${PR_NUMBER}" --method PATCH --input "$payload_file" --jq .html_url
+    response_file="$(mktemp "${TMPDIR:-/tmp}/contex-pr-edit-response.XXXXXX")"
+    published_body_file="$(mktemp "${TMPDIR:-/tmp}/contex-pr-body-published.XXXXXX")"
+    published_title_file="$(mktemp "${TMPDIR:-/tmp}/contex-pr-title-published.XXXXXX")"
+    trap 'rm -f "$body_file" "$title_file" "$payload_file" "$response_file" "$published_body_file" "$published_title_file"' EXIT
+    gh api "repos/$(repository_name)/pulls/${PR_NUMBER}" --method PATCH --input "$payload_file" > "$response_file"
+    php -r '
+      $json=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR);
+      file_put_contents($argv[2], $json["body"] ?? "");
+      file_put_contents($argv[3], $json["title"] ?? "");
+    ' "$response_file" "$published_body_file" "$published_title_file"
+    validate_published_text "$published_body_file" "corpo do PR publicado"
+    validate_published_text "$published_title_file" "titulo do PR publicado"
+    cmp -s "$body_file" "$published_body_file" || {
+      echo "O corpo devolvido pelo GitHub diverge do corpo sanitizado enviado." >&2
+      exit 1
+    }
+    if [[ -n "$title_file" ]]; then
+      cmp -s "$title_file" "$published_title_file" || {
+        echo "O titulo devolvido pelo GitHub diverge do titulo sanitizado enviado." >&2
+        exit 1
+      }
+    fi
+    php -r '$json=json_decode(file_get_contents($argv[1]), true, 512, JSON_THROW_ON_ERROR); echo ($json["html_url"] ?? "") . PHP_EOL;' "$response_file"
     ;;
   comment)
     [[ -n "$PR_NUMBER" ]] || { echo "--pr e obrigatorio." >&2; exit 1; }
