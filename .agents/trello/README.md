@@ -48,7 +48,7 @@ Também é possível usar variáveis de ambiente:
 .agents/trello/trello.sh update-name -CardId "ID_DO_CARD" -Name "Novo título"
 ```
 
-O script `trello.ps1` fica disponível como alternativa legada. O agente pode usar o helper ou outra ferramenta adequada para acessar o Trello, desde que preserve a codificação, o conteúdo e as regras operacionais do projeto.
+O script `trello.ps1` é o helper oficial no Windows; `trello.sh` é o helper oficial no Bash. Não é permitido usar `curl`, `Invoke-RestMethod`, SDK, MCP ou qualquer cliente direto para escrever no Trello fora desses helpers. Depois de cada escrita textual, o helper deve reler e validar o conteúdo publicado.
 
 O board é detectado pelo diretório atual do projeto. Por exemplo, executando o script a partir de `C:\laragon\www\contex` será usado o board `contex`; a partir de `C:\laragon\www\contex-spa`, o board `contex-spa`.
 
