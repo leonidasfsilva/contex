@@ -175,6 +175,11 @@ function reconciliarFinanceiroUsuario($idUsuario = null, $origem = 'login')
     try {
         integracaoDespesasUsuario($idUsuario);
         atualizaValorVinculoFaturas(null, $idUsuario);
+
+        if (!sanitizaIntegracaoTerceirosUsuario($idUsuario)) {
+            throw new RuntimeException('Erro ao sanitizar vínculos financeiros de terceiros.');
+        }
+
         vinculoAutomaticoComprasTerceiros($idUsuario);
         sincronizaPagamentosRecebidosTerceirosUsuario($idUsuario);
 
