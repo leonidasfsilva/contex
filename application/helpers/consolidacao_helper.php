@@ -180,8 +180,13 @@ function reconciliarFinanceiroUsuario($idUsuario = null, $origem = 'login')
             throw new RuntimeException('Erro ao sanitizar vínculos financeiros de terceiros.');
         }
 
-        vinculoAutomaticoComprasTerceiros($idUsuario);
-        sincronizaPagamentosRecebidosTerceirosUsuario($idUsuario);
+        if (!vinculoAutomaticoComprasTerceiros($idUsuario)) {
+            throw new RuntimeException('Erro ao criar vínculos automáticos de compras de terceiros.');
+        }
+
+        if (!sincronizaPagamentosRecebidosTerceirosUsuario($idUsuario)) {
+            throw new RuntimeException('Erro ao sincronizar pagamentos recebidos de terceiros.');
+        }
 
         $CI->db
             ->where('id', $idConsolidacao)

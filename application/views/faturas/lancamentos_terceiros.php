@@ -34,8 +34,8 @@ if (isset($referenceMonth) && $referenceMonth) {
                     class="btn btn-primary btn-sm"
                     id="vincularTerceiroPeriodo"
                     data-toggle="modal"
-                    title="<?= $vinculoTerceiroPeriodo ? 'Período já vinculado ao módulo de Lançamentos' : 'Vincular saldo do período ao módulo de Lançamentos' ?>"
-                    <?= $vinculoTerceiroPeriodo ? 'disabled' : '' ?>>
+                    title="<?= $autoLinkThirdParty ? 'Vinculação automática de compras de terceiros está ativada para este cartão' : ($vinculoTerceiroPeriodo ? 'Período já vinculado ao módulo de Lançamentos' : 'Vincular saldo do período ao módulo de Lançamentos') ?>"
+                    <?= ($vinculoTerceiroPeriodo || $autoLinkThirdParty) ? 'disabled' : '' ?>>
                     <i class="fas fa-link fa-fw"></i> Vincular
                 </button>
             <?php } ?>
