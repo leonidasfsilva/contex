@@ -467,6 +467,11 @@ if ($this->permission->checkPermission($this->session->userdata('permissao'), 'a
                         <input type="checkbox" id="invoice-link-switch" name="invoiceAutoLink" class="switch-input primary" <?= $autoLinkInvoices ? 'checked' : '' ?>>
                         <label for="invoice-link-switch" id="auto-link-label" class="switch-label primary font-weight-bold"><?= $autoLinkInvoices ? 'Auto vínculo ativado' : 'Auto vínculo desativado' ?></label>
                     </div>
+                    <p class="font-weight-bold">Vinculação automática de compras de terceiros:</p>
+                    <div>
+                        <input type="checkbox" id="third-party-link-switch" name="thirdPartyAutoLink" class="switch-input primary" <?= $autoLinkThirdParty ? 'checked' : '' ?>>
+                        <label for="third-party-link-switch" class="switch-label primary font-weight-bold"><?= $autoLinkThirdParty ? 'Auto vínculo ativado' : 'Auto vínculo desativado' ?></label>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default btn-sm" data-dismiss="modal" aria-hidden="true">

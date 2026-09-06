@@ -225,6 +225,7 @@ class Faturas extends CI_Controller
 
             $data['yearsList']           = $this->yearsList;
             $data['autoLinkInvoices']    = $this->fatura_model->getAutoLinkUser();
+            $data['autoLinkThirdParty']  = $this->fatura_model->getAutoLinkTerceirosCartao($idCartao);
             $data['existe_configuracao'] = $this->fatura_model->existeConfiguracao($idCartao);
             $data['dia_vencimento']      = $this->fatura_model->getDiaVencimentoFatura($idCartao);
             $data['cartoes']             = $this->cartoes_model->getCartoesAtivosUsuario(getUserId());
@@ -1653,6 +1654,7 @@ class Faturas extends CI_Controller
         $id_cartao = $this->input->post('id_cartao');
         $dia       = $this->input->post('dia_vencimento');
         $autoLink  = $this->input->post('invoiceAutoLink');
+        $autoLinkThirdParty = $this->input->post('thirdPartyAutoLink');
 
         if (!$id_cartao) {
             $this->session->set_flashdata('erro', 'Método não permitido');
@@ -1663,6 +1665,7 @@ class Faturas extends CI_Controller
             'id_usuario'     => getUserId(),
             'id_cartao'      => $id_cartao,
             'dia_vencimento' => $dia,
+            'auto_vinculo_terceiros' => ($autoLinkThirdParty == 'on') ? 1 : null,
         );
 
         if ($autoLink == 'on') {
@@ -1705,6 +1708,7 @@ class Faturas extends CI_Controller
                     'id_cartao'         => $adicional->id_cartao,
                     'id_cartao_titular' => $id_cartao,
                     'dia_vencimento'    => $dia,
+                    'auto_vinculo_terceiros' => ($autoLinkThirdParty == 'on') ? 1 : null,
                     'adicional'         => 1
                 );
                 $this->fatura_model->edit('configs_faturas', $data, 'id_cartao', $adicional->id_cartao);
@@ -1744,6 +1748,7 @@ class Faturas extends CI_Controller
                 'id_cartao'         => $adicional->id_cartao,
                 'id_cartao_titular' => $id_cartao,
                 'dia_vencimento'    => $dia,
+                'auto_vinculo_terceiros' => ($autoLinkThirdParty == 'on') ? 1 : null,
                 'adicional'         => 1
             );
             $this->fatura_model->add('configs_faturas', $data);
@@ -1832,6 +1837,7 @@ class Faturas extends CI_Controller
 
         $faturasTerceiros   = $this->fatura_model->getFaturasTerceiros(getUserId(), $nome, $referenceMonth, $referenceYear);
         $vinculoTerceiroPeriodo = $this->fatura_model->getVinculoTerceiroPeriodo(getUserId(), $nome, $referenceMonth, $referenceYear);
+        $data['autoLinkThirdParty'] = $this->fatura_model->getAutoLinkTerceirosCartao($idCartao);
         $referenceMonthName = getExtendedMonthName($referenceMonth);
         $prevReferenceMonth = translateMonth($prevReferenceMonth, true, true);
         $nextReferenceMonth = translateMonth($nextReferenceMonth, true, true);
@@ -1932,6 +1938,13 @@ class Faturas extends CI_Controller
 
         $pago = ($acao == 'pagar');
 
+        if ($pago && !$this->fatura_model->getVinculoPagamentoTerceiroPorAssoc($idAssoc, getUserId())) {
+            if (!$this->garantirVinculoAutomaticoTerceiroPorParcela($lancamento)) {
+                $this->session->set_flashdata('erro', $this->mensagemVinculoTerceiroAusente($lancamento));
+                redirect($urlAtual);
+            }
+        }
+
         $this->db->trans_begin();
 
         if (
@@ -1948,6 +1961,29 @@ class Faturas extends CI_Controller
         $this->db->trans_rollback();
         $this->session->set_flashdata('erro', 'Erro ao tentar atualizar pagamento da parcela');
         redirect($urlAtual);
+    }
+
+    private function mensagemVinculoTerceiroAusente($lancamento)
+    {
+        $mes = str_pad((string) $lancamento->mes_referencia, 2, '0', STR_PAD_LEFT);
+        $ano = $lancamento->ano_referencia;
+
+        return "Compras deste terceiro ainda não estão vinculadas para {$mes}/{$ano}. Vincule o período ou ative a vinculação automática.";
+    }
+
+    private function garantirVinculoAutomaticoTerceiroPorParcela($lancamento)
+    {
+        if (!$this->fatura_model->getAutoLinkTerceirosCartao($lancamento->id_cartao, getUserId())) {
+            return false;
+        }
+
+        return (bool) $this->fatura_model->criarVinculoTerceiroPeriodo(
+            getUserId(),
+            $lancamento->nome_cliente,
+            $lancamento->mes_referencia,
+            $lancamento->ano_referencia,
+            $lancamento->id_cartao
+        );
     }
 
     public function marcarCompraTerceiroPago()
@@ -1974,6 +2010,13 @@ class Faturas extends CI_Controller
         }
 
         $pago = ($acao == 'pagar');
+
+        if ($pago && !$this->fatura_model->getVinculoPagamentoTerceiroPorAssoc($idAssoc, getUserId())) {
+            if (!$this->garantirVinculoAutomaticoTerceiroPorParcela($lancamento)) {
+                $this->session->set_flashdata('erro', $this->mensagemVinculoTerceiroAusente($lancamento));
+                redirect($urlAtual);
+            }
+        }
 
         $this->db->trans_begin();
 

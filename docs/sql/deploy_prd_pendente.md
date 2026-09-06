@@ -6,6 +6,7 @@ Este arquivo controla scripts versionados que ainda precisam ser aplicados manua
 | --- | ---: | --- | --- | --- | --- | --- |
 | APLICADO | 1 | `feature_278_controle_operacional_spa.sql` | Card 278 / PR 54 | 2026-07-27 | 2026-07-28 | Leônidas Ferreira |
 | PENDENTE | 2 | `bugfix_283_integracao_terceiros_unica_por_parcela.sql` | Card 283 | 2026-08-08 | - | Leônidas Ferreira |
+| PENDENTE | 3 | `feature_284_vinculo_automatico_compras_terceiros.sql` | Vinculação automática de compras de terceiros | 2026-09-06 | - | Leônidas Ferreira |
 
 ## Verificação da pendência atual
 

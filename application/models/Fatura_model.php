@@ -1131,13 +1131,13 @@ class Fatura_model extends CI_Model
         ];
     }
 
-    function getParcelasTerceiroPeriodoParaVinculo($idUsuario, $nome, $mesReferencia, $anoReferencia)
+    function getParcelasTerceiroPeriodoParaVinculo($idUsuario, $nome, $mesReferencia, $anoReferencia, $idCartao = null)
     {
         if (!is_string($nome) || is_numeric($nome)) {
             return false;
         }
 
-        return $this->db
+        $query = $this->db
             ->select('
                 lfa.id_assoc,
                 lfa.id_lancamento,
@@ -1164,10 +1164,13 @@ class Fatura_model extends CI_Model
             ->where('lfa.status', 1)
             ->where('lfa.mes_referencia', $mesReferencia)
             ->where('lfa.ano_referencia', $anoReferencia)
-            ->where('lfa.parcela_terceiro_pago IS NULL', null, false)
-            ->order_by('f.vencimento', 'ASC')
-            ->get()
-            ->result_array();
+            ->where('lfa.parcela_terceiro_pago IS NULL', null, false);
+
+        if ($idCartao) {
+            $query->where('f.id_cartao', $idCartao);
+        }
+
+        return $query->order_by('f.vencimento', 'ASC')->get()->result_array();
     }
 
     function getParcelasTerceiroPeriodoPagasParaVinculo($idUsuario, $nome, $mesReferencia, $anoReferencia)
@@ -1209,13 +1212,13 @@ class Fatura_model extends CI_Model
             ->result_array();
     }
 
-    function getVinculoTerceiroPeriodo($idUsuario, $nome, $mesReferencia, $anoReferencia)
+    function getVinculoTerceiroPeriodo($idUsuario, $nome, $mesReferencia, $anoReferencia, $idCartao = null)
     {
         if (!is_string($nome) || is_numeric($nome)) {
             return false;
         }
 
-        return $this->db
+        $query = $this->db
             ->select('l.*')
             ->from('lancamentos_terceiros_vinculos AS ltv')
             ->join('lancamentos AS l', 'l.id_lancamento = ltv.id_lancamento', 'inner')
@@ -1229,10 +1232,13 @@ class Fatura_model extends CI_Model
             ->where('lf.nome_cliente', $nome)
             ->where('lfa.status', 1)
             ->where('lfa.mes_referencia', $mesReferencia)
-            ->where('lfa.ano_referencia', $anoReferencia)
-            ->limit(1)
-            ->get()
-            ->row();
+            ->where('lfa.ano_referencia', $anoReferencia);
+
+        if ($idCartao) {
+            $query->where('ltv.id_cartao', $idCartao);
+        }
+
+        return $query->limit(1)->get()->row();
     }
 
     function vincularLancamentoTerceiro($idLancamento, array $idsLancamentosFaturasAssoc)
@@ -2366,6 +2372,104 @@ class Fatura_model extends CI_Model
             return true;
         }
         return false;
+    }
+
+    function getAutoLinkTerceirosCartao($idCartao, $idUsuario = null)
+    {
+        $idUsuario = $idUsuario ?: getUserId();
+
+        return (bool) $this->db
+            ->from('configs_faturas')
+            ->where('id_usuario', $idUsuario)
+            ->where('id_cartao', $idCartao)
+            ->where('auto_vinculo_terceiros', 1)
+            ->count_all_results();
+    }
+
+    function getPeriodosTerceirosParaVinculoAutomatico($idUsuario)
+    {
+        return $this->db
+            ->select('DISTINCT lf.nome_cliente, lfa.mes_referencia, lfa.ano_referencia, f.id_cartao', false)
+            ->from('lancamentos_faturas_assoc AS lfa')
+            ->join('lancamentos_faturas AS lf', 'lf.id_lancamento = lfa.id_lancamento', 'inner')
+            ->join('faturas AS f', 'f.id_fatura = lfa.id_fatura', 'inner')
+            ->join('configs_faturas AS cf', 'cf.id_cartao = f.id_cartao AND cf.id_usuario = lf.id_usuario', 'inner')
+            ->where('lf.id_usuario', $idUsuario)
+            ->where('lf.status', 1)
+            ->where('lf.compra_terceiros', 1)
+            ->where('lfa.status', 1)
+            ->where('lfa.parcela_terceiro_pago IS NULL', null, false)
+            ->where('cf.auto_vinculo_terceiros', 1)
+            ->order_by('lfa.ano_referencia', 'ASC')
+            ->order_by('lfa.mes_referencia', 'ASC')
+            ->get()
+            ->result_array();
+    }
+
+    function criarVinculoTerceiroPeriodo($idUsuario, $nome, $mesReferencia, $anoReferencia, $idCartao = null)
+    {
+        $vinculoExistente = $this->getVinculoTerceiroPeriodo($idUsuario, $nome, $mesReferencia, $anoReferencia, $idCartao);
+
+        if ($vinculoExistente) {
+            return $vinculoExistente->id_lancamento;
+        }
+
+        $parcelas = $this->getParcelasTerceiroPeriodoParaVinculo($idUsuario, $nome, $mesReferencia, $anoReferencia, $idCartao);
+
+        if (!$parcelas) {
+            return false;
+        }
+
+        $total = 0;
+        $vencimento = $parcelas[0]['vencimento'];
+        $idsAssoc = [];
+        $totaisCartao = [];
+
+        foreach ($parcelas as $parcela) {
+            $total += $parcela['valor_parcela'];
+            $idsAssoc[] = $parcela['id_assoc'];
+
+            if (strtotime($parcela['vencimento']) < strtotime($vencimento)) {
+                $vencimento = $parcela['vencimento'];
+            }
+
+            $numeroCartao = decriptar($parcela['cartao_numero']);
+            $partesCartao = explode(' ', trim($numeroCartao));
+            $finalCartao = end($partesCartao);
+            $cartaoLabel = $parcela['cartao_apelido'] ?: $parcela['cartao_bandeira'] . ' - FINAL ' . $finalCartao;
+            $totaisCartao[$cartaoLabel] = ($totaisCartao[$cartaoLabel] ?? 0) + $parcela['valor_parcela'];
+        }
+
+        $observacoes = [];
+
+        foreach ($totaisCartao as $cartaoLabel => $valorCartao) {
+            $observacoes[] = $cartaoLabel . ': R$ ' . number_format($valorCartao, 2, ',', '.');
+        }
+
+        $this->db->trans_begin();
+
+        $criado = $this->add('lancamentos', [
+            'id_usuario' => $idUsuario,
+            'descricao' => 'TOTAL DEVIDO NOS CARTOES',
+            'observacoes' => implode("\n", $observacoes),
+            'valor' => $total,
+            'data_lancamento' => $vencimento,
+            'data_pagamento' => $vencimento,
+            'baixado' => 0,
+            'cliente_fornecedor' => padronizarString($nome),
+            'forma_pgto' => 6,
+            'tipo' => 1,
+        ]);
+        $idLancamento = $criado ? $this->insert_id('lancamentos') : null;
+        $vinculado = $idLancamento ? $this->vincularLancamentoTerceiro($idLancamento, $idsAssoc) : false;
+
+        if (!$criado || !$vinculado || !$this->db->trans_status()) {
+            $this->db->trans_rollback();
+            return false;
+        }
+
+        $this->db->trans_commit();
+        return $idLancamento;
     }
 
     function getVinculoFaturaComModuloLancamentos($idFatura, $idUsuario = null)

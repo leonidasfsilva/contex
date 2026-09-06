@@ -45,6 +45,10 @@
 - O Agente IA deve atuar como revisor/integrador final nesses casos, evitando implementar diretamente antes de testar o fluxo com o estagiário local.
 - Exceções: hotfix de uma linha, bug crítico, tarefa muito sensível ou pedido explícito do desenvolvedor para o Agente IA implementar diretamente.
 
+### 3.1. Ambiente de produção
+- É terminantemente proibido acessar ou alterar ambiente de produção — hospedagem, SSH, hPanel, arquivos publicados, banco de dados ou APIs administrativas — sem autorização explícita do desenvolvedor para a ação solicitada.
+- GitHub, Trello e demais integrações usuais de desenvolvimento podem ser usados no fluxo autorizado pelo desenvolvedor, sem confirmação repetitiva.
+
 ### 4. Estilo de Commits
 - **Mensagens curtas e em inglês**
 - Formato: `action: description`

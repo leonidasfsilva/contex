@@ -453,6 +453,20 @@ function vinculoAutomaticoComprasTerceiros($idUsuario = null): bool
     $CI->load->model('fatura_model');
 
     $idUsuario = $idUsuario ?: getUserId();
+    $periodosAutomaticos = $CI->fatura_model->getPeriodosTerceirosParaVinculoAutomatico($idUsuario);
+
+    foreach ($periodosAutomaticos as $periodo) {
+        if (!$CI->fatura_model->criarVinculoTerceiroPeriodo(
+            $idUsuario,
+            $periodo['nome_cliente'],
+            $periodo['mes_referencia'],
+            $periodo['ano_referencia'],
+            $periodo['id_cartao']
+        )) {
+            return false;
+        }
+    }
+
     $periodosVinculados = $CI->fatura_model->getPeriodosTerceirosVinculadosAtivos($idUsuario);
 
     if (!$periodosVinculados) {
@@ -460,13 +474,15 @@ function vinculoAutomaticoComprasTerceiros($idUsuario = null): bool
     }
 
     foreach ($periodosVinculados as $periodo) {
-        $CI->fatura_model->sincronizarVinculoTerceiroPeriodo(
+        if (!$CI->fatura_model->sincronizarVinculoTerceiroPeriodo(
             $periodo['id_lancamento'],
             $idUsuario,
             $periodo['nome_cliente'],
             $periodo['mes_referencia'],
             $periodo['ano_referencia']
-        );
+        )) {
+            return false;
+        }
     }
 
     return true;
